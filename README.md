@@ -15,14 +15,14 @@ This project delivers an **on-premises Retrieval-Augmented Generation (RAG) syst
 
 ## Strategic Goals
 
-Our implementation addresses six core business objectives:
+Our implementation addresses six core business objectives through a structured SAFe approach:
 
-1. **[Technical Foundation](docs/plan/goal-1.md)**: Robust development environment and MVP implementation
-2. **[Documentation Excellence](docs/plan/goal-2.md)**: Clear, accessible documentation in B1 English for all stakeholders
-3. **[Technology Strategy](docs/plan/goal-3.md)**: Justified tool selection with clear rationale for choices and rejections
-4. **[Infrastructure Design](docs/plan/goal-4.md)**: Containerized deployment with optimized Python and LLM integration
-5. **[User Experience](docs/plan/goal-5.md)**: Intuitive GUI with enterprise-grade role-based access control
-6. **[Security Framework](docs/plan/goal-6.md)**: Comprehensive security and access control implementation
+1. **[Technical Foundation](docs/project/program/features/FEAT-001.md)**: Robust development environment and MVP implementation
+2. **[Enterprise User Interface](docs/project/program/features/FEAT-002.md)**: Intuitive GUI with enterprise-grade role-based access control
+3. **[Flexible LLM Integration](docs/project/portfolio/epics/EPIC-001.md)**: Justified tool selection with clear rationale for choices and rejections
+4. **[Database Query Capabilities](docs/project/portfolio/epics/EPIC-001.md)**: Natural language to SQL functionality
+5. **[Production Deployment](docs/project/portfolio/epics/EPIC-001.md)**: Containerized deployment with optimized Python and LLM integration
+6. **[Security Framework](docs/project/portfolio/epics/EPIC-001.md)**: Comprehensive security and access control implementation
 
 ## Key Business Concerns & Decisions
 
@@ -95,6 +95,7 @@ Our implementation addresses six core business objectives:
 
 ---
 
-**Project Documentation**: Detailed technical plans available in [`docs/plan/`](docs/plan/)  
+**Project Documentation**: Detailed SAFe project structure available in [`docs/project/`](docs/project/)  
+**Strategic Overview**: Complete business case in [`docs/SAFe Project Plan.md`](docs/SAFe%20Project%20Plan.md)  
 **Project Status**: Development Phase - MVP in progress  
-**Last Updated**: June 2025
+**Last Updated**: 2025-05-31

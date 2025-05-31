@@ -282,7 +282,7 @@ gantt
     title Project Implementation Timeline
     dateFormat  YYYY-MM-DD
     section Foundation
-    Goal 1: Technical Foundation    :g1, 2025-01-01, 4w
+    Goal 1: Technical Foundation    :g1, 2025-05-31, 4w
     Goal 3: LLM Integration        :g3, after g1, 3w
 
     section User Interface

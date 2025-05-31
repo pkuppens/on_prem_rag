@@ -1,0 +1,111 @@
+---
+description: 
+globs: *.md
+alwaysApply: false
+---
+# Cursor Rules for Markdown Files
+
+## General Markdown Formatting
+
+- Use consistent indentation (2 spaces for nested lists, 4 spaces for code blocks)
+- Ensure empty lines around all major sections
+- Use proper heading hierarchy (no skipping levels)
+- Limit line length to 100 characters where possible
+
+## Code Block Formatting
+
+### Standard Code Blocks
+
+- Always surround code blocks with empty lines
+- Use proper language identifiers for syntax highlighting
+- Indent nested code blocks by 4 additional spaces within lists
+
+### Nested Code Blocks in Lists
+
+```markdown
+- Item description:
+  
+    ```language
+    code here
+    ```
+    
+- Next item
+```
+
+### Mermaid Diagrams
+- Always surround mermaid diagrams with empty lines
+- Indent mermaid diagrams properly when nested in lists
+- Use descriptive node names
+
+```markdown
+- Diagram description:
+  
+    ```mermaid
+    graph TD
+        A[Start] --> B[Process]
+        B --> C[End]
+    ```
+    
+- Next section
+```
+
+## File Structure Rules
+
+- Use kebab-case for file names (e.g., `user-guide.md`)
+- Organize files in logical directory structures
+- Include README.md files in subdirectories for navigation
+
+## Documentation Standards
+
+- Start each file with a clear H1 title
+- Include a brief description/introduction
+- Use tables for structured data
+- Include references and links where appropriate
+- End files with relevant next steps or related documentation
+
+## Task Documentation Format
+
+For task-level documentation, include:
+- Context from parent goal
+- Clear problem statement
+- Technology considerations and trade-offs
+- Implementation hints with code samples
+- Definition of done checklist
+
+Example structure:
+```markdown
+# Task Name
+
+## Context
+Brief context from parent goal...
+
+## Problem Statement
+What needs to be solved...
+
+## Technology Considerations
+### Option 1: Technology A
+- Pros: ...
+- Cons: ...
+
+### Option 2: Technology B
+- Pros: ...
+- Cons: ...
+
+### Decision: Chosen Technology
+Rationale for choice...
+
+## Implementation Hints
+
+    ```python
+    # Pseudo-code example
+    def example_function():
+        pass
+    ```
+
+## Definition of Done
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+
+

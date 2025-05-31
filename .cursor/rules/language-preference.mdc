@@ -1,0 +1,50 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Simple English Documentation Rule
+
+Write all documentation and code comments using simple English at B1 level when possible.
+
+## Guidelines:
+- Use short, clear sentences
+- Choose common words over complex ones
+- Avoid unnecessary jargon
+- Break complex ideas into smaller parts
+- Use active voice when possible
+
+## Exceptions:
+- Technical terms that are widely accepted in the field
+- Standard programming terminology
+- Industry-specific jargon that has no simple equivalent
+
+## Examples:
+
+### Good:
+```javascript
+// Check if the user is logged in
+// This function returns true or false
+function isUserLoggedIn() {
+    // Code here
+}
+```
+
+### Avoid:
+```javascript
+// Ascertain authentication status utilizing comprehensive verification methodology
+// This sophisticated function determines user authentication state
+function isUserLoggedIn() {
+    // Code here
+}
+```
+
+## Word Choice Guidelines:
+- Use "start" instead of "initiate"
+- Use "end" instead of "terminate"
+- Use "get" instead of "retrieve"
+- Use "send" instead of "transmit"
+- Use "make" instead of "generate"
+
+
+Keep technical accuracy while making content accessible to developers with different English skill levels.

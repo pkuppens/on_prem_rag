@@ -1,0 +1,282 @@
+# SAFe Project Management Rule
+
+This cursor rule helps manage projects using the Scaled Agile Framework (SAFe) methodology. All project management documents are stored in `docs/project/` with appropriate subdirectories.
+
+**SAFe Reference**: https://scaledagileframework.com/
+
+## SAFe Configurations & Levels
+
+### 1. Essential SAFe (Team + Program Level)
+- **Team Level**: Agile teams with Scrum/Kanban
+- **Program Level**: Agile Release Train (ART) coordination
+
+### 2. Large Solution SAFe (adds Solution Level)
+- **Solution Level**: Solution Train for complex products
+- Coordinates multiple ARTs and suppliers
+
+### 3. Portfolio SAFe (adds Portfolio Level)  
+- **Portfolio Level**: Strategy and investment funding
+- Epic management and Lean Portfolio Management
+
+### 4. Full SAFe (All 4 Levels)
+- Combines all levels: Team, Program, Large Solution, Portfolio
+
+## File Structure
+
+```
+docs/project/
+├── portfolio/          # Portfolio level artifacts
+│   ├── epics/         # Portfolio epics
+│   ├── value-streams/ # Value stream mapping
+│   └── strategy/      # Strategic themes
+├── solution/          # Large solution level
+│   ├── capabilities/  # Solution capabilities
+│   ├── solution-trains/ # Solution train planning
+│   └── architecture/  # Solution architecture
+├── program/           # Program level (ART)
+│   ├── features/      # Program features
+│   ├── pi-planning/   # Program Increment planning
+│   └── art-sync/      # ART synchronization
+├── team/              # Team level
+│   ├── stories/       # User stories
+│   ├── tasks/         # Development tasks
+│   └── sprints/       # Sprint planning
+└── backlog/           # Cross-level backlog items
+```
+
+## Task Breakdown Structure
+
+### Portfolio Epic → Program Feature → Team Story → Task
+
+1. **Portfolio Epic** (3-12 months)
+   - Business outcome focused
+   - Requires substantial investment
+   - Cross multiple ARTs
+
+2. **Program Feature** (2-3 PIs, ~20-30 weeks)  
+   - Delivers business value
+   - Fits within ART capacity
+   - Enables capabilities
+
+3. **Team Story** (1-2 sprints, ~2-4 weeks)
+   - User-focused functionality
+   - Testable and deliverable
+   - Fits team capacity
+
+4. **Development Task** (hours to 2 days)
+   - Technical implementation
+   - Specific and actionable
+   - Assigned to individuals
+
+## Document Templates
+
+### Epic Template (`docs/project/portfolio/epics/EPIC-001.md`)
+```markdown
+# Epic: [Epic Name]
+
+**ID**: EPIC-001
+**Status**: Draft | In Progress | Done | Cancelled
+**Priority**: High | Medium | Low
+**Value Stream**: [Name]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## Business Outcome
+[What business value will this deliver?]
+
+## Hypothesis
+We believe that [this capability]
+Will result in [this outcome]
+We will have confidence to proceed when [this measurement]
+
+## Features
+- [ ] Feature 1: [Link to feature doc]
+- [ ] Feature 2: [Link to feature doc]
+
+## Acceptance Criteria
+- [ ] Criteria 1
+- [ ] Criteria 2
+
+## Dependencies
+- Depends on: [Other epics/capabilities]
+- Blocks: [What this blocks]
+
+## Progress
+- **Current PI**: [PI number]
+- **Completion**: 0% | 25% | 50% | 75% | 100%
+- **Next Milestone**: [Date and description]
+```
+
+### Feature Template (`docs/project/program/features/FEAT-001.md`)
+```markdown
+# Feature: [Feature Name]
+
+**ID**: FEAT-001
+**Epic**: [Link to parent epic]
+**ART**: [Agile Release Train name]
+**Status**: Backlog | Analysis | Implementation | Done
+**Priority**: Must Have | Should Have | Could Have
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## Description
+[What does this feature do?]
+
+## Business Value
+[Why is this important?]
+
+## User Stories
+- [ ] Story 1: [Link to story]
+- [ ] Story 2: [Link to story]
+
+## Acceptance Criteria
+- [ ] Criteria 1
+- [ ] Criteria 2
+
+## Definition of Done
+- [ ] Code complete
+- [ ] Tests pass
+- [ ] Documentation updated
+- [ ] Demo ready
+
+## Estimates
+- **Story Points**: [Total points]
+- **PI Capacity**: [PI assignment]
+
+## Dependencies
+- Depends on: [Other features]
+- Enables: [What this enables]
+```
+
+### Story Template (`docs/project/team/stories/STORY-001.md`)
+```markdown
+# User Story: [Story Title]
+
+**ID**: STORY-001
+**Feature**: [Link to parent feature]
+**Team**: [Team name]
+**Status**: Backlog | In Progress | Review | Done
+**Priority**: P1 | P2 | P3
+**Points**: [Story points]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## User Story
+As a [user type]
+I want [functionality]
+So that [benefit/value]
+
+## Acceptance Criteria
+- [ ] Given [context], when [action], then [outcome]
+- [ ] Given [context], when [action], then [outcome]
+
+## Tasks
+- [ ] Task 1: [Description] - [Assignee] - [Hours]
+- [ ] Task 2: [Description] - [Assignee] - [Hours]
+
+## Definition of Done
+- [ ] Code implemented
+- [ ] Unit tests written
+- [ ] Code reviewed
+- [ ] Integration tested
+- [ ] Documentation updated
+
+## Notes
+[Additional context, designs, etc.]
+```
+
+### Task Template (`docs/project/team/tasks/TASK-001.md`)
+```markdown
+# Task: [Task Name]
+
+**ID**: TASK-001
+**Story**: [Link to parent story]
+**Assignee**: [Name]
+**Status**: Todo | In Progress | Done
+**Effort**: [Hours]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## Description
+[What needs to be done?]
+
+## Acceptance Criteria
+- [ ] Specific outcome 1
+- [ ] Specific outcome 2
+
+## Implementation Notes
+[Technical details, approaches, etc.]
+
+## Dependencies
+- Blocked by: [Other tasks]
+- Blocks: [What this blocks]
+
+## Time Tracking
+- **Estimated**: [Hours]
+- **Actual**: [Hours]
+- **Remaining**: [Hours]
+```
+
+## Commands for Task Management
+
+### Create New Work Items
+- `Create epic for [description]` - Creates new portfolio epic
+- `Create feature for [description]` - Creates new program feature  
+- `Create story for [description]` - Creates new user story
+- `Create task for [description]` - Creates new development task
+
+### Break Down Work
+- `Break down epic [ID] into features` - Decompose epic to features
+- `Break down feature [ID] into stories` - Decompose feature to stories
+- `Break down story [ID] into tasks` - Decompose story to tasks
+
+### Update Status
+- `Mark [ID] as done` - Complete work item
+- `Update [ID] status to [status]` - Change status
+- `Update [ID] progress to [percentage]` - Update completion
+
+### Generate Reports
+- `Create PI planning summary` - Generate PI planning document
+- `Create team velocity report` - Show team progress
+- `Create dependency report` - Show cross-team dependencies
+
+## SAFe Events Support
+
+### Program Increment (PI) Planning
+```markdown
+# PI [Number] Planning
+
+**Dates**: [Start] - [End]
+**ART**: [Name]
+**Objectives**: [Link to objectives doc]
+
+## Features Planned
+- [ ] Feature 1: [Name] - [Team] - [Confidence: High/Medium/Low]
+- [ ] Feature 2: [Name] - [Team] - [Confidence: High/Medium/Low]
+
+## Risks
+- Risk 1: [Description] - [Mitigation]
+- Risk 2: [Description] - [Mitigation]
+
+## Dependencies
+- External: [Description]
+- Internal: [Cross-team dependencies]
+```
+
+## Automation Rules
+
+1. **Auto-linking**: When creating child items, automatically link to parent
+2. **Status propagation**: Update parent status based on child completion
+3. **Progress tracking**: Calculate epic/feature progress from child items
+4. **Dependency checking**: Flag circular or missing dependencies
+5. **Template application**: Use appropriate template based on work item type
+
+## Best Practices
+
+1. **Context Preservation**: Always maintain traceability from task to epic
+2. **Small Batches**: Keep stories small (1-2 sprints max)
+3. **Clear Ownership**: Assign clear owners at each level
+4. **Regular Updates**: Update status and progress regularly
+5. **Dependency Management**: Identify and manage dependencies early
+
+Remember: SAFe is about alignment, built-in quality, transparency, and program execution. Use these templates to maintain clarity and traceability across all levels of work.

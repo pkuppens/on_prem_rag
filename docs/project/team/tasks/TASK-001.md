@@ -28,11 +28,11 @@ Set up the basic structure for this project:
 
 ## Acceptance Criteria
 
-- [ ] `pyproject.toml` configured with project metadata and dependencies
-- [ ] `uv.lock` consideration explained
-- [ ] Project structure follows Python packaging best practices for proof-of-concept library
-- [ ] All core dependencies for RAG pipeline specified with version constraints
-- [ ] Development dependencies separated from production requirements
+- [x] `pyproject.toml` configured with project metadata and dependencies
+- [x] `uv.lock` consideration explained
+- [x] Project structure follows Python packaging best practices for proof-of-concept library
+- [x] All core dependencies for RAG pipeline specified with version constraints
+- [x] Development dependencies separated from production requirements
 
 ## Implementation Details
 

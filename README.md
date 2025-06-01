@@ -19,10 +19,10 @@ Our implementation addresses six core business objectives through a structured S
 
 1. **[Technical Foundation](docs/project/program/features/FEAT-001.md)**: Robust development environment and MVP implementation
 2. **[Enterprise User Interface](docs/project/program/features/FEAT-002.md)**: Intuitive GUI with enterprise-grade role-based access control
-3. **[Flexible LLM Integration](docs/project/portfolio/epics/EPIC-001.md)**: Justified tool selection with clear rationale for choices and rejections
-4. **[Database Query Capabilities](docs/project/portfolio/epics/EPIC-001.md)**: Natural language to SQL functionality
-5. **[Production Deployment](docs/project/portfolio/epics/EPIC-001.md)**: Containerized deployment with optimized Python and LLM integration
-6. **[Security Framework](docs/project/portfolio/epics/EPIC-001.md)**: Comprehensive security and access control implementation
+3. **[Flexible LLM Integration](docs/project/program/features/FEAT-003.md)**: Justified tool selection with clear rationale for choices and rejections
+4. **[Database Query Capabilities](docs/project/program/features/FEAT-004.md)**: Natural language to SQL functionality
+5. **[Production Deployment](docs/project/program/features/FEAT-005.md)**: Containerized deployment with optimized Python and LLM integration
+6. **[Security Framework](docs/project/program/features/FEAT-006.md)**: Comprehensive security and access control implementation
 
 ## Repository Overview
 

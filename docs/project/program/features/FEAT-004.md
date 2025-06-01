@@ -12,6 +12,10 @@
 
 Build a natural language to SQL system that enables business users to query databases using natural language without requiring SQL knowledge. The system translates natural language questions into safe, accurate SQL queries while maintaining enterprise security and providing clear explanations of results.
 
+This feature is scheduled only after the document Q&A workflow (Features
+001 and 002) proves stable. Document-based answers remain the top priority for
+the MVP.
+
 ## Business Value
 
 **Impact**: Democratizes data access for business users without SQL expertise  
@@ -120,7 +124,7 @@ def nl_to_sql_pipeline(question: str, schema: str, user_roles: list) -> dict:
 
 ## Dependencies
 
-- **Depends on**: FEAT-001 (Technical Foundation), FEAT-003 (LLM Integration)
+- **Depends on**: FEAT-001 (Technical Foundation), FEAT-003 (LLM Integration), successful completion of document Q&A (FEAT-002)
 - **Enables**: Advanced analytics and reporting capabilities
 - **Blocks**: None (optional feature for core RAG functionality)
 

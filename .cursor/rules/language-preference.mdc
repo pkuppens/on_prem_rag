@@ -1,6 +1,7 @@
 ---
-description:
+description: Simple English guidelines
 globs:
+  - "**/*.md"
 alwaysApply: false
 ---
 # Simple English Documentation Rule

@@ -1,6 +1,7 @@
 ---
-description:
+description: Agile documentation refinement
 globs:
+  - "**/*.md"
 alwaysApply: false
 ---
 # Agile Documentation Refinement Rule

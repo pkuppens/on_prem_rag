@@ -1,7 +1,7 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description:
+globs:
+alwaysApply: false
 ---
 # Simple English Documentation Rule
 
@@ -45,6 +45,5 @@ function isUserLoggedIn() {
 - Use "get" instead of "retrieve"
 - Use "send" instead of "transmit"
 - Use "make" instead of "generate"
-
 
 Keep technical accuracy while making content accessible to developers with different English skill levels.

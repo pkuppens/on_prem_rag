@@ -1,0 +1,99 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Agile Documentation Refinement Rule
+
+## Core Principle
+When refining any Agile artifact (Epic, Feature, Story, Task, etc.), automatically identify and update all related artifacts in the project hierarchy to maintain consistency and alignment.
+
+## Refinement Scope
+Always consider the following relationships when making changes:
+
+### Upward Cascade (Parent Items)
+- **Stories** → **Features** → **Epics** → **Initiatives**
+- Update acceptance criteria, definitions of done, and success metrics
+- Revise effort estimates and dependencies
+- Adjust priorities and business value statements
+
+### Downward Cascade (Child Items)
+- **Epics** → **Features** → **Stories** → **Tasks/Subtasks**
+- Break down or consolidate work items as needed
+- Update task descriptions and acceptance criteria
+- Revise story points and time estimates
+
+### Lateral Cascade (Sibling Items)
+- Stories within the same Feature
+- Tasks within the same Story
+- Features within the same Epic
+
+## Required Actions for Each Refinement
+
+### 1. Impact Analysis
+- Identify all related artifacts (parents, children, siblings)
+- Assess which items need updates based on the refinement
+- Flag potential conflicts or inconsistencies
+
+### 2. Consistency Updates
+- **Acceptance Criteria**: Ensure child items support parent acceptance criteria
+- **Definition of Done**: Cascade DoD changes to appropriate levels
+- **Business Value**: Align value statements across hierarchy
+- **Dependencies**: Update predecessor/successor relationships
+- **Effort Estimates**: Reconcile estimates between levels (story points, hours, etc.)
+
+### 3. Traceability Maintenance
+- Update requirement traceability matrices
+- Maintain links between related artifacts
+- Ensure all changes are documented with rationale
+
+### 4. Stakeholder Communication
+- Identify affected team members and stakeholders
+- Note which artifacts require review/approval
+- Flag items that may need re-estimation or re-planning
+
+## Refinement Checklist
+
+When refining any artifact, verify:
+
+- [ ] **Parent Alignment**: Does this change align with parent objectives?
+- [ ] **Child Consistency**: Do child items still support this artifact?
+- [ ] **Sibling Coordination**: Are related items at the same level consistent?
+- [ ] **Acceptance Criteria**: Are ACs complete and testable?
+- [ ] **Dependencies**: Are all dependencies current and accurate?
+- [ ] **Estimates**: Do effort estimates align across levels?
+- [ ] **Priority**: Is priority consistent with business value?
+- [ ] **Status Tracking**: Are statuses updated appropriately?
+
+## Examples
+
+### Story Refinement Example
+**When refining a User Story:**
+1. **Update the Story** with new acceptance criteria
+2. **Review Parent Feature** to ensure alignment with feature goals
+3. **Update Child Tasks** to reflect new acceptance criteria
+4. **Check Sibling Stories** for consistency within the feature
+5. **Adjust Epic** if story changes impact epic scope or timeline
+
+### Epic Refinement Example
+**When refining an Epic:**
+1. **Update the Epic** with new business objectives
+2. **Review Parent Initiative** for strategic alignment
+3. **Update Child Features** to support new epic direction
+4. **Cascade to Stories** that may need acceptance criteria updates
+5. **Adjust Dependencies** with other epics or initiatives
+
+## Quality Gates
+
+Before considering a refinement complete:
+- All related artifacts have been reviewed and updated
+- No orphaned or inconsistent items remain
+- Traceability links are maintained
+- Team members are aware of changes affecting their work
+- Estimates and timelines are realistic and aligned
+
+## Tools and Documentation
+- Update backlog management tools (Jira, Azure DevOps, etc.)
+- Maintain requirement traceability matrices
+- Document refinement decisions and rationale
+- Update project glossaries and definition repositories

@@ -1,13 +1,13 @@
 # User Story: Interactive Q&A Interface
 
-**ID**: STORY-007
-**Feature**: [FEAT-002: Enterprise User Interface](../../program/features/FEAT-002.md)
-**Team**: Frontend Engineering
-**Status**: Backlog
-**Priority**: P1
-**Points**: 8
-**Created**: 2025-05-31
-**Updated**: 2025-05-31
+**ID**: STORY-007  
+**Feature**: [FEAT-002: Enterprise User Interface](../../program/features/FEAT-002.md)  
+**Team**: Frontend Engineering  
+**Status**: Backlog  
+**Priority**: P1  
+**Points**: 8  
+**Created**: 2025-05-31  
+**Updated**: 2025-05-31  
 
 ## User Story
 As a **business user**,

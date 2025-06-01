@@ -1,13 +1,13 @@
 # User Story: Containerized Deployment
 
-**ID**: STORY-004
-**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)
-**Team**: DevOps
-**Status**: In Progress
-**Priority**: P1
-**Points**: 5
-**Created**: 2025-05-31
-**Updated**: 2025-05-31
+**ID**: STORY-004  
+**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)  
+**Team**: DevOps  
+**Status**: In Progress  
+**Priority**: P1  
+**Points**: 5  
+**Created**: 2025-05-31  
+**Updated**: 2025-05-31  
 
 ## User Story
 As an **operator of the RAG system**,
@@ -23,10 +23,10 @@ Containerization ensures the development setup mirrors production, enabling quic
 - [ ] **Given** the Docker setup, **when** developers follow the README, **then** they can replicate the environment on any machine.
 
 ## Tasks
-- [ ] **TASK-014**: Write application Dockerfile - DevOps Engineer - 4h
-- [ ] **TASK-015**: Define docker-compose services for app, database, and LLM - DevOps Engineer - 6h
-- [ ] **TASK-016**: Create environment configuration and startup scripts - DevOps Engineer - 4h
-- [ ] **TASK-017**: Document container workflow and troubleshooting - Technical Writer - 4h
+- [ ] **[TASK-014](../tasks/TASK-014.md)**: Write application Dockerfile - DevOps Engineer - 4h
+- [ ] **[TASK-015](../tasks/TASK-015.md)**: Define docker-compose services for app, database, and LLM - DevOps Engineer - 6h
+- [ ] **[TASK-016](../tasks/TASK-016.md)**: Create environment configuration and startup scripts - DevOps Engineer - 4h
+- [ ] **[TASK-017](../tasks/TASK-017.md)**: Document container workflow and troubleshooting - Technical Writer - 4h
 
 ## Definition of Done
 - [ ] Dockerfile builds the FastAPI application image

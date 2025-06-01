@@ -1,13 +1,13 @@
 # User Story: Basic Q&A Interface
 
-**ID**: STORY-003
-**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)
-**Team**: Backend Engineering
-**Status**: In Progress
-**Priority**: P1
-**Points**: 8
-**Created**: 2025-05-31
-**Updated**: 2025-05-31
+**ID**: STORY-003  
+**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)  
+**Team**: Backend Engineering  
+**Status**: In Progress  
+**Priority**: P1  
+**Points**: 8  
+**Created**: 2025-05-31  
+**Updated**: 2025-05-31  
 
 ## User Story
 As a **user of the RAG system**,
@@ -23,10 +23,10 @@ Delivering a minimal question-answering API demonstrates the value of the system
 - [ ] **Given** multiple relevant documents, **when** results are merged, **then** the answer references each source correctly.
 
 ## Tasks
-- [ ] **TASK-010**: Create FastAPI endpoint for question answering - Backend Engineer - 6h
-- [ ] **TASK-011**: Implement vector search retrieval logic - Backend Engineer - 4h
-- [ ] **TASK-012**: Integrate Ollama LLM for answer generation - ML Engineer - 6h
-- [ ] **TASK-013**: Write API tests for Q&A flow - QA Engineer - 4h
+- [ ] **[TASK-010](../tasks/TASK-010.md)**: Create FastAPI endpoint for question answering - Backend Engineer - 6h
+- [ ] **[TASK-011](../tasks/TASK-011.md)**: Implement vector search retrieval logic - Backend Engineer - 4h
+- [ ] **[TASK-012](../tasks/TASK-012.md)**: Integrate Ollama LLM for answer generation - ML Engineer - 6h
+- [ ] **[TASK-013](../tasks/TASK-013.md)**: Write API tests for Q&A flow - QA Engineer - 4h
 
 ## Definition of Done
 - [ ] API endpoint `/ask` accepts text questions and optional parameters

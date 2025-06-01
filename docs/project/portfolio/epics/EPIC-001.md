@@ -33,12 +33,12 @@ We will have confidence to proceed when **MVP demonstrates successful document Q
 
 ## Features
 
-- [ ] **[FEAT-001: Technical Foundation & MVP](../program/features/FEAT-001.md)**: Core RAG pipeline and document processing
-- [ ] **[FEAT-002: Enterprise User Interface](../program/features/FEAT-002.md)**: Interactive Q&A with role-based access control  
-- [ ] **[FEAT-003: Flexible LLM Integration](../program/features/FEAT-003.md)**: Modular model support and configuration
-- [ ] **[FEAT-004: Database Query Capabilities](../program/features/FEAT-004.md)**: Natural language to SQL functionality *(starts after document Q&A milestones)*
-- [ ] **[FEAT-005: Production Deployment](../program/features/FEAT-005.md)**: Containerized infrastructure and monitoring
-- [ ] **[FEAT-006: Security Framework](../program/features/FEAT-006.md)**: Comprehensive security and access control
+- [ ] **[FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)**: Core RAG pipeline and document processing
+- [ ] **[FEAT-002: Enterprise User Interface](../../program/features/FEAT-002.md)**: Interactive Q&A with role-based access control  
+- [ ] **[FEAT-003: Flexible LLM Integration](../../program/features/FEAT-003.md)**: Modular model support and configuration
+- [ ] **[FEAT-004: Database Query Capabilities](../../program/features/FEAT-004.md)**: Natural language to SQL functionality *(starts after document Q&A milestones)*
+- [ ] **[FEAT-005: Production Deployment](../../program/features/FEAT-005.md)**: Containerized infrastructure and monitoring
+- [ ] **[FEAT-006: Security Framework](../../program/features/FEAT-006.md)**: Comprehensive security and access control
 
 ## Acceptance Criteria
 

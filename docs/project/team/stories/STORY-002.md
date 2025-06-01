@@ -1,13 +1,13 @@
 # User Story: Document Processing Pipeline
 
-**ID**: STORY-002
-**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)
-**Team**: Data Engineering
-**Status**: In Progress
-**Priority**: P1
-**Points**: 8
-**Created**: 2025-05-31
-**Updated**: 2025-05-31
+**ID**: STORY-002  
+**Feature**: [FEAT-001: Technical Foundation & MVP](../../program/features/FEAT-001.md)  
+**Team**: Data Engineering  
+**Status**: In Progress  
+**Priority**: P1  
+**Points**: 8  
+**Created**: 2025-05-31  
+**Updated**: 2025-05-31  
 
 ## User Story
 As the **RAG system**,
@@ -24,10 +24,10 @@ Automated document processing enables rapid onboarding of enterprise knowledge. 
 - [ ] **Given** invalid or corrupted files, **when** processed, **then** meaningful errors are logged and surfaced.
 
 ## Tasks
-- [ ] **TASK-006**: Implement file ingestion module for PDF, DOCX, TXT - Backend Engineer - 6h
-- [ ] **TASK-007**: Build text chunking and embedding generation - ML Engineer - 6h
-- [ ] **TASK-008**: Integrate ChromaDB storage and retrieval - Backend Engineer - 4h
-- [ ] **TASK-009**: Write unit tests for document pipeline - QA Engineer - 4h
+- [ ] **[TASK-006](../tasks/TASK-006.md)**: Implement file ingestion module for PDF, DOCX, TXT - Backend Engineer - 6h
+- [ ] **[TASK-007](../tasks/TASK-007.md)**: Build text chunking and embedding generation - ML Engineer - 6h
+- [ ] **[TASK-008](../tasks/TASK-008.md)**: Integrate ChromaDB storage and retrieval - Backend Engineer - 4h
+- [ ] **[TASK-009](../tasks/TASK-009.md)**: Write unit tests for document pipeline - QA Engineer - 4h
 
 ## Definition of Done
 - [ ] Document loader accepts PDF, DOCX, and TXT files

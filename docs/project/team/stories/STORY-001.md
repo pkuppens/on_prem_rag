@@ -28,11 +28,11 @@ A standardized development environment eliminates "works on my machine" problems
 
 ## Tasks
 
-- [ ] **TASK-001**: Configure Python project with uv package manager - Backend Engineer - 4h
-- [ ] **TASK-002**: Create development Docker Compose setup - DevOps Engineer - 6h  
-- [ ] **TASK-003**: Set up code quality tools (ruff, black, pytest) - Backend Engineer - 4h
-- [ ] **TASK-004**: Create comprehensive setup documentation - Technical Writer - 4h
-- [ ] **TASK-005**: Validate setup across different operating systems - QA Engineer - 8h
+- [ ] **[TASK-001](../tasks/TASK-001.md)**: Configure Python project with uv package manager - Backend Engineer - 4h
+- [ ] **[TASK-002](../tasks/TASK-002.md)**: Create development Docker Compose setup - DevOps Engineer - 6h  
+- [ ] **[TASK-003](../tasks/TASK-003.md)**: Set up code quality tools (ruff, black, pytest) - Backend Engineer - 4h
+- [ ] **[TASK-004](../tasks/TASK-004.md)**: Create comprehensive setup documentation - Technical Writer - 4h
+- [ ] **[TASK-005](../tasks/TASK-005.md)**: Validate setup across different operating systems - QA Engineer - 8h
 
 ## Definition of Done
 

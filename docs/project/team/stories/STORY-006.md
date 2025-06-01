@@ -1,13 +1,13 @@
 # User Story: Document Upload Interface
 
-**ID**: STORY-006
-**Feature**: [FEAT-002: Enterprise User Interface](../../program/features/FEAT-002.md)
-**Team**: Frontend Engineering
-**Status**: Backlog
-**Priority**: P1
-**Points**: 5
-**Created**: 2025-05-31
-**Updated**: 2025-05-31
+**ID**: STORY-006  
+**Feature**: [FEAT-002: Enterprise User Interface](../../program/features/FEAT-002.md)  
+**Team**: Frontend Engineering  
+**Status**: Backlog  
+**Priority**: P1  
+**Points**: 5  
+**Created**: 2025-05-31  
+**Updated**: 2025-05-31  
 
 ## User Story
 As a **user**,

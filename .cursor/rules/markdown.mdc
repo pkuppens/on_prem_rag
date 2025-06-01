@@ -1,6 +1,7 @@
 ---
-description: 
-globs: *.md
+description: Markdown formatting guidelines
+globs:
+  - "**/*.md"
 alwaysApply: false
 ---
 # Cursor Rules for Markdown Files

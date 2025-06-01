@@ -24,6 +24,14 @@ Our implementation addresses six core business objectives through a structured S
 5. **[Production Deployment](docs/project/portfolio/epics/EPIC-001.md)**: Containerized deployment with optimized Python and LLM integration
 6. **[Security Framework](docs/project/portfolio/epics/EPIC-001.md)**: Comprehensive security and access control implementation
 
+## Repository Overview
+
+This repository contains the complete SAFe project structure under [`docs/`](docs/),
+including epics, features, stories, and tasks that guide development. Source
+code will be added as the tasks in the `team` folder are implemented. The first
+milestone focuses on document question-answering, while database NLP/SQL
+capabilities are planned for later phases.
+
 ## Key Business Concerns & Decisions
 
 ### Legal & Licensing Considerations
@@ -61,8 +69,13 @@ Our implementation addresses six core business objectives through a structured S
 
 ## Implementation Roadmap
 
+The roadmap below intentionally prioritizes document-based question answering
+before adding any database NLP/SQL features. A working document pipeline is
+critical for validating the overall architecture.
+
 ### Phase 1: Foundation (Weeks 1-4)
 - Core RAG pipeline with document ingestion
+- Document question-answering pipeline
 - Basic web interface for proof-of-concept
 - Docker-based deployment
 

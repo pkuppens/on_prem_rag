@@ -4,6 +4,9 @@
 
 This directory contains the complete SAFe (Scaled Agile Framework) project structure for the On-Premises RAG Solution. The project follows Essential SAFe configuration with Team and Program levels.
 
+At this stage the repository primarily consists of these planning documents.
+Source code will be introduced as stories and tasks are implemented.
+
 ## SAFe Levels
 
 ### Portfolio Level (`portfolio/`)

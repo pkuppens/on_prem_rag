@@ -13,6 +13,12 @@
 - **Offline Deployment**: No external calls, all local execution
 - **Enterprise Security**: RBAC, application and network-level isolation
 
+This plan has been reviewed to ensure that the initial focus is on
+document-based question answering. Database NLP/SQL capabilities will only
+begin once the document pipeline is validated and stable. At this stage the
+repository contains planning artifacts only; source code will be added as tasks
+in the `docs/project/team` folder are executed.
+
 ---
 
 ## Strategic Goals Overview
@@ -125,6 +131,10 @@ class OllamaProvider(LLMProvider):
 **Timeline**: 2-3 weeks | **Priority**: High
 
 ### Goal 4: Natural Language to SQL (Database Q&A)
+
+This goal begins only after Goals 1 and 2 verify that document question-answering
+is stable. It introduces database NLP/SQL capabilities once the core RAG
+workflow is proven.
 
 **Business Impact**: Enable business users to query databases without SQL knowledge
 

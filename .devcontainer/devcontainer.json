@@ -1,0 +1,55 @@
+{
+	"name": "Python 3.12 Development Container",
+	"image": "mcr.microsoft.com/devcontainers/python:3.12",
+
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "false",
+			"installOhMyZsh": "false",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
+        "ghcr.io/devcontainers-contrib/features/ruff:1": {},
+        "ghcr.io/astral-sh/devcontainer-features/uv:0": {}
+	},
+
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.linting.enabled": true,
+				"python.linting.ruffEnabled": true,
+				"python.formatting.provider": "none", // Using ruff format via pre-commit or specific commands
+                "editor.formatOnSave": true,
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll": "explicit",
+                        "source.organizeImports": "explicit"
+                    }
+                },
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                }
+			},
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"tamasfe.even-better-toml",
+				"ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode", // For markdown and other non-python formatting
+                "ms-vscode-remote.remote-containers"
+			]
+		}
+	},
+
+	"postCreateCommand": "uv venv && source .venv/bin/activate && uv pip install -e .[dev] && pre-commit install",
+
+	"remoteUser": "vscode"
+}

@@ -1,0 +1,48 @@
+[project]
+name = "on_prem_rag"
+version = "0.1.0"
+description = "A RAG pipeline project"
+dependencies = [
+    "fastapi>=0.104.0",
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.2.0",
+    "ollama>=0.1.0",
+    "pypdf>=3.17.0",
+    "python-docx>=1.1.0",
+    "uvicorn>=0.24.0",
+]
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "ruff>=0.11.12",
+    "pre-commit>=4.2.0",
+]
+
+[tool.ruff.lint]
+# Allow all rules for a permissive style initially.
+# We can refine this later.
+# Rule reference: https://docs.astral.sh/ruff/rules/
+# Ruff codes: https://docs.astral.sh/ruff/rules/
+select = ["E", "F", "W", "C90", "I", "N", "D", "UP", "ANN", "S", "BLE", "A", "COM", "C4", "DTZ", "T10", "EM", "EXE", "ISC", "ICN", "G", "INP", "PIE", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "TCH", "ARG", "PTH", "ERA", "PD", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY", "FLY", "NPY", "PERF", "RUF"] # Equivalent to --select ALL
+ignore = ["D203", "D212"]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

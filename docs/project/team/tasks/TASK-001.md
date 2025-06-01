@@ -10,13 +10,27 @@
 
 ## Description
 
-Set up the Python project structure using the `uv` package manager for fast, reliable dependency management. Create the foundational project files including `pyproject.toml`, dependency specifications, and initial package structure.
+Set up the basic structure for this project:
+* Create the foundational project files, including `pyproject.toml`, dependency specifications, and initial package structure.
+* Python (3.12) for coding
+    * coding style instructions for well-documented code with type hinting, extensive docstrings
+    * using the `uv` package manager for fast, reliable dependency management
+    * using minimum requirements (>=x.y.z) or no requirement over fixed requirements (==x.y.z) during library/proof of concept development
+    * `uv.lock` is git ignored, or only linked to production releases.
+    * using `ruff` over `flake`, `black`, for code formatting and linting, with a very permissive coding style
+    * using `pytest` for testing over `unittest`
+* Pre-commit hooks that run:
+    * both ruff format and ruff check
+    * pytest (coverage is out of scope for now)
+    * secret detection
+* Github actions folder with minimal example
+* 'SETUP.md' documentation for the set-up with explanations, and required steps, pre-commit autoupdate and install
 
 ## Acceptance Criteria
 
 - [ ] `pyproject.toml` configured with project metadata and dependencies
-- [ ] `uv.lock` file generated with locked dependency versions
-- [ ] Project structure follows Python packaging best practices
+- [ ] `uv.lock` consideration explained
+- [ ] Project structure follows Python packaging best practices for proof-of-concept library
 - [ ] All core dependencies for RAG pipeline specified with version constraints
 - [ ] Development dependencies separated from production requirements
 
@@ -27,7 +41,8 @@ Set up the Python project structure using the `uv` package manager for fast, rel
 - `uv.lock`: Locked dependency versions for reproducible builds
 - `src/rag_pipeline/`: Main package directory structure
 - `.python-version`: Python version specification
-- `README.md`: Basic project setup instructions
+- `README.md`: Basic project setup instructions link
+  `SETUP.md`: Setup descriptions and instructions
 
 ### Core Dependencies
 ```toml
@@ -47,7 +62,6 @@ dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
     "ruff>=0.1.0",
-    "black>=23.10.0",
     "pre-commit>=3.5.0"
 ]
 ```
@@ -92,7 +106,7 @@ tests/
 
 1. **Initialize uv project** (30 min)
    - Run `uv init` to create basic project structure
-   - Configure Python version constraint (3.11+)
+   - Configure Python version constraint (3.12+)
 
 2. **Configure pyproject.toml** (90 min)
    - Add project metadata (name, version, description)
@@ -109,9 +123,11 @@ tests/
    - Run `uv lock` to generate `uv.lock` file
    - Verify all dependencies resolve correctly
    - Test installation in clean environment
+   - Document the Version constraints decisions
 
 5. **Documentation** (30 min)
-   - Update README with setup instructions
+   - Update README.md with setup instructions link to SETUP.md
+   - Write SETUP.md with setup instructions
    - Document package structure and purpose
    - Add troubleshooting notes for common issues
 
@@ -128,7 +144,7 @@ tests/
 ### Technology Rationale
 - **uv**: Chosen over pip/poetry for significantly faster dependency resolution and installation
 - **src layout**: Improves import behavior and testing isolation
-- **Version constraints**: Pinned to stable versions while allowing patch updates
+- **Version constraints**: Be flexible during development, and pinned to stable versions while allowing patch updates when moving to production releases
 
 ### Future Considerations
 - Integration with pre-commit hooks for dependency validation

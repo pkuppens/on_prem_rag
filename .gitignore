@@ -142,3 +142,4 @@ uv.lock
 # pre-commit
 .pre-commit-config.yaml
 **/embeddings_cache/*
+notebooks/data/

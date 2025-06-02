@@ -21,6 +21,7 @@ dependencies = [
     "bitsandbytes>=0.42.0",
     "ipykernel>=6.29.5",
     "ipywidgets>=8.1.7",
+    "pip>=25.1.1",
 ]
 requires-python = ">=3.12"
 
@@ -34,20 +35,37 @@ dev = [
     "nbstripout>=0.6.1",
 ]
 
+[tool.ruff]
+line-length = 132
+
 [tool.ruff.lint]
 # Allow all rules for a permissive style initially.
 # We can refine this later.
 # Rule reference: https://docs.astral.sh/ruff/rules/
 # Ruff codes: https://docs.astral.sh/ruff/rules/
-select = ["E", "F", "W", "C90", "I", "N", "D", "UP", "ANN", "S", "BLE", "A", "COM", "C4", "DTZ", "T10", "EM", "EXE", "ISC", "ICN", "G", "INP", "PIE", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "TCH", "ARG", "PTH", "ERA", "PD", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY", "FLY", "NPY", "PERF", "RUF"] # Equivalent to --select ALL
-ignore = ["D203", "D212"]
+select = ["E", "F", "W", "C90", "I", "N", "D", "UP", "ANN", "S", "BLE", "A", "COM", "C4", "DTZ", "T10", "EM", "EXE", "ISC", "ICN", "G", "INP", "PIE", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "TCH", "ARG", "PTH", "ERA", "PD", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY", "FLY", "NPY", "PERF", "RUF"] # Equivalent to --select ALL# Set maximum line length for the formatter
+ignore = [
+    "D203", "D212",  # Existing
+    "F403", "F405",  # Star imports (e.g., `from module import *`)
+    "PLR0913",       # Too many arguments in function definition
+    "ANN201",        # Missing return type annotation for public function
+    "ANN202",        # Missing return type annotation for private function
+    "ANN204",        # Missing return type annotation for special method `__init__`
+    "D401",          # First line of docstring should be in imperative mood
+    "D417",          # Missing argument description in the docstring
+    "BLE001",        # Do not catch blind exception: `Exception`
+    "RET504",        # Unnecessary assignment to variable before `return` statement
+    "COM812",        # Missing trailing comma in multi-line CPython list, tuple, or dict literal
+]
 # Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$$"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
 "*.md" = ["W292"]
 "*.mdc" = ["W292"]
+"notebooks/*.ipynb" = ["E501"] # Ignore line length in notebooks
+"*.ipynb" = ["E501"]           # Ignore line length in notebooks in root
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.

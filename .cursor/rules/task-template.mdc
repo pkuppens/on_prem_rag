@@ -1,0 +1,61 @@
+---
+description: TASK-*.md task descriptions wiht markdown and template
+globs: **/TASK-*.md
+alwaysApply: false
+---
+# Task Template Guide
+
+This guide defines the standard format for task documentation files (TASK-*.md) in the project.
+
+## File Location
+Task files should be stored in `docs/project/team/tasks/` with the naming pattern `TASK-XXX.md` where XXX is a sequential number.
+
+## Template Structure
+
+```markdown
+# Task: [Task Title]
+
+**ID**: TASK-XXX  
+**Story**: [STORY-XXX: Story Title](../stories/STORY-XXX.md)  
+**Assignee**: [Role/Name]  
+**Status**: [Todo/In Progress/Review/Done]  
+**Effort**: [X hours/days]  
+**Created**: YYYY-MM-DD  
+**Updated**: YYYY-MM-DD
+
+## Description
+[Clear and concise description of the task. Use bullet points for complex requirements.]
+
+## Implementation Hints
+- [ ] [Implementation step 1]  
+    [Code or command examples if needed]
+- [ ] [Implementation step 2]  
+    [Additional details or examples]
+
+## Acceptance Criteria
+- [ ] [Specific, measurable criterion 1]
+- [ ] [Specific, measurable criterion 2]
+
+## Dependencies
+- **Blocked by**: [TASK-XXX or None]
+- **Blocks**: [TASK-XXX or None]
+
+---
+**Implementer**: [Name/Role]  
+**Reviewer**: [Name/Role]  
+**Target Completion**: [Date or TBD]
+```
+
+## Guidelines
+1. Use clear, action-oriented task titles
+2. Keep descriptions concise but complete
+3. Break down complex tasks into implementation hints
+4. Make acceptance criteria specific and measurable
+5. Update the "Updated" date when making changes
+6. Use checkboxes (- [ ]) for tracking progress
+7. Include relevant code examples or commands in implementation hints
+8. Link related stories and tasks using markdown links
+9. Allow trailing double spaces after each line in lists for proper rendering
+
+## Example
+See [TASK-006.md](mdc:docs/project/team/tasks/TASK-006.md) for a complete example.

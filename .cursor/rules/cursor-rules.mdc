@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Creating Cursor Rules
+
+This guide explains how to create and use Cursor rules to help AI understand your codebase better.
+
+## Rule File Basics
+
+- Rules are stored in the `.cursor/rules` directory
+- Each rule file must have a `.mdc` extension
+- Rules use Markdown format with special Cursor extensions
+- Rules help AI navigate and understand your codebase
+
+## File References
+
+To reference files in your rules, use this format:
+```
+[filename.ext](mdc:filename.ext)
+```
+
+The path should be relative to your workspace root.
+
+## Rule Structure
+
+1. Start with a clear title using a level 1 heading (#)
+2. Add sections using level 2 headings (##)
+3. Use bullet points for lists
+4. Include code examples in triple backticks
+5. Reference files using the format above
+
+## Example Rule
+
+```markdown
+# Project Structure Guide
+
+The main entry point is [index.js](mdc:index.js), which loads configuration from [config.js](mdc:config.js).
+
+## Key Components
+
+- `src/` - Contains source code
+- `tests/` - Contains test files
+- `docs/` - Contains documentation
+
+## Important Files
+
+- [package.json](mdc:package.json) - Project dependencies
+- [README.md](mdc:README.md) - Project documentation
+```
+
+## Best Practices
+
+1. Keep rules focused and specific
+2. Use clear, descriptive titles
+3. Include relevant file references
+4. Add examples when helpful
+5. Update rules when project structure changes
+
+## Common Use Cases
+
+- Document project structure
+- Explain coding standards
+- Define naming conventions
+- Describe build processes
+- List important files and their purposes
+

@@ -18,10 +18,11 @@ Create a module that loads PDF, DOCX, and TXT files using **LlamaIndex** documen
     uv add pypdf  
     uv add python-docx  
     ```
-- [ ] Ask Claude:  
+- [ ] Ask your favorite AI coding assistant LLM:  
     `Can you give example code to set up RAG using LlamaIndex and local models like Mistral? Include package installation instructions using uv.`
 - [ ] Explore with testers or notebooks  
     - use 0.0 for temperature in tests for reproducible results.
+    - create an exploratory jupyter notebook, that step-by-step creates and checks the components
 
 ## Acceptance Criteria
 - [ ] Function `load_document(path)` returns a list of `Document` objects for each supported format using LlamaIndex

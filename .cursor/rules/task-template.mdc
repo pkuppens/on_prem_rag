@@ -1,6 +1,7 @@
 ---
-description: TASK-*.md task descriptions wiht markdown and template
-globs: **/TASK-*.md
+description: TASK-*.md task descriptions with markdown and template
+globs:
+  - "**/TASK-*.md"
 alwaysApply: false
 ---
 # Task Template Guide

@@ -1,0 +1,80 @@
+---
+description: STORY-*.md story descriptions with markdown and template
+globs:
+  - "**/STORY-*.md"
+alwaysApply: false
+---
+# User Story Template Guide
+
+This guide defines the standard format for user story documentation files (`STORY-*.md`) in the project.
+
+## File Location
+User story files should be stored in `docs/project/team/stories/` with the naming pattern `STORY-XXX.md` where `XXX` is a sequential number.
+
+## Template Structure
+
+```markdown
+# User Story: [Story Title]
+
+**ID**: STORY-XXX  
+**Feature**: [FEAT-XXX: Feature Name](../../program/features/FEAT-XXX.md)  
+**Team**: [Team Name]  
+**Status**: [Backlog/To Do/In Progress/Review/Done/Blocked]  
+**Priority**: [P0/P1/P2/P3]  
+**Points**: [Story Points (e.g., 1, 2, 3, 5, 8, ...)]  
+**Created**: YYYY-MM-DD  
+**Updated**: YYYY-MM-DD  
+
+## User Story
+As a **[User Role/Persona/System]**,
+I want **[to perform an action or achieve a goal]**,
+So that **[I can obtain a benefit or value]**.
+
+## Business Context
+[Explain the business value and strategic importance of this story. Why is it needed?]
+
+## Acceptance Criteria
+- [ ] **Given** [a precondition], **when** [an action is performed], **then** [an expected outcome occurs].
+- [ ] [Another acceptance criterion]
+
+## Solution Approach
+[Describe the proposed technical solution or approach. Link to relevant issues, designs, or discussions.]
+
+## Tasks
+- [ ] **[TASK-XXX](../tasks/TASK-XXX.md)**: [Task description] - [Assignee Role] - [Estimated hours]
+- [ ] [Another task]
+
+## Definition of Done
+- [ ] [Criterion 1 for considering the story complete]
+- [ ] [Criterion 2 for considering the story complete]
+
+## Technical Requirements
+- **Framework**: [e.g., LlamaIndex, FastAPI]
+- **Libraries**: [e.g., pypdf, python-docx]
+- **Key Components**: [e.g., Embedding Model, Vector Store]
+
+## Risks & Mitigations
+| Risk                      | Impact      | Mitigation                                     |
+|---------------------------|-------------|------------------------------------------------|
+| [Potential risk]          | [Low/Medium/High] | [How to mitigate or address the risk]      |
+| [Another potential risk]  | [Low/Medium/High] | [Mitigation strategy]                        |
+
+---
+**Story Owner**: [Role/Name]
+**Reviewer**: [Role/Name]
+**Sprint**: [Sprint Name/Number or TBD]
+**Estimated Completion**: [Date or TBD]
+```
+
+## Guidelines
+1.  **Title**: Use a concise and descriptive title for the user story.
+2.  **User Story Format**: Strictly follow the "As a..., I want..., So that..." format.
+3.  **Acceptance Criteria**: Write clear, testable, and specific acceptance criteria using the "Given-When-Then" format where appropriate.
+4.  **Tasks**: Link to specific task files (`TASK-XXX.md`) required to complete the story.
+5.  **Definition of Done**: Clearly define what conditions must be met for the story to be considered complete.
+6.  **Updates**: Always update the "Updated" date when making changes to the story.
+7.  **Links**: Use relative markdown links for features and tasks.
+8.  **Markdown**: Ensure proper markdown formatting for readability.
+
+## Example
+See [STORY-002.md](mdc:docs/project/team/stories/STORY-002.md) for a complete example of a user story.

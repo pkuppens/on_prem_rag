@@ -1,6 +1,7 @@
 ---
-description: 
-globs: 
+description: Creating and modifying Cursor Rules
+globs:
+  - "**/*.mdc"
 alwaysApply: false
 ---
 # Creating Cursor Rules
@@ -65,4 +66,3 @@ The main entry point is [index.js](mdc:index.js), which loads configuration from
 - Define naming conventions
 - Describe build processes
 - List important files and their purposes
-

@@ -1,3 +1,9 @@
+---
+description: Agile documentation refinement
+globs:
+  - "**/*.md"
+alwaysApply: false
+---
 # SAFe Project Management Rule
 
 This cursor rule helps manage projects using the Scaled Agile Framework (SAFe) methodology. All project management documents are stored in `docs/project/` with appropriate subdirectories.
@@ -14,7 +20,7 @@ This cursor rule helps manage projects using the Scaled Agile Framework (SAFe) m
 - **Solution Level**: Solution Train for complex products
 - Coordinates multiple ARTs and suppliers
 
-### 3. Portfolio SAFe (adds Portfolio Level)  
+### 3. Portfolio SAFe (adds Portfolio Level)
 - **Portfolio Level**: Strategy and investment funding
 - Epic management and Lean Portfolio Management
 
@@ -53,7 +59,7 @@ docs/project/
    - Requires substantial investment
    - Cross multiple ARTs
 
-2. **Program Feature** (2-3 PIs, ~20-30 weeks)  
+2. **Program Feature** (2-3 PIs, ~20-30 weeks)
    - Delivers business value
    - Fits within ART capacity
    - Enables capabilities
@@ -221,7 +227,7 @@ So that [benefit/value]
 
 ### Create New Work Items
 - `Create epic for [description]` - Creates new portfolio epic
-- `Create feature for [description]` - Creates new program feature  
+- `Create feature for [description]` - Creates new program feature
 - `Create story for [description]` - Creates new user story
 - `Create task for [description]` - Creates new development task
 

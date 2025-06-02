@@ -25,11 +25,11 @@ alwaysApply: false
 
 ```markdown
 - Item description:
-  
+
     ```language
     code here
     ```
-    
+
 - Next item
 ```
 
@@ -40,13 +40,13 @@ alwaysApply: false
 
 ```markdown
 - Diagram description:
-  
+
     ```mermaid
     graph TD
         A[Start] --> B[Process]
         B --> C[End]
     ```
-    
+
 - Next section
 ```
 
@@ -107,6 +107,3 @@ Rationale for choice...
 - [ ] Criterion 1
 - [ ] Criterion 2
 - [ ] Criterion 3
-
-
-

@@ -9,10 +9,10 @@
 **Updated**: 2025-05-31
 
 ## Description
-Create a module that loads PDF, DOCX, and TXT files, extracting plain text for downstream processing. Use `pypdf` and `python-docx` libraries.
+Create a module that loads PDF, DOCX, and TXT files using **LlamaIndex** document loaders. The loader should return `Document` objects for downstream processing. Under the hood these loaders rely on `pypdf` and `python-docx`.
 
 ## Acceptance Criteria
-- [ ] Function `load_document(path)` returns extracted text for each supported format
+- [ ] Function `load_document(path)` returns a list of `Document` objects for each supported format using LlamaIndex
 - [ ] Errors are logged and raised for unsupported formats or corrupted files
 
 ## Dependencies

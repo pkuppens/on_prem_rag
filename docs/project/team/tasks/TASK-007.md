@@ -9,11 +9,11 @@
 **Updated**: 2025-05-31
 
 ## Description
-Split extracted text into manageable chunks and generate vector embeddings using a local sentence-transformers model.
+Use **LlamaIndex** to split the loaded `Document` objects into manageable chunks and generate vector embeddings. Configure the service context to use the local sentence-transformers model.
 
 ## Acceptance Criteria
 - [ ] Chunking respects sentence boundaries and max token length
-- [ ] Function returns embedding vectors for each chunk
+- [ ] Function returns embedding vectors for each chunk via LlamaIndex
 
 ## Dependencies
 - **Blocked by**: TASK-006 (document loader)

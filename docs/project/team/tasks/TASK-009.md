@@ -9,7 +9,7 @@
 **Updated**: 2025-05-31
 
 ## Description
-Create pytest test cases for document loading, chunking, embedding generation, and ChromaDB storage components.
+Create pytest test cases for the LlamaIndex document pipeline, covering document loading, chunking, embedding generation, and ChromaDB storage components.
 
 ## Acceptance Criteria
 - [ ] Tests cover happy path for each document type

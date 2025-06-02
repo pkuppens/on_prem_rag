@@ -22,20 +22,26 @@ Automated document processing enables rapid onboarding of enterprise knowledge. 
 - [ ] **Given** extracted text, **when** chunked, **then** chunks are embedded using the selected model.
 - [ ] **Given** generated embeddings, **when** stored, **then** they can be retrieved efficiently for queries.
 - [ ] **Given** invalid or corrupted files, **when** processed, **then** meaningful errors are logged and surfaced.
+## Solution Approach
+As discussed in [issue #12](https://github.com/pkuppens/on_prem_rag/issues/12), the first implementation of the document pipeline will leverage **LlamaIndex**. The framework
+provides document loaders, text chunking, embedding utilities, and vector store integrations that may accelerate development.
+This approach will help evaluate whether LlamaIndex satisfies the acceptance criteria before building custom components.
+
 
 ## Tasks
-- [ ] **[TASK-006](../tasks/TASK-006.md)**: Implement file ingestion module for PDF, DOCX, TXT - Backend Engineer - 6h
-- [ ] **[TASK-007](../tasks/TASK-007.md)**: Build text chunking and embedding generation - ML Engineer - 6h
-- [ ] **[TASK-008](../tasks/TASK-008.md)**: Integrate ChromaDB storage and retrieval - Backend Engineer - 4h
-- [ ] **[TASK-009](../tasks/TASK-009.md)**: Write unit tests for document pipeline - QA Engineer - 4h
+- [ ] **[TASK-006](../tasks/TASK-006.md)**: Implement LlamaIndex file ingestion module - Backend Engineer - 6h
+- [ ] **[TASK-007](../tasks/TASK-007.md)**: Build LlamaIndex chunking and embedding generation - ML Engineer - 6h
+- [ ] **[TASK-008](../tasks/TASK-008.md)**: Integrate LlamaIndex with ChromaDB storage - Backend Engineer - 4h
+- [ ] **[TASK-009](../tasks/TASK-009.md)**: Write unit tests for LlamaIndex pipeline - QA Engineer - 4h
 
 ## Definition of Done
-- [ ] Document loader accepts PDF, DOCX, and TXT files
-- [ ] Embeddings generated using sentence transformers
-- [ ] ChromaDB stores and retrieves document chunks
+- [ ] Document loader accepts PDF, DOCX, and TXT files via LlamaIndex
+- [ ] Embeddings generated using sentence transformers through LlamaIndex
+- [ ] ChromaDB stores and retrieves document chunks with LlamaIndex
 - [ ] Tests cover extraction, embedding, and storage logic
 
 ## Technical Requirements
+- **Framework**: LlamaIndex for document pipeline
 - **Parsing Libraries**: pypdf, python-docx
 - **Embedding Model**: Sentence Transformers (local model)
 - **Vector Store**: ChromaDB with local persistence

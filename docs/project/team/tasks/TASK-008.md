@@ -9,10 +9,10 @@
 **Updated**: 2025-05-31
 
 ## Description
-Persist embedding vectors in ChromaDB and provide retrieval functions for similarity search.
+Persist embedding vectors in ChromaDB using the **LlamaIndex** `ChromaVectorStore` and provide retrieval functions through the framework's API.
 
 ## Acceptance Criteria
-- [ ] Embeddings are written to and read from ChromaDB collections
+- [ ] Embeddings are written to and read from ChromaDB collections via LlamaIndex
 - [ ] Retrieval by similarity returns sorted results
 
 ## Dependencies

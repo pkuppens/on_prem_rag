@@ -139,7 +139,6 @@ cython_debug/
 uv.lock
 .uv
 
-# pre-commit
-.pre-commit-config.yaml
+# Datafiles, both (secret) input and working directories
 **/embeddings_cache/*
 notebooks/data/

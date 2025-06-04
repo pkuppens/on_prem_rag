@@ -36,45 +36,12 @@ from llama_index.llms.ollama import Ollama
 from llama_index.readers.file import DocxReader, PDFReader
 
 # Local imports
+from rag_pipeline.config.parameter_sets import RAGParams
 from rag_pipeline.utils.directory_utils import (
     DirectoryEmptyError,
     ensure_directory,
     validate_directory,
 )
-
-# =============================================================================
-# CONFIGURATION CONSTANTS WITH EXPLANATIONS
-# =============================================================================
-
-# Chunk size: Number of characters per text chunk
-# - Smaller chunks (256-512): Better for precise answers, more granular retrieval
-# - Larger chunks (1024-2048): Better context, may include irrelevant info
-# - Rule of thumb: Match your typical question complexity
-DEFAULT_CHUNK_SIZE = 512
-
-# Chunk overlap: Characters shared between adjacent chunks
-# - Prevents information loss at chunk boundaries
-# - Usually 10-20% of chunk_size
-# - Higher overlap = more redundancy but better context preservation
-DEFAULT_CHUNK_OVERLAP = 50
-
-# Embedding model: Converts text to vector representations
-# - "BAAI/bge-small-en-v1.5": Fast, good general performance, 384 dimensions
-# - "sentence-transformers/all-MiniLM-L6-v2": Lighter, 384 dimensions
-# - "BAAI/bge-large-en-v1.5": Better quality, slower, 1024 dimensions
-# - Choose based on speed vs accuracy tradeoff
-DEFAULT_EMBED_MODEL = "BAAI/bge-small-en-v1.5"
-
-# Retrieval settings
-# - Top-k: Number of most similar chunks to retrieve per query
-# - Higher k = more context but potentially more noise
-DEFAULT_TOP_K = 3
-
-# LLM settings
-DEFAULT_LLM_MODEL = "mistral"  # Ollama model name
-DEFAULT_TEMPERATURE = 0.1  # Lower = more focused, higher = more creative
-DEFAULT_MAX_TOKENS = 512  # Maximum response length
-DEFAULT_PREVIEW_LENGTH = 200  # Max length for content preview
 
 
 class LocalRAGSystem:
@@ -102,11 +69,7 @@ class LocalRAGSystem:
 
     def __init__(
         self,
-        model_name: str = DEFAULT_LLM_MODEL,
-        embed_model_name: str = DEFAULT_EMBED_MODEL,
-        chunk_size: int = DEFAULT_CHUNK_SIZE,
-        chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
-        top_k: int = DEFAULT_TOP_K,
+        params: RAGParams,
         input_data_dir: str = "data",
         index_storage_dir: str = "storage",
         embeddings_cache_dir: str = "cache",
@@ -115,24 +78,22 @@ class LocalRAGSystem:
         Initialize the RAG system with specified configuration.
 
         Args:
-            model_name: Name of the LLM model to use (default: "mistral")
-            embed_model_name: Name of the embedding model
-            chunk_size: Size of text chunks for processing (default: 512)
-            chunk_overlap: Overlap between chunks (default: 50)
-            top_k: Number of chunks to retrieve per query (default: 3)
+            params: RAG parameters configuration
             input_data_dir: Directory for input documents.
             index_storage_dir: Directory for persistent index storage.
             embeddings_cache_dir: Directory for caching embeddings.
 
         Raises:
             DirectoryError: If there are issues with directory creation or access.
+            ValueError: If parameters are invalid.
 
         """
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
-        self.embed_model_name = embed_model_name
-        self.model_name = model_name
-        self.top_k = top_k
+        # Validate parameters
+        errors = params.validate()
+        if errors:
+            raise ValueError("Invalid parameters:\n" + "\n".join(f"- {e}" for e in errors))
+
+        self.params = params
 
         # Ensure directories exist and are accessible
         self.input_data_dir = ensure_directory(
@@ -151,8 +112,8 @@ class LocalRAGSystem:
         # Initialize components and set global settings
         Settings.llm = self._setup_llm()
         Settings.embed_model = self._setup_embeddings()
-        Settings.chunk_size = chunk_size
-        Settings.chunk_overlap = chunk_overlap
+        Settings.chunk_size = params.chunking.chunk_size
+        Settings.chunk_overlap = params.chunking.chunk_overlap
 
         # Document readers for different file types
         self.pdf_reader = PDFReader()
@@ -173,9 +134,9 @@ class LocalRAGSystem:
         # Option 1: Using Ollama (easier, recommended)
         try:
             llm = Ollama(
-                model=self.model_name,
+                model=self.params.llm.model_name,
                 request_timeout=120.0,
-                temperature=DEFAULT_TEMPERATURE,
+                temperature=self.params.llm.temperature,
                 system_prompt=(
                     "You are a helpful assistant that answers questions based on "
                     "the provided context. Always include specific references to "
@@ -188,8 +149,7 @@ class LocalRAGSystem:
         except Exception as e:
             print(f"Ollama setup failed: {e}")
             print("Falling back to HuggingFace implementation...")
-        else:
-            return llm
+            return self._setup_hf_llm()
 
     def _setup_hf_llm(self):
         """
@@ -221,14 +181,14 @@ class LocalRAGSystem:
             tokenizer_name=model_name,
             query_wrapper_prompt=query_wrapper_prompt,
             context_window=4096,
-            max_new_tokens=DEFAULT_MAX_TOKENS,
+            max_new_tokens=self.params.llm.max_tokens,
             model_kwargs={
                 "torch_dtype": torch.float16,
                 "load_in_8bit": True,  # For memory efficiency
             },
             tokenizer_kwargs={},
             generate_kwargs={
-                "temperature": DEFAULT_TEMPERATURE,
+                "temperature": self.params.llm.temperature,
                 "do_sample": True,
                 "top_p": 0.9,
             },
@@ -245,7 +205,7 @@ class LocalRAGSystem:
 
         """
         return HuggingFaceEmbedding(
-            model_name=self.embed_model_name,
+            model_name=self.params.embedding.model_name,
             cache_folder=str(self.embeddings_cache_dir / "embeddings_cache"),
         )
 
@@ -439,8 +399,8 @@ class LocalRAGSystem:
         """
         # Parse documents into nodes with metadata preservation
         node_parser = SimpleNodeParser.from_defaults(
-            chunk_size=self.chunk_size,
-            chunk_overlap=self.chunk_overlap,
+            chunk_size=self.params.chunking.chunk_size,
+            chunk_overlap=self.params.chunking.chunk_overlap,
             include_metadata=True,  # Preserve document metadata
             include_prev_next_rel=True,  # Track chunk relationships
         )
@@ -529,6 +489,7 @@ class LocalRAGSystem:
             index: VectorStoreIndex instance to query.
             question: Question to ask.
             include_sources: Whether to include source information in response.
+            top_k: Optional override for number of chunks to retrieve.
 
         Returns:
             Dictionary containing:
@@ -545,7 +506,7 @@ class LocalRAGSystem:
 
         """
         query_engine = index.as_query_engine(
-            similarity_top_k=top_k or self.top_k,
+            similarity_top_k=top_k or self.params.retrieval.top_k,
             response_mode="compact",  # Better for source attribution
         )
 
@@ -563,9 +524,7 @@ class LocalRAGSystem:
                     "rank": i + 1,
                     "score": getattr(node, "score", 0.0),
                     "reference": node.metadata.get("full_reference", "Unknown"),
-                    "content_preview": (
-                        node.text[:DEFAULT_PREVIEW_LENGTH] + "..." if len(node.text) > DEFAULT_PREVIEW_LENGTH else node.text
-                    ),
+                    "content_preview": (node.text[:200] + "..." if len(node.text) > 200 else node.text),
                     "metadata": dict(node.metadata),
                 }
                 result["sources"].append(source_info)

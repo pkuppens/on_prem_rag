@@ -1,18 +1,12 @@
 {
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Enabled": false,
-    "python.linting.mypyEnabled": true,
-    "python.linting.ruffEnabled": true,
     "editor.rulers": [132],
     "editor.formatOnSave": true,
-    "python.formatting.provider": "none",
     "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.defaultFormatter": "ms-python.python",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll.ruff": true,
-            "source.organizeImports.ruff": true
+            "source.fixAll.ruff": "always",
+            "source.organizeImports.ruff": "always"
         }
     }
 }

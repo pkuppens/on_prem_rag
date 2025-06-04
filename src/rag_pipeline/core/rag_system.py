@@ -35,6 +35,13 @@ from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.ollama import Ollama
 from llama_index.readers.file import DocxReader, PDFReader
 
+# Local imports
+from rag_pipeline.utils.directory_utils import (
+    DirectoryEmptyError,
+    ensure_directory,
+    validate_directory,
+)
+
 # =============================================================================
 # CONFIGURATION CONSTANTS WITH EXPLANATIONS
 # =============================================================================
@@ -117,20 +124,29 @@ class LocalRAGSystem:
             index_storage_dir: Directory for persistent index storage.
             embeddings_cache_dir: Directory for caching embeddings.
 
+        Raises:
+            DirectoryError: If there are issues with directory creation or access.
+
         """
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.embed_model_name = embed_model_name
         self.model_name = model_name
         self.top_k = top_k
-        self.input_data_dir = Path(input_data_dir)
-        self.index_storage_dir = Path(index_storage_dir)
-        self.embeddings_cache_dir = Path(embeddings_cache_dir)
 
-        # Ensure directories exist
-        self.input_data_dir.mkdir(parents=True, exist_ok=True)
-        self.index_storage_dir.mkdir(parents=True, exist_ok=True)
-        self.embeddings_cache_dir.mkdir(parents=True, exist_ok=True)
+        # Ensure directories exist and are accessible
+        self.input_data_dir = ensure_directory(
+            input_data_dir,
+            description="input data directory",
+        )
+        self.index_storage_dir = ensure_directory(
+            index_storage_dir,
+            description="index storage directory",
+        )
+        self.embeddings_cache_dir = ensure_directory(
+            embeddings_cache_dir,
+            description="embeddings cache directory",
+        )
 
         # Initialize components and set global settings
         Settings.llm = self._setup_llm()
@@ -326,24 +342,55 @@ class LocalRAGSystem:
         Returns:
             List of Document objects with enhanced metadata.
 
+        Raises:
+            DirectoryError: If there are issues with the input directory.
+            ValueError: If no supported documents are found.
+
         Note:
             Uses SimpleDirectoryReader to automatically handle multiple file types.
             Adds enhanced metadata for better source attribution.
 
         """
         resolved_data_path = Path(data_path) if data_path else self.input_data_dir
-        if not resolved_data_path.exists():
-            error_message = f"Data path {resolved_data_path} not found"
-            raise FileNotFoundError(error_message)
 
-        # SimpleDirectoryReader supports PDF, DOCX, TXT, MD, HTML, and more
-        reader = SimpleDirectoryReader(
-            input_dir=str(resolved_data_path),
-            recursive=True,  # Search subdirectories
-            required_exts=[".pdf", ".docx", ".txt", ".md"],  # Supported file types
+        # Validate input directory
+        validate_directory(
+            resolved_data_path,
+            must_exist=True,
+            must_be_readable=True,
+            description="input data directory",
         )
 
-        documents = reader.load_data()
+        # Check if directory is empty
+        if not any(resolved_data_path.iterdir()):
+            raise DirectoryEmptyError(
+                f"Input data directory is empty: {resolved_data_path}\n"
+                f"Please add your documents (PDF, DOCX, TXT, MD) to this directory."
+            )
+
+        # SimpleDirectoryReader supports PDF, DOCX, TXT, MD, HTML, and more
+        try:
+            reader = SimpleDirectoryReader(
+                input_dir=str(resolved_data_path),
+                recursive=True,  # Search subdirectories
+                required_exts=[".pdf", ".docx", ".txt", ".md"],  # Supported file types
+            )
+
+            documents = reader.load_data()
+
+            if not documents:
+                raise ValueError(
+                    f"No supported documents found in: {resolved_data_path}\n"
+                    f"Please add documents with these extensions: .pdf, .docx, .txt, .md"
+                )
+
+        except ValueError as e:
+            if "No files found" in str(e):
+                raise ValueError(
+                    f"No supported documents found in: {resolved_data_path}\n"
+                    f"Please add documents with these extensions: .pdf, .docx, .txt, .md"
+                ) from e
+            raise
 
         # Add enhanced metadata for better source attribution
         for doc in documents:
@@ -381,6 +428,9 @@ class LocalRAGSystem:
 
         Returns:
             A VectorStoreIndex instance.
+
+        Raises:
+            DirectoryError: If there are issues with the index storage directory.
 
         Note:
             The index includes enhanced metadata for better source attribution
@@ -421,7 +471,14 @@ class LocalRAGSystem:
         # Persist index if path provided
         resolved_persist_dir = Path(persist_dir) if persist_dir else self.index_storage_dir
         if resolved_persist_dir:
-            resolved_persist_dir.mkdir(parents=True, exist_ok=True)
+            # Ensure directory exists and is writable
+            validate_directory(
+                resolved_persist_dir,
+                must_exist=True,
+                must_be_writable=True,
+                create_if_missing=True,
+                description="index storage directory",
+            )
             index.storage_context.persist(str(resolved_persist_dir))
             print(f"Index saved to {resolved_persist_dir}")
 
@@ -437,13 +494,19 @@ class LocalRAGSystem:
         Returns:
             A VectorStoreIndex instance loaded from storage.
 
+        Raises:
+            DirectoryError: If there are issues with the index directory.
+
         """
         resolved_persist_dir = Path(persist_dir) if persist_dir else self.index_storage_dir
-        if not resolved_persist_dir.exists():
-            error_message = f"Index directory {resolved_persist_dir} not found."
-            raise FileNotFoundError(
-                error_message,
-            )
+
+        # Validate index directory
+        validate_directory(
+            resolved_persist_dir,
+            must_exist=True,
+            must_be_readable=True,
+            description="index directory",
+        )
 
         storage_context = StorageContext.from_defaults(
             persist_dir=str(resolved_persist_dir),

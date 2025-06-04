@@ -150,9 +150,7 @@ def generate_parameter_grid(
 
     # Generate all combinations
     combinations = []
-    for (c, c_desc), (e, e_desc), (llm_params, llm_desc), (r, r_desc) in product(
-        chunking, embedding, llm, retrieval
-    ):
+    for (c, c_desc), (e, e_desc), (llm_params, llm_desc), (r, r_desc) in product(chunking, embedding, llm, retrieval):
         params = RAGParams(
             chunking=c,
             embedding=e,

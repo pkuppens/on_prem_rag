@@ -37,7 +37,73 @@ dev = [
 ]
 
 [tool.ruff]
-line-length = 132
+# Enable commonly used rule sets:
+select = [
+    "E",  # pycodestyle: style issues like indentation, whitespace, etc.
+    "F",  # Pyflakes: logical errors such as unused variables or undefined names
+    "I",  # isort: import sorting
+    "N",  # pep8-naming: class/function/method naming conventions
+    "W",  # pycodestyle warnings (deprecated, generally covered by E)
+    "B",  # bugbear: likely bugs and design problems
+    "C4", # flake8-comprehensions: comprehensions and generator improvements
+    "UP", # pyupgrade: syntax modernization (e.g., f-strings, walrus operator)
+    "PL", # pylint rules, categorized into subgroups like PLR (refactor), PLE (errors), etc.
+]
+ignore = [
+    "E501",    # line too long
+    "PLR2004", # magic value used in comparison
+    "E741",    # ambiguous variable name (we fixed this one)
+    "C901",    # too complex
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+    "PLR0912", # too many branches
+    "PLR0911", # too many return statements
+]
+
+# Allow autofix for all enabled rules (when `--fix` is used)
+fixable = ["ALL"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+# Same as Black.
+line-length = 100
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8
+target-version = "py38"
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.isort]
+known-first-party = ["rag_pipeline"]
 
 [tool.ruff.lint]
 # Allow all rules for a permissive style initially.
@@ -45,65 +111,65 @@ line-length = 132
 # Rule reference: https://docs.astral.sh/ruff/rules/
 # Ruff codes: https://docs.astral.sh/ruff/rules/
 select = [
-    "E",
-    "F",
-    "W",
-    "C90",
-    "I",
-    "N",
-    "D",
-    "UP",
-    "ANN",
-    "S",
-    "BLE",
-    "A",
-    "COM",
-    "C4",
-    "DTZ",
-    "T10",
-    "EXE",
-    "ISC",
-    "ICN",
-    "G",
-    "INP",
-    "PIE",
-    "PYI",
-    "PT",
-    "Q",
-    "RSE",
-    "RET",
-    "SLF",
-    "SIM",
-    "TID",
-    "TCH",
-    "ARG",
-    "PTH",
-    "ERA",
-    "PD",
-    "PGH",
-    "PLC",
-    "PLE",
-    "PLR",
-    "PLW",
-    "FLY",
-    "NPY",
-    "PERF",
-    "RUF",
+    "E",    # pycodestyle errors
+    "F",    # pyflakes errors
+    "W",    # pycodestyle warnings
+    "C90",  # mccabe complexity
+    "I",    # isort import sorting
+    "N",    # pep8-naming
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+    "ANN",  # flake8-annotations
+    "S",    # flake8-bandit
+    "BLE",  # flake8-blind-except
+    "A",    # flake8-builtins
+    "COM",  # flake8-commas
+    "C4",   # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "T10",  # flake8-debugger
+    "EXE",  # flake8-executable
+    "ISC",  # flake8-implicit-str-concat
+    "ICN",  # flake8-import-conventions
+    "G",    # flake8-logging-format
+    "INP",  # flake8-no-pep420
+    "PIE",  # flake8-pie
+    "PYI",  # flake8-pyi
+    "PT",   # flake8-pytest-style
+    "Q",    # flake8-quotes
+    "RSE",  # flake8-raise
+    "RET",  # flake8-return
+    "SLF",  # flake8-self
+    "SIM",  # flake8-simplify
+    "TID",  # flake8-tidy-imports
+    "TCH",  # flake8-type-checking
+    "ARG",  # flake8-unused-arguments
+    "PTH",  # flake8-use-pathlib
+    "ERA",  # eradicate
+    "PD",   # pandas-vet
+    "PGH",  # pygrep-hooks
+    "PLC",  # pylint conventions
+    "PLE",  # pylint errors
+    "PLR",  # pylint refactoring
+    "PLW",  # pylint warnings
+    "FLY",  # flynt
+    "NPY",  # numpy-vet
+    "PERF", # perflint
+    "RUF",  # ruff-specific rules
 ] # Equivalent to --select ALL
 ignore = [
-    "D203",
-    "D212",    # Existing
-    "F403",
-    "F405",    # Star imports (e.g., `from module import *`)
-    "PLR0913", # Too many arguments in function definition
-    "ANN201",  # Missing return type annotation for public function
-    "ANN202",  # Missing return type annotation for private function
-    "ANN204",  # Missing return type annotation for special method `__init__`
-    "D401",    # First line of docstring should be in imperative mood
-    "D417",    # Missing argument description in the docstring
-    "BLE001",  # Do not catch blind exception: `Exception`
-    "RET504",  # Unnecessary assignment to variable before `return` statement
-    "COM812",  # Missing trailing comma in multi-line CPython list, tuple, or dict literal
+    "D203",    # 1-blank-line-before-class
+    "D212",    # multi-line-summary-first-line
+    "F403",    # star-imports
+    "F405",    # star-imports
+    "PLR0913", # too-many-arguments
+    "ANN201",  # missing-return-type-public-function
+    "ANN202",  # missing-return-type-private-function
+    "ANN204",  # missing-return-type-special-method
+    "D401",    # first-line-should-be-in-imperative-mood
+    "D417",    # missing-argument-description
+    "BLE001",  # blind-except
+    "RET504",  # unnecessary-assign
+    "COM812",  # missing-trailing-comma
 ]
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$$"

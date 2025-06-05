@@ -24,6 +24,7 @@ dependencies = [
     "pip>=25.1.1",
     "nbstripout>=0.8.1",
     "hf-xet>=1.1.2",
+    "pytest>=8.4.0",
 ]
 requires-python = ">=3.12"
 

@@ -3,28 +3,29 @@
 **ID**: TASK-001
 **Story**: [STORY-001: Development Environment Setup](../stories/STORY-001.md)
 **Assignee**: Backend Engineer
-**Status**: Todo
+**Status**: Completed
 **Effort**: 4 hours
 **Created**: 2025-05-31
-**Updated**: 2025-05-31
+**Updated**: 2025-06-05
 
 ## Description
 
 Set up the basic structure for this project:
-* Create the foundational project files, including `pyproject.toml`, dependency specifications, and initial package structure.
-* Python (3.12) for coding
-    * coding style instructions for well-documented code with type hinting, extensive docstrings
-    * using the `uv` package manager for fast, reliable dependency management
-    * using minimum requirements (>=x.y.z) or no requirement over fixed requirements (==x.y.z) during library/proof of concept development
-    * `uv.lock` is git ignored, or only linked to production releases.
-    * using `ruff` over `flake`, `black`, for code formatting and linting, with a very permissive coding style
-    * using `pytest` for testing over `unittest`
-* Pre-commit hooks that run:
-    * both ruff format and ruff check
-    * pytest (coverage is out of scope for now)
-    * secret detection
-* Github actions folder with minimal example
-* 'SETUP.md' documentation for the set-up with explanations, and required steps, pre-commit autoupdate and install
+
+- Create the foundational project files, including `pyproject.toml`, dependency specifications, and initial package structure.
+- Python (3.12) for coding
+  - coding style instructions for well-documented code with type hinting, extensive docstrings
+  - using the `uv` package manager for fast, reliable dependency management
+  - using minimum requirements (>=x.y.z) or no requirement over fixed requirements (==x.y.z) during library/proof of concept development
+  - `uv.lock` is git ignored, or only linked to production releases.
+  - using `ruff` over `flake`, `black`, for code formatting and linting, with a very permissive coding style
+  - using `pytest` for testing over `unittest`
+- Pre-commit hooks that run:
+  - both ruff format and ruff check
+  - pytest (coverage is out of scope for now)
+  - secret detection
+- Github actions folder with minimal example
+- 'SETUP.md' documentation for the set-up with explanations, and required steps, pre-commit autoupdate and install
 
 ## Acceptance Criteria
 
@@ -37,6 +38,7 @@ Set up the basic structure for this project:
 ## Implementation Details
 
 ### Required Files
+
 - `pyproject.toml`: Project configuration and dependency specification
 - `uv.lock`: Locked dependency versions for reproducible builds
 - `src/rag_pipeline/`: Main package directory structure
@@ -45,6 +47,7 @@ Set up the basic structure for this project:
   `SETUP.md`: Setup descriptions and instructions
 
 ### Core Dependencies
+
 ```toml
 [project]
 dependencies = [
@@ -67,6 +70,7 @@ dev = [
 ```
 
 ### Package Structure
+
 ```
 src/
 ├── rag_pipeline/
@@ -105,21 +109,25 @@ tests/
 ## Implementation Steps
 
 1. **Initialize uv project** (30 min)
+
    - Run `uv init` to create basic project structure
    - Configure Python version constraint (3.12+)
 
 2. **Configure pyproject.toml** (90 min)
+
    - Add project metadata (name, version, description)
    - Specify core dependencies with version constraints
    - Configure development dependencies
    - Set up project entry points
 
 3. **Create package structure** (60 min)
+
    - Create `src/rag_pipeline/` directory structure
    - Add `__init__.py` files with proper imports
    - Create placeholder modules for core functionality
 
 4. **Generate lock file** (30 min)
+
    - Run `uv lock` to generate `uv.lock` file
    - Verify all dependencies resolve correctly
    - Test installation in clean environment
@@ -142,11 +150,13 @@ tests/
 ## Notes
 
 ### Technology Rationale
+
 - **uv**: Chosen over pip/poetry for significantly faster dependency resolution and installation
 - **src layout**: Improves import behavior and testing isolation
 - **Version constraints**: Be flexible during development, and pinned to stable versions while allowing patch updates when moving to production releases
 
 ### Future Considerations
+
 - Integration with pre-commit hooks for dependency validation
 - Automated dependency vulnerability scanning
 - Consideration of dependency grouping for different deployment scenarios

@@ -9,16 +9,21 @@
 **Updated**: 2025-05-31
 
 ## Description
-Write a step-by-step guide covering repository cloning, dependency installation with `uv`, Docker Compose usage, and common troubleshooting tips.
+
+Write a step-by-step guide covering repository cloning, dependency installation with `uv`, Docker Compose usage, and common
+troubleshooting tips.
 
 ## Acceptance Criteria
+
 - [ ] README includes setup steps and command examples
 - [ ] Troubleshooting section covers common errors
 
 ## Dependencies
+
 - **Blocked by**: TASK-002 (compose setup for screenshots/examples)
 
 ---
+
 **Implementer**: Technical Writer
 **Reviewer**: Lead Developer
 **Target Completion**: TBD

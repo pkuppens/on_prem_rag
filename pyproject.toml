@@ -114,6 +114,37 @@ line-ending = "auto"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v"
 
 [tool.uv]
 python-preference = "only-managed" # Use uv-managed Python installations
+
+[tool.coverage.run]
+source = ["src/rag_pipeline"]
+branch = true
+
+[tool.coverage.report]
+# Lines to exclude from coverage reporting
+exclude_lines = [
+    "pragma: no cover",           # Explicitly marked lines
+    "def __repr__",               # Standard special methods
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",                       # Empty implementations
+]
+show_missing = true # Show line numbers of missing coverage
+
+# Test commands for different scenarios:
+# - Basic test with coverage: uv run pytest --cov=src/rag_pipeline --cov-report=term
+# - Test specific file: uv run pytest --cov=src/rag_pipeline --cov-report=term tests/core/test_document_loader.py
+# - Test specific function: uv run pytest --cov=src/rag_pipeline --cov-report=term -k test_load_text_file
+# - Generate HTML report: uv run pytest --cov=src/rag_pipeline --cov-report=html
+
+# Note: Direct script shortcuts are not supported in uv yet.
+# Instead, use the following commands:
+# - Terminal coverage: uv run pytest --cov=src/rag_pipeline --cov-report=term
+# - HTML coverage: uv run pytest --cov=src/rag_pipeline --cov-report=html
+# Additional arguments can be added after the command, e.g.:
+# uv run pytest --cov=src/rag_pipeline --cov-report=term -k test_load_text_file

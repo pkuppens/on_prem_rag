@@ -1,23 +1,83 @@
-"""Document loader module for handling various file formats and preprocessing."""
+"""Document loader module for handling various file formats and preprocessing.
+
+Project References:
+- Feature: FEAT-001 (Technical Foundation & MVP)
+- Story: STORY-002 (Document Processing Pipeline)
+- Task: TASK-006 (Implement robust file ingestion module)
+  - [✓] Idempotent document loading with duplicate detection
+  - [✓] File validation and preprocessing pipeline
+  - [✓] LlamaIndex document loaders with error handling
+  - [✓] Support PDF, DOCX, MD, and TXT file types
+  - [ ] Advanced chunking and embedding system (TASK-007)
+  - [ ] Document obsoletion/invalidation (TASK-007)
+
+This module is part of the core RAG (Retrieval-Augmented Generation) pipeline,
+addressing the following business needs:
+
+1. Data Privacy & Compliance
+   - Zero cloud dependencies for document processing
+   - Complete data sovereignty for sensitive information
+   - Compliance with GDPR, HIPAA, and other regulations
+
+2. Cost Control & Efficiency
+   - Eliminate per-query API costs
+   - Predictable resource usage
+   - Efficient document processing
+
+3. Operational Independence
+   - No internet dependency for core functionality
+   - Reliable document processing pipeline
+   - Robust error handling and recovery
+
+Features:
+[✓] Core Document Processing
+    - Support for PDF, DOCX, MD, and TXT files
+    - File validation and size limits
+    - Duplicate detection using SHA-256 hashing
+    - Error handling and logging
+
+[✓] Document Metadata
+    - File path and type tracking
+    - File size and hash information
+    - Processing status and error messages
+    - Page count for PDF documents
+
+[ ] Planned Enhancements (TASK-007)
+    - Document versioning and history
+    - Validity periods (valid_at, invalid_at)
+    - Access control integration
+    - Document obsoletion/invalidation
+    - Batch processing optimization
+    - Progress tracking and resumability
+
+This module is part of FEAT-001 (Technical Foundation & MVP) and supports
+FEAT-002 (Enterprise User Interface) for document upload capabilities.
+"""
 
 import hashlib
 import logging
 from pathlib import Path
 
-from llama_index.core import Document
+from llama_index.core import Document, SimpleDirectoryReader
 from llama_index.readers.file import (
     DocxReader,
     MarkdownReader,
     PDFReader,
-    SimpleDirectoryReader,
 )
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 
 class DocumentMetadata(BaseModel):
-    """Metadata for a processed document."""
+    """Metadata for a processed document.
+
+    This class can be extended with additional fields for future features such as:
+    - Validity periods (valid_at, invalid_at)
+    - Creation and modification timestamps
+    - Access control information
+    - Document versioning
+    """
 
     file_path: str
     file_hash: str
@@ -45,7 +105,6 @@ class DocumentLoader:
             ".pdf": PDFReader(),
             ".docx": DocxReader(),
             ".md": MarkdownReader(),
-            ".txt": SimpleDirectoryReader(),
         }
 
     def _compute_file_hash(self, file_path: Path) -> str:
@@ -106,7 +165,10 @@ class DocumentLoader:
 
         try:
             # Get appropriate reader
-            reader = self.readers[file_path.suffix.lower()]
+            if file_path.suffix.lower() == ".txt":
+                reader = SimpleDirectoryReader(input_files=[str(file_path)])
+            else:
+                reader = self.readers[file_path.suffix.lower()]
 
             # Load document
             documents = reader.load_data(file_path)

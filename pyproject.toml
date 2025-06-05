@@ -23,6 +23,7 @@ dependencies = [
     "ipywidgets>=8.1.7",
     "pip>=25.1.1",
     "nbstripout>=0.8.1",
+    "hf-xet>=1.1.2",
 ]
 requires-python = ">=3.12"
 
@@ -38,6 +39,16 @@ dev = [
 
 [tool.ruff]
 # Enable commonly used rule sets:
+# Same as Black.
+line-length = 132
+
+# Assume Python 3.12
+target-version = "py312"
+
+[tool.ruff.lint]
+# Allow autofix for all enabled rules (when `--fix` is used)
+fixable = ["ALL"]
+unfixable = []
 select = [
     "E",  # pycodestyle: style issues like indentation, whitespace, etc.
     "F",  # Pyflakes: logical errors such as unused variables or undefined names
@@ -47,15 +58,6 @@ select = [
     "B",  # bugbear: likely bugs and design problems
     "UP", # pyupgrade: syntax modernization (e.g., f-strings, walrus operator)
 ]
-
-# Same as Black.
-line-length = 132
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-# Assume Python 3.12
-target-version = "py312"
 
 ignore = [
     "E501",    # line too long
@@ -70,10 +72,6 @@ ignore = [
     "F",       # all F* errors (Pyflakes)
 ]
 
-[tool.ruff.lint]
-# Allow autofix for all enabled rules (when `--fix` is used)
-fixable = ["ALL"]
-unfixable = []
 
 # Exclude a variety of commonly ignored directories.
 exclude = [

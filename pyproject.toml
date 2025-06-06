@@ -25,8 +25,14 @@ dependencies = [
     "nbstripout>=0.8.1",
     "hf-xet>=1.1.2",
     "pytest>=8.4.0",
+    "python-multipart>=0.0.6",
+    "ruff>=0.11.12",
 ]
 requires-python = ">=3.12"
+
+[project.scripts]
+start-backend = "rag_pipeline.file_ingestion:start_server"
+# start-frontend: cd frontend && npm run dev
 
 [project.optional-dependencies]
 dev = [

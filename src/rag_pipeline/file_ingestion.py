@@ -21,12 +21,15 @@ from rag_pipeline.config.parameter_sets import (
 from rag_pipeline.core.document_loader import DocumentLoader
 from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
+NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
+
 
 # Set up structured logging
 class StructuredLogger:
     def __init__(self, name: str, level: int = logging.INFO):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
+        self.level = level
 
         # Create console handler with formatting
         handler = logging.StreamHandler(sys.stdout)
@@ -67,7 +70,7 @@ app.add_middleware(
 )
 
 # Store upload progress
-upload_progress: dict[str, float] = {}
+upload_progress: dict[str, int] = {}
 
 # Global helpers
 document_loader = DocumentLoader()
@@ -99,6 +102,7 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
         with open(file_path, "wb") as f:
             f.write(await file.read())
             logger.debug("File saved to", filename=str(file_path))
+            upload_progress[file.filename] = 10
 
         # Load document using loader with duplicate detection
         documents, _ = document_loader.load_document(file_path)
@@ -115,6 +119,7 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
         nodes = parser.get_nodes_from_documents(documents)
         total_nodes = len(nodes)
         logger.debug("Nodes parsed", filename=str(file_path), total_nodes=total_nodes)
+        upload_progress[file.filename] = 15
 
         unique_nodes = []
         for node in nodes:
@@ -138,9 +143,13 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
                 embeddings=[embedding],
                 metadatas=[node.metadata],
             )
-            upload_progress[file.filename] = int(100 * idx / total)
+            upload_progress[file.filename] = 15 + int(80 * idx / total)
+            # Yield control to event loop every NODES_PER_YIELD nodes to allow WebSocket updates
+            # Can be just 1 because the WebSocket updates are not that frequent and rendering fast
+            if idx % NODES_PER_YIELD == 0:
+                await asyncio.sleep(0)
 
-        upload_progress[file.filename] = 100
+        upload_progress[file.filename] = 100  # upload completed
         logger.info("File processing completed", filename=file.filename, chunks=total)
         return {"message": "File processed successfully", "filename": file.filename, "chunks": total}
 

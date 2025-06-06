@@ -12,6 +12,11 @@ interface SetsResponse {
   sets: Record<string, unknown>;
 }
 
+// Helper function to safely get nested values
+const getNestedValue = (obj: any, path: string[]): any => {
+  return path.reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : null), obj);
+};
+
 export const RAGParamsSelector = ({ value, onChange }: Props) => {
   const [sets, setSets] = useState<Record<string, unknown>>({});
 
@@ -25,6 +30,12 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   }, []);
 
   const params = sets[value] || {};
+
+  // Extract key parameters
+  const chunkSize = getNestedValue(params, ['chunking', 'chunk_size']);
+  const chunkOverlap = getNestedValue(params, ['chunking', 'chunk_overlap']);
+  const embeddingModel = getNestedValue(params, ['embedding', 'model_name']);
+  const llmModel = getNestedValue(params, ['llm', 'model_name']);
 
   return (
     <Box sx={{ mb: 4 }}>
@@ -44,8 +55,24 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
         </Select>
       </FormControl>
       <Box sx={{ mt: 2 }}>
-        <Typography variant="subtitle2">Selected Parameters</Typography>
-        <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(params, null, 2)}</pre>
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>Selected Parameters</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+          {chunkSize && chunkOverlap && (
+            <Typography variant="body2" color="text.secondary">
+              Chunk Size/Overlap: {chunkSize} / {chunkOverlap}
+            </Typography>
+          )}
+          {embeddingModel && (
+            <Typography variant="body2" color="text.secondary">
+              Embedding: {embeddingModel}
+            </Typography>
+          )}
+          {llmModel && (
+            <Typography variant="body2" color="text.secondary">
+              LLM: {llmModel}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );

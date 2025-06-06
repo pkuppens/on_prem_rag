@@ -6,14 +6,15 @@ This guide provides instructions for setting up the development environment for 
 
 - Python 3.12 or higher
 - `uv` package manager. Can be installed via
-    - `winget install astral-sh.uv`
-    - `pip install uv`
-    - or `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - `winget install astral-sh.uv`
+  - `pip install uv`
+  - or `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Git
 
 ## Initial Setup
 
 1.  **Clone the repository:**
+
     ```bash
     git clone <repository-url>
     cd on_prem_rag
@@ -22,10 +23,13 @@ This guide provides instructions for setting up the development environment for 
 2.  **Set up Python environment using `uv`:**
 
     If you have a `.python-version` file (which should be `3.12`), `uv` can automatically create a virtual environment with that Python version.
+
     ```bash
     uv venv
     ```
+
     This will create a `.venv` directory. Activate it using:
+
     - On macOS and Linux:
       ```bash
       source .venv/bin/activate
@@ -38,21 +42,38 @@ This guide provides instructions for setting up the development environment for 
 3.  **Install dependencies:**
 
     Install both production and development dependencies using `uv`:
+
     ```bash
     uv pip install -e .[dev]
     ```
+
     The `-e .` installs the current project in editable mode. `[dev]` installs the optional development dependencies specified in `pyproject.toml`.
+
+    Note: The project uses several llama-index packages for different functionalities:
+
+    - `llama-index`: Core package
+    - `llama-index-llms-ollama`: For Ollama LLM integration
+    - `llama-index-llms-huggingface`: For HuggingFace LLM integration
+    - `llama-index-embeddings-huggingface`: For HuggingFace embeddings
+    - `llama-index-readers-file`: For file reading capabilities
+    - `llama-index-vector-stores-chroma`: For ChromaDB vector store integration
+
+    If you encounter any import errors related to llama-index modules, make sure all these packages are installed.
 
 4.  **Locking Dependencies (Optional but Recommended for Production):**
 
     The `uv.lock` file is gitignored by default for library/proof-of-concept development to allow flexibility. For production releases or to ensure exact reproducible environments, you can generate and commit `uv.lock`:
+
     ```bash
     uv lock
     ```
+
     To install from the lock file:
+
     ```bash
     uv pip sync --locked
     ```
+
     **Decision on `uv.lock`**: During initial development and for this proof-of-concept, we will not commit `uv.lock` to the repository. This provides more flexibility with dependency versions. For production releases, a `uv.lock` file should be generated and used to ensure reproducible builds.
 
 ## Pre-commit Hooks
@@ -62,6 +83,7 @@ This project uses pre-commit hooks to ensure code quality and consistency before
 1.  **Install pre-commit:**
 
     If you haven't already, install pre-commit (it's also in the dev dependencies):
+
     ```bash
     pip install pre-commit
     # or, if you installed dev dependencies with uv:
@@ -71,27 +93,30 @@ This project uses pre-commit hooks to ensure code quality and consistency before
 2.  **Install the git hooks:**
 
     Run this command in the root of the project to install the hooks defined in `.pre-commit-config.yaml`:
+
     ```bash
     pre-commit install
     ```
+
     Now, the defined hooks will run automatically every time you commit changes.
 
 3.  **Update hooks (Optional):**
 
     To update the hooks to their latest versions:
+
     ```bash
     pre-commit autoupdate
     ```
 
 ## Code Quality and Formatting
 
--   **Ruff**: Used for linting and formatting. Configuration is in `pyproject.toml`.
-    -   To format code: `ruff format .`
-    -   To check for linting issues: `ruff check .`
-    -   These are also run by the pre-commit hooks.
--   **Pytest**: Used for running tests. Tests are located in the `tests/` directory.
-    -   To run tests: `pytest`
-    -   This is also run by the pre-commit hooks.
+- **Ruff**: Used for linting and formatting. Configuration is in `pyproject.toml`.
+  - To format code: `ruff format .`
+  - To check for linting issues: `ruff check .`
+  - These are also run by the pre-commit hooks.
+- **Pytest**: Used for running tests. Tests are located in the `tests/` directory.
+  - To run tests: `pytest`
+  - This is also run by the pre-commit hooks.
 
 ## Package Structure
 
@@ -117,8 +142,8 @@ tests/
 └── test_document_loader.py
 ```
 
--   `src/rag_pipeline`: Contains the main application code.
--   `tests/`: Contains all the tests.
+- `src/rag_pipeline`: Contains the main application code.
+- `tests/`: Contains all the tests.
 
 ## Running the Application (Example with Uvicorn)
 
@@ -132,6 +157,6 @@ uvicorn rag_pipeline.api.main:app --reload
 
 ## Troubleshooting
 
--   **`uv` command not found**: Ensure `uv` is installed and its installation directory is in your system's PATH. Refer to the official `uv` installation guide.
--   **Python version issues**: Make sure you have Python 3.12 installed and that `uv` is using it. You can specify the Python version for `uv venv` using `uv venv -p 3.12`.
--   **Pre-commit hook failures**: Address the issues reported by the hooks (e.g., formatting errors, linting violations) and re-commit.
+- **`uv` command not found**: Ensure `uv` is installed and its installation directory is in your system's PATH. Refer to the official `uv` installation guide.
+- **Python version issues**: Make sure you have Python 3.12 installed and that `uv` is using it. You can specify the Python version for `uv venv` using `uv venv -p 3.12`.
+- **Pre-commit hook failures**: Address the issues reported by the hooks (e.g., formatting errors, linting violations) and re-commit.

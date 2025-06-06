@@ -15,6 +15,7 @@ dependencies = [
     "llama-index-llms-huggingface>=0.1.0",
     "llama-index-embeddings-huggingface>=0.1.0",
     "llama-index-readers-file>=0.1.0",
+    "llama-index-vector-stores-chroma>=0.4.2",
     "transformers>=4.37.0",
     "torch>=2.2.0",
     "accelerate>=0.27.0",

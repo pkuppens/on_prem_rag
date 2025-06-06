@@ -65,4 +65,3 @@ class MetadataStore:
             if doc:
                 doc.obsolete = True
                 session.commit()
-

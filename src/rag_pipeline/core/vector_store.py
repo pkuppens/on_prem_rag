@@ -4,11 +4,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List
 
 import chromadb
-from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import StorageContext
+from llama_index.vector_stores.chroma import ChromaVectorStore
 
 from rag_pipeline.config.vector_store import VectorStoreConfig
 
@@ -23,14 +22,14 @@ class VectorStoreManager(ABC):
     @abstractmethod
     def add_embeddings(
         self,
-        ids: List[str],
-        embeddings: List[List[float]],
-        metadatas: List[dict] | None = None,
+        ids: list[str],
+        embeddings: list[list[float]],
+        metadatas: list[dict] | None = None,
     ) -> None:
         """Add embeddings to the store."""
 
     @abstractmethod
-    def query(self, embedding: List[float], top_k: int) -> list[str]:
+    def query(self, embedding: list[float], top_k: int) -> list[str]:
         """Query the store and return matching IDs."""
 
 
@@ -56,10 +55,10 @@ class ChromaVectorStoreManager(VectorStoreManager):
         vector_store = ChromaVectorStore(chroma_collection=self._collection)
         return StorageContext.from_defaults(vector_store=vector_store)
 
-    def add_embeddings(self, ids: List[str], embeddings: List[List[float]], metadatas: List[dict] | None = None) -> None:
+    def add_embeddings(self, ids: list[str], embeddings: list[list[float]], metadatas: list[dict] | None = None) -> None:
         self._collection.add(ids=ids, embeddings=embeddings, metadatas=metadatas)
 
-    def query(self, embedding: List[float], top_k: int) -> list[str]:
+    def query(self, embedding: list[float], top_k: int) -> list[str]:
         result = self._collection.query(query_embeddings=[embedding], n_results=top_k)
         return result["ids"][0] if result["ids"] else []
 

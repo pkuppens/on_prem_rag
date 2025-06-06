@@ -147,3 +147,9 @@ notebooks/data/
 CURRENT_WORK.md
 NEXT_DEMO.md
 SCRATCH.md
+
+# Test data, note, treat this as confidential data, or place publicly available docs like PDF, DOCX, etc here
+tests/test_data/
+
+# Test temporary files
+tests/test_temp/

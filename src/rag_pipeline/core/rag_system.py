@@ -37,12 +37,12 @@ from llama_index.readers.file import DocxReader, PDFReader
 
 # Local imports
 from rag_pipeline.config.parameter_sets import RAGParams
+from rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager_from_env
 from rag_pipeline.utils.directory_utils import (
     DirectoryEmptyError,
     ensure_directory,
     validate_directory,
 )
-from rag_pipeline.core.vector_store import get_vector_store_manager_from_env, VectorStoreManager
 
 
 class LocalRAGSystem:

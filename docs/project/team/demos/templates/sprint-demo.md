@@ -7,6 +7,16 @@
 - **Duration**: [Planned Duration]
 - **Audience**: [Target Audience]
 
+## Ultimate Goal
+
+[Start with the business value: What problem does this solve for users? How does it make their work easier or better?]
+
+### How we do this:
+
+- [List the main capabilities in simple terms]
+- [Focus on what users can do]
+- [Add any future benefits or next steps]
+
 ## Story Coverage
 
 List of stories being demonstrated:

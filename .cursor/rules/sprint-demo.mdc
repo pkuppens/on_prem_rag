@@ -1,6 +1,6 @@
 ---
 description: Sprint Demo Documentation
-globs:
+globs: 
 alwaysApply: false
 ---
 # Sprint Demo Documentation Standards
@@ -19,24 +19,30 @@ Sprint demo documents must follow a consistent structure to ensure clear communi
    - Target audience
    - Demo owner/presenter
 
-2. **Story Coverage**
+2. **Demo Goal**
+   - Clear statement of primary demo objective
+   - Business value, impact, and relevance
+   - End-user benefit and value proposition
+   - Key capabilities being demonstrated
+
+3. **Story Coverage**
    - List of demonstrated stories with IDs
    - Link to related features from Program Board
    - Current implementation status
 
-3. **Technical Scope**
+4. **Technical Scope**
    - Architecture components involved
    - New implementations or changes
    - Integration points
    - Performance considerations
 
-4. **Demo Flow**
+5. **Demo Flow**
    - Detailed step-by-step demonstration plan
    - Time allocation for each section
    - Prerequisites and setup requirements
    - Expected outcomes and success criteria
 
-5. **Known Limitations & Next Steps**
+6. **Known Limitations & Next Steps**
    - Current constraints
    - Planned improvements
    - Dependencies and risks

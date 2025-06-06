@@ -7,6 +7,21 @@
 - **Duration**: 15 minutes
 - **Audience**: Stakeholders, Product Management, Development Team
 
+## Demo Goal
+
+Our goal is to make finding information in documents easier and faster. Users can search with normal words and phrases, and the
+system will find the right documents and sections - even if they use different words to describe the same thing.
+
+### How we do this:
+
+- Users can upload multiple documents (at once)
+- The system chunks the documents into smaller sections
+- The system attaches a meaning to the sections by creating 'embeddings', and stores them in a database
+- We can then search the system for keywords
+- The system finds relevant sections by matching the keywords to embeddings in the database, not just exact word matches
+- The system returns a sorted list of document sections that match the keywords the best
+- This is the first step towards a system that can answer questions about the documents
+
 ## Story Coverage
 
 List of stories being demonstrated:

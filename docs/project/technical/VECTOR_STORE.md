@@ -9,8 +9,10 @@ This document describes the vector store implementation and configuration for th
 1. [Introduction](#introduction)
 2. [Vector Store Selection](#vector-store-selection)
 3. [Implementation Details](#implementation-details)
-4. [Performance Considerations](#performance-considerations)
-5. [Future Improvements](#future-improvements)
+4. [Docker Compose Setup](#docker-compose-setup)
+5. [Management Schema](#management-schema)
+6. [Performance Considerations](#performance-considerations)
+7. [Future Improvements](#future-improvements)
 
 ## Introduction
 
@@ -186,6 +188,31 @@ To migrate from the default storage to ChromaDB:
 - **Metadata Storage**: SQLite with enhanced schema
 - **Progress Tracking**: WebSocket events
 
+### Docker Compose Setup
+
+For local development we provide a `docker-compose.yml` that launches all
+required services:
+
+1. **chroma** – persistent ChromaDB instance on port `8000`
+2. **backend** – FastAPI application with hot reload enabled
+3. **frontend** – React development server
+4. **ollama** – optional LLM container (can be omitted if you already run one)
+
+The compose file mounts the source directories for live development and uses
+named volumes to persist database and model state. The backend communicates with
+ChromaDB and Ollama using environment variables (`CHROMA_HOST`, `CHROMA_PORT`,
+`OLLAMA_BASE_URL`). Adjust these values or comment out the `ollama` service if an
+external container is already running.
+
+Start everything with:
+
+```bash
+docker-compose up --build
+```
+
+Shut down with `docker-compose down`. Data in the `chroma-data` and
+`ollama-data` volumes persists between runs.
+
 ### Metadata Management
 
 1. **Document Metadata**
@@ -206,6 +233,23 @@ To migrate from the default storage to ChromaDB:
    - Embedding quality scores
    - Deduplication status
    - Validation results
+
+### Management Schema
+
+Metadata is stored in a lightweight SQLite database alongside the vector store.
+Two tables keep track of documents and embedding configurations:
+
+| Table | Purpose |
+|-------|---------|
+| `documents` | filename, page range, file hash, version, and obsoletion flag |
+| `embeddings` | reference to `documents`, embedding model, chunk size, overlap |
+
+The `documents` table prevents duplicates by file hash and allows older
+versions to be marked obsolete. The embedding table records which parameters were
+used to generate vectors so multiple embedding strategies can coexist.
+
+Raw documents are stored on disk and referenced by path so that the application
+can present the original page when returning search results.
 
 ## Performance Considerations
 

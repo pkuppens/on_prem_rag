@@ -142,3 +142,8 @@ uv.lock
 # Datafiles, both (secret) input and working directories
 **/embeddings_cache/*
 notebooks/data/
+
+# Work in progress documentation files
+CURRENT_WORK.md
+NEXT_DEMO.md
+SCRATCH.md

@@ -1,0 +1,149 @@
+---
+description: Golden Rules for AI Coding Assistance
+globs:
+alwaysApply: true
+---
+# Golden Rules for AI Coding Assistance
+
+This guide outlines the key principles and practices for AI-assisted development in our SAFe environment.
+
+## Core Principles
+
+1. **File Size Management**
+   - Keep files under 500 lines of code
+   - Split into modules when approaching limit
+   - Maintain clear module boundaries
+
+2. **Conversation Management**
+   - Start fresh conversations frequently
+   - One task per message for optimal results
+   - Avoid long-running threads that degrade quality
+
+3. **Documentation First**
+   - Follow documentation hierarchy for updates:
+     1. Update working files (.gitignored)
+     2. Update task-level documentation
+     3. Update story/feature documentation
+     4. Update epic-level documentation if needed
+     5. Update architectural decisions in ARCHITECTURE.md
+     6. Keep README.md current for project-wide changes
+   - Write code comments alongside implementation
+   - Never delay documentation updates
+   - Document discovered tasks in CURRENT_WORK.md
+
+## Project Structure
+
+### Documentation Hierarchy
+
+#### Version Controlled Documentation
+- `EPIC-*.md` - Strategic initiatives and business objectives
+- `FEATURE-*.md` - Feature scope, constraints, and acceptance criteria
+- `STORY-*.md` - User stories with acceptance criteria and implementation notes
+- `TASK-*.md` - Technical implementation details and completion criteria
+- `ARCHITECTURE.md` - System architecture, technical decisions, and constraints
+- `README.md` - Project overview, setup, and maintenance guidelines
+
+#### Working Documentation (.gitignored)
+- `CURRENT_WORK.md` - Active tasks, notes, and immediate TODOs
+- `NEXT_DEMO.md` - Features and changes for upcoming demonstration
+- `SCRATCH.md` - Temporary notes and experimental ideas
+
+### Code Organization
+- `src/` - Source code with clear component separation
+- `tests/` - Test files mirroring source structure
+- `docs/` - Technical and API documentation
+- `.cursor/rules/` - AI assistance rules and guidelines
+
+## Development Workflow
+
+### 1. Planning Phase
+- Review ARCHITECTURE.md at start of new conversations
+- Check TASK.md before starting new work
+- Update task tracking during development
+- Document discovered sub-tasks
+
+### 2. Implementation Phase
+- One task per conversation
+- Test early and often
+- Write unit tests for each new feature
+- Include docstrings and comments
+
+### 3. Testing Standards
+- Create tests for every new feature
+- Test structure:
+  - 1 test for expected use
+  - 1 edge case test
+  - 1 failure case test
+- Mock external service calls
+- Update tests when logic changes
+
+## Coding Standards
+
+### General Principles
+1. **Readability First**
+   - Use clear, descriptive names
+   - Follow language-preference rule for code comments
+   - Document complex logic with inline comments
+
+2. **Documentation Integration**
+   - Link code changes to stories/tasks using IDs
+   - Update documentation alongside code changes
+   - Add "Reason:" comments for complex logic
+   - Follow documentation hierarchy for updates
+
+3. **Quality Gates**
+   - Write tests for new functionality
+   - Follow TDD where applicable
+   - Ensure code coverage meets standards
+   - Address technical debt proactively
+
+### Security and Environment
+1. **Environment Management**
+   - Never trust AI with API keys
+   - Implement environment variables manually
+   - Use secure configuration patterns
+   - Document all required variables
+
+2. **Security Best Practices**
+   - Never expose sensitive data
+   - Use environment variables for configuration
+   - Follow security best practices
+   - Document security considerations
+
+## Communication Standards
+
+1. **Code Comments**
+   - Follow language-preference rule for English usage
+   - Explain complex logic
+   - Document assumptions
+   - Document decisions
+   - Include examples for unclear code
+
+2. **Documentation**
+   - Follow markdown standards
+   - Keep README files updated
+   - Document breaking changes
+   - Include setup instructions
+
+## AI Interaction Guidelines
+
+1. **Request Clarity**
+   - Be specific in requests
+   - Provide relevant examples
+   - Include necessary context
+   - Specify acceptance criteria
+
+2. **Code Reviews**
+   - Follow review checklist
+   - Document review findings
+   - Track technical debt
+   - Ensure documentation updates
+
+3. **AI Behavior Rules**
+   - Never assume missing context
+   - Ask questions when uncertain
+   - Never hallucinate libraries
+   - Confirm file paths before use
+   - Never delete code without explicit instruction
+
+Remember to update these rules as project standards evolve.

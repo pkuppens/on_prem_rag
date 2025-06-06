@@ -278,3 +278,29 @@ TEST_PARAMS = RAGParams(
         top_k=1,  # Single result for testing
     ),
 )
+
+# ---------------------------------------------------------------------------
+# Parameter set lookup helpers
+# ---------------------------------------------------------------------------
+
+DEFAULT_PARAM_SET_NAME = "fast"
+
+PARAMETER_SETS: dict[str, RAGParams] = {
+    "fast": FAST_ANSWERS,
+    "precise": PRECISE_ANSWERS,
+    "context_rich": CONTEXT_RICH,
+    "balanced": BALANCED,
+    "test": TEST_PARAMS,
+}
+
+
+def get_param_set(name: str) -> RAGParams:
+    """Return parameter set by name with fallback to default."""
+
+    return PARAMETER_SETS.get(name, PARAMETER_SETS[DEFAULT_PARAM_SET_NAME])
+
+
+def available_param_sets() -> dict[str, dict[str, Any]]:
+    """Return all parameter sets as serializable dictionaries."""
+
+    return {k: v.to_dict() for k, v in PARAMETER_SETS.items()}

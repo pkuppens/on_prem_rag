@@ -42,6 +42,7 @@ from rag_pipeline.utils.directory_utils import (
     ensure_directory,
     validate_directory,
 )
+from rag_pipeline.core.vector_store import get_vector_store_manager_from_env, VectorStoreManager
 
 
 class LocalRAGSystem:
@@ -73,6 +74,7 @@ class LocalRAGSystem:
         input_data_dir: str = "data",
         index_storage_dir: str = "storage",
         embeddings_cache_dir: str = "cache",
+        vector_store_manager: VectorStoreManager | None = None,
     ):
         """
         Initialize the RAG system with specified configuration.
@@ -82,6 +84,8 @@ class LocalRAGSystem:
             input_data_dir: Directory for input documents.
             index_storage_dir: Directory for persistent index storage.
             embeddings_cache_dir: Directory for caching embeddings.
+            vector_store_manager: Optional manager for vector store access. If
+                not provided, it is created from environment variables.
 
         Raises:
             DirectoryError: If there are issues with directory creation or access.
@@ -108,6 +112,8 @@ class LocalRAGSystem:
             embeddings_cache_dir,
             description="embeddings cache directory",
         )
+
+        self.vector_store_manager = vector_store_manager or get_vector_store_manager_from_env()
 
         # Initialize components and set global settings
         Settings.llm = self._setup_llm()
@@ -422,9 +428,11 @@ class LocalRAGSystem:
 
                 node.metadata["full_reference"] = reference
 
-        # Create index
+        # Create index using the configured vector store
+        storage_context = self.vector_store_manager.get_storage_context()
         index = VectorStoreIndex(
             nodes,
+            storage_context=storage_context,
             show_progress=True,
         )
 
@@ -468,8 +476,10 @@ class LocalRAGSystem:
             description="index directory",
         )
 
+        vs_context = self.vector_store_manager.get_storage_context()
         storage_context = StorageContext.from_defaults(
             persist_dir=str(resolved_persist_dir),
+            vector_store=vs_context.vector_store,
         )
         index = load_index_from_storage(storage_context=storage_context)
         print(f"Index loaded from {resolved_persist_dir}")

@@ -79,6 +79,19 @@ critical for validating the overall architecture.
 - Basic web interface for proof-of-concept
 - Docker-based deployment
 
+## Quick Start with Docker Compose
+
+Clone the repository and run:
+
+```bash
+docker-compose up --build
+```
+
+This launches ChromaDB, the FastAPI backend, the React frontend and an Ollama
+container. Visit the frontend at http://localhost:5173. If you already run an
+Ollama container separately, comment out the `ollama` service in
+`docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
+
 ### Phase 2: Enterprise Features (Weeks 5-8)
 - Role-based access control
 - Multi-user support

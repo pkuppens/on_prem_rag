@@ -34,7 +34,7 @@ requires-python = ">=3.12"
 
 [project.scripts]
 start-backend = "rag_pipeline.file_ingestion:start_server"
-# start-frontend: cd frontend && npm run dev
+# start-frontend: cd frontend && npm install && npm run dev
 
 [project.optional-dependencies]
 dev = [

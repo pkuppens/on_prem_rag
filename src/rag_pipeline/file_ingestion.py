@@ -10,7 +10,6 @@ from pathlib import Path
 
 from fastapi import FastAPI, UploadFile, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-
 from llama_index.core.node_parser import SimpleNodeParser
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
@@ -25,9 +24,9 @@ from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
 # Set up structured logging
 class StructuredLogger:
-    def __init__(self, name: str):
+    def __init__(self, name: str, level: int = logging.INFO):
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(level)
 
         # Create console handler with formatting
         handler = logging.StreamHandler(sys.stdout)
@@ -54,7 +53,7 @@ class StructuredLogger:
         self.logger.debug(f"{message} | {json.dumps({**caller, **kwargs})}")
 
 
-logger = StructuredLogger(__name__)
+logger = StructuredLogger(__name__, level=logging.DEBUG)
 
 app = FastAPI()
 
@@ -79,6 +78,7 @@ chunk_hashes: set[str] = set()
 @app.get("/api/parameters/sets")
 async def get_parameter_sets() -> dict:
     """Return available RAG parameter sets and default selection."""
+    logger.info("GET /api/parameters/sets")
 
     return {"default": DEFAULT_PARAM_SET_NAME, "sets": available_param_sets()}
 
@@ -88,9 +88,9 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
     """Handle file upload, chunking, and embedding."""
 
     try:
-        logger.info("Received file upload", filename=file.filename, size=file.size, content_type=file.content_type)
+        logger.info("POST /api/documents/upload", filename=file.filename, size=file.size, content_type=file.content_type)
 
-        params = get_param_set(params_name)
+        params = get_param_set(params_name)  # from dictionary, not the GET function call
 
         # Save upload to a temporary location
         temp_dir = Path("uploaded_files")
@@ -98,10 +98,12 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
         file_path = temp_dir / file.filename
         with open(file_path, "wb") as f:
             f.write(await file.read())
+            logger.debug("File saved to", filename=str(file_path))
 
         # Load document using loader with duplicate detection
         documents, _ = document_loader.load_document(file_path)
         if not documents:
+            logger.debug("No documents found in file", filename=str(file_path))
             upload_progress[file.filename] = 100
             return {"message": "Duplicate file", "filename": file.filename}
 
@@ -111,6 +113,8 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
             include_metadata=True,
         )
         nodes = parser.get_nodes_from_documents(documents)
+        total_nodes = len(nodes)
+        logger.debug("Nodes parsed", filename=str(file_path), total_nodes=total_nodes)
 
         unique_nodes = []
         for node in nodes:
@@ -134,7 +138,7 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
                 embeddings=[embedding],
                 metadatas=[node.metadata],
             )
-            upload_progress[file.filename] = int(idx / total * 100)
+            upload_progress[file.filename] = int(100 * idx / total)
 
         upload_progress[file.filename] = 100
         logger.info("File processing completed", filename=file.filename, chunks=total)

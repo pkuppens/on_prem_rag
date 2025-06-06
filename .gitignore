@@ -153,3 +153,8 @@ tests/test_data/
 
 # Test temporary files
 tests/test_temp/
+
+# Data files from experiments, should not be in the repo
+cache/embeddings/
+data/chroma/
+uploaded_files/

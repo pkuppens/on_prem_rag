@@ -10,18 +10,31 @@
 
 ## Description
 
-Create a robust module that loads PDF, DOCX, MD, and TXT files using **LlamaIndex** document loaders.
-The loader should implement idempotent document processing with duplicate detection and tracking.
-The module should include comprehensive validation, preprocessing, error handling, and logging.
+Create a robust FastAPI module that handles file uploads and processes PDF, DOCX, MD, and TXT files. The module should implement idempotent document processing with duplicate detection and tracking, including comprehensive validation, preprocessing, error handling, and logging.
 
 ## Implementation Hints
 
-- [ ] Add the required packages
+- [ ] Set up FastAPI with required packages
   ```bash
+  uv add fastapi
+  uv add python-multipart
   uv add llama-index[...]
   uv add pypdf
   uv add python-docx
   uv add markdown
+  ```
+- [ ] Create FastAPI endpoints:
+  ```python
+  @app.post("/api/documents/upload")
+  async def upload_document(file: UploadFile):
+      # Handle file upload
+      # Return processing status
+  ```
+- [ ] Implement WebSocket endpoint for progress updates:
+  ```python
+  @app.websocket("/ws/upload-progress")
+  async def upload_progress(websocket: WebSocket):
+      # Send real-time progress updates
   ```
 - [ ] Implement document fingerprinting for duplicate detection
 - [ ] Create a preprocessing pipeline for each file type
@@ -30,6 +43,8 @@ The module should include comprehensive validation, preprocessing, error handlin
 
 ## Acceptance Criteria
 
+- [ ] FastAPI endpoint successfully handles file uploads
+- [ ] WebSocket connection provides real-time progress updates
 - [ ] Function `load_document(path)` returns a list of `Document` objects for each supported format
 - [ ] Document loading is idempotent with duplicate detection
 - [ ] Comprehensive error handling for:
@@ -40,11 +55,12 @@ The module should include comprehensive validation, preprocessing, error handlin
 - [ ] Structured logging implemented for all operations
 - [ ] File validation and preprocessing pipeline in place
 - [ ] Unit tests covering all file types and error cases
+- [ ] API documentation with OpenAPI/Swagger
 
 ## Dependencies
 
 - **Blocked by**: TASK-001 (project scaffolding)
-- **Blocks**: TASK-007
+- **Blocks**: TASK-007, TASK-008
 
 ---
 

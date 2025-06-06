@@ -1,0 +1,90 @@
+---
+description: Sprint Demo Documentation
+globs:
+alwaysApply: false
+---
+# Sprint Demo Documentation Standards
+
+This rule applies to all sprint demo documentation in the [docs/project/team/demos](mdc:docs/project/team/demos) directory and its subdirectories.
+
+## Structure Requirements
+
+Sprint demo documents must follow a consistent structure to ensure clear communication and efficient preparation. Each demo document should be named following the pattern: `sprint-{number}-demo.md`.
+
+### Required Sections
+
+1. **Demo Information**
+   - Sprint number and date
+   - Duration (typically 30-45 minutes)
+   - Target audience
+   - Demo owner/presenter
+
+2. **Story Coverage**
+   - List of demonstrated stories with IDs
+   - Link to related features from Program Board
+   - Current implementation status
+
+3. **Technical Scope**
+   - Architecture components involved
+   - New implementations or changes
+   - Integration points
+   - Performance considerations
+
+4. **Demo Flow**
+   - Detailed step-by-step demonstration plan
+   - Time allocation for each section
+   - Prerequisites and setup requirements
+   - Expected outcomes and success criteria
+
+5. **Known Limitations & Next Steps**
+   - Current constraints
+   - Planned improvements
+   - Dependencies and risks
+
+## Documentation Guidelines
+
+1. **Timing**
+   - Create demo document at sprint start
+   - Update incrementally during sprint
+   - Finalize 24h before demo
+
+2. **Content Quality**
+   - Use clear, concise language (B2 level English)
+   - Include technical terms when necessary
+   - Provide context for non-technical audience
+   - Document all prerequisites
+
+3. **Links and References**
+   - Link to relevant stories and features
+   - Reference architectural decisions
+   - Include test data locations
+   - Add configuration examples
+
+## Template Usage
+
+Use the [sprint-demo.md](mdc:docs/project/team/demos/templates/sprint-demo.md) template as your starting point. The template ensures:
+
+- Consistent structure across demos
+- Complete coverage of required information
+- Clear demonstration flow
+- Proper preparation for Q&A
+
+## Best Practices
+
+1. **Preparation**
+   - Test demo flow before presentation
+   - Prepare fallback scenarios
+   - Document known issues
+   - Have test data ready
+
+2. **Documentation**
+   - Keep sections focused and concise
+   - Update success criteria as needed
+   - Document technical deep-dive points
+   - Include relevant metrics
+
+3. **Follow-up**
+   - Document questions raised
+   - Track action items
+   - Update related documentation
+   - Share demo recordings if applicable

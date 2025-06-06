@@ -7,7 +7,7 @@
 ### Key Business Features
 
 - **Document Knowledge Base**: Ingest and index documents for RAG
-- **Interactive Q&A Interface**: Web GUI with role-based access control  
+- **Interactive Q&A Interface**: Web GUI with role-based access control
 - **Multi-LLM Support**: Flexible, local model usage (Mistral, Phi-3, etc.)
 - **Database Q&A**: Translate natural language to SQL over PostgreSQL/MSSQL
 - **Offline Deployment**: No external calls, all local execution
@@ -28,6 +28,7 @@ in the `docs/project/team` folder are executed.
 **Business Impact**: Establish robust development foundation and core RAG capabilities
 
 #### Core Features
+
 - Document ingestion pipeline (PDF, DOCX, TXT, Markdown)
 - Vector embedding and storage using ChromaDB
 - LLM integration with Ollama
@@ -61,6 +62,7 @@ vectordb = Chroma(
 **Business Impact**: Deliver enterprise-grade user interface and security
 
 #### Core Features
+
 - FastAPI backend with JWT authentication
 - React frontend for modern UX
 - Role-based document access control
@@ -98,6 +100,7 @@ async def query_documents(
 **Business Impact**: Ensure flexibility and future-proofing of AI capabilities
 
 #### Core Features
+
 - Configurable model backends (Ollama, llama.cpp, HuggingFace)
 - Default Mistral 7B with Apache 2.0 license
 - Custom prompt templates per model
@@ -118,7 +121,7 @@ class LLMProvider(ABC):
 class OllamaProvider(LLMProvider):
     def __init__(self, model_name: str = "mistral:7b"):
         self.model = model_name
-        
+
     def generate_answer(self, prompt: str) -> str:
         # Ollama API call
         response = ollama.chat(
@@ -139,6 +142,7 @@ workflow is proven.
 **Business Impact**: Enable business users to query databases without SQL knowledge
 
 #### Core Features
+
 - PostgreSQL and MSSQL support
 - Intent recognition for query routing
 - Security controls (read-only access, query filtering)
@@ -153,20 +157,20 @@ def nl_to_sql_pipeline(question: str, schema: str, user_roles: list) -> dict:
     # Generate SQL prompt
     prompt = f"""
     You are an expert data analyst. Convert this question to SQL.
-    
+
     Database Schema:
     {schema}
-    
+
     Question: {question}
-    
+
     Generate only SELECT statements. No DELETE, DROP, or UPDATE allowed.
-    
+
     SQL:
     """
-    
+
     # Get SQL from LLM
     sql_query = llm_provider.generate_answer(prompt)
-    
+
     # Execute with safety checks
     if validate_sql_safety(sql_query):
         results = execute_readonly_query(sql_query, user_roles)
@@ -187,6 +191,7 @@ def nl_to_sql_pipeline(question: str, schema: str, user_roles: list) -> dict:
 **Business Impact**: Enable production deployment with enterprise standards
 
 #### Core Features
+
 - Docker containerization
 - Development tooling (uv, ruff, pytest)
 - Performance monitoring
@@ -197,7 +202,7 @@ def nl_to_sql_pipeline(question: str, schema: str, user_roles: list) -> dict:
 **Docker Compose Configuration**:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   rag-backend:
     build: .
@@ -240,6 +245,7 @@ volumes:
 **Business Impact**: Meet enterprise security and compliance requirements
 
 #### Core Features
+
 - Network isolation and HTTPS
 - Secrets management
 - RBAC enforcement
@@ -256,7 +262,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 # Security middleware
 app.add_middleware(
-    TrustedHostMiddleware, 
+    TrustedHostMiddleware,
     allowed_hosts=["localhost", "*.yourcompany.com"]
 )
 
@@ -306,51 +312,62 @@ gantt
 
 ## Technology Stack Summary
 
-| Layer | Technology | License | Rationale |
-|-------|------------|---------|-----------|
-| **Language** | Python 3.11+ | PSF | Mature ML/AI ecosystem |
-| **Framework** | FastAPI + React | MIT + MIT | Modern, high-performance stack |
-| **Database** | PostgreSQL + ChromaDB | PostgreSQL + Apache 2.0 | Enterprise reliability |
-| **LLM** | Ollama + Mistral 7B | MIT + Apache 2.0 | Local inference, commercial use |
-| **Deployment** | Docker + Nginx | Apache 2.0 + BSD | Industry standard |
-| **Development** | uv + ruff + pytest | MIT + MIT + MIT | Modern, fast tooling |
+| Layer           | Technology            | License                 | Rationale                       |
+| --------------- | --------------------- | ----------------------- | ------------------------------- |
+| **Language**    | Python 3.11+          | PSF                     | Mature ML/AI ecosystem          |
+| **Framework**   | FastAPI + React       | MIT + MIT               | Modern, high-performance stack  |
+| **Database**    | PostgreSQL + ChromaDB | PostgreSQL + Apache 2.0 | Enterprise reliability          |
+| **LLM**         | Ollama + Mistral 7B   | MIT + Apache 2.0        | Local inference, commercial use |
+| **Deployment**  | Docker + Nginx        | Apache 2.0 + BSD        | Industry standard               |
+| **Development** | uv + ruff + pytest    | MIT + MIT + MIT         | Modern, fast tooling            |
 
 ## Success Metrics
 
 ### Technical Metrics
+
 - Document processing: <10 seconds per file
 - Query response time: <3 seconds average
 - Concurrent users: 10+ supported
 - Uptime: 99.9% availability target
+- Demo environment setup: <5 minutes
 
 ### Business Metrics
+
 - User adoption: 80% of target users active monthly
 - Query accuracy: 85%+ user satisfaction
 - Support overhead: <5 tickets per week
 - Deployment time: <2 hours on new environment
+- Sprint demo success rate: 90%+ acceptance criteria met
 
 ## Risk Management
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| **LLM Performance** | Medium | High | Benchmark multiple models, fallback options |
-| **Scalability Issues** | Medium | Medium | Load testing, horizontal scaling design |
-| **Security Vulnerabilities** | Low | High | Security reviews, penetration testing |
-| **License Compliance** | Low | High | Legal review, open-source alternatives |
+| Risk                         | Probability | Impact | Mitigation                                  |
+| ---------------------------- | ----------- | ------ | ------------------------------------------- |
+| **LLM Performance**          | Medium      | High   | Benchmark multiple models, fallback options |
+| **Scalability Issues**       | Medium      | Medium | Load testing, horizontal scaling design     |
+| **Security Vulnerabilities** | Low         | High   | Security reviews, penetration testing       |
+| **License Compliance**       | Low         | High   | Legal review, open-source alternatives      |
 
 ## Documentation Deliverables
 
 ### User Documentation
+
 - **Quick Start Guide**: 15-minute setup and first query
 - **User Manual**: Complete feature documentation with screenshots
 - **Admin Guide**: User management, system configuration
 - **Troubleshooting Guide**: Common issues and solutions
+- **Demo Recordings**: Archived sprint demonstrations
 
 ### Technical Documentation
+
 - **API Reference**: Complete endpoint documentation
 - **Architecture Guide**: System design and component interaction
 - **Deployment Guide**: Docker and manual installation
 - **Security Guide**: Best practices and compliance
+- **Demo Templates**: Standardized sprint demo documentation
+  - Success criteria mapping
+  - Feature demonstration scripts
+  - Technical deep-dive guides
 
 ---
 
@@ -364,4 +381,4 @@ gantt
 
 **Maintained By**: Technical Team  
 **Review Cycle**: Weekly during development, monthly in maintenance  
-**Last Updated**: December 2024 
+**Last Updated**: June 2025

@@ -19,6 +19,7 @@ Implement enterprise-grade security measures including network isolation, secret
 **Trust Building**: Security standards encourage organizational adoption and customer confidence
 
 ### Key Outcomes
+
 - Network isolation and HTTPS encryption
 - Comprehensive secrets management system
 - RBAC enforcement at all application levels
@@ -60,23 +61,24 @@ Implement enterprise-grade security measures including network isolation, secret
 ### Network Security Architecture
 
 #### HTTPS and TLS Configuration
+
 ```nginx
 server {
     listen 443 ssl http2;
     server_name your-rag-system.com;
-    
+
     # SSL Configuration
     ssl_certificate /etc/ssl/certs/your-cert.crt;
     ssl_certificate_key /etc/ssl/private/your-key.key;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512;
-    
+
     # Security Headers
     add_header Strict-Transport-Security "max-age=63072000" always;
     add_header X-Content-Type-Options nosniff;
     add_header X-Frame-Options DENY;
     add_header X-XSS-Protection "1; mode=block";
-    
+
     # Rate Limiting
     limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     limit_req zone=api burst=20 nodelay;
@@ -84,6 +86,7 @@ server {
 ```
 
 #### Network Isolation
+
 ```yaml
 # docker-compose.security.yml
 networks:
@@ -114,26 +117,28 @@ services:
 ### Authentication & Authorization
 
 #### JWT Security Implementation
+
 ```python
 class SecurityManager:
     def __init__(self, secret_key: str, algorithm: str = "HS256"):
         self.secret_key = secret_key
         self.algorithm = algorithm
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    
+
     def create_access_token(self, data: dict, expires_delta: timedelta = None):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
             expire = datetime.utcnow() + timedelta(minutes=15)
-        
+
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
 ```
 
 #### Role-Based Access Control
+
 ```python
 def enforce_rbac(required_roles: list):
     def decorator(func):
@@ -150,6 +155,7 @@ def enforce_rbac(required_roles: list):
 ### Secrets Management
 
 #### Environment-Based Configuration
+
 - **Development**: Local environment variables
 - **Staging/Production**: External secrets management (Vault, AWS Secrets Manager)
 - **Container Secrets**: Docker secrets or Kubernetes secrets
@@ -158,6 +164,7 @@ def enforce_rbac(required_roles: list):
 ### Audit Logging System
 
 #### Security Event Logging
+
 ```python
 class AuditLogger:
     def log_security_event(self, event_type: str, user_id: str, details: dict):
@@ -177,6 +184,7 @@ class AuditLogger:
 ```
 
 #### Monitored Events
+
 - **Authentication**: Login attempts, token generation, logout
 - **Authorization**: Access granted/denied, role changes
 - **Data Access**: Document views, downloads, queries
@@ -186,12 +194,14 @@ class AuditLogger:
 ## Security Compliance Features
 
 ### GDPR Compliance
+
 - **Data Minimization**: Collect only necessary data
 - **Right to be Forgotten**: User data deletion capabilities
 - **Data Portability**: Export user data in standard formats
 - **Consent Management**: Explicit consent for data processing
 
 ### HIPAA Compliance
+
 - **Access Controls**: Granular user permissions
 - **Audit Trails**: Complete activity logging
 - **Data Encryption**: Encryption in transit and at rest
@@ -211,22 +221,24 @@ class AuditLogger:
 
 ## Risks & Mitigations
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| **Security Vulnerabilities** | Critical | Third-party security audit and penetration testing |
-| **Compliance Gaps** | High | Legal review and compliance expert consultation |
-| **Performance Impact** | Medium | Performance testing with security features enabled |
-| **Configuration Complexity** | Medium | Automated configuration and comprehensive documentation |
+| Risk                         | Impact   | Mitigation                                              |
+| ---------------------------- | -------- | ------------------------------------------------------- |
+| **Security Vulnerabilities** | Critical | Third-party security audit and penetration testing      |
+| **Compliance Gaps**          | High     | Legal review and compliance expert consultation         |
+| **Performance Impact**       | Medium   | Performance testing with security features enabled      |
+| **Configuration Complexity** | Medium   | Automated configuration and comprehensive documentation |
 
 ## Security Testing Strategy
 
 ### Automated Security Testing
+
 - **Static Analysis**: Code security scanning with SAST tools
 - **Dependency Scanning**: Vulnerability scanning of all dependencies
 - **Container Scanning**: Docker image vulnerability assessment
 - **Dynamic Testing**: Runtime security testing with DAST tools
 
 ### Manual Security Testing
+
 - **Penetration Testing**: Third-party security assessment
 - **Code Review**: Security-focused code review process
 - **Configuration Review**: Security configuration validation
@@ -245,4 +257,4 @@ class AuditLogger:
 **Feature Owner**: Security Engineer  
 **Product Owner**: Chief Security Officer  
 **Sprint Assignment**: TBD  
-**Demo Date**: TBD 
+**Demo Date**: TBD

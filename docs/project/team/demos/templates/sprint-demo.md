@@ -21,14 +21,14 @@
 
 List of stories being demonstrated:
 
-- [ ] [STORY-ID] - [Story Title]
-- [ ] [STORY-ID] - [Story Title]
+- [ ] **[STORY-ID: [Story Title]](../../../team/stories/STORY-ID.md)**: [Story Title]
+- [ ] **[STORY-ID: [Story Title]](../../../team/stories/STORY-ID.md)**: [Story Title]
 
 ## Feature Alignment
 
 Related features from Program Board:
 
-- [FEATURE-ID] - [Feature Title]
+- [ ] **[FEAT-ID: [Feature Title]](../../../program/features/FEAT-ID.md)**: [Feature Title]
 
 ## Demo Overview
 

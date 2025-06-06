@@ -26,16 +26,16 @@ system will find the right documents and sections - even if they use different w
 
 List of stories being demonstrated:
 
-- [ ] STORY-001 - Document Upload and Processing Pipeline
-- [ ] STORY-002 - Semantic Search Implementation
-- [ ] STORY-003 - Containerized Deployment Setup
+- [ ] **[STORY-002: Document Processing Pipeline](../../../team/stories/STORY-002.md)**: Ingest PDF, DOCX, and TXT files and generate vector embeddings
+- [ ] **[STORY-003: Basic Q&A Interface](../../../team/stories/STORY-003.md)**: Ask questions about uploaded documents
+- [ ] **[STORY-004: Containerized Deployment](../../../team/stories/STORY-004.md)**: Containerized services for consistent deployment
 
 ## Feature Alignment
 
 Related features from Program Board:
 
-- FEATURE-001 - Document Knowledge Base
-- FEATURE-002 - Interactive Q&A Interface
+- **[FEAT-001: Technical Foundation & MVP](../../../program/features/FEAT-001.md)**: Core RAG capabilities for document processing and question-answering
+- **[FEAT-002: Enterprise User Interface](../../../program/features/FEAT-002.md)**: Modern web interface for document upload and interactive Q&A
 
 ## Demo Overview
 

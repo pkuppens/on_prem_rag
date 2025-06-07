@@ -32,6 +32,16 @@ code will be added as the tasks in the `team` folder are implemented. The first
 milestone focuses on document question-answering, while database NLP/SQL
 capabilities are planned for later phases.
 
+### Authentication Service
+
+A lightweight authentication microservice (`auth_service`) handles username/password
+registration and login while exposing placeholder OAuth2 endpoints for Google and Outlook.
+Start it with:
+
+```bash
+uv run start-auth
+```
+
 ## Key Business Concerns & Decisions
 
 ### Legal & Licensing Considerations

@@ -34,6 +34,8 @@ requires-python = ">=3.12"
 
 [project.scripts]
 start-backend = "rag_pipeline.file_ingestion:start_server"
+# Start the authentication microservice
+start-auth = "auth_service.main:start_server"
 # start-frontend: cd frontend && npm install && npm run dev
 
 [project.optional-dependencies]
@@ -78,6 +80,7 @@ ignore = [
     "PLR0912", # too many branches
     "PLR0911", # too many return statements
     "B006",    # mutable default argument
+    "B008",    # depends in function definition
     "F",       # all F* errors (Pyflakes)
 ]
 

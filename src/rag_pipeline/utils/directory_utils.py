@@ -12,6 +12,46 @@ class DirectoryEmptyError(DirectoryError):
     """Raised when a directory is empty but should not be."""
 
 
+def get_project_root() -> Path:
+    """
+    Get the project root directory.
+
+    Returns:
+        Path to the project root directory (where pyproject.toml is located)
+
+    Raises:
+        FileNotFoundError: If project root cannot be determined
+    """
+    current = Path.cwd().resolve()
+
+    # Try to find pyproject.toml by walking up the directory tree
+    while current != current.parent:
+        if (current / "pyproject.toml").exists():
+            return current
+        current = current.parent
+
+    raise FileNotFoundError("Could not find project root directory (pyproject.toml not found in parent directories)")
+
+
+def get_test_data_dir() -> Path:
+    """
+    Get the test data directory.
+
+    Returns:
+        Path to the test data directory
+
+    Raises:
+        FileNotFoundError: If test data directory cannot be found
+    """
+    root = get_project_root()
+    test_data = root / "tests" / "test_data"
+
+    if not test_data.exists():
+        raise FileNotFoundError(f"Test data directory not found at expected location: {test_data}")
+
+    return test_data
+
+
 def _validate_path_input(path: str | Path | None) -> Path:
     """
     Validate and convert path input to Path object.

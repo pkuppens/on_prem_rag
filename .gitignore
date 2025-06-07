@@ -156,6 +156,6 @@ SCRATCH.md
 tests/test_temp/
 
 # Data files from experiments, should not be in the repo
-cache/embeddings/
-data/chroma/
 uploaded_files/
+cache/embeddings/
+data/*chroma

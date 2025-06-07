@@ -29,8 +29,8 @@ class VectorStoreManager(ABC):
         """Add embeddings to the store."""
 
     @abstractmethod
-    def query(self, embedding: list[float], top_k: int) -> list[str]:
-        """Query the store and return matching IDs."""
+    def query(self, embedding: list[float], top_k: int) -> tuple[list[str], list[float]]:
+        """Query the store and return matching IDs and distances."""
 
 
 @dataclass
@@ -49,7 +49,9 @@ class ChromaVectorStoreManager(VectorStoreManager):
     def _create_client(self):
         if self.config.host:
             return chromadb.HttpClient(host=self.config.host, port=self.config.port or 8000)
-        return chromadb.PersistentClient(path=self.config.persist_directory)
+        # Convert Path to string for ChromaDB
+        persist_dir = str(self.config.persist_directory) if self.config.persist_directory else None
+        return chromadb.PersistentClient(path=persist_dir)
 
     def get_storage_context(self) -> StorageContext:
         vector_store = ChromaVectorStore(chroma_collection=self._collection)
@@ -58,9 +60,9 @@ class ChromaVectorStoreManager(VectorStoreManager):
     def add_embeddings(self, ids: list[str], embeddings: list[list[float]], metadatas: list[dict] | None = None) -> None:
         self._collection.add(ids=ids, embeddings=embeddings, metadatas=metadatas)
 
-    def query(self, embedding: list[float], top_k: int) -> list[str]:
-        result = self._collection.query(query_embeddings=[embedding], n_results=top_k)
-        return result["ids"][0] if result["ids"] else []
+    def query(self, embedding: list[float], top_k: int) -> tuple[list[str], list[float]]:
+        result = self._collection.query(query_embeddings=[embedding], n_results=top_k, include=["distances"])
+        return (result["ids"][0] if result["ids"] else [], result["distances"][0] if result["distances"] else [])
 
 
 def get_vector_store_manager_from_env() -> VectorStoreManager:

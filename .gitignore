@@ -159,3 +159,4 @@ tests/test_temp/
 uploaded_files/
 cache/embeddings/
 data/*chroma
+data/test_chunks/

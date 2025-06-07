@@ -1,26 +1,27 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-    -   id: trailing-whitespace
+      - id: trailing-whitespace
         exclude: .*\.(md|mdc)$
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
-    -   id: check-toml
-    -   id: check-merge-conflict
-    -   id: debug-statements
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        exclude: "tests/test_data/.*"
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: debug-statements
 
--   repo: https://github.com/astral-sh/ruff-pre-commit
+  - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.13
     hooks:
-    -   id: ruff
+      - id: ruff
         args: [--fix]
-    -   id: ruff-format
+      - id: ruff-format
 
--   repo: https://github.com/kynan/nbstripout
+  - repo: https://github.com/kynan/nbstripout
     rev: 0.8.1
     hooks:
-    -   id: nbstripout
+      - id: nbstripout
         args: [--drop-empty-cells]
         files: ^notebooks/.*\.ipynb$

@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import inspect
 import json
 import logging
@@ -9,13 +10,26 @@ from pathlib import Path
 
 from fastapi import FastAPI, UploadFile, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+from llama_index.core.node_parser import SimpleNodeParser
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+from rag_pipeline.config.parameter_sets import (
+    DEFAULT_PARAM_SET_NAME,
+    available_param_sets,
+    get_param_set,
+)
+from rag_pipeline.core.document_loader import DocumentLoader
+from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
+
+NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
 
 
 # Set up structured logging
 class StructuredLogger:
-    def __init__(self, name: str):
+    def __init__(self, name: str, level: int = logging.INFO):
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(level)
+        self.level = level
 
         # Create console handler with formatting
         handler = logging.StreamHandler(sys.stdout)
@@ -42,7 +56,7 @@ class StructuredLogger:
         self.logger.debug(f"{message} | {json.dumps({**caller, **kwargs})}")
 
 
-logger = StructuredLogger(__name__)
+logger = StructuredLogger(__name__, level=logging.DEBUG)
 
 app = FastAPI()
 
@@ -56,26 +70,90 @@ app.add_middleware(
 )
 
 # Store upload progress
-upload_progress: dict[str, float] = {}
+upload_progress: dict[str, int] = {}
+
+# Global helpers
+document_loader = DocumentLoader()
+vector_store_manager = get_vector_store_manager_from_env()
+chunk_hashes: set[str] = set()
+
+
+@app.get("/api/parameters/sets")
+async def get_parameter_sets() -> dict:
+    """Return available RAG parameter sets and default selection."""
+    logger.info("GET /api/parameters/sets")
+
+    return {"default": DEFAULT_PARAM_SET_NAME, "sets": available_param_sets()}
 
 
 @app.post("/api/documents/upload")
-async def upload_document(file: UploadFile):
-    """Handle file upload and process document."""
+async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET_NAME):
+    """Handle file upload, chunking, and embedding."""
+
     try:
-        # Log file metadata
-        logger.info("Received file upload", filename=file.filename, size=file.size, content_type=file.content_type)
+        logger.info("POST /api/documents/upload", filename=file.filename, size=file.size, content_type=file.content_type)
 
-        # Simulate processing with progress updates
-        for progress in range(0, 101, 20):
-            upload_progress[file.filename] = progress
-            logger.debug("Processing progress update", filename=file.filename, progress=progress)
-            await asyncio.sleep(1)
+        params = get_param_set(params_name)  # from dictionary, not the GET function call
 
-        logger.info("File processing completed", filename=file.filename)
-        return {"message": "File processed successfully", "filename": file.filename}
+        # Save upload to a temporary location
+        temp_dir = Path("uploaded_files")
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        file_path = temp_dir / file.filename
+        with open(file_path, "wb") as f:
+            f.write(await file.read())
+            logger.debug("File saved to", filename=str(file_path))
+            upload_progress[file.filename] = 10
 
-    except Exception as e:
+        # Load document using loader with duplicate detection
+        documents, _ = document_loader.load_document(file_path)
+        if not documents:
+            logger.debug("No documents found in file", filename=str(file_path))
+            upload_progress[file.filename] = 100
+            return {"message": "Duplicate file", "filename": file.filename}
+
+        parser = SimpleNodeParser.from_defaults(
+            chunk_size=params.chunking.chunk_size,
+            chunk_overlap=params.chunking.chunk_overlap,
+            include_metadata=True,
+        )
+        nodes = parser.get_nodes_from_documents(documents)
+        total_nodes = len(nodes)
+        logger.debug("Nodes parsed", filename=str(file_path), total_nodes=total_nodes)
+        upload_progress[file.filename] = 15
+
+        unique_nodes = []
+        for node in nodes:
+            chunk_hash = hashlib.sha256(node.text.encode("utf-8")).hexdigest()
+            if chunk_hash in chunk_hashes:
+                continue
+            chunk_hashes.add(chunk_hash)
+            node.metadata["chunk_hash"] = chunk_hash
+            unique_nodes.append(node)
+
+        embed_model = HuggingFaceEmbedding(
+            model_name=params.embedding.model_name,
+            cache_folder="cache/embeddings",
+        )
+
+        total = len(unique_nodes)
+        for idx, node in enumerate(unique_nodes, start=1):
+            embedding = embed_model.get_text_embedding(node.text)
+            vector_store_manager.add_embeddings(
+                ids=[node.node_id],
+                embeddings=[embedding],
+                metadatas=[node.metadata],
+            )
+            upload_progress[file.filename] = 15 + int(80 * idx / total)
+            # Yield control to event loop every NODES_PER_YIELD nodes to allow WebSocket updates
+            # Can be just 1 because the WebSocket updates are not that frequent and rendering fast
+            if idx % NODES_PER_YIELD == 0:
+                await asyncio.sleep(0)
+
+        upload_progress[file.filename] = 100  # upload completed
+        logger.info("File processing completed", filename=file.filename, chunks=total)
+        return {"message": "File processed successfully", "filename": file.filename, "chunks": total}
+
+    except Exception as e:  # pragma: no cover - runtime errors reported during manual runs
         logger.error("Error processing file", filename=file.filename, error=str(e))
         raise
 

@@ -3,10 +3,10 @@
 **ID**: TASK-014
 **Story**: [STORY-004: Containerized Deployment](../stories/STORY-004.md)
 **Assignee**: DevOps Engineer
-**Status**: Todo
+**Status**: In Progress
 **Effort**: 4 hours
 **Created**: 2025-05-31
-**Updated**: 2025-05-31
+**Updated**: 2025-06-08
 
 ## Description
 Create a production-ready Dockerfile for the FastAPI application using a multi-stage build to minimize image size.

@@ -1,0 +1,71 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Environment Settings Rule
+
+## Environment Variable Management
+
+When working with environment variables in this project:
+
+1. **Never commit .env files** - They contain sensitive information
+2. **Always create/update env.example** - Template file with empty values and descriptions
+3. **Use inline comments** - Describe what each variable does and where to get it
+
+## File Structure
+
+- `.env` - Local environment variables (gitignored)
+- `env.example` - Template with empty values and descriptions (version controlled)
+
+## Environment Variable Format
+
+```bash
+# Description of what this variable does and where to get it
+VARIABLE_NAME=
+
+# Google OAuth2 Client ID - Get from Google Cloud Console > APIs & Services > Credentials
+GOOGLE_CLIENT_ID=
+
+# Google OAuth2 Client Secret - Get from same location as Client ID
+GOOGLE_CLIENT_SECRET=
+```
+
+## Authentication Service Variables
+
+The authentication service requires these environment variables:
+
+- **GOOGLE_CLIENT_ID** - Google OAuth2 application client identifier
+- **GOOGLE_CLIENT_SECRET** - Google OAuth2 application secret key
+- **MICROSOFT_CLIENT_ID** - Microsoft/Azure AD application client identifier  
+- **MICROSOFT_CLIENT_SECRET** - Microsoft/Azure AD application secret key
+- **MICROSOFT_TENANT_ID** - Azure AD tenant ID (use "common" for multi-tenant)
+- **SESSION_SECRET_KEY** - Random string for session encryption/signing
+- **SERVER_DEBUG** - Enable detailed error responses for debugging
+
+## Implementation Rules
+
+1. **When adding new environment variables:**
+   - Add to `env.example` with empty value and descriptive comment
+   - Document where/how to obtain the value
+   - Update relevant documentation files
+
+2. **When referencing in code:**
+   - Use `os.getenv("VARIABLE_NAME", "default_value")`
+   - Provide sensible defaults where possible
+   - Handle missing variables gracefully
+
+3. **For OAuth2 setup:**
+   - Reference the detailed setup guides in [TEST_AUTHENTICATION.md](mdc:docs/TEST_AUTHENTICATION.md)
+   - Include platform-specific instructions
+   - Mention admin access requirements
+
+4. **Documentation updates:**
+   - Keep [TEST_AUTHENTICATION.md](mdc:docs/TEST_AUTHENTICATION.md) environment setup section current
+   - Update [AUTHENTICATION_REQUIREMENTS.md](mdc:docs/AUTHENTICATION_REQUIREMENTS.md) if needed
+   - Include troubleshooting for missing variables
+
+## Debug Settings
+
+- **SERVER_DEBUG=True** - Returns detailed server error information in responses
+- **SERVER_DEBUG=False** - Returns generic error messages (production setting)

@@ -17,7 +17,7 @@ This plan has been reviewed to ensure that the initial focus is on
 document-based question answering. Database NLP/SQL capabilities will only
 begin once the document pipeline is validated and stable. At this stage the
 repository contains planning artifacts only; source code will be added as tasks
-in the `docs/project/team` folder are executed.
+in the `project/team` folder are executed.
 
 ---
 

@@ -29,11 +29,20 @@ dependencies = [
     "pytest>=8.4.0",
     "python-multipart>=0.0.6",
     "ruff>=0.11.12",
+    # OAuth2 and authentication dependencies
+    "authlib>=1.3.0",
+    "itsdangerous>=2.1.0",
+    "google-auth>=2.27.0",
+    "cryptography>=41.0.0",
 ]
 requires-python = ">=3.12"
 
 [project.scripts]
 start-backend = "rag_pipeline.file_ingestion:start_server"
+# Start the authentication microservice
+start-auth = "auth_service.main:start_server"
+# Start the test application for authentication testing
+start-test-app = "test_app:start_server"
 # start-frontend: cd frontend && npm install && npm run dev
 
 [project.optional-dependencies]
@@ -78,6 +87,7 @@ ignore = [
     "PLR0912", # too many branches
     "PLR0911", # too many return statements
     "B006",    # mutable default argument
+    "B008",    # depends in function definition
     "F",       # all F* errors (Pyflakes)
 ]
 

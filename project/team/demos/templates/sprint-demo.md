@@ -21,8 +21,8 @@
 
 List of stories being demonstrated:
 
-- [ ] **[STORY-ID: [Story Title]](../../../team/stories/STORY-ID.md)**: [Story Title]
-- [ ] **[STORY-ID: [Story Title]](../../../team/stories/STORY-ID.md)**: [Story Title]
+- [ ] **[STORY-ID: [Story Title]](../../stories/STORY-ID.md)**: [Story Title]
+- [ ] **[STORY-ID: [Story Title]](../../stories/STORY-ID.md)**: [Story Title]
 
 ## Feature Alignment
 

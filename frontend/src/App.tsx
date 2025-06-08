@@ -1,5 +1,7 @@
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { UploadPage } from './pages/UploadPage';
+import { AuthProvider } from './components/auth/AuthContext';
+import { Header } from './components/auth/Header';
 
 const theme = createTheme({
   palette: {
@@ -11,7 +13,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <UploadPage />
+      <AuthProvider>
+        <Header />
+        <UploadPage />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

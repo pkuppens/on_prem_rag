@@ -160,3 +160,24 @@ uvicorn rag_pipeline.api.main:app --reload
 - **`uv` command not found**: Ensure `uv` is installed and its installation directory is in your system's PATH. Refer to the official `uv` installation guide.
 - **Python version issues**: Make sure you have Python 3.12 installed and that `uv` is using it. You can specify the Python version for `uv venv` using `uv venv -p 3.12`.
 - **Pre-commit hook failures**: Address the issues reported by the hooks (e.g., formatting errors, linting violations) and re-commit.
+
+## Offline model caching
+
+The tests rely on the `sentence-transformers/all-MiniLM-L6-v2` model. If you are
+working in an environment without internet access you must download this model
+in advance and cache it locally:
+
+```bash
+python - <<'EOF'
+from sentence_transformers import SentenceTransformer
+SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+EOF
+```
+
+The files are stored under `~/.cache/huggingface` by default. Afterwards you can
+set the following environment variables to avoid network calls:
+
+```bash
+export TRANSFORMERS_OFFLINE=1
+export HF_DATASETS_OFFLINE=1
+```

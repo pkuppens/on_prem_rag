@@ -1,20 +1,18 @@
-"""Utility functions for processing PDFs and storing embeddings."""
+"""Utility functions for embedding documents and storing embeddings."""
 
 from __future__ import annotations
 
-import hashlib
 import logging
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
 from pathlib import Path
 from typing import TypedDict
 
 from llama_index.core import Document
-from llama_index.core.node_parser import SimpleNodeParser
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.readers.file import PDFReader
 
 from rag_pipeline.config.vector_store import VectorStoreConfig
+from rag_pipeline.core.chunking import ChunkingResult, chunk_documents, generate_content_hash
+from rag_pipeline.core.document_loader import DocumentLoader
 from rag_pipeline.core.vector_store import ChromaVectorStoreManager
 
 # Configure logging
@@ -40,32 +38,11 @@ class QueryResult(TypedDict):
 
 
 __all__ = [
-    "load_pdf_nodes",
     "embed_text_nodes",
     "store_embeddings",
     "process_pdf",
     "query_embeddings",
 ]
-
-
-def load_pdf_nodes(
-    pdf_path: str | Path,
-    *,
-    chunk_size: int = 512,
-    chunk_overlap: int = 50,
-    max_pages: int | None = None,
-) -> list[Document]:
-    """Load a PDF and split it into document nodes."""
-    reader = PDFReader()
-    docs = reader.load_data(Path(pdf_path))
-    if max_pages is not None:
-        docs = docs[:max_pages]
-
-    parser = SimpleNodeParser.from_defaults(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-    )
-    return parser.get_nodes_from_documents(docs)
 
 
 def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]]:
@@ -74,9 +51,7 @@ def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]
     return [embed_model.get_text_embedding(n.text) for n in nodes]
 
 
-def generate_content_hash(text: str) -> str:
-    """Generate a hash of the text content for deduplication."""
-    return hashlib.sha256(text.encode()).hexdigest()
+# Content hash function moved to chunking.py module
 
 
 def store_embeddings(
@@ -147,14 +122,30 @@ def process_pdf(
     max_pages: int | None = None,
     deduplicate: bool = True,
 ) -> tuple[int, int]:
-    """Process a PDF and store embeddings, returning counts."""
+    """Process a PDF and store embeddings, returning counts.
+
+    This function combines document loading, chunking, and embedding
+    for convenience. For more control, use the separate functions.
+    """
     pdf_path = Path(pdf_path)
-    nodes = load_pdf_nodes(
-        pdf_path,
+
+    # Load the document
+    document_loader = DocumentLoader()
+    documents, document_metadata = document_loader.load_document(pdf_path)
+
+    # Limit pages if requested
+    if max_pages is not None:
+        documents = documents[:max_pages]
+
+    # Chunk the documents
+    chunking_result = chunk_documents(
+        documents,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
-        max_pages=max_pages,
+        source_path=pdf_path,
     )
+
+    nodes = chunking_result.chunks
 
     # Log first node for debugging
     if nodes:

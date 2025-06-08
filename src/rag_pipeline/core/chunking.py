@@ -4,6 +4,9 @@ This module handles the chunking of documents loaded by the document loader.
 It provides functionality to split documents into smaller pieces suitable for
 embedding and retrieval.
 
+See docs/technical/CHUNKING.md for detailed chunking strategies, implementation
+decisions, and performance considerations.
+
 Key features:
 - Page-based chunking with token size considerations
 - Chunk overlap management
@@ -64,6 +67,9 @@ def chunk_documents(
     source_path: str | Path | None = None,
 ) -> ChunkingResult:
     """Chunk a list of documents into smaller pieces.
+
+    Uses SimpleNodeParser with character-based chunking strategy.
+    See docs/technical/CHUNKING.md#implementation-details for configuration rationale.
 
     Args:
         documents: List of Document objects to chunk

@@ -1,4 +1,4 @@
-# Authentication and Authorisation
+# Authentication and Authorization
 
 This document describes the lightweight authentication service used by the project and how it can be extended with OAuth2 providers.
 

@@ -1,4 +1,8 @@
-"""Tests for the chunking module."""
+"""Tests for the chunking module.
+
+Comprehensive test coverage for chunking strategies and configurations.
+Test scenarios align with docs/technical/CHUNKING.md strategy documentation.
+"""
 
 from pathlib import Path
 

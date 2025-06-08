@@ -149,3 +149,12 @@ def process_documents(documents: list[Document], chunk_size: int = 512, chunk_ov
 - [LlamaIndex Node Parser Documentation](https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/)
 - [Text Chunking Best Practices](https://www.pinecone.io/learn/chunking-strategies/)
 - [Embedding Model Documentation](EMBEDDING.md)
+
+## Code Files
+
+- [src/rag_pipeline/core/chunking.py](../../src/rag_pipeline/core/chunking.py) - Main chunking implementation with SimpleNodeParser and metadata handling
+- [tests/test_chunking.py](../../tests/test_chunking.py) - Comprehensive test suite covering chunking strategies, overlap, and edge cases
+- [src/rag_pipeline/config/parameter_sets.py](../../src/rag_pipeline/config/parameter_sets.py) - ChunkingParams configuration and validation
+- [src/rag_pipeline/core/embeddings.py](../../src/rag_pipeline/core/embeddings.py) - Integration between chunking and embedding generation
+- [src/rag_pipeline/file_ingestion.py](../../src/rag_pipeline/file_ingestion.py) - File upload and chunking pipeline integration
+- [src/rag_pipeline/core/rag_system.py](../../src/rag_pipeline/core/rag_system.py) - RAG system integration with chunking for index creation

@@ -36,6 +36,45 @@ This document provides a practical example of how OpenAI Codex is integrated int
    - All pytests must pass, with a preference for code coverage measurements.
    - Regularly update tests to reflect code changes.
 
+### Bidirectional Documentation-Code References
+
+Based on feedback integration, the following standards ensure documentation and code stay synchronized:
+
+#### Technical Documentation Standards
+
+1. **Code Files Section**
+
+   - Add "## Code Files" section after "## References" in technical documentation
+   - Include links to relevant code files with brief descriptions
+   - For non-code documentation (e.g., AGENTS.md, CODEX.md), either omit this section or note "Intentionally left empty - no direct code dependencies"
+
+2. **Reference Format**
+   ```markdown
+   ## Code Files
+
+   - [src/rag_pipeline/core/chunking.py](src/rag_pipeline/core/chunking.py) - Main chunking implementation
+   - [tests/test_chunking.py](tests/test_chunking.py) - Chunking functionality tests
+   ```
+
+#### Code File Standards
+
+1. **Documentation Links in Docstrings**
+
+   - Include links to relevant technical documentation in module and class docstrings
+   - Use relative paths from project root
+   - Example format: `See docs/technical/CHUNKING.md for detailed chunking strategies`
+
+2. **Inline Documentation References**
+
+   - Add documentation links in complex code sections as inline comments
+   - Reference specific sections when relevant
+   - Example: `# Adaptive chunking strategy - see CHUNKING.md#future-improvements`
+
+3. **Maintenance Guidelines**
+   - Update documentation links when files are moved or renamed
+   - Verify links during code reviews
+   - Keep documentation current with implementation changes
+
 ### Usage Guidelines
 
 - **Environment**: Codex does not require a local virtual environment but should be kept up to date.

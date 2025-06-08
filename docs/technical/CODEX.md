@@ -33,3 +33,12 @@ OpenAI Codex is an advanced AI system capable of translating natural language in
 ## Conclusion
 
 The integration of OpenAI Codex into our project is aimed at optimizing development workflows, reducing manual coding efforts, and maintaining high code quality standards. By adhering to the outlined guidelines and regularly updating Codex, we can ensure its effective use in our project.
+
+## References
+
+- [OpenAI Codex Documentation](https://openai.com/blog/openai-codex/)
+- [AGENTS.md](../AGENTS.md) - Codex integration workflow guidelines
+
+## Code Files
+
+Intentionally left empty - no direct code dependencies. This document describes development methodology and AI assistance integration rather than specific implementation code.

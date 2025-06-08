@@ -3,3 +3,123 @@ description:
 globs:
 alwaysApply: false
 ---
+# Documentation-Code Synchronization Rule
+
+This rule ensures bidirectional references between technical documentation and code files to maintain synchronization and help developers and AI coders efficiently track relationships.
+
+## Technical Documentation Standards
+
+### Code Files Section
+
+For technical documentation files (CHUNKING.md, EMBEDDING.md, LLM.md, VECTOR_STORE.md, etc.):
+
+1. **Add "## Code Files" section after "## References"**
+2. **Include links to relevant code files with brief descriptions**
+3. **Use relative paths from project root**
+
+Example format:
+```markdown
+## Code Files
+
+- [src/rag_pipeline/core/chunking.py](src/rag_pipeline/core/chunking.py) - Main chunking implementation with SimpleNodeParser
+- [tests/test_chunking.py](tests/test_chunking.py) - Comprehensive chunking functionality tests
+- [src/rag_pipeline/config/parameter_sets.py](src/rag_pipeline/config/parameter_sets.py) - ChunkingParams configuration
+```
+
+### Non-Code Documentation
+
+For documentation without direct code dependencies (AGENTS.md, CODEX.md, etc.):
+- Either omit the "Code Files" section entirely
+- Or include it with note: "Intentionally left empty - no direct code dependencies"
+
+## Code File Standards
+
+### Module Docstrings
+
+Include links to relevant technical documentation:
+
+```python
+"""Document chunking functionality for the RAG pipeline.
+
+This module handles the chunking of documents loaded by the document loader.
+See docs/technical/CHUNKING.md for detailed chunking strategies and implementation decisions.
+
+Key features:
+- Page-based chunking with token size considerations
+- Chunk overlap management
+- Metadata preservation
+"""
+```
+
+### Class Docstrings
+
+Reference specific documentation sections:
+
+```python
+class ChunkingResult:
+    """Result from document chunking operations.
+    
+    Configuration details documented in docs/technical/CHUNKING.md#implementation-details
+    """
+```
+
+### Inline Comments for Complex Sections
+
+Add documentation references in complex code areas:
+
+```python
+# Adaptive chunking strategy implementation
+# See docs/technical/CHUNKING.md#future-improvements for design rationale
+def adaptive_chunk_documents(documents, strategy="semantic"):
+    pass
+```
+
+## Implementation Guidelines
+
+### When Adding New Files
+
+1. **New code files**: Add documentation links in docstrings
+2. **New documentation**: Add "Code Files" section with relevant links
+3. **Update existing documentation** when adding related code
+
+### When Modifying Files
+
+1. **Code changes**: Update related documentation
+2. **Documentation changes**: Verify code references are current
+3. **File moves/renames**: Update all cross-references
+
+### During Code Reviews
+
+1. **Verify documentation links** are current and correct
+2. **Check for missing references** in new code or documentation
+3. **Ensure descriptions** accurately reflect current implementation
+
+## Cross-Reference Validation
+
+Use these patterns to maintain consistency:
+
+- **Documentation → Code**: Relative paths from project root
+- **Code → Documentation**: Relative paths from project root
+- **Descriptions**: Brief but informative (implementation focus, test coverage, configuration)
+
+## Examples
+
+### Good Documentation Section
+```markdown
+## Code Files
+
+- [src/rag_pipeline/core/chunking.py](src/rag_pipeline/core/chunking.py) - Core chunking logic using LlamaIndex SimpleNodeParser
+- [src/rag_pipeline/core/embeddings.py](src/rag_pipeline/core/embeddings.py) - Integration with chunking for embedding generation
+- [tests/test_chunking.py](tests/test_chunking.py) - Unit tests covering chunking strategies and edge cases
+```
+
+### Good Code Docstring
+```python
+"""Document chunking functionality for the RAG pipeline.
+
+This module implements the chunking strategies documented in docs/technical/CHUNKING.md.
+See that file for strategy comparisons, configuration guidance, and performance considerations.
+"""
+```
+
+This rule ensures documentation and code remain synchronized and easily navigable for both human developers and AI assistants.

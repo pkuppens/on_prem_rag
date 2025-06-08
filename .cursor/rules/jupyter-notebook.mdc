@@ -1,0 +1,30 @@
+---
+description: 
+globs: **/*.ipynb
+alwaysApply: false
+---
+# Jupyter Notebook Rule
+
+This rule applies to Jupyter Notebooks with the `.ipynb` extension.
+
+## JSON Format
+- Ensure the notebook is in a valid JSON format.
+- Use tools like `nbformat` to validate and convert notebooks if necessary.
+
+## Jupyter Notebook Conventions
+- Begin with an introductory markdown cell explaining the notebook's purpose.
+- Include a table of contents if the notebook is lengthy.
+- Place all import statements in the first code cell.
+- Ensure there is a line feed between separate import statements.
+- Keep code cells small and focused on a single task or concept.
+- Prefer function and class definitions in regular Python files; use the notebook for usage and demonstration.
+- Use markdown cells to explain complex logic and document assumptions.
+
+## Best Practices
+- Follow Jupyter Notebook conventions for readability and maintainability.
+- Use descriptive titles and headings in markdown cells.
+- Document the purpose and expected output of each code cell.
+- Regularly clear output cells to reduce file size and improve readability.
+- Use version control to track changes and collaborate effectively.
+
+For more information on Jupyter Notebook best practices, refer to the [Jupyter Documentation](mdc:https:/jupyter-notebook.readthedocs.io/en/stable).

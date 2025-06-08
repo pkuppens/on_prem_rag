@@ -102,6 +102,19 @@ container. Visit the frontend at http://localhost:5173. If you already run an
 Ollama container separately, comment out the `ollama` service in
 `docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
 
+## Local Development Setup
+
+To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.
+
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -e .[dev]
+pre-commit install
+```
+
+See [SETUP.md](SETUP.md) for additional details.
+
 ### Phase 2: Enterprise Features (Weeks 5-8)
 - Role-based access control
 - Multi-user support

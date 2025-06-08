@@ -47,7 +47,7 @@ Source code will be introduced as stories and tasks are implemented.
 
 ## Quick Links
 
-- **[SAFe Project Plan](../SAFe%20Project%20Plan.md)**: Complete strategic overview
+- **[SAFe Project Plan](SAFe%20Project%20Plan.md)**: Complete strategic overview
 - **[Epic EPIC-001: On-Premises RAG Foundation](portfolio/epics/EPIC-001.md)**: Core business epic
 - **[Current PI Planning](program/pi-planning/)**: Active program increment
 - **[Current Sprint Demo](team/demos/current/semantic-search-demo.md)**: Upcoming demo details

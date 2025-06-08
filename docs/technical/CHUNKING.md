@@ -148,4 +148,4 @@ def process_documents(documents: list[Document], chunk_size: int = 512, chunk_ov
 
 - [LlamaIndex Node Parser Documentation](https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/)
 - [Text Chunking Best Practices](https://www.pinecone.io/learn/chunking-strategies/)
-- [Embedding Model Documentation](docs/project/technical/EMBEDDING.md)
+- [Embedding Model Documentation](EMBEDDING.md)

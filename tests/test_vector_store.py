@@ -28,7 +28,13 @@ class TestChromaVectorStoreManager:
         # Simple 2d embeddings for test
         manager.add_embeddings(ids=["1"], embeddings=[[0.0, 0.1]], metadatas=[{"test": "value"}])
         result = manager.query([0.0, 0.1], top_k=1)
-        assert result[0] == "1"
+
+        # Query returns (ids, distances) tuple
+        ids, distances = result
+        print(f"Query returned: ids={ids}, distances={distances}")
+        assert isinstance(ids, list), f"Expected ids to be list, got {type(ids)}"
+        assert len(ids) == 1, f"Expected 1 id, got {len(ids)}"
+        assert ids[0] == "1", f"Expected first id to be '1', got '{ids[0]}'"
 
         # Cleanup to release file locks on Windows
         del manager

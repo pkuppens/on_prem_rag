@@ -28,6 +28,7 @@ class EmbeddingResult(TypedDict):
     document_name: str  # Name of the source document
     chunk_index: int  # Index of the chunk within the document
     record_id: str  # Database record ID
+    page_number: str | int  # Page number from the source document
 
 
 class QueryResult(TypedDict):
@@ -41,6 +42,8 @@ __all__ = [
     "embed_text_nodes",
     "store_embeddings",
     "process_pdf",
+    "chunk_pdf",
+    "embed_chunks",
     "query_embeddings",
 ]
 
@@ -48,7 +51,18 @@ __all__ = [
 def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]]:
     """Embed text nodes using a HuggingFace model."""
     embed_model = HuggingFaceEmbedding(model_name=model_name)
-    return [embed_model.get_text_embedding(n.text) for n in nodes]
+
+    embeddings = []
+    total_nodes = len(nodes)
+
+    for i, node in enumerate(nodes, 1):
+        if i % 10 == 0 or i == total_nodes:  # Report progress every 10 embeddings or at the end
+            print(f"  Embedding progress: {i}/{total_nodes} chunks ({i / total_nodes:.1%})")
+
+        embedding = embed_model.get_text_embedding(node.text)
+        embeddings.append(embedding)
+
+    return embeddings
 
 
 # Content hash function moved to chunking.py module
@@ -183,6 +197,114 @@ def process_pdf(
     return len(nodes), count
 
 
+def chunk_pdf(
+    pdf_path: str | Path,
+    *,
+    chunk_size: int = 512,
+    chunk_overlap: int = 50,
+    max_pages: int | None = None,
+) -> ChunkingResult:
+    """Chunk a PDF file into text chunks.
+
+    Args:
+        pdf_path: Path to the PDF file
+        chunk_size: Maximum size of each chunk in characters
+        chunk_overlap: Number of characters to overlap between chunks
+        max_pages: Maximum number of pages to process (None for all)
+
+    Returns:
+        ChunkingResult with chunked documents and metadata
+    """
+    pdf_path = Path(pdf_path)
+
+    # Load the document
+    print(f"Loading PDF document: {pdf_path.name}")
+    document_loader = DocumentLoader()
+    documents, document_metadata = document_loader.load_document(pdf_path)
+
+    print(f"Loaded {len(documents)} pages from PDF")
+
+    # Limit pages if requested
+    if max_pages is not None:
+        documents = documents[:max_pages]
+        print(f"Limited to first {len(documents)} pages")
+
+    # Chunk the documents
+    print(f"Chunking documents with size={chunk_size}, overlap={chunk_overlap}")
+    chunking_result = chunk_documents(
+        documents,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        source_path=pdf_path,
+    )
+
+    print(f"Created {chunking_result.chunk_count} chunks")
+    return chunking_result
+
+
+def embed_chunks(
+    chunking_result: ChunkingResult,
+    model_name: str,
+    *,
+    persist_dir: str | Path,
+    collection_name: str = "documents",
+    deduplicate: bool = True,
+) -> tuple[int, int]:
+    """Embed chunks and store them in a vector database.
+
+    Args:
+        chunking_result: Result from chunk_pdf function
+        model_name: Name of the HuggingFace embedding model
+        persist_dir: Directory to store the embeddings
+        collection_name: Name of the collection
+        deduplicate: Whether to deduplicate based on content hash
+
+    Returns:
+        Tuple of (number_of_chunks, number_of_stored_records)
+    """
+    nodes = chunking_result.chunks
+    pdf_path = Path(chunking_result.file_path)
+
+    # Log first node for debugging
+    if nodes:
+        logger.debug(f"First node attributes: {vars(nodes[0])}")
+        logger.debug(f"First node metadata: {nodes[0].metadata}")
+
+    # Generate embeddings with progress reporting
+    print(f"Generating embeddings for {len(nodes)} chunks...")
+    embeddings = embed_text_nodes(nodes, model_name)
+
+    # Enhanced metadata with document information
+    metadatas = []
+    for i, node in enumerate(nodes):
+        # Generate a stable document ID from the file path and chunk index
+        doc_id = f"{pdf_path.stem}_{i}"
+
+        metadatas.append(
+            {
+                "text": node.text,
+                "document_name": pdf_path.name,
+                "document_id": doc_id,
+                "chunk_index": i,
+                "page_number": node.metadata.get("page_label", "unknown"),
+                "source": str(pdf_path),
+            }
+        )
+
+    print(f"Storing {len(embeddings)} embeddings...")
+    manager = store_embeddings(
+        [f"{pdf_path.stem}_{i}" for i in range(len(nodes))],  # Generate stable IDs
+        embeddings,
+        metadatas,
+        persist_dir,
+        collection_name,
+        deduplicate=deduplicate,
+    )
+    count = manager._collection.count()
+    print(f"Stored {count} records in vector database")
+    return len(nodes), count
+
+
 def query_embeddings(
     query: str,
     model_name: str,
@@ -237,6 +359,7 @@ def query_embeddings(
             document_name=m.get("document_name", ""),
             chunk_index=m.get("chunk_index", -1),
             record_id=id_,
+            page_number=m.get("page_number", "unknown"),
         )
         for m, sim, id_ in zip(results["metadatas"], similarities, ids, strict=False)
     ]

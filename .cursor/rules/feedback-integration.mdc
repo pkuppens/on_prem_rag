@@ -1,0 +1,99 @@
+---
+description: Feedback Integration
+globs: 
+alwaysApply: false
+---
+---
+description: Captures and integrates development workflow feedback for continuous improvement
+alwaysApply: false
+---
+
+# Feedback Integration Rule
+
+## Purpose
+This rule enables continuous improvement of the development workflow through structured feedback and retrospectives.
+
+## How to Provide Feedback
+
+Use `@feedback-integration:` followed by your feedback message. The feedback can be positive, negative, or mixed:
+
+### Examples
+```
+@feedback-integration: This last session was very successful! The task breakdown worked well and the code quality was excellent.
+```
+
+```
+@feedback-integration: The typical task size was still a bit large, it took many iterations and a complex pull request over many components to complete the issue.
+```
+
+```
+@feedback-integration: The automated testing worked great this time, but the documentation updates were forgotten again. Also, the PR review process was smoother than usual.
+```
+
+## AI Response to Feedback
+
+When you receive feedback with `@feedback-integration:`:
+
+1. **Analyze the feedback** - Identify what worked well, what didn't work, and mixed signals
+2. **Categorize improvements needed** - Determine which processes or documentation need updates
+3. **Update relevant documentation** in this priority order:
+   - [AGENTS.md](mdc:AGENTS.md) - For agent-specific workflow and task management improvements
+   - Cursor rules in `.cursor/rules/` - For development process improvements  
+   - [ARCHITECTURE.md](mdc:ARCHITECTURE.md) - For technical approach and constraint improvements
+4. **Apply improvements** - Implement the enhanced process for current and future work
+5. **Acknowledge the feedback** with a summary of changes made
+
+### Handling Mixed Feedback
+For feedback containing both positive and negative elements:
+- **Extract successful patterns** from positive aspects and reinforce them in documentation
+- **Identify root causes** for negative aspects and implement fixes
+- **Balance improvements** - ensure fixes don't eliminate successful practices
+
+## Documentation Update Guidelines
+
+### When updating [AGENTS.md](mdc:AGENTS.md):
+- Add new guidelines to relevant sections
+- Update workflow steps based on lessons learned
+- Refine task sizing and management practices
+- Enhance quality gates and standards
+
+### When updating cursor rules:
+- Create new rules for recurring patterns
+- Modify existing rules to address identified issues
+- Ensure rules are actionable and specific
+
+### When updating [ARCHITECTURE.md](mdc:ARCHITECTURE.md):
+- Document technical constraints discovered
+- Add new patterns or anti-patterns
+- Update decision records based on outcomes
+
+## Examples of Improvements
+
+### Task Sizing Issues
+If feedback indicates tasks are too large:
+- Update [AGENTS.md](mdc:AGENTS.md) with smaller task breakdown guidelines
+- Create cursor rule for task complexity assessment
+- Document maximum task scope in hours/story points
+
+### Code Quality Issues  
+If feedback indicates quality problems:
+- Enhance testing requirements in [AGENTS.md](mdc:AGENTS.md)
+- Update code review standards
+- Add quality gate cursor rules
+
+### Documentation Issues
+If feedback indicates documentation gaps:
+- Strengthen documentation requirements in [AGENTS.md](mdc:AGENTS.md)
+- Create cursor rules for documentation timing
+- Update documentation hierarchy guidance
+
+## Feedback Integration Workflow
+
+1. **Receive feedback** using `@feedback-integration:` format
+2. **Analyze and categorize** the feedback content and impact areas
+3. **Identify specific improvements** needed in processes or documentation  
+4. **Update relevant files** following the priority order above
+5. **Confirm changes** with a summary of improvements made
+6. **Apply improvements** to current and future work
+
+This rule ensures that every piece of feedback leads to concrete improvements in our development workflow and documentation.

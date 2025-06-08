@@ -1,5 +1,7 @@
 {
-    "editor.rulers": [132],
+    "editor.rulers": [
+        132
+    ],
     "editor.formatOnSave": true,
     "[python]": {
         "editor.defaultFormatter": "ms-python.python",
@@ -8,5 +10,10 @@
             "source.fixAll.ruff": "always",
             "source.organizeImports.ruff": "always"
         }
-    }
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

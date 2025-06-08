@@ -166,6 +166,7 @@ async def login_page(return_url: str = Query("/")):
                 const password = document.getElementById('password').value;
 
                 try {{
+                    console.log('Attempting login...');
                     const response = await fetch('http://localhost:8001/login', {{
                         method: 'POST',
                         headers: {{
@@ -178,15 +179,26 @@ async def login_page(return_url: str = Query("/")):
                         }})
                     }});
 
+                    console.log('Login response status:', response.status);
+
                     if (response.ok) {{
                         const data = await response.json();
+                        console.log('Login successful, token received');
                         localStorage.setItem('auth_token', data.token);
-                        window.location.href = '{return_url}';
+
+                        // Get return URL from current page URL params or use default
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const returnUrl = urlParams.get('return_url') || '/';
+
+                        console.log('Redirecting to:', returnUrl);
+                        window.location.href = returnUrl;
                     }} else {{
                         const error = await response.json();
+                        console.error('Login failed:', error);
                         alert('Login failed: ' + error.detail);
                     }}
                 }} catch (error) {{
+                    console.error('Login error:', error);
                     alert('Login failed: ' + error.message);
                 }}
             }});
@@ -291,28 +303,23 @@ async def register_page(return_url: str = Query("/")):
 
 
 @app.get("/login_test")
-async def login_test(request: Request, current_user: User | None = Depends(get_current_user_optional)):
+async def login_test(request: Request):
     """
     Test endpoint that requires authentication.
 
-    If user is not authenticated, redirects to login page with return URL.
-    If user is authenticated, shows welcome message with user details.
+    Uses client-side authentication check with localStorage token.
     """
-    if not current_user:
-        # Redirect to login page with return URL
-        return_url = str(request.url)
-        login_url = f"/login?return_url={quote(return_url)}"
-        return RedirectResponse(url=login_url, status_code=302)
-
     return HTMLResponse(f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Login Test - Authenticated</title>
+        <title>Login Test</title>
         <style>
             body {{ font-family: Arial, sans-serif; margin: 40px; }}
             .success {{ color: #28a745; }}
+            .error {{ color: #dc3545; }}
             .info {{ background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0; }}
+            .loading {{ color: #007bff; }}
             .button {{
                 display: inline-block;
                 padding: 10px 20px;
@@ -321,50 +328,123 @@ async def login_test(request: Request, current_user: User | None = Depends(get_c
                 text-decoration: none;
                 border-radius: 5px;
                 margin: 10px 5px 0 0;
+                text-decoration: none;
             }}
+            .hidden {{ display: none; }}
         </style>
     </head>
     <body>
-        <h1>🎉 Authentication Successful!</h1>
-        <p class="success">You have successfully accessed a protected endpoint.</p>
-
-        <div class="info">
-            <h3>User Information:</h3>
-            <p><strong>Username:</strong> {current_user.username}</p>
-            <p><strong>Email:</strong> {current_user.email or "Not provided"}</p>
-            <p><strong>Roles:</strong> {current_user.roles}</p>
-            <p><strong>User ID:</strong> {current_user.id}</p>
+        <div id="loading" class="loading">
+            <h1>Checking authentication...</h1>
+            <p>Please wait while we verify your login status.</p>
         </div>
 
-        <h3>Test Results:</h3>
-        <p>✅ Authentication middleware working correctly</p>
-        <p>✅ User session validated successfully</p>
-        <p>✅ Protected endpoint accessible to authenticated users</p>
+        <div id="authenticated" class="hidden">
+            <h1>🎉 Authentication Successful!</h1>
+            <p class="success">You have successfully accessed a protected endpoint.</p>
 
-        <div>
-            <a href="/" class="button" style="background-color: #007bff;">Go Home</a>
-            <button id="logoutBtn" class="button">Logout</button>
+            <div class="info">
+                <h3>User Information:</h3>
+                <p><strong>Username:</strong> <span id="username"></span></p>
+                <p><strong>Email:</strong> <span id="email"></span></p>
+                <p><strong>Roles:</strong> <span id="roles"></span></p>
+                <p><strong>User ID:</strong> <span id="user-id"></span></p>
+            </div>
+
+            <h3>Test Results:</h3>
+            <p>✅ Authentication middleware working correctly</p>
+            <p>✅ User session validated successfully</p>
+            <p>✅ Protected endpoint accessible to authenticated users</p>
+
+            <div>
+                <a href="/" class="button" style="background-color: #007bff;">Go Home</a>
+                <button id="logoutBtn" class="button">Logout</button>
+            </div>
+        </div>
+
+        <div id="unauthenticated" class="hidden">
+            <h1 class="error">Authentication Required</h1>
+            <p>You need to log in to access this page.</p>
+            <a href="/login?return_url={quote(str(request.url))}" class="button" style="background-color: #007bff;">Go to Login</a>
         </div>
 
         <script>
-            document.getElementById('logoutBtn').addEventListener('click', async () => {{
+            async function checkAuthentication() {{
+                const token = localStorage.getItem('auth_token');
+
+                if (!token) {{
+                    console.log('No token found in localStorage');
+                    showUnauthenticated();
+                    return;
+                }}
+
                 try {{
-                    const token = localStorage.getItem('auth_token');
-                    if (token) {{
-                        await fetch('http://localhost:8001/logout', {{
-                            method: 'POST',
-                            headers: {{
-                                'Authorization': 'Bearer ' + token
-                            }}
-                        }});
-                        localStorage.removeItem('auth_token');
+                    console.log('Checking authentication with token...');
+                    const response = await fetch('http://localhost:8001/me', {{
+                        method: 'GET',
+                        headers: {{
+                            'Authorization': 'Bearer ' + token
+                        }}
+                    }});
+
+                    if (response.ok) {{
+                        const user = await response.json();
+                        console.log('Authentication successful:', user);
+                        showAuthenticated(user);
+                    }} else {{
+                        console.log('Token validation failed:', response.status);
+                        localStorage.removeItem('auth_token'); // Remove invalid token
+                        showUnauthenticated();
                     }}
-                    window.location.href = '/';
                 }} catch (error) {{
-                    console.error('Logout error:', error);
-                    // Still redirect even if logout fails
-                    localStorage.removeItem('auth_token');
-                    window.location.href = '/';
+                    console.error('Authentication check failed:', error);
+                    localStorage.removeItem('auth_token'); // Remove token on error
+                    showUnauthenticated();
+                }}
+            }}
+
+            function showAuthenticated(user) {{
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('unauthenticated').classList.add('hidden');
+                document.getElementById('authenticated').classList.remove('hidden');
+
+                // Populate user information
+                document.getElementById('username').textContent = user.username;
+                document.getElementById('email').textContent = user.email || 'Not provided';
+                document.getElementById('roles').textContent = user.roles;
+                document.getElementById('user-id').textContent = user.id;
+            }}
+
+            function showUnauthenticated() {{
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('authenticated').classList.add('hidden');
+                document.getElementById('unauthenticated').classList.remove('hidden');
+            }}
+
+            // Check authentication on page load
+            document.addEventListener('DOMContentLoaded', checkAuthentication);
+
+            // Logout functionality
+            document.addEventListener('click', async (e) => {{
+                if (e.target.id === 'logoutBtn') {{
+                    try {{
+                        const token = localStorage.getItem('auth_token');
+                        if (token) {{
+                            await fetch('http://localhost:8001/logout', {{
+                                method: 'POST',
+                                headers: {{
+                                    'Authorization': 'Bearer ' + token
+                                }}
+                            }});
+                        }}
+                        localStorage.removeItem('auth_token');
+                        window.location.href = '/';
+                    }} catch (error) {{
+                        console.error('Logout error:', error);
+                        // Still redirect even if logout fails
+                        localStorage.removeItem('auth_token');
+                        window.location.href = '/';
+                    }}
                 }}
             }});
         </script>
@@ -400,9 +480,20 @@ async def api_login_test(current_user: User = Depends(get_current_user)):
 
 def start_server() -> None:
     """Start the test application server."""
+    import logging
+
     import uvicorn
 
-    uvicorn.run("test_app:app", host="0.0.0.0", port=8002, reload=True)
+    # Configure uvicorn logging to include timestamps
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["formatters"]["default"]["fmt"] = "%(asctime)s.%(msecs)03d %(levelprefix)s %(message)s"
+    log_config["formatters"]["default"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
+    log_config["formatters"]["access"]["fmt"] = (
+        '%(asctime)s.%(msecs)03d INFO:     %(client_addr)s - "%(request_line)s" %(status_code)s'
+    )
+    log_config["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
+
+    uvicorn.run("test_app:app", host="0.0.0.0", port=8002, reload=True, log_config=log_config)
 
 
 if __name__ == "__main__":

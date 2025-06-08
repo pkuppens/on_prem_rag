@@ -7,6 +7,7 @@ from uuid import uuid4
 import httpx
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -62,14 +63,34 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Auth Service", lifespan=lifespan)
 
+# Add CORS middleware to allow cross-origin requests from test app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8002", "http://localhost:5173"],  # Test app and React dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Add session middleware for OAuth2 flows
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY", "your-secret-key-change-this"))
 
 
 def start_server() -> None:
+    import logging
+
     import uvicorn
 
-    uvicorn.run("auth_service.main:app", host="0.0.0.0", port=8001, reload=True)
+    # Configure uvicorn logging to include timestamps
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["formatters"]["default"]["fmt"] = "%(asctime)s.%(msecs)03d %(levelprefix)s %(message)s"
+    log_config["formatters"]["default"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
+    log_config["formatters"]["access"]["fmt"] = (
+        '%(asctime)s.%(msecs)03d INFO:     %(client_addr)s - "%(request_line)s" %(status_code)s'
+    )
+    log_config["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
+
+    uvicorn.run("auth_service.main:app", host="0.0.0.0", port=8001, reload=True, log_config=log_config)
 
 
 def get_db():

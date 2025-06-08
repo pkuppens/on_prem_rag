@@ -160,3 +160,7 @@ uploaded_files/
 cache/embeddings/
 data/*chroma
 data/test_chunks/
+
+# Database files
+# TODO: actually, we need a better location for database files, but for now this is fine
+*.db

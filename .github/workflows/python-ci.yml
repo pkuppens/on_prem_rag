@@ -2,9 +2,9 @@ name: Python CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -14,33 +14,33 @@ jobs:
         python-version: ["3.12"]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install uv
-      run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-    - name: Install dependencies
-      run: |
-        uv venv
-        source .venv/bin/activate
-        uv pip install -e .[dev]
-    - name: Cache embedding model
-      run: |
-        source .venv/bin/activate
-        python - <<'EOF'
-from sentence_transformers import SentenceTransformer
-SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-EOF
-    - name: Lint with ruff
-      run: |
-        source .venv/bin/activate
-        ruff check .
-        ruff format --check .
-    - name: Test with pytest
-      run: |
-        source .venv/bin/activate
-        TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: Install dependencies
+        run: |
+          uv venv
+          source .venv/bin/activate
+          uv pip install -e .[dev]
+      - name: Cache embedding model
+        run: |
+          source .venv/bin/activate
+          python - <<'EOF'
+          from sentence_transformers import SentenceTransformer
+          SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+          EOF
+      - name: Lint with ruff
+        run: |
+          source .venv/bin/activate
+          ruff check .
+          ruff format --check .
+      - name: Test with pytest
+        run: |
+          source .venv/bin/activate
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest

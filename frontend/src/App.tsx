@@ -13,6 +13,7 @@ import axios from 'axios';
 import Logger from './utils/logger';
 // Initialize PDF.js for secure on-premises deployment (must be imported early)
 import './utils/pdfSetup';
+import { PDFTestPage } from './pages/PDFTestPage';
 
 function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -76,12 +77,17 @@ function App() {
     };
   }, []);
 
-  // Check if we're on the test page
-  const isTestPage = window.location.search.includes('test=theme');
+  // Check if we're on test pages
+  const isThemeTestPage = window.location.search.includes('test=theme');
+  const isPDFTestPage = window.location.search.includes('test=pdf');
 
-  // If it's the test page, show only the test component without authentication
-  if (isTestPage) {
+  // If it's a test page, show only the test component without authentication
+  if (isThemeTestPage) {
     return <ThemeTestPage />;
+  }
+
+  if (isPDFTestPage) {
+    return <PDFTestPage />;
   }
 
   const handleFileSelect = async (files: File[]) => {

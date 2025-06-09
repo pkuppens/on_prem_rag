@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography, Slider } from '@mui/material';
 import axios from 'axios';
 
 interface EmbeddingResult {
@@ -26,6 +26,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<EmbeddingResult[]>([]);
   const [selected, setSelected] = useState(0);
+  const [numResults, setNumResults] = useState(5); // Default to 5 results
 
   const runQuery = async () => {
     if (!query.trim()) return;
@@ -33,6 +34,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
     const res = await axios.post<QueryResponse>('http://localhost:8000/api/query', {
       query,
       params_name: paramSet,
+      top_k: numResults, // Override the parameter set's top_k with user selection
     });
     setResults(res.data.all_results);
     if (res.data.all_results.length > 0) {
@@ -45,6 +47,18 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   const handleResultSelect = (result: EmbeddingResult, index: number) => {
     setSelected(index);
     onResultSelect(result);
+  };
+
+  const handleSliderChange = (_event: Event, newValue: number | number[]) => {
+    const value = Array.isArray(newValue) ? newValue[0] : newValue;
+    setNumResults(value);
+  };
+
+  const handleSliderChangeCommitted = () => {
+    // Re-run query when slider is released if we have existing results
+    if (query.trim() && results.length > 0) {
+      runQuery();
+    }
   };
 
   return (
@@ -63,6 +77,26 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
           }
         }}
       />
+
+      {/* Number of Results Slider */}
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="body2" sx={{ mb: 1 }}>
+          Number of Results: {numResults}
+        </Typography>
+        <Slider
+          value={numResults}
+          onChange={handleSliderChange}
+          onChangeCommitted={handleSliderChangeCommitted}
+          aria-labelledby="results-slider"
+          valueLabelDisplay="auto"
+          step={1}
+          marks
+          min={1}
+          max={10}
+          sx={{ mb: 1 }}
+        />
+      </Box>
+
       <Button
         variant="contained"
         fullWidth

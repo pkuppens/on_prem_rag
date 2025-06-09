@@ -11,9 +11,9 @@ import { pdfjs } from 'react-pdf';
  */
 
 // Set worker source to use local files bundled with the application
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url
-).toString();
+// Updated to match pdfjs-dist version 5.3.31 to fix version mismatch
+// Fix: Using pdfjs.version ensures API and Worker versions match
+// Previous error: "The API version "4.8.69" does not match the Worker version "5.3.31""
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export { pdfjs };

@@ -87,6 +87,7 @@ class QueryRequest(BaseModel):
 
     query: str
     params_name: str | None = None
+    top_k: int | None = None  # Optional override for number of results
 
 
 @app.get("/api/parameters/sets")
@@ -191,12 +192,15 @@ async def query_documents(payload: QueryRequest) -> dict:
 
     params = get_param_set(payload.params_name or DEFAULT_PARAM_SET_NAME)
 
+    # Use custom top_k if provided, otherwise use parameter set default
+    top_k = payload.top_k if payload.top_k is not None else params.retrieval.top_k
+
     results = query_embeddings(
         payload.query,
         params.embedding.model_name,
         persist_dir=vector_store_manager.config.persist_directory,
         collection_name=vector_store_manager.config.collection_name,
-        top_k=params.retrieval.top_k,
+        top_k=top_k,
     )
     return results
 

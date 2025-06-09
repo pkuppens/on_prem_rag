@@ -8,10 +8,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, WebSocket
+from fastapi import FastAPI, HTTPException, UploadFile, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from llama_index.core.node_parser import SimpleNodeParser
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from pydantic import BaseModel
 
 from rag_pipeline.config.parameter_sets import (
     DEFAULT_PARAM_SET_NAME,
@@ -19,6 +21,7 @@ from rag_pipeline.config.parameter_sets import (
     get_param_set,
 )
 from rag_pipeline.core.document_loader import DocumentLoader
+from rag_pipeline.core.embeddings import query_embeddings
 from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
 NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
@@ -59,6 +62,7 @@ class StructuredLogger:
 logger = StructuredLogger(__name__, level=logging.DEBUG)
 
 app = FastAPI()
+app.mount("/files", StaticFiles(directory="uploaded_files"), name="files")
 
 # Add CORS middleware
 app.add_middleware(
@@ -76,6 +80,13 @@ upload_progress: dict[str, int] = {}
 document_loader = DocumentLoader()
 vector_store_manager = get_vector_store_manager_from_env()
 chunk_hashes: set[str] = set()
+
+
+class QueryRequest(BaseModel):
+    """Payload for the query endpoint."""
+
+    query: str
+    params_name: str | None = None
 
 
 @app.get("/api/parameters/sets")
@@ -156,6 +167,25 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
     except Exception as e:  # pragma: no cover - runtime errors reported during manual runs
         logger.error("Error processing file", filename=file.filename, error=str(e))
         raise
+
+
+@app.post("/api/query")
+async def query_documents(payload: QueryRequest) -> dict:
+    """Return matching chunks for a query."""
+
+    if not payload.query:
+        raise HTTPException(status_code=400, detail="Query must not be empty")
+
+    params = get_param_set(payload.params_name or DEFAULT_PARAM_SET_NAME)
+
+    results = query_embeddings(
+        payload.query,
+        params.embedding.model_name,
+        persist_dir=vector_store_manager.config.persist_directory,
+        collection_name=vector_store_manager.config.collection_name,
+        top_k=params.retrieval.top_k,
+    )
+    return results
 
 
 @app.websocket("/ws/upload-progress")

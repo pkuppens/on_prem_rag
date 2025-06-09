@@ -18,6 +18,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-pdf": "^7.7.2",
+    "pdfjs-dist": "^3.11.174",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {

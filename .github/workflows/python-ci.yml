@@ -28,13 +28,21 @@ jobs:
           uv venv
           source .venv/bin/activate
           uv pip install -e .[dev]
-      - name: Cache embedding model
+      - name: Cache HuggingFace models
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-huggingface-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-huggingface-
+      - name: Pre-download embedding models
         run: |
           source .venv/bin/activate
-          python - <<'EOF'
-          from sentence_transformers import SentenceTransformer
-          SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-          EOF
+          # Set cache directory to ensure consistent location
+          export HF_HOME=$HOME/.cache/huggingface
+          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
+          python scripts/setup_embedding_models.py
       - name: Lint with ruff
         run: |
           source .venv/bin/activate
@@ -43,4 +51,9 @@ jobs:
       - name: Test with pytest
         run: |
           source .venv/bin/activate
+          # Set cache directories for offline mode
+          export HF_HOME=$HOME/.cache/huggingface
+          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
+          # Run tests in offline mode
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest

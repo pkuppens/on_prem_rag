@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "on_prem_rag"
 version = "0.1.0"
@@ -36,6 +40,14 @@ dependencies = [
     "cryptography>=41.0.0",
 ]
 requires-python = ">=3.12"
+
+# Configure the package to include src, scripts, and project directories
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "scripts*", "project*"]
+
+[tool.setuptools.package-dir]
+"" = "."
 
 [project.scripts]
 start-backend = "rag_pipeline.file_ingestion:start_server"
@@ -132,10 +144,16 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+# Include src, scripts, and project directories in Python path for testing
+# This allows absolute imports from any of these directories
+pythonpath = ["src", "scripts", "project", "."]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v"
+# Custom markers for test organization
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
 
 [tool.uv]
 python-preference = "only-managed" # Use uv-managed Python installations

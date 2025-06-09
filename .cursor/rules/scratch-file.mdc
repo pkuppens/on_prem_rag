@@ -1,0 +1,58 @@
+---
+description: Defines how AI agents should interact with SCRATCH.md files.
+globs: 
+alwaysApply: false
+---
+# SCRATCH.md File Rules
+
+This rule defines how AI agents should interact with SCRATCH.md files.
+
+## Purpose
+
+SCRATCH.md files are working documentation files (.gitignored) used for:
+- Temporary notes and experimental ideas
+- Issue investigation and analysis
+- Agent collaboration and responses
+
+## Agent Interaction Rules
+
+### Adding Content
+
+Agents may add inline content to SCRATCH.md files using this format:
+```
+{agent_name} >>> {content}
+```
+
+Where:
+- `{agent_name}` is the name of the AI agent (e.g., "Claude", "Codex", "GPT-4")
+- `{content}` is the agent's response, analysis, or notes
+
+### Content Preservation
+
+- **DO NOT** modify existing content in SCRATCH.md files
+- **DO NOT** remove or alter previous agent responses
+- **DO NOT** reformat existing sections
+- **ONLY** add new content using the specified format
+
+### Examples
+
+Correct agent additions:
+```
+Claude >>> The issue appears to be related to model caching. Here's my analysis...
+
+GPT-4 >>> I agree with Claude's assessment. Additionally, we should consider...
+
+Codex >>> Based on the code review, the following changes are needed...
+```
+
+### File References
+
+The main SCRATCH.md file is [SCRATCH.md](mdc:SCRATCH.md).
+
+## Best Practices
+
+1. Use clear, descriptive agent names
+2. Provide detailed, actionable content
+3. Build upon previous agent responses when relevant
+4. Maintain chronological order of responses
+5. Focus on problem-solving and solution-oriented content

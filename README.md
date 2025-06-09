@@ -114,9 +114,18 @@ To run the tests or work on the code outside containers, install the Python depe
 ```bash
 uv venv
 source .venv/bin/activate
+# Install package in editable mode with development dependencies
 uv pip install -e .[dev]
 pre-commit install
 ```
+
+**Note**: The project uses editable installation (`-e`) to ensure proper Python module resolution. This allows the test suite to correctly import modules from `src/`, `scripts/`, and `project/` directories using absolute imports.
+
+### Development Standards
+
+- **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
+- **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
+- **Package Management**: Configuration is handled through `pyproject.toml` for portable development environments
 
 See [SETUP.md](SETUP.md) for additional details.
 

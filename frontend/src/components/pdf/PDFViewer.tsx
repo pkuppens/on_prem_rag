@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Typography, Paper } from '@mui/material';
-import { Document as PDFDocument, Page, pdfjs } from 'react-pdf';
+import { Document as PDFDocument, Page } from 'react-pdf';
+import { pdfjs } from '../../utils/pdfSetup';
 import Logger from '../../utils/logger';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface EmbeddingResult {
   text: string;

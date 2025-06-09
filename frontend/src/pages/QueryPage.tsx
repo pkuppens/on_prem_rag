@@ -7,11 +7,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Document as PDFDocument, Page, pdfjs } from 'react-pdf';
+import { Document as PDFDocument, Page } from 'react-pdf';
+import { pdfjs } from '../utils/pdfSetup';
 import axios from 'axios';
 import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface EmbeddingResult {
   text: string;

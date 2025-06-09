@@ -11,6 +11,8 @@ import { QuerySection } from './components/query/QuerySection';
 import { PDFViewer } from './components/pdf/PDFViewer';
 import axios from 'axios';
 import Logger from './utils/logger';
+// Initialize PDF.js for secure on-premises deployment (must be imported early)
+import './utils/pdfSetup';
 
 function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');

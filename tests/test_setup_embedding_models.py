@@ -82,7 +82,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_sentence_transformer_model("test-model")
 
         # Verify
-        assert result is True
+        assert result is True, "download_sentence_transformer_model should return True on successful download"
         mock_sentence_transformer.assert_called_once_with("test-model")
         mock_model.encode.assert_called_once_with("Test sentence")
 
@@ -96,7 +96,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_sentence_transformer_model("test-model")
 
         # Verify
-        assert result is False
+        assert result is False, "download_sentence_transformer_model should return False when download fails"
         mock_sentence_transformer.assert_called_once_with("test-model")
 
     @patch("scripts.setup_embedding_models.AutoModel")
@@ -121,7 +121,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_transformers_model("test-model")
 
         # Verify
-        assert result is True
+        assert result is True, "download_transformers_model should return True on successful download"
         mock_tokenizer.from_pretrained.assert_called_once_with("test-model")
         mock_model.from_pretrained.assert_called_once_with("test-model")
 
@@ -136,7 +136,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_transformers_model("test-model")
 
         # Verify
-        assert result is False
+        assert result is False, "download_transformers_model should return False when download fails"
         mock_tokenizer.from_pretrained.assert_called_once_with("test-model")
 
     @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
@@ -151,7 +151,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_llamaindex_embedding("test-model")
 
         # Verify
-        assert result is True
+        assert result is True, "download_llamaindex_embedding should return True on successful download"
         mock_hf_embedding.assert_called_once_with(model_name="test-model")
         mock_embedding_instance.get_text_embedding.assert_called_once_with("Test sentence")
 
@@ -165,7 +165,7 @@ class TestSetupEmbeddingModels:
         result = setup_embedding_models.download_llamaindex_embedding("test-model")
 
         # Verify
-        assert result is False
+        assert result is False, "download_llamaindex_embedding should return False when download fails"
         mock_hf_embedding.assert_called_once_with(model_name="test-model")
 
     def test_script_imports(self):
@@ -180,24 +180,36 @@ class TestSetupEmbeddingModels:
     @pytest.mark.slow
     def test_script_execution_dry_run(self, tmp_path, monkeypatch):
         """Test script execution without actually downloading models."""
-        # Mock the home directory
-        mock_home = str(tmp_path)
-        monkeypatch.setattr(os.path, "expanduser", lambda path: path.replace("~", mock_home))
+        # Set up temporary cache directories using environment variables
+        # This is more reliable than mocking expanduser
+        hf_home = str(tmp_path / "huggingface")
+        transformers_cache = str(tmp_path / "huggingface" / "hub")
+        sentence_transformers_home = str(tmp_path / "huggingface" / "sentence_transformers")
 
-        # Mock all download functions to return True without actual downloads
-        with (
-            patch("scripts.setup_embedding_models.download_sentence_transformer_model", return_value=True),
-            patch("scripts.setup_embedding_models.download_transformers_model", return_value=True),
-            patch("scripts.setup_embedding_models.download_llamaindex_embedding", return_value=True),
+        # Set environment variables to override defaults
+        with patch.dict(
+            os.environ,
+            {
+                "HF_HOME": hf_home,
+                "TRANSFORMERS_CACHE": transformers_cache,
+                "SENTENCE_TRANSFORMERS_HOME": sentence_transformers_home,
+            },
         ):
-            # Test the main function
-            result = setup_embedding_models.main()
+            # Mock all download functions to return True without actual downloads
+            with (
+                patch("scripts.setup_embedding_models.download_sentence_transformer_model", return_value=True),
+                patch("scripts.setup_embedding_models.download_transformers_model", return_value=True),
+                patch("scripts.setup_embedding_models.download_llamaindex_embedding", return_value=True),
+            ):
+                # Test the main function
+                result = setup_embedding_models.main()
 
-            # Verify
-            assert result is True
+                # Verify main function succeeded
+                assert result is True, "main() function should return True when all downloads succeed"
 
-            # Verify cache directories were created
-            expected_hf_home = f"{mock_home}/.cache/huggingface"
-            assert Path(expected_hf_home).exists()
-            assert Path(f"{expected_hf_home}/hub").exists()
-            assert Path(f"{expected_hf_home}/sentence_transformers").exists()
+                # Verify cache directories were created using Path objects for cross-platform compatibility
+                assert Path(hf_home).exists(), f"HF_HOME directory should exist at: {hf_home}"
+                assert Path(transformers_cache).exists(), f"TRANSFORMERS_CACHE directory should exist at: {transformers_cache}"
+                assert Path(sentence_transformers_home).exists(), (
+                    f"SENTENCE_TRANSFORMERS_HOME directory should exist at: {sentence_transformers_home}"
+                )

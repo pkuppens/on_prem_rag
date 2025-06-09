@@ -30,11 +30,43 @@ This document provides a comprehensive manual testing guide for the authenticati
 
 2. **Install dependencies:**
 
+   **When to use `uv sync`:**
+
+   - When initializing a new environment
+   - After pulling new changes that include dependency updates
+   - When adding new packages to `pyproject.toml`
+   - When switching between branches with different dependencies
+   - If you encounter "module not found" errors that suggest missing dependencies
+
    ```bash
    uv sync
    ```
 
-3. **Set up environment variables (optional for basic testing):**
+   This command synchronizes your project's dependencies using the UV package manager. It reads your `pyproject.toml` and installs
+   all required packages.
+
+   **Important Note:** If you previously ran `pip install -e .[dev]`, you may need to run it again after `uv sync`.
+   This is because `uv sync` installs packages in a clean environment, which can remove the development installation of your project.
+   The development installation is necessary for the entry point scripts to work with the src-layout project structure.
+
+   This ensures your project is properly installed in development mode.
+
+3. **Install the package in development mode:**
+
+   **When to use `pip install -e .[dev]`:**
+
+   - After running `uv sync`
+   - When you get import errors for your project's modules
+   - When entry point scripts (`uv run start-auth`, etc.) fail to find your project's modules
+   - After making changes to your project's structure or entry points
+
+   ```bash
+   uv pip install -e .[dev]
+   ```
+
+   This step is **required** for the entry point scripts (`uv run start-auth`, etc.) to work properly with the src-layout project structure.
+
+4. **Set up environment variables (optional for basic testing):**
    Copy the template and fill in your values:
 
    ```bash
@@ -46,9 +78,34 @@ This document provides a comprehensive manual testing guide for the authenticati
 
 ## Starting the Services
 
-### Step 1: Start the Authentication Service
+For comprehensive testing, you'll need to start multiple services. Open **4 separate terminal windows** and follow these steps in order:
 
-In your first terminal window:
+### Step 1: Start the Backend RAG Service
+
+In your **first terminal window**:
+
+```bash
+uv run start-backend
+```
+
+**Expected output:**
+
+```
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [12345] using WatchFiles
+INFO:     Started server process [12346]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+**Verification:**
+
+- Open http://localhost:8000/docs in your browser
+- You should see the FastAPI documentation for the RAG pipeline endpoints
+
+### Step 2: Start the Authentication Service
+
+In your **second terminal window**:
 
 ```bash
 uv run start-auth
@@ -58,8 +115,8 @@ uv run start-auth
 
 ```
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [12345] using WatchFiles
-INFO:     Started server process [12346]
+INFO:     Started reloader process [12347] using WatchFiles
+INFO:     Started server process [12348]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 ```
@@ -69,9 +126,9 @@ INFO:     Application startup complete.
 - Open http://localhost:8001/docs in your browser
 - You should see the FastAPI documentation with authentication endpoints
 
-### Step 2: Start the Test Application
+### Step 3: Start the Test Application
 
-In your second terminal window:
+In your **third terminal window**:
 
 ```bash
 uv run start-test-app
@@ -81,8 +138,8 @@ uv run start-test-app
 
 ```
 INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
-INFO:     Started reloader process [12347] using WatchFiles
-INFO:     Started server process [12348]
+INFO:     Started reloader process [12349] using WatchFiles
+INFO:     Started server process [12350]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 ```
@@ -91,6 +148,109 @@ INFO:     Application startup complete.
 
 - Open http://localhost:8002 in your browser
 - You should see the test application homepage
+
+### Step 4: Start the Frontend (Optional)
+
+In your **fourth terminal window**:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+**When to use `npm install`:**
+
+- When setting up the frontend for the first time
+- After pulling new changes that include package.json updates
+- When switching between branches with different frontend dependencies
+- If you encounter "module not found" errors in the browser console
+- After deleting the `node_modules` folder
+
+**Security note for developers:** If you see security vulnerabilities during `npm install`, you can address them by running:
+
+```bash
+npm audit fix --force
+```
+
+**Note for testers:** If you encounter security warnings during setup, please report them to the development team rather than running audit fixes yourself.
+
+**Expected output:**
+
+```
+  VITE v6.x.x  ready in xxx ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h to show help
+```
+
+**Verification:**
+
+- Open http://localhost:5173 in your browser
+- You should see the frontend application with a clean, modern interface
+- **Left Sidebar (4 columns)** should contain in order:
+  1. Theme selector (Light/Dark/System)
+  2. RAG parameter selector (defaults to "fast", full width)
+  3. Drag & drop file upload area
+  4. Keyword query input with search button (full width)
+- **Right Area (8 columns)** should show:
+  - Placeholder message for PDF viewer when no results selected
+  - PDF document viewer when search results are selected
+- All components should have consistent sizing and spacing
+- No console errors should appear in browser developer tools
+
+**Theme Component Testing (Bypass Authentication):**
+
+If you encounter authentication-related issues or need to test the frontend components in isolation:
+
+- Navigate to http://localhost:5173/?test=theme
+- This loads a simplified test page with only the theme selector component
+- No authentication is required for this test page
+- Use this page to verify that:
+  - The theme selector component loads correctly
+  - Theme switching between Light, Dark, and System works
+  - No console errors appear
+  - The UI responds properly to theme changes
+
+### Service Overview
+
+Once all services are running, you'll have:
+
+| Service          | Port | URL                   | Purpose                          |
+| ---------------- | ---- | --------------------- | -------------------------------- |
+| Backend RAG      | 8000 | http://localhost:8000 | Document processing and search   |
+| Authentication   | 8001 | http://localhost:8001 | User authentication and OAuth2   |
+| Test Application | 8002 | http://localhost:8002 | Authentication testing interface |
+| Frontend         | 5173 | http://localhost:5173 | Main user interface              |
+
+### Quick Start Commands Summary
+
+For easy copy-paste, here are all the commands:
+
+**Terminal 1 (Backend):**
+
+```bash
+uv run start-backend
+```
+
+**Terminal 2 (Auth Service):**
+
+```bash
+uv run start-auth
+```
+
+**Terminal 3 (Test App):**
+
+```bash
+uv run start-test-app
+```
+
+**Terminal 4 (Frontend - Optional):**
+
+```bash
+cd frontend && npm install && npm run dev
+```
 
 ## Test Scenarios
 
@@ -276,7 +436,46 @@ INFO:     Application startup complete.
 - ✅ API endpoint rejects requests without tokens
 - ✅ API endpoint returns appropriate HTTP status codes
 
-### Test Scenario 6: Error Handling and Edge Cases
+### Test Scenario 6: Frontend Theme Component Testing (Authentication Bypass)
+
+**Objective:** Verify the frontend theme selector component works correctly in isolation
+
+**Steps:**
+
+1. **Access the theme test page:**
+
+   - Navigate to http://localhost:5173/?test=theme
+   - The page should load without requiring authentication
+
+2. **Verify component display:**
+
+   - You should see a clean test page with the title "Theme Selector Test Page"
+   - The current theme mode should be displayed
+   - A theme selector dropdown should be visible
+
+3. **Test theme switching:**
+
+   - Click on the theme selector dropdown
+   - Try switching to "Dark" theme - the page should immediately change to dark colors
+   - Try switching to "Light" theme - the page should change to light colors
+   - Try switching to "System" theme - the page should adapt to your system's theme preference
+
+4. **Verify functionality:**
+   - Check browser console (F12) - no errors should appear
+   - Theme changes should be instant and smooth
+   - The displayed "Current theme mode" text should update correctly
+   - All form elements should be consistently sized and aligned
+
+**Expected Results:**
+
+- ✅ Test page loads without authentication requirements
+- ✅ Theme selector component displays correctly
+- ✅ All three theme options (Light/Dark/System) work properly
+- ✅ Theme changes are applied immediately to the UI
+- ✅ No console errors appear during theme switching
+- ✅ Typography and spacing look correct in all themes
+
+### Test Scenario 7: Error Handling and Edge Cases
 
 **Objective:** Verify proper error handling for various failure scenarios
 
@@ -439,33 +638,100 @@ INFO:     Application startup complete.
 
 ### Common Issues and Solutions
 
-1. **"OAuth2 not configured" errors:**
+1. **"Module not found" or import errors when starting services:**
+
+   **Symptoms:**
+
+   - `ModuleNotFoundError: No module named 'auth_service'`
+   - `ModuleNotFoundError: No module named 'rag_pipeline'`
+   - Services fail to start with import-related errors
+
+   **Fix:**
+
+   ```bash
+   uv pip install -e .[dev]
+   ```
+
+   **Explanation:** The project uses a src-layout structure where all modules are inside the `src/` directory. For the entry point scripts (`uv run start-auth`, `uv run start-backend`, etc.) to work properly, the package must be installed in development mode. This makes all modules discoverable by Python's import system.
+
+   **Verification:** Run the import tests to check if everything is configured correctly:
+
+   ```bash
+   uv run pytest tests/test_imports.py -v
+   ```
+
+2. **"OAuth2 not configured" errors:**
 
    - Ensure environment variables are set correctly
    - Restart the auth service after setting environment variables
    - Check variable names match exactly (case-sensitive)
 
-2. **OAuth2 redirect loops:**
+3. **OAuth2 redirect loops:**
 
    - Verify redirect URIs match exactly in provider configuration
    - Check for trailing slashes in URLs
    - Ensure the auth service is running on the correct port (8001)
 
-3. **Session/token issues:**
+4. **Session/token issues:**
 
    - Clear browser localStorage: `localStorage.clear()`
    - Delete SQLite database file to reset: `rm auth.db`
    - Check that both services are running on correct ports
 
-4. **CORS errors:**
+5. **CORS errors:**
 
    - Both services should be running on localhost
    - Check that the test app is calling the correct auth service URL
 
-5. **Database errors:**
+6. **Database errors:**
+
    - Ensure SQLite is available on your system
    - Check file permissions in the project directory
    - Delete and recreate database: `rm auth.db` then restart auth service
+
+7. **Frontend blank screen or console errors:**
+
+   **Symptoms:**
+
+   - Blank page at http://localhost:5173
+   - Console errors about missing exports or modules
+   - TypeScript compilation errors in browser
+
+   **Fix:**
+
+   ```bash
+   cd frontend
+   npm run build
+   ```
+
+   If build succeeds but dev server still shows errors:
+
+   ```bash
+   # Clear node modules and reinstall
+   rm -rf node_modules package-lock.json
+   npm install
+   npm run dev
+   ```
+
+   **Verification:**
+
+   - Build should complete without TypeScript errors
+   - Development server should start without warnings
+   - Browser console should show no errors when loading the page
+
+   **Alternative Test Method (Bypass Authentication):**
+   If the main page still shows issues, test the isolated component:
+
+   ```
+   http://localhost:5173/?test=theme
+   ```
+
+   This test page:
+
+   - Bypasses all authentication requirements
+   - Shows only the theme selector component
+   - Helps isolate frontend issues from authentication problems
+   - Should load quickly with no console errors
 
 ### Logging and Debugging
 
@@ -501,6 +767,8 @@ After completing all test scenarios, you should have verified:
 - ✅ **Session Management:** Sessions expire and refresh correctly
 - ✅ **Protected Endpoints:** Authentication is properly enforced
 - ✅ **API Authentication:** Bearer token authentication works
+- ✅ **Frontend Components:** Theme selector and UI components work correctly
+- ✅ **Authentication Isolation:** Components can be tested without authentication barriers
 - ✅ **Error Handling:** Proper error messages and status codes
 - ✅ **Redirect Flow:** Login redirects work with return URLs
 - ✅ **User Experience:** Intuitive and functional UI flows
@@ -511,6 +779,8 @@ After completing all test scenarios, you should have verified:
 - OAuth2 flows should complete within 5-10 seconds (depending on provider)
 - Session validation should be nearly instantaneous
 - Database operations should complete within 100ms
+- Frontend should load within 1-2 seconds on localhost
+- No browser console errors should appear during normal operation
 
 ### Security Verification
 

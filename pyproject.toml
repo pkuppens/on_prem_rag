@@ -41,13 +41,13 @@ dependencies = [
 ]
 requires-python = ">=3.12"
 
-# Configure the package to include src, scripts, and project directories
+# Configure the package to include src directory and make it importable
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["src*", "scripts*", "project*"]
+where = ["src"]
+include = ["*"]
 
 [tool.setuptools.package-dir]
-"" = "."
+"" = "src"
 
 [project.scripts]
 start-backend = "rag_pipeline.file_ingestion:start_server"

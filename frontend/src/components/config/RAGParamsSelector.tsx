@@ -23,11 +23,15 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   useEffect(() => {
     axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets').then((res) => {
       setSets(res.data.sets);
+      // If no value is set yet, try to use 'fast' first, then default
       if (!value) {
-        onChange(res.data.default);
+        const preferredDefault = Object.keys(res.data.sets).includes('fast')
+          ? 'fast'
+          : res.data.default;
+        onChange(preferredDefault);
       }
     });
-  }, []);
+  }, [value, onChange]);
 
   const params = sets[value] || {};
 
@@ -39,7 +43,7 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
 
   return (
     <Box sx={{ mb: 4 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="medium">
         <InputLabel id="rag-set-label">RAG Parameter Set</InputLabel>
         <Select
           labelId="rag-set-label"

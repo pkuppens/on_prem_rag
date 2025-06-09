@@ -29,7 +29,7 @@ interface QueryResponse {
 }
 
 export const QueryPage = () => {
-  const [paramSet, setParamSet] = useState('');
+  const [paramSet, setParamSet] = useState('fast');
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<EmbeddingResult[]>([]);
   const [selected, setSelected] = useState(0);
@@ -55,14 +55,18 @@ export const QueryPage = () => {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={3}>
-        <RAGParamsSelector value={paramSet} onChange={setParamSet} />
+      <Grid item xs={12} md={4}>
+        <Box sx={{ mb: 2 }}>
+          <RAGParamsSelector value={paramSet} onChange={setParamSet} />
+        </Box>
         <TextField
           fullWidth
           label="Keyword Query"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          sx={{ mb: 1 }}
+          sx={{ mb: 2 }}
+          size="medium"
+          variant="outlined"
         />
         <Button variant="contained" fullWidth onClick={runQuery} sx={{ mb: 2 }}>
           Search
@@ -90,7 +94,7 @@ export const QueryPage = () => {
           </Paper>
         ))}
       </Grid>
-      <Grid item xs={12} md={9}>
+      <Grid item xs={12} md={8}>
         {selectedResult && (
           <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>

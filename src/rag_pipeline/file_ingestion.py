@@ -138,6 +138,7 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
             if chunk_hash in chunk_hashes:
                 continue
             chunk_hashes.add(chunk_hash)
+            # Store the hash in the node for later use
             node.metadata["chunk_hash"] = chunk_hash
             unique_nodes.append(node)
 
@@ -149,10 +150,22 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
         total = len(unique_nodes)
         for idx, node in enumerate(unique_nodes, start=1):
             embedding = embed_model.get_text_embedding(node.text)
+
+            # Enhanced metadata with required fields for query results
+            enhanced_metadata = {
+                **node.metadata,  # Keep existing metadata (includes chunk_hash)
+                "text": node.text,
+                "document_name": file.filename,
+                "document_id": f"{file_path.stem}_{idx - 1}",  # Generate stable document ID
+                "chunk_index": idx - 1,
+                "page_number": node.metadata.get("page_label", "unknown"),
+                "source": str(file_path),
+            }
+
             vector_store_manager.add_embeddings(
                 ids=[node.node_id],
                 embeddings=[embedding],
-                metadatas=[node.metadata],
+                metadatas=[enhanced_metadata],
             )
             upload_progress[file.filename] = 15 + int(80 * idx / total)
             # Yield control to event loop every NODES_PER_YIELD nodes to allow WebSocket updates

@@ -1,42 +1,79 @@
-version: '3.9'
+version: "3.9"
 services:
   chroma:
     image: chromadb/chroma:latest
     volumes:
       - chroma-data:/chroma
     ports:
-      - "8000:8000"
+      - "9100:8000"
     environment:
       - IS_PERSISTENT=TRUE
+    networks:
+      - app-network
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
     volumes:
       - ./src:/app/src
+      - ./tests:/app/tests
+      - ./uploaded_files:/app/uploaded_files
     environment:
       - CHROMA_HOST=chroma
       - CHROMA_PORT=8000
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - ALLOW_ORIGINS=http://localhost:5173
+      - ENVIRONMENT=development
+      - PORT=9000
     ports:
-      - "8001:8000"
+      - "9000:9000"
     depends_on:
       - chroma
-  frontend:
-    build: ./frontend
+    networks:
+      - app-network
+    command: uvicorn src.backend.rag_pipeline.file_ingestion:app --host 0.0.0.0 --port 9000 --reload
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  auth:
+    build:
+      context: .
+      dockerfile: src/auth/Dockerfile
     volumes:
-      - ./frontend:/frontend
+      - ./src/auth:/app/src/auth
     environment:
-      - VITE_BACKEND_URL=http://localhost:8001
+      - PORT=9100
+      - ENVIRONMENT=development
+    ports:
+      - "9100:9100"
+    networks:
+      - app-network
+    command: uvicorn auth.main:app --host 0.0.0.0 --port 9100 --reload
+  frontend:
+    build:
+      context: .
+      dockerfile: src/frontend/Dockerfile
+    volumes:
+      - ./src/frontend:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      - VITE_BACKEND_URL=http://localhost:9000
+      - VITE_AUTH_URL=http://localhost:9100
     ports:
       - "5173:5173"
-    command: npm run dev -- --host
     depends_on:
       - backend
+      - auth
+    networks:
+      - app-network
   ollama:
     image: ollama/ollama:latest
     ports:
       - "11434:11434"
     volumes:
       - ollama-data:/root/.ollama
+networks:
+  app-network:
+    driver: bridge
 volumes:
   chroma-data:
   ollama-data:

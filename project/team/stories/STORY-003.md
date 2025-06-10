@@ -7,7 +7,7 @@
 **Priority**: P1  
 **Points**: 8  
 **Created**: 2025-05-31  
-**Updated**: 2025-05-31  
+**Updated**: 2025-06-09
 
 ## User Story
 As a **user of the RAG system**,
@@ -45,6 +45,9 @@ Delivering a minimal question-answering API demonstrates the value of the system
 | **Slow response time** | Medium | Cache frequent queries and tune similarity thresholds |
 | **Low answer quality** | Medium | Experiment with prompts and chunk sizes |
 | **API misuse** | Low | Rate limit endpoints and validate inputs |
+
+## Progress
+- 2025-06-09: Added `/api/query` endpoint and search page with PDF preview.
 
 ---
 **Story Owner**: Backend Engineer

@@ -17,20 +17,24 @@ def get_project_root() -> Path:
     Get the project root directory.
 
     Returns:
-        Path to the project root directory (where pyproject.toml is located)
-
-    Raises:
-        FileNotFoundError: If project root cannot be determined
+        Path to the project root directory
     """
-    current = Path.cwd().resolve()
+    # src\rag_pipeline\utils\directory_utils.py
+    return Path(__file__).parent.parent.parent.parent
 
-    # Try to find pyproject.toml by walking up the directory tree
-    while current != current.parent:
-        if (current / "pyproject.toml").exists():
-            return current
-        current = current.parent
 
-    raise FileNotFoundError("Could not find project root directory (pyproject.toml not found in parent directories)")
+def get_uploaded_files_dir() -> Path:
+    """
+    Get the uploaded files directory.
+
+    Returns:
+        Path to the uploaded files directory
+
+    Note:
+        This directory is used by the FastAPI app to store uploaded files.
+        It should be created before the app starts.
+    """
+    return get_project_root() / "uploaded_files"
 
 
 def get_test_data_dir() -> Path:
@@ -73,6 +77,25 @@ def _validate_path_input(path: str | Path | None) -> Path:
     return Path(path)
 
 
+def _format_path_for_error(path: Path) -> str:
+    """
+    Format a path for error messages, using relative paths when possible.
+
+    Args:
+        path: Path to format
+
+    Returns:
+        Formatted path string
+    """
+    try:
+        # Try to get relative path from project root
+        rel_path = path.relative_to(get_project_root())
+        return f"./{rel_path}"
+    except ValueError:
+        # If path is not under project root, just use the name
+        return path.name
+
+
 def validate_directory(
     path: str | Path | None,
     must_exist: bool = True,
@@ -110,35 +133,42 @@ def validate_directory(
     # Check if path exists
     if path.exists():
         if not path.is_dir():
-            raise NotADirectoryError(f"Path exists but is not a {description}: {path}\nPlease provide a valid directory path.")
+            raise NotADirectoryError(
+                f"Path exists but is not a {description}: {_format_path_for_error(path)}\nPlease provide a valid directory path."
+            )
     elif must_exist:
         if create_if_missing:
             try:
                 path.mkdir(parents=True, exist_ok=True)
             except PermissionError as e:
                 raise PermissionError(
-                    f"Cannot create {description} at {path}\n"
+                    f"Cannot create {description} at {_format_path_for_error(path)}\n"
                     f"Permission denied: {e!s}\n"
                     "Please check your permissions or choose a different location."
                 ) from e
         else:
             raise FileNotFoundError(
-                f"{description.capitalize()} not found: {path}\nPlease create this directory or provide a valid path."
+                f"{description.capitalize()} not found: {_format_path_for_error(path)}\n"
+                "Please create this directory or provide a valid path."
             )
 
     # Check if directory is empty
     if must_be_empty and any(path.iterdir()):
-        raise DirectoryEmptyError(f"{description.capitalize()} is not empty: {path}\nPlease provide an empty directory.")
+        raise DirectoryEmptyError(
+            f"{description.capitalize()} is not empty: {_format_path_for_error(path)}\nPlease provide an empty directory."
+        )
 
     # Check permissions
     if must_be_writable and not os.access(path, os.W_OK):
         raise PermissionError(
-            f"No write permission for {description}: {path}\nPlease check your permissions or choose a different location."
+            f"No write permission for {description}: {_format_path_for_error(path)}\n"
+            "Please check your permissions or choose a different location."
         )
 
     if must_be_readable and not os.access(path, os.R_OK):
         raise PermissionError(
-            f"No read permission for {description}: {path}\nPlease check your permissions or choose a different location."
+            f"No read permission for {description}: {_format_path_for_error(path)}\n"
+            "Please check your permissions or choose a different location."
         )
 
     return path
@@ -170,12 +200,14 @@ def ensure_directory(
 
     try:
         if path.exists() and not path.is_dir():
-            raise NotADirectoryError(f"Path exists but is not a {description}: {path}\nPlease provide a valid directory path.")
+            raise NotADirectoryError(
+                f"Path exists but is not a {description}: {_format_path_for_error(path)}\nPlease provide a valid directory path."
+            )
         path.mkdir(parents=create_parents, exist_ok=True)
         return path
     except PermissionError as e:
         raise PermissionError(
-            f"Cannot create or access {description} at {path}\n"
+            f"Cannot create or access {description} at {_format_path_for_error(path)}\n"
             f"Permission denied: {e!s}\n"
             "Please check your permissions or choose a different location."
         ) from e

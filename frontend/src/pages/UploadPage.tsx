@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { FileDropzone } from '../components/upload/FileDropzone';
 import { UploadProgress } from '../components/upload/UploadProgress';
-import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
 import axios from 'axios';
 import Logger from '../utils/logger';
 
@@ -13,7 +12,6 @@ interface UploadProgress {
 export const UploadPage = () => {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
   const [ws, setWs] = useState<WebSocket | null>(null);
-  const [paramSet, setParamSet] = useState<string>('');
 
   useEffect(() => {
     // Connect to WebSocket
@@ -111,12 +109,6 @@ export const UploadPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Document Upload
-      </Typography>
-
-      <RAGParamsSelector value={paramSet} onChange={setParamSet} />
-
       <Box sx={{ mb: 4 }}>
         <FileDropzone onFileSelect={handleFileSelect} />
       </Box>

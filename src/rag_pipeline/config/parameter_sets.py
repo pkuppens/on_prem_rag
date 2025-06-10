@@ -257,7 +257,7 @@ FAST_ANSWERS = RAGParams(
         max_tokens=256,  # Shorter responses
     ),
     retrieval=RetrievalParams(
-        top_k=2,  # Minimal context for speed
+        top_k=5,  # Default to 5 results for better user experience
     ),
 )
 

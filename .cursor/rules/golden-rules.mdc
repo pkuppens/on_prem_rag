@@ -1,6 +1,6 @@
 ---
 description: Golden Rules for AI Coding Assistance
-globs:
+globs: 
 alwaysApply: true
 ---
 # Golden Rules for AI Coding Assistance
@@ -30,6 +30,15 @@ This guide outlines the key principles and practices for AI-assisted development
    - Write code comments alongside implementation
    - Never delay documentation updates
    - Document discovered tasks in CURRENT_WORK.md
+
+4. **Coding Style**
+   - Follow [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) guidelines
+   - Functions should be either execution or orchestration focused
+   - Use complete docstrings with examples
+   - Implement granular error handling
+   - Separate concerns in code organization
+   - Use dedicated functions for file operations
+   - Keep progress tracking separate from core logic
 
 ## Project Structure
 
@@ -67,6 +76,7 @@ This guide outlines the key principles and practices for AI-assisted development
 - Test early and often
 - Write unit tests for each new feature
 - Include docstrings and comments
+- Follow coding style guidelines
 
 ### 3. Testing Standards
 - Create tests for every new feature
@@ -96,6 +106,12 @@ This guide outlines the key principles and practices for AI-assisted development
    - Follow TDD where applicable
    - Ensure code coverage meets standards
    - Address technical debt proactively
+
+4. **Function Design**
+   - Follow execution/orchestration function principles
+   - Use complete docstrings with examples
+   - Implement granular error handling
+   - Separate concerns in code organization
 
 ### Security and Environment
 1. **Environment Management**

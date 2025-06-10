@@ -10,6 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, UploadFile, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from llama_index.core.node_parser import SimpleNodeParser
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -23,7 +24,7 @@ from rag_pipeline.config.parameter_sets import (
 from rag_pipeline.core.document_loader import DocumentLoader
 from rag_pipeline.core.embeddings import query_embeddings
 from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
-from rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+from rag_pipeline.utils.directory_utils import _format_path_for_error, get_uploaded_files_dir
 
 NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
 
@@ -59,23 +60,31 @@ class StructuredLogger:
         caller = self._get_caller_info()
         self.logger.debug(f"{message} | {json.dumps({**caller, **kwargs})}")
 
+    def warning(self, message: str, **kwargs):
+        caller = self._get_caller_info()
+        self.logger.warning(f"{message} | {json.dumps({**caller, **kwargs})}")
 
+
+# Set root logger to DEBUG level
+logging.getLogger().setLevel(logging.DEBUG)
+
+# Create our structured logger
 logger = StructuredLogger(__name__, level=logging.DEBUG)
 
 # Ensure uploaded_files directory exists
 uploaded_files_dir = get_uploaded_files_dir()
+logger.debug("Initializing uploaded files directory", directory=str(uploaded_files_dir), exists=uploaded_files_dir.exists())
 uploaded_files_dir.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
-app.mount("/files", StaticFiles(directory=str(uploaded_files_dir)), name="files")
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=["http://localhost:5173"],  # Frontend development server
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
 )
 
 # Store upload progress
@@ -226,6 +235,104 @@ async def websocket_progress(websocket: WebSocket):
     finally:
         logger.info("WebSocket connection closed")
         await websocket.close()
+
+
+# Custom file serving with error handling and logging
+@app.get("/files/{filename}")
+async def serve_file(filename: str):
+    """Serve uploaded files with proper error handling and logging.
+
+    Args:
+        filename (str): Name of the file to serve
+
+    Returns:
+        FileResponse: The requested file
+
+    Raises:
+        HTTPException: 404 if file not found
+        HTTPException: 400 if filename is invalid
+        HTTPException: 500 if file access fails
+    """
+    try:
+        logger.debug(
+            "File request received",
+            filename=filename,
+            upload_dir=str(uploaded_files_dir),
+            upload_dir_exists=uploaded_files_dir.exists(),
+            upload_dir_is_dir=uploaded_files_dir.is_dir(),
+        )
+
+        # Input validation
+        if not filename or ".." in filename or "/" in filename:
+            logger.warning("Invalid filename requested", filename=filename, reason="Contains invalid characters or is empty")
+            raise HTTPException(status_code=400, detail="Invalid filename: contains invalid characters or is empty")
+
+        file_path = uploaded_files_dir / filename
+        logger.debug(
+            "Resolved file path",
+            filename=filename,
+            full_path=str(file_path),
+            exists=file_path.exists(),
+            is_file=file_path.is_file() if file_path.exists() else None,
+            size=file_path.stat().st_size if file_path.exists() else None,
+        )
+
+        # Check if file exists
+        if not file_path.exists():
+            logger.warning(
+                "File not found", filename=filename, path=str(file_path), upload_dir_contents=list(uploaded_files_dir.iterdir())
+            )
+            raise HTTPException(
+                status_code=404, detail=f"File not found: {filename} (checked in {_format_path_for_error(uploaded_files_dir)})"
+            )
+
+        # Check if path is a file (not a directory)
+        if not file_path.is_file():
+            logger.warning(
+                "Path is not a file",
+                filename=filename,
+                path=str(file_path),
+                is_dir=file_path.is_dir(),
+                is_symlink=file_path.is_symlink(),
+            )
+            raise HTTPException(status_code=400, detail=f"Invalid file path: {filename} is not a regular file")
+
+        # Log successful file access
+        logger.info(
+            "Serving file",
+            filename=filename,
+            path=str(file_path),
+            size=file_path.stat().st_size,
+            media_type="application/pdf" if filename.lower().endswith(".pdf") else None,
+        )
+
+        # Set media type based on file extension
+        media_type = "application/pdf" if filename.lower().endswith(".pdf") else None
+
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type=media_type,
+            headers={
+                "Access-Control-Allow-Origin": "http://localhost:5173",
+                "Access-Control-Allow-Methods": "GET, OPTIONS",
+                "Access-Control-Allow-Headers": "*",
+                "Content-Disposition": f'inline; filename="{filename}"',
+            },
+        )
+
+    except HTTPException:
+        raise  # Re-raise HTTP exceptions as-is
+    except Exception as e:
+        logger.error(
+            "Error serving file",
+            filename=filename,
+            error=str(e),
+            error_type=type(e).__name__,
+            upload_dir=str(uploaded_files_dir),
+            upload_dir_exists=uploaded_files_dir.exists(),
+        )
+        raise HTTPException(status_code=500, detail=f"Internal server error while serving file: {str(e)}") from e
 
 
 def start_server():

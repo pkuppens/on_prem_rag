@@ -1,0 +1,421 @@
+---
+description: Coding style guidelines for Python and TypeScript applications
+globs:
+  - "**/*.py"
+  - "**/*.ts"
+# Coding Style Guidelines
+
+This rule defines the coding style preferences for Python and TypeScript applications, balancing structure with development pragmatism.
+
+## Core Principles
+
+### Code Organization Philosophy
+
+- **Separation of Concerns**: Keep distinct responsibilities in separate functions/modules
+- **Readability First**: Code should be self-documenting and easy to understand
+- **Pragmatic Structure**: Apply appropriate levels of organization based on project complexity
+- **Testability**: Write code that can be easily unit tested
+
+### When to Apply These Guidelines
+
+- **Full adherence**: Production APIs, shared libraries, long-term projects
+- **Selective application**: Prototypes, scripts, exploratory code
+- **Use judgment**: Balance structure with development speed based on context
+
+## Function Design
+
+### Function Types (Preferred Patterns)
+
+Functions typically fall into these categories:
+
+1. **Pure Functions**: Calculations, transformations, data processing
+2. **I/O Functions**: Database operations, file handling, external API calls
+3. **Orchestration Functions**: Workflow coordination, business logic flow
+4. **Utility Functions**: Helper functions, formatters, validators
+
+_Note: Many functions naturally combine aspects of these types - use this as guidance, not rigid rules._
+
+### Function Documentation
+
+#### Public APIs and Core Business Logic
+
+Every public function must have a complete docstring:
+
+- Input parameter descriptions with types
+- Return value description (including None)
+- Possible errors/exceptions/HTTP codes
+- Business purpose and usage context
+- Usage examples for complex functions
+
+Example:
+
+```python
+def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET_NAME):
+    """Handle file upload, chunking, and embedding.
+
+    Args:
+        file (UploadFile): The file to upload. Supports .md, .docx, .pdf formats.
+        params_name (str): Name of the parameter set to use for processing.
+            Defaults to DEFAULT_PARAM_SET_NAME.
+
+    Returns:
+        dict: Response containing:
+            - message (str): Status message
+            - filename (str): Name of processed file
+            - chunks (int): Number of chunks created (if successful)
+
+    Raises:
+        HTTPException: 400 if file format not supported
+        HTTPException: 500 if processing fails
+
+    Example:
+        curl -X POST -F "file=@document.pdf" http://localhost:8000/api/documents/upload
+    """
+```
+
+#### Internal Utilities and Helpers
+
+Simpler functions need concise but clear documentation:
+
+```python
+def is_valid_file_type(filename: str) -> bool:
+    """Check if file extension is supported (.md, .docx, .pdf)."""
+    return Path(filename).suffix.lower() in SUPPORTED_EXTENSIONS
+```
+
+## Error Handling
+
+### Granular Error Handling
+
+- Use specific try-except blocks for different failure modes
+- Raise appropriate HTTP status codes for API endpoints
+- Include actionable error messages
+- Log errors with sufficient context for debugging
+- Preserve exception details when re-raising
+
+Example:
+
+```python
+try:
+    # Input validation
+    if not is_valid_file_type(file.filename):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type. Supported: {', '.join(SUPPORTED_EXTENSIONS)}"
+        )
+
+    try:
+        # Core operation
+        result = process_file(file)
+    except ProcessingError as e:
+        logger.error("File processing failed", filename=file.filename, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}") from e
+
+except HTTPException:
+    raise  # Re-raise HTTP exceptions as-is
+except Exception as e:
+    logger.error("Unexpected error in upload", filename=file.filename, error=str(e))
+    raise HTTPException(
+        status_code=500,
+        detail=f"Internal server error: {str(e)}"
+    ) from e  # Preserve original exception details
+```
+
+### Exception Handling Best Practices
+
+1. **Preserve Exception Details**
+   - Always use `raise ... from e` when re-raising exceptions
+   - Include original exception message in error details
+   - Log both the original and wrapped exceptions
+
+2. **HTTP Exception Handling**
+   - Use specific HTTP status codes (400, 401, 403, 404, 500)
+   - Include clear error messages in the detail field
+   - Preserve original exception context when wrapping
+
+3. **Logging Requirements**
+   - Log exceptions before re-raising
+   - Include relevant context (file names, IDs, etc.)
+   - Use appropriate log levels (error for exceptions)
+
+4. **Error Message Guidelines**
+   - Be specific about what went wrong
+   - Include relevant identifiers (file names, IDs)
+   - Avoid exposing sensitive information
+   - Make messages actionable when possible
+
+Example of proper exception handling:
+
+```python
+try:
+    # Operation that might fail
+    result = process_data(data)
+except ValueError as e:
+    # Handle specific error
+    logger.error("Invalid data format", data_id=data.id, error=str(e))
+    raise HTTPException(
+        status_code=400,
+        detail=f"Invalid data format: {str(e)}"
+    ) from e
+except DatabaseError as e:
+    # Handle database errors
+    logger.error("Database operation failed", operation="process_data", error=str(e))
+    raise HTTPException(
+        status_code=500,
+        detail=f"Database error: {str(e)}"
+    ) from e
+except Exception as e:
+    # Handle unexpected errors
+    logger.error("Unexpected error", operation="process_data", error=str(e))
+    raise HTTPException(
+        status_code=500,
+        detail=f"Internal server error: {str(e)}"
+    ) from e
+```
+
+## Code Organization
+
+### Layered Architecture (For Complex Applications)
+
+Separate concerns into distinct layers:
+
+```python
+# API layer - HTTP concerns only
+@app.post("/api/documents/upload")
+async def upload_document_endpoint(
+    file: UploadFile,
+    params_name: str = DEFAULT_PARAM_SET_NAME
+):
+    """API endpoint for document upload."""
+    return await document_service.upload_document(file, params_name)
+
+# Service layer - Business logic
+class DocumentService:
+    async def upload_document(self, file: UploadFile, params_name: str):
+        """Orchestrate document upload and processing."""
+        # Validation
+        self._validate_upload(file)
+
+        # File handling
+        file_path = await self._save_upload(file)
+
+        # Processing
+        return await self._process_document(file_path, params_name)
+
+    def _validate_upload(self, file: UploadFile) -> None:
+        """Validate uploaded file meets requirements."""
+        if not is_valid_file_type(file.filename):
+            raise ValueError(f"Unsupported file type: {file.filename}")
+
+    async def _save_upload(self, file: UploadFile) -> Path:
+        """Save uploaded file to temporary location."""
+        upload_dir = ensure_upload_directory()
+        file_path = upload_dir / file.filename
+        await write_upload_file(file, file_path)
+        return file_path
+
+# Utility layer - Pure functions
+def ensure_upload_directory(base_path: Path = UPLOAD_DIR) -> Path:
+    """Create upload directory if it doesn't exist."""
+    base_path.mkdir(parents=True, exist_ok=True)
+    return base_path
+```
+
+### Simple Function Organization (For Scripts/Prototypes)
+
+For simpler projects, group related functions logically:
+
+```python
+# File operations
+def save_file(content: str, path: Path) -> None:
+    """Save content to file, creating directories as needed."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content)
+
+# Data processing
+def process_data(data: List[dict]) -> List[dict]:
+    """Clean and transform input data."""
+    return [clean_record(record) for record in data if is_valid_record(record)]
+
+# Main logic
+def main():
+    """Run the processing pipeline."""
+    data = load_data()
+    processed = process_data(data)
+    save_results(processed)
+```
+
+## File Management Best Practices
+
+### File Operations
+
+Create focused functions for file operations with clear responsibilities:
+
+```python
+def ensure_directory(path: Path, create: bool = True) -> Path:
+    """Get directory path, optionally creating it.
+
+    Args:
+        path: Directory path to check/create
+        create: Whether to create directory if it doesn't exist
+
+    Returns:
+        Path: The directory path (created if requested)
+
+    Raises:
+        FileNotFoundError: If directory doesn't exist and create=False
+    """
+    if create:
+        path.mkdir(parents=True, exist_ok=True)
+    elif not path.exists():
+        raise FileNotFoundError(f"Directory not found: {path}")
+    return path
+
+async def write_upload_file(file: UploadFile, destination: Path) -> None:
+    """Write uploaded file to disk, handling both text and binary content."""
+    content = await file.read()
+
+    # Handle different content types appropriately
+    if is_text_content(file.content_type):
+        destination.write_text(content.decode('utf-8'))
+    else:
+        destination.write_bytes(content)
+```
+
+## Progress Tracking
+
+### Optional Progress Callbacks
+
+Make progress tracking optional and non-intrusive:
+
+```python
+def process_items_with_progress(
+    items: List[T],
+    processor: Callable[[T], R],
+    progress_callback: Optional[Callable[[int, int], None]] = None
+) -> List[R]:
+    """Process items with optional progress tracking.
+
+    Args:
+        items: Items to process
+        processor: Function to apply to each item
+        progress_callback: Optional callback for progress updates (current, total)
+
+    Returns:
+        List of processed results
+    """
+    results = []
+    total = len(items)
+
+    for idx, item in enumerate(items):
+        result = processor(item)
+        results.append(result)
+
+        if progress_callback:
+            progress_callback(idx + 1, total)
+
+    return results
+
+# Usage with progress
+def update_progress(current: int, total: int) -> None:
+    percent = int(100 * current / total)
+    print(f"Progress: {percent}% ({current}/{total})")
+
+results = process_items_with_progress(
+    data,
+    process_item,
+    progress_callback=update_progress
+)
+```
+
+## Naming and Style Conventions
+
+### Function Names
+
+- Use descriptive verbs for actions: `process_document`, `validate_input`, `send_notification`
+- Use descriptive nouns for getters: `get_user_preferences`, `find_matching_records`
+- Use `is_` or `has_` prefixes for boolean returns: `is_valid_email`, `has_permission`
+
+### Variable Names
+
+- Use descriptive names: `user_count` instead of `c`, `file_path` instead of `fp`
+- Use conventional abbreviations sparingly: `idx` for index, `ctx` for context
+- Prefer full words: `message` instead of `msg`, `document` instead of `doc`
+
+### Type Hints
+
+Always use type hints for function signatures:
+
+```python
+def calculate_total(items: List[dict], tax_rate: float = 0.08) -> Decimal:
+    """Calculate total with tax from list of items."""
+    subtotal = sum(Decimal(str(item['price'])) for item in items)
+    return subtotal * (1 + Decimal(str(tax_rate)))
+```
+
+## Testing Guidelines
+
+### Test Organization
+
+- Group tests by functionality, not by file structure
+- Use descriptive test names that explain the scenario
+- Include both positive and negative test cases
+- Test error conditions and edge cases
+
+### Test Structure
+
+```python
+def test_upload_document_success():
+    """Test successful document upload with valid file."""
+    # Arrange
+    mock_file = create_mock_upload_file("test.pdf", b"PDF content")
+
+    # Act
+    result = upload_document(mock_file, "default_params")
+
+    # Assert
+    assert result["message"] == "Upload successful"
+    assert result["filename"] == "test.pdf"
+    assert result["chunks"] > 0
+
+def test_upload_document_invalid_file_type():
+    """Test upload rejection for unsupported file type."""
+    # Arrange
+    mock_file = create_mock_upload_file("test.exe", b"executable")
+
+    # Act & Assert
+    with pytest.raises(HTTPException) as exc_info:
+        upload_document(mock_file, "default_params")
+
+    assert exc_info.value.status_code == 400
+    assert "Unsupported file type" in str(exc_info.value.detail)
+```
+
+## Application Guidelines
+
+### When to Be Strict
+
+- **Production APIs**: Follow all guidelines rigorously
+- **Shared libraries**: Full documentation and error handling
+- **Complex business logic**: Use layered architecture
+- **Long-term projects**: Invest in structure upfront
+
+### When to Be Flexible
+
+- **Prototypes**: Focus on core patterns, lighter documentation
+- **Scripts**: Simple organization, essential error handling only
+- **Exploratory code**: Prioritize clarity over comprehensive structure
+- **Tight deadlines**: Apply core principles, defer perfect organization
+
+### Refactoring Strategy
+
+Start simple and refactor toward these patterns as code matures:
+
+1. **Phase 1**: Clear naming, basic error handling, type hints
+2. **Phase 2**: Proper function organization, core documentation
+3. **Phase 3**: Full layered architecture, comprehensive testing
+
+Remember: These guidelines serve code quality and team productivity. Use judgment to apply them appropriately for your specific context and project needs.
+
+
+Remember: These guidelines serve code quality and team productivity. Use judgment to apply them appropriately for your specific context and project needs.

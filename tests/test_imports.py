@@ -9,11 +9,11 @@ import pytest
 
 
 def test_auth_service_imports():
-    """Test that auth service modules can be imported."""
+    """Test that auth_service imports work."""
     try:
-        from src.auth_service.database import init_db
-        from src.auth_service.main import app, start_server
-        from src.auth_service.models import Session, User
+        from src.backend.auth_service.database import init_db
+        from src.backend.auth_service.main import app, start_server
+        from src.backend.auth_service.models import Session, User
 
         assert app is not None
         assert start_server is not None
@@ -29,11 +29,11 @@ def test_auth_service_imports():
 
 
 def test_rag_pipeline_imports():
-    """Test that RAG pipeline modules can be imported."""
+    """Test that rag_pipeline imports work."""
     try:
-        from src.rag_pipeline.core.document_loader import DocumentLoader
-        from src.rag_pipeline.file_ingestion import app, start_server
-        from src.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+        from src.backend.rag_pipeline.core.document_loader import DocumentLoader
+        from src.backend.rag_pipeline.file_ingestion import app, start_server
+        from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
         # Verify uploaded_files directory exists
         uploaded_files_dir = get_uploaded_files_dir()
@@ -78,7 +78,7 @@ def test_scripts_can_be_called():
     """Test that entry point scripts can be imported without errors."""
     import importlib.util
 
-    from src.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+    from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
     # Verify uploaded_files directory exists
     uploaded_files_dir = get_uploaded_files_dir()
@@ -88,7 +88,7 @@ def test_scripts_can_be_called():
     )
 
     # Test that the modules referenced in pyproject.toml scripts exist
-    script_modules = ["src.auth_service.main", "src.rag_pipeline.file_ingestion", "src.test_app"]
+    script_modules = ["src.backend.auth_service.main", "src.backend.rag_pipeline.file_ingestion", "src.test_app"]
 
     for module_name in script_modules:
         try:

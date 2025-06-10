@@ -50,9 +50,9 @@ include = ["*"]
 "" = "src"
 
 [project.scripts]
-start-backend = "rag_pipeline.file_ingestion:start_server"
+start-backend = "backend.rag_pipeline.file_ingestion:start_server"
 # Start the authentication microservice
-start-auth = "auth_service.main:start_server"
+start-auth = "backend.auth_service.main:start_server"
 # Start the test application for authentication testing
 start-test-app = "test_app:start_server"
 # start-frontend: cd frontend && npm install && npm run dev
@@ -144,22 +144,23 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.pytest.ini_options]
-# Include src, scripts, and project directories in Python path for testing
-# This allows absolute imports from any of these directories
-pythonpath = ["src", "scripts", "project", "."]
+# Include src directory in Python path for testing
+pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v"
 # Custom markers for test organization
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-]
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
+# Configure test discovery
+norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
+# Configure test environment
+env_files = [".env.test"]
 
 [tool.uv]
 python-preference = "only-managed" # Use uv-managed Python installations
 
 [tool.coverage.run]
-source = ["src/rag_pipeline"]
+source = ["src/backend"]
 branch = true
 
 [tool.coverage.report]
@@ -174,14 +175,14 @@ exclude_lines = [
 show_missing = true # Show line numbers of missing coverage
 
 # Test commands for different scenarios:
-# - Basic test with coverage: uv run pytest --cov=src/rag_pipeline --cov-report=term
-# - Test specific file: uv run pytest --cov=src/rag_pipeline --cov-report=term tests/core/test_document_loader.py
-# - Test specific function: uv run pytest --cov=src/rag_pipeline --cov-report=term -k test_load_text_file
-# - Generate HTML report: uv run pytest --cov=src/rag_pipeline --cov-report=html
+# - Basic test with coverage: uv run pytest --cov=src/backend --cov-report=term
+# - Test specific file: uv run pytest --cov=src/backend --cov-report=term tests/core/test_document_loader.py
+# - Test specific function: uv run pytest --cov=src/backend --cov-report=term -k test_load_text_file
+# - Generate HTML report: uv run pytest --cov=src/backend --cov-report=html
 
 # Note: Direct script shortcuts are not supported in uv yet.
 # Instead, use the following commands:
-# - Terminal coverage: uv run pytest --cov=src/rag_pipeline --cov-report=term
-# - HTML coverage: uv run pytest --cov=src/rag_pipeline --cov-report=html
+# - Terminal coverage: uv run pytest --cov=src/backend --cov-report=term
+# - HTML coverage: uv run pytest --cov=src/backend --cov-report=html
 # Additional arguments can be added after the command, e.g.:
-# uv run pytest --cov=src/rag_pipeline --cov-report=term -k test_load_text_file
+# uv run pytest --cov=src/backend --cov-report=term -k test_load_text_file

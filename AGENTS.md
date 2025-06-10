@@ -49,6 +49,7 @@ Based on feedback integration, the following standards ensure documentation and 
    - For non-code documentation (e.g., AGENTS.md, CODEX.md), either omit this section or note "Intentionally left empty - no direct code dependencies"
 
 2. **Reference Format**
+
    ```markdown
    ## Code Files
 
@@ -84,3 +85,35 @@ Based on feedback integration, the following standards ensure documentation and 
 ### Conclusion
 
 This example implementation of Codex integration aims to optimize development workflows, reduce manual coding efforts, and maintain high code quality standards. Regular updates and adherence to the outlined guidelines will ensure effective use of Codex in the project.
+
+## Task Completion and Verification
+
+### Acceptance Criteria Tracking
+
+When implementing tasks:
+
+1. Mark acceptance criteria checkboxes as completed [x] when implementing each item
+2. Document the implementation details in the task description or comments
+3. Keep the task file updated throughout the implementation process
+
+### Verification Process
+
+1. Self-verification:
+
+   - Review all acceptance criteria
+   - Test each implemented feature
+   - Update documentation
+   - Mark completed items
+
+2. Human verification:
+   - Developer reviews the implementation
+   - Verifies all acceptance criteria
+   - Confirms documentation is complete
+   - Updates task status
+
+### Documentation Requirements
+
+- Keep task files up-to-date with implementation progress
+- Document any deviations from original requirements
+- Include testing instructions and results
+- Note any dependencies or prerequisites

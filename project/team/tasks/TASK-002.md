@@ -21,16 +21,16 @@ Ensure services can communicate on a shared network, files and databases are per
 
 ## Acceptance Criteria
 
-- [ ] Document the exact location of docker-compose.yml and the complete command to start services
-- [ ] `docker-compose up` starts all services without errors (including test_app)
-- [ ] Update configuration to use environment variables for settings like `allow_origins` instead of hardcoded values
-- [ ] Application container mounts source code for live reload - including tests directory, test_data/, uploaded_files/
-- [ ] Data volumes persist ChromaDB state between restarts
-- [ ] Document the use of Docker volumes for data persistence
-- [ ] Document how to share important folders (e.g. uploaded_files)
-- [ ] Tests still pass locally
-- [ ] Document how to run unit tests inside the container
-- [ ] Create docs/TEST_DOCKER.md with instructions for testing the complete application inside Docker
+- [x] Document the exact location of docker-compose.yml and the complete command to start services
+- [x] `docker-compose up` starts all services without errors (including test_app)
+- [x] Update configuration to use environment variables for settings like `allow_origins` instead of hardcoded values
+- [x] Application container mounts source code for live reload - including tests directory, test_data/, uploaded_files/
+- [x] Data volumes persist ChromaDB state between restarts
+- [x] Document the use of Docker volumes for data persistence
+- [x] Document how to share important folders (e.g. uploaded_files)
+- [x] Tests still pass locally
+- [x] Document how to run unit tests inside the container
+- [x] Create docs/TEST_DOCKER.md with instructions for testing the complete application inside Docker
 
 ## Dependencies
 

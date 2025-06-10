@@ -17,20 +17,23 @@ def get_project_root() -> Path:
     Get the project root directory.
 
     Returns:
-        Path to the project root directory (where pyproject.toml is located)
-
-    Raises:
-        FileNotFoundError: If project root cannot be determined
+        Path to the project root directory
     """
-    current = Path.cwd().resolve()
+    return Path(__file__).parent.parent.parent
 
-    # Try to find pyproject.toml by walking up the directory tree
-    while current != current.parent:
-        if (current / "pyproject.toml").exists():
-            return current
-        current = current.parent
 
-    raise FileNotFoundError("Could not find project root directory (pyproject.toml not found in parent directories)")
+def get_uploaded_files_dir() -> Path:
+    """
+    Get the uploaded files directory.
+
+    Returns:
+        Path to the uploaded files directory
+
+    Note:
+        This directory is used by the FastAPI app to store uploaded files.
+        It should be created before the app starts.
+    """
+    return get_project_root() / "uploaded_files"
 
 
 def get_test_data_dir() -> Path:

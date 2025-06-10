@@ -23,6 +23,7 @@ from rag_pipeline.config.parameter_sets import (
 from rag_pipeline.core.document_loader import DocumentLoader
 from rag_pipeline.core.embeddings import query_embeddings
 from rag_pipeline.core.vector_store import get_vector_store_manager_from_env
+from rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
 NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
 
@@ -61,8 +62,12 @@ class StructuredLogger:
 
 logger = StructuredLogger(__name__, level=logging.DEBUG)
 
+# Ensure uploaded_files directory exists
+uploaded_files_dir = get_uploaded_files_dir()
+uploaded_files_dir.mkdir(parents=True, exist_ok=True)
+
 app = FastAPI()
-app.mount("/files", StaticFiles(directory="uploaded_files"), name="files")
+app.mount("/files", StaticFiles(directory=str(uploaded_files_dir)), name="files")
 
 # Add CORS middleware
 app.add_middleware(

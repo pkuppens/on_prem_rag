@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+pytest.importorskip("llama_index", reason="missing deps")
 from scripts import setup_embedding_models
 
 

@@ -1,8 +1,10 @@
 """Tests for the embeddings module."""
 
+import pytest
+
+pytest.importorskip("llama_index")
 from pathlib import Path
 
-import pytest
 from llama_index.core import Document
 
 from rag_pipeline.config.parameter_sets import TEST_PARAMS

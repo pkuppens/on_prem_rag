@@ -1,3 +1,6 @@
+import pytest
+
+pytest.importorskip("sqlalchemy")
 """Tests for metadata store."""
 
 from rag_pipeline.core.metadata_store import MetadataStore

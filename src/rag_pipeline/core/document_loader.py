@@ -58,12 +58,10 @@ import hashlib
 import logging
 from pathlib import Path
 
-from llama_index.core import Document, SimpleDirectoryReader
-from llama_index.readers.file import (
-    DocxReader,
-    MarkdownReader,
-    PDFReader,
-)
+# Import from LlamaIndex lazily to allow tests to run without optional deps
+Document = object
+SimpleDirectoryReader = object
+DocxReader = MarkdownReader = PDFReader = None
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -101,6 +99,17 @@ class DocumentLoader:
 
     def _setup_readers(self) -> None:
         """Set up document readers for different file types."""
+        global Document, SimpleDirectoryReader, DocxReader, MarkdownReader, PDFReader
+        from llama_index.core import Document as LIDocument
+        from llama_index.core import SimpleDirectoryReader as SID
+        from llama_index.readers.file import DocxReader as DR
+        from llama_index.readers.file import MarkdownReader as MR
+        from llama_index.readers.file import PDFReader as PR
+
+        Document = LIDocument
+        SimpleDirectoryReader = SID
+        DocxReader, MarkdownReader, PDFReader = DR, MR, PR
+
         self.readers = {
             ".pdf": PDFReader(),
             ".docx": DocxReader(),

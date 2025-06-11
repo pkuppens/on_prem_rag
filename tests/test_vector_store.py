@@ -4,6 +4,8 @@ import sys
 
 import pytest
 
+pytest.importorskip("chromadb")
+
 from rag_pipeline.config.vector_store import VectorStoreConfig
 from rag_pipeline.core.vector_store import ChromaVectorStoreManager
 

@@ -17,8 +17,8 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 # Import authentication dependencies from auth service
-from auth_service.main import get_current_user, get_db
-from auth_service.models import User
+from backend.auth_service.main import get_current_user, get_db
+from backend.auth_service.models import User
 
 app = FastAPI(title="Test Application with Authentication")
 
@@ -34,7 +34,7 @@ def get_current_user_optional(db: Session = Depends(get_db), token: str | None =
         return None
 
     try:
-        from auth_service.main import get_current_user
+        from backend.auth_service.main import get_current_user
 
         return get_current_user(db, token)
     except HTTPException:

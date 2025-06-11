@@ -90,7 +90,7 @@ def start_server() -> None:
     )
     log_config["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
 
-    uvicorn.run("auth_service.main:app", host="0.0.0.0", port=8001, reload=True, log_config=log_config)
+    uvicorn.run("backend.auth_service.main:app", host="0.0.0.0", port=8001, reload=True, log_config=log_config)
 
 
 def get_db():

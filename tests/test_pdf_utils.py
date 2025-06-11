@@ -41,6 +41,9 @@ def test_clean_pdf_text():
     assert cleaned == "Example hyphenated word.", "Text should be properly cleaned"
 
 
+@pytest.mark.skipif(
+    not Path("tests/test_data/learninglangchain.pdf").exists(), reason="learninglangchain.pdf not found in test data directory"
+)
 def test_extract_and_clean_pdf():
     """Test combined extraction and cleaning.
 
@@ -57,6 +60,9 @@ def test_extract_and_clean_pdf():
     assert len(pages) > 0, "Expected at least one page"
 
 
+@pytest.mark.skipif(
+    not Path("tests/test_data/learninglangchain.pdf").exists(), reason="learninglangchain.pdf not found in test data directory"
+)
 def test_page_numbering_with_roman_numerals():
     """Test that page numbering works correctly with Roman numerals in the PDF.
 

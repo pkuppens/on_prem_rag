@@ -340,7 +340,9 @@ def start_server():
     import uvicorn
 
     logger.info("Starting backend server")
-    uvicorn.run("rag_pipeline.file_ingestion:app", host="0.0.0.0", port=8000, reload=True)
+    # Use the fully qualified package path so the entrypoint works without
+    # manipulating PYTHONPATH.
+    uvicorn.run("backend.rag_pipeline.file_ingestion:app", host="0.0.0.0", port=8000, reload=True)
 
 
 if __name__ == "__main__":

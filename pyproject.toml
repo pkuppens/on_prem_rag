@@ -49,6 +49,9 @@ include = ["*"]
 [tool.setuptools.package-dir]
 "" = "src"
 
+# Entry points executed via ``uv run``. ``start-backend`` uses the fully
+# qualified package path so imports work without manually adjusting
+# ``PYTHONPATH``.
 [project.scripts]
 start-backend = "backend.rag_pipeline.file_ingestion:start_server"
 # Start the authentication microservice

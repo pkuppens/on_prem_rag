@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 pytest.importorskip("llama_index", reason="missing deps")
+from backend.rag_pipeline.utils.directory_utils import get_cache_dir, get_project_root
 from scripts import setup_embedding_models
 
 
@@ -45,30 +46,70 @@ class TestSetupEmbeddingModels:
             assert result_sentence_transformers_home == sentence_transformers_home
 
     def test_setup_cache_directories_defaults(self, tmp_path, monkeypatch):
-        """Test cache directory setup with default values."""
-        # Mock the home directory
-        mock_home = str(tmp_path)
-        monkeypatch.setattr(os.path, "expanduser", lambda path: path.replace("~", mock_home))
+        """Test cache directory setup with default values.
+
+        This test verifies that:
+        1. When no environment variables are set, the cache directories are created in the project's data/cache directory
+        2. The subdirectories (hub and sentence_transformers) are created correctly
+        3. The paths returned match the expected project structure
+        """
+        # Mock the project root to use tmp_path
+        mock_project_root = tmp_path
+        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
 
         # Clear environment variables to test defaults
         with patch.dict(os.environ, {}, clear=True):
+            # Call the function
             result_hf_home, result_transformers_cache, result_sentence_transformers_home = (
                 setup_embedding_models.setup_cache_directories()
             )
 
-            # Verify default paths
-            expected_hf_home = f"{mock_home}/.cache/huggingface"
+            # Calculate expected paths
+            expected_hf_home = str(mock_project_root / "data" / "cache" / "huggingface")
             expected_transformers_cache = f"{expected_hf_home}/hub"
             expected_sentence_transformers_home = f"{expected_hf_home}/sentence_transformers"
 
-            assert result_hf_home == expected_hf_home
-            assert result_transformers_cache == expected_transformers_cache
-            assert result_sentence_transformers_home == expected_sentence_transformers_home
+            # Debug information
+            print("\nDebug Information:")
+            print(f"Mock project root: {mock_project_root}")
+            print(f"Expected HF_HOME: {expected_hf_home}")
+            print(f"Actual HF_HOME: {result_hf_home}")
+            print(f"Expected TRANSFORMERS_CACHE: {expected_transformers_cache}")
+            print(f"Actual TRANSFORMERS_CACHE: {result_transformers_cache}")
+            print(f"Expected SENTENCE_TRANSFORMERS_HOME: {expected_sentence_transformers_home}")
+            print(f"Actual SENTENCE_TRANSFORMERS_HOME: {result_sentence_transformers_home}")
+
+            # Verify paths match
+            assert result_hf_home == expected_hf_home, (
+                f"HF_HOME path mismatch:\nExpected: {expected_hf_home}\nGot: {result_hf_home}"
+            )
+            assert result_transformers_cache == expected_transformers_cache, (
+                f"TRANSFORMERS_CACHE path mismatch:\nExpected: {expected_transformers_cache}\nGot: {result_transformers_cache}"
+            )
+            assert result_sentence_transformers_home == expected_sentence_transformers_home, (
+                f"SENTENCE_TRANSFORMERS_HOME path mismatch:\n"
+                f"Expected: {expected_sentence_transformers_home}\n"
+                f"Got: {result_sentence_transformers_home}"
+            )
 
             # Verify directories were created
-            assert Path(expected_hf_home).exists()
-            assert Path(expected_transformers_cache).exists()
-            assert Path(expected_sentence_transformers_home).exists()
+            assert Path(expected_hf_home).exists(), f"HF_HOME directory not created at: {expected_hf_home}"
+            assert Path(expected_transformers_cache).exists(), (
+                f"TRANSFORMERS_CACHE directory not created at: {expected_transformers_cache}"
+            )
+            assert Path(expected_sentence_transformers_home).exists(), (
+                f"SENTENCE_TRANSFORMERS_HOME directory not created at: {expected_sentence_transformers_home}"
+            )
+
+            # Verify directory structure
+            hf_home_path = Path(expected_hf_home)
+            assert hf_home_path.is_dir(), f"HF_HOME is not a directory: {expected_hf_home}"
+            assert Path(expected_transformers_cache).is_dir(), (
+                f"TRANSFORMERS_CACHE is not a directory: {expected_transformers_cache}"
+            )
+            assert Path(expected_sentence_transformers_home).is_dir(), (
+                f"SENTENCE_TRANSFORMERS_HOME is not a directory: {expected_sentence_transformers_home}"
+            )
 
     @patch("scripts.setup_embedding_models.SentenceTransformer")
     def test_download_sentence_transformer_model_success(self, mock_sentence_transformer):

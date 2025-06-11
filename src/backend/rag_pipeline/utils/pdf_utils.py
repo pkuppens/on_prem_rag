@@ -11,7 +11,11 @@ from pathlib import Path
 
 
 def extract_pdf_text(pdf_path: str | Path) -> list[str]:
-    """Return raw text of each page in the PDF."""
+    """Return raw text of each page in the PDF.
+
+    Returns a list of strings, where each string is the text content of a page.
+    The list index corresponds to the page number (0-based), including cover pages.
+    """
     from pypdf import PdfReader  # imported lazily for optional dependency
 
     pdf_path = Path(pdf_path)

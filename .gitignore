@@ -148,6 +148,9 @@ data/
 !tests/test_data/
 !tests/test_data/**
 
+# Explicitly ignore specific test files to prevent copyright issues
+tests/test_data/learninglangchain.pdf
+
 # Test temporary files
 tests/test_temp/
 

@@ -150,6 +150,7 @@ def get_page_chunks(pdf_path: str | Path) -> dict[int, list[Document]]:
     Note:
         This function loads the PDF and chunks it with default parameters
         for analysis purposes. Use chunk_documents() for production chunking.
+        Page numbers are 0-based indices from the PDF, including cover pages.
     """
     from llama_index.readers.file import PDFReader
 
@@ -162,12 +163,9 @@ def get_page_chunks(pdf_path: str | Path) -> dict[int, list[Document]]:
 
     # Organize chunks by page
     page_chunks: dict[int, list[Document]] = {}
-    for chunk in result.chunks:
-        page_label = chunk.metadata.get("page_label", "unknown")
-        try:
-            page_num = int(page_label) if page_label != "unknown" else 0
-        except (ValueError, TypeError):
-            page_num = 0
+    for i, chunk in enumerate(result.chunks, start=1):
+        # Use the document index as the page number (1-based)
+        page_num = i
 
         if page_num not in page_chunks:
             page_chunks[page_num] = []

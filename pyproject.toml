@@ -58,7 +58,7 @@ start-backend = "backend.rag_pipeline.file_ingestion:start_server"
 start-auth = "backend.auth_service.main:start_server"
 # Start the test application for authentication testing
 start-test-app = "test_app:start_server"
-# start-frontend: cd frontend && npm install && npm run dev
+# start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]
 dev = [

@@ -24,7 +24,14 @@ from backend.rag_pipeline.config.parameter_sets import (
 from backend.rag_pipeline.core.document_loader import DocumentLoader
 from backend.rag_pipeline.core.embeddings import query_embeddings
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
-from backend.rag_pipeline.utils.directory_utils import _format_path_for_error, get_uploaded_files_dir
+from backend.rag_pipeline.utils.directory_utils import (
+    _format_path_for_error,
+    ensure_directory_exists,
+    get_cache_dir,
+    get_chunks_dir,
+    get_database_dir,
+    get_uploaded_files_dir,
+)
 
 NODES_PER_YIELD = 1  # Yield control to event loop every N nodes to allow WebSocket and UI updates
 
@@ -71,10 +78,15 @@ logging.getLogger().setLevel(logging.DEBUG)
 # Create our structured logger
 logger = StructuredLogger(__name__, level=logging.DEBUG)
 
-# Ensure uploaded_files directory exists
+# Initialize directories
 uploaded_files_dir = get_uploaded_files_dir()
-logger.debug("Initializing uploaded files directory", directory=str(uploaded_files_dir), exists=uploaded_files_dir.exists())
-uploaded_files_dir.mkdir(parents=True, exist_ok=True)
+chunks_dir = get_chunks_dir()
+database_dir = get_database_dir()
+cache_dir = get_cache_dir()
+
+# Ensure all required directories exist
+for directory in [uploaded_files_dir, chunks_dir, database_dir, cache_dir]:
+    ensure_directory_exists(directory)
 
 app = FastAPI()
 

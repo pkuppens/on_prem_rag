@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytest
 
+from backend.auth_service.models import User
+
 pytest.importorskip("httpx")
 from auth_service.database import Base
 from auth_service.main import app, get_db, get_password_hash

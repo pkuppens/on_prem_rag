@@ -8,7 +8,7 @@ Usage:
     python scripts/setup_embedding_models.py
 
 Environment Variables:
-    HF_HOME: HuggingFace cache directory (default: ~/.cache/huggingface)
+    HF_HOME: HuggingFace cache directory (default: data/cache/huggingface)
     SENTENCE_TRANSFORMERS_HOME: Sentence transformers cache directory
 """
 
@@ -25,11 +25,14 @@ except ImportError as e:
     print("Please install dependencies with: uv pip install -e .[dev]")
     sys.exit(1)
 
+from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_cache_dir
+
 
 def setup_cache_directories():
     """Set up cache directories for HuggingFace models."""
-    # Set default cache locations
-    hf_home = os.environ.get("HF_HOME", os.path.expanduser("~/.cache/huggingface"))
+    # Set default cache locations in our data directory
+    cache_dir = get_cache_dir()
+    hf_home = os.environ.get("HF_HOME", str(cache_dir / "huggingface"))
     transformers_cache = os.environ.get("TRANSFORMERS_CACHE", f"{hf_home}/hub")
     sentence_transformers_home = os.environ.get("SENTENCE_TRANSFORMERS_HOME", f"{hf_home}/sentence_transformers")
 

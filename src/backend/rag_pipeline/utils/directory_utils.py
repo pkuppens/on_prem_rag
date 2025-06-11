@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+from typing import Optional
 
 
 class DirectoryError(Exception):
@@ -19,8 +20,23 @@ def get_project_root() -> Path:
     Returns:
         Path to the project root directory
     """
-    # src\rag_pipeline\utils\directory_utils.py
-    return Path(__file__).parent.parent.parent.parent
+    # Start from the current file and go up until we find the project root
+    current_path = Path(__file__).resolve()
+    while current_path.name != "src":
+        if current_path.parent == current_path:  # Reached root of filesystem
+            raise RuntimeError("Could not find project root directory")
+        current_path = current_path.parent
+    return current_path.parent
+
+
+def get_data_dir() -> Path:
+    """
+    Get the main data directory.
+
+    Returns:
+        Path to the data directory
+    """
+    return get_project_root() / "data"
 
 
 def get_uploaded_files_dir() -> Path:
@@ -29,12 +45,38 @@ def get_uploaded_files_dir() -> Path:
 
     Returns:
         Path to the uploaded files directory
-
-    Note:
-        This directory is used by the FastAPI app to store uploaded files.
-        It should be created before the app starts.
     """
-    return get_project_root() / "uploaded_files"
+    return get_data_dir() / "uploads"
+
+
+def get_chunks_dir() -> Path:
+    """
+    Get the chunks directory.
+
+    Returns:
+        Path to the chunks directory
+    """
+    return get_data_dir() / "chunks"
+
+
+def get_database_dir() -> Path:
+    """
+    Get the database directory.
+
+    Returns:
+        Path to the database directory
+    """
+    return get_data_dir() / "database"
+
+
+def get_cache_dir() -> Path:
+    """
+    Get the cache directory.
+
+    Returns:
+        Path to the cache directory
+    """
+    return get_data_dir() / "cache"
 
 
 def get_test_data_dir() -> Path:
@@ -79,21 +121,15 @@ def _validate_path_input(path: str | Path | None) -> Path:
 
 def _format_path_for_error(path: Path) -> str:
     """
-    Format a path for error messages, using relative paths when possible.
+    Format a path for error messages, showing the relative path from project root.
 
     Args:
-        path: Path to format
+        path (Path): Path to format
 
     Returns:
-        Formatted path string
+        str: Formatted path string
     """
-    try:
-        # Try to get relative path from project root
-        rel_path = path.relative_to(get_project_root())
-        return f"./{rel_path}"
-    except ValueError:
-        # If path is not under project root, just use the name
-        return path.name
+    return f"./{get_relative_path(path)}"
 
 
 def validate_directory(
@@ -211,3 +247,29 @@ def ensure_directory(
             f"Permission denied: {e!s}\n"
             "Please check your permissions or choose a different location."
         ) from e
+
+
+def ensure_directory_exists(directory: Path) -> None:
+    """
+    Ensure that a directory exists, creating it if necessary.
+
+    Args:
+        directory (Path): Directory to ensure exists
+    """
+    directory.mkdir(parents=True, exist_ok=True)
+
+
+def get_relative_path(path: Path, base: Path | None = None) -> str:
+    """
+    Get the relative path from the base directory.
+
+    Args:
+        path (Path): Path to get relative path for
+        base (Optional[Path]): Base directory to get relative path from. Defaults to project root.
+
+    Returns:
+        str: Relative path as string
+    """
+    if base is None:
+        base = get_project_root()
+    return str(path.relative_to(base))

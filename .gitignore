@@ -139,29 +139,23 @@ cython_debug/
 uv.lock
 .uv
 
-# Datafiles, both (secret) input and working directories
-**/embeddings_cache/*
-notebooks/data/
+# Data directory - ignore all files in the data directory
+data/
+# But keep the directory structure
+!data/.gitkeep
+
+# Test data directory - explicitly track this directory
+!tests/test_data/
+!tests/test_data/**
+
+# Test temporary files
+tests/test_temp/
 
 # Work in progress documentation files
 CURRENT_WORK.md
 NEXT_DEMO.md
 SCRATCH.md
 
-# Test data, note, treat this as *PUBLIC*. Place publicly available docs like PDF, DOCX, etc here, no confidential data!
-# For testing to get reproducible results, or for demoing, etc.
-# tests/test_data/
-
-# Test temporary files
-tests/test_temp/
-
-# Data files from experiments, should not be in the repo
-uploaded_files/
-cache/embeddings/
-data/*chroma
-data/test_chunks/
-
-# Database files
-# TODO: actually, we need a better location for database files, but for now this is fine
-*.db
-**/node_modules/*
+# Node modules
+**/node_modules/
+src/frontend/node_modules/

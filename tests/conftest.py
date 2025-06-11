@@ -27,7 +27,7 @@ def test_temp_dir() -> Path:
 
 
 @pytest.fixture(scope="class")
-def test_case_dir(test_temp_dir) -> Generator[Path, None, None]:
+def test_case_dir(test_temp_dir) -> Generator[Path]:
     """Create and return a unique directory for a test case.
 
     The directory is automatically cleaned up after the test.

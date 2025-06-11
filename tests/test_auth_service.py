@@ -3,9 +3,10 @@ import tempfile
 from pathlib import Path
 
 import pytest
+
+pytest.importorskip("httpx")
 from auth_service.database import Base
 from auth_service.main import app, get_db, get_password_hash
-from auth_service.models import User
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

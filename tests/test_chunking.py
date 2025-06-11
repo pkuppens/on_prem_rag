@@ -4,9 +4,11 @@ Comprehensive test coverage for chunking strategies and configurations.
 Test scenarios align with docs/technical/CHUNKING.md strategy documentation.
 """
 
+import pytest
+
+pytest.importorskip("llama_index")
 from pathlib import Path
 
-import pytest
 from llama_index.core import Document
 from rag_pipeline.core.chunking import (
     ChunkingResult,

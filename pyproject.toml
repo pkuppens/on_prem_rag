@@ -93,6 +93,7 @@ select = [
 ]
 
 ignore = [
+    "E402",    # Module level import not at top of file
     "E501",    # line too long
     "PLR2004", # magic value used in comparison
     "E741",    # ambiguous variable name (we fixed this one)

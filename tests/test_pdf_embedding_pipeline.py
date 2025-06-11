@@ -1,3 +1,6 @@
+import pytest
+
+pytest.importorskip("llama_index")
 import pathlib
 
 from rag_pipeline.config.parameter_sets import FAST_ANSWERS

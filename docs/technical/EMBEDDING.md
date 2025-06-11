@@ -206,3 +206,8 @@ The 512 token limit affects our system in several ways:
 - [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
 - [Multilingual-E5 Documentation](https://huggingface.co/intfloat/multilingual-e5-large-instruct)
 - [Sentence Transformers Documentation](https://www.sbert.net/)
+
+## Code Files
+
+- [src/rag_pipeline/core/embeddings.py](../../src/rag_pipeline/core/embeddings.py) - Embedding generation and query utilities
+- [tests/test_embedding_shapes.py](../../tests/test_embedding_shapes.py) - Tests for embedding vector dimensions

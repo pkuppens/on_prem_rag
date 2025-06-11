@@ -1,3 +1,6 @@
+import pytest
+
+pytest.importorskip("llama_index")
 """Integration test for PDF embedding pipeline.
 
 This test validates the complete pipeline from PDF loading through chunking,

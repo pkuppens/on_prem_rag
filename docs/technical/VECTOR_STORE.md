@@ -304,3 +304,9 @@ can present the original page when returning search results.
 - [Chroma Documentation](https://docs.trychroma.com/)
 - [Vector Database Comparison](https://www.pinecone.io/learn/vector-database/)
 - [LlamaIndex Storage Documentation](https://docs.llamaindex.ai/en/stable/module_guides/storage/)
+
+## Code Files
+
+- [src/rag_pipeline/core/vector_store.py](../../src/rag_pipeline/core/vector_store.py) - ChromaDB integration layer
+- [src/rag_pipeline/utils/vector_db_inspector.py](../../src/rag_pipeline/utils/vector_db_inspector.py) - Tools for inspecting the underlying SQLite schema
+- [tests/test_vector_db_inspector.py](../../tests/test_vector_db_inspector.py) - Tests for schema inspection

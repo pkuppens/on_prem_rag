@@ -4,7 +4,7 @@ This guide provides instructions for setting up the development environment for 
 
 ## Prerequisites
 
-- Python 3.12 or higher
+- Python 3.12 or higher, I use 3.13.2 for development and 3.12 for implicit portability testing
 - `uv` package manager. Can be installed via
   - `winget install astral-sh.uv`
   - `pip install uv`
@@ -22,10 +22,10 @@ This guide provides instructions for setting up the development environment for 
 
 2.  **Set up Python environment using `uv`:**
 
-    If you have a `.python-version` file (which should be `3.12`), `uv` can automatically create a virtual environment with that Python version.
+    If you have a `.python-version` file (which should be `3.13.2`), `uv` can automatically create a virtual environment with that Python version.
 
     ```bash
-    uv venv
+    uv venv --python 3.13.2
     ```
 
     This will create a `.venv` directory. Activate it using:
@@ -158,7 +158,7 @@ uvicorn rag_pipeline.api.main:app --reload
 ## Troubleshooting
 
 - **`uv` command not found**: Ensure `uv` is installed and its installation directory is in your system's PATH. Refer to the official `uv` installation guide.
-- **Python version issues**: Make sure you have Python 3.12 installed and that `uv` is using it. You can specify the Python version for `uv venv` using `uv venv -p 3.12`.
+- **Python version issues**: Make sure you have Python 3.13.2 installed and that `uv` is using it. You can specify the Python version for `uv venv` using `uv venv -p 3.13.2`.
 - **Pre-commit hook failures**: Address the issues reported by the hooks (e.g., formatting errors, linting violations) and re-commit.
 
 ## Offline model caching

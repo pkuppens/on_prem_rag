@@ -112,7 +112,7 @@ Ollama container separately, comment out the `ollama` service in
 To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.
 
 ```bash
-uv venv
+uv venv --python 3.13.2
 source .venv/bin/activate
 # Install package in editable mode with development dependencies
 uv pip install -e .[dev]

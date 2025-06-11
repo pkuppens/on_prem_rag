@@ -133,10 +133,9 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
 
         params = get_param_set(params_name)  # from dictionary, not the GET function call
 
-        # Save upload to a temporary location
-        temp_dir = Path("uploaded_files")
-        temp_dir.mkdir(parents=True, exist_ok=True)
-        file_path = temp_dir / file.filename
+        # Save upload to the proper uploaded files directory (data/uploads)
+        # Reason: Using correct directory from directory_utils instead of hardcoded path
+        file_path = uploaded_files_dir / file.filename
         with open(file_path, "wb") as f:
             f.write(await file.read())
             logger.debug("File saved to", filename=str(file_path))
@@ -171,7 +170,8 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
 
         embed_model = HuggingFaceEmbedding(
             model_name=params.embedding.model_name,
-            cache_folder="cache/embeddings",
+            # Reason: Using proper cache directory (data/cache) instead of hardcoded root path
+            cache_folder=str(cache_dir / "embeddings"),
         )
 
         total = len(unique_nodes)

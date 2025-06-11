@@ -3,7 +3,6 @@
 from pathlib import Path
 
 import pytest
-
 from rag_pipeline.core.document_loader import DocumentLoader, DocumentMetadata
 
 

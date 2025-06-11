@@ -8,7 +8,6 @@ from pathlib import Path
 
 import pytest
 from llama_index.core import Document
-
 from rag_pipeline.core.chunking import (
     ChunkingResult,
     chunk_documents,

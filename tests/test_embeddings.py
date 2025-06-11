@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 from llama_index.core import Document
-
 from rag_pipeline.config.parameter_sets import TEST_PARAMS
 from rag_pipeline.core.embeddings import (
     EmbeddingResult,

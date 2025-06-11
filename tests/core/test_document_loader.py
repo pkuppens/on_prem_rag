@@ -60,7 +60,6 @@ from pathlib import Path
 
 import pytest
 from llama_index.core import Document
-
 from rag_pipeline.core.document_loader import DocumentLoader, DocumentMetadata
 
 

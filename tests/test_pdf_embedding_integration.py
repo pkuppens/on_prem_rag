@@ -8,7 +8,6 @@ import shutil
 from pathlib import Path
 
 import pytest
-
 from rag_pipeline.config.parameter_sets import get_param_set
 from rag_pipeline.core.embeddings import chunk_pdf, embed_chunks, query_embeddings
 

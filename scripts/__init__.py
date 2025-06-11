@@ -32,4 +32,3 @@ def configure_pythonpath() -> None:
         path = root / rel
         if str(path) not in sys.path:
             sys.path.insert(0, str(path))
-

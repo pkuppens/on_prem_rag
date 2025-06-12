@@ -18,8 +18,9 @@ from __future__ import annotations
 
 import hashlib
 import logging
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Iterable, Sequence, TypedDict
+from typing import Any, TypedDict
 
 from llama_index.core import Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -88,15 +89,15 @@ def query_embeddings(
     persist_dir: str | Path,
     collection_name: str = "documents",
     top_k: int = 5,
-) -> dict[str, Any]:
-    """Query the vector store for similar embeddings.
+) -> QueryResult:
+    """Query embeddings for similar content.
 
     Args:
-        query: Query text
+        query: The text query to search for
         model_name: Name of the HuggingFace embedding model
         persist_dir: Directory containing the vector store
         collection_name: Name of the collection to query
-        top_k: Number of results to return
+        top_k: Maximum number of results to return
 
     Returns:
         Dictionary containing query results with metadata
@@ -105,30 +106,41 @@ def query_embeddings(
     embed_model = HuggingFaceEmbedding(model_name=model_name)
     query_embedding = embed_model.get_text_embedding(query)
 
-    # Query the vector store
-    manager = ChromaVectorStoreManager(persist_dir=str(persist_dir), collection_name=collection_name)
-    results = manager.query(query_embeddings=[query_embedding], n_results=top_k)
+    # Query the vector store using proper config
+    config = VectorStoreConfig(persist_directory=persist_dir, collection_name=collection_name)
+    manager = ChromaVectorStoreManager(config)
 
-    # Format results for API response
-    formatted_results = []
-    if results["documents"] and results["documents"][0]:
-        for i in range(len(results["documents"][0])):
-            metadata = results["metadatas"][0][i] if results["metadatas"] else {}
-            
+    # Use the correct query method signature
+    ids, distances = manager.query(query_embedding, top_k)
+
+    # Get full results with metadata from the collection directly
+    if ids:
+        results = manager._collection.get(ids=ids, include=["documents", "metadatas"])
+
+        formatted_results = []
+        for i, doc_id in enumerate(ids):
+            metadata = results["metadatas"][i] if results["metadatas"] and i < len(results["metadatas"]) else {}
+            document_text = results["documents"][i] if results["documents"] and i < len(results["documents"]) else ""
+
             formatted_results.append(
                 {
-                    "text": results["documents"][0][i],
-                    "similarity_score": 1 - results["distances"][0][i],  # Convert distance to similarity
+                    "text": document_text,
+                    "similarity_score": 1 - distances[i],  # Convert distance to similarity
                     "document_id": metadata.get("document_id", "unknown"),
                     "document_name": metadata.get("document_name", "unknown"),
                     "chunk_index": metadata.get("chunk_index", "unknown"),
-                    "record_id": results["ids"][0][i],
+                    "record_id": doc_id,
                     "page_number": metadata.get("page_number", "unknown"),
                     "page_label": metadata.get("page_label", "unknown"),
                 }
             )
+    else:
+        formatted_results = []
 
-    return {"results": formatted_results, "query": query, "total_results": len(formatted_results)}
+    # Set primary result to the first result's text, or empty if no results
+    primary_result = formatted_results[0]["text"] if formatted_results else ""
+
+    return {"primary_result": primary_result, "all_results": formatted_results}
 
 
 def store_embeddings(
@@ -152,25 +164,46 @@ def store_embeddings(
     Returns:
         ChromaVectorStoreManager instance
     """
-    manager = ChromaVectorStoreManager(persist_dir=str(persist_dir), collection_name=collection_name)
+    config = VectorStoreConfig(persist_directory=persist_dir, collection_name=collection_name)
+    manager = ChromaVectorStoreManager(config)
 
     if deduplicate and metadatas:
-        # Filter out duplicates based on content hash
+        # Filter out duplicates based on content hash or text content
         unique_data = []
-        seen_hashes = set()
+        seen_content = set()
 
         for i, metadata in enumerate(metadatas):
+            # Try content_hash first, then fall back to text content
             content_hash = metadata.get("content_hash")
-            if content_hash and content_hash not in seen_hashes:
-                seen_hashes.add(content_hash)
+            if content_hash:
+                content_key = content_hash
+            else:
+                # Use text content as fallback for deduplication
+                content_key = metadata.get("text", f"id_{i}")
+
+            if content_key not in seen_content:
+                seen_content.add(content_key)
                 unique_data.append(i)
-        
+
         # Keep only unique entries
         ids = [list(ids)[i] for i in unique_data]
         embeddings = [embeddings[i] for i in unique_data]
         metadatas = [metadatas[i] for i in unique_data]
 
-    manager.add_embeddings(ids=ids, embeddings=embeddings, metadatas=metadatas)
+    # Only add embeddings if we have data to add
+    if ids and embeddings:
+        # Extract documents from metadata if available
+        documents = []
+        if metadatas:
+            for metadata in metadatas:
+                # Use 'text' field from metadata as document content
+                doc_text = metadata.get("text", "")
+                documents.append(doc_text)
+        else:
+            documents = [""] * len(ids)
+
+        # Add to collection with documents
+        manager._collection.add(ids=list(ids), embeddings=list(embeddings), metadatas=metadatas, documents=documents)
     return manager
 
 

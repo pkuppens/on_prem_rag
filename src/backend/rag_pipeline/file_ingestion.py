@@ -22,7 +22,7 @@ from backend.rag_pipeline.config.parameter_sets import (
     get_param_set,
 )
 from backend.rag_pipeline.core.document_loader import DocumentLoader
-from backend.rag_pipeline.core.embeddings import query_embeddings, process_document
+from backend.rag_pipeline.core.embeddings import process_document, query_embeddings
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 from backend.rag_pipeline.utils.directory_utils import (
     _format_path_for_error,
@@ -166,18 +166,15 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
                 chunk_overlap=params.chunking.chunk_overlap,
                 deduplicate=True,
             )
-            
+
             if chunks_processed == 0:
                 logger.debug("No new chunks processed (duplicate file)", filename=str(file_path))
                 upload_progress[file.filename] = 100
                 return {"message": "Duplicate file", "filename": file.filename}
-                
-            logger.info("Document processing completed", 
-                       filename=file.filename, 
-                       chunks=chunks_processed, 
-                       records=records_stored)
+
+            logger.info("Document processing completed", filename=file.filename, chunks=chunks_processed, records=records_stored)
             upload_progress[file.filename] = 95
-            
+
         except Exception as e:
             logger.error("Error during document processing", filename=file.filename, error=str(e))
             raise

@@ -50,7 +50,7 @@ class ChunkMetadata:
     document_id: str
     document_name: str
     page_number: int | None  # Sequential page number (1-based)
-    page_label: str | None   # PDF's internal page label
+    page_label: str | None  # PDF's internal page label
     source: str
     content_hash: str
 
@@ -80,7 +80,7 @@ def chunk_documents(
 
     Returns:
         ChunkingResult with chunked documents and metadata
-        
+
     Note:
         This is the centralized chunking function that should be used for all document types.
         It properly handles both page labels and sequential page numbers for PDFs.
@@ -121,22 +121,16 @@ def chunk_documents(
     for i, doc in enumerate(documents):
         sequential_page = i + 1  # 1-based sequential page number
         page_label = doc.metadata.get("page_label", str(sequential_page))
-        page_mapping[doc.doc_id] = {
-            "sequential_page": sequential_page,
-            "page_label": page_label
-        }
+        page_mapping[doc.doc_id] = {"sequential_page": sequential_page, "page_label": page_label}
 
     # Enhanced metadata for chunks
     for i, chunk in enumerate(chunks):
         # Generate a stable document ID from the file path and chunk index
         doc_id = f"{source_path.stem}_{i}"
-        
+
         # Get the source document for this chunk to extract page information
-        source_doc_id = chunk.ref_doc_id if hasattr(chunk, 'ref_doc_id') else None
-        page_info = page_mapping.get(source_doc_id, {
-            "sequential_page": None,
-            "page_label": "unknown"
-        })
+        source_doc_id = chunk.ref_doc_id if hasattr(chunk, "ref_doc_id") else None
+        page_info = page_mapping.get(source_doc_id, {"sequential_page": None, "page_label": "unknown"})
 
         # Ensure we have valid page information - fallback to extracting from existing metadata
         if page_info["sequential_page"] is None and "page_label" in chunk.metadata:
@@ -145,16 +139,10 @@ def chunk_documents(
             if existing_page_label != "unknown":
                 try:
                     # If page_label is a number, use it as both page_number and page_label
-                    if isinstance(existing_page_label, (int, str)) and str(existing_page_label).isdigit():
-                        page_info = {
-                            "sequential_page": int(existing_page_label),
-                            "page_label": existing_page_label
-                        }
+                    if isinstance(existing_page_label, int | str) and str(existing_page_label).isdigit():
+                        page_info = {"sequential_page": int(existing_page_label), "page_label": existing_page_label}
                     else:
-                        page_info = {
-                            "sequential_page": None,
-                            "page_label": existing_page_label
-                        }
+                        page_info = {"sequential_page": None, "page_label": existing_page_label}
                 except (ValueError, TypeError):
                     pass
 
@@ -165,7 +153,7 @@ def chunk_documents(
                 "document_id": doc_id,
                 "document_name": source_path.name,
                 "page_number": page_info["sequential_page"],  # Sequential page number for navigation
-                "page_label": page_info["page_label"],        # PDF's internal page label for display
+                "page_label": page_info["page_label"],  # PDF's internal page label for display
                 "source": str(source_path),
                 "content_hash": generate_content_hash(chunk.text),
             }

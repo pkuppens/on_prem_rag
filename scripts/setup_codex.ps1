@@ -50,19 +50,19 @@ function Show-Help {
 
 function Test-Environment {
     Log-Info "Checking Windows environment..."
-    
+
     # Check if we're in the right directory
     if (-not (Test-Path "pyproject.toml")) {
         Log-Error "pyproject.toml not found. Please run this script from the project root."
         exit 1
     }
-    
+
     Log-Success "Environment check passed"
 }
 
 function Install-Uv {
     Log-Info "Checking for uv installation..."
-    
+
     # Check if uv is available
     try {
         $uvVersion = uv --version 2>$null
@@ -72,7 +72,7 @@ function Install-Uv {
     catch {
         Log-Info "uv not found, attempting installation..."
     }
-    
+
     # Install uv using winget if available
     try {
         if (Get-Command winget -ErrorAction SilentlyContinue) {
@@ -84,7 +84,7 @@ function Install-Uv {
             # Download and install uv
             Invoke-RestMethod https://astral.sh/uv/install.ps1 | Invoke-Expression
         }
-        
+
         # Verify installation
         $uvVersion = uv --version 2>$null
         Log-Success "uv installed successfully: $uvVersion"
@@ -100,13 +100,13 @@ function Install-Uv {
 
 function Setup-PythonEnvironment {
     Log-Info "Setting up Python environment..."
-    
+
     # Check required Python version from pyproject.toml
     $requiredPython = Select-String -Path "pyproject.toml" -Pattern 'requires-python.*=' | ForEach-Object { $_.Line } | ForEach-Object { if ($_ -match '>=([0-9.]+)') { $matches[1] } }
     if ($requiredPython) {
         Log-Info "Project requires Python >= $requiredPython"
     }
-    
+
     # Check current Python version
     try {
         $pythonVersion = python --version 2>$null
@@ -115,24 +115,24 @@ function Setup-PythonEnvironment {
     catch {
         Log-Warning "Python not found or not accessible"
     }
-    
+
     # Note: On Windows, uv python management might work differently
     Log-Info "Python environment setup complete (Windows)"
 }
 
 function Clear-Environment {
     Log-Info "Cleaning existing environment..."
-    
+
     if (Test-Path ".venv") {
         Log-Info "Removing existing virtual environment..."
         Remove-Item -Recurse -Force ".venv"
     }
-    
+
     if (Test-Path "uv.lock") {
         Log-Info "Removing existing lock file..."
         Remove-Item -Force "uv.lock"
     }
-    
+
     # Clean uv cache
     try {
         Log-Info "Cleaning uv cache..."
@@ -141,21 +141,21 @@ function Clear-Environment {
     catch {
         Log-Warning "Failed to clean cache (may not exist)"
     }
-    
+
     Log-Success "Environment cleaned"
 }
 
 function Install-Dependencies {
     Log-Info "Installing project dependencies..."
-    
+
     try {
         # Create virtual environment and install dependencies
         Log-Info "Creating virtual environment and installing dependencies..."
         uv sync --verbose
-        
+
         # Verify critical dependencies
         Log-Info "Verifying critical dependencies..."
-        
+
         # Check for httpx specifically
         $httpxCheck = uv pip list | Select-String "httpx"
         if ($httpxCheck) {
@@ -165,7 +165,7 @@ function Install-Dependencies {
             Log-Error "httpx dependency missing - this may cause test failures"
             exit 1
         }
-        
+
         # Check for other critical packages
         $criticalPackages = @("fastapi", "pytest", "uvicorn")
         foreach ($package in $criticalPackages) {
@@ -177,7 +177,7 @@ function Install-Dependencies {
                 Log-Warning "$package dependency missing"
             }
         }
-        
+
         Log-Success "Dependencies installed successfully"
     }
     catch {
@@ -188,7 +188,7 @@ function Install-Dependencies {
 
 function Test-Setup {
     Log-Info "Verifying setup with test run..."
-    
+
     try {
         # Test httpx import
         $httpxTest = uv run python -c "import httpx; print(f'httpx version: {httpx.__version__}')"
@@ -200,7 +200,7 @@ function Test-Setup {
         Log-Error "httpx import test failed: $_"
         exit 1
     }
-    
+
     try {
         # Run pytest
         Log-Info "Running test suite..."
@@ -216,7 +216,7 @@ function Test-Setup {
 function Show-EnvironmentInfo {
     Log-Info "Environment Information:"
     Write-Output "=========================="
-    
+
     try {
         $pythonVersion = python --version 2>$null
         Write-Output "Python version: $pythonVersion"
@@ -224,7 +224,7 @@ function Show-EnvironmentInfo {
     catch {
         Write-Output "Python version: Not accessible"
     }
-    
+
     try {
         $uvVersion = uv --version 2>$null
         Write-Output "uv version: $uvVersion"
@@ -232,18 +232,18 @@ function Show-EnvironmentInfo {
     catch {
         Write-Output "uv version: Not accessible"
     }
-    
+
     Write-Output "Project root: $(Get-Location)"
-    
+
     if (Test-Path ".venv") {
         Write-Output "Virtual environment: Present"
     }
     else {
         Write-Output "Virtual environment: Not found"
     }
-    
+
     Write-Output ""
-    
+
     Log-Info "Installed packages (first 20):"
     try {
         uv pip list | Select-Object -First 20
@@ -251,9 +251,9 @@ function Show-EnvironmentInfo {
     catch {
         Write-Output "Could not retrieve package list"
     }
-    
+
     Write-Output ""
-    
+
     Log-Info "Critical dependencies status:"
     $criticalDeps = @("httpx", "fastapi", "pytest", "uvicorn", "chromadb")
     foreach ($dep in $criticalDeps) {
@@ -278,26 +278,26 @@ function Main {
         Show-Help
         return
     }
-    
+
     Log-Info "Starting Windows Codex environment setup (test)..."
     Write-Output "================================================"
-    
+
     Test-Environment
     Install-Uv
     Setup-PythonEnvironment
-    
+
     if ($Clean) {
         Clear-Environment
     }
-    
+
     Install-Dependencies
-    
+
     if (-not $SkipTests) {
         Test-Setup
     }
-    
+
     Show-EnvironmentInfo
-    
+
     Log-Success "Windows environment setup completed!"
     Write-Output ""
     Log-Info "Next steps:"
@@ -309,4 +309,4 @@ function Main {
 }
 
 # Run main function
-Main 
+Main

@@ -75,8 +75,8 @@ dev = [
 # Same as Black.
 line-length = 132
 
-# Assume Python 3.12
-target-version = "py312"
+# Assume Python 3.13
+target-version = "py313"
 
 [tool.ruff.lint]
 # Allow autofix for all enabled rules (when `--fix` is used)

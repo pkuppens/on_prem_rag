@@ -1,4 +1,9 @@
-"""Utility functions for directory validation and handling."""
+"""Utility functions for directory validation and handling.
+
+This module provides functions for managing the project's directory structure
+as documented in docs/PROJECT_STRUCTURE.md. All data directories are organized
+under the main /data/ directory which is gitignored for privacy protection.
+"""
 
 import os
 from pathlib import Path

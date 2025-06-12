@@ -255,8 +255,17 @@ class TestSetupEmbeddingModels:
             mock_li.assert_not_called()
 
     @pytest.mark.slow
+    @pytest.mark.requires_internet
     def test_real_model_download_sentence_transformer(self, tmp_path, monkeypatch):
-        """Test downloading a real sentence transformer model (small model for testing)."""
+        """Download a small model from Hugging Face and verify caching.
+
+        This integration test checks that ``download_sentence_transformer_model``
+        can retrieve an actual model when internet access is available. The
+        expected behaviour is:
+        1. The function returns ``True`` to indicate success.
+        2. The cache directory contains at least one file after download.
+        The test is skipped automatically when internet connectivity is missing.
+        """
         # Use a very small model for testing
         test_model = "sentence-transformers/all-MiniLM-L6-v2"
 
@@ -280,9 +289,9 @@ class TestSetupEmbeddingModels:
 
         # Verify cache directory contains model files
         cache_path = Path(cache_dir / "sentence_transformers")
-        assert cache_path.exists(), "Cache directory should exist"
+        assert cache_path.exists(), "Cache directory should exist after model download"
 
         # The model should be cached somewhere in the directory structure
         # Note: Exact structure may vary by version, so we just check that files were created
         cached_files = list(cache_path.rglob("*"))
-        assert len(cached_files) > 0, "Should have cached some model files"
+        assert len(cached_files) > 0, "No files were cached. Check network access or model name."

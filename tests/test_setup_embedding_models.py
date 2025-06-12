@@ -255,6 +255,7 @@ class TestSetupEmbeddingModels:
             mock_li.assert_not_called()
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_real_model_download_sentence_transformer(self, tmp_path, monkeypatch):
         """Test downloading a real sentence transformer model (small model for testing)."""
         # Use a very small model for testing

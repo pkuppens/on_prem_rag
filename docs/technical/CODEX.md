@@ -301,6 +301,28 @@ uv sync --index-url https://pypi.org/simple/
 ✓ chromadb: 0.4.0+
 ```
 
+**Test Organization:**
+The project uses pytest markers to categorize tests:
+
+- **Fast tests**: Complete in <10 seconds, suitable for quick verification
+- **Slow tests**: Take >10 seconds, involve model loading, PDF processing, etc.
+
+**Testing Commands:**
+
+```bash
+# Run only fast tests (used by setup script)
+uv run pytest -m "not slow"
+
+# Run all tests
+uv run pytest
+
+# Run only slow tests
+uv run pytest -m slow
+
+# Run tests with coverage
+uv run pytest --cov=src/backend --cov-report=term
+```
+
 **If setup fails:**
 
 1. Check the troubleshooting section above

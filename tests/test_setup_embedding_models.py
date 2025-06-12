@@ -211,47 +211,78 @@ class TestSetupEmbeddingModels:
         mock_hf_embedding.assert_called_once_with(model_name="test-model")
 
     def test_script_imports(self):
-        """Test that the script can be imported without errors."""
-        # This test verifies the script has correct imports and syntax
-        assert hasattr(setup_embedding_models, "main")
-        assert hasattr(setup_embedding_models, "setup_cache_directories")
-        assert hasattr(setup_embedding_models, "download_sentence_transformer_model")
-        assert hasattr(setup_embedding_models, "download_transformers_model")
-        assert hasattr(setup_embedding_models, "download_llamaindex_embedding")
+        """Test that all imports work correctly."""
+        # Test importing the script works
+        import scripts.setup_embedding_models
+
+        # Test that required functions exist
+        assert hasattr(scripts.setup_embedding_models, "setup_cache_directories")
+        assert hasattr(scripts.setup_embedding_models, "download_sentence_transformer_model")
+        assert hasattr(scripts.setup_embedding_models, "download_transformers_model")
+        assert hasattr(scripts.setup_embedding_models, "download_llamaindex_embedding")
 
     @pytest.mark.slow
     def test_script_execution_dry_run(self, tmp_path, monkeypatch):
-        """Test script execution without actually downloading models."""
-        # Set up temporary cache directories using environment variables
-        # This is more reliable than mocking expanduser
-        hf_home = str(tmp_path / "huggingface")
-        transformers_cache = str(tmp_path / "huggingface" / "hub")
-        sentence_transformers_home = str(tmp_path / "huggingface" / "sentence_transformers")
+        """Test script execution in dry run mode."""
+        # Mock the project root to use tmp_path
+        mock_project_root = tmp_path
+        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
 
-        # Set environment variables to override defaults
-        with patch.dict(
-            os.environ,
-            {
-                "HF_HOME": hf_home,
-                "TRANSFORMERS_CACHE": transformers_cache,
-                "SENTENCE_TRANSFORMERS_HOME": sentence_transformers_home,
-            },
+        # Mock sys.argv to include dry-run
+        test_argv = ["setup_embedding_models.py", "--dry-run"]
+        monkeypatch.setattr("sys.argv", test_argv)
+
+        # Mock all download functions to avoid actual downloads
+        with (
+            patch("scripts.setup_embedding_models.download_sentence_transformer_model") as mock_st,
+            patch("scripts.setup_embedding_models.download_transformers_model") as mock_tr,
+            patch("scripts.setup_embedding_models.download_llamaindex_embedding") as mock_li,
         ):
-            # Mock all download functions to return True without actual downloads
-            with (
-                patch("scripts.setup_embedding_models.download_sentence_transformer_model", return_value=True),
-                patch("scripts.setup_embedding_models.download_transformers_model", return_value=True),
-                patch("scripts.setup_embedding_models.download_llamaindex_embedding", return_value=True),
-            ):
-                # Test the main function
-                result = setup_embedding_models.main()
+            # Set up mocks to return success
+            mock_st.return_value = True
+            mock_tr.return_value = True
+            mock_li.return_value = True
 
-                # Verify main function succeeded
-                assert result is True, "main() function should return True when all downloads succeed"
+            # Import and run main
+            from scripts.setup_embedding_models import main
 
-                # Verify cache directories were created using Path objects for cross-platform compatibility
-                assert Path(hf_home).exists(), f"HF_HOME directory should exist at: {hf_home}"
-                assert Path(transformers_cache).exists(), f"TRANSFORMERS_CACHE directory should exist at: {transformers_cache}"
-                assert Path(sentence_transformers_home).exists(), (
-                    f"SENTENCE_TRANSFORMERS_HOME directory should exist at: {sentence_transformers_home}"
-                )
+            # This should execute without errors
+            main()
+
+            # Verify that download functions were not called in dry-run mode
+            mock_st.assert_not_called()
+            mock_tr.assert_not_called()
+            mock_li.assert_not_called()
+
+    @pytest.mark.slow
+    def test_real_model_download_sentence_transformer(self, tmp_path, monkeypatch):
+        """Test downloading a real sentence transformer model (small model for testing)."""
+        # Use a very small model for testing
+        test_model = "sentence-transformers/all-MiniLM-L6-v2"
+
+        # Mock the project root to use tmp_path
+        mock_project_root = tmp_path
+        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
+
+        # Set up cache directories in tmp_path
+        cache_dir = tmp_path / "cache" / "huggingface"
+        monkeypatch.setenv("HF_HOME", str(cache_dir))
+        monkeypatch.setenv("SENTENCE_TRANSFORMERS_HOME", str(cache_dir / "sentence_transformers"))
+
+        # Setup cache directories
+        setup_embedding_models.setup_cache_directories()
+
+        # Download the model
+        result = setup_embedding_models.download_sentence_transformer_model(test_model)
+
+        # Verify successful download
+        assert result is True, f"Failed to download model: {test_model}"
+
+        # Verify cache directory contains model files
+        cache_path = Path(cache_dir / "sentence_transformers")
+        assert cache_path.exists(), "Cache directory should exist"
+
+        # The model should be cached somewhere in the directory structure
+        # Note: Exact structure may vary by version, so we just check that files were created
+        cached_files = list(cache_path.rglob("*"))
+        assert len(cached_files) > 0, "Should have cached some model files"

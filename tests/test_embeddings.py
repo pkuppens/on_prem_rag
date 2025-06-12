@@ -20,6 +20,7 @@ from rag_pipeline.core.embeddings import (
 class TestEmbeddings:
     """Test the embedding functionality."""
 
+    @pytest.mark.slow
     def test_embed_text_nodes(self):
         """Test embedding text nodes."""
         documents = [
@@ -80,6 +81,7 @@ class TestEmbeddings:
         # Should only store 2 items (one duplicate removed)
         assert manager._collection.count() == 2
 
+    @pytest.mark.slow
     def test_process_pdf_integration(self, test_data_dir, test_case_dir):
         """Test the complete PDF processing pipeline."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"  # Use smaller PDF
@@ -100,6 +102,7 @@ class TestEmbeddings:
         assert records > 0
         assert records <= chunks  # Deduplication may reduce count
 
+    @pytest.mark.slow
     def test_process_pdf_expected_values(self, test_data_dir, test_case_dir):
         """Test PDF processing returns expected values for specific test file."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"
@@ -121,6 +124,7 @@ class TestEmbeddings:
         assert chunks < 50, "Should not create excessive chunks for single page"
         assert records == chunks, "No duplicates expected in single PDF page"
 
+    @pytest.mark.slow
     def test_query_embeddings(self, test_data_dir, test_case_dir):
         """Test querying stored embeddings."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"
@@ -178,6 +182,7 @@ class TestEmbeddings:
         assert result["primary_result"] == ""
         assert result["all_results"] == []
 
+    @pytest.mark.slow
     def test_embeddings_deterministic(self):
         """Test that embeddings are deterministic for same input."""
         document = Document(text="Consistent test content for deterministic testing.")
@@ -193,6 +198,7 @@ class TestEmbeddings:
             for val1, val2 in zip(emb1, emb2, strict=False):
                 assert abs(val1 - val2) < 1e-6  # Very small tolerance
 
+    @pytest.mark.slow
     def test_embedding_persistence(self, test_case_dir):
         """Test that embeddings persist correctly across sessions."""
         # Create test documents and generate real embeddings to match dimensions

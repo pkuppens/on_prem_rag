@@ -173,17 +173,18 @@ verify_setup() {
         exit 1
     fi
 
-    # Run pytest with a timeout to avoid hanging
-    log_info "Running test suite (with 10 minute timeout)..."
-    if timeout 600 uv run pytest --tb=short -v tests/ || [[ $? == 124 ]]; then
+    # Run pytest with a timeout to avoid hanging, excluding slow tests
+    log_info "Running test suite (excluding slow tests, with 10 minute timeout)..."
+    if timeout 600 uv run pytest --tb=short -v -m "not slow" tests/ || [[ $? == 124 ]]; then
         if [[ $? == 124 ]]; then
             log_warning "Tests timed out after 10 minutes - this may indicate environment issues"
         else
-            log_success "Test suite completed"
+            log_success "Test suite completed (slow tests skipped)"
         fi
     else
         log_error "Test suite failed"
         log_info "This may be expected if there are test-specific issues unrelated to environment setup"
+        log_info "Note: Slow tests were skipped during setup verification"
     fi
 }
 
@@ -239,8 +240,11 @@ main() {
             --help)
                 echo "Usage: $0 [--clean] [--skip-tests] [--help]"
                 echo "  --clean      Clean existing environment before setup"
-                echo "  --skip-tests Skip test verification step"
+                echo "  --skip-tests Skip test verification step completely"
                 echo "  --help       Show this help message"
+                echo ""
+                echo "Note: During setup verification, slow tests are automatically skipped"
+                echo "      to avoid timeouts. Run 'uv run pytest' to execute all tests."
                 exit 0
                 ;;
             *)
@@ -271,9 +275,11 @@ main() {
     log_success "Codex environment setup completed!"
     echo ""
     log_info "Next steps:"
-    echo "1. Run tests: uv run pytest"
-    echo "2. Start development server: uv run start-backend"
-    echo "3. Check available scripts: grep '\\[project.scripts\\]' -A 10 pyproject.toml"
+    echo "1. Run fast tests: uv run pytest -m 'not slow'"
+    echo "2. Run all tests: uv run pytest"
+    echo "3. Run only slow tests: uv run pytest -m slow"
+    echo "4. Start development server: uv run start-backend"
+    echo "5. Check available scripts: grep '\\[project.scripts\\]' -A 10 pyproject.toml"
     echo ""
     log_info "If you encounter issues, check docs/technical/CODEX.md for troubleshooting"
 }

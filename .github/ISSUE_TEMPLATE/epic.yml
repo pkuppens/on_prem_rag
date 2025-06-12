@@ -1,0 +1,35 @@
+name: Epic
+description: High-level initiative grouping multiple features.
+title: "[EPIC]: "
+labels: ["epic"]
+body:
+  - type: input
+    id: epic_id
+    attributes:
+      label: Epic ID
+      description: e.g. EPIC-001
+    validations:
+      required: true
+  - type: textarea
+    id: business_outcome
+    attributes:
+      label: Business Outcome
+      description: Desired business result for this epic
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: Hypothesis or goal statement
+  - type: textarea
+    id: features
+    attributes:
+      label: Linked Features
+      description: List features that belong to this epic
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

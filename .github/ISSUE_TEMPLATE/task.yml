@@ -1,0 +1,33 @@
+name: Task
+description: Implementation task linked to a user story.
+title: "[TASK]: "
+labels: ["task"]
+body:
+  - type: input
+    id: task_id
+    attributes:
+      label: Task ID
+      description: e.g. TASK-001
+    validations:
+      required: true
+  - type: input
+    id: story_link
+    attributes:
+      label: Story Reference
+      description: Link to parent story
+  - type: input
+    id: assignee
+    attributes:
+      label: Assignee
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

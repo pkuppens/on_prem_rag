@@ -1,0 +1,25 @@
+name: Test
+description: Define test cases and scenarios.
+title: "[TEST]: "
+labels: ["test"]
+body:
+  - type: input
+    id: related_item
+    attributes:
+      label: Related Story/Feature
+  - type: textarea
+    id: description
+    attributes:
+      label: Test Description
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce / Test Procedure
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Results
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

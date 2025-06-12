@@ -10,6 +10,7 @@ interface EmbeddingResult {
   chunk_index: number;
   record_id: string;
   page_number: number | string;
+  page_label?: string;
 }
 
 interface QueryResponse {
@@ -127,7 +128,12 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
               }}
             >
               <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-                {r.document_name} • Page {r.page_number === 'unknown' || r.page_number === undefined ? 'N/A' : r.page_number} • Chunk {r.chunk_index} • Score: {r.similarity_score.toFixed(3)}
+                {r.document_name} • Page {
+                  r.page_number === 'unknown' || r.page_number === undefined ? 'N/A' : 
+                  r.page_label && r.page_label !== 'unknown' && r.page_label !== String(r.page_number) 
+                    ? `${r.page_number} (${r.page_label})` 
+                    : r.page_number
+                } • Chunk {r.chunk_index} • Score: {r.similarity_score.toFixed(3)}
               </Typography>
               <Typography variant="body2" sx={{ mt: 0.5, fontWeight: idx === selected ? 'medium' : 'normal' }}>
                 {r.text.slice(0, 150)}{r.text.length > 150 ? '...' : ''}

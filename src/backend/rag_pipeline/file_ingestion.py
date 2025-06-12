@@ -22,7 +22,7 @@ from backend.rag_pipeline.config.parameter_sets import (
     get_param_set,
 )
 from backend.rag_pipeline.core.document_loader import DocumentLoader
-from backend.rag_pipeline.core.embeddings import query_embeddings
+from backend.rag_pipeline.core.embeddings import query_embeddings, process_document
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 from backend.rag_pipeline.utils.directory_utils import (
     _format_path_for_error,
@@ -155,68 +155,36 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
             logger.debug("File saved to", filename=str(file_path))
             upload_progress[file.filename] = 10
 
-        # Load document using loader with duplicate detection
-        documents, _ = document_loader.load_document(file_path)
-        if not documents:
-            logger.debug("No documents found in file", filename=str(file_path))
-            upload_progress[file.filename] = 100
-            return {"message": "Duplicate file", "filename": file.filename}
-
-        parser = SimpleNodeParser.from_defaults(
-            chunk_size=params.chunking.chunk_size,
-            chunk_overlap=params.chunking.chunk_overlap,
-            include_metadata=True,
-        )
-        nodes = parser.get_nodes_from_documents(documents)
-        total_nodes = len(nodes)
-        logger.debug("Nodes parsed", filename=str(file_path), total_nodes=total_nodes)
-        upload_progress[file.filename] = 15
-
-        unique_nodes = []
-        for node in nodes:
-            chunk_hash = hashlib.sha256(node.text.encode("utf-8")).hexdigest()
-            if chunk_hash in chunk_hashes:
-                continue
-            chunk_hashes.add(chunk_hash)
-            # Store the hash in the node for later use
-            node.metadata["chunk_hash"] = chunk_hash
-            unique_nodes.append(node)
-
-        embed_model = HuggingFaceEmbedding(
-            model_name=params.embedding.model_name,
-            # Reason: Using proper cache directory (data/cache) instead of hardcoded root path
-            cache_folder=str(cache_dir / "embeddings"),
-        )
-
-        total = len(unique_nodes)
-        for idx, node in enumerate(unique_nodes, start=1):
-            embedding = embed_model.get_text_embedding(node.text)
-
-            # Enhanced metadata with required fields for query results
-            enhanced_metadata = {
-                **node.metadata,  # Keep existing metadata (includes chunk_hash)
-                "text": node.text,
-                "document_name": file.filename,
-                "document_id": f"{file_path.stem}_{idx - 1}",  # Generate stable document ID
-                "chunk_index": idx - 1,
-                "page_number": node.metadata.get("page_label", "unknown"),
-                "source": str(file_path),
-            }
-
-            vector_store_manager.add_embeddings(
-                ids=[node.node_id],
-                embeddings=[embedding],
-                metadatas=[enhanced_metadata],
+        # Use centralized document processing for consistent chunking and embedding
+        try:
+            chunks_processed, records_stored = process_document(
+                file_path,
+                params.embedding.model_name,
+                persist_dir=vector_store_manager.config.persist_directory,
+                collection_name=vector_store_manager.config.collection_name,
+                chunk_size=params.chunking.chunk_size,
+                chunk_overlap=params.chunking.chunk_overlap,
+                deduplicate=True,
             )
-            upload_progress[file.filename] = 15 + int(80 * idx / total)
-            # Yield control to event loop every NODES_PER_YIELD nodes to allow WebSocket updates
-            # Can be just 1 because the WebSocket updates are not that frequent and rendering fast
-            if idx % NODES_PER_YIELD == 0:
-                await asyncio.sleep(0)
+            
+            if chunks_processed == 0:
+                logger.debug("No new chunks processed (duplicate file)", filename=str(file_path))
+                upload_progress[file.filename] = 100
+                return {"message": "Duplicate file", "filename": file.filename}
+                
+            logger.info("Document processing completed", 
+                       filename=file.filename, 
+                       chunks=chunks_processed, 
+                       records=records_stored)
+            upload_progress[file.filename] = 95
+            
+        except Exception as e:
+            logger.error("Error during document processing", filename=file.filename, error=str(e))
+            raise
 
         upload_progress[file.filename] = 100  # upload completed
-        logger.info("File processing completed", filename=file.filename, chunks=total)
-        return {"message": "File processed successfully", "filename": file.filename, "chunks": total}
+        logger.info("File processing completed", filename=file.filename, chunks=chunks_processed)
+        return {"message": "File processed successfully", "filename": file.filename, "chunks": chunks_processed}
 
     except Exception as e:  # pragma: no cover - runtime errors reported during manual runs
         logger.error("Error processing file", filename=file.filename, error=str(e))

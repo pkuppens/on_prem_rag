@@ -20,6 +20,7 @@ interface EmbeddingResult {
   chunk_index: number;
   record_id: string;
   page_number: number | string;
+  page_label?: string;
 }
 
 interface QueryResponse {

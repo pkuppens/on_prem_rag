@@ -39,6 +39,8 @@ dependencies = [
     "google-auth>=2.27.0",
     "cryptography>=41.0.0",
     "httpx>=0.24.0",
+    "python-jose>=3.5.0",
+    "passlib>=1.7.4",
 ]
 requires-python = ">=3.12"
 
@@ -155,7 +157,10 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v"
 # Custom markers for test organization
-markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')"
+]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
 # Configure test environment

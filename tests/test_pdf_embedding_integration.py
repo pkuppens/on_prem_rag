@@ -16,6 +16,7 @@ from rag_pipeline.core.embeddings import chunk_pdf, embed_chunks, query_embeddin
 
 
 @pytest.mark.slow
+@pytest.mark.internet
 class TestPDFEmbeddingIntegration:
     """Integration tests for the complete PDF embedding pipeline."""
 

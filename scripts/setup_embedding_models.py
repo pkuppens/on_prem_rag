@@ -6,12 +6,14 @@ are downloaded and cached locally, enabling offline operation.
 
 Usage:
     python scripts/setup_embedding_models.py
+    python scripts/setup_embedding_models.py --dry-run
 
 Environment Variables:
     HF_HOME: HuggingFace cache directory (default: data/cache/huggingface)
     SENTENCE_TRANSFORMERS_HOME: Sentence transformers cache directory
 """
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -99,11 +101,28 @@ def download_llamaindex_embedding(model_name: str):
 
 def main():
     """Main setup function."""
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Setup embedding models for local development")
+    parser.add_argument("--dry-run", action="store_true", help="Setup directories but skip model downloads")
+    args = parser.parse_args()
+
     print("🚀 Setting up embedding models for local development...")
+    if args.dry_run:
+        print("📋 Running in DRY-RUN mode - directories will be set up but no models will be downloaded")
     print("=" * 60)
 
     # Setup cache directories
     hf_home, transformers_cache, sentence_transformers_home = setup_cache_directories()
+
+    if args.dry_run:
+        print("\n" + "=" * 60)
+        print("📊 Dry Run Summary: Cache directories set up successfully")
+        print("📝 Environment Configuration:")
+        print(f"   HF_HOME: {hf_home}")
+        print(f"   TRANSFORMERS_CACHE: {transformers_cache}")
+        print(f"   SENTENCE_TRANSFORMERS_HOME: {sentence_transformers_home}")
+        print("\n💡 To download models, run without --dry-run flag")
+        return True
 
     # Models used in the project (from parameter_sets.py and test files)
     models_to_download = [

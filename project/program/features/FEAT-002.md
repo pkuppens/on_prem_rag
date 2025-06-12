@@ -45,8 +45,8 @@ Role-based access control (RBAC) and administrative functions will be implemente
 
 Phase 1 (Current):
 
-- [ ] **[STORY-006: Document Upload Interface](../../team/stories/STORY-006.md)**: As a user, I want to upload and process documents
-- [ ] **[STORY-007: Interactive Q&A Interface](../../team/stories/STORY-007.md)**: As a user, I want to ask questions about my documents
+- [x] **[STORY-006: Document Upload Interface](../../team/stories/STORY-006.md)**: As a user, I want to upload and process documents
+- [x] **[STORY-007: Interactive Q&A Interface](../../team/stories/STORY-007.md)**: As a user, I want to ask questions about my documents
 
 Future Phase:
 
@@ -58,11 +58,11 @@ Future Phase:
 
 Phase 1:
 
-- [ ] **Document Management**
+- [x] **Document Management**
   - Upload interface handles PDF, DOCX, and TXT files
   - Processing status tracked and displayed in real-time
   - Error handling for invalid files and failed processing
-- [ ] **Q&A Interface**
+- [x] **Q&A Interface**
   - Real-time streaming responses
   - Interactive source citations
   - Conversation history
@@ -70,6 +70,7 @@ Phase 1:
 - [ ] **Performance**
   - Page load times <3 seconds
   - Query response streaming starts <2 seconds
+  - TODO: add frontend profiling and caching
 
 Future Phase:
 
@@ -81,10 +82,11 @@ Future Phase:
 
 Phase 1:
 
-- [ ] Frontend and backend integration complete
-- [ ] Document processing pipeline operational
+- [x] Frontend and backend integration complete
+- [x] Document processing pipeline operational
 - [ ] User interface tested across major browsers
 - [ ] Performance benchmarks met for document processing
+  - TODO: add Lighthouse reports in CI
 - [ ] Documentation updated with user guides
 
 ## Technical Implementation

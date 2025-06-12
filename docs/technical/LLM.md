@@ -181,3 +181,9 @@ def process_query(
 - [Ollama Documentation](https://github.com/ollama/ollama)
 - [Mistral Model Card](https://huggingface.co/mistralai/Mistral-7B-v0.1)
 - [LlamaIndex LLM Integration](https://docs.llamaindex.ai/en/stable/module_guides/llms/)
+
+## Code Files
+
+- [src/rag_pipeline/core/llm_providers.py](../../src/rag_pipeline/core/llm_providers.py) - Simple provider abstraction and factory implementation
+- [src/rag_pipeline/core/db_query.py](../../src/rag_pipeline/core/db_query.py) - Placeholder NL2SQL pipeline used for database queries
+- [src/backend/security/security_manager.py](../../src/backend/security/security_manager.py) - JWT token utilities used in authentication

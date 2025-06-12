@@ -148,7 +148,8 @@ install_dependencies() {
     fi
     
     # Check for other critical packages
-    local critical_packages=("fastapi" "pytest" "uvicorn")
+    local critical_packages
+    critical_packages=("fastapi" "pytest" "uvicorn")
     for package in "${critical_packages[@]}"; do
         if uv pip list | grep -q "$package"; then
             log_success "$package dependency verified"
@@ -165,7 +166,7 @@ verify_setup() {
     log_info "Verifying setup with test run..."
     
     # Run a quick test to verify everything works
-    if uv run python -c "import httpx; print(f'httpx version: {httpx.__version__}')"; then
+    if uv run python -c "import httpx; print('httpx version: ' + httpx.__version__)"; then
         log_success "httpx import test passed"
     else
         log_error "httpx import test failed"
@@ -174,7 +175,7 @@ verify_setup() {
     
     # Run pytest with a timeout to avoid hanging
     log_info "Running test suite (with 5 minute timeout)..."
-    if timeout 300 uv run pytest --tb=short -v tests/ || [[ $? == 124 ]]; then
+    if timeout 300 uv run pytest --tb=short -v tests/ 2>/dev/null || [[ $? == 124 ]]; then
         if [[ $? == 124 ]]; then
             log_warning "Tests timed out after 5 minutes - this may indicate environment issues"
         else
@@ -204,7 +205,8 @@ show_environment_info() {
     echo ""
     
     log_info "Critical dependencies status:"
-    local critical_deps=("httpx" "fastapi" "pytest" "uvicorn" "chromadb")
+    local critical_deps
+    critical_deps=("httpx" "fastapi" "pytest" "uvicorn" "chromadb")
     for dep in "${critical_deps[@]}"; do
         if uv pip list | grep -q "$dep"; then
             local version=$(uv pip list | grep "$dep" | awk '{print $2}')
@@ -254,13 +256,13 @@ main() {
     install_uv
     setup_python_environment
     
-    if [[ "$CLEAN_ENV" == true ]]; then
+    if [[ "$CLEAN_ENV" == "true" ]]; then
         clean_environment
     fi
     
     install_dependencies
     
-    if [[ "$SKIP_TESTS" != true ]]; then
+    if [[ "$SKIP_TESTS" != "true" ]]; then
         verify_setup
     fi
     

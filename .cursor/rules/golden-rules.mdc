@@ -126,6 +126,13 @@ This guide outlines the key principles and practices for AI-assisted development
    - Follow security best practices
    - Document security considerations
 
+3. **Dependency Management**
+   - **CRITICAL: Always use `uv add` for project dependencies - NEVER use `pip install`**
+   - `pip install` only works locally and causes failures in fresh environments
+   - All imported packages must exist in `pyproject.toml` dependencies
+   - Before importing: check if package exists, add with `uv add`, then import
+   - Use `uv sync` for installing dependencies in fresh environments
+
 ## Communication Standards
 
 1. **Code Comments**
@@ -161,5 +168,8 @@ This guide outlines the key principles and practices for AI-assisted development
    - Never hallucinate libraries
    - Confirm file paths before use
    - Never delete code without explicit instruction
+   - **When adding new imports, always use `uv add package-name` first**
+   - **Never suggest `pip install` - always suggest `uv add`**
+   - **Verify imported packages exist in `pyproject.toml` before using them**
 
 Remember to update these rules as project standards evolve.

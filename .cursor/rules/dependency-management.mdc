@@ -1,0 +1,160 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Dependency Management Rule
+
+## Purpose
+Ensures all package dependencies are properly managed and persist across environments, preventing missing dependency errors in fresh environments like CI/CD and containerized deployments.
+
+## Critical Rules
+
+### 🚨 NEVER Use pip install for Project Dependencies
+
+**WRONG:**
+```bash
+pip install httpx
+pip install requests
+```
+
+**CORRECT:**
+```bash
+uv add httpx
+uv add requests
+```
+
+### Why This Matters
+
+When you use `pip install`, the package is only installed in your current environment but is NOT added to `pyproject.toml`. This means:
+- ✅ Works in your local environment 
+- ❌ Fails in fresh environments (CI/CD, containers, other developers)
+- ❌ Causes build failures and test failures
+- ❌ Wastes time debugging "module not found" errors
+
+## Correct Dependency Management Workflow
+
+### 1. Adding New Dependencies
+
+```bash
+# For runtime dependencies
+uv add package-name
+
+# For development dependencies  
+uv add --dev package-name
+
+# For specific versions
+uv add "package-name>=1.0.0"
+
+# Example: Adding httpx for HTTP client functionality
+uv add "httpx>=0.24.0"
+```
+
+### 2. Updating Dependencies
+
+```bash
+# Update specific package
+uv add -U package-name
+
+# Update all dependencies
+uv sync --upgrade
+```
+
+### 3. Installing Dependencies in Fresh Environment
+
+```bash
+# Install all dependencies from pyproject.toml
+uv sync
+
+# Install with development dependencies
+uv sync --dev
+```
+
+## Development Workflow Integration
+
+### Before Writing Code That Imports New Packages
+
+1. **Check if package exists in pyproject.toml**
+   ```bash
+   grep -i "package-name" pyproject.toml
+   ```
+
+2. **If not found, add it properly**
+   ```bash
+   uv add package-name
+   ```
+
+3. **Then write your import statements**
+   ```python
+   import httpx  # Now this will work in all environments
+   ```
+
+### Code Review Checklist
+
+- [ ] All imported packages are listed in `pyproject.toml` dependencies
+- [ ] No temporary `pip install` commands used
+- [ ] `uv.lock` file updated (happens automatically with `uv add`)
+- [ ] Tests pass in fresh environment
+
+## Emergency Fixes
+
+If you discover missing dependencies:
+
+1. **Identify the missing package** from error messages
+2. **Add it properly** with `uv add package-name`
+3. **Test in clean environment** with `uv run pytest`
+4. **Document the fix** in commit message
+
+## Environment-Specific Guidelines
+
+### Development Environment
+- Always use `uv add` for new dependencies
+- Use `uv sync` to keep environment current
+- Never commit changes that use `pip install`
+
+### CI/CD Environment
+- Relies on `pyproject.toml` and `uv.lock` for reproducible builds
+- Will fail if dependencies are not properly declared
+
+### Container Environment  
+- Uses `uv sync` during build process
+- Missing dependencies cause container build failures
+
+## Common Mistakes to Avoid
+
+1. **Using pip install during development**
+   - Temporarily "fixes" local environment
+   - Breaks fresh environments
+
+2. **Forgetting to run uv add after manual installation**
+   - Package works locally but not in CI/CD
+
+3. **Adding dependencies to wrong section**
+   - Runtime dependencies in dev section cause production issues
+
+## Quick Reference Commands
+
+```bash
+# Add runtime dependency
+uv add package-name
+
+# Add development dependency
+uv add --dev package-name
+
+# Install all dependencies
+uv sync
+
+# Update all dependencies
+uv sync --upgrade
+
+# Check what's installed
+uv pip list
+```
+
+## Integration with Project Tools
+
+- **pytest**: Automatically uses packages from `pyproject.toml`
+- **Docker**: `uv sync` in Dockerfile ensures consistent dependencies
+- **GitHub Actions**: Uses `uv.lock` for reproducible builds
+
+Remember: If it's not in `pyproject.toml`, it doesn't exist in production!

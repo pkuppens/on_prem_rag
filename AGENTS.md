@@ -28,9 +28,26 @@ This document provides a practical example of how OpenAI Codex is integrated int
 
 5. **Package Management**
 
-   - Use 'uv add -U {package}' for package installation and updates.
-   - Ensure 'uv' is installed and used for managing dependencies.
-   - Allow internet access for package installation to ensure all dependencies are up to date.
+   - **CRITICAL: Always use `uv add` for project dependencies - NEVER use `pip install`**
+   - Use `uv add package-name` to add runtime dependencies
+   - Use `uv add --dev package-name` for development dependencies
+   - Use `uv add -U {package}` for package updates
+   - Ensure all imported packages exist in `pyproject.toml` dependencies
+   - **Why this matters**: `pip install` only works locally but fails in fresh environments (CI/CD, containers)
+   - Before importing any new package, always run `uv add package-name` first
+   - Use `uv sync` to install dependencies in fresh environments
+   - Allow internet access for package installation to ensure all dependencies are up to date
+
+### Dependency Management Workflow
+
+Before writing code that imports new packages:
+
+1. **Check if package exists**: `grep -i "package-name" pyproject.toml`
+2. **If missing, add properly**: `uv add package-name`
+3. **Then write import statements**: `import package-name`
+4. **Verify in fresh environment**: `uv run pytest`
+
+**Root Cause Prevention**: The missing `httpx` dependency issue occurred because someone used `pip install httpx` locally (which worked) but didn't run `uv add httpx` to persist it in `pyproject.toml`. This caused failures in fresh environments.
 
 6. **Testing**
    - All pytests must pass, with a preference for code coverage measurements.

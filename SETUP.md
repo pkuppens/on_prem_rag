@@ -49,6 +49,13 @@ This guide provides instructions for setting up the development environment for 
 
     The `-e .` installs the current project in editable mode. `[dev]` installs the optional development dependencies specified in `pyproject.toml`.
 
+    **CRITICAL DEPENDENCY MANAGEMENT RULE**:
+
+    - **Always use `uv add package-name` for new dependencies - NEVER use `pip install`**
+    - `pip install` only works locally but fails in fresh environments (CI/CD, containers)
+    - Before importing any new package, always run `uv add package-name` first
+    - This ensures the dependency is added to `pyproject.toml` and works in all environments
+
     Note: The project uses several llama-index packages for different functionalities:
 
     - `llama-index`: Core package

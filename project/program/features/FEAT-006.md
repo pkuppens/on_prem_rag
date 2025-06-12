@@ -31,6 +31,7 @@ Implement enterprise-grade security measures including network isolation, secret
 
 - [ ] **[STORY-025: Network Security](../../team/stories/STORY-025.md)**: As a system, I need secure network isolation and encryption
 - [ ] **[STORY-026: Authentication & Authorization](../../team/stories/STORY-026.md)**: As a system, I need robust authentication and RBAC
+  - Implemented basic JWT handling via SecurityManager
 - [ ] **[STORY-027: Secrets Management](../../team/stories/STORY-027.md)**: As an operator, I need secure secrets management
 - [ ] **[STORY-028: Audit Logging](../../team/stories/STORY-028.md)**: As a compliance officer, I need comprehensive audit trails
 - [ ] **[STORY-029: Security Monitoring](../../team/stories/STORY-029.md)**: As a security team, I need threat detection and monitoring
@@ -39,6 +40,8 @@ Implement enterprise-grade security measures including network isolation, secret
 
 - [ ] **Network Security**: HTTPS encryption, network isolation, and secure communication
 - [ ] **Authentication**: JWT-based authentication with secure token management
+- [ ] **Authentication**: JWT-based authentication with secure token management
+  - TODO: add token revocation list
 - [ ] **Authorization**: Role-based access control for all resources and operations
 - [ ] **Secrets Management**: Secure storage and rotation of sensitive configuration
 - [ ] **Audit Logging**: Complete logging of all user actions and system events
@@ -48,7 +51,8 @@ Implement enterprise-grade security measures including network isolation, secret
 ## Definition of Done
 
 - [ ] Network security implemented with TLS 1.3 and isolation
-- [ ] Authentication system with JWT and secure session management
+  - TODO: configure nginx reverse proxy
+- [x] Authentication system with JWT and secure session management
 - [ ] RBAC system controlling all resource access
 - [ ] Secrets management with encryption and rotation
 - [ ] Audit logging capturing all security-relevant events

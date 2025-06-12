@@ -102,6 +102,13 @@ app.add_middleware(
 # Store upload progress
 upload_progress: dict[str, int] = {}
 
+
+@app.get("/api/health")
+async def health() -> dict[str, str]:
+    """Simple health check endpoint."""
+    return {"status": "ok"}
+
+
 # Global helpers
 document_loader = DocumentLoader()
 vector_store_manager = get_vector_store_manager_from_env()
@@ -122,6 +129,13 @@ async def get_parameter_sets() -> dict:
     logger.info("GET /api/parameters/sets")
 
     return {"default": DEFAULT_PARAM_SET_NAME, "sets": available_param_sets()}
+
+
+@app.get("/api/documents/list")
+async def list_documents() -> dict[str, list[str]]:
+    """Return a list of uploaded document filenames."""
+    files = [f.name for f in uploaded_files_dir.iterdir() if f.is_file()]
+    return {"files": files}
 
 
 @app.post("/api/documents/upload")

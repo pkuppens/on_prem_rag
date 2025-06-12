@@ -40,6 +40,7 @@ the MVP.
 ## Acceptance Criteria
 
 - [ ] **NL2SQL Translation**: Convert natural language to SQL with >90% accuracy on business queries
+  - TODO: connect to LLMProviderFactory and add schema awareness
 - [ ] **Database Support**: Working connectors for PostgreSQL and MSSQL databases
 - [ ] **Security Validation**: SQL injection prevention and read-only query enforcement
 - [ ] **Role-Based Access**: Filter results based on user roles and permissions

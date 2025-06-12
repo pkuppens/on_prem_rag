@@ -1,0 +1,21 @@
+name: CI/CD Task
+description: Pipeline or deployment related work.
+title: "[CICD]: "
+labels: ["cicd"]
+body:
+  - type: input
+    id: pipeline
+    attributes:
+      label: Pipeline Name
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

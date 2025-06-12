@@ -1,0 +1,42 @@
+name: Feature
+description: Work required to deliver a key capability.
+title: "[FEAT]: "
+labels: ["feature"]
+body:
+  - type: input
+    id: feature_id
+    attributes:
+      label: Feature ID
+      description: e.g. FEAT-001
+    validations:
+      required: true
+  - type: input
+    id: epic_link
+    attributes:
+      label: Epic Reference
+      description: Link to parent epic
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Short summary of the feature
+  - type: textarea
+    id: business_value
+    attributes:
+      label: Business Value
+  - type: textarea
+    id: user_stories
+    attributes:
+      label: Related User Stories
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of Done
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

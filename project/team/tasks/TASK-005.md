@@ -23,3 +23,6 @@ Verify that the development environment can be set up and the pipeline runs succ
 **Implementer**: QA Engineer
 **Reviewer**: Lead Developer
 **Target Completion**: TBD
+
+TODO: Tests failing in Codex environment due to missing packages (`httpx`,
+`llama_index`). Needs cross-platform verification once dependencies install.

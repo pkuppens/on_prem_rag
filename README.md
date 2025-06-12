@@ -126,6 +126,11 @@ pre-commit install
 - **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
 - **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
 - **Package Management**: Configuration is handled through `pyproject.toml` for portable development environments
+- **Dependency Management**:
+  - **CRITICAL**: Always use `uv add package-name` for new dependencies - NEVER use `pip install`
+  - `pip install` only works locally but fails in fresh environments (CI/CD, containers)
+  - Before importing any package, verify it exists in `pyproject.toml` or add it with `uv add`
+  - Use `uv sync` to install dependencies in fresh environments
 
 See [SETUP.md](SETUP.md) for additional details.
 

@@ -1,0 +1,29 @@
+name: Demo
+description: Plan a sprint demo or showcase.
+title: "[DEMO]: "
+labels: ["demo"]
+body:
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint
+  - type: input
+    id: date
+    attributes:
+      label: Demo Date
+  - type: textarea
+    id: overview
+    attributes:
+      label: Demo Overview
+  - type: textarea
+    id: stories
+    attributes:
+      label: Stories Being Demonstrated
+  - type: textarea
+    id: success
+    attributes:
+      label: Success Criteria
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

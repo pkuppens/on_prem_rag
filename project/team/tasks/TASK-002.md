@@ -3,7 +3,7 @@
 **ID**: TASK-002
 **Story**: [STORY-001: Development Environment Setup](../stories/STORY-001.md)
 **Assignee**: DevOps Engineer
-**Status**: Todo
+**Status**: Completed
 **Effort**: 6 hours
 **Created**: 2025-05-31
 **Updated**: 2025-06-10

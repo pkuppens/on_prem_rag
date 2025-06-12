@@ -66,29 +66,30 @@ Demonstration of containerized semantic search application for uploaded document
 
 1. **Setup & Configuration** (2 min)
 
-   - Container startup demonstration
-   - Configuration walkthrough
-   - Resource monitoring setup
+   - *Introduction*: quick recap of our containerized semantic search stack and what the audience will see
+   - *Container startup*: start the docker compose stack from the desktop terminal – see [docs/TEST_DOCKER.md](../../../docs/TEST_DOCKER.md) for build details
+   - *Configuration walkthrough*: highlight the UI settings, especially the embedding mode selector (**Fast** vs **Precise**) – model options are documented in [docs/EMBEDDING_MODEL_SETUP.md](../../../docs/EMBEDDING_MODEL_SETUP.md)
+   - *Resource monitoring*: show a brief `docker stats` output to confirm CPU and memory usage
 
 2. **Document Management** (3 min)
 
-   - Document upload workflow
-   - Processing pipeline visualization
-   - Chunking strategy explanation
-   - Embedding generation display
+   - Document upload workflow – open a file browser and drag four curated files into the upload area
+   - Processing pipeline visualization – show a simple Mermaid diagram while the documents process
+   - Chunking strategy explanation – reference [docs/technical/CHUNKING.md](../../../docs/technical/CHUNKING.md)
+   - Embedding generation display – watch the progress indicator as vectors are created
 
 3. **Search Demonstration** (5 min)
 
-   - Keyword search examples
-   - Semantic query capabilities
-   - Result ranking demonstration
-   - Context preservation showcase
+   - Keyword search examples – simple term search to show baseline behavior
+   - Semantic query capabilities – ask a natural language question and highlight matched snippets
+   - Result ranking demonstration – explain why the top result is most relevant
+   - Context preservation showcase – open the document section to show surrounding text
 
 4. **Technical Deep-Dive** (5 min)
-   - Architecture overview
-   - Security implementation
-   - Performance metrics
-   - Scaling capabilities
+   - Architecture overview – diagram of backend, vector store, and UI (see [docs/DOCKER_TECHNICAL.md](../../../docs/DOCKER_TECHNICAL.md))
+   - Security implementation – login screen and placeholder auth, roadmap for improved controls
+   - Performance metrics – share baseline response times from container logs
+   - Scaling capabilities – discuss testing with 100+ documents and multiple concurrent users
 
 ## Success Criteria
 
@@ -136,3 +137,11 @@ Prepare for common questions:
 - [ ] Additional file format support (STORY-005)
 - [ ] Enhanced security features (STORY-006)
 - [ ] Improved result visualization (STORY-007)
+
+## Demo Best Practices
+
+- Use the [sprint-demo template](../templates/sprint-demo.md) for consistent structure
+- Update this document throughout the sprint and finalize it one day before presenting
+- Keep language concise and link to related stories, features, and technical docs
+- Run `pre-commit run --files <file>` before committing changes
+- Manage dependencies with `uv add` as described in [AGENTS.md](../../../AGENTS.md)

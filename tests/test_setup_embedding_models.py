@@ -255,7 +255,7 @@ class TestSetupEmbeddingModels:
             mock_li.assert_not_called()
 
     @pytest.mark.slow
-    @pytest.mark.requires_internet
+    @pytest.mark.internet
     def test_real_model_download_sentence_transformer(self, tmp_path, monkeypatch):
         """Download a small model from Hugging Face and verify caching.
 

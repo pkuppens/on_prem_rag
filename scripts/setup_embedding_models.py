@@ -102,6 +102,11 @@ def main():
     print("🚀 Setting up embedding models for local development...")
     print("=" * 60)
 
+    # Check for dry run mode
+    is_dry_run = "--dry-run" in sys.argv
+    if is_dry_run:
+        print("🔍 Running in dry-run mode - no models will be downloaded")
+
     # Setup cache directories
     hf_home, transformers_cache, sentence_transformers_home = setup_cache_directories()
 
@@ -120,35 +125,48 @@ def main():
     total_count = len(models_to_download)
 
     for download_type, model_name in models_to_download:
-        if download_type == "sentence_transformer":
-            success = download_sentence_transformer_model(model_name)
-        elif download_type == "transformers":
-            success = download_transformers_model(model_name)
-        elif download_type == "llamaindex":
-            success = download_llamaindex_embedding(model_name)
+        if is_dry_run:
+            print(f"📝 Would download {download_type} model: {model_name}")
+            success = True
         else:
-            print(f"❌ Unknown download type: {download_type}")
-            success = False
+            if download_type == "sentence_transformer":
+                success = download_sentence_transformer_model(model_name)
+            elif download_type == "transformers":
+                success = download_transformers_model(model_name)
+            elif download_type == "llamaindex":
+                success = download_llamaindex_embedding(model_name)
+            else:
+                print(f"❌ Unknown download type: {download_type}")
+                success = False
 
         if success:
             success_count += 1
 
     print("\n" + "=" * 60)
-    print(f"📊 Download Summary: {success_count}/{total_count} models downloaded successfully")
+    if is_dry_run:
+        print(f"📊 Dry Run Summary: {success_count}/{total_count} models would be downloaded")
+    else:
+        print(f"📊 Download Summary: {success_count}/{total_count} models downloaded successfully")
 
     if success_count == total_count:
-        print("🎉 All models downloaded successfully!")
-        print("\n📝 Environment Configuration:")
-        print(f"   HF_HOME: {hf_home}")
-        print(f"   TRANSFORMERS_CACHE: {transformers_cache}")
-        print(f"   SENTENCE_TRANSFORMERS_HOME: {sentence_transformers_home}")
-        print("\n💡 For offline testing, set these environment variables:")
-        print("   export TRANSFORMERS_OFFLINE=1")
-        print("   export HF_DATASETS_OFFLINE=1")
+        if is_dry_run:
+            print("✅ All models would be downloaded successfully!")
+        else:
+            print("🎉 All models downloaded successfully!")
+            print("\n📝 Environment Configuration:")
+            print(f"   HF_HOME: {hf_home}")
+            print(f"   TRANSFORMERS_CACHE: {transformers_cache}")
+            print(f"   SENTENCE_TRANSFORMERS_HOME: {sentence_transformers_home}")
+            print("\n💡 For offline testing, set these environment variables:")
+            print("   export TRANSFORMERS_OFFLINE=1")
+            print("   export HF_DATASETS_OFFLINE=1")
         return True
     else:
-        print(f"⚠️  {total_count - success_count} models failed to download")
-        print("   Check your internet connection and try again")
+        if is_dry_run:
+            print(f"⚠️  {total_count - success_count} models would fail to download")
+        else:
+            print(f"⚠️  {total_count - success_count} models failed to download")
+            print("   Check your internet connection and try again")
         return False
 
 

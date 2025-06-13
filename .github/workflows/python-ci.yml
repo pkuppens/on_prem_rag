@@ -33,9 +33,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.HF_HOME }}
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('**/pyproject.toml') }}
+          key: huggingface-models-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
-            ${{ runner.os }}-huggingface-
+            huggingface-models-
 
       - name: Setup Python environment
         run: |

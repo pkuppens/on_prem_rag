@@ -1,11 +1,26 @@
-"""Utility functions for embedding documents and storing embeddings."""
+"""Embedding generation and vector storage for the RAG pipeline.
+
+This module provides functionality for:
+- Converting text chunks to embeddings using HuggingFace models
+- Storing embeddings in ChromaDB vector store
+- Querying embeddings for similarity search
+- Centralized processing functions for all document types
+
+Key features:
+- HuggingFace embedding model integration
+- ChromaDB vector storage with persistence
+- Batch processing for efficiency
+- Deduplication based on content hashes
+- Comprehensive metadata preservation
+"""
 
 from __future__ import annotations
 
+import hashlib
 import logging
 from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from llama_index.core import Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -49,23 +64,83 @@ __all__ = [
 
 
 def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]]:
-    """Embed text nodes using a HuggingFace model."""
+    """Convert text nodes to embeddings using HuggingFace models.
+
+    Args:
+        nodes: List of Document objects containing text to embed
+        model_name: Name of the HuggingFace embedding model
+
+    Returns:
+        List of embedding vectors
+    """
     embed_model = HuggingFaceEmbedding(model_name=model_name)
-
     embeddings = []
-    total_nodes = len(nodes)
 
-    for i, node in enumerate(nodes, 1):
-        if i % 10 == 0 or i == total_nodes:  # Report progress every 10 embeddings or at the end
-            print(f"  Embedding progress: {i}/{total_nodes} chunks ({i / total_nodes:.1%})")
-
+    for node in nodes:
         embedding = embed_model.get_text_embedding(node.text)
         embeddings.append(embedding)
 
     return embeddings
 
 
-# Content hash function moved to chunking.py module
+def query_embeddings(
+    query: str,
+    model_name: str,
+    persist_dir: str | Path,
+    collection_name: str = "documents",
+    top_k: int = 5,
+) -> QueryResult:
+    """Query embeddings for similar content.
+
+    Args:
+        query: The text query to search for
+        model_name: Name of the HuggingFace embedding model
+        persist_dir: Directory containing the vector store
+        collection_name: Name of the collection to query
+        top_k: Maximum number of results to return
+
+    Returns:
+        Dictionary containing query results with metadata
+    """
+    # Create embedding for the query
+    embed_model = HuggingFaceEmbedding(model_name=model_name)
+    query_embedding = embed_model.get_text_embedding(query)
+
+    # Query the vector store using proper config
+    config = VectorStoreConfig(persist_directory=persist_dir, collection_name=collection_name)
+    manager = ChromaVectorStoreManager(config)
+
+    # Use the correct query method signature
+    ids, distances = manager.query(query_embedding, top_k)
+
+    # Get full results with metadata from the collection directly
+    if ids:
+        results = manager._collection.get(ids=ids, include=["documents", "metadatas"])
+
+        formatted_results = []
+        for i, doc_id in enumerate(ids):
+            metadata = results["metadatas"][i] if results["metadatas"] and i < len(results["metadatas"]) else {}
+            document_text = results["documents"][i] if results["documents"] and i < len(results["documents"]) else ""
+
+            formatted_results.append(
+                {
+                    "text": document_text,
+                    "similarity_score": 1 - distances[i],  # Convert distance to similarity
+                    "document_id": metadata.get("document_id", "unknown"),
+                    "document_name": metadata.get("document_name", "unknown"),
+                    "chunk_index": metadata.get("chunk_index", "unknown"),
+                    "record_id": doc_id,
+                    "page_number": metadata.get("page_number", "unknown"),
+                    "page_label": metadata.get("page_label", "unknown"),
+                }
+            )
+    else:
+        formatted_results = []
+
+    # Set primary result to the first result's text, or empty if no results
+    primary_result = formatted_results[0]["text"] if formatted_results else ""
+
+    return {"primary_result": primary_result, "all_results": formatted_results}
 
 
 def store_embeddings(
@@ -76,53 +151,119 @@ def store_embeddings(
     collection_name: str = "documents",
     deduplicate: bool = True,
 ) -> ChromaVectorStoreManager:
-    """Store embeddings in a Chroma vector store.
+    """Store embeddings in the vector database.
 
     Args:
-        ids: List of unique identifiers for the embeddings
+        ids: Unique identifiers for each embedding
         embeddings: List of embedding vectors
-        metadatas: List of metadata dictionaries
-        persist_dir: Directory to store the embeddings
+        metadatas: Metadata for each embedding
+        persist_dir: Directory to store the vector database
         collection_name: Name of the collection
         deduplicate: Whether to deduplicate based on content hash
+
+    Returns:
+        ChromaVectorStoreManager instance
     """
-    # Convert persist_dir to Path if it's a string
-    persist_dir = Path(persist_dir) if isinstance(persist_dir, str) else persist_dir
-    # Ensure the directory exists
-    persist_dir.mkdir(parents=True, exist_ok=True)
-    config = VectorStoreConfig(host=None, persist_directory=persist_dir, collection_name=collection_name)
+    config = VectorStoreConfig(persist_directory=persist_dir, collection_name=collection_name)
     manager = ChromaVectorStoreManager(config)
 
     if deduplicate and metadatas:
-        # Get existing content hashes
-        existing_hashes = set()
-        if manager._collection.count() > 0:
-            existing = manager._collection.get()
-            existing_hashes = {m.get("content_hash", "") for m in existing["metadatas"]}
+        # Filter out duplicates based on content hash or text content
+        unique_data = []
+        seen_content = set()
 
-        # Filter out duplicates
-        filtered_data = []
-        for id_, emb, meta in zip(ids, embeddings, metadatas, strict=False):
-            content_hash = generate_content_hash(meta["text"])
-            if content_hash not in existing_hashes:
-                meta["content_hash"] = content_hash
-                filtered_data.append((id_, emb, meta))
-                existing_hashes.add(content_hash)
+        for i, metadata in enumerate(metadatas):
+            # Try content_hash first, then fall back to text content
+            content_hash = metadata.get("content_hash")
+            if content_hash:
+                content_key = content_hash
+            else:
+                # Use text content as fallback for deduplication
+                content_key = metadata.get("text", f"id_{i}")
 
-        if filtered_data:
-            manager.add_embeddings(
-                ids=[d[0] for d in filtered_data],
-                embeddings=[d[1] for d in filtered_data],
-                metadatas=[d[2] for d in filtered_data],
-            )
-    else:
-        manager.add_embeddings(
-            ids=list(ids),
-            embeddings=[list(e) for e in embeddings],
-            metadatas=list(metadatas) if metadatas else None,
-        )
+            if content_key not in seen_content:
+                seen_content.add(content_key)
+                unique_data.append(i)
 
+        # Keep only unique entries
+        ids = [list(ids)[i] for i in unique_data]
+        embeddings = [embeddings[i] for i in unique_data]
+        metadatas = [metadatas[i] for i in unique_data]
+
+    # Only add embeddings if we have data to add
+    if ids and embeddings:
+        # Extract documents from metadata if available
+        documents = []
+        if metadatas:
+            for metadata in metadatas:
+                # Use 'text' field from metadata as document content
+                doc_text = metadata.get("text", "")
+                documents.append(doc_text)
+        else:
+            documents = [""] * len(ids)
+
+        # Add to collection with documents
+        manager._collection.add(ids=list(ids), embeddings=list(embeddings), metadatas=metadatas, documents=documents)
     return manager
+
+
+def process_document(
+    file_path: str | Path,
+    model_name: str,
+    *,
+    persist_dir: str | Path,
+    collection_name: str = "documents",
+    chunk_size: int = 512,
+    chunk_overlap: int = 50,
+    max_pages: int | None = None,
+    deduplicate: bool = True,
+) -> tuple[int, int]:
+    """Process any document type and store embeddings.
+
+    This is the centralized function for processing all document types (PDF, DOCX, TXT, MD).
+    It combines document loading, chunking, and embedding for convenience.
+
+    Args:
+        file_path: Path to the document file
+        model_name: Name of the HuggingFace embedding model
+        persist_dir: Directory to store the embeddings
+        collection_name: Name of the collection
+        chunk_size: Maximum size of each chunk in characters
+        chunk_overlap: Number of characters to overlap between chunks
+        max_pages: Maximum number of pages to process (None for all)
+        deduplicate: Whether to deduplicate based on content hash
+
+    Returns:
+        Tuple of (number_of_chunks, number_of_stored_records)
+    """
+    file_path = Path(file_path)
+
+    # Load the document
+    document_loader = DocumentLoader()
+    documents, document_metadata = document_loader.load_document(file_path)
+
+    # Limit pages if requested (mainly for PDFs)
+    if max_pages is not None and len(documents) > max_pages:
+        documents = documents[:max_pages]
+
+    # Chunk the documents using centralized chunking
+    chunking_result = chunk_documents(
+        documents,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        source_path=file_path,
+    )
+
+    # Create embeddings and store them
+    chunks_processed, records_stored = embed_chunks(
+        chunking_result,
+        model_name,
+        persist_dir=persist_dir,
+        collection_name=collection_name,
+        deduplicate=deduplicate,
+    )
+
+    return chunks_processed, records_stored
 
 
 def process_pdf(
@@ -138,63 +279,19 @@ def process_pdf(
 ) -> tuple[int, int]:
     """Process a PDF and store embeddings, returning counts.
 
-    This function combines document loading, chunking, and embedding
-    for convenience. For more control, use the separate functions.
+    This function is a convenience wrapper around process_document specifically for PDFs.
+    For new code, prefer using process_document() which handles all document types.
     """
-    pdf_path = Path(pdf_path)
-
-    # Load the document
-    document_loader = DocumentLoader()
-    documents, document_metadata = document_loader.load_document(pdf_path)
-
-    # Limit pages if requested
-    if max_pages is not None:
-        documents = documents[:max_pages]
-
-    # Chunk the documents
-    chunking_result = chunk_documents(
-        documents,
+    return process_document(
+        pdf_path,
+        model_name,
+        persist_dir=persist_dir,
+        collection_name=collection_name,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
-        source_path=pdf_path,
-    )
-
-    nodes = chunking_result.chunks
-
-    # Log first node for debugging
-    if nodes:
-        logger.debug(f"First node attributes: {vars(nodes[0])}")
-        logger.debug(f"First node metadata: {nodes[0].metadata}")
-
-    embeddings = embed_text_nodes(nodes, model_name)
-
-    # Enhanced metadata with document information
-    metadatas = []
-    for i, node in enumerate(nodes):
-        # Generate a stable document ID from the file path and chunk index
-        doc_id = f"{pdf_path.stem}_{i}"
-
-        metadatas.append(
-            {
-                "text": node.text,
-                "document_name": pdf_path.name,
-                "document_id": doc_id,
-                "chunk_index": i,
-                "page_number": node.metadata.get("page_label", "unknown"),
-                "source": str(pdf_path),
-            }
-        )
-
-    manager = store_embeddings(
-        [f"{pdf_path.stem}_{i}" for i in range(len(nodes))],  # Generate stable IDs
-        embeddings,
-        metadatas,
-        persist_dir,
-        collection_name,
+        max_pages=max_pages,
         deduplicate=deduplicate,
     )
-    count = manager._collection.count()
-    return len(nodes), count
 
 
 def chunk_pdf(
@@ -229,7 +326,7 @@ def chunk_pdf(
         documents = documents[:max_pages]
         print(f"Limited to first {len(documents)} pages")
 
-    # Chunk the documents
+    # Chunk the documents using centralized chunking
     print(f"Chunking documents with size={chunk_size}, overlap={chunk_overlap}")
     chunking_result = chunk_documents(
         documents,
@@ -253,7 +350,7 @@ def embed_chunks(
     """Embed chunks and store them in a vector database.
 
     Args:
-        chunking_result: Result from chunk_pdf function
+        chunking_result: Result from chunk_pdf function or chunk_documents
         model_name: Name of the HuggingFace embedding model
         persist_dir: Directory to store the embeddings
         collection_name: Name of the collection
@@ -263,7 +360,7 @@ def embed_chunks(
         Tuple of (number_of_chunks, number_of_stored_records)
     """
     nodes = chunking_result.chunks
-    pdf_path = Path(chunking_result.file_path)
+    file_path = Path(chunking_result.file_path)
 
     # Log first node for debugging
     if nodes:
@@ -278,22 +375,24 @@ def embed_chunks(
     metadatas = []
     for i, node in enumerate(nodes):
         # Generate a stable document ID from the file path and chunk index
-        doc_id = f"{pdf_path.stem}_{i}"
+        doc_id = f"{file_path.stem}_{i}"
 
         metadatas.append(
             {
                 "text": node.text,
-                "document_name": pdf_path.name,
+                "document_name": file_path.name,
                 "document_id": doc_id,
                 "chunk_index": i,
-                "page_number": node.metadata.get("page_label", "unknown"),
-                "source": str(pdf_path),
+                "page_number": node.metadata.get("page_number", "unknown"),
+                "page_label": node.metadata.get("page_label", "unknown"),
+                "source": str(file_path),
+                "content_hash": node.metadata.get("content_hash", ""),
             }
         )
 
     print(f"Storing {len(embeddings)} embeddings...")
     manager = store_embeddings(
-        [f"{pdf_path.stem}_{i}" for i in range(len(nodes))],  # Generate stable IDs
+        [f"{file_path.stem}_{i}" for i in range(len(nodes))],  # Generate stable IDs
         embeddings,
         metadatas,
         persist_dir,
@@ -303,71 +402,3 @@ def embed_chunks(
     count = manager._collection.count()
     print(f"Stored {count} records in vector database")
     return len(nodes), count
-
-
-def query_embeddings(
-    query: str,
-    model_name: str,
-    *,
-    persist_dir: str | Path,
-    collection_name: str = "documents",
-    top_k: int = 3,
-) -> QueryResult:
-    """Query the persisted embeddings and return texts with similarity scores.
-
-    Args:
-        query: The text to search for
-        model_name: Name of the HuggingFace embedding model to use
-        persist_dir: Directory where embeddings are stored
-        collection_name: Name of the collection to search in
-        top_k: Number of results to return
-
-    Returns:
-        A QueryResult containing:
-        - primary_result: The text of the most similar embedding
-        - all_results: List of all matching results with their similarity scores
-
-    Note:
-        Similarity scores are cosine similarities, ranging from -1 to 1.
-        Higher scores (closer to 1) indicate more similar embeddings.
-    """
-    # Convert persist_dir to Path if it's a string
-    persist_dir = Path(persist_dir) if isinstance(persist_dir, str) else persist_dir
-    # Ensure the directory exists
-    persist_dir.mkdir(parents=True, exist_ok=True)
-    config = VectorStoreConfig(host=None, persist_directory=persist_dir, collection_name=collection_name)
-    manager = ChromaVectorStoreManager(config)
-    embed_model = HuggingFaceEmbedding(model_name=model_name)
-    q_emb = embed_model.get_query_embedding(query)
-    ids, distances = manager.query(q_emb, top_k)
-
-    # Handle empty results
-    if not ids:
-        return QueryResult(primary_result="", all_results=[])
-
-    results = manager._collection.get(ids=ids)
-
-    # Convert distances to cosine similarities (ChromaDB returns L2 distances)
-    # Cosine similarity = 1 - (L2 distance^2 / 2)
-    similarities = [1 - (d * d / 2) for d in distances]
-
-    all_results = [
-        EmbeddingResult(
-            text=m.get("text", ""),
-            similarity_score=sim,
-            document_id=m.get("document_id", ""),
-            document_name=m.get("document_name", ""),
-            chunk_index=m.get("chunk_index", -1),
-            record_id=id_,
-            page_number=m.get("page_number", "unknown"),
-        )
-        for m, sim, id_ in zip(results["metadatas"], similarities, ids, strict=False)
-    ]
-
-    # Sort by similarity score in descending order
-    all_results.sort(key=lambda x: x["similarity_score"], reverse=True)
-
-    return QueryResult(
-        primary_result=all_results[0]["text"] if all_results else "",
-        all_results=all_results,
-    )

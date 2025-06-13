@@ -6,6 +6,11 @@ _Talk with your documents and data using LLMs without Cloud privacy and confiden
 
 This project delivers an **on-premises Retrieval-Augmented Generation (RAG) system** that enables organizations to leverage Large Language Models (LLMs) for document analysis and database querying while maintaining complete data sovereignty and regulatory compliance.
 
+## What We'll Build
+
+![image](https://github.com/user-attachments/assets/2ed5872e-9ab2-49e4-90bf-ca0f774a46e1)
+
+
 ### Business Value Proposition
 
 - **Data Privacy & Compliance**: Zero cloud dependencies ensure sensitive information never leaves your infrastructure

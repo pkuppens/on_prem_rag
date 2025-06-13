@@ -21,6 +21,7 @@ class TestEmbeddings:
     """Test the embedding functionality."""
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_embed_text_nodes(self):
         """Test embedding text nodes."""
         documents = [
@@ -82,6 +83,7 @@ class TestEmbeddings:
         assert manager._collection.count() == 2
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_process_pdf_integration(self, test_data_dir, test_case_dir):
         """Test the complete PDF processing pipeline."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"  # Use smaller PDF
@@ -103,6 +105,7 @@ class TestEmbeddings:
         assert records <= chunks  # Deduplication may reduce count
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_process_pdf_expected_values(self, test_data_dir, test_case_dir):
         """Test PDF processing returns expected values for specific test file."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"
@@ -125,6 +128,7 @@ class TestEmbeddings:
         assert records == chunks, "No duplicates expected in single PDF page"
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_query_embeddings(self, test_data_dir, test_case_dir):
         """Test querying stored embeddings."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"
@@ -183,6 +187,7 @@ class TestEmbeddings:
         assert result["all_results"] == []
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_embeddings_deterministic(self):
         """Test that embeddings are deterministic for same input."""
         document = Document(text="Consistent test content for deterministic testing.")
@@ -199,6 +204,7 @@ class TestEmbeddings:
                 assert abs(val1 - val2) < 1e-6  # Very small tolerance
 
     @pytest.mark.slow
+    @pytest.mark.internet
     def test_embedding_persistence(self, test_case_dir):
         """Test that embeddings persist correctly across sessions."""
         # Create test documents and generate real embeddings to match dimensions

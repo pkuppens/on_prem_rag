@@ -29,6 +29,7 @@ def setup_notebook():
         sys.path.insert(0, backend_path)
         print(f"Added {backend_path} to Python path.")
 
+
 SET_PATH_ON_IMPORT = True
 
 if __name__ == "__main__" or SET_PATH_ON_IMPORT:

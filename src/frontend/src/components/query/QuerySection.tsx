@@ -136,14 +136,14 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
                 } • Chunk {r.chunk_index} • Score: {r.similarity_score.toFixed(3)}
               </Typography>
               <Tooltip
-                title={r.text}
+                title={r.text || 'No text content available'}
                 placement="top"
                 arrow
                 enterDelay={500}
                 leaveDelay={200}
               >
                 <Typography variant="body2" sx={{ mt: 0.5, fontWeight: idx === selected ? 'medium' : 'normal' }}>
-                  {r.text.slice(0, 150)}{r.text.length > 150 ? '...' : ''}
+                  {r.text ? `${r.text.slice(0, 150)}${r.text.length > 150 ? '...' : ''}` : 'No text content available'}
                 </Typography>
               </Tooltip>
             </Paper>

@@ -32,7 +32,7 @@ We will implement a modern drag-and-drop interface using React and TypeScript, w
 
 ## Tasks
 
-- [ ] **[TASK-021](../tasks/TASK-021.md)**: Django Project Setup - Backend Developer - 1 day
+- [ ] **[TASK-021](../tasks/TASK-021.md)**: FastAPI Project Setup - Backend Developer - 1 day
 - [ ] **[TASK-018](../tasks/TASK-018.md)**: Implement Document Upload Component - Frontend Developer - 2 days
 - [ ] **[TASK-019](../tasks/TASK-019.md)**: Document Processing Integration - Backend Developer - 3 days
 

@@ -363,7 +363,7 @@ class TestSetupEmbeddingModels:
             mock_tokenizer.from_pretrained.assert_called_once()
             assert mock_tokenizer.from_pretrained.call_args[0][0] == "test-model"
             assert mock_tokenizer.from_pretrained.call_args[1].get("local_files_only") is True
-            
+
             mock_model.from_pretrained.assert_called_once()
             assert mock_model.from_pretrained.call_args[0][0] == "test-model"
             assert mock_model.from_pretrained.call_args[1].get("local_files_only") is True

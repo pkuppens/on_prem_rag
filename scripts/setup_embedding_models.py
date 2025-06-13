@@ -54,6 +54,27 @@ def setup_cache_directories():
 def download_sentence_transformer_model(model_name: str):
     """Download a sentence transformer model."""
     print(f"\n📥 Downloading sentence-transformers model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            model = SentenceTransformer(model_name, device="cpu")
+            cache_path = model.cache_folder if hasattr(model, "cache_folder") else "default location"
+            print(f"✅ Model found in cache at: {cache_path}")
+
+            # Test the model works
+            test_embedding = model.encode("Test sentence")
+            print(f"✅ Model test successful - embedding dimension: {len(test_embedding)}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         model = SentenceTransformer(model_name)
         cache_path = model.cache_folder if hasattr(model, "cache_folder") else "default location"
@@ -71,6 +92,28 @@ def download_sentence_transformer_model(model_name: str):
 def download_transformers_model(model_name: str):
     """Download a transformers model (tokenizer + model)."""
     print(f"\n📥 Downloading transformers model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+            model = AutoModel.from_pretrained(model_name, local_files_only=True)
+            print(f"✅ Model found in cache")
+
+            # Test the model works
+            inputs = tokenizer("Test sentence", return_tensors="pt")
+            outputs = model(**inputs)
+            print(f"✅ Model test successful - output shape: {outputs.last_hidden_state.shape}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name)
@@ -89,6 +132,23 @@ def download_transformers_model(model_name: str):
 def download_llamaindex_embedding(model_name: str):
     """Download a model via LlamaIndex HuggingFaceEmbedding."""
     print(f"\n📥 Downloading LlamaIndex embedding model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            embed_model = HuggingFaceEmbedding(model_name=model_name, local_files_only=True)
+            test_embedding = embed_model.get_text_embedding("Test sentence")
+            print(f"✅ Model found in cache and tested - dimension: {len(test_embedding)}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         embed_model = HuggingFaceEmbedding(model_name=model_name)
         test_embedding = embed_model.get_text_embedding("Test sentence")

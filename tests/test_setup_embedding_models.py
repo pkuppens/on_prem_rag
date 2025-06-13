@@ -281,17 +281,43 @@ class TestSetupEmbeddingModels:
         # Setup cache directories
         setup_embedding_models.setup_cache_directories()
 
-        # Download the model
-        result = setup_embedding_models.download_sentence_transformer_model(test_model)
+        # Check if we're in offline mode
+        if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+            pytest.skip("Test requires internet access but TRANSFORMERS_OFFLINE=1")
 
-        # Verify successful download
-        assert result is True, f"Failed to download model: {test_model}"
+        try:
+            # Download the model
+            result = setup_embedding_models.download_sentence_transformer_model(test_model)
 
-        # Verify cache directory contains model files
-        cache_path = Path(cache_dir / "sentence_transformers")
-        assert cache_path.exists(), "Cache directory should exist after model download"
+            # Verify successful download
+            assert result is True, (
+                f"Failed to download model: {test_model}. "
+                "This could be due to:\n"
+                "1. No internet connection\n"
+                "2. Hugging Face servers are down\n"
+                "3. Model name is incorrect\n"
+                "4. Cache directory permissions issues"
+            )
 
-        # The model should be cached somewhere in the directory structure
-        # Note: Exact structure may vary by version, so we just check that files were created
-        cached_files = list(cache_path.rglob("*"))
-        assert len(cached_files) > 0, "No files were cached. Check network access or model name."
+            # Verify cache directory contains model files
+            cache_path = Path(cache_dir / "sentence_transformers")
+            assert cache_path.exists(), f"Cache directory should exist after model download. Expected path: {cache_path}"
+
+            # The model should be cached somewhere in the directory structure
+            cached_files = list(cache_path.rglob("*"))
+            assert len(cached_files) > 0, (
+                "No files were cached. This could be due to:\n"
+                "1. Network access issues\n"
+                "2. Incorrect model name\n"
+                "3. Cache directory permissions\n"
+                f"Cache path: {cache_path}"
+            )
+
+        except Exception as e:
+            pytest.fail(
+                f"Test failed with error: {str(e)}\n"
+                "This could be due to:\n"
+                "1. Network connectivity issues\n"
+                "2. Hugging Face API changes\n"
+                "3. Model repository access issues"
+            )

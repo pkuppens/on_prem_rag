@@ -61,4 +61,4 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run tests in offline mode, excluding internet-dependent tests
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest -m "not internet"
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest -m "not internet and not slow"

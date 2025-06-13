@@ -135,7 +135,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
                     : r.page_number
                 } • Chunk {r.chunk_index} • Score: {r.similarity_score.toFixed(3)}
               </Typography>
-              <Tooltip 
+              <Tooltip
                 title={r.text}
                 placement="top"
                 arrow

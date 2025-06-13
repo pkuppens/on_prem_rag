@@ -74,5 +74,5 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 
     skip_marker = pytest.mark.skip(reason="requires internet access")
     for item in items:
-        if "requires_internet" in item.keywords:
+        if "internet" in item.keywords:
             item.add_marker(skip_marker)

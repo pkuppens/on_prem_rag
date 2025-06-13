@@ -226,7 +226,7 @@ enable documentation lookups and model downloads:
 - `github.com` - documentation and setup scripts
 - `openai.com` - API references
 
-Without access to these domains, tests marked with `requires_internet` will be
+Without access to these domains, tests marked with `internet` will be
 skipped.
 
 #### Troubleshooting Setup Issues

@@ -216,6 +216,19 @@ curl -I https://github.com/astral-sh/uv
 nslookup pypi.org
 ```
 
+###### Allowed Domains
+
+Codex workspaces may restrict outbound network access. Allow these domains to
+enable documentation lookups and model downloads:
+
+- `pypi.org` - Python packages
+- `huggingface.co` - embedding and model downloads
+- `github.com` - documentation and setup scripts
+- `openai.com` - API references
+
+Without access to these domains, tests marked with `internet` will be
+skipped.
+
 #### Troubleshooting Setup Issues
 
 ##### uv Installation Fails
@@ -306,6 +319,7 @@ The project uses pytest markers to categorize tests:
 
 - **Fast tests**: Complete in <10 seconds, suitable for quick verification
 - **Slow tests**: Take >10 seconds, involve model loading, PDF processing, etc.
+- **Requires internet**: Perform network downloads. Run with `--run-internet` to enable.
 
 **Testing Commands:**
 

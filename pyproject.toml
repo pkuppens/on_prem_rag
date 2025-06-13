@@ -71,6 +71,7 @@ dev = [
     "pre-commit>=4.2.0",
     "jupyter>=1.0.0",
     "nbstripout>=0.6.1",
+    "nbformat>=5.10.4",
 ]
 
 [tool.ruff]
@@ -183,6 +184,12 @@ exclude_lines = [
     "pass",                       # Empty implementations
 ]
 show_missing = true # Show line numbers of missing coverage
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]
+
 
 # Test commands for different scenarios:
 # - Basic test with coverage: uv run pytest --cov=src/backend --cov-report=term

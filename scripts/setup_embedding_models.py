@@ -54,6 +54,27 @@ def setup_cache_directories():
 def download_sentence_transformer_model(model_name: str):
     """Download a sentence transformer model."""
     print(f"\n📥 Downloading sentence-transformers model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            model = SentenceTransformer(model_name, device="cpu")
+            cache_path = model.cache_folder if hasattr(model, "cache_folder") else "default location"
+            print(f"✅ Model found in cache at: {cache_path}")
+
+            # Test the model works
+            test_embedding = model.encode("Test sentence")
+            print(f"✅ Model test successful - embedding dimension: {len(test_embedding)}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         model = SentenceTransformer(model_name)
         cache_path = model.cache_folder if hasattr(model, "cache_folder") else "default location"
@@ -71,6 +92,28 @@ def download_sentence_transformer_model(model_name: str):
 def download_transformers_model(model_name: str):
     """Download a transformers model (tokenizer + model)."""
     print(f"\n📥 Downloading transformers model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+            model = AutoModel.from_pretrained(model_name, local_files_only=True)
+            print(f"✅ Model found in cache")
+
+            # Test the model works
+            inputs = tokenizer("Test sentence", return_tensors="pt")
+            outputs = model(**inputs)
+            print(f"✅ Model test successful - output shape: {outputs.last_hidden_state.shape}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name)
@@ -89,6 +132,23 @@ def download_transformers_model(model_name: str):
 def download_llamaindex_embedding(model_name: str):
     """Download a model via LlamaIndex HuggingFaceEmbedding."""
     print(f"\n📥 Downloading LlamaIndex embedding model: {model_name}")
+
+    # Check if we're in offline mode
+    if os.environ.get("TRANSFORMERS_OFFLINE") == "1":
+        print("⚠️  Running in offline mode (TRANSFORMERS_OFFLINE=1)")
+        print("   Checking if model is already cached...")
+
+        # Try to load the model from cache
+        try:
+            embed_model = HuggingFaceEmbedding(model_name=model_name, local_files_only=True)
+            test_embedding = embed_model.get_text_embedding("Test sentence")
+            print(f"✅ Model found in cache and tested - dimension: {len(test_embedding)}")
+            return True
+        except Exception as e:
+            print(f"❌ Model not found in cache: {e}")
+            print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
+            return False
+
     try:
         embed_model = HuggingFaceEmbedding(model_name=model_name)
         test_embedding = embed_model.get_text_embedding("Test sentence")
@@ -110,6 +170,11 @@ def main():
     if args.dry_run:
         print("📋 Running in DRY-RUN mode - directories will be set up but no models will be downloaded")
     print("=" * 60)
+
+    # Check for dry run mode
+    is_dry_run = "--dry-run" in sys.argv
+    if is_dry_run:
+        print("🔍 Running in dry-run mode - no models will be downloaded")
 
     # Setup cache directories
     hf_home, transformers_cache, sentence_transformers_home = setup_cache_directories()
@@ -139,35 +204,48 @@ def main():
     total_count = len(models_to_download)
 
     for download_type, model_name in models_to_download:
-        if download_type == "sentence_transformer":
-            success = download_sentence_transformer_model(model_name)
-        elif download_type == "transformers":
-            success = download_transformers_model(model_name)
-        elif download_type == "llamaindex":
-            success = download_llamaindex_embedding(model_name)
+        if is_dry_run:
+            print(f"📝 Would download {download_type} model: {model_name}")
+            success = True
         else:
-            print(f"❌ Unknown download type: {download_type}")
-            success = False
+            if download_type == "sentence_transformer":
+                success = download_sentence_transformer_model(model_name)
+            elif download_type == "transformers":
+                success = download_transformers_model(model_name)
+            elif download_type == "llamaindex":
+                success = download_llamaindex_embedding(model_name)
+            else:
+                print(f"❌ Unknown download type: {download_type}")
+                success = False
 
         if success:
             success_count += 1
 
     print("\n" + "=" * 60)
-    print(f"📊 Download Summary: {success_count}/{total_count} models downloaded successfully")
+    if is_dry_run:
+        print(f"📊 Dry Run Summary: {success_count}/{total_count} models would be downloaded")
+    else:
+        print(f"📊 Download Summary: {success_count}/{total_count} models downloaded successfully")
 
     if success_count == total_count:
-        print("🎉 All models downloaded successfully!")
-        print("\n📝 Environment Configuration:")
-        print(f"   HF_HOME: {hf_home}")
-        print(f"   TRANSFORMERS_CACHE: {transformers_cache}")
-        print(f"   SENTENCE_TRANSFORMERS_HOME: {sentence_transformers_home}")
-        print("\n💡 For offline testing, set these environment variables:")
-        print("   export TRANSFORMERS_OFFLINE=1")
-        print("   export HF_DATASETS_OFFLINE=1")
+        if is_dry_run:
+            print("✅ All models would be downloaded successfully!")
+        else:
+            print("🎉 All models downloaded successfully!")
+            print("\n📝 Environment Configuration:")
+            print(f"   HF_HOME: {hf_home}")
+            print(f"   TRANSFORMERS_CACHE: {transformers_cache}")
+            print(f"   SENTENCE_TRANSFORMERS_HOME: {sentence_transformers_home}")
+            print("\n💡 For offline testing, set these environment variables:")
+            print("   export TRANSFORMERS_OFFLINE=1")
+            print("   export HF_DATASETS_OFFLINE=1")
         return True
     else:
-        print(f"⚠️  {total_count - success_count} models failed to download")
-        print("   Check your internet connection and try again")
+        if is_dry_run:
+            print(f"⚠️  {total_count - success_count} models would fail to download")
+        else:
+            print(f"⚠️  {total_count - success_count} models failed to download")
+            print("   Check your internet connection and try again")
         return False
 
 

@@ -24,6 +24,15 @@ export const PDFViewer = ({ selectedResult }: Props) => {
   const [numPages, setNumPages] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
+  const handleCopy = () => {
+    const selectedText = window.getSelection()?.toString();
+    const textToCopy = selectedText?.trim() ? selectedText : selectedResult?.text;
+    if (!textToCopy) return;
+    navigator.clipboard.writeText(textToCopy).catch((err) => {
+      Logger.error('Copy failed', 'PDFViewer.tsx', 'handleCopy', 25, { err });
+    });
+  };
+
   useEffect(() => {
     if (selectedResult) {
       const pageNum = Number(selectedResult.page_number);
@@ -74,6 +83,9 @@ export const PDFViewer = ({ selectedResult }: Props) => {
           {selectedResult.document_name}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button onClick={handleCopy} size="small" variant="outlined">
+            Copy Text
+          </Button>
           <Button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
@@ -132,7 +144,7 @@ export const PDFViewer = ({ selectedResult }: Props) => {
           <Page
             pageNumber={page}
             width={Math.min(800, window.innerWidth * 0.6)}
-            renderTextLayer={false}
+            renderTextLayer
             renderAnnotationLayer={false}
           />
         </PDFDocument>

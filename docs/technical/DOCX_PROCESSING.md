@@ -74,6 +74,13 @@ pytest tests/test_docx_utils.py
 - [python-docx Documentation](https://python-docx.readthedocs.io/)
 - [Chunking and Embedding](CHUNKING.md)
 
+## Code Files
+
+- [src/backend/rag_pipeline/utils/docx_utils.py](../../src/backend/rag_pipeline/utils/docx_utils.py) - Extraction and cleaning helpers
+- [src/frontend/src/components/docx/DOCXViewer.tsx](../../src/frontend/src/components/docx/DOCXViewer.tsx) - Frontend viewer component
+- [src/frontend/src/components/text/TextViewer.tsx](../../src/frontend/src/components/text/TextViewer.tsx) - Fallback viewer for text files
+- [tests/test_docx_utils.py](../../tests/test_docx_utils.py) - Validation tests for DOCX handling
+
 ## Differences from PDF Processing
 
 While similar to PDF processing, DOCX processing has some key differences:

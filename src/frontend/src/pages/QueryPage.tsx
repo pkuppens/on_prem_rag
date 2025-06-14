@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { PDFViewer } from '../components/pdf/PDFViewer';
 import { DOCXViewer } from '../components/docx/DOCXViewer';
+import { TextViewer } from '../components/text/TextViewer';
 import { pdfjs } from '../utils/pdfSetup';
 import axios from 'axios';
 import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
@@ -61,6 +62,9 @@ export const QueryPage = () => {
         return <PDFViewer selectedResult={selectedResult} />;
       case 'docx':
         return <DOCXViewer selectedResult={selectedResult} />;
+      case 'txt':
+      case 'md':
+        return <TextViewer selectedResult={selectedResult} />;
       default:
         return (
           <Paper sx={{ p: 4, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

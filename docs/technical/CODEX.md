@@ -319,7 +319,7 @@ The project uses pytest markers to categorize tests:
 
 - **Fast tests**: Complete in <10 seconds, suitable for quick verification
 - **Slow tests**: Take >10 seconds, involve model loading, PDF processing, etc.
-- **Requires internet**: Perform network downloads. Run with `--run-internet` to enable.
+- **Internet tests** (`internet` mark): Perform network downloads. They are skipped on Codex and CI. Use `--run-internet` locally to enable.
 
 **Testing Commands:**
 
@@ -335,6 +335,12 @@ uv run pytest -m slow
 
 # Run tests with coverage
 uv run pytest --cov=src/backend --cov-report=term
+
+# Skip internet tests (default in Codex/CI)
+uv run pytest -- --no-internet
+
+# Run internet tests
+uv run pytest -- --run-internet
 ```
 
 **If setup fails:**

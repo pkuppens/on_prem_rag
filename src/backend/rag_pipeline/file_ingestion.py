@@ -6,6 +6,7 @@ import logging
 import os
 import subprocess
 import sys
+import traceback
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, UploadFile, WebSocket
@@ -155,7 +156,7 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
             logger.debug("File saved to", filename=str(file_path))
             upload_progress[file.filename] = 10
 
-        # Use centralized document processing for consistent chunking and embedding
+        # Always process the document, even if it was processed before
         try:
             chunks_processed, records_stored = process_document(
                 file_path,
@@ -164,13 +165,8 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
                 collection_name=vector_store_manager.config.collection_name,
                 chunk_size=params.chunking.chunk_size,
                 chunk_overlap=params.chunking.chunk_overlap,
-                deduplicate=True,
+                deduplicate=False,  # Changed to False to always process
             )
-
-            if chunks_processed == 0:
-                logger.debug("No new chunks processed (duplicate file)", filename=str(file_path))
-                upload_progress[file.filename] = 100
-                return {"message": "Duplicate file", "filename": file.filename}
 
             logger.info("Document processing completed", filename=file.filename, chunks=chunks_processed, records=records_stored)
             upload_progress[file.filename] = 95
@@ -218,8 +214,10 @@ async def websocket_progress(websocket: WebSocket):
 
     try:
         while True:
-            # Send current progress for all files
-            await websocket.send_json(upload_progress)
+            # Filter out completed files (100%) and send current progress
+            active_progress = {k: v for k, v in upload_progress.items() if v < 100}
+            if active_progress:  # Only send if there are active uploads
+                await websocket.send_json(active_progress)
             await asyncio.sleep(0.5)
     except Exception as e:
         logger.error("WebSocket error", error=str(e))
@@ -300,9 +298,10 @@ async def serve_file(filename: str):
         # Set media type based on file extension
         media_type = "application/pdf" if filename.lower().endswith(".pdf") else None
 
-        return FileResponse(
-            path=file_path,
-            filename=filename,
+        # Ensure all path objects are converted to strings
+        response = FileResponse(
+            path=str(file_path),
+            filename=filename,  # filename is already a string
             media_type=media_type,
             headers={
                 "Access-Control-Allow-Origin": "http://localhost:5173",
@@ -312,18 +311,26 @@ async def serve_file(filename: str):
             },
         )
 
+        return response
+
     except HTTPException:
         raise  # Re-raise HTTP exceptions as-is
     except Exception as e:
-        logger.error(
-            "Error serving file",
-            filename=filename,
-            error=str(e),
-            error_type=type(e).__name__,
-            upload_dir=str(uploaded_files_dir),
-            upload_dir_exists=uploaded_files_dir.exists(),
-        )
-        raise HTTPException(status_code=500, detail=f"Internal server error while serving file: {str(e)}") from e
+        error_info = {
+            "error": str(e),
+            "error_type": type(e).__name__,
+            "filename": filename,
+            "file_path": str(file_path),
+            "upload_dir": str(uploaded_files_dir),
+            "upload_dir_exists": uploaded_files_dir.exists(),
+            "upload_dir_contents": [str(p) for p in uploaded_files_dir.iterdir()],
+            "stack_trace": traceback.format_exc(),
+        }
+        logger.error("Error serving file", **error_info)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal server error while serving file: {str(e)}. Error type: {type(e).__name__}. File: {filename}. Path: {str(file_path)}",
+        ) from e
 
 
 def start_server():

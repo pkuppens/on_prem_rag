@@ -23,12 +23,23 @@ export const PDFViewer = ({ selectedResult }: Props) => {
   const [page, setPage] = useState(1);
   const [numPages, setNumPages] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [selection, setSelection] = useState<string>('');
+
+  const handleCopy = () => {
+    const selectedText = selection || window.getSelection()?.toString();
+    const textToCopy = selectedText?.trim() ? selectedText : selectedResult?.text;
+    if (!textToCopy) return;
+    navigator.clipboard.writeText(textToCopy).catch((err) => {
+      Logger.error('Copy failed', 'PDFViewer.tsx', 'handleCopy', 25, { err });
+    });
+  };
 
   useEffect(() => {
     if (selectedResult) {
       const pageNum = Number(selectedResult.page_number);
       setPage(pageNum && pageNum > 0 ? pageNum : 1);
       setError(null);
+      setSelection('');
 
       // Log the PDF URL for debugging
       const pdfUrl = `http://localhost:8000/files/${selectedResult.document_name}`;
@@ -37,6 +48,16 @@ export const PDFViewer = ({ selectedResult }: Props) => {
         document_name: selectedResult.document_name,
         page_number: selectedResult.page_number
       });
+
+      // Attempt to highlight the matched text when the page renders
+      setTimeout(() => {
+        try {
+          const found = window.find(selectedResult.text);
+          Logger.debug('Highlight result', 'PDFViewer.tsx', 'useEffect', 33, { found });
+        } catch (err) {
+          Logger.warn('Highlight failed', 'PDFViewer.tsx', 'useEffect', 35, { err });
+        }
+      }, 500);
     }
   }, [selectedResult]);
 
@@ -74,6 +95,9 @@ export const PDFViewer = ({ selectedResult }: Props) => {
           {selectedResult.document_name}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button onClick={handleCopy} size="small" variant="outlined">
+            Copy Text
+          </Button>
           <Button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
@@ -113,7 +137,7 @@ export const PDFViewer = ({ selectedResult }: Props) => {
         borderRadius: 1,
         overflow: 'auto',
         maxHeight: '80vh'
-      }}>
+      }} onMouseUp={() => setSelection(window.getSelection()?.toString() || '')}>
         <PDFDocument
           file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
@@ -132,7 +156,7 @@ export const PDFViewer = ({ selectedResult }: Props) => {
           <Page
             pageNumber={page}
             width={Math.min(800, window.innerWidth * 0.6)}
-            renderTextLayer={false}
+            renderTextLayer
             renderAnnotationLayer={false}
           />
         </PDFDocument>

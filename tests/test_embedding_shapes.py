@@ -2,6 +2,8 @@ import pytest
 from rag_pipeline.config.parameter_sets import TEST_PARAMS
 
 
+@pytest.mark.slow
+@pytest.mark.internet
 def test_embedding_shape():
     pytest.importorskip("llama_index")
     from llama_index.core import Document

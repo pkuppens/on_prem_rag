@@ -53,6 +53,12 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         default=False,
         help="Run tests that require internet access",
     )
+    parser.addoption(
+        "--no-internet",
+        action="store_true",
+        default=False,
+        help="Skip internet tests regardless of connectivity",
+    )
 
 
 def _internet_available() -> bool:
@@ -69,10 +75,12 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     """Skip internet tests when no connectivity or flag is set."""
 
     run_internet = config.getoption("--run-internet")
-    if run_internet and _internet_available():
+    no_internet = config.getoption("--no-internet")
+    if run_internet and not no_internet and _internet_available():
         return
 
-    skip_marker = pytest.mark.skip(reason="requires internet access")
-    for item in items:
-        if "internet" in item.keywords:
-            item.add_marker(skip_marker)
+    if no_internet or not _internet_available():
+        skip_marker = pytest.mark.skip(reason="requires internet access")
+        for item in items:
+            if "internet" in item.keywords:
+                item.add_marker(skip_marker)

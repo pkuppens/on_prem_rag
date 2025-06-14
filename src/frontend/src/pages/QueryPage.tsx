@@ -7,7 +7,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Document as PDFDocument, Page } from 'react-pdf';
+import { PDFViewer } from '../components/pdf/PDFViewer';
+import { DOCXViewer } from '../components/docx/DOCXViewer';
 import { pdfjs } from '../utils/pdfSetup';
 import axios from 'axios';
 import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
@@ -23,91 +24,114 @@ interface EmbeddingResult {
   page_label?: string;
 }
 
-interface QueryResponse {
-  primary_result: string;
-  all_results: EmbeddingResult[];
-}
-
 export const QueryPage = () => {
-  const [paramSet, setParamSet] = useState('fast');
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<EmbeddingResult[]>([]);
-  const [selected, setSelected] = useState(0);
-  const [page, setPage] = useState(1);
+  const [selectedResult, setSelectedResult] = useState<EmbeddingResult | null>(null);
+  const [paramSet, setParamSet] = useState('default');
 
-  const runQuery = async () => {
-    const res = await axios.post<QueryResponse>('http://localhost:8000/api/query', {
-      query,
-      params_name: paramSet,
-    });
-    setResults(res.data.all_results);
-    if (res.data.all_results.length > 0) {
-      const first = res.data.all_results[0];
-      setSelected(0);
-      setPage(Number(first.page_number) || 1);
+  const handleQuery = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/query', {
+        query,
+        params_name: paramSet,
+      });
+      setResults(response.data);
+      setSelectedResult(null);
+    } catch (error) {
+      console.error('Error querying:', error);
     }
   };
 
-  const selectedResult = results[selected];
-  const pdfUrl = selectedResult
-    ? `http://localhost:8000/files/${selectedResult.document_name}`
-    : '';
+  const handleResultSelect = (result: EmbeddingResult) => {
+    setSelectedResult(result);
+  };
 
-  return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={4}>
-        <Box sx={{ mb: 2 }}>
-          <RAGParamsSelector value={paramSet} onChange={setParamSet} />
-        </Box>
-        <TextField
-          fullWidth
-          label="Keyword Query"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          sx={{ mb: 2 }}
-          size="medium"
-          variant="outlined"
-        />
-        <Button variant="contained" fullWidth onClick={runQuery} sx={{ mb: 2 }}>
-          Search
-        </Button>
-        {results.map((r, idx) => (
-          <Paper
-            key={idx}
-            onClick={() => {
-              setSelected(idx);
-              setPage(Number(r.page_number) || 1);
-            }}
-            sx={{
-              p: 1,
-              mb: 1,
-              cursor: 'pointer',
-              bgcolor: idx === selected ? 'action.hover' : undefined,
-            }}
-          >
-            <Typography variant="caption" sx={{ display: 'block' }}>
-              p.{r.page_number}
-            </Typography>
-            <Typography variant="body2" noWrap>
-              {r.text.slice(0, 100)}
+  const getFileType = (filename: string) => {
+    const extension = filename.split('.').pop()?.toLowerCase();
+    return extension;
+  };
+
+  const renderViewer = () => {
+    if (!selectedResult) return null;
+
+    const fileType = getFileType(selectedResult.document_name);
+    switch (fileType) {
+      case 'pdf':
+        return <PDFViewer selectedResult={selectedResult} />;
+      case 'docx':
+        return <DOCXViewer selectedResult={selectedResult} />;
+      default:
+        return (
+          <Paper sx={{ p: 4, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="body1" color="text.secondary">
+              Preview not available for this file type
             </Typography>
           </Paper>
-        ))}
-      </Grid>
-      <Grid item xs={12} md={8}>
-        {selectedResult && (
-          <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Button onClick={() => setPage((p) => Math.max(1, p - 1))}>Prev</Button>
-              <Typography>Page {page}</Typography>
-              <Button onClick={() => setPage((p) => p + 1)}>Next</Button>
+        );
+    }
+  };
+
+  return (
+    <Box sx={{ p: 3 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              <TextField
+                fullWidth
+                label="Enter your query"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleQuery()}
+              />
+              <Button variant="contained" onClick={handleQuery}>
+                Search
+              </Button>
             </Box>
-            <PDFDocument file={pdfUrl}>
-              <Page pageNumber={page} width={800} />
-            </PDFDocument>
-          </Box>
-        )}
+            <Box sx={{ mt: 2 }}>
+              <RAGParamsSelector value={paramSet} onChange={setParamSet} />
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 2, height: '100%' }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Search Results
+            </Typography>
+            {results.map((result, index) => (
+              <Paper
+                key={index}
+                sx={{
+                  p: 2,
+                  mb: 1,
+                  cursor: 'pointer',
+                  bgcolor: selectedResult === result ? 'action.selected' : 'background.paper',
+                  '&:hover': {
+                    bgcolor: 'action.hover',
+                  },
+                }}
+                onClick={() => handleResultSelect(result)}
+              >
+                <Typography variant="subtitle2" noWrap>
+                  {result.document_name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Score: {result.similarity_score.toFixed(3)}
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {result.text}
+                </Typography>
+              </Paper>
+            ))}
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          {renderViewer()}
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };

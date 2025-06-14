@@ -54,11 +54,15 @@ This module is part of FEAT-001 (Technical Foundation & MVP) and supports
 FEAT-002 (Enterprise User Interface) for document upload capabilities.
 """
 
+from __future__ import annotations
+
 import hashlib
 import logging
 from pathlib import Path
+from typing import Any
 
 # Import from LlamaIndex lazily to allow tests to run without optional deps
+# Removing this could be the cause for failing test_embedding_shapes.py tests
 Document = object
 SimpleDirectoryReader = object
 DocxReader = MarkdownReader = PDFReader = None
@@ -131,7 +135,7 @@ class DocumentLoader:
         return True, None
 
     def _get_metadata(self, file_path: Path, file_hash: str) -> DocumentMetadata:
-        """Create metadata for the document."""
+        """Create metadata object for a document."""
         return DocumentMetadata(
             file_path=str(file_path),
             file_hash=file_hash,
@@ -140,7 +144,7 @@ class DocumentLoader:
         )
 
     def load_document(self, file_path: str | Path) -> tuple[list[Document], DocumentMetadata]:
-        """Load and preprocess a document.
+        """Load a document and return its content and metadata.
 
         Args:
             file_path: Path to the document file
@@ -149,8 +153,7 @@ class DocumentLoader:
             Tuple of (list of Document objects, DocumentMetadata)
 
         Raises:
-            ValueError: If file validation fails
-            IOError: If file cannot be read
+            OSError: If file cannot be loaded or processed
         """
         file_path = Path(file_path)
 
@@ -159,7 +162,7 @@ class DocumentLoader:
         if not is_valid:
             raise ValueError(error_msg)
 
-        # Check for duplicates
+        # Check for duplicate files
         file_hash = self._compute_file_hash(file_path)
         if file_hash in self.processed_files:
             logger.info(f"Skipping duplicate file: {file_path}")
@@ -178,6 +181,9 @@ class DocumentLoader:
             # Update metadata
             metadata = self._get_metadata(file_path, file_hash)
             if file_path.suffix.lower() == ".pdf":
+                metadata.num_pages = len(documents)
+            elif file_path.suffix.lower() == ".docx":
+                # For DOCX, we use paragraphs as the basic unit
                 metadata.num_pages = len(documents)
 
             # Mark as processed

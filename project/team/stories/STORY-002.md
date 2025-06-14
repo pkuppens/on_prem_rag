@@ -66,6 +66,7 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
   - Implement performance benchmarks
   - Add error handling and edge case tests
   - Create test data generation utilities
+- [ ] **[TASK-023](../tasks/TASK-023.md)**: Upload Script for Batch Document Ingestion - Backend Engineer - 4h
 
 ## Definition of Done
 
@@ -109,6 +110,9 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
 | **Unsupported formats** | Medium | Validate file types and document supported formats in docs |
 | **Large documents**     | Medium | Implement chunking and streaming to manage memory          |
 | **Embedding errors**    | Low    | Add thorough logging and fallback for problematic pages    |
+
+## Progress
+- 2025-06-14: Added command-line upload script (TASK-023) for batch ingestion.
 
 ---
 

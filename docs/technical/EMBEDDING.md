@@ -87,6 +87,21 @@ Settings.embed_model = setup_embeddings(
 )
 ```
 
+### Retrieving Embedding Models
+
+Use `get_embedding_model` to load models from a local directory, existing cache,
+or download from Hugging Face if needed. The function respects the
+`TRANSFORMERS_OFFLINE` environment variable for offline testing.
+
+```python
+from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
+
+embed_model = get_embedding_model(
+    "sentence-transformers/all-MiniLM-L6-v2",
+    cache_dir="data/cache/huggingface",
+)
+```
+
 ### Document Processing and Embedding
 
 ```python
@@ -211,3 +226,5 @@ The 512 token limit affects our system in several ways:
 
 - [src/rag_pipeline/core/embeddings.py](../../src/rag_pipeline/core/embeddings.py) - Embedding generation and query utilities
 - [tests/test_embedding_shapes.py](../../tests/test_embedding_shapes.py) - Tests for embedding vector dimensions
+- [src/backend/rag_pipeline/utils/embedding_model_utils.py](../../src/backend/rag_pipeline/utils/embedding_model_utils.py) - Helper to load embedding models from cache or download
+- [tests/test_embedding_model_utils.py](../../tests/test_embedding_model_utils.py) - Tests for model retrieval logic

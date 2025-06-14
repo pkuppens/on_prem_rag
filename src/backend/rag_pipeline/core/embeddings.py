@@ -29,6 +29,7 @@ from backend.rag_pipeline.config.vector_store import VectorStoreConfig
 from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents, generate_content_hash
 from backend.rag_pipeline.core.document_loader import DocumentLoader
 from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
+from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -73,7 +74,7 @@ def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]
     Returns:
         List of embedding vectors
     """
-    embed_model = HuggingFaceEmbedding(model_name=model_name)
+    embed_model = get_embedding_model(model_name)
     embeddings = []
 
     for node in nodes:
@@ -103,7 +104,7 @@ def query_embeddings(
         Dictionary containing query results with metadata
     """
     # Create embedding for the query
-    embed_model = HuggingFaceEmbedding(model_name=model_name)
+    embed_model = get_embedding_model(model_name)
     query_embedding = embed_model.get_text_embedding(query)
 
     # Query the vector store using proper config

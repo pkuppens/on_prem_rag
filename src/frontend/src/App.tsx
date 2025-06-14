@@ -14,6 +14,8 @@ import Logger from './utils/logger';
 // Initialize PDF.js for secure on-premises deployment (must be imported early)
 import './utils/pdfSetup';
 import { PDFTestPage } from './pages/PDFTestPage';
+import DocxTestPage from './pages/DocxTestPage';
+import TextTestPage from './pages/TextTestPage';
 
 function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -81,6 +83,8 @@ function App() {
   // Check if we're on test pages
   const isThemeTestPage = window.location.search.includes('test=theme');
   const isPDFTestPage = window.location.search.includes('test=pdf');
+  const isDocxTestPage = window.location.search.includes('test=docx');
+  const isTextTestPage = window.location.search.includes('test=text');
 
   // If it's a test page, show only the test component without authentication
   if (isThemeTestPage) {
@@ -89,6 +93,12 @@ function App() {
 
   if (isPDFTestPage) {
     return <PDFTestPage />;
+  }
+  if (isDocxTestPage) {
+    return <DocxTestPage />;
+  }
+  if (isTextTestPage) {
+    return <TextTestPage />;
   }
 
   const handleFileSelect = async (files: File[]) => {

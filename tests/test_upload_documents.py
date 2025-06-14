@@ -45,3 +45,36 @@ class TestUploadDocuments:
         ):
             with pytest.raises(upload_documents.UploadError):
                 upload_documents.main(["--haltonerror", str(file_path)])
+
+    def test_direct_mode_uses_local_processing(self, tmp_path):
+        """--direct should invoke local processing function."""
+        file_path = tmp_path / "doc.txt"
+        file_path.write_text("data")
+
+        with patch("scripts.upload_documents.process_local_file") as mock_local:
+            result = upload_documents.main(["--direct", str(file_path)])
+
+        assert result == 0
+        mock_local.assert_called_once()
+
+    def test_upload_only_flag(self, tmp_path):
+        """--upload-only forwards True to process_local_file."""
+        file_path = tmp_path / "doc.txt"
+        file_path.write_text("data")
+
+        with patch("scripts.upload_documents.process_local_file") as mock_local:
+            upload_documents.main(["--direct", "--upload-only", str(file_path)])
+
+        mock_local.assert_called_once()
+        args, _ = mock_local.call_args
+        assert args[3] is True
+
+    def test_clear_flag_invokes_cleanup(self, tmp_path):
+        """--clear should call backend cleanup."""
+        file_path = tmp_path / "doc.txt"
+        file_path.write_text("data")
+
+        with patch("scripts.upload_documents.clear_backend") as mock_clear, patch("scripts.upload_documents.process_local_file"):
+            upload_documents.main(["--direct", "--clear", str(file_path)])
+
+        mock_clear.assert_called_once()

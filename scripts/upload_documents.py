@@ -13,10 +13,23 @@ from __future__ import annotations
 
 import argparse
 import logging
+import shutil
 from collections.abc import Iterable
 from pathlib import Path
 
 import httpx
+
+from backend.rag_pipeline.config.parameter_sets import get_param_set
+from backend.rag_pipeline.core.embeddings import process_document
+from backend.rag_pipeline.core.vector_store import (
+    get_vector_store_manager_from_env,
+)
+from backend.rag_pipeline.utils.directory_utils import (
+    ensure_directory_exists,
+    get_chunks_dir,
+    get_database_dir,
+    get_uploaded_files_dir,
+)
 
 DEFAULT_API_URL = "http://localhost:8000/api/documents/upload"
 DEFAULT_PARAM_SET = "fast"
@@ -60,6 +73,21 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--api-url", default=DEFAULT_API_URL, help="Upload API endpoint")
     parser.add_argument("--haltonerror", action="store_true", help="Stop processing on first error")
     parser.add_argument("--quiet", action="store_true", help="Suppress informational output")
+    parser.add_argument(
+        "--direct",
+        action="store_true",
+        help="Process files locally instead of calling the API",
+    )
+    parser.add_argument(
+        "--upload-only",
+        action="store_true",
+        help="Only copy files to the upload directory when --direct is used",
+    )
+    parser.add_argument(
+        "--clear",
+        action="store_true",
+        help="Remove uploaded files and database before processing",
+    )
 
     return parser.parse_args(argv)
 
@@ -119,9 +147,50 @@ def upload_file(path: Path, upload_name: str, api_url: str, params_name: str) ->
             raise UploadError(f"{path}: {resp.status_code} {resp.text}")
 
 
+vector_store_manager = get_vector_store_manager_from_env()
+
+
+def clear_backend() -> None:
+    """Remove uploaded files and database directories."""
+    for directory in [
+        get_uploaded_files_dir(),
+        get_chunks_dir(),
+        get_database_dir(),
+        vector_store_manager.config.persist_directory,
+    ]:
+        if directory.exists():
+            shutil.rmtree(directory, ignore_errors=True)
+        directory.mkdir(parents=True, exist_ok=True)
+
+
+def process_local_file(path: Path, upload_name: str, params_name: str, upload_only: bool) -> None:
+    """Copy file locally and optionally process it."""
+    upload_dir = get_uploaded_files_dir()
+    ensure_directory_exists(upload_dir)
+    dest = upload_dir / upload_name
+    shutil.copy2(path, dest)
+
+    if upload_only:
+        return
+
+    params = get_param_set(params_name)
+    process_document(
+        dest,
+        params.embedding.model_name,
+        persist_dir=vector_store_manager.config.persist_directory,
+        collection_name=vector_store_manager.config.collection_name,
+        chunk_size=params.chunking.chunk_size,
+        chunk_overlap=params.chunking.chunk_overlap,
+        deduplicate=False,
+    )
+
+
 def main(argv: Iterable[str] | None = None) -> int:
     """CLI entry point."""
     args = parse_args(argv)
+
+    if args.clear:
+        clear_backend()
 
     if args.fullpath:
         mode = "fullpath"
@@ -143,7 +212,15 @@ def main(argv: Iterable[str] | None = None) -> int:
         if not args.quiet:
             print(f"Uploading {file_path} as {upload_name}...")
         try:
-            upload_file(file_path, upload_name, args.api_url, args.parameterset)
+            if args.direct:
+                process_local_file(
+                    file_path,
+                    upload_name,
+                    args.parameterset,
+                    args.upload_only,
+                )
+            else:
+                upload_file(file_path, upload_name, args.api_url, args.parameterset)
         except Exception as exc:  # pragma: no cover - runtime errors
             if args.haltonerror:
                 raise

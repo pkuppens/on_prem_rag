@@ -7,6 +7,7 @@ from rag_pipeline.config.parameter_sets import FAST_ANSWERS
 from rag_pipeline.core.embeddings import process_pdf
 
 
+@pytest.mark.internet
 def test_pdf_embedding_counts(test_case_dir):
     pdf_path = pathlib.Path("tests/test_data/2303.18223v16.pdf")
     persist = test_case_dir / "chroma"

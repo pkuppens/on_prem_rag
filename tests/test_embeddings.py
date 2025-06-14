@@ -172,6 +172,7 @@ class TestEmbeddings:
             for res in result["all_results"]:
                 assert -1 <= res["similarity_score"] <= 1
 
+    @pytest.mark.internet
     def test_query_embeddings_empty_collection(self, test_case_dir):
         """Test querying an empty collection."""
         result = query_embeddings(

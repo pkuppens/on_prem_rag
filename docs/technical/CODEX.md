@@ -319,7 +319,7 @@ The project uses pytest markers to categorize tests:
 
 - **Fast tests**: Complete in <10 seconds, suitable for quick verification
 - **Slow tests**: Take >10 seconds, involve model loading, PDF processing, etc.
-- **Requires internet**: Perform network downloads. Run with `--run-internet` to enable.
+- **Internet tests** (`internet` mark): Perform network downloads. Run with `--run-internet` to enable.
 
 **Testing Commands:**
 
@@ -335,6 +335,9 @@ uv run pytest -m slow
 
 # Run tests with coverage
 uv run pytest --cov=src/backend --cov-report=term
+
+# Run internet tests
+uv run pytest -- --run-internet
 ```
 
 **If setup fails:**

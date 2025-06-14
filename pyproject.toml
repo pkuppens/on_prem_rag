@@ -48,11 +48,12 @@ requires-python = ">=3.12"
 
 # Configure the package to include src directory and make it importable
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "scripts"]
 include = ["*"]
 
 [tool.setuptools.package-dir]
 "" = "src"
+scripts = "scripts"
 
 # Entry points executed via ``uv run``. ``start-backend`` uses the fully
 # qualified package path so imports work without manually adjusting

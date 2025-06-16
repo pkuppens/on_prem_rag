@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography, CircularProgress } from '@mui/material';
 import axios from 'axios';
 
 interface Props {
@@ -19,18 +19,30 @@ const getNestedValue = (obj: any, path: string[]): any => {
 
 export const RAGParamsSelector = ({ value, onChange }: Props) => {
   const [sets, setSets] = useState<Record<string, unknown>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets').then((res) => {
-      setSets(res.data.sets);
-      // If no value is set yet, try to use 'fast' first, then default
-      if (!value) {
-        const preferredDefault = Object.keys(res.data.sets).includes('fast')
-          ? 'fast'
-          : res.data.default;
-        onChange(preferredDefault);
+    const fetchSets = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets');
+        setSets(res.data.sets);
+
+        // If no value is set yet, use the default from the backend
+        if (!value) {
+          onChange(res.data.default);
+        }
+        setError(null);
+      } catch (err) {
+        setError('Failed to load parameter sets');
+        console.error('Error loading parameter sets:', err);
+      } finally {
+        setIsLoading(false);
       }
-    });
+    };
+
+    fetchSets();
   }, [value, onChange]);
 
   const params = sets[value] || {};
@@ -40,6 +52,27 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   const chunkOverlap = getNestedValue(params, ['chunking', 'chunk_overlap']);
   const embeddingModel = getNestedValue(params, ['embedding', 'model_name']);
   const llmModel = getNestedValue(params, ['llm', 'model_name']);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+        <CircularProgress size={20} />
+        <Typography variant="body2" color="text.secondary">
+          Loading parameter sets...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="body2" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ mb: 4 }}>

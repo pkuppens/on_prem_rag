@@ -24,6 +24,16 @@ export const UploadPage = () => {
         'useEffect',
         20
       );
+
+      // Start sending pings every 30 seconds to keep connection alive
+      const pingInterval = setInterval(() => {
+        if (websocket.readyState === WebSocket.OPEN) {
+          websocket.send('ping');
+        }
+      }, 30000);
+
+      // Store interval ID for cleanup
+      websocket.pingInterval = pingInterval;
     };
 
     websocket.onmessage = (event) => {
@@ -55,11 +65,19 @@ export const UploadPage = () => {
         'useEffect.onclose',
         42
       );
+      // Clear ping interval
+      if (websocket.pingInterval) {
+        clearInterval(websocket.pingInterval);
+      }
     };
 
     setWs(websocket);
 
     return () => {
+      // Clear ping interval
+      if (websocket.pingInterval) {
+        clearInterval(websocket.pingInterval);
+      }
       websocket.close();
     };
   }, []);

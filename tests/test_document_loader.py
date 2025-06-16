@@ -60,15 +60,17 @@ class TestDocumentLoader:
         pdf_path = test_data_dir / "2303.18223v16.pdf"
 
         # Load the same file twice
-        documents1, metadata1 = loader.load_document(pdf_path)
-        documents2, metadata2 = loader.load_document(pdf_path)
+        documents1, metadata1 = loader.load_document(pdf_path, params_key="fast")
+        documents2, metadata2 = loader.load_document(pdf_path, params_key="fast")
+        documents3, metadata3 = loader.load_document(pdf_path, params_key="slow")
 
-        # Second load should return empty documents (duplicate detection)
         assert len(documents1) > 0
         assert len(documents2) == 0
+        assert len(documents3) > 0  # different params_key should process
 
         # Metadata should be the same
         assert metadata1.file_hash == metadata2.file_hash
+        assert metadata1.file_hash == metadata3.file_hash
 
     def test_file_validation_errors(self, test_case_dir):
         """Test file validation error handling."""

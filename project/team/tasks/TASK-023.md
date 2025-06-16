@@ -19,6 +19,7 @@ Develop a Python CLI script that uploads multiple local documents to the existin
 - Use `httpx` for HTTP requests
 - Avoid symlink loops by tracking resolved directories
 - Provide detailed help text and a quiet mode for automation
+- Consider listening to `/ws/upload-progress` for live updates
 
 ## Acceptance Criteria
 

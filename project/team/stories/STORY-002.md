@@ -71,7 +71,7 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
 ## Definition of Done
 
 - [ ] Document loader accepts PDF, DOCX, MD, and TXT files with proper validation and error handling
-- [ ] Idempotent document processing with duplicate detection and tracking
+- [x] Idempotent document processing with duplicate detection and tracking
 - [ ] Configurable chunking strategies with semantic awareness
 - [ ] Embeddings generated using sentence transformers with local model support and caching
 - [ ] ChromaDB integration with proper connection management and error handling
@@ -114,6 +114,7 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
 ## Progress
 - 2025-06-14: Added command-line upload script (TASK-023) for batch ingestion.
 - 2025-06-14: Enhanced upload script with direct processing and cleanup options.
+- 2025-06-16: Added parameter-set aware duplicate detection in DocumentLoader.
 
 ---
 

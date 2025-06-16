@@ -3,7 +3,7 @@
 **ID**: TASK-006  
 **Story**: [STORY-002: Document Processing Pipeline](../stories/STORY-002.md)  
 **Assignee**: Backend Engineer  
-**Status**: Todo  
+**Status**: In Progress
 **Effort**: 8 hours  
 **Created**: 2025-05-31  
 **Updated**: 2025-06-05
@@ -112,7 +112,7 @@ Note: Scripts are installed in your Python environment, so they need to be reins
 - [ ] FastAPI endpoint successfully handles file uploads
 - [ ] WebSocket connection provides real-time progress updates
 - [ ] Function `load_document(path)` returns a list of `Document` objects for each supported format
-- [ ] Document loading is idempotent with duplicate detection
+- [x] Document loading is idempotent with duplicate detection per parameter set
 - [ ] Comprehensive error handling for:
   - Unsupported formats
   - Corrupted files

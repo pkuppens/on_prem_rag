@@ -29,7 +29,11 @@ function useAppTheme(mode: ThemeMode) {
 }
 
 interface UploadProgress {
-  [key: string]: number;
+  [key: string]: {
+    progress: number;
+    error?: string;
+    isComplete?: boolean;
+  };
 }
 
 interface EmbeddingResult {
@@ -60,9 +64,16 @@ function App() {
     };
 
     websocket.onmessage = (event) => {
-      const progress = JSON.parse(event.data);
-      Logger.debug('Received progress update', 'App.tsx', 'useEffect.onmessage', 51, progress);
-      setUploadProgress(progress);
+      const data = JSON.parse(event.data);
+      Logger.debug('Received progress update', 'App.tsx', 'useEffect.onmessage', 51, data);
+      setUploadProgress(prev => ({
+        ...prev,
+        [data.filename]: {
+          progress: data.progress,
+          error: data.error,
+          isComplete: data.isComplete
+        }
+      }));
     };
 
     websocket.onerror = (error) => {
@@ -112,7 +123,13 @@ function App() {
       );
 
       // Provide immediate feedback: set progress at 5% and yield to UI
-      setUploadProgress(prev => ({ ...prev, [file.name]: 5 }));
+      setUploadProgress(prev => ({
+        ...prev,
+        [file.name]: {
+          progress: 5,
+          isComplete: false
+        }
+      }));
 
       // Small async wait to give UI time to accept the progress update
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -138,6 +155,16 @@ function App() {
           95,
           response.data
         );
+
+        // Mark upload as complete
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            progress: 100,
+            isComplete: true
+          }
+        }));
       } catch (error) {
         Logger.error(
           'Error uploading file',
@@ -146,6 +173,15 @@ function App() {
           102,
           error
         );
+
+        // Set error state
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            error: error instanceof Error ? error.message : 'Upload failed'
+          }
+        }));
       }
     }
   };
@@ -169,11 +205,21 @@ function App() {
                 {/* 3. Drag/Drop Upload */}
                 <Box>
                   <FileDropzone onFileSelect={handleFileSelect} />
-                  {Object.entries(uploadProgress).map(([filename, progress]) => (
+                  {Object.entries(uploadProgress).map(([filename, data]) => (
                     <UploadProgress
                       key={filename}
                       filename={filename}
-                      progress={progress}
+                      progress={data.progress}
+                      error={data.error}
+                      isComplete={data.isComplete}
+                      onComplete={() => {
+                        // Remove the completed upload from the progress list
+                        setUploadProgress(prev => {
+                          const newProgress = { ...prev };
+                          delete newProgress[filename];
+                          return newProgress;
+                        });
+                      }}
                     />
                   ))}
                 </Box>

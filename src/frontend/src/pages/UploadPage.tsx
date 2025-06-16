@@ -6,7 +6,11 @@ import axios from 'axios';
 import Logger from '../utils/logger';
 
 interface UploadProgress {
-  [key: string]: number;
+  [key: string]: {
+    progress: number;
+    error?: string;
+    isComplete?: boolean;
+  };
 }
 
 export const UploadPage = () => {
@@ -27,15 +31,22 @@ export const UploadPage = () => {
     };
 
     websocket.onmessage = (event) => {
-      const progress = JSON.parse(event.data);
+      const data = JSON.parse(event.data);
       Logger.debug(
         'Received progress update',
         'UploadPage.tsx',
         'useEffect.onmessage',
         27,
-        progress
+        data
       );
-      setUploadProgress(progress);
+      setUploadProgress(prev => ({
+        ...prev,
+        [data.filename]: {
+          progress: data.progress,
+          error: data.error,
+          isComplete: data.isComplete
+        }
+      }));
     };
 
     websocket.onerror = (error) => {
@@ -95,6 +106,16 @@ export const UploadPage = () => {
           70,
           response.data
         );
+
+        // Mark upload as complete
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            progress: 100,
+            isComplete: true
+          }
+        }));
       } catch (error) {
         Logger.error(
           'Error uploading file',
@@ -103,6 +124,15 @@ export const UploadPage = () => {
           77,
           error
         );
+
+        // Set error state
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            error: error instanceof Error ? error.message : 'Upload failed'
+          }
+        }));
       }
     }
   };
@@ -114,11 +144,21 @@ export const UploadPage = () => {
       </Box>
 
       <Box>
-        {Object.entries(uploadProgress).map(([filename, progress]) => (
+        {Object.entries(uploadProgress).map(([filename, data]) => (
           <UploadProgress
             key={filename}
             filename={filename}
-            progress={progress}
+            progress={data.progress}
+            error={data.error}
+            isComplete={data.isComplete}
+            onComplete={() => {
+              // Remove the completed upload from the progress list
+              setUploadProgress(prev => {
+                const newProgress = { ...prev };
+                delete newProgress[filename];
+                return newProgress;
+              });
+            }}
           />
         ))}
       </Box>

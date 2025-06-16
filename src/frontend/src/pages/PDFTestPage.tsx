@@ -24,7 +24,13 @@ export const PDFTestPage = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [uploadProgress, setUploadProgress] = useState<{
+    [key: string]: {
+      progress: number;
+      error?: string;
+      isComplete?: boolean;
+    }
+  }>({});
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [currentPdfUrl, setCurrentPdfUrl] = useState<string>(TEST_PDF_URL);
 
@@ -37,9 +43,16 @@ export const PDFTestPage = () => {
     };
 
     websocket.onmessage = (event) => {
-      const progress = JSON.parse(event.data);
-      Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useEffect.onmessage', 27, progress);
-      setUploadProgress(progress);
+      const data = JSON.parse(event.data);
+      Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useEffect.onmessage', 27, data);
+      setUploadProgress(prev => ({
+        ...prev,
+        [data.filename]: {
+          progress: data.progress,
+          error: data.error,
+          isComplete: data.isComplete
+        }
+      }));
     };
 
     websocket.onerror = (error) => {
@@ -82,6 +95,16 @@ export const PDFTestPage = () => {
 
         Logger.info('File upload completed', 'PDFTestPage.tsx', 'handleFileSelect', 70, response.data);
 
+        // Mark upload as complete
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            progress: 100,
+            isComplete: true
+          }
+        }));
+
         // Update the PDF URL to show the newly uploaded file
         if (file.name.toLowerCase().endsWith('.pdf')) {
           setCurrentPdfUrl(`http://localhost:8000/files/${file.name}`);
@@ -90,6 +113,15 @@ export const PDFTestPage = () => {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         Logger.error('Error uploading file', 'PDFTestPage.tsx', 'handleFileSelect', 77, error);
         setError(`Failed to upload file: ${errorMessage}`);
+
+        // Set error state in progress
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: {
+            ...prev[file.name],
+            error: errorMessage
+          }
+        }));
       }
     }
   };
@@ -138,11 +170,21 @@ export const PDFTestPage = () => {
           Upload PDF
         </Typography>
         <FileDropzone onFileSelect={handleFileSelect} />
-        {Object.entries(uploadProgress).map(([filename, progress]) => (
+        {Object.entries(uploadProgress).map(([filename, data]) => (
           <UploadProgress
             key={filename}
             filename={filename}
-            progress={progress}
+            progress={data.progress}
+            error={data.error}
+            isComplete={data.isComplete}
+            onComplete={() => {
+              // Remove the completed upload from the progress list
+              setUploadProgress(prev => {
+                const newProgress = { ...prev };
+                delete newProgress[filename];
+                return newProgress;
+              });
+            }}
           />
         ))}
       </Paper>

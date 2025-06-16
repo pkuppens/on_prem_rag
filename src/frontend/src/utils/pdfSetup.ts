@@ -1,4 +1,6 @@
 import { pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 /**
  * PDF.js Security Configuration for On-Premises Deployment

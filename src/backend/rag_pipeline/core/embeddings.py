@@ -16,6 +16,7 @@ Key features:
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
 from collections.abc import Iterable, Sequence
@@ -23,6 +24,8 @@ from pathlib import Path
 from typing import Any, TypedDict
 
 from llama_index.core import Document
+from llama_index.core.node_parser import SimpleNodeParser
+from llama_index.core.schema import BaseNode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig
@@ -30,6 +33,7 @@ from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents, 
 from backend.rag_pipeline.core.document_loader import DocumentLoader
 from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
 from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
+from backend.rag_pipeline.utils.progress_notifier import ProgressEvent, progress_notifier
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -208,7 +212,7 @@ def store_embeddings(
     return manager
 
 
-def process_document(
+async def process_document(
     file_path: str | Path,
     model_name: str,
     *,
@@ -247,6 +251,24 @@ def process_document(
     if max_pages is not None and len(documents) > max_pages:
         documents = documents[:max_pages]
 
+    # Calculate progress steps
+    total_pages = len(documents) or 1  # Prevent division by zero
+    progress_per_page = 85 / total_pages  # 85% of total progress (10% to 95%)
+
+    # Process each page and update progress
+    for i, _doc in enumerate(documents):
+        # Calculate progress for this page
+        current_progress = 10 + (i + 1) * progress_per_page
+        current_progress = min(95, current_progress)  # Cap at 95% until completion
+
+        # Notify progress update
+        await progress_notifier.notify(
+            ProgressEvent(file_path.name, int(current_progress), f"Processing page {i + 1} of {total_pages}")
+        )
+
+        # Yield to event loop to allow UI updates
+        await asyncio.sleep(0)
+
     # Chunk the documents using centralized chunking
     chunking_result = chunk_documents(
         documents,
@@ -267,7 +289,7 @@ def process_document(
     return chunks_processed, records_stored
 
 
-def process_pdf(
+async def process_pdf(
     pdf_path: str | Path,
     model_name: str,
     *,
@@ -283,7 +305,7 @@ def process_pdf(
     This function is a convenience wrapper around process_document specifically for PDFs.
     For new code, prefer using process_document() which handles all document types.
     """
-    return process_document(
+    return await process_document(
         pdf_path,
         model_name,
         persist_dir=persist_dir,

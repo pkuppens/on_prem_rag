@@ -1,5 +1,9 @@
-"""Pytest configuration and fixtures."""
+"""Test configuration and fixtures.
 
+This module provides shared fixtures and configuration for all tests.
+"""
+
+import os
 import shutil
 import socket
 import uuid
@@ -8,14 +12,50 @@ from pathlib import Path
 
 import pytest
 
+from src.backend.rag_pipeline.utils.progress_notifier import progress_notifier
+
+# Ensure test data directory exists
+TEST_DATA_DIR = Path(__file__).parent / "test_data"
+TEST_DATA_DIR.mkdir(exist_ok=True)
+
 
 @pytest.fixture(scope="session")
 def test_data_dir() -> Path:
-    """Return the path to the test data directory.
+    """Get the path to the test data directory."""
+    return TEST_DATA_DIR
 
-    This directory is version controlled and contains fixed test files.
-    """
-    return Path(__file__).parent / "test_data"
+
+@pytest.fixture(autouse=True)
+def cleanup_upload_progress():
+    """Clean up upload progress tracking before and after each test."""
+    # Clear progress tracking before test
+    progress_notifier._current_progress.clear()
+    yield
+    # Clear progress tracking after test
+    progress_notifier._current_progress.clear()
+
+
+@pytest.fixture(autouse=True)
+def cleanup_uploaded_files():
+    """Clean up uploaded files before and after each test."""
+    from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+
+    uploaded_dir = get_uploaded_files_dir()
+
+    # Create directory if it doesn't exist
+    uploaded_dir.mkdir(parents=True, exist_ok=True)
+
+    # Clean up before test
+    for file in uploaded_dir.glob("*"):
+        if file.is_file():
+            file.unlink()
+
+    yield
+
+    # Clean up after test
+    for file in uploaded_dir.glob("*"):
+        if file.is_file():
+            file.unlink()
 
 
 @pytest.fixture(scope="session")

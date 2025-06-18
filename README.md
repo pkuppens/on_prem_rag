@@ -4,7 +4,7 @@ _Talk with your documents and data using LLMs without Cloud privacy and confiden
 
 ## Executive Summary
 
-This project delivers an **on-premises Retrieval-Augmented Generation (RAG) system** that enables organizations to leverage Large Language Models (LLMs) for document analysis and database querying while maintaining complete data sovereignty and regulatory compliance.
+This project delivers an **on-premises Retrieval-Augmented Generation (RAG) system** that enables organizations to leverage Large Language Models (LLMs) for document analysis and database querying while maintaining complete data sovereignty and regulatory compliance. The architecture now embraces the **Model‑Context‑Protocol (MCP)** for standardized context exchange between components.
 
 ## What We'll Build
 

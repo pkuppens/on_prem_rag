@@ -23,6 +23,7 @@ This document provides a practical example of how OpenAI Codex is integrated int
 
 4. **Documentation**
 
+   - Use `docs/technical/DOMAIN_DRIVEN_DESIGN.md` file for architectural decisions and explanations.
    - Update project progress reports in markdown files like STORY-xxx, TASK-xxx, FEAT-xxx.
    - Ensure documentation is in sync with code changes.
 

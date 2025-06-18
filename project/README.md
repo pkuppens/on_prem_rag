@@ -5,7 +5,7 @@
 This directory contains the complete SAFe (Scaled Agile Framework) project structure for the On-Premises RAG Solution. The project follows Essential SAFe configuration with Team and Program levels.
 
 At this stage the repository primarily consists of these planning documents.
-Source code will be introduced as stories and tasks are implemented.
+Source code will be introduced as stories and tasks are implemented. The roadmap now includes **Model‑Context‑Protocol (MCP)** adoption for standardized context handling.
 
 ## SAFe Levels
 

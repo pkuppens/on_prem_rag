@@ -5,7 +5,7 @@
 The system ingests enterprise documents and makes them searchable through a
 Retrieval‑Augmented Generation workflow. It exposes a web API and UI for
 questions, returning answers with source citations. The architecture prioritizes
-local execution and security.
+local execution and security. **The latest iteration adopts the Model‑Context‑Protocol (MCP) to standardize how context is packaged and transferred between services.**
 
 ## Bounded Contexts
 
@@ -16,6 +16,7 @@ local execution and security.
 - **User Interface** – React frontend for upload and chat
 - **Security** – authentication, authorization and audit logging
 - **Deployment** – Docker, monitoring and CI/CD
+- **MCP Gateway** – handles Model‑Context‑Protocol envelopes between components
 
 ## Key Entities
 
@@ -28,6 +29,7 @@ local execution and security.
 | Answer    | LLM response with citations                    |
 | User      | Authenticated actor with roles                 |
 | Role      | Permission set used by RBAC                    |
+| MCPEnvelope | Standardized package of model, context and metadata |
 
 ## Component Responsibilities
 
@@ -38,17 +40,19 @@ local execution and security.
 - **LLMProviderFactory** – creates provider instances
 - **SecurityManager** – JWT handling and role enforcement
 - **Web API** – FastAPI endpoints and streaming responses
+- **MCPAdapter** – converts internal data structures to MCP envelopes
 - **Frontend** – React components for upload and Q&A
 
 ## Data Flow
 
 1. User uploads document through the UI.
 2. Backend processes file into chunks and embeddings.
-3. Embeddings stored in ChromaDB via VectorStoreManager.
-4. User submits question to `/ask` endpoint.
-5. Query Service retrieves relevant chunks.
-6. LLMProvider generates answer from context.
-7. Response streamed back with citations.
+3. **MCPAdapter** packages the processed data into an MCP envelope.
+4. Embeddings stored in ChromaDB via VectorStoreManager.
+5. User submits question to `/ask` endpoint using an MCP formatted request.
+6. Query Service retrieves relevant chunks.
+7. LLMProvider generates answer using context from the MCP envelope.
+8. Response streamed back as an MCP envelope with citations.
 
 ## References
 
@@ -56,6 +60,7 @@ local execution and security.
 - [docs/technical/EMBEDDING.md](docs/technical/EMBEDDING.md)
 - [docs/technical/LLM.md](docs/technical/LLM.md)
 - [docs/technical/VECTOR_STORE.md](docs/technical/VECTOR_STORE.md)
+- [Model‑Context‑Protocol Introduction](https://modelcontextprotocol.io/introduction)
 
 ## Code Files
 
@@ -63,3 +68,4 @@ local execution and security.
 - [src/backend/rag_pipeline/core/vector_store.py](src/backend/rag_pipeline/core/vector_store.py) – ChromaDB integration
 - [src/backend/rag_pipeline/core/embeddings.py](src/backend/rag_pipeline/core/embeddings.py) – Embedding generation
 - [src/backend/security/security_manager.py](src/backend/security/security_manager.py) – JWT utilities
+- [src/backend/mcp/mcp_adapter.py](src/backend/mcp/mcp_adapter.py) – MCP envelope utilities *(planned)*

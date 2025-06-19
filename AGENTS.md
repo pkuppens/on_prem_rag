@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## Shared Guidance
+
+For consolidated rules see [agents/README.md](agents/README.md).
+
 ## Codex Integration Example
 
 This document provides a practical example of how OpenAI Codex is integrated into our project to enhance productivity and streamline coding tasks.
@@ -135,3 +139,7 @@ When implementing tasks:
 - Document any deviations from original requirements
 - Include testing instructions and results
 - Note any dependencies or prerequisites
+
+## Related Guidance
+
+See [agents/README.md](agents/README.md) for links to coding style, documentation style, project management and architecture rules.

@@ -5,6 +5,7 @@ alwaysApply: true
 ---
 # Golden Rules for AI Coding Assistance
 
+For consolidated guidance see [agents/README.md](../../agents/README.md).
 This guide outlines the key principles and practices for AI-assisted development in our SAFe environment.
 
 ## Core Principles

@@ -28,7 +28,7 @@ Example format:
 
 ### Non-Code Documentation
 
-For documentation without direct code dependencies (AGENTS.md, CODEX.md, etc.):
+For documentation without direct code dependencies (files in the agents directory, etc.):
 - Either omit the "Code Files" section entirely
 - Or include it with note: "Intentionally left empty - no direct code dependencies"
 

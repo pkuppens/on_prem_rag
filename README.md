@@ -174,3 +174,4 @@ See [SETUP.md](SETUP.md) for additional details.
 **Strategic Overview**: Complete business case in [`project/SAFe Project Plan.md`](project/SAFe%20Project%20Plan.md)
 **Project Status**: Development Phase - MVP in progress
 **Last Updated**: 2025-05-31
+\n## Architecture\n\nSee [docs/technical/DDD_TARGET_ARCHITECTURE.md](docs/technical/DDD_TARGET_ARCHITECTURE.md) for the planned domain-driven design structure.

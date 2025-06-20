@@ -37,7 +37,7 @@ When you receive feedback with `@feedback-integration:`:
 1. **Analyze the feedback** - Identify what worked well, what didn't work, and mixed signals
 2. **Categorize improvements needed** - Determine which processes or documentation need updates
 3. **Update relevant documentation** in this priority order:
-   - [AGENTS.md](mdc:AGENTS.md) - For agent-specific workflow and task management improvements
+   - [codex rules](mdc:../agents/codex_rules.md) - For agent-specific workflow and task management improvements
    - Cursor rules in `.cursor/rules/` - For development process improvements  
    - [ARCHITECTURE.md](mdc:ARCHITECTURE.md) - For technical approach and constraint improvements
 4. **Apply improvements** - Implement the enhanced process for current and future work
@@ -51,7 +51,7 @@ For feedback containing both positive and negative elements:
 
 ## Documentation Update Guidelines
 
-### When updating [AGENTS.md](mdc:AGENTS.md):
+### When updating [codex rules](mdc:../agents/codex_rules.md):
 - Add new guidelines to relevant sections
 - Update workflow steps based on lessons learned
 - Refine task sizing and management practices
@@ -71,19 +71,19 @@ For feedback containing both positive and negative elements:
 
 ### Task Sizing Issues
 If feedback indicates tasks are too large:
-- Update [AGENTS.md](mdc:AGENTS.md) with smaller task breakdown guidelines
+- Update [codex rules](mdc:../agents/codex_rules.md) with smaller task breakdown guidelines
 - Create cursor rule for task complexity assessment
 - Document maximum task scope in hours/story points
 
 ### Code Quality Issues  
 If feedback indicates quality problems:
-- Enhance testing requirements in [AGENTS.md](mdc:AGENTS.md)
+- Enhance testing requirements in [codex rules](mdc:../agents/codex_rules.md)
 - Update code review standards
 - Add quality gate cursor rules
 
 ### Documentation Issues
 If feedback indicates documentation gaps:
-- Strengthen documentation requirements in [AGENTS.md](mdc:AGENTS.md)
+- Strengthen documentation requirements in [codex rules](mdc:../agents/codex_rules.md)
 - Create cursor rules for documentation timing
 - Update documentation hierarchy guidance
 

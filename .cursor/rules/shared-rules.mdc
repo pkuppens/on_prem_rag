@@ -1,0 +1,7 @@
+---
+description: Shared rules location
+alwaysApply: false
+---
+# Shared Rules
+
+The definitive rules for AI-assisted coding and project management are stored in the [agents](../agents/) directory. Refer to those files from both Codex and Cursor.

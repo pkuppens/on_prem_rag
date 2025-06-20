@@ -7,6 +7,22 @@ Retrieval‑Augmented Generation workflow. It exposes a web API and UI for
 questions, returning answers with source citations. The architecture prioritizes
 local execution and security. **The latest iteration adopts the Model‑Context‑Protocol (MCP) to standardize how context is packaged and transferred between services.**
 
+## Domains and Subdomains
+
+The solution is organised under the **Knowledge Retrieval** domain. The following
+subdomains map to the bounded contexts used throughout the repository:
+
+| Subdomain        | Bounded Context  | Responsibility                                               |
+|------------------|------------------|-------------------------------------------------------------|
+| Ingestion        | Document Processing | Convert uploaded files into chunkable text                 |
+| Search           | Vector Store        | Persist embeddings and perform similarity queries         |
+| Language Runtime | LLM Provider        | Interface with local LLMs for generation                  |
+| Conversation     | Query Service       | Orchestrate retrieval and answer formulation              |
+| Access Control   | Security            | Authenticate users and enforce permissions                |
+| Presentation     | User Interface      | React based upload and chat experience                    |
+| Operations       | Deployment          | Containerisation, monitoring and CI/CD                    |
+| Integration      | MCP Gateway         | Exchange MCP envelopes between components                 |
+
 ## Bounded Contexts
 
 - **Document Processing** – loaders, chunking and embeddings
@@ -30,6 +46,14 @@ local execution and security. **The latest iteration adopts the Model‑Context�
 | User      | Authenticated actor with roles                 |
 | Role      | Permission set used by RBAC                    |
 | MCPEnvelope | Standardized package of model, context and metadata |
+| PDFDocument | Specialized Document with page label metadata |
+| DocumentProcessor | Service that orchestrates loading, chunking and embedding |
+| ProgressEvent | Domain event published during processing to report status |
+
+## Object-Oriented Relationships
+
+- **PDFDocument** `is_a` **Document** – retains all Document metadata and adds page labels and count.
+- **DocumentProcessor** `has_a` **ProgressEvent** – publishes updates via the progress notifier while processing documents.
 
 ## Component Responsibilities
 

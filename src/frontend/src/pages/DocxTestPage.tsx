@@ -1,7 +1,8 @@
 import { Container, Typography, Paper } from '@mui/material';
 import { DOCXViewer } from '../components/docx/DOCXViewer';
+import { apiUrls } from '../config/api';
 
-const SAMPLE_DOCX = 'http://localhost:8000/files/toolsfairy-com-sample-docx-files-sample4.docx';
+const SAMPLE_DOCX = apiUrls.file('toolsfairy-com-sample-docx-files-sample4.docx');
 
 export const DocxTestPage = () => (
   <Container maxWidth="md" sx={{ py: 4 }}>

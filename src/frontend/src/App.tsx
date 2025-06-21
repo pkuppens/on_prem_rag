@@ -16,6 +16,7 @@ import './utils/pdfSetup';
 import { PDFTestPage } from './pages/PDFTestPage';
 import DocxTestPage from './pages/DocxTestPage';
 import TextTestPage from './pages/TextTestPage';
+import { apiUrls, apiConfig } from './config/api';
 
 function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -57,7 +58,7 @@ function App() {
 
   // WebSocket setup for upload progress
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:8000/ws/upload-progress');
+    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
 
     websocket.onopen = () => {
       Logger.info('WebSocket connection established', 'App.tsx', 'useEffect', 47);
@@ -139,7 +140,7 @@ function App() {
 
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/documents/upload?params_name=${paramSet}`,
+          apiUrls.upload(paramSet),
           formData,
           {
             headers: {

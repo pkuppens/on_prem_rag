@@ -52,7 +52,7 @@ class Logger {
     );
 
     // In development, use console with colors
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       const colors = {
         info: '\x1b[32m', // Green
         warn: '\x1b[33m', // Yellow
@@ -111,7 +111,7 @@ class Logger {
     lineNumber: number,
     data?: unknown
   ): void {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       this.log('debug', message, filename, functionName, lineNumber, data);
     }
   }

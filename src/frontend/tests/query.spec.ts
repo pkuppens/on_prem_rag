@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { apiUrls } from '../src/config/api';
 
 test.describe('Query Functionality', () => {
   test('should show no results message when query returns empty results', async ({ page }) => {

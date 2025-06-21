@@ -15,6 +15,7 @@ import { TextViewer } from '../components/text/TextViewer';
 import { pdfjs } from '../utils/pdfSetup';
 import axios from 'axios';
 import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
+import { apiUrls } from '../config/api';
 
 interface EmbeddingResult {
   text: string;
@@ -44,7 +45,7 @@ export const QueryPage = () => {
     setHasSearched(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/query', {
+      const response = await axios.post(apiUrls.query(), {
         query,
         params_name: paramSet,
       });

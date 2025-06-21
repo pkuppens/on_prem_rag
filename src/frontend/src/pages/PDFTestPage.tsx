@@ -15,9 +15,10 @@ import { FileDropzone } from '../components/upload/FileDropzone';
 import { UploadProgress } from '../components/upload/UploadProgress';
 import axios from 'axios';
 import Logger from '../utils/logger';
+import { apiUrls } from '../config/api';
 
 // Test URL for the uploaded PDF
-const TEST_PDF_URL = 'http://localhost:8000/files/2303.18223v16.pdf';
+const TEST_PDF_URL = apiUrls.file('2303.18223v16.pdf');
 
 export const PDFTestPage = () => {
   const [numPages, setNumPages] = useState<number>(0);
@@ -36,7 +37,7 @@ export const PDFTestPage = () => {
 
   useEffect(() => {
     // Connect to WebSocket
-    const websocket = new WebSocket('ws://localhost:8000/ws/upload-progress');
+    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
 
     websocket.onopen = () => {
       Logger.info('WebSocket connection established', 'PDFTestPage.tsx', 'useEffect', 20);
@@ -107,7 +108,7 @@ export const PDFTestPage = () => {
 
         // Update the PDF URL to show the newly uploaded file
         if (file.name.toLowerCase().endsWith('.pdf')) {
-          setCurrentPdfUrl(`http://localhost:8000/files/${file.name}`);
+          setCurrentPdfUrl(apiUrls.file(file.name));
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';

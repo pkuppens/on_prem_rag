@@ -4,6 +4,7 @@ import { FileDropzone } from '../components/upload/FileDropzone';
 import { UploadProgress } from '../components/upload/UploadProgress';
 import axios from 'axios';
 import Logger from '../utils/logger';
+import { apiUrls } from '../config/api';
 
 interface UploadProgress {
   [key: string]: {
@@ -21,7 +22,7 @@ export const UploadPage = () => {
 
   useEffect(() => {
     // Connect to WebSocket
-    const websocket = new WebSocket('ws://localhost:8000/ws/upload-progress');
+    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
 
     websocket.onopen = () => {
       Logger.info(
@@ -110,7 +111,7 @@ export const UploadPage = () => {
 
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/documents/upload?params_name=${paramSet}`,
+          apiUrls.upload(paramSet),
           formData,
           {
             headers: {

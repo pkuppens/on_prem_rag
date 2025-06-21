@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
+import { apiUrls } from '../../config/api';
 
 interface EmbeddingResult {
   text: string;
@@ -40,7 +41,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
     setHasSearched(true);
 
     try {
-      const res = await axios.post<QueryResponse>('http://localhost:8000/api/query', {
+      const res = await axios.post<QueryResponse>(apiUrls.query(), {
         query,
         params_name: paramSet,
         top_k: numResults, // Override the parameter set's top_k with user selection

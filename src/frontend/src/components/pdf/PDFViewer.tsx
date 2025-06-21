@@ -3,6 +3,7 @@ import { Box, Button, Typography, Paper } from '@mui/material';
 import { Document as PDFDocument, Page } from 'react-pdf';
 import { pdfjs } from '../../utils/pdfSetup';
 import Logger from '../../utils/logger';
+import { apiUrls } from '../../config/api';
 
 interface EmbeddingResult {
   text: string;
@@ -42,22 +43,12 @@ export const PDFViewer = ({ selectedResult }: Props) => {
       setSelection('');
 
       // Log the PDF URL for debugging
-      const pdfUrl = `http://localhost:8000/files/${selectedResult.document_name}`;
+      const pdfUrl = apiUrls.file(selectedResult.document_name);
       Logger.info('Loading PDF', 'PDFViewer.tsx', 'useEffect', 29, {
         pdfUrl,
         document_name: selectedResult.document_name,
         page_number: selectedResult.page_number
       });
-
-      // Attempt to highlight the matched text when the page renders
-      setTimeout(() => {
-        try {
-          const found = window.find(selectedResult.text);
-          Logger.debug('Highlight result', 'PDFViewer.tsx', 'useEffect', 33, { found });
-        } catch (err) {
-          Logger.warn('Highlight failed', 'PDFViewer.tsx', 'useEffect', 35, { err });
-        }
-      }, 500);
     }
   }, [selectedResult]);
 
@@ -86,7 +77,7 @@ export const PDFViewer = ({ selectedResult }: Props) => {
     );
   }
 
-  const pdfUrl = `http://localhost:8000/files/${selectedResult.document_name}`;
+  const pdfUrl = apiUrls.file(selectedResult.document_name);
 
   return (
     <Paper sx={{ p: 2, height: 'fit-content' }}>

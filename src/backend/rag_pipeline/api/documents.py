@@ -20,7 +20,9 @@ from ..utils.directory_utils import (
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
 
-logger = StructuredLogger(__name__)
+logger = StructuredLogger(__name__, level="DEBUG")
+logger.debug("Starting document management API endpoints")
+
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 
 # Initialize directories and services
@@ -207,27 +209,6 @@ async def _serve_file(filename: str):
 @router.get("/files/{filename}")
 async def serve_document_file(filename: str):
     """Serve uploaded files with proper error handling and logging.
-
-    Args:
-        filename: Name of the file to serve
-
-    Returns:
-        FileResponse: The requested file
-
-    Raises:
-        HTTPException: 404 if file not found
-        HTTPException: 400 if filename is invalid
-        HTTPException: 500 if file access fails
-    """
-    return await _serve_file(filename)
-
-
-@router.get("/files/{filename}")
-async def serve_file(filename: str):
-    """Legacy endpoint to serve uploaded files.
-
-    This endpoint is kept for backward compatibility.
-    New code should use /api/documents/files/{filename} instead.
 
     Args:
         filename: Name of the file to serve

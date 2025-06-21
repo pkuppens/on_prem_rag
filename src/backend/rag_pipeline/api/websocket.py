@@ -53,4 +53,10 @@ async def websocket_progress(websocket: WebSocket):
         # Cleanup when connection ends
         await progress_notifier.unsubscribe(websocket)
         logger.info("WebSocket connection closed")
-        await websocket.close()
+
+        # Only close if not already closed
+        try:
+            if websocket.client_state.value != 3:  # 3 = CLOSED
+                await websocket.close()
+        except Exception as e:
+            logger.debug("WebSocket already closed or error during close", error=str(e))

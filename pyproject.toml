@@ -98,7 +98,7 @@ select = [
     "N",  # pep8-naming: class/function/method naming conventions
     "W",  # pycodestyle warnings (deprecated, generally covered by E)
     "B",  # bugbear: likely bugs and design problems
-    "UP", # pyupgrade: syntax modernization (e.g., f-strings, walrus operator)
+    # "UP", # pyupgrade: syntax modernization (e.g., f-strings, walrus operator)
 ]
 
 ignore = [
@@ -114,6 +114,7 @@ ignore = [
     "B006",    # mutable default argument
     "B008",    # depends in function definition
     "F",       # all F* errors (Pyflakes)
+    "UP035",   # X | Y for type sets,
 ]
 
 

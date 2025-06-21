@@ -1,0 +1,24 @@
+{
+    "include": [
+        "src",
+        "tests",
+        "scripts"
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__",
+        ".venv",
+        ".pytest_cache",
+        ".ruff_cache"
+    ],
+    "pythonPath": ".venv/Scripts/python.exe",
+    "pythonVersion": "3.12",
+    "typeCheckingMode": "basic",
+    "useLibraryCodeForTypes": true,
+    "reportMissingImports": true,
+    "reportMissingTypeStubs": false,
+    "reportUnusedImport": true,
+    "reportUnusedClass": true,
+    "reportUnusedFunction": true,
+    "reportUnusedVariable": true
+}

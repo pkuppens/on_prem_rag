@@ -15,5 +15,9 @@
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    "python.defaultInterpreterPath": "./.venv/Scripts/python.exe"
 }

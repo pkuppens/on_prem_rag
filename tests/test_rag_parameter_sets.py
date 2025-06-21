@@ -1,6 +1,6 @@
 """Test importing RAG parameter sets."""
 
-from src.backend.rag_pipeline.config.parameter_sets import (
+from backend.rag_pipeline.config.parameter_sets import (
     FAST_ANSWERS,
     get_param_set,
 )

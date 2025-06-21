@@ -101,6 +101,8 @@ class ProgressNotifier:
             "progress": event.progress,
             "message": event.message,
             "timestamp": event.timestamp,
+            "isComplete": event.progress >= 100,
+            "error": event.message if event.progress == -1 else None,
         }
 
         # Send to all connected WebSocket clients

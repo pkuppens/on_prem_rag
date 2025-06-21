@@ -530,12 +530,31 @@ class LocalRAGSystem:
         # Extract source information
         if include_sources and hasattr(response, "source_nodes"):
             for i, node in enumerate(response.source_nodes):
+                # Create clean, serializable metadata to avoid RelatedNodeInfo issues
+                clean_metadata = {}
+                if hasattr(node, "metadata") and node.metadata:
+                    for key, value in node.metadata.items():
+                        # Only include serializable types
+                        if isinstance(value, str | int | float | bool | list | dict) and not key.startswith("_"):
+                            if isinstance(value, list):
+                                # Only include lists of basic types
+                                if all(isinstance(item, str | int | float | bool) for item in value):
+                                    clean_metadata[key] = value
+                            elif isinstance(value, dict):
+                                # Only include dicts with basic type values
+                                if all(isinstance(v, str | int | float | bool | list) for v in value.values()):
+                                    clean_metadata[key] = value
+                            else:
+                                clean_metadata[key] = value
+
                 source_info = {
                     "rank": i + 1,
                     "score": getattr(node, "score", 0.0),
-                    "reference": node.metadata.get("full_reference", "Unknown"),
+                    "reference": node.metadata.get("full_reference", "Unknown")
+                    if hasattr(node, "metadata") and node.metadata
+                    else "Unknown",
                     "content_preview": (node.text[:200] + "..." if len(node.text) > 200 else node.text),
-                    "metadata": dict(node.metadata),
+                    "metadata": clean_metadata,
                 }
                 result["sources"].append(source_info)
 

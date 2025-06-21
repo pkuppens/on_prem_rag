@@ -1,0 +1,153 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Test Documentation Standards
+
+## Purpose
+This rule ensures that tests have clear, comprehensive documentation that explains the business objective and technical
+implementation details where applicable.
+
+## Test Docstring Format
+
+All test methods that test business objectives must use the following docstring format:
+
+```python
+def test_example(self):
+    """As a user I want [business objective], so I can [user benefit].
+
+    [specific technical requirement].
+
+    [how the test validates the requirement - optional for complex tests].
+    """
+```
+
+Technical implementation tests can be more simple:
+
+```python
+def test_get_fast_parameters():
+    """Ensure the 'fast' parameter set can be imported and retrieved."""
+    fast_params = get_param_set("fast")
+    assert fast_params == FAST_ANSWERS
+```
+
+## Required Elements
+
+### 1. Business Objective (User Story)
+- Start with "As a user I want..."
+- Clearly state what the user wants to achieve
+- Include the benefit: "so I can..." or "so that..."
+
+### 2. Technical Detail
+- Add empty line to separate business objective from technical part
+- Explain the specific technical requirement being tested
+- Include validation approach if not obvious
+
+### 3. Validation Method (Optional)
+- Explain how the test validates the requirement
+- Required for complex or non-obvious test approaches
+
+## Examples
+
+### Good Examples
+
+```python
+def test_page_boundaries_are_preserved(self):
+    """As a user I want search results to link to a single page, so I can quickly view and verify the result.
+
+    Chunking should respect page boundaries - chunks must not cross from one page to another.
+
+    Use large chunk size to force potential boundary crossing, then verify we get at least one chunk per page.
+    """
+```
+
+```python
+def test_empty_pages_are_handled(self):
+    """As a user I want to link search results to valid pages only.
+
+    Empty pages should not be processed in the embeddings and therefore not included in search results.
+    """
+```
+
+```python
+def test_document_loading_handles_errors(self):
+    """As a user I want the system to handle corrupted files gracefully, so I don't lose other documents.
+
+    Document loader should catch and report errors without crashing the entire processing pipeline.
+    """
+```
+
+### Bad Examples
+
+```python
+# Too vague - no business context
+def test_page_processing(self):
+    """Test that pages are processed correctly."""
+```
+
+```python
+# No technical details
+def test_user_experience(self):
+    """As a user I want good search results."""
+```
+
+```python
+# Missing business objective
+def test_chunking_works(self):
+    """Verify chunking algorithm produces expected output."""
+```
+
+## Implementation Guidelines
+
+### When Writing New Tests
+1. **Start with the user story** - What does the user want to achieve?
+2. **Add technical requirements** - What specific behavior must the system exhibit?
+3. **Include validation approach** - How will you test this requirement?
+4. **Keep it concise** - Aim for 2-3 lines maximum
+
+### When Reviewing Tests
+1. **Check for business context** - Does it explain why this matters to users?
+2. **Verify technical clarity** - Is the technical requirement clear?
+3. **Assess validation approach** - Is it clear how the test validates the requirement?
+4. **Ensure completeness** - Does the docstring cover all necessary information?
+
+### Edge Cases and Error Conditions
+For tests covering edge cases or error conditions:
+
+```python
+def test_handles_missing_file(self):
+    """As a user I want clear error messages when files are missing, so I can fix the issue quickly.
+
+    System should provide descriptive error messages for missing files without crashing.
+    """
+```
+
+### Integration Tests
+For integration tests, emphasize the end-to-end user experience:
+
+```python
+def test_complete_upload_pipeline(self):
+    """As a user I want to upload a document and see it in search results immediately.
+
+    End-to-end integration test verifying upload, processing, indexing, and search functionality.
+    ...
+    """
+```
+
+## Benefits
+
+This documentation standard provides:
+
+1. **Clear Business Context** - Developers understand why the test matters
+2. **Technical Clarity** - Specific requirements are documented
+3. **Maintenance Support** - Future developers can understand test purpose
+4. **Quality Assurance** - Tests are more likely to be comprehensive
+5. **User-Centric Development** - Keeps focus on user value
+
+## Enforcement
+
+- All new tests must follow this format
+- Existing tests should be updated when modified on a file basis.
+- Code reviews should check docstring quality
+- Test documentation is part of the definition of done

@@ -35,8 +35,9 @@ pytest.importorskip("llama_index")
 from pathlib import Path
 
 from llama_index.core import Document
-from rag_pipeline.config.parameter_sets import TEST_PARAMS
-from rag_pipeline.core.embeddings import (
+
+from backend.rag_pipeline.config.parameter_sets import TEST_PARAMS
+from backend.rag_pipeline.core.embeddings import (
     EmbeddingResult,
     QueryResult,
     embed_text_nodes,
@@ -193,8 +194,7 @@ class TestEmbeddings:
 
     @pytest.mark.slow
     @pytest.mark.internet
-    @pytest.mark.asyncio
-    async def test_process_pdf_integration(self, test_data_dir, test_case_dir):
+    def test_process_pdf_integration(self, test_data_dir, test_case_dir):
         """Test the complete PDF processing pipeline.
 
         Verifies that:
@@ -208,7 +208,7 @@ class TestEmbeddings:
         """
         pdf_path = test_data_dir / "2005.11401v4.pdf"  # Use smaller PDF
 
-        chunks, records = await process_pdf(
+        chunks, records = process_pdf(
             pdf_path=pdf_path,
             model_name=TEST_PARAMS.embedding.model_name,
             persist_dir=test_case_dir,
@@ -226,8 +226,7 @@ class TestEmbeddings:
 
     @pytest.mark.slow
     @pytest.mark.internet
-    @pytest.mark.asyncio
-    async def test_process_pdf_expected_values(self, test_data_dir, test_case_dir):
+    def test_process_pdf_expected_values(self, test_data_dir, test_case_dir):
         """Test PDF processing returns expected values for specific test file.
 
         Verifies that:
@@ -241,7 +240,7 @@ class TestEmbeddings:
         pdf_path = test_data_dir / "2005.11401v4.pdf"
 
         # Process with known parameters
-        chunks, records = await process_pdf(
+        chunks, records = process_pdf(
             pdf_path=pdf_path,
             model_name=TEST_PARAMS.embedding.model_name,
             persist_dir=test_case_dir,
@@ -254,7 +253,7 @@ class TestEmbeddings:
 
         # Test specific expectations
         assert chunks > 0, "Should create at least one chunk"
-        assert chunks < 50, "Should not create excessive chunks for single page"
+        assert chunks < 50, "Should not create excessive chunks for single PDF page"
         assert records == chunks, "No duplicates expected in single PDF page"
 
     @pytest.mark.slow
@@ -275,7 +274,7 @@ class TestEmbeddings:
         pdf_path = test_data_dir / "2005.11401v4.pdf"
 
         # First, store some embeddings
-        await process_pdf(
+        process_pdf(
             pdf_path=pdf_path,
             model_name=TEST_PARAMS.embedding.model_name,
             persist_dir=test_case_dir,

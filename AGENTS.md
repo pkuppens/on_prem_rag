@@ -57,6 +57,64 @@ Before writing code that imports new packages:
 6. **Testing**
    - All pytests must pass, with a preference for code coverage measurements.
    - Regularly update tests to reflect code changes.
+   - Follow test documentation standards for clear business context and technical details.
+
+### Test Documentation Standards
+
+Based on feedback integration, all tests must include clear documentation that explains both business objectives and technical implementation:
+
+#### Required Test Docstring Format
+
+```python
+def test_example(self):
+    """As a user I want [business objective], so I can [user benefit].
+    Technical: [specific technical requirement or validation approach].
+    Validation: [how the test validates the requirement - optional for complex tests].
+    """
+```
+
+#### Key Requirements
+
+1. **Business Context**: Start with "As a user I want..." to explain why the test matters
+2. **Technical Detail**: Include "Technical:" section explaining specific requirements
+3. **Validation Method**: Add "Validation:" for complex or non-obvious test approaches
+4. **User-Centric Focus**: Keep focus on user value and business outcomes
+
+#### Examples
+
+**Good Example:**
+
+```python
+def test_page_boundaries_are_preserved(self):
+    """As a user I want search results to link to a single page, so I can quickly view and verify the result.
+    Technical: Chunking should respect page boundaries - chunks must not cross from one page to another.
+    Validation: Use large chunk size to force potential boundary crossing, then verify we get at least one chunk per page.
+    """
+```
+
+**Bad Example:**
+
+```python
+def test_page_processing(self):
+    """Test that pages are processed correctly."""  # Too vague, no business context
+```
+
+#### Benefits
+
+- **Clear Business Context**: Developers understand why tests matter
+- **Technical Clarity**: Specific requirements are documented
+- **Maintenance Support**: Future developers can understand test purpose
+- **Quality Assurance**: Tests are more likely to be comprehensive
+- **User-Centric Development**: Keeps focus on user value
+
+#### Enforcement
+
+- All new tests must follow this format
+- Existing tests should be updated when modified
+- Code reviews should check docstring quality
+- Test documentation is part of the definition of done
+
+See [.cursor/rules/test-documentation.mdc](.cursor/rules/test-documentation.mdc) for detailed guidelines and examples.
 
 ### Bidirectional Documentation-Code References
 

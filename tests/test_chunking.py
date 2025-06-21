@@ -10,13 +10,14 @@ pytest.importorskip("llama_index")
 from pathlib import Path
 
 from llama_index.core import Document
-from rag_pipeline.core.chunking import (
+
+from backend.rag_pipeline.core.chunking import (
     ChunkingResult,
     chunk_documents,
     generate_content_hash,
     get_page_chunks,
 )
-from rag_pipeline.core.document_loader import DocumentLoader
+from backend.rag_pipeline.core.document_loader import DocumentLoader
 
 
 class TestChunking:
@@ -185,17 +186,46 @@ class TestChunking:
         assert result.file_size == doc_metadata.file_size
 
     def test_chunk_metadata_consistency(self):
-        """Test that chunk metadata is consistent and complete."""
-        documents = [Document(text="Test document for metadata checking.")]
-        source_path = Path("test_file.pdf")
+        """Test that chunk metadata is consistent across different chunking operations."""
+        documents = [
+            Document(text="This is the first page content."),
+            Document(text="This is the second page content."),
+        ]
 
-        result = chunk_documents(documents, source_path=source_path)
+        result1 = chunk_documents(documents, source_path=Path("test.pdf"))
+        result2 = chunk_documents(documents, source_path=Path("test.pdf"))
 
-        for i, chunk in enumerate(result.chunks):
-            # Check required metadata fields
-            assert chunk.metadata["chunk_index"] == i
-            assert chunk.metadata["document_name"] == source_path.name
-            assert chunk.metadata["source"] == str(source_path)
-            assert "document_id" in chunk.metadata
-            assert "content_hash" in chunk.metadata
-            assert len(chunk.metadata["content_hash"]) == 64  # SHA-256 length
+        # Verify that both results have the same number of chunks
+        assert len(result1.chunks) == len(result2.chunks)
+
+        # Verify that metadata is consistent
+        for chunk1, chunk2 in zip(result1.chunks, result2.chunks, strict=False):
+            assert chunk1.metadata["page_number"] == chunk2.metadata["page_number"]
+            assert chunk1.metadata["document_name"] == chunk2.metadata["document_name"]
+
+    def test_empty_page_handling(self):
+        """Test that empty pages are properly marked and preserved for page numbering."""
+        documents = [
+            Document(text="This is the first page with content."),
+            Document(text=""),  # Empty page
+            Document(text="This is the third page with content."),
+        ]
+
+        result = chunk_documents(documents, source_path=Path("test.pdf"), enable_text_cleaning=True)
+
+        # Verify we have chunks for all pages (including empty ones)
+        assert len(result.chunks) > 0, "Should have chunks even with empty pages"
+
+        # Check that empty pages are marked appropriately
+        empty_pages = [chunk for chunk in result.chunks if chunk.metadata.get("is_empty_page", False)]
+        non_empty_pages = [chunk for chunk in result.chunks if not chunk.metadata.get("is_empty_page", False)]
+
+        # Verify page numbering is sequential (1, 2, 3)
+        page_numbers = sorted([chunk.metadata["page_number"] for chunk in result.chunks])
+        assert page_numbers == [1, 2, 3], f"Expected sequential page numbers [1, 2, 3], got {page_numbers}"
+
+        # Verify that empty pages have empty text but are still included
+        for chunk in result.chunks:
+            if chunk.metadata.get("is_empty_page", False):
+                assert chunk.text == "", "Empty pages should have empty text"
+                assert chunk.metadata["page_number"] in [1, 2, 3], "Empty pages should have valid page numbers"

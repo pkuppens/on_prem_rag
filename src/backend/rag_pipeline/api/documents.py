@@ -3,6 +3,7 @@
 This module provides endpoints for uploading, listing, and serving documents.
 """
 
+import asyncio
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile
@@ -39,6 +40,7 @@ async def list_documents() -> dict[str, list[str]]:
     Returns:
         Dict containing a list of filenames
     """
+    logger.info("GET /api/documents/list")
     files = [f.name for f in uploaded_files_dir.iterdir() if f.is_file()]
     return {"files": files}
 
@@ -60,8 +62,6 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
     logger.info("POST /api/documents/upload", filename=file.filename, size=file.size, content_type=file.content_type)
 
     try:
-        params = get_param_set(params_name)
-
         # Notify upload started
         await progress_notifier.notify(ProgressEvent(file.filename, 5, "Upload started"))
 
@@ -70,21 +70,54 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
         with open(file_path, "wb") as f:
             f.write(await file.read())
             logger.debug("File saved to", filename=str(file_path))
-            await progress_notifier.notify(ProgressEvent(file.filename, 10, "File saved"))
+
+        await progress_notifier.notify(ProgressEvent(file.filename, 10, "File saved"))
 
         # Process the document
         try:
-            chunks_processed, records_stored = await process_document(
+            logger.debug("Processing document", filename=file.filename, params_name=params_name)
+            params = get_param_set(params_name)
+
+            # Create a sync progress callback that can be called from the processing thread
+            def progress_callback(progress: float) -> None:
+                """Map processing progress (0.0-1.0) to upload progress (10-95%)."""
+                # Map progress from 0.0-1.0 to 10-95% range
+                upload_progress = 10 + int(progress * 85)
+                logger.debug(
+                    "Document processing progress",
+                    filename=file.filename,
+                    processing_progress=progress,
+                    upload_progress=upload_progress,
+                )
+                # Schedule the async notification to run in the event loop
+                asyncio.create_task(
+                    progress_notifier.notify(
+                        ProgressEvent(file.filename, upload_progress, f"Processing document ({int(progress * 100)}%)")
+                    )
+                )
+
+            # Process document in a thread pool to avoid blocking the event loop
+            loop = asyncio.get_event_loop()
+            chunks_processed, records_stored = await loop.run_in_executor(
+                None,  # Use default executor
+                process_document,
                 file_path,
                 params.embedding.model_name,
                 persist_dir=vector_store_manager.config.persist_directory,
                 collection_name=vector_store_manager.config.collection_name,
                 chunk_size=params.chunking.chunk_size,
                 chunk_overlap=params.chunking.chunk_overlap,
+                max_pages=None,
                 deduplicate=False,
+                progress_callback=progress_callback,
             )
 
-            logger.info("Document processing completed", filename=file.filename, chunks=chunks_processed, records=records_stored)
+            logger.debug(
+                "Document processing completed",
+                filename=file.filename,
+                chunks_processed=chunks_processed,
+                records_stored=records_stored,
+            )
 
             await progress_notifier.notify(ProgressEvent(file.filename, 95, "Processing completed"))
 
@@ -180,7 +213,7 @@ async def _serve_file(filename: str):
             filename=filename,
             media_type=media_type,
             headers={
-                "Access-Control-Allow-Origin": "http://localhost:5173",
+                "Access-Control-Allow-Origin": "http://localhost:5173",  # TODO: make this configurable
                 "Access-Control-Allow-Methods": "GET, OPTIONS",
                 "Access-Control-Allow-Headers": "*",
                 "Content-Disposition": f'inline; filename="{filename}"',
@@ -221,4 +254,5 @@ async def serve_document_file(filename: str):
         HTTPException: 400 if filename is invalid
         HTTPException: 500 if file access fails
     """
+    logger.info("GET /api/documents/files/{filename}", filename=filename)
     return await _serve_file(filename)

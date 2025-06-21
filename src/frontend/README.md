@@ -1,90 +1,99 @@
-# Document Upload Frontend
+# Frontend
 
-This is the frontend application for the document upload feature. It provides a user-friendly interface for uploading and tracking document processing progress.
-
-## Prerequisites
-
-- Node.js 18 or higher
-- npm 9 or higher
-- Python 3.12 or higher
-- uv package manager
-
-## Installation
-
-1. Install frontend dependencies:
-
-   ```bash
-   npm install
-   ```
-
-2. Install backend dependencies and scripts:
-   ```bash
-   uv pip install -e .
-   ```
-
-## Starting the Servers
-
-You need to run both the backend and frontend servers. The project provides scripts to make this easy:
-
-1. Start the backend server (in one terminal):
-
-   ```bash
-   uv run start-backend
-   ```
-
-   The backend will be available at http://localhost:8000
-
-2. Start the frontend development server (in another terminal):
-   ```bash
-   uv run start-frontend
-   ```
-   The frontend will be available at http://localhost:5173
-
-### Alternative: Manual Start
-
-If you prefer to start the servers manually:
-
-1. Backend:
-
-   ```bash
-   uvicorn rag_pipeline.file_ingestion:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-2. Frontend:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+This is the frontend application for the on-premises RAG system.
 
 ## Features
 
-- Drag and drop file upload
-- Support for PDF, DOCX, and TXT files
-- Real-time upload progress tracking
-- Material UI design
-- Responsive layout
-- Structured logging with timestamps and context
+### Query Interface
+
+- **Search Functionality**: Users can search through uploaded documents using natural language queries
+- **Real-time Feedback**:
+  - Loading indicators during search operations
+  - Clear error messages when API calls fail
+  - Informative messages when no results are found
+  - Result count display when documents are found
+- **Parameter Configuration**: Users can select different RAG parameter sets for optimized search results
+- **Result Selection**: Click on search results to view document content in the appropriate viewer
+
+### Document Viewers
+
+- **PDF Viewer**: Displays PDF documents with page navigation
+- **DOCX Viewer**: Shows Word documents with formatting preserved
+- **Text Viewer**: Displays plain text and markdown files
+
+### File Upload
+
+- **Drag & Drop**: Intuitive file upload interface
+- **Progress Tracking**: Real-time upload progress with WebSocket updates
+- **Error Handling**: Clear error messages for failed uploads
+
+### Theme Support
+
+- **Light/Dark Mode**: Toggle between light and dark themes
+- **System Preference**: Automatically detects user's system theme preference
+
+## User Experience Improvements
+
+### Query Error Handling
+
+The application now provides comprehensive feedback for query operations:
+
+1. **Loading State**: A spinner is shown while the search is in progress
+2. **No Results**: When no documents match the query, users see a helpful message suggesting they try different keywords or check if documents have been uploaded
+3. **Error Messages**: If the API call fails, users receive a clear error message with guidance to try again
+4. **Success Feedback**: When results are found, the count is displayed to provide context
+
+### Responsive Design
+
+- Works on desktop and mobile devices
+- Adaptive layout that adjusts to screen size
+- Touch-friendly interface elements
 
 ## Development
 
-- The frontend is built with React, TypeScript, and Material UI
-- The backend is built with FastAPI
-- WebSocket is used for real-time progress updates
-- Vite is used as the development server and build tool
+### Prerequisites
 
-## Logging
+- Node.js 18+
+- npm or yarn
 
-The application uses structured logging with:
+### Setup
 
-- Timestamps (up to milliseconds)
-- Log levels (info, warn, error, debug)
-- File name, function name, and line number
-- Additional context data in JSON format
-
-Example log output:
-
+```bash
+npm install
 ```
-[2024-02-14T10:30:45.123] INFO: WebSocket connection established (UploadPage.tsx:useEffect:20)
-[2024-02-14T10:30:45.456] INFO: Starting file upload (UploadPage.tsx:handleFileSelect:55)
-Data: {"filename": "example.pdf", "size": 1234567, "type": "application/pdf"}
+
+### Development Server
+
+```bash
+npm run dev
 ```
+
+### Testing
+
+```bash
+npm run test
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+## Architecture
+
+The frontend is built with:
+
+- **React 18** with TypeScript
+- **Material-UI** for components and theming
+- **Vite** for build tooling
+- **Playwright** for end-to-end testing
+- **Axios** for API communication
+
+## API Integration
+
+The frontend communicates with the backend through RESTful APIs:
+
+- Document upload: `POST /api/documents/upload`
+- Query search: `POST /api/query`
+- WebSocket for real-time progress updates: `ws://localhost:8000/ws/upload-progress`

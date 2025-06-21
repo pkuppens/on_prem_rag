@@ -47,7 +47,7 @@ export const PDFTestPage = () => {
       Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useEffect.onmessage', 27, data);
       setUploadProgress(prev => ({
         ...prev,
-        [data.filename]: {
+        [data.file_id]: {
           progress: data.progress,
           error: data.error,
           isComplete: data.isComplete

@@ -16,6 +16,8 @@ interface UploadProgress {
 export const UploadPage = () => {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
   const [ws, setWs] = useState<WebSocket | null>(null);
+  const [paramSet, setParamSet] = useState<string>('default');
+  const [pingInterval, setPingInterval] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Connect to WebSocket
@@ -30,14 +32,14 @@ export const UploadPage = () => {
       );
 
       // Start sending pings every 30 seconds to keep connection alive
-      const pingInterval = setInterval(() => {
+      const interval = setInterval(() => {
         if (websocket.readyState === WebSocket.OPEN) {
           websocket.send('ping');
         }
       }, 30000);
 
       // Store interval ID for cleanup
-      websocket.pingInterval = pingInterval;
+      setPingInterval(interval);
     };
 
     websocket.onmessage = (event) => {
@@ -51,7 +53,7 @@ export const UploadPage = () => {
       );
       setUploadProgress(prev => ({
         ...prev,
-        [data.filename]: {
+        [data.file_id]: {
           progress: data.progress,
           error: data.error,
           isComplete: data.isComplete
@@ -77,8 +79,8 @@ export const UploadPage = () => {
         42
       );
       // Clear ping interval
-      if (websocket.pingInterval) {
-        clearInterval(websocket.pingInterval);
+      if (pingInterval) {
+        clearInterval(pingInterval);
       }
     };
 
@@ -86,12 +88,12 @@ export const UploadPage = () => {
 
     return () => {
       // Clear ping interval
-      if (websocket.pingInterval) {
-        clearInterval(websocket.pingInterval);
+      if (pingInterval) {
+        clearInterval(pingInterval);
       }
       websocket.close();
     };
-  }, []);
+  }, [pingInterval]);
 
   const handleFileSelect = async (files: File[]) => {
     for (const file of files) {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography, Slider, Tooltip } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 
 interface EmbeddingResult {
@@ -28,20 +28,35 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   const [results, setResults] = useState<EmbeddingResult[]>([]);
   const [selected, setSelected] = useState(0);
   const [numResults, setNumResults] = useState(5); // Default to 5 results
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const runQuery = async () => {
     if (!query.trim()) return;
 
-    const res = await axios.post<QueryResponse>('http://localhost:8000/api/query', {
-      query,
-      params_name: paramSet,
-      top_k: numResults, // Override the parameter set's top_k with user selection
-    });
-    setResults(res.data.all_results);
-    if (res.data.all_results.length > 0) {
-      const first = res.data.all_results[0];
-      setSelected(0);
-      onResultSelect(first);
+    setIsLoading(true);
+    setError(null);
+    setHasSearched(true);
+
+    try {
+      const res = await axios.post<QueryResponse>('http://localhost:8000/api/query', {
+        query,
+        params_name: paramSet,
+        top_k: numResults, // Override the parameter set's top_k with user selection
+      });
+      setResults(res.data.all_results);
+      if (res.data.all_results.length > 0) {
+        const first = res.data.all_results[0];
+        setSelected(0);
+        onResultSelect(first);
+      }
+    } catch (error) {
+      console.error('Error querying:', error);
+      setError('Failed to search documents. Please try again.');
+      setResults([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,12 +118,30 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
         fullWidth
         onClick={runQuery}
         sx={{ mb: 2 }}
-        disabled={!query.trim()}
+        disabled={!query.trim() || isLoading}
       >
-        Search
+        {isLoading ? 'Searching...' : 'Search'}
       </Button>
 
-      {results.length > 0 && (
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+          <CircularProgress size={24} />
+        </Box>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      {!isLoading && hasSearched && results.length === 0 && !error && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          No documents found matching your query. Try different keywords or check if documents have been uploaded.
+        </Alert>
+      )}
+
+      {!isLoading && results.length > 0 && (
         <Box>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Search Results ({results.length})

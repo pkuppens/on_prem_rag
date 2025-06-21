@@ -68,7 +68,7 @@ function App() {
       Logger.debug('Received progress update', 'App.tsx', 'useEffect.onmessage', 51, data);
       setUploadProgress(prev => ({
         ...prev,
-        [data.filename]: {
+        [data.file_id]: {
           progress: data.progress,
           error: data.error,
           isComplete: data.isComplete

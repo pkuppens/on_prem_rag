@@ -6,6 +6,8 @@ import {
   Paper,
   TextField,
   Typography,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import { PDFViewer } from '../components/pdf/PDFViewer';
 import { DOCXViewer } from '../components/docx/DOCXViewer';
@@ -30,17 +32,30 @@ export const QueryPage = () => {
   const [results, setResults] = useState<EmbeddingResult[]>([]);
   const [selectedResult, setSelectedResult] = useState<EmbeddingResult | null>(null);
   const [paramSet, setParamSet] = useState('default');
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleQuery = async () => {
+    if (!query.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+    setHasSearched(true);
+
     try {
       const response = await axios.post('http://localhost:8000/api/query', {
         query,
         params_name: paramSet,
       });
-      setResults(response.data);
+      setResults(response.data.all_results || response.data);
       setSelectedResult(null);
     } catch (error) {
       console.error('Error querying:', error);
+      setError('Failed to search documents. Please try again.');
+      setResults([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -104,31 +119,57 @@ export const QueryPage = () => {
             <Typography variant="h6" sx={{ mb: 2 }}>
               Search Results
             </Typography>
-            {results.map((result, index) => (
-              <Paper
-                key={index}
-                sx={{
-                  p: 2,
-                  mb: 1,
-                  cursor: 'pointer',
-                  bgcolor: selectedResult === result ? 'action.selected' : 'background.paper',
-                  '&:hover': {
-                    bgcolor: 'action.hover',
-                  },
-                }}
-                onClick={() => handleResultSelect(result)}
-              >
-                <Typography variant="subtitle2" noWrap>
-                  {result.document_name}
+
+            {isLoading && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+                <CircularProgress />
+              </Box>
+            )}
+
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+
+            {!isLoading && hasSearched && results.length === 0 && !error && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                No documents found matching your query. Try different keywords or check if documents have been uploaded.
+              </Alert>
+            )}
+
+            {!isLoading && results.length > 0 && (
+              <>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Found {results.length} result{results.length !== 1 ? 's' : ''}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Score: {result.similarity_score.toFixed(3)}
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  {result.text}
-                </Typography>
-              </Paper>
-            ))}
+                {results.map((result, index) => (
+                  <Paper
+                    key={index}
+                    sx={{
+                      p: 2,
+                      mb: 1,
+                      cursor: 'pointer',
+                      bgcolor: selectedResult === result ? 'action.selected' : 'background.paper',
+                      '&:hover': {
+                        bgcolor: 'action.hover',
+                      },
+                    }}
+                    onClick={() => handleResultSelect(result)}
+                  >
+                    <Typography variant="subtitle2" noWrap>
+                      {result.document_name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Score: {result.similarity_score.toFixed(3)}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      {result.text}
+                    </Typography>
+                  </Paper>
+                ))}
+              </>
+            )}
           </Paper>
         </Grid>
 

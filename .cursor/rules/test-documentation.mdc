@@ -151,3 +151,9 @@ This documentation standard provides:
 - Existing tests should be updated when modified on a file basis.
 - Code reviews should check docstring quality
 - Test documentation is part of the definition of done
+
+## Test Organization and Scope
+
+- Implement a dedicated test class for each significant story, feature, component, or bounded context.
+- Use module and class docstrings to clearly state what is under test and why it matters.
+- Within each class, include both functional tests and focused unit tests for edge cases.

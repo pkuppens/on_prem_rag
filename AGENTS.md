@@ -58,6 +58,9 @@ Before writing code that imports new packages:
    - All pytests must pass, with a preference for code coverage measurements.
    - Regularly update tests to reflect code changes.
    - Follow test documentation standards for clear business context and technical details.
+   - Organize tests into classes that map to stories, features, components, or bounded contexts.
+   - Provide file and class docstrings describing the scope and test goals.
+   - Include functional scenarios and edge‑case unit tests within each class.
 
 ### Test Documentation Standards
 

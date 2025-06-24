@@ -3,7 +3,7 @@
 **ID**: TASK-009
 **Story**: [STORY-002: Document Processing Pipeline](../stories/STORY-002.md)
 **Assignee**: QA Engineer
-**Status**: Todo
+**Status**: In Progress
 **Effort**: 6 hours
 **Created**: 2025-05-31
 **Updated**: 2025-06-05
@@ -16,7 +16,7 @@ Ensure high test coverage and proper error handling validation.
 
 ## Implementation Hints
 
-- [ ] Set up pytest with appropriate fixtures
+- [x] Set up pytest with fixtures and sample data
 - [ ] Create mock data generators
 - [ ] Implement performance benchmarking
 - [ ] Design integration test scenarios
@@ -26,6 +26,7 @@ Ensure high test coverage and proper error handling validation.
 
 - [ ] Unit tests for all pipeline components:
   - Document loading and validation
+  - Duplicate detection per parameter set
   - Chunking strategies
   - Embedding generation
   - Vector store operations

@@ -58,6 +58,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
@@ -69,6 +70,59 @@ DocxReader = MarkdownReader = PDFReader = None
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
+
+
+class BaseProcessor(ABC):
+    """Template interface for document processors."""
+
+    @abstractmethod
+    def load(self, file_path: Path) -> list[Document]:
+        """Return Document objects for the given file."""
+
+
+class PDFProcessor(BaseProcessor):
+    def __init__(self) -> None:
+        global PDFReader
+        from llama_index.readers.file import PDFReader
+
+        self.reader = PDFReader()
+
+    def load(self, file_path: Path) -> list[Document]:
+        return self.reader.load_data(file_path)
+
+
+class DocxProcessor(BaseProcessor):
+    def __init__(self) -> None:
+        global DocxReader
+        from llama_index.readers.file import DocxReader
+
+        self.reader = DocxReader()
+
+    def load(self, file_path: Path) -> list[Document]:
+        return self.reader.load_data(file_path)
+
+
+class MarkdownProcessor(BaseProcessor):
+    def __init__(self) -> None:
+        global MarkdownReader
+        from llama_index.readers.file import MarkdownReader
+
+        self.reader = MarkdownReader()
+
+    def load(self, file_path: Path) -> list[Document]:
+        return self.reader.load_data(file_path)
+
+
+class TextProcessor(BaseProcessor):
+    def __init__(self) -> None:
+        global SimpleDirectoryReader
+        from llama_index.core import SimpleDirectoryReader
+
+        self.reader_cls = SimpleDirectoryReader
+
+    def load(self, file_path: Path) -> list[Document]:
+        reader = self.reader_cls(input_files=[str(file_path)])
+        return reader.load_data(file_path)
 
 
 class DocumentMetadata(BaseModel):
@@ -96,21 +150,21 @@ class DocumentLoader:
     SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".md", ".txt"}
     MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 
-    def __init__(self):
-        """Initialize the document loader with necessary readers."""
-        self.processed_files: set[str] = set()
-        self._setup_readers()
+    def __init__(self) -> None:
+        """Initialize the document loader with document processors."""
+        self.processed_files: set[tuple[str, str]] = set()
+        self._setup_processors()
 
-    def _setup_readers(self) -> None:
-        """Set up document readers for different file types."""
-        global Document, SimpleDirectoryReader, DocxReader, MarkdownReader, PDFReader
-        from llama_index.core import Document, SimpleDirectoryReader
-        from llama_index.readers.file import DocxReader, MarkdownReader, PDFReader
+    def _setup_processors(self) -> None:
+        """Set up processors for different file types."""
+        global Document
+        from llama_index.core import Document
 
-        self.readers = {
-            ".pdf": PDFReader(),
-            ".docx": DocxReader(),
-            ".md": MarkdownReader(),
+        self.processors = {
+            ".pdf": PDFProcessor(),
+            ".docx": DocxProcessor(),
+            ".md": MarkdownProcessor(),
+            ".txt": TextProcessor(),
         }
 
     def _compute_file_hash(self, file_path: Path) -> str:
@@ -143,11 +197,12 @@ class DocumentLoader:
             file_size=file_path.stat().st_size,
         )
 
-    def load_document(self, file_path: str | Path) -> tuple[list[Document], DocumentMetadata]:
+    def load_document(self, file_path: str | Path, *, params_key: str = "default") -> tuple[list[Document], DocumentMetadata]:
         """Load a document and return its content and metadata.
 
         Args:
             file_path: Path to the document file
+            params_key: Identifier for the parameter set used
 
         Returns:
             Tuple of (list of Document objects, DocumentMetadata)
@@ -162,21 +217,17 @@ class DocumentLoader:
         if not is_valid:
             raise ValueError(error_msg)
 
-        # Check for duplicate files
+        # Check for duplicate files using file hash + parameter key
         file_hash = self._compute_file_hash(file_path)
-        if file_hash in self.processed_files:
-            logger.info(f"Skipping duplicate file: {file_path}")
+        dedup_key = (file_hash, params_key)
+        if dedup_key in self.processed_files:
+            logger.info("Skipping duplicate file", file=file_path, params=params_key)
             return [], self._get_metadata(file_path, file_hash)
 
         try:
-            # Get appropriate reader
-            if file_path.suffix.lower() == ".txt":
-                reader = SimpleDirectoryReader(input_files=[str(file_path)])
-            else:
-                reader = self.readers[file_path.suffix.lower()]
-
-            # Load document
-            documents = reader.load_data(file_path)
+            # Get appropriate processor
+            processor = self.processors[file_path.suffix.lower()]
+            documents = processor.load(file_path)
 
             # Update metadata
             metadata = self._get_metadata(file_path, file_hash)
@@ -187,7 +238,7 @@ class DocumentLoader:
                 metadata.num_pages = len(documents)
 
             # Mark as processed
-            self.processed_files.add(file_hash)
+            self.processed_files.add(dedup_key)
 
             logger.info(f"Successfully loaded document: {file_path}")
             return documents, metadata

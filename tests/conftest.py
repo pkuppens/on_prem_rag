@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from src.backend.rag_pipeline.utils.progress_notifier import progress_notifier
+from src.backend.rag_pipeline.utils.progress import progress_notifier
 
 # Ensure test data directory exists
 TEST_DATA_DIR = Path(__file__).parent / "test_data"

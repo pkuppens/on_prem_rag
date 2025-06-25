@@ -131,6 +131,14 @@ def progress_callback(progress: float) -> None:
     )
 ```
 
+### Progress Notifier
+
+The `progress_notifier` module implements a lightweight observer pattern.
+Processing functions emit :class:`ProgressEvent` objects while WebSocket clients
+subscribed to ``/ws/upload-progress`` receive them as JSON messages. This keeps
+the processing code independent from the WebSocket layer and allows multiple
+clients to watch the same upload.
+
 ## Benefits
 
 1. **Simpler Code**: No more `asyncio.iscoroutinefunction()` checks

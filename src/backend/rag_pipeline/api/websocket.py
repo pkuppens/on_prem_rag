@@ -1,7 +1,9 @@
-"""WebSocket API endpoints for the RAG pipeline.
+"""WebSocket endpoint for progress reporting.
 
-This module provides WebSocket endpoints for real-time progress updates
-during document processing.
+The backend publishes :class:`~backend.rag_pipeline.utils.progress.ProgressEvent`
+objects via ``progress_notifier``.  Clients connect to
+``/ws/upload-progress`` to receive those events.  The connection stays alive
+with a simple ``ping``/``pong`` exchange.
 """
 
 from fastapi import APIRouter, WebSocket

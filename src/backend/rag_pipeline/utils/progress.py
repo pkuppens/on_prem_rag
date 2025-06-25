@@ -1,7 +1,9 @@
-"""Progress notification utilities for the RAG pipeline.
+"""Utilities for broadcasting progress updates.
 
-This module provides classes for tracking and broadcasting progress updates
-during long-running operations like document processing.
+These helpers implement a very small observer pattern so that processing
+functions can emit ``ProgressEvent`` objects without knowing whether any
+WebSocket clients are connected. The :class:`ProgressNotifier` keeps track
+of subscribed ``WebSocket`` connections and forwards each event to them.
 """
 
 import asyncio

@@ -221,7 +221,7 @@ class DocumentLoader:
         file_hash = self._compute_file_hash(file_path)
         dedup_key = (file_hash, params_key)
         if dedup_key in self.processed_files:
-            logger.info("Skipping duplicate file", file=file_path, params=params_key)
+            logger.debug(f"Skipping duplicate file: {file_path} ({params_key})")
             return [], self._get_metadata(file_path, file_hash)
 
         try:

@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider, createTheme, useMediaQuery, Box, Grid, Container } from '@mui/material';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { ThemeTestPage } from './pages/ThemeTestPage';
 import { AuthProvider } from './components/auth/AuthContext';
 import { Header } from './components/auth/Header';
@@ -16,7 +16,9 @@ import './utils/pdfSetup';
 import { PDFTestPage } from './pages/PDFTestPage';
 import DocxTestPage from './pages/DocxTestPage';
 import TextTestPage from './pages/TextTestPage';
+import { WebSocketTestPage } from './pages/WebSocketTestPage';
 import { apiUrls, apiConfig } from './config/api';
+import { useWebSocket } from './hooks/useWebSocket';
 
 function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -53,20 +55,13 @@ function App() {
   const [paramSet, setParamSet] = useState<string>('fast');
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
   const [selectedResult, setSelectedResult] = useState<EmbeddingResult | null>(null);
-  const [ws, setWs] = useState<WebSocket | null>(null);
   const theme = useAppTheme(mode);
 
-  // WebSocket setup for upload progress
-  useEffect(() => {
-    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
-
-    websocket.onopen = () => {
-      Logger.info('WebSocket connection established', 'App.tsx', 'useEffect', 47);
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      Logger.debug('Received progress update', 'App.tsx', 'useEffect.onmessage', 51, data);
+  // WebSocket setup for upload progress using the custom hook
+  const { isConnected: wsConnected } = useWebSocket({
+    url: apiUrls.uploadProgressWebSocket(),
+    onMessage: (data) => {
+      Logger.debug('Received progress update', 'App.tsx', 'useWebSocket.onMessage', 47, data);
       setUploadProgress(prev => ({
         ...prev,
         [data.file_id]: {
@@ -75,28 +70,27 @@ function App() {
           isComplete: data.isComplete
         }
       }));
-    };
-
-    websocket.onerror = (error) => {
-      Logger.error('WebSocket error occurred', 'App.tsx', 'useEffect.onerror', 56, error);
-    };
-
-    websocket.onclose = () => {
-      Logger.info('WebSocket connection closed', 'App.tsx', 'useEffect.onclose', 60);
-    };
-
-    setWs(websocket);
-
-    return () => {
-      websocket.close();
-    };
-  }, []);
+    },
+    onError: (error) => {
+      Logger.error('WebSocket error occurred', 'App.tsx', 'useWebSocket.onError', 56, error);
+    },
+    onOpen: () => {
+      Logger.info('WebSocket connection established', 'App.tsx', 'useWebSocket.onOpen', 60);
+    },
+    onClose: () => {
+      Logger.info('WebSocket connection closed', 'App.tsx', 'useWebSocket.onClose', 63);
+    },
+    reconnectInterval: 5000,
+    maxReconnectAttempts: 5,
+    pingInterval: 30000,
+  });
 
   // Check if we're on test pages
   const isThemeTestPage = window.location.search.includes('test=theme');
   const isPDFTestPage = window.location.search.includes('test=pdf');
   const isDocxTestPage = window.location.search.includes('test=docx');
   const isTextTestPage = window.location.search.includes('test=text');
+  const isWebSocketTestPage = window.location.search.includes('test=websocket');
 
   // If it's a test page, show only the test component without authentication
   if (isThemeTestPage) {
@@ -111,6 +105,10 @@ function App() {
   }
   if (isTextTestPage) {
     return <TextTestPage />;
+  }
+
+  if (isWebSocketTestPage) {
+    return <WebSocketTestPage />;
   }
 
   const handleFileSelect = async (files: File[]) => {

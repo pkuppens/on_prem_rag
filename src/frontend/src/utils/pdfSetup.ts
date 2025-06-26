@@ -13,9 +13,8 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
  */
 
 // Set worker source to use local files bundled with the application
-// Updated to match pdfjs-dist version 5.3.31 to fix version mismatch
-// Fix: Using pdfjs.version ensures API and Worker versions match
-// Previous error: "The API version "4.8.69" does not match the Worker version "5.3.31""
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// Using local worker file to avoid CDN connectivity issues
+// The worker file is copied to the public directory during build
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export { pdfjs };

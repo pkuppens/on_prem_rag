@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Document, Page } from 'react-pdf';
-import { pdfjs } from '../utils/pdfSetup';
-import {
-  Container,
-  Typography,
-  Paper,
-  Box,
-  Button,
-  Alert,
-  CircularProgress,
-  Link
-} from '@mui/material';
+import { Container, Typography, Paper, Box, Button, Alert, CircularProgress, Link } from '@mui/material';
 import { FileDropzone } from '../components/upload/FileDropzone';
 import { UploadProgress } from '../components/upload/UploadProgress';
-import axios from 'axios';
-import Logger from '../utils/logger';
 import { apiUrls } from '../config/api';
+import { useWebSocket } from '../hooks/useWebSocket';
+import Logger from '../utils/logger';
+import axios from 'axios';
+// Import the centralized PDF setup
+import { pdfjs } from '../utils/pdfSetup';
 
-// Test URL for the uploaded PDF
-const TEST_PDF_URL = apiUrls.file('2303.18223v16.pdf');
+const TEST_PDF_URL = 'http://localhost:8000/api/documents/files/2303.18223v16.pdf';
 
 export const PDFTestPage = () => {
   const [numPages, setNumPages] = useState<number>(0);
@@ -32,20 +24,13 @@ export const PDFTestPage = () => {
       isComplete?: boolean;
     }
   }>({});
-  const [ws, setWs] = useState<WebSocket | null>(null);
   const [currentPdfUrl, setCurrentPdfUrl] = useState<string>(TEST_PDF_URL);
 
-  useEffect(() => {
-    // Connect to WebSocket
-    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
-
-    websocket.onopen = () => {
-      Logger.info('WebSocket connection established', 'PDFTestPage.tsx', 'useEffect', 20);
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useEffect.onmessage', 27, data);
+  // WebSocket setup for upload progress using the custom hook
+  const { isConnected: wsConnected } = useWebSocket({
+    url: apiUrls.uploadProgressWebSocket(),
+    onMessage: (data) => {
+      Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useWebSocket.onMessage', 27, data);
       setUploadProgress(prev => ({
         ...prev,
         [data.file_id]: {
@@ -54,23 +39,21 @@ export const PDFTestPage = () => {
           isComplete: data.isComplete
         }
       }));
-    };
-
-    websocket.onerror = (error) => {
-      Logger.error('WebSocket error occurred', 'PDFTestPage.tsx', 'useEffect.onerror', 35, error);
+    },
+    onError: (error) => {
+      Logger.error('WebSocket error occurred', 'PDFTestPage.tsx', 'useWebSocket.onError', 35, error);
       setError('Failed to connect to upload progress server. Please check if the backend is running.');
-    };
-
-    websocket.onclose = () => {
-      Logger.info('WebSocket connection closed', 'PDFTestPage.tsx', 'useEffect.onclose', 42);
-    };
-
-    setWs(websocket);
-
-    return () => {
-      websocket.close();
-    };
-  }, []);
+    },
+    onOpen: () => {
+      Logger.info('WebSocket connection established', 'PDFTestPage.tsx', 'useWebSocket.onOpen', 40);
+    },
+    onClose: () => {
+      Logger.info('WebSocket connection closed', 'PDFTestPage.tsx', 'useWebSocket.onClose', 43);
+    },
+    reconnectInterval: 5000,
+    maxReconnectAttempts: 5,
+    pingInterval: 30000,
+  });
 
   const handleFileSelect = async (files: File[]) => {
     for (const file of files) {

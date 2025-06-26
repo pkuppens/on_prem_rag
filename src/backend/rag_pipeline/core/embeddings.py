@@ -232,7 +232,7 @@ def process_document(
     chunk_overlap: int = 50,
     max_pages: int | None = None,
     deduplicate: bool = True,
-    progress_callback: Callable[[float], None] | None = None,
+    progress_callback: Callable[[str, float], None] | None = None,
 ) -> tuple[int, int]:
     """Process any document type and store embeddings.
 
@@ -260,7 +260,7 @@ def process_document(
     # Progress tracking: Document loading (10% of total progress)
     logger.debug("Starting document processing", filename=file_path.name, model=model_name)
     if progress_callback:
-        progress_callback(0.0)  # 0% - Starting
+        progress_callback(file_path.name, 0.0)  # 0% - Starting
 
     # Load the document
     logger.debug("Loading document", filename=file_path.name)
@@ -281,7 +281,7 @@ def process_document(
         logger.debug("Limited document pages", filename=file_path.name, max_pages=max_pages, actual_pages=len(documents))
 
     if progress_callback:
-        progress_callback(0.1)  # 10% - Document loaded
+        progress_callback(file_path.name, 0.1)  # 10% - Document loaded
 
     # Progress tracking: Chunking (40% of total progress, from 10% to 50%)
     logger.debug(
@@ -299,7 +299,7 @@ def process_document(
             # Map page progress from 0-1 to 10-50% range
             page_progress = page_num / total_pages
             overall_progress = 0.1 + (page_progress * 0.4)  # 10% to 50%
-            progress_callback(overall_progress)
+            progress_callback(file_path.name, overall_progress)
 
     # Chunk the documents using centralized chunking with page-by-page progress
     chunking_result = chunk_documents(
@@ -323,7 +323,7 @@ def process_document(
     )
 
     if progress_callback:
-        progress_callback(0.5)  # 50% - Chunking completed
+        progress_callback(file_path.name, 0.5)  # 50% - Chunking completed
 
     # Progress tracking: Embedding and storage (50% of total progress, from 50% to 100%)
     logger.debug(
@@ -339,7 +339,7 @@ def process_document(
         if progress_callback:
             # Map embedding progress from 0.0-1.0 to 0.5-1.0 range
             total_progress = 0.5 + (embedding_progress * 0.5)
-            progress_callback(total_progress)
+            progress_callback(file_path.name, total_progress)
 
     # Create embeddings and store them
     chunks_processed, records_stored = embed_chunks(
@@ -359,7 +359,7 @@ def process_document(
     )
 
     if progress_callback:
-        progress_callback(1.0)  # 100% - Processing completed
+        progress_callback(file_path.name, 1.0)  # 100% - Processing completed
 
     return chunks_processed, records_stored
 

@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy-pdf-worker": "copy node_modules\\react-pdf\\node_modules\\pdfjs-dist\\build\\pdf.worker.min.mjs public\\pdf.worker.min.mjs",
+    "build:with-worker": "npm run copy-pdf-worker && npm run build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -15,7 +17,6 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "axios": "^1.6.7",
-    "pdfjs-dist": "^5.3.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",

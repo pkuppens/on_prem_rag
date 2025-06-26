@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Container, Box } from '@mui/material';
 import { FileDropzone } from '../components/upload/FileDropzone';
 import { UploadProgress } from '../components/upload/UploadProgress';
 import axios from 'axios';
 import Logger from '../utils/logger';
 import { apiUrls } from '../config/api';
+import { useWebSocket } from '../hooks/useWebSocket';
 
 interface UploadProgress {
   [key: string]: {
@@ -16,39 +17,16 @@ interface UploadProgress {
 
 export const UploadPage = () => {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
-  const [ws, setWs] = useState<WebSocket | null>(null);
   const [paramSet, setParamSet] = useState<string>('default');
-  const [pingInterval, setPingInterval] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    // Connect to WebSocket
-    const websocket = new WebSocket(apiUrls.uploadProgressWebSocket());
-
-    websocket.onopen = () => {
-      Logger.info(
-        'WebSocket connection established',
-        'UploadPage.tsx',
-        'useEffect',
-        20
-      );
-
-      // Start sending pings every 30 seconds to keep connection alive
-      const interval = setInterval(() => {
-        if (websocket.readyState === WebSocket.OPEN) {
-          websocket.send('ping');
-        }
-      }, 30000);
-
-      // Store interval ID for cleanup
-      setPingInterval(interval);
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+  // WebSocket setup for upload progress using the custom hook
+  const { isConnected: wsConnected } = useWebSocket({
+    url: apiUrls.uploadProgressWebSocket(),
+    onMessage: (data) => {
       Logger.debug(
         'Received progress update',
         'UploadPage.tsx',
-        'useEffect.onmessage',
+        'useWebSocket.onMessage',
         27,
         data
       );
@@ -60,41 +38,36 @@ export const UploadPage = () => {
           isComplete: data.isComplete
         }
       }));
-    };
-
-    websocket.onerror = (error) => {
+    },
+    onError: (error) => {
       Logger.error(
         'WebSocket error occurred',
         'UploadPage.tsx',
-        'useEffect.onerror',
+        'useWebSocket.onError',
         35,
         error
       );
-    };
-
-    websocket.onclose = () => {
+    },
+    onOpen: () => {
+      Logger.info(
+        'WebSocket connection established',
+        'UploadPage.tsx',
+        'useWebSocket.onOpen',
+        20
+      );
+    },
+    onClose: () => {
       Logger.info(
         'WebSocket connection closed',
         'UploadPage.tsx',
-        'useEffect.onclose',
+        'useWebSocket.onClose',
         42
       );
-      // Clear ping interval
-      if (pingInterval) {
-        clearInterval(pingInterval);
-      }
-    };
-
-    setWs(websocket);
-
-    return () => {
-      // Clear ping interval
-      if (pingInterval) {
-        clearInterval(pingInterval);
-      }
-      websocket.close();
-    };
-  }, [pingInterval]);
+    },
+    reconnectInterval: 5000,
+    maxReconnectAttempts: 5,
+    pingInterval: 30000,
+  });
 
   const handleFileSelect = async (files: File[]) => {
     for (const file of files) {

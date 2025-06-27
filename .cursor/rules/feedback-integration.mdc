@@ -1,13 +1,8 @@
 ---
-description: Feedback Integration
+description: Captures and integrates development workflow feedback for continuous improvement
 globs: 
 alwaysApply: false
 ---
----
-description: Captures and integrates development workflow feedback for continuous improvement
-alwaysApply: false
----
-
 # Feedback Integration Rule
 
 ## Purpose

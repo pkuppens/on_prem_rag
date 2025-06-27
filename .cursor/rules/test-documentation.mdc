@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: Test Documentation Standards
+globs: 
 alwaysApply: false
 ---
 # Test Documentation Standards
@@ -8,6 +8,8 @@ alwaysApply: false
 ## Purpose
 This rule ensures that tests have clear, comprehensive documentation that explains the business objective and technical
 implementation details where applicable.
+
+**For function design standards that apply to test functions, see [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc).**
 
 ## Test Docstring Format
 

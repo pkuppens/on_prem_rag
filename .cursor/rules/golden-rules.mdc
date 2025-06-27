@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 # Golden Rules for AI Coding Assistance
 
-For consolidated guidance see [agents/README.md](../../agents/README.md).
+For consolidated guidance see [agents/README.md](mdc:../../agents/README.md).
 This guide outlines the key principles and practices for AI-assisted development in our SAFe environment.
 
 ## Core Principles
@@ -34,10 +34,7 @@ This guide outlines the key principles and practices for AI-assisted development
 
 4. **Coding Style**
    - Follow [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) guidelines
-   - Functions should be either execution or orchestration focused
-   - Use complete docstrings with examples
-   - Implement granular error handling
-   - Separate concerns in code organization
+   - **Function Design**: Follow [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) for comprehensive function standards
    - Use dedicated functions for file operations
    - Keep progress tracking separate from core logic
 
@@ -107,12 +104,6 @@ This guide outlines the key principles and practices for AI-assisted development
    - Follow TDD where applicable
    - Ensure code coverage meets standards
    - Address technical debt proactively
-
-4. **Function Design**
-   - Follow execution/orchestration function principles
-   - Use complete docstrings with examples
-   - Implement granular error handling
-   - Separate concerns in code organization
 
 ### Security and Environment
 1. **Environment Management**

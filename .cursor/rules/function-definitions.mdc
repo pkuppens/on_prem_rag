@@ -1,0 +1,361 @@
+---
+description: Function Definition Standards
+globs: 
+alwaysApply: false
+---
+# Function Definition Standards
+
+This rule establishes standards for function definitions across Python and TypeScript codebases.
+It serves as the single source of truth for function design principles and should be referenced
+by other rules that include function definition guidance.
+
+## Core Principles
+
+### 1. Clear and Descriptive Function Names
+
+**Python Examples:**
+```python
+# ✅ Good - Clear purpose and action
+def calculate_user_score(responses: list[str]) -> float:
+def process_batch(items: list[Item], *, batch_size: int = 100) -> BatchResult:
+def validate_input(data: str) -> bool:
+
+# ❌ Poor - Unclear purpose
+def process(data: list) -> dict:
+def helper(items: list) -> list:
+def do_work(input: str) -> str:
+```
+
+**TypeScript Examples:**
+```typescript
+// ✅ Good - Clear purpose and action
+function calculateUserScore(responses: string[]): number
+function processBatch(items: Item[], batchSize: number = 100): BatchResult
+function validateInput(data: string): boolean
+
+// ❌ Poor - Unclear purpose
+function process(data: any[]): Record<string, any>
+function doWork(input: string): string
+function helper(items: any[]): any[]
+```
+
+### 2. Comprehensive Inline Documentation
+
+**Python Docstring Format:**
+```python
+def process_batch(
+    items: list[Item],
+    *,
+    batch_size: int = 100,
+    max_retries: int = 3,
+    callback: Callable[[int, int], None] | None = None,
+) -> BatchResult:
+    """Process items in batches with retry logic and progress tracking.
+
+    Args:
+        items: List of items to process
+        batch_size: Maximum number of items per batch
+        max_retries: Number of retry attempts for failed batches
+        callback: Optional progress callback (current, total)
+
+    Returns:
+        BatchResult containing processed items and summary statistics
+
+    Raises:
+        ValueError: If batch_size is less than 1
+        ProcessingError: If all retry attempts fail
+
+    Example:
+        >>> items = [Item("a"), Item("b"), Item("c")]
+        >>> result = process_batch(items, batch_size=2)
+        >>> print(result.success_count)
+        3
+    """
+```
+
+**TypeScript JSDoc Format:**
+```typescript
+/**
+ * Process items in batches with retry logic and progress tracking.
+ * 
+ * @param items - List of items to process
+ * @param options - Configuration options
+ * @param options.batchSize - Maximum number of items per batch
+ * @param options.maxRetries - Number of retry attempts for failed batches
+ * @param options.callback - Optional progress callback (current, total)
+ * @returns BatchResult containing processed items and summary statistics
+ * @throws {Error} If batchSize is less than 1
+ * @throws {ProcessingError} If all retry attempts fail
+ * 
+ * @example
+ * ```typescript
+ * const items = [new Item("a"), new Item("b")];
+ * const result = await processBatch(items, { batchSize: 2 });
+ * console.log(result.successCount);
+ * ```
+ */
+function processBatch(
+    items: Item[],
+    options: {
+        batchSize?: number;
+        maxRetries?: number;
+        callback?: (current: number, total: number) => void;
+    } = {}
+): Promise<BatchResult>
+```
+
+### 3. Easy-to-Extract Function Signatures
+
+Keep function signatures simple and focused on a single purpose:
+
+**Python:**
+```python
+# ✅ Good - Clear signature with single purpose
+def calculate_hash(text: str) -> str:
+    """Generate hash of text content."""
+
+def validate_min_length(data: str, min_length: int = 1) -> bool:
+    """Check if data meets minimum length requirement.
+    
+    Args:
+        data: Input string to validate
+        min_length: Minimum required length
+        
+    Returns:
+        True if data meets length requirement, False otherwise
+    """
+
+# ❌ Poor - Complex signature, multiple purposes
+def process_and_validate_and_transform_data(
+    data: list, 
+    validate: bool, 
+    transform: bool, 
+    output_format: str
+) -> dict:
+```
+
+**TypeScript:**
+```typescript
+// ✅ Good - Clear signature with single purpose
+function calculateHash(text: string): string
+function validateMinLength(data: string, minLength: number = 1): boolean
+
+// ❌ Poor - Complex signature, multiple purposes
+function processAndValidateAndTransformData(
+    data: any[],
+    validate: boolean,
+    transform: boolean,
+    outputFormat: string
+): Record<string, any>
+```
+
+### 4. Testable Function Design
+
+Design functions to be easily testable through dependency injection:
+
+**Python:**
+```python
+# ✅ Good - Pure function, easy to test
+def calculate_hash(text: str) -> str:
+    """Generate hash of text content.
+    
+    Args:
+        text: Input text to hash
+        
+    Returns:
+        SHA-256 hash as hexadecimal string
+    """
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+# ✅ Good - Dependency injection for testability
+def process_batch(
+    items: list[Item],
+    *,
+    processor: Callable[[Item], ProcessedItem] = default_processor,
+    validator: Callable[[ProcessedItem], bool] = default_validator,
+) -> BatchResult:
+
+# ❌ Poor - Hard to test due to tight coupling
+def process_batch(items: list[Item]) -> BatchResult:
+    processor = DefaultProcessor()  # Hard-coded dependency
+    # ... rest of implementation
+```
+
+**TypeScript:**
+```typescript
+// ✅ Good - Pure function, easy to test
+function calculateHash(text: string): string {
+    return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+}
+
+// ✅ Good - Dependency injection for testability
+function processBatch(
+    items: Item[],
+    dependencies: {
+        processor?: (item: Item) => ProcessedItem;
+        validator?: (item: ProcessedItem) => boolean;
+    } = {}
+): BatchResult
+```
+
+### 5. Single Responsibility Principle
+
+Each function should handle one logical operation:
+
+**Python:**
+```python
+# ✅ Good - Single responsibility
+def calculate_hash(text: str) -> str:
+    """Generate hash of text content."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+def validate_item(item: Item) -> bool:
+    """Check if item meets quality standards.
+    
+    Args:
+        item: Item to validate
+        
+    Returns:
+        True if item passes validation, False otherwise
+    """
+    return len(item.content) > 0 and item.type in VALID_TYPES
+
+def add_metadata(item: Item, source: str) -> None:
+    """Add metadata to an item."""
+    item.metadata["source"] = source
+    item.metadata["processed_at"] = datetime.now()
+
+# ❌ Poor - Multiple responsibilities
+def process_validate_and_add_metadata(item: Item, source: str) -> Item:
+    # This function does too many things
+```
+
+### 6. Business Goal Alignment
+
+Function names should reflect business purpose, not implementation details:
+
+**Python:**
+```python
+# ✅ Good - Reflects business goal
+def calculate_user_engagement_score(interactions: list[Interaction]) -> float:
+    """Calculate engagement score for personalization."""
+
+def detect_duplicate_content(text: str, existing_hashes: set[str]) -> bool:
+    """Check if content already exists in the system."""
+
+# ❌ Poor - Technical implementation details
+def apply_algorithm_with_coefficients(data: list[float]) -> float:
+    """Apply mathematical algorithm with predefined coefficients."""
+```
+
+**TypeScript:**
+```typescript
+// ✅ Good - Reflects business goal
+function calculateUserEngagementScore(interactions: Interaction[]): number {
+    // Implementation focused on business value
+}
+
+function detectDuplicateContent(text: string, existingHashes: Set<string>): boolean {
+    // Implementation focused on business need
+}
+
+// ❌ Poor - Technical implementation details
+function applyAlgorithmWithCoefficients(data: number[]): number {
+    // Implementation focused on technical details
+}
+```
+
+## Function Size and Complexity Guidelines
+
+### Size Limits
+- **Target**: Functions should be under 50 lines of code
+- **Maximum**: Functions should not exceed 60 lines
+- **Exception**: API handlers may be slightly longer due to validation needs
+
+### Complexity Management
+- Break large functions into smaller, focused functions
+- Each function should handle one logical operation
+- Use helper functions to reduce complexity
+
+## Inline Code Comments
+
+### When to Use Comments
+```python
+# ✅ Good - Explain business logic
+# Use exponential backoff to handle rate limiting
+delay = base_delay * (2 ** attempt_count)
+
+# ✅ Good - Explain complex algorithms
+# Sliding window approach maintains context between chunks
+for i in range(len(data) - window_size + 1):
+    window = data[i:i + window_size]
+
+# ✅ Good - Explain workarounds
+# Preserve empty items for indexing consistency
+if not item.content:
+    item.content = ""  # Empty content
+    item.metadata["is_placeholder"] = True
+
+# ❌ Poor - Obvious comments
+count = count + 1  # Increment count
+```
+
+## API Endpoint Patterns
+
+### Separation of Concerns
+```python
+# ✅ Good - API endpoint with separated concerns
+@router.post("/process")
+async def process_items(request: ProcessRequest):
+    """Handle item processing request."""
+    # 1. API-level logging
+    logger.info("POST /api/process", request_id=request.id)
+    
+    # 2. Input validation
+    if not request.items:
+        raise HTTPException(status_code=400, detail="No items provided")
+    
+    # 3. Business logic delegation
+    result = await process_items_business_logic(request.items, request.options)
+    
+    # 4. Response formatting
+    return {"success": True, "processed_count": result.count}
+
+# ✅ Good - Separated business logic
+async def process_items_business_logic(items: list[Item], options: ProcessOptions) -> ProcessResult:
+    """Process items with business logic."""
+    # Pure business logic without API concerns
+    # ... implementation
+```
+
+## Implementation Checklist
+
+When creating or reviewing functions, ensure they meet these criteria:
+
+- [ ] Function name clearly describes its single purpose
+- [ ] Complete docstring with Args, Returns, Raises, and examples
+- [ ] Function signature is easy to extract and understand
+- [ ] Function is testable (pure or with dependency injection)
+- [ ] Function has single responsibility
+- [ ] Function name reflects business goals, not implementation details
+- [ ] Type annotations are complete and specific
+- [ ] Function size is manageable (< 50 lines preferred, max 60 lines)
+- [ ] Inline comments explain only non-trivial logic
+- [ ] API endpoints separate concerns from business logic
+
+## References to Other Rules
+
+For comprehensive guidance on related topics, refer to:
+
+- **Error Handling**: See [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) for structured error handling patterns
+- **Testing Standards**: See [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) for test documentation requirements
+- **Dependency Management**: See [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc) for package management guidelines
+- **Code Quality Tools**: See [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) for linting and formatting configuration
+- **Security Practices**: See [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) for secure function design
+
+## External References
+
+- [Python Type Hints](https://docs.python.org/3/library/typing.html)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
+- [JSDoc Reference](https://jsdoc.app/)

@@ -3,6 +3,8 @@ description: Coding style guidelines for Python and TypeScript applications
 globs:
   - "**/*.py"
   - "**/*.ts"
+alwaysApply: false
+---
 # Coding Style Guidelines
 
 This rule defines the coding style preferences for Python and TypeScript applications, balancing structure with development pragmatism.
@@ -23,6 +25,8 @@ This rule defines the coding style preferences for Python and TypeScript applica
 - **Use judgment**: Balance structure with development speed based on context
 
 ## Function Design
+
+**For comprehensive function design standards, see [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc).**
 
 ### Function Types (Preferred Patterns)
 

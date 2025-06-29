@@ -16,17 +16,12 @@ Key features:
 
 from __future__ import annotations
 
-import asyncio
-import hashlib
 import logging
 from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict, Union
 
-from llama_index.core import Document
-from llama_index.core.node_parser import SimpleNodeParser
-from llama_index.core.schema import BaseNode
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.core.schema import BaseNode, TextNode
 
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig
 from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents, generate_content_hash
@@ -70,11 +65,11 @@ __all__ = [
 ]
 
 
-def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]]:
+def embed_text_nodes(nodes: list[Union[BaseNode, TextNode]], model_name: str) -> list[list[float]]:
     """Convert text nodes to embeddings using HuggingFace models.
 
     Args:
-        nodes: List of Document objects containing text to embed
+        nodes: List of BaseNode objects containing text to embed
         model_name: Name of the HuggingFace embedding model
 
     Returns:
@@ -88,12 +83,32 @@ def embed_text_nodes(nodes: list[Document], model_name: str) -> list[list[float]
     # Process each node to generate embeddings
     # This is typically the most time-consuming part of document processing
     for i, node in enumerate(nodes):
-        logger.debug("Generating embedding for node", node_index=i, total_nodes=len(nodes), text_length=len(node.text))
+        # Validate text content before embedding
+        if not hasattr(node, "text") or not getattr(node, "text", None):
+            logger.warning(f"Skipping node {i} - no text content", extra={"node_index": i, "total_nodes": len(nodes)})
+            # Create a zero embedding or skip - for now, skip
+            continue
 
-        embedding = embed_model.get_text_embedding(node.text)
-        embeddings.append(embedding)
+        # Ensure text is a string and clean it
+        text = str(getattr(node, "text", "")).strip()
+        if not text:
+            logger.warning(f"Skipping node {i} - empty text after cleaning", extra={"node_index": i, "total_nodes": len(nodes)})
+            continue
 
-    logger.debug("Text embedding generation completed", model=model_name, embeddings_generated=len(embeddings))
+        logger.debug("Generating embedding for node", extra={"node_index": i, "total_nodes": len(nodes), "text_length": len(text)})
+
+        try:
+            embedding = embed_model.get_text_embedding(text)
+            embeddings.append(embedding)
+        except Exception as e:
+            logger.error(
+                f"Embedding attempt failed for node {i}: {str(e)}",
+                extra={"node_index": i, "text_preview": text[:100], "error": str(e)},
+            )
+            # Continue with next node instead of failing completely
+            continue
+
+    logger.debug("Text embedding generation completed", extra={"model": model_name, "embeddings_generated": len(embeddings)})
 
     return embeddings
 
@@ -201,7 +216,8 @@ def store_embeddings(
                 unique_data.append(i)
 
         # Keep only unique entries
-        ids = [list(ids)[i] for i in unique_data]
+        ids_list = list(ids)
+        ids = [ids_list[i] for i in unique_data]
         embeddings = [embeddings[i] for i in unique_data]
         metadatas = [metadatas[i] for i in unique_data]
 
@@ -215,10 +231,12 @@ def store_embeddings(
                 doc_text = metadata.get("text", "")
                 documents.append(doc_text)
         else:
-            documents = [""] * len(ids)
+            documents = [""] * len(list(ids))
 
         # Add to collection with documents
-        manager._collection.add(ids=list(ids), embeddings=list(embeddings), metadatas=metadatas, documents=documents)
+        manager._collection.add(
+            ids=list(ids), embeddings=list(embeddings), metadatas=list(metadatas) if metadatas else None, documents=documents
+        )
     return manager
 
 

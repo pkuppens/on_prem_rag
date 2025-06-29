@@ -135,6 +135,25 @@ class TestChunking:
         # Hash should be SHA-256 length
         assert len(hash1) == 64
 
+    def test_generate_content_hash_unicode_handling(self):
+        """Test content hash generation with Unicode surrogate characters."""
+        # Test with surrogate characters that would cause UnicodeEncodeError
+        text_with_surrogates = "Normal text with \ud835 surrogate characters"
+
+        # This should not raise UnicodeEncodeError
+        try:
+            hash_result = generate_content_hash(text_with_surrogates)
+            assert len(hash_result) == 64, "Hash should be SHA-256 length"
+            assert isinstance(hash_result, str), "Hash should be a string"
+        except UnicodeEncodeError:
+            pytest.fail("generate_content_hash should handle Unicode surrogate characters")
+
+        # Test with other Unicode characters
+        unicode_text = "Text with émojis 🚀 and accénts"
+        hash_unicode = generate_content_hash(unicode_text)
+        assert len(hash_unicode) == 64
+        assert isinstance(hash_unicode, str)
+
     def test_get_page_chunks_integration(self, test_data_dir):
         """Test the get_page_chunks function with real PDF."""
         pdf_path = test_data_dir / "2005.11401v4.pdf"  # Use smaller PDF
@@ -219,6 +238,10 @@ class TestChunking:
         # Check that empty pages are marked appropriately
         empty_pages = [chunk for chunk in result.chunks if chunk.metadata.get("is_empty_page", False)]
         non_empty_pages = [chunk for chunk in result.chunks if not chunk.metadata.get("is_empty_page", False)]
+
+        # Verify we have the expected number of empty and non-empty pages
+        assert len(empty_pages) == 1, f"Expected 1 empty page, got {len(empty_pages)}"
+        assert len(non_empty_pages) == 2, f"Expected 2 non-empty pages, got {len(non_empty_pages)}"
 
         # Verify page numbering is sequential (1, 2, 3)
         page_numbers = sorted([chunk.metadata["page_number"] for chunk in result.chunks])

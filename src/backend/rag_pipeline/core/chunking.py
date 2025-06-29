@@ -67,8 +67,18 @@ class ChunkMetadata:
 
 
 def generate_content_hash(text: str) -> str:
-    """Generate SHA-256 hash of text content."""
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    """Generate SHA-256 hash of text content.
+
+    Handles Unicode surrogate characters by normalizing the text before encoding.
+    """
+    # Normalize Unicode characters and handle surrogates
+    try:
+        # First try direct encoding
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    except UnicodeEncodeError:
+        # If that fails, normalize and try again
+        normalized_text = text.encode("utf-8", errors="replace").decode("utf-8")
+        return hashlib.sha256(normalized_text.encode("utf-8")).hexdigest()
 
 
 def chunk_documents(

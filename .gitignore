@@ -162,3 +162,7 @@ SCRATCH.md
 # Node modules
 **/node_modules/
 src/frontend/node_modules/
+
+# Test data: ignore pdf test files except the 2*.pdf files, as they are public domain, and can be used for testing
+tests/test_data/*.pdf
+!tests/test_data/2*.pdf

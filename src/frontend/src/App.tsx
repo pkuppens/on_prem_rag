@@ -11,6 +11,8 @@ import { QuerySection } from './components/query/QuerySection';
 import { PDFViewer } from './components/pdf/PDFViewer';
 import axios from 'axios';
 import Logger from './utils/logger';
+import { useBackendStatus } from './hooks/useBackendStatus';
+import { enhanceErrorMessage } from './utils/errorUtils';
 // Initialize PDF.js for secure on-premises deployment (must be imported early)
 import './utils/pdfSetup';
 import { PDFTestPage } from './pages/PDFTestPage';
@@ -56,6 +58,7 @@ function App() {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
   const [selectedResult, setSelectedResult] = useState<EmbeddingResult | null>(null);
   const theme = useAppTheme(mode);
+  const { isBackendRunning, isChecking } = useBackendStatus();
 
   // WebSocket setup for upload progress using the custom hook
   const { isConnected: wsConnected } = useWebSocket({
@@ -173,12 +176,14 @@ function App() {
           error
         );
 
-        // Set error state
+        // Set error state with enhanced message
+        const originalError = error instanceof Error ? error.message : 'Upload failed';
+        const enhancedError = enhanceErrorMessage(originalError, isBackendRunning, isChecking);
         setUploadProgress(prev => ({
           ...prev,
           [file.name]: {
             ...prev[file.name],
-            error: error instanceof Error ? error.message : 'Upload failed'
+            error: enhancedError
           }
         }));
       }

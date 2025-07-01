@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography, CircularProgress } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography, CircularProgress, Tooltip } from '@mui/material';
 import axios from 'axios';
+import { useBackendStatus } from '../../hooks/useBackendStatus';
+import { enhanceErrorMessage } from '../../utils/errorUtils';
 
 interface Props {
   value: string;
@@ -21,29 +23,32 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   const [sets, setSets] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isBackendRunning, isChecking } = useBackendStatus();
+
+  const fetchSets = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets');
+      setSets(res.data.sets);
+
+      // If no value is set yet, use the default from the backend
+      if (!value) {
+        onChange(res.data.default);
+      }
+      setError(null);
+    } catch (err) {
+      const originalError = 'Failed to load parameter sets';
+      const enhancedError = enhanceErrorMessage(originalError, isBackendRunning, isChecking);
+      setError(enhancedError);
+      console.error('Error loading parameter sets:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSets = async () => {
-      try {
-        setIsLoading(true);
-        const res = await axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets');
-        setSets(res.data.sets);
-
-        // If no value is set yet, use the default from the backend
-        if (!value) {
-          onChange(res.data.default);
-        }
-        setError(null);
-      } catch (err) {
-        setError('Failed to load parameter sets');
-        console.error('Error loading parameter sets:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchSets();
-  }, [value, onChange]);
+  }, [value, onChange, isBackendRunning, isChecking]);
 
   const params = sets[value] || {};
 
@@ -67,9 +72,31 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   if (error) {
     return (
       <Box sx={{ mb: 4 }}>
-        <Typography variant="body2" color="error">
-          {error}
-        </Typography>
+        <Tooltip
+          title="Click to retry"
+          placement="top"
+          arrow
+        >
+          <Typography
+            variant="body2"
+            color="error"
+            sx={{
+              cursor: 'pointer',
+              whiteSpace: 'pre-line', // Preserve line breaks for enhanced error messages
+              '&:hover': {
+                textDecoration: 'underline'
+              }
+            }}
+            onClick={() => {
+              setError(null);
+              setIsLoading(true);
+              // Trigger a re-fetch
+              fetchSets();
+            }}
+          >
+            {error}
+          </Typography>
+        </Tooltip>
       </Box>
     );
   }

@@ -119,7 +119,11 @@ export const UploadProgress = ({
           <Typography
             variant="caption"
             color="error"
-            sx={{ mt: 1, display: 'block' }}
+            sx={{
+              mt: 1,
+              display: 'block',
+              whiteSpace: 'pre-line' // Preserve line breaks for enhanced error messages
+            }}
           >
             {error}
           </Typography>

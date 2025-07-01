@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { apiUrls } from '../../config/api';
+import { useBackendStatus } from '../../hooks/useBackendStatus';
+import { enhanceErrorMessage } from '../../utils/errorUtils';
 
 interface EmbeddingResult {
   text: string;
@@ -32,6 +34,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isBackendRunning, isChecking } = useBackendStatus();
 
   const runQuery = async () => {
     if (!query.trim()) return;
@@ -54,7 +57,9 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
       }
     } catch (error) {
       console.error('Error querying:', error);
-      setError('Failed to search documents. Please try again.');
+      const originalError = 'Failed to search documents. Please try again.';
+      const enhancedError = enhanceErrorMessage(originalError, isBackendRunning, isChecking);
+      setError(enhancedError);
       setResults([]);
     } finally {
       setIsLoading(false);
@@ -131,7 +136,29 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
       )}
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert
+          severity="error"
+          sx={{
+            mb: 2,
+            '& .MuiAlert-message': {
+              whiteSpace: 'pre-line' // Preserve line breaks for enhanced error messages
+            }
+          }}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setError(null);
+                if (query.trim()) {
+                  runQuery();
+                }
+              }}
+            >
+              Retry
+            </Button>
+          }
+        >
           {error}
         </Alert>
       )}

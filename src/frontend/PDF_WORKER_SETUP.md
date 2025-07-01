@@ -1,118 +1,46 @@
 # PDF Worker Setup
 
+This document explains the PDF.js worker file setup for offline operation.
+
 ## Overview
 
-This project uses a local PDF.js worker file instead of loading it from a CDN to ensure:
+The application uses `react-pdf` for PDF viewing, which requires the PDF.js worker file to be available locally for offline operation. The worker file is automatically copied during the build process.
 
-- **Offline operation**: No external network dependencies
-- **Security**: No external requests for PDF processing
-- **Reliability**: No CDN connectivity issues
-- **CSP compliance**: Works with strict Content Security Policies
-- **Version compatibility**: Uses the exact worker version that react-pdf expects
+## How It Works
 
-## Setup
+1. **Automatic Copy**: The `copy-pdf-worker.js` script copies the worker file from `node_modules` to the `public` directory
+2. **Build Integration**: The copy process is integrated into both `dev` and `build` scripts
+3. **Offline Operation**: The worker file is served from the local public directory, eliminating CDN dependencies
 
-### Automatic Setup (Recommended)
+## Scripts
 
-The PDF worker file is automatically copied during the build process:
-
-```bash
-npm run build:with-worker
-```
-
-This command:
-
-1. Copies the worker file from `node_modules/react-pdf/node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/pdf.worker.min.mjs`
-2. Builds the application
-
-### Manual Setup
-
-If you need to copy the worker file manually:
-
-```bash
-npm run copy-pdf-worker
-```
-
-Or manually copy the file:
-
-```bash
-copy node_modules\react-pdf\node_modules\pdfjs-dist\build\pdf.worker.min.mjs public\pdf.worker.min.mjs
-```
-
-## Configuration
-
-The PDF worker is configured in `src/utils/pdfSetup.ts`:
-
-```typescript
-import { pdfjs } from "react-pdf";
-
-// Set worker source to use local file
-pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-
-export { pdfjs };
-```
-
-## Usage
-
-Import the configured PDF.js instance in your components:
-
-```typescript
-import { pdfjs } from "../utils/pdfSetup";
-import { Document, Page } from "react-pdf";
-
-// Use Document and Page components normally
-<Document file={pdfUrl}>
-  <Page pageNumber={1} />
-</Document>;
-```
-
-## Troubleshooting
-
-### Worker Not Found Error
-
-If you see "Failed to fetch dynamically imported module" errors:
-
-1. **Check if worker file exists**: Verify `public/pdf.worker.min.mjs` exists
-2. **Copy worker file**: Run `npm run copy-pdf-worker`
-3. **Restart dev server**: Restart the development server after copying
-
-### Version Mismatch Error
-
-If you see "API version does not match Worker version" errors:
-
-1. **Check versions**: Ensure the worker file matches react-pdf's expected version
-2. **Copy correct worker**: Run `npm run copy-pdf-worker` to get the right version
-3. **Restart dev server**: Restart the development server after copying
-
-### Build Issues
-
-If the build fails:
-
-1. **Check file paths**: Ensure the worker file exists in `node_modules/react-pdf/node_modules/pdfjs-dist/build/`
-2. **Run copy command**: Execute `npm run copy-pdf-worker` before building
-3. **Check permissions**: Ensure write permissions to the `public/` directory
+- `npm run copy-pdf-worker`: Manually copy the PDF worker file
+- `npm run dev`: Start development server (includes worker copy)
+- `npm run build`: Build for production (includes worker copy)
 
 ## File Locations
 
-- **Source worker**: `node_modules/react-pdf/node_modules/pdfjs-dist/build/pdf.worker.min.mjs`
-- **Public worker**: `public/pdf.worker.min.mjs`
-- **Configuration**: `src/utils/pdfSetup.ts`
+- **Source**: `node_modules/react-pdf/node_modules/pdfjs-dist/build/pdf.worker.min.mjs`
+- **Destination**: `public/pdf.worker.min.mjs`
+- **Configuration**: `src/utils/pdfSetup.ts` (sets worker source to `/pdf.worker.min.mjs`)
 
-## Dependencies
+## Troubleshooting
 
-- `react-pdf@9.2.1`: React PDF viewer component (includes pdfjs-dist@4.8.69)
+### Worker File Not Found
 
-## Version Compatibility
+If you see "Failed to fetch dynamically imported module" errors:
 
-This setup ensures that:
+1. Ensure `react-pdf` is installed: `npm install`
+2. Run the copy script: `npm run copy-pdf-worker`
+3. Restart the development server: `npm run dev`
 
-- The worker file version matches exactly what `react-pdf` expects
-- No version conflicts between different pdfjs-dist installations
-- Consistent behavior across all PDF viewing components
+### Cross-Platform Compatibility
+
+The copy script works on Windows, macOS, and Linux using Node.js file system APIs.
 
 ## Security Benefits
 
-1. **No external requests**: All PDF processing happens locally
-2. **CSP compliance**: No need for `unsafe-eval` or external script sources
-3. **Offline capability**: PDF viewing works without internet connection
-4. **Version control**: Worker version is locked to react-pdf's expected version
+- **No CDN Dependencies**: Eliminates external network requests for PDF processing
+- **CSP Compliance**: Works with strict Content Security Policies
+- **Offline Operation**: PDF viewing works without internet connectivity
+- **Version Control**: Worker file version is locked to the installed `react-pdf` version

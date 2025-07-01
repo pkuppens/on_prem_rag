@@ -190,10 +190,10 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Header />
-        <Container maxWidth="xl" sx={{ py: 2 }}>
+        <Box sx={{ py: 2, px: 3, width: '100%' }}>
           <Grid container spacing={3}>
-            {/* Left Sidebar - 4 columns */}
-            <Grid item xs={12} md={4}>
+            {/* Left Sidebar - 3 columns for ultrawide */}
+            <Grid item xs={12} lg={3} xl={2}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* 1. Theme Selector */}
                 <ThemeSelector mode={mode} onChange={setMode} />
@@ -231,12 +231,12 @@ function App() {
               </Box>
             </Grid>
 
-            {/* Right Area - 8 columns */}
-            <Grid item xs={12} md={8}>
+            {/* Right Area - 9 columns for ultrawide */}
+            <Grid item xs={12} lg={9} xl={10}>
               <PDFViewer selectedResult={selectedResult} />
             </Grid>
           </Grid>
-        </Container>
+        </Box>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -107,24 +107,23 @@ class TestEmbeddings:
         embeddings = embed_text_nodes([], TEST_PARAMS.embedding.model_name)
         assert len(embeddings) == 0
 
-        # Test empty text
+        # Test (only) empty text in array, should be skipped and thus return an empty list
         empty_doc = Document(text="")
         embeddings = embed_text_nodes([empty_doc], TEST_PARAMS.embedding.model_name)
-        assert len(embeddings) == 1
-        assert len(embeddings[0]) > 0
+        assert len(embeddings) == 0, "Empty document should be skipped and thus return an empty list"
 
         # Test long text
         long_text = "test " * 1000
         long_doc = Document(text=long_text)
         embeddings = embed_text_nodes([long_doc], TEST_PARAMS.embedding.model_name)
-        assert len(embeddings) == 1
-        assert len(embeddings[0]) > 0
+        assert len(embeddings) == 1, "Long document should be embedded"
+        assert len(embeddings[0]) > 0, "Embedding should have non-zero length"
 
         # Test special characters
         special_doc = Document(text="!@#$%^&*()_+{}|:<>?")
         embeddings = embed_text_nodes([special_doc], TEST_PARAMS.embedding.model_name)
-        assert len(embeddings) == 1
-        assert len(embeddings[0]) > 0
+        assert len(embeddings) == 1, "Document with special characters should be embedded"
+        assert len(embeddings[0]) > 0, "Embedding should have non-zero length"
 
     def test_store_embeddings_basic(self, test_case_dir):
         """Test basic embedding storage functionality.

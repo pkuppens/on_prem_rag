@@ -71,17 +71,18 @@ This guide outlines the key principles and practices for AI-assisted development
 
 ### 2. Implementation Phase
 - One task per conversation
-- Test early and often
-- Write unit tests for each new feature
-- Include docstrings and comments
+- Use test driven development to develop new features
+- Write pytest unit tests for the edge cases of each new feature
+- Include docstrings and comments in both code and tests for interfaces like function calls, and complex code segments
 - Follow coding style guidelines
+- Use SOLID principles where applicable, like dependency injection for external interfaces.
 
 ### 3. Testing Standards
 - Create tests for every new feature
 - Test structure:
   - 1 test for expected use
-  - 1 edge case test
-  - 1 failure case test
+  - edge case tests
+  - failure case test for proper error handling
 - Mock external service calls
 - Update tests when logic changes
 

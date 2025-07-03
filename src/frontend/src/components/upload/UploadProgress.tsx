@@ -52,6 +52,11 @@ export const UploadProgress = ({
   const [flashCount, setFlashCount] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
+  // Validate and sanitize progress value
+  const validProgress = typeof progress === 'number' && !isNaN(progress)
+    ? Math.max(0, Math.min(100, progress))
+    : 0;
+
   // Handle completion animation sequence
   useEffect(() => {
     if (isComplete && flashCount < 3) {
@@ -107,12 +112,12 @@ export const UploadProgress = ({
             variant="body2"
             color={error ? 'error.main' : 'text.secondary'}
           >
-            {progress}%
+            {validProgress}%
           </Typography>
         </Box>
         <LinearProgress
           variant="determinate"
-          value={progress}
+          value={validProgress}
           color={error ? 'error' : 'primary'}
         />
         {error && (

@@ -93,7 +93,7 @@ elif json_data.get("type") == "ping":
 Use the test script to verify WebSocket functionality:
 
 ```bash
-python test_websocket_connection.py
+python tests/test_websocket_connection.py
 ```
 
 This script tests:

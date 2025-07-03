@@ -5,7 +5,7 @@ This module provides endpoints for uploading, listing, and serving documents.
 
 import asyncio
 
-from fastapi import APIRouter, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
@@ -35,27 +35,181 @@ vector_store_manager = get_vector_store_manager_from_env()
 chroma_manager = vector_store_manager if isinstance(vector_store_manager, ChromaVectorStoreManager) else None
 
 
-# Create a sync progress callback that can be called from the processing thread
+# Global variable to store progress events for the current processing task
+_current_progress_events = []
+
+
 def progress_callback(filename: str, progress: float) -> None:
-    """Notify progress for document processing to the UI.
+    """Store progress events for document processing.
+
+    This function is called from the sync process_document function.
+    It stores progress events that will be processed by the async background task.
+
     Args:
         filename: The name of the file being processed
         progress: The current progress of the processing (0.0-1.0)
     """
-    # convert progress as float in range 0.0-1.0 to upload progress in percentage 0-100
-    upload_progress = int(100 * progress)
+    global _current_progress_events
+
+    # Map processing progress (0.0-1.0) to upload progress (15-100%)
+    # This ensures we start at 15% (after upload) and go to 100%
+    upload_progress = int(15 + (progress * 85))  # 15% to 100%
+
+    # Create appropriate progress messages based on the phase
+    if progress <= 0.1:
+        message = "Loading document..."
+    elif progress <= 0.5:
+        message = f"Chunking document ({int(progress * 100)}%)"
+    elif progress <= 0.8:
+        message = f"Generating embeddings ({int(progress * 100)}%)"
+    elif progress < 1.0:
+        message = "Storing in vector database..."
+    else:
+        message = "Processing completed"
 
     logger.debug(
-        "Document processing progress",
+        "Document processing progress callback called",
         filename=filename,
         processing_progress=progress,
         upload_progress=upload_progress,
+        progress_message=message,
     )
 
-    # Schedule the async notification to run in the event loop
-    asyncio.create_task(
-        progress_notifier.notify(ProgressEvent(filename, upload_progress, f"Processing document ({int(progress * 100)}%)"))
-    )
+    # Store the progress event for the async task to process
+    _current_progress_events.append({"filename": filename, "progress": upload_progress, "message": message})
+
+
+async def process_document_background(file_path, filename: str, params_name: str):
+    """Process document in the background with progress updates.
+
+    This function follows the same pattern as the working test.py example.
+    It runs the sync process_document function and then processes any progress events.
+
+    Args:
+        file_path: Path to the uploaded file
+        filename: Name of the file being processed
+        params_name: Name of the parameter set to use
+    """
+    global _current_progress_events
+
+    try:
+        logger.info(f"Starting background processing for {filename}")
+
+        # Clear any previous progress events
+        _current_progress_events.clear()
+
+        # Verify file exists before processing
+        if not file_path.exists():
+            logger.error("File not found for processing", filename=filename, file_path=str(file_path))
+            await progress_notifier.notify(ProgressEvent(filename, -1, f"File not found: {filename}"))
+            return
+
+        logger.debug(
+            "File verified for processing", filename=filename, file_path=str(file_path), file_size=file_path.stat().st_size
+        )
+
+        # Get parameter set
+        params = get_param_set(params_name)
+        if not isinstance(params, RAGParams):
+            await progress_notifier.notify(ProgressEvent(filename, -1, f"Invalid parameter set: {params_name}"))
+            return
+
+        # Notify processing started
+        await progress_notifier.notify(ProgressEvent(filename, 15, "Processing started"))
+
+        # Small yield to allow other tasks to run
+        await asyncio.sleep(0.01)
+
+        logger.debug("Starting process_document call", filename=filename)
+
+        # Run the sync process_document function in a thread pool
+        # This will call progress_callback which stores events in _current_progress_events
+        loop = asyncio.get_event_loop()
+
+        # Start a task to monitor and send progress events in real-time
+        progress_task = asyncio.create_task(_send_progress_events(filename))
+
+        try:
+            chunks_processed, records_stored = await loop.run_in_executor(
+                None,  # Use default executor
+                lambda: process_document(
+                    file_path,
+                    params.embedding.model_name,
+                    persist_dir=chroma_manager.config.persist_directory if chroma_manager else uploaded_files_dir,
+                    collection_name=chroma_manager.config.collection_name if chroma_manager else "documents",
+                    chunk_size=params.chunking.chunk_size,
+                    chunk_overlap=params.chunking.chunk_overlap,
+                    max_pages=None,
+                    deduplicate=False,
+                    progress_callback=progress_callback,
+                ),
+            )
+
+            logger.debug(
+                "Document processing completed",
+                filename=filename,
+                chunks_processed=chunks_processed,
+                records_stored=records_stored,
+            )
+        finally:
+            # Cancel the progress task
+            progress_task.cancel()
+            try:
+                await progress_task
+            except asyncio.CancelledError:
+                pass
+
+        # Process any remaining progress events
+        for event_data in _current_progress_events:
+            event = ProgressEvent(file_id=event_data["filename"], progress=event_data["progress"], message=event_data["message"])
+            await progress_notifier.notify(event)
+            logger.debug(f"Sent progress event: {event_data['progress']}% - {event_data['message']}")
+
+        # Clear the events
+        _current_progress_events.clear()
+
+    except Exception as e:
+        logger.error("Error during document processing", filename=filename, error=str(e), error_type=type(e).__name__)
+        await progress_notifier.notify(ProgressEvent(filename, -1, f"Processing failed: {str(e)}"))
+
+
+async def _send_progress_events(filename: str):
+    """Monitor and send progress events in real-time.
+
+    This function runs concurrently with document processing and sends
+    progress events as they are created by the progress_callback.
+
+    Args:
+        filename: The filename to monitor progress events for
+    """
+    global _current_progress_events
+
+    try:
+        while True:
+            # Check for new progress events
+            if _current_progress_events:
+                # Get events for this file
+                file_events = [e for e in _current_progress_events if e["filename"] == filename]
+
+                # Remove processed events
+                for event_data in file_events:
+                    _current_progress_events.remove(event_data)
+
+                    # Send the event
+                    event = ProgressEvent(
+                        file_id=event_data["filename"], progress=event_data["progress"], message=event_data["message"]
+                    )
+                    await progress_notifier.notify(event)
+                    logger.debug(f"Sent real-time progress event: {event_data['progress']}% - {event_data['message']}")
+
+            # Wait a bit before checking again
+            await asyncio.sleep(0.1)
+
+    except asyncio.CancelledError:
+        logger.debug(f"Progress sender cancelled for {filename}")
+        raise
+    except Exception as e:
+        logger.error(f"Error in progress sender for {filename}: {e}")
 
 
 @router.get("/list")
@@ -71,18 +225,19 @@ async def list_documents() -> dict[str, list[str]]:
 
 
 @router.post("/upload")
-async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET_NAME):
-    """Handle file upload, chunking, and embedding.
+async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, params_name: str = DEFAULT_PARAM_SET_NAME):
+    """Handle file upload and start background processing.
 
     Args:
         file: The uploaded file
+        background_tasks: FastAPI background tasks manager
         params_name: Name of the parameter set to use (default: DEFAULT_PARAM_SET_NAME)
 
     Returns:
-        Dict with success message
+        Dict with upload status and file information
 
     Raises:
-        HTTPException: If upload or processing fails
+        HTTPException: If upload validation fails
     """
     logger.info("POST /api/documents/upload", filename=file.filename, size=file.size, content_type=file.content_type)
 
@@ -118,60 +273,59 @@ async def upload_document(file: UploadFile, params_name: str = DEFAULT_PARAM_SET
             status_code=400, detail=f"Unsupported file type: {content_type}. Supported types: {', '.join(supported_types)}"
         )
 
-    # Notify request validated
-    await progress_notifier.notify(ProgressEvent(filename, 1, "Request validated"))
-    await asyncio.sleep(0.1)  # Yield thread to UI for 0.1 second
-
     try:
         # Notify upload started
         await progress_notifier.notify(ProgressEvent(filename, 5, "Upload started"))
 
+        # Ensure the upload directory exists
+        logger.debug(
+            "Preparing to save file",
+            filename=filename,
+            upload_dir=str(uploaded_files_dir),
+            upload_dir_exists=uploaded_files_dir.exists(),
+            upload_dir_is_dir=uploaded_files_dir.is_dir(),
+        )
+
         # Save upload to the proper uploaded files directory
         file_path = uploaded_files_dir / filename
+        logger.debug("File path resolved", file_path=str(file_path))
+
+        # Read file content first
+        file_content = await file.read()
+        logger.debug("File content read", content_size=len(file_content))
+
+        # Directory is already ensured to exist at module level
+
+        # Write file content
         with open(file_path, "wb") as f:
-            f.write(await file.read())
-            logger.debug("File saved to", filename=str(file_path))
+            f.write(file_content)
+
+        # Verify file was saved
+        if not file_path.exists():
+            raise RuntimeError(f"File was not saved successfully to {file_path}")
+
+        logger.debug("File saved successfully", filename=str(file_path), file_size=file_path.stat().st_size)
 
         await progress_notifier.notify(ProgressEvent(filename, 10, "File saved"))
-        await asyncio.sleep(0.1)  # Yield thread to UI for 0.1 second
+
+        # Small delay to ensure file is fully written
+        await asyncio.sleep(0.1)
+
+        # Start background processing
+        background_tasks.add_task(process_document_background, file_path, filename, params_name)
+
+        logger.info("Document upload completed, background processing started", filename=filename)
+
+        return {
+            "message": "Document uploaded successfully, processing started",
+            "file_id": filename,
+            "status": "uploaded",
+            "processing": "started",
+        }
+
     except Exception as e:
-        logger.error("Error during file upload", filename=filename, error=str(e))
+        logger.error("Error during file upload", filename=filename, error=str(e), error_type=type(e).__name__)
         await progress_notifier.notify(ProgressEvent(filename, -1, f"Upload failed: {str(e)}"))
-        raise HTTPException(status_code=500, detail=str(e)) from e
-
-    try:
-        logger.debug("Chunking document", filename=file.filename, params_name=params_name)
-
-        # Process the document and get results
-        chunks_processed, records_stored = process_document(
-            file_path,
-            params.embedding.model_name,
-            persist_dir=chroma_manager.config.persist_directory if chroma_manager else uploaded_files_dir,
-            collection_name=chroma_manager.config.collection_name if chroma_manager else "documents",
-            chunk_size=params.chunking.chunk_size,
-            chunk_overlap=params.chunking.chunk_overlap,
-            max_pages=None,
-            deduplicate=False,
-            progress_callback=progress_callback,
-        )
-
-        logger.debug(
-            "Document processing completed",
-            filename=file.filename,
-            chunks_processed=chunks_processed,
-            records_stored=records_stored,
-        )
-
-        await progress_notifier.notify(ProgressEvent(file.filename, 95, "Processing completed"))
-
-        # Notify final completion
-        await progress_notifier.notify(ProgressEvent(file.filename, 100, "Upload completed successfully"))
-
-        return {"message": "Document uploaded and processed successfully"}
-
-    except Exception as e:
-        logger.error("Error during document processing", filename=file.filename, error=str(e))
-        await progress_notifier.notify(ProgressEvent(file.filename, -1, f"Processing failed: {str(e)}"))
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 

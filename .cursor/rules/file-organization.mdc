@@ -1,0 +1,122 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# File Organization Guidelines
+
+This rule ensures that all files are placed in their proper locations according to the project's organizational structure.
+
+## Root Directory Files
+
+**Keep in root directory:**
+- `README.md` - Project overview and main documentation
+- `AGENTS.md` - AI assistant guidance and context
+- `GEMINI.md` - Gemini AI workspace context
+- `LICENSE` - Project license
+- Configuration files: `pyproject.toml`, `docker-compose.yml`, `.gitignore`, etc.
+
+## Test Files
+
+**All test files must be placed in `tests/` directory:**
+- Python test files: `test_*.py`
+- Test data files: `test_*.txt`, `test_*.json`, etc.
+- Test configuration files
+- Test utilities and helpers
+
+**Examples:**
+- `test_websocket_connection.py` → `tests/test_websocket_connection.py`
+- `test_progress_simulation.py` → `tests/test_progress_simulation.py`
+- `test_upload.txt` → `tests/test_upload.txt`
+
+## Documentation Organization
+
+### Project Documentation (`project/`)
+- `EPIC-*.md` - Strategic initiatives and business objectives
+- `FEATURE-*.md` - Feature scope, constraints, and acceptance criteria
+- `STORY-*.md` - User stories with acceptance criteria and implementation notes
+- `TASK-*.md` - Technical implementation details and completion criteria
+
+### Technical Documentation (`docs/`)
+- `SETUP.md` - Development environment setup instructions
+- `PRODUCT_REQUIREMENTS_DOCUMENT.md` - Product requirements and specifications
+- `ARCHITECTURE.md` - System architecture, technical decisions, and constraints
+
+### Technical Subdirectories (`docs/technical/`)
+- Technical implementation details and fixes
+- Domain-specific documentation (e.g., `CHUNKING.md`, `EMBEDDING.md`)
+- Integration guides and API documentation
+- Progress reporting fixes and technical solutions
+
+### Project Management (`docs/project/`)
+- Project management documentation
+- Sprint planning and progress tracking
+
+### Archive (`docs/archive/`)
+- Historical documentation and temporary notes
+- Deprecated or outdated documentation
+- Scratch files and experimental ideas
+
+## File Naming Conventions
+
+### Test Files
+- Use `test_` prefix for all test files
+- Follow the pattern: `test_<module_name>.py`
+- Test data files: `test_<purpose>.<extension>`
+
+### Documentation Files
+- Use UPPERCASE for main documentation files
+- Use descriptive names that indicate content
+- Technical fixes: `PROGRESS_REPORTING_FIX.md`
+- Domain-specific: `CHUNKING.md`, `EMBEDDING.md`
+
+## Reference Updates
+
+When moving files, ensure all references are updated:
+- Update markdown links to reflect new paths
+- Update import statements in code
+- Update documentation references
+- Check for relative path issues when both files move
+
+## Enforcement
+
+- **Never place test files in root directory**
+- **Follow documentation hierarchy for all markdown files**
+- **Update all references when moving files**
+- **Use git mv for tracked files to preserve history**
+- **Check for broken links after file moves**
+
+## Examples
+
+### Correct Organization
+```
+on_prem_rag/
+├── README.md                    # Root - project overview
+├── AGENTS.md                    # Root - AI guidance
+├── GEMINI.md                    # Root - Gemini context
+├── tests/                       # All test files
+│   ├── test_websocket_connection.py
+│   ├── test_progress_simulation.py
+│   └── test_upload.txt
+└── docs/                        # Technical documentation
+    ├── SETUP.md
+    ├── PRODUCT_REQUIREMENTS_DOCUMENT.md
+    ├── technical/               # Technical details
+    │   ├── PROGRESS_REPORTING_FIX.md
+    │   ├── CHUNKING.md
+    │   └── EMBEDDING.md
+    ├── project/                 # Project management
+    │   └── PROJECT_MANAGER.md
+    ├── portfolio/epics/
+    ├── program/features/
+    └── team/stories/
+```
+
+### Incorrect Organization
+```
+on_prem_rag/
+├── test_websocket_connection.py  # ❌ Test file in root
+├── SETUP.md                      # ❌ Should be in docs/
+├── PROGRESS_REPORTING_FIX.md     # ❌ Should be in docs/technical/
+└── PROJECT_MANAGER.md            # ❌ Should be in docs/project/
+```

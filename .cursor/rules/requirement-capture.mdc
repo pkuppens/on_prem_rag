@@ -1,0 +1,227 @@
+---
+description: Requirement Capture and Documentation Rule
+globs:  
+alwaysApply: false
+---
+# Requirement Capture and Documentation Rule
+
+## Overview
+This rule defines how to capture, document, and trace requirements during development. Requirements can be edge cases, new features, or functional specifications that need to be implemented.
+
+## Requirement Types
+
+### 1. Functional Requirements
+- **Definition**: What the system should do
+- **Example**: "Files dropped in FileDropzone should be uploaded to the backend"
+- **Documentation Level**: Feature/Story level
+
+### 2. Technical Requirements  
+- **Definition**: How the system should implement functionality
+- **Example**: "File uploads should use multipart/form-data with progress tracking"
+- **Documentation Level**: Task/Component level
+
+### 3. Edge Case Requirements
+- **Definition**: How to handle exceptional situations
+- **Example**: "Handle file upload failures with user-friendly error messages"
+- **Documentation Level**: Story/Task level
+
+## Documentation Hierarchy
+
+### Top-Down Traceability
+Requirements should be documented at the **appropriate abstraction level**, not just in source code:
+
+```
+EPIC-*.md (Strategic level) (project\portfolio\epics directory)
+├── FEAT-*.md (Feature level) (project\program\features directory)
+├── STORY-*.md (User story level) (project\team\stories directory)
+├── TASK-*.md (Implementation level) (project\team\tasks directory)
+└── ARCHITECTURE.md (System design)
+```
+
+### Documentation Placement Rules
+
+#### 1. **EPIC Level** (EPIC-*.md)
+- **When**: Strategic business objectives, major system capabilities
+- **Example**: "Enable secure document processing for RAG applications"
+- **Content**: High-level requirements, business value, success criteria
+
+#### 2. **Feature Level** (FEAT-*.md)  
+- **When**: Major functional areas, user-facing capabilities
+- **Example**: "Document upload and processing functionality"
+- **Content**: Feature scope, acceptance criteria, component responsibilities
+
+#### 3. **Story Level** (STORY-*.md)
+- **When**: Specific user interactions, functional workflows
+- **Example**: "As a user, I can upload documents for processing"
+- **Content**: User stories, acceptance criteria, component interfaces
+
+#### 4. **Task Level** (TASK-*.md)
+- **When**: Technical implementation details, specific components
+- **Example**: "Implement file upload component with drag-and-drop"
+- **Content**: Technical specifications, component responsibilities, implementation notes
+
+#### 5. **Architecture Level** (ARCHITECTURE.md)
+- **When**: System-wide design decisions, cross-cutting concerns
+- **Example**: "File storage architecture and security considerations"
+- **Content**: System design, component interactions, security requirements
+
+## Requirement Capture Process
+
+### Step 1: Identify Requirement Type
+```markdown
+**Requirement**: [Brief description]
+**Type**: [Functional/Technical/Edge Case]
+**Priority**: [High/Medium/Low]
+**Source**: [User feedback/Bug report/Design decision/etc.]
+```
+
+### Step 2: Determine Documentation Level
+- **Strategic**: EPIC level
+- **Feature**: FEAT level  
+- **User Interaction**: STORY level
+- **Implementation**: TASK level
+- **System-wide**: ARCHITECTURE level
+
+### Step 3: Document at Appropriate Level
+```markdown
+## Requirements
+
+### [Requirement Name]
+**Description**: [Clear description of what is needed]
+**Acceptance Criteria**: 
+- [ ] Criterion 1
+- [ ] Criterion 2
+**Components Involved**: [Frontend/Backend/Shared]
+**Dependencies**: [Other requirements or components]
+**Traceability**: [Links to related stories/tasks]
+```
+
+### Step 4: Update Related Documentation
+- Check for conflicts with existing requirements
+- Update related stories and tasks
+- Ensure traceability links are maintained
+
+## Example: File Upload Requirement
+
+### EPIC Level (EPIC-001.md)
+```markdown
+## Requirements
+
+### Document Processing Capability
+**Description**: Enable users to upload and process documents for RAG applications
+**Business Value**: Core functionality for knowledge base creation
+**Success Criteria**: Users can successfully upload documents and see processing progress
+```
+
+### Feature Level (FEAT-001.md)
+```markdown
+## Requirements
+
+### File Upload and Processing
+**Description**: Users can upload documents through a web interface for processing
+**Acceptance Criteria**:
+- [ ] Users can drag and drop files onto upload area
+- [ ] Files are validated for supported formats
+- [ ] Upload progress is displayed to users
+- [ ] Files are stored securely on backend
+**Components**: Frontend upload component, Backend file handling
+```
+
+### Story Level (STORY-001.md)
+```markdown
+## Requirements
+
+### File Dropzone Functionality
+**Description**: As a user, I can drag and drop files onto the upload area
+**Acceptance Criteria**:
+- [ ] Visual feedback when files are dragged over dropzone
+- [ ] Files are accepted when dropped
+- [ ] Invalid files are rejected with clear error messages
+**Components**: FileDropzone.tsx, UploadPage.tsx
+**Dependencies**: Backend upload endpoint
+```
+
+### Task Level (TASK-001.md)
+```markdown
+## Requirements
+
+### FileDropzone Component Implementation
+**Description**: Implement drag-and-drop file upload component
+**Technical Requirements**:
+- [ ] Use HTML5 drag-and-drop API
+- [ ] Validate file types on frontend
+- [ ] Show upload progress via WebSocket
+- [ ] Handle upload errors gracefully
+**Files**: src/frontend/src/components/upload/FileDropzone.tsx
+**Dependencies**: Backend upload API, WebSocket progress tracking
+```
+
+## Traceability Maintenance
+
+### Cross-Reference Links
+Always include traceability links in documentation:
+
+```markdown
+**Related**: 
+- EPIC-001: Document Processing Capability
+- FEAT-001: File Upload and Processing  
+- STORY-002: Upload Progress Tracking
+- TASK-003: WebSocket Progress Implementation
+```
+
+### Conflict Detection
+When adding new requirements:
+1. Check existing EPIC/FEAT/STORY/TASK files for conflicts
+2. Update related documentation if needed
+3. Ensure architectural decisions are consistent
+4. Verify component responsibilities are clear
+
+### Documentation Updates
+- Update requirements when implementation reveals new needs
+- Maintain traceability links as requirements evolve
+- Document design decisions that affect multiple components
+
+## Best Practices
+
+### 1. **Abstraction Level**
+- Document at the **highest appropriate level**
+- Avoid documenting only in source code
+- Use component-level documentation for technical details
+
+### 2. **Clarity and Specificity**
+- Use clear, unambiguous language
+- Include acceptance criteria
+- Specify component responsibilities
+
+### 3. **Traceability**
+- Always link related requirements
+- Maintain top-down traceability
+- Update links when requirements change
+
+### 4. **Conflict Resolution**
+- Check for conflicts before adding requirements
+- Resolve conflicts at the appropriate level
+- Document resolution decisions
+
+### 5. **Evolution**
+- Update requirements as implementation progresses
+- Capture new requirements discovered during development
+- Maintain documentation consistency
+
+## Tools and References
+
+### Documentation Structure
+- [project/portfolio/epics/](mdc:project/portfolio/epics/) - Strategic requirements
+- [project/program/features/](mdc:project/program/features/) - Feature requirements  
+- [project/team/stories/](mdc:project/team/stories/) - User story requirements
+- [project/team/tasks/](mdc:project/team/tasks/) - Implementation requirements
+- [ARCHITECTURE.md](mdc:ARCHITECTURE.md) - System architecture requirements
+
+### Component Documentation
+- [src/frontend/src/components/](mdc:src/frontend/src/components/) - Frontend components
+- [src/backend/rag_pipeline/](mdc:src/backend/rag_pipeline/) - Backend services
+- [docs/](mdc:docs/) - Technical documentation
+
+### Templates
+- [project/team/stories/templates/](mdc:project/team/stories/templates/) - Story templates
+- [project/team/tasks/templates/](mdc:project/team/tasks/templates/) - Task templates

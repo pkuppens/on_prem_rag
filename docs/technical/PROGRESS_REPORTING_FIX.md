@@ -180,7 +180,7 @@ The implementation was tested with:
 1. `src/backend/rag_pipeline/core/embeddings.py` - Main progress reporting implementation + metadata serialization fix
 2. `src/backend/rag_pipeline/api/documents.py` - API integration with progress callback
 3. `src/backend/rag_pipeline/core/rag_system.py` - Metadata serialization fix for query results
-4. `PROGRESS_REPORTING_FIX.md` - This documentation
+4. `docs/technical/PROGRESS_REPORTING_FIX.md` - This documentation
 
 ## Inline Code Comments
 

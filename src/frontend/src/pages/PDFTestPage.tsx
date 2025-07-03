@@ -31,14 +31,24 @@ export const PDFTestPage = () => {
     url: apiUrls.uploadProgressWebSocket(),
     onMessage: (data) => {
       Logger.debug('Received progress update', 'PDFTestPage.tsx', 'useWebSocket.onMessage', 27, data);
-      setUploadProgress(prev => ({
-        ...prev,
-        [data.file_id]: {
-          progress: data.progress,
-          error: data.error,
-          isComplete: data.isComplete
-        }
-      }));
+
+      // Validate the data before setting it
+      if (data && data.file_id) {
+        const progress = typeof data.progress === 'number' && !isNaN(data.progress)
+          ? Math.max(0, Math.min(100, data.progress))
+          : 0;
+
+        setUploadProgress(prev => ({
+          ...prev,
+          [data.file_id]: {
+            progress: progress,
+            error: data.error || undefined,
+            isComplete: Boolean(data.isComplete)
+          }
+        }));
+      } else {
+        Logger.warn('Received invalid progress data', 'PDFTestPage.tsx', 'useWebSocket.onMessage', 40, data);
+      }
     },
     onError: (error) => {
       Logger.error('WebSocket error occurred', 'PDFTestPage.tsx', 'useWebSocket.onError', 35, error);
@@ -110,6 +120,29 @@ export const PDFTestPage = () => {
     }
   };
 
+  const handleDummyProgressTest = async () => {
+    Logger.info('Starting dummy progress test', 'PDFTestPage.tsx', 'handleDummyProgressTest', 110);
+
+    try {
+      const response = await axios.post('http://localhost:8000/api/test/dummy');
+      Logger.info('Dummy progress test started', 'PDFTestPage.tsx', 'handleDummyProgressTest', 113, response.data);
+
+      // Initialize progress for the test file
+      setUploadProgress(prev => ({
+        ...prev,
+        'progress_test.pdf': {
+          progress: 0,
+          isComplete: false
+        }
+      }));
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      Logger.error('Error starting dummy progress test', 'PDFTestPage.tsx', 'handleDummyProgressTest', 120, error);
+      setError(`Failed to start dummy progress test: ${errorMessage}`);
+    }
+  };
+
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
     setLoading(false);
@@ -154,23 +187,43 @@ export const PDFTestPage = () => {
           Upload PDF
         </Typography>
         <FileDropzone onFileSelect={handleFileSelect} />
-        {Object.entries(uploadProgress).map(([filename, data]) => (
-          <UploadProgress
-            key={filename}
-            filename={filename}
-            progress={data.progress}
-            error={data.error}
-            isComplete={data.isComplete}
-            onComplete={() => {
-              // Remove the completed upload from the progress list
-              setUploadProgress(prev => {
-                const newProgress = { ...prev };
-                delete newProgress[filename];
-                return newProgress;
-              });
-            }}
-          />
-        ))}
+        {Object.entries(uploadProgress).map(([filename, data]) => {
+          console.log('Rendering UploadProgress for:', filename, 'with data:', data);
+          return (
+            <UploadProgress
+              key={filename}
+              filename={filename}
+              progress={data.progress}
+              error={data.error}
+              isComplete={data.isComplete}
+              onComplete={() => {
+                // Remove the completed upload from the progress list
+                setUploadProgress(prev => {
+                  const newProgress = { ...prev };
+                  delete newProgress[filename];
+                  return newProgress;
+                });
+              }}
+            />
+          );
+        })}
+      </Paper>
+
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Progress Test
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          Test progress bar behavior and UI responsiveness with a simulated 5-second processing task.
+        </Typography>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleDummyProgressTest}
+          disabled={Object.keys(uploadProgress).some(key => key === 'progress_test.pdf')}
+        >
+          Start Dummy Progress Test
+        </Button>
       </Paper>
 
       {error && (

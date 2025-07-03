@@ -25,7 +25,7 @@ Set up the basic structure for this project:
   - pytest (coverage is out of scope for now)
   - secret detection
 - Github actions folder with minimal example
-- 'SETUP.md' documentation for the set-up with explanations, and required steps, pre-commit autoupdate and install
+- 'docs/SETUP.md' documentation for the set-up with explanations, and required steps, pre-commit autoupdate and install
 
 ## Acceptance Criteria
 
@@ -44,7 +44,7 @@ Set up the basic structure for this project:
 - `src/rag_pipeline/`: Main package directory structure
 - `.python-version`: Python version specification
 - `README.md`: Basic project setup instructions link
-  `SETUP.md`: Setup descriptions and instructions
+  `docs/SETUP.md`: Setup descriptions and instructions
 
 ### Core Dependencies
 
@@ -134,10 +134,11 @@ tests/
    - Document the Version constraints decisions
 
 5. **Documentation** (30 min)
-   - Update README.md with setup instructions link to SETUP.md
-   - Write SETUP.md with setup instructions
-   - Document package structure and purpose
-   - Add troubleshooting notes for common issues
+   - Update README.md with setup instructions link to docs/SETUP.md
+
+- Write docs/SETUP.md with setup instructions
+  - Document package structure and purpose
+  - Add troubleshooting notes for common issues
 
 ## Validation
 

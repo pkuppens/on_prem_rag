@@ -573,7 +573,48 @@ def embed_chunks(
 
     # Generate embeddings - this is the most time-consuming part
     logger.debug("Generating embeddings for chunks", filename=file_path.name, total_chunks=len(non_empty_nodes))
-    embeddings = embed_text_nodes(non_empty_nodes, model_name)
+
+    # Add granular progress reporting for embedding generation
+    embed_model = get_embedding_model(model_name)
+    embeddings = []
+
+    # Process each node to generate embeddings with progress updates
+    for i, node in enumerate(non_empty_nodes):
+        # Validate text content before embedding
+        if not hasattr(node, "text") or not getattr(node, "text", None):
+            logger.warning(f"Skipping node {i} - no text content", extra={"node_index": i, "total_nodes": len(non_empty_nodes)})
+            continue
+
+        # Ensure text is a string and clean it
+        text = str(getattr(node, "text", "")).strip()
+        if not text:
+            logger.warning(
+                f"Skipping node {i} - empty text after cleaning", extra={"node_index": i, "total_nodes": len(non_empty_nodes)}
+            )
+            continue
+
+        logger.debug(
+            "Generating embedding for node", extra={"node_index": i, "total_nodes": len(non_empty_nodes), "text_length": len(text)}
+        )
+
+        try:
+            embedding = embed_model.get_text_embedding(text)
+            embeddings.append(embedding)
+
+            # Report progress every 10 nodes or at the end
+            if progress_callback and (i % 10 == 0 or i == len(non_empty_nodes) - 1):
+                # Map embedding progress (0.0-1.0) to overall progress (0.5-0.8)
+                embedding_progress = (i + 1) / len(non_empty_nodes)
+                overall_progress = 0.5 + (embedding_progress * 0.3)  # 50% to 80%
+                progress_callback(overall_progress)
+
+        except Exception as e:
+            logger.error(
+                f"Embedding attempt failed for node {i}: {str(e)}",
+                extra={"node_index": i, "text_preview": text[:100], "error": str(e)},
+            )
+            # Continue with next node instead of failing completely
+            continue
 
     logger.debug("Embedding generation completed", filename=file_path.name, embeddings_generated=len(embeddings))
 
@@ -589,6 +630,13 @@ def embed_chunks(
         clean_metadata = create_clean_metadata(node, file_path, i)
         metadatas.append(clean_metadata)
 
+        # Report progress for metadata preparation
+        if progress_callback and (i % 20 == 0 or i == len(non_empty_nodes) - 1):
+            # Map metadata progress (0.0-1.0) to overall progress (0.8-0.9)
+            metadata_progress = (i + 1) / len(non_empty_nodes)
+            overall_progress = 0.8 + (metadata_progress * 0.1)  # 80% to 90%
+            progress_callback(overall_progress)
+
     logger.debug(
         "Clean metadata preparation completed",
         filename=file_path.name,
@@ -596,13 +644,16 @@ def embed_chunks(
         sample_metadata_keys=list(metadatas[0].keys()) if metadatas else [],
     )
 
-    # Progress tracking: Vector database storage (final 20% of embedding phase)
+    # Progress tracking: Vector database storage (final 10% of embedding phase)
     logger.debug(
         "Storing embeddings in vector database",
         filename=file_path.name,
         embeddings_to_store=len(embeddings),
         collection=collection_name,
     )
+
+    if progress_callback:
+        progress_callback(0.9)  # 90% of total progress - Starting storage
 
     manager = store_embeddings(
         [f"{file_path.stem}_{i}" for i in range(len(non_empty_nodes))],  # Generate stable IDs

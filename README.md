@@ -10,7 +10,6 @@ This project delivers an **on-premises Retrieval-Augmented Generation (RAG) syst
 
 ![image](https://github.com/user-attachments/assets/2ed5872e-9ab2-49e4-90bf-ca0f774a46e1)
 
-
 ### Business Value Proposition
 
 - **Data Privacy & Compliance**: Zero cloud dependencies ensure sensitive information never leaves your infrastructure
@@ -137,7 +136,7 @@ pre-commit install
   - Before importing any package, verify it exists in `pyproject.toml` or add it with `uv add`
   - Use `uv sync` to install dependencies in fresh environments
 
-See [SETUP.md](SETUP.md) for additional details.
+See [docs/SETUP.md](docs/SETUP.md) for additional details.
 
 ### Phase 2: Enterprise Features (Weeks 5-8)
 

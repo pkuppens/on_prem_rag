@@ -46,9 +46,11 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
     }
   };
 
+  // Only fetch parameter sets on initial mount
   useEffect(() => {
     fetchSets();
-  }, [value, onChange, isBackendRunning, isChecking]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const params = sets[value] || {};
 

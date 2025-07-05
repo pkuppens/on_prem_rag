@@ -189,9 +189,10 @@ export const apiUrls = {
   parameters: () => apiUrlBuilder.getParametersUrl(),
 
   /**
-   * Get health check URL
+   * Health check endpoint is a static string, no builder needed
+   * This keeps usage simple and avoids unnecessary indirection
    */
-  health: () => apiUrlBuilder.getHealthUrl(),
+  health: '/api/health',
 
   /**
    * Get upload progress WebSocket URL

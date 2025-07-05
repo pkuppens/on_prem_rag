@@ -6,6 +6,7 @@ import { useBackendStatus } from '../../hooks/useBackendStatus';
 import WifiIcon from '@mui/icons-material/Wifi';
 import WifiOffIcon from '@mui/icons-material/WifiOff';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import { BackendStatus } from '../BackendStatus';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -63,7 +64,7 @@ export const Header = () => {
 
         {/* Backend Status Indicator */}
         <Box sx={{ mr: 2 }}>
-          {getBackendStatusChip()}
+          <BackendStatus />
         </Box>
 
         {user ? (

@@ -42,24 +42,53 @@ This guide outlines the key principles and practices for AI-assisted development
 
 ### Documentation Hierarchy
 
-#### Version Controlled Documentation
+#### Root Level Documentation (Keep in root)
+- `README.md` - Project overview, setup, and maintenance guidelines
+- `AGENTS.md` - AI assistant guidance and context
+- `GEMINI.md` - Gemini AI workspace context
+- `LICENSE` - Project license
+
+#### Project Documentation (`project/`)
 - `EPIC-*.md` - Strategic initiatives and business objectives
 - `FEATURE-*.md` - Feature scope, constraints, and acceptance criteria
 - `STORY-*.md` - User stories with acceptance criteria and implementation notes
 - `TASK-*.md` - Technical implementation details and completion criteria
+
+#### Technical Documentation (`docs/`)
+- `SETUP.md` - Development environment setup instructions
+- `PRODUCT_REQUIREMENTS_DOCUMENT.md` - Product requirements and specifications
 - `ARCHITECTURE.md` - System architecture, technical decisions, and constraints
-- `README.md` - Project overview, setup, and maintenance guidelines
+
+#### Technical Subdirectories (`docs/technical/`)
+- Technical implementation details and fixes
+- Domain-specific documentation (e.g., `CHUNKING.md`, `EMBEDDING.md`)
+- Integration guides and API documentation
+
+#### Project Management (`docs/project/`)
+- Project management documentation
+- Sprint planning and progress tracking
+
+#### Archive (`docs/archive/`)
+- Historical documentation and temporary notes
+- Deprecated or outdated documentation
 
 #### Working Documentation (.gitignored)
 - `CURRENT_WORK.md` - Active tasks, notes, and immediate TODOs
 - `NEXT_DEMO.md` - Features and changes for upcoming demonstration
-- `SCRATCH.md` - Temporary notes and experimental ideas
+- `SCRATCH.md` - Temporary notes and experimental ideas (moved to docs/archive/)
 
 ### Code Organization
 - `src/` - Source code with clear component separation
-- `tests/` - Test files mirroring source structure
+- `tests/` - All test files (including those previously in root)
 - `docs/` - Technical and API documentation
 - `.cursor/rules/` - AI assistance rules and guidelines
+
+### File Organization Rules
+- **Test Files**: All test files must be placed in `tests/` directory
+- **Documentation**: Follow the documentation hierarchy above
+- **Root Directory**: Keep only essential project files (README.md, AGENTS.md, GEMINI.md, LICENSE, configuration files)
+- **Technical Documentation**: Place in appropriate `docs/` subdirectories
+- **Project Management**: Place in `project/` directory structure
 
 ## Development Workflow
 

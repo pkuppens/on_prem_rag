@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from ..core.embeddings import query_embeddings
 from ..core.vector_store import get_vector_store_manager_from_env
+from ..main import process_medical_conversation
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
@@ -31,6 +32,16 @@ class QueryRequest(BaseModel):
     query: str
     params_name: str | None = None
     top_k: int | None = None
+
+
+class ConversationRequest(BaseModel):
+    """Payload for the conversation endpoint.
+
+    Attributes:
+        text: The conversation text to process
+    """
+
+    text: str
 
 
 @router.post("")
@@ -66,3 +77,27 @@ async def query_documents(payload: QueryRequest) -> dict:
     except Exception as e:
         logger.error("Error during query", query=payload.query, error=str(e))
         raise HTTPException(status_code=500, detail=f"Error during query: {str(e)}") from e
+
+
+@router.post("/process_conversation")
+async def process_conversation_endpoint(payload: ConversationRequest) -> dict:
+    """Process a medical conversation through the RAG pipeline.
+
+    Args:
+        payload: The conversation request containing the text to process
+
+    Returns:
+        The result of the crew's work.
+
+    Raises:
+        HTTPException: If the text is empty or processing fails
+    """
+    if not payload.text:
+        raise HTTPException(status_code=400, detail="Text must not be empty")
+
+    try:
+        result = process_medical_conversation(payload.text)
+        return {"result": result}
+    except Exception as e:
+        logger.error("Error during conversation processing", text=payload.text, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Error during conversation processing: {str(e)}") from e

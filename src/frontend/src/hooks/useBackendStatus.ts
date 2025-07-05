@@ -8,8 +8,8 @@ export const useBackendStatus = () => {
   const checkBackendStatus = async () => {
     try {
       setIsChecking(true);
-      // Try to reach the health endpoint
-      const response = await fetch(apiUrls.health(), {
+      // Try to reach the health endpoint (static string)
+      const response = await fetch(apiUrls.health, {
         method: 'GET',
         signal: AbortSignal.timeout(3000), // 3 second timeout
       });

@@ -6,7 +6,7 @@ Main entry point for the RAG pipeline.
 from crewai import Crew
 
 from backend.rag_pipeline.agents import create_medical_crew
-from backend.rag_pipeline.config.parameter_sets import RAGParams
+from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from backend.rag_pipeline.core.rag_system import LocalRAGSystem
 from backend.rag_pipeline.tasks import (
     AssessPatientLanguageTask,
@@ -27,7 +27,7 @@ def process_medical_conversation(text: str):
     Returns:
         The result of the crew's work.
     """
-    params = RAGParams()
+    params = get_param_set(DEFAULT_PARAM_SET_NAME)
     rag_system = LocalRAGSystem(params)
     llm = rag_system._setup_llm()
 
@@ -54,7 +54,7 @@ def process_medical_conversation(text: str):
             summarize_task,
             quality_control_task,
         ],
-        verbose=2,
+        verbose=True,
     )
 
     result = crew.kickoff(inputs={"text": text})

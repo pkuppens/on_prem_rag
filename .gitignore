@@ -167,3 +167,4 @@ src/frontend/node_modules/
 tests/test_data/*.pdf
 !tests/test_data/2*.pdf
 src/frontend/test-results/*
+cache/

@@ -1,0 +1,30 @@
+# .gitattributes
+# Enforce consistent line endings for all contributors.
+# This file ensures that Git handles line endings correctly across different
+# operating systems (Windows, macOS, Linux).
+
+# Auto-detect text files and perform normalization.
+# On checkout, Git will convert LF to CRLF on Windows.
+# On commit, Git will convert CRLF back to LF for storage in the repo.
+* text=auto
+
+# Explicitly set line endings for specific file types to LF.
+# This is best practice for cross-platform compatibility, especially for scripts.
+*.sh text eol=lf
+
+# Other files will still be "auto"
+*.py text eol=auto
+*.md text eol=auto
+*.json text eol=auto
+*.yml text eol=auto
+*.yaml text eol=auto
+
+# Mark binary files as such to prevent Git from trying to normalize them.
+# This prevents corruption of images, archives, and other non-text files.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.gz binary

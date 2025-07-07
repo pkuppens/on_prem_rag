@@ -11,6 +11,7 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
 import websockets
 
 # Add the project root to the Python path
@@ -21,6 +22,7 @@ from src.backend.rag_pipeline.utils.logging import StructuredLogger
 logger = StructuredLogger(__name__)
 
 
+@pytest.mark.asyncio
 async def test_websocket_connection():
     """Test WebSocket connection with ping-pong functionality."""
     uri = "ws://localhost:8000/ws/upload-progress"

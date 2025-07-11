@@ -114,6 +114,7 @@ ignore = [
     "PLR0911", # too many return statements
     "B006",    # mutable default argument
     "B008",    # depends in function definition
+    "B904",    # raise exception from exception
     "F",       # all F* errors (Pyflakes)
     "UP035",   # X | Y for type sets,
 ]

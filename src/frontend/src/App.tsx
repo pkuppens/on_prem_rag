@@ -19,6 +19,7 @@ import { PDFTestPage } from './pages/PDFTestPage';
 import DocxTestPage from './pages/DocxTestPage';
 import TextTestPage from './pages/TextTestPage';
 import { WebSocketTestPage } from './pages/WebSocketTestPage';
+import StatusPage from './pages/StatusPage'; // Import the new StatusPage
 import { apiUrls, apiConfig } from './config/api';
 import { useWebSocket } from './hooks/useWebSocket';
 
@@ -94,10 +95,14 @@ function App() {
   const isDocxTestPage = window.location.search.includes('test=docx');
   const isTextTestPage = window.location.search.includes('test=text');
   const isWebSocketTestPage = window.location.search.includes('test=websocket');
+  const isStatusPage = window.location.search.includes('test=status');
 
   // If it's a test page, show only the test component without authentication
   if (isThemeTestPage) {
     return <ThemeTestPage />;
+  }
+  if (isStatusPage) {
+    return <StatusPage />;
   }
 
   if (isPDFTestPage) {

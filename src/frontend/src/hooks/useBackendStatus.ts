@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiUrls } from '../config/api';
+import { apiUrlBuilder } from '../config/api';
 
 export const useBackendStatus = () => {
   const [isBackendRunning, setIsBackendRunning] = useState<boolean | null>(null);
@@ -8,8 +8,9 @@ export const useBackendStatus = () => {
   const checkBackendStatus = async () => {
     try {
       setIsChecking(true);
-      // Try to reach the health endpoint (static string)
-      const response = await fetch(apiUrls.health, {
+      // Use the URL builder to get the proper backend health endpoint
+      const healthUrl = apiUrlBuilder.buildUrl('/health');
+      const response = await fetch(healthUrl, {
         method: 'GET',
         signal: AbortSignal.timeout(3000), // 3 second timeout
       });

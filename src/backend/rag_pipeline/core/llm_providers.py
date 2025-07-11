@@ -18,14 +18,30 @@ class LLMProvider(ABC):
         """Return an answer for the given prompt."""
         raise NotImplementedError
 
+    @abstractmethod
+    async def health_check(self) -> bool:
+        """Return True if the provider is healthy."""
+        raise NotImplementedError
+
 
 class OllamaProvider(LLMProvider):
     def __init__(self, model_name: str, config: dict) -> None:
         self.model_name = model_name
         self.config = config
+        self.host = config.get("host", "http://localhost:11434")
 
     def generate_answer(self, prompt: str) -> str:
         return f"Ollama({self.model_name}): {prompt[:10]}..."
+
+    async def health_check(self) -> bool:
+        import httpx
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.host)
+                return response.status_code == 200
+        except httpx.RequestError:
+            return False
 
 
 class LlamaCppProvider(LLMProvider):

@@ -168,7 +168,8 @@ addopts = "-v"
 # Custom markers for test organization
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')"
+    "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')",
+    "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')"
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]

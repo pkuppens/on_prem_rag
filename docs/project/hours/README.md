@@ -6,12 +6,13 @@ This directory contains utility files and scripts for generating WBSO (Dutch R&D
 
 This system retrofits WBSO hours registration to achieve a 510+ hour target by capturing:
 
-- **Git commits** across multiple repositories
-- **GitHub issues** (creation, management, investigation)
-- **Documentation work** and analysis activities
+- **Git commits** across multiple repositories (prioritizing AI agent/privacy/security development)
+- **GitHub issues** (creation, management, investigation) - focusing on AI/privacy/security issues
+- **Documentation work** and analysis activities (technical documentation for WBSO-AICM-2025-01)
 - **Cross-repository coordination** and context switching
 - **Dedicated WBSO Google Calendar** with color-coded non-declarable activities
 - **Manual processes** are acceptable - not everything needs to be automated
+- **WBSO-aligned activities** - prioritizing approved AI agent R&D tasks over general development
 
 For detailed project planning, see [PROJECT_PLAN.md](PROJECT_PLAN.md).
 
@@ -227,7 +228,18 @@ The generated documentation includes:
 
 ## Hour Allocation Strategy
 
-### Commit-Based Hours
+### WBSO-Approved Activities (Priority - AI Agent Project)
+
+- **AI Framework Development**: 3-6 hours per significant commit (core R&D work)
+- **Access Control Systems**: 2-5 hours per authorization mechanism
+- **Privacy-Preserving Algorithms**: 2-5 hours per anonymization/pseudonymization implementation
+- **Audit Logging Systems**: 2-4 hours per privacy-friendly logging mechanism
+- **Data Integrity Protection**: 2-4 hours per corruption prevention system
+- **Natural Language Processing**: 2-4 hours per intent recognition feature
+- **Jailbreak Detection**: 2-4 hours per security mechanism
+- **Cloud Integration Research**: 1-3 hours per cloud safety investigation
+
+### Standard Development Activities
 
 - **Development Work**: 2-4 hours per significant commit
 - **Bug Fixes**: 1-3 hours depending on complexity
@@ -236,10 +248,11 @@ The generated documentation includes:
 
 ### Issue-Based Hours
 
+- **AI/Privacy Technical Investigation**: 2-4 hours per technical investigation issue
+- **Security Feature Planning**: 1-3 hours per security/privacy feature issue
+- **Data Protection Bug Analysis**: 1-2 hours per data integrity bug report
+- **Privacy Compliance Research**: 2-4 hours per AVG/privacy compliance issue
 - **Issue Creation**: 0.5-1 hour per issue (documentation work)
-- **Investigation**: 2-4 hours per investigation issue
-- **Feature Planning**: 1-3 hours per feature issue
-- **Bug Analysis**: 1-2 hours per bug report
 
 ### Additional Hours
 

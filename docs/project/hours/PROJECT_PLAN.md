@@ -13,11 +13,12 @@
 1. **Target Hours**: Achieve 510+ hours for WBSO compliance
 2. **Multi-Repository**: Capture work across all development repositories
 3. **Comprehensive Coverage**: Include both commits and GitHub issues
-4. **Generous Allocation**: Justify higher hour allocations for thorough work documentation
+4. **WBSO-Aligned Activities**: Prioritize hours registration on approved WBSO tasks and technical development work
 5. **Dedicated WBSO Google Calendar**: Create a specific Google Calendar for WBSO activities with color-coded non-declarable items
 6. **Conflict Detection**: Detect existing calendar items to avoid double-counting and identify non-declarable activities
 7. **Flexible Implementation**: Manual processes and calendar exports are acceptable; not everything needs to be automated
 8. **Reporting Tools**: Tools for hour calculation and reporting (can include manual processes)
+9. **Generous Allocation**: Justify higher hour allocations for thorough work documentation, and reading of documentation as part of investigating solutions to technical problems.
 
 ### Secondary Requirements
 
@@ -25,6 +26,8 @@
 2. **Audit Trail**: Maintain clear documentation for tax authorities
 3. **Activity Categorization**: Proper classification of R&D activities
 4. **Time Validation**: Realistic time allocations with proper breaks
+5. **Approved Task Alignment**: Focus on technical development tasks that align with WBSO project goals
+6. **Technical Innovation Documentation**: Document technical challenges and innovative solutions
 
 ## Current State Analysis
 
@@ -272,7 +275,18 @@ docs/project/hours/
 
 ## Hour Allocation Strategy
 
-### Commit-Based Hours
+### WBSO-Approved Activities (Priority - AI Agent Project)
+
+- **AI Framework Development**: 3-6 hours per significant commit (core R&D work)
+- **Access Control Systems**: 2-5 hours per authorization mechanism
+- **Privacy-Preserving Algorithms**: 2-5 hours per anonymization/pseudonymization implementation
+- **Audit Logging Systems**: 2-4 hours per privacy-friendly logging mechanism
+- **Data Integrity Protection**: 2-4 hours per corruption prevention system
+- **Natural Language Processing**: 2-4 hours per intent recognition feature
+- **Jailbreak Detection**: 2-4 hours per security mechanism
+- **Cloud Integration Research**: 1-3 hours per cloud safety investigation
+
+### Standard Development Activities
 
 - **Development Work**: 2-4 hours per significant commit
 - **Bug Fixes**: 1-3 hours depending on complexity
@@ -281,17 +295,19 @@ docs/project/hours/
 
 ### Issue-Based Hours
 
+- **AI/Privacy Technical Investigation**: 2-4 hours per technical investigation issue
+- **Security Feature Planning**: 1-3 hours per security/privacy feature issue
+- **Data Protection Bug Analysis**: 1-2 hours per data integrity bug report
+- **Privacy Compliance Research**: 2-4 hours per AVG/privacy compliance issue
 - **Issue Creation**: 0.5-1 hour per issue (documentation work)
-- **Investigation**: 2-4 hours per investigation issue
-- **Feature Planning**: 1-3 hours per feature issue
-- **Bug Analysis**: 1-2 hours per bug report
 
 ### Additional Hours
 
 - **Context Switching**: 0.5-1 hour between different repositories
-- **Research and Learning**: 1-3 hours per research session
-- **Testing and Validation**: 1-2 hours per testing session
+- **Research and Learning**: 1-3 hours per research session (WBSO-aligned)
+- **Testing and Validation**: 1-2 hours per testing session (technical testing)
 - **Code Review**: 0.5-1 hour per review session
+- **Technical Documentation**: 1-2 hours per technical documentation session
 
 ### Non-Declarable Activities (Solo Developer Context)
 
@@ -308,6 +324,41 @@ docs/project/hours/
 - **Post-commit Documentation**: 15-30 minutes after each commit
 - **Issue Analysis**: 30-60 minutes for issue understanding
 - **Cross-repository Coordination**: 30 minutes for context switching
+
+## WBSO Project Alignment
+
+### Approved WBSO Activities (Based on Filled Form)
+
+Based on your specific WBSO project "AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving" (WBSO-AICM-2025-01), the following key areas qualify for R&D tax deduction:
+
+1. **AI Framework & Access Control Development** (40-45% of hours)
+
+   - AI-agent framework design and implementation
+   - Role/context-based access control systems
+   - Intent recognition algorithms
+   - Jailbreak detection mechanisms
+   - Natural language processing for authorization
+
+2. **Privacy-Preserving Cloud Integration** (25-30% of hours)
+
+   - Data anonymization/pseudonymization algorithms
+   - Safe cloud LLM integration techniques
+   - Data screening and processing layers
+   - Cloud-worthiness decision rules
+   - AVG compliance mechanisms
+
+3. **Privacy-Friendly Audit Logging** (15-20% of hours)
+
+   - Custom audit log structure development
+   - Secure reference systems
+   - Traceability without privacy leaks
+   - Privacy-preserving audit mechanisms
+
+4. **Data Integrity & Protection Systems** (10-15% of hours)
+   - Data classification modules (read/edit)
+   - Corruption prevention mechanisms
+   - Risk operation blocking systems
+   - Data integrity validation
 
 ## WBSO Compliance Framework
 

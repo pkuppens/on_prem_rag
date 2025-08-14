@@ -1,0 +1,222 @@
+2025-05-30 1748630016 Initial commit
+2025-05-30 1748635833 Update README.md with project plan - needs review and formatting
+2025-05-31 1748684399 LICENSE: MIT with Commercial Use Restriction
+2025-05-31 1748686919 Extensive project planning divided in 6 goals
+2025-05-31 1748695272 SAFe and Language cursor rules
+2025-05-31 1748697176 Rewrite to SAFe project management
+2025-06-01 1748765169 Add a refine cursor rule
+2025-06-01 1748797620 Fix YAML front matter in cursor rule files
+2025-06-01 1748798141 Merge pull request #2 from pkuppens/codex/find-and-fix-a-bug-in-codebase
+2025-06-01 1748798207 Language preference cursor rule no longer limited to markdown, but applicable to all files.
+2025-06-01 1748798268 Merge pull request #3 from pkuppens/codex/find-and-fix-a-bug-in-codebase
+2025-06-01 1748798990 docs: update repository overview
+2025-06-01 1748799073 Merge pull request #4 from pkuppens/codex/explain-codebase-structure-and-key-elements
+2025-06-01 1748799834 Add basic tests directory with placeholder
+2025-06-01 1748799896 docs: update repository overview
+2025-06-01 1748799927 Merge pull request #6 from pkuppens/eg23c1-codex/explain-codebase-structure-and-key-elements
+2025-06-01 1748799953 Merge pull request #5 from pkuppens/codex/create-test-directory-and-placeholder-file
+2025-06-01 1748800075 docs: add placeholders for stories 005-009
+2025-06-01 1748800088 Merge pull request #7 from pkuppens/codex/add-placeholder-markdown-files-for-story-005-to-story-009
+2025-06-01 1748800125 Link roadmap bullets to feature files
+2025-06-01 1748800176 Merge pull request #8 from pkuppens/codex/update-readme.md-with-feature-links
+2025-06-01 1748800239 chore: add trailing newline to FEAT-002
+2025-06-01 1748800260 Merge pull request #9 from pkuppens/codex/add-newline-to-feat-002.md
+2025-06-01 1748801283 Add detailed stories and tasks for MVP
+2025-06-01 1748801345 Merge pull request #10 from pkuppens/codex/drill-down-stories-and-tasks-for-feat-001
+2025-06-01 1748804703 Fix doc links and story formatting
+2025-06-01 1748804745 Merge pull request #11 from pkuppens/codex/fix-markdown-links-and-formatting
+2025-06-01 1748806741 Update TASK-001.md
+2025-06-01 1748810349 task: 001: initial project setup
+2025-06-01 1748810445 chore: check of completed Acceptance Criteria
+2025-06-02 1748864531 docs: update STORY-002 to use LlamaIndex
+2025-06-02 1748864578 Merge pull request #13 from pkuppens/codex/update-story-002-with-llamaindex-solution
+2025-06-02 1748865508 Create a cursor-rules cursor rule with /Generate Cursor Rules
+2025-06-02 1748867539 chore: cursor rule for TASK templates
+2025-06-02 1748877321 task: 006: Initial Local RAG System definition. Add data for exploration.
+2025-06-02 1748887237 pre-commit fixes with markdown and trailing whitespace
+2025-06-02 1748895548 notebook exploration of local data
+2025-06-03 1748936955 exploration: RAG notebook additions
+2025-06-04 1749031979 some more linting warning prevention attempts
+2025-06-04 1749036262 chore: pre-commit hooks
+2025-06-04 1749036425 chore: directory utils
+2025-06-04 1749051245 configuration sets of parameters
+2025-06-04 1749051873 chore: better linting descriptions
+2025-06-04 1749071620 lint less strict
+2025-06-05 1749105730 Switch to FAST_ANSWERS parameter set in exploration
+2025-06-05 1749107069 proj: progress update
+2025-06-05 1749109161 docs: STORY-002 refinement
+2025-06-05 1749111102 TASK-006: document loader
+2025-06-05 1749121828 TASK-009: document loader testing
+2025-06-05 1749132294 FEAT-002 refinement
+2025-06-05 1749132748 chore: add pytest to default dependencies to prevent some pre-commit & github action issues
+2025-06-06 1749191414 chore: project golden rules update for coding with AI Coding Assistants
+2025-06-06 1749194863 project: sprint-demo management
+2025-06-06 1749197129 chore: demo templating improvements
+2025-06-06 1749198479 chore: semantic search demo story linking
+2025-06-06 1749201570 UI: task definitions
+2025-06-06 1749208448 TASK-006 & TASK-022: UI for document upload with backend app receivers.
+2025-06-06 1749213993 docs: add initial versions of technical documentation
+2025-06-06 1749220650 Add docker compose and vector store manager (#14)
+2025-06-06 1749235952 feat: enable selectable RAG parameter sets
+2025-06-06 1749239560 fix: enhance logging in file ingestion
+2025-06-06 1749242015 fix: file ingestion progress not showing because of UI starvation
+2025-06-06 1749242041 ui: compact representation of selected parameters
+2025-06-07 1749277319 Implement RAG parameter selection and backend processing (#15)
+2025-06-07 1749281129 Update AGENTS.md with practical implementation details and internet access for package installation as per SCRATCH.md task
+2025-06-07 1749281185 docs: technical CODEX description
+2025-06-07 1749281291 Codex/implement document embedding with UI uploads (#16)
+2025-06-07 1749281357 Merge branch 'codex/implement-document-embedding-with-ui-uploads'
+2025-06-07 1749286720 test: add some test data that will not be gitignored
+2025-06-07 1749290774 Add PDF embedding utilities and tests
+2025-06-07 1749293089 feat(auth): add authentication service and frontend login
+2025-06-07 1749311772 chore: jupyter-notebook cursor rules (applied)
+2025-06-07 1749330164 analysis: compare embeddings in two notebooks
+2025-06-07 1749331351 exploration: initial exploration of PDF document chunking with FAST_ANSWERS chunking
+2025-06-08 1749366954 Install dev packages and update setup docs
+2025-06-08 1749384735 chore: factor out chunking from embedding
+2025-06-08 1749384764 chore: factor out chunking from embedding part 2
+2025-06-08 1749386906 chore: feedback integration cursor rule
+2025-06-08 1749366954 Install dev packages and update setup docs
+2025-06-08 1749384735 chore: factor out chunking from embedding
+2025-06-08 1749384764 chore: factor out chunking from embedding part 2
+2025-06-08 1749386906 chore: feedback integration cursor rule
+2025-06-08 1749387253 Merge branch 'codex/refactor-jupyter-notebooks-and-remove-duplication' into codex/explore-processing-and-analysis-of-pdf-with-embeddings
+2025-06-08 1749387541 Merge pull request #20 from pkuppens/codex/explore-processing-and-analysis-of-pdf-with-embeddings
+2025-06-08 1749387641 Merge remote-tracking branch 'origin/main' into codex/implement-flexible-frontend-authentication
+2025-06-08 1749398530 auth: start implement login with Google/Microsoft
+2025-06-08 1749403296 docs: reorganize project and technical documentation
+2025-06-08 1749404550 feat: enhance authentication flow and logging create account
+2025-06-08 1749406705 Merge pull request #18 from pkuppens/codex/implement-flexible-frontend-authentication
+2025-06-08 1749414910 Fix tests setup and offline instructions
+2025-06-08 1749414975 Merge pull request #21 from pkuppens/codex/fix-test-failures-and-environment-setup
+2025-06-08 1749408182 chore: new cursor rule to sync documentation and code
+2025-06-08 1749408258 chore: file wasnt saved
+2025-06-08 1749414671 test: auth_service
+2025-06-08 1749414910 Fix tests setup and offline instructions
+2025-06-08 1749414738 embedding generator now processes all 144 pages of the test document
+2025-06-08 1749417169 Fix tests setup and offline instructions
+2025-06-09 1749450139 fix: setup embedding models for offline environments like github actions
+2025-06-09 1749451207 fix: setup embedding test error that only occurred on github actions
+2025-06-09 1749459378 Add query endpoint and PDF preview UI
+2025-06-09 1749478602 UI: connect the UI query search to the backend
+2025-06-09 1749480982 security: introduce new cursor rule after finding CDN issues
+2025-06-09 1749488408 fix: frontend now showing PDF preview on on-prem config
+2025-06-10 1749539302 fix: github actions tests did not have uploaded_files folder.
+2025-06-10 1749550961 test: RAG Demo works on Learning Langchain upload
+2025-06-10 1749557407 Merge pull request #22 from pkuppens/codex/implement-document-search-with-preview-feature
+2025-06-10 1749559413 TASK-002: refinement
+2025-06-10 1749566216 refactor: restructure project layout - Move backend and frontend into src directory - Reorganize auth_service and rag_pipeline under backend
+2025-06-10 1749566228 refactor: update imports and paths for new project structure - Update pyproject.toml for new src layout - Adjust test imports
+2025-06-10 1749566239 docs: update documentation for new project structure - Add Docker technical documentation - Add project structure documentation - Update task documentation
+2025-06-10 1749566249 docker: update Docker configuration for new project structure - Add .dockerignore - Update main Dockerfile - Update docker-compose.yml - Add backend Dockerfile
+2025-06-10 1749566276 chore: remove old frontend directory - Files have been moved to src/frontend/frontend
+2025-06-10 1749566352 chore: remove old backend directories src/auth_service and src/rag_pipeline after migration to src/backend
+2025-06-11 1749618777 fix entrypoint imports and add param set test
+2025-06-11 1749619568 fix: imports in pyproject  project scripts
+2025-06-11 1749620773 ruff check
+2025-06-11 1749625356 Merge pull request #23 from pkuppens/codex/fix-relative-import-issues-in-pyproject-scripts
+2025-06-11 1749639967 Add PDF inspection utilities and tests
+2025-06-11 1749640846 ruff: whitespace fixes
+2025-06-11 1749641967 Merge branch 'codex/create-python-tools-for-pdf-conversion,-chunking,-and-embedd' into feature/restructure-project-layout
+2025-06-11 1749645294 refactor: move frontend directory
+2025-06-11 1749648288 fix: page numbering in PDF for reference with react-pdf
+2025-06-11 1749648998 chore: improve vibe coding with better assertions and checks before coding completes
+2025-06-11 1749652571 fix: didn't put learninglangchain in repo, so skip tests these tests in cloud
+2025-06-11 1749663014 fix: describe project directory structure
+2025-06-11 1749665502 chore: python version for dev sync to 3.13.2 on dev PCs
+2025-06-11 1749673178 chore: pre-commit hook
+2025-06-12 1749709342 chore: add GitHub issue templates
+2025-06-12 1749709430 Merge branch 'main' into codex/complete-story-001.md-and-update-tasks
+2025-06-12 1749710414 fix: pytest failed in codex, improved dependency management
+2025-06-12 1749710787 Merge pull request #26 from pkuppens/codex/complete-story-001.md-and-update-tasks
+2025-06-12 1749716891 chore: codex environment improvement
+2025-06-12 1749717088 fix: syntax error in script
+2025-06-12 1749718253 chore: ruff
+2025-06-12 1749718420 docs: expand semantic search demo
+2025-06-12 1749718557 Merge remote-tracking branch 'origin/codex/complete-demo-flow-for-presentation'
+2025-06-12 1749718747 codex: skip slow tests on workspace start
+2025-06-12 1749720739 FEAT-003: document provider modules
+2025-06-12 1749730030 test: test plan cursor rule and initial test plans
+2025-06-12 1749731178 Update README.md with app preview
+2025-06-12 1749733162 test: disable internet tests on github
+2025-06-12 1749733507 UI: better PDF page linking
+2025-06-12 1749735543 UI: Hover text with full chunk
+2025-06-12 1749735626 refactor: unify chunking and embedding
+2025-06-12 1749735793 Merge pull request #28 from pkuppens/codex/review-and-implement-tasks-for-feat-files
+2025-06-12 1749747752 Rename top_n to top_k and document network tests
+2025-06-13 1749805118 fix: tests
+2025-06-13 1749814114 exploration: top_k comparison 5 and 50 results (performance and its top 5 are equal)
+2025-06-13 1749815659 fix: setup_notebook imports, and explore unrelated queries
+2025-06-13 1749815916 Merge main into feature branch, resolve test marker conflict
+2025-06-13 1749818480 fix: tests and merge fix
+2025-06-13 1749819539 fix: unify huggingface cache to limit storage
+2025-06-13 1749820684 fix: cache: "pip" issue break github action?
+2025-06-13 1749821762 fix: try fix github action
+2025-06-13 1749823865 fix: tests in CICD
+2025-06-13 1749827709 fix: remove test mock call assertions that are too sensitive
+2025-06-13 1749834088 fix: ruff whitespace
+2025-06-13 1749837090 Merge pull request #29 from pkuppens/codex/create-jupyter-notebook-for-top-n-answers-analysis
+2025-06-13 1749799734 Add upload script and tests
+2025-06-13 1749845776 docx: chunking and preview snippet, no DOCXViewer yet.
+2025-06-14 1749891475 Merge pull request #31 from pkuppens/codex/create-document-upload-script-with-api-support
+2025-06-14 1749895120 feat(frontend): support text previews and copy
+2025-06-14 1749903053 Mark internet-dependent tests
+2025-06-14 1749903060 Improve offline test handling and add viewer test pages
+2025-06-14 1749910744 fix: uploaded file not present
+2025-06-14 1749911136 Merge pull request #32 from pkuppens/codex/update-demo-with-enhanced-file-preview-features
+2025-06-14 1749915149 feat: expand upload script
+2025-06-16 1750074060 UI: Frontend fixes for upload progress
+2025-06-16 1750078001 Merge pull request #33 from pkuppens/codex/implement-document-upload-script-with-additional-options
+2025-06-16 1750095060 Implement parameter-aware duplicate detection
+2025-06-16 1750100808 create 30 second ping to keep websocket alive
+2025-06-17 1750151873 docs: add high-level requirements and planning
+2025-06-17 1750152274 Merge pull request #35 from pkuppens/codex/update-top-level-project-documentation
+2025-06-17 1750160082 refactor api into smaller files
+2025-06-14 1749915149 feat: expand upload script
+2025-06-16 1750074060 UI: Frontend fixes for upload progress
+2025-06-17 1750151873 docs: add high-level requirements and planning
+2025-06-17 1750160200 Merge branch 'main' of https://github.com/pkuppens/on_prem_rag
+2025-06-18 1750231298 DDD for agents
+2025-06-18 1750234558 docs: introduce MCP architecture
+2025-06-18 1750236155 Merge pull request #36 from pkuppens/codex/update-documentation-for-model-context-protocol
+2025-06-19 1750356117 Add agents directory and shared guidance
+2025-06-19 1750356148 Merge pull request #37 from pkuppens/codex/organize-shared-rules-for-ai-assisted-coding
+2025-06-20 1750415382 docs: expand DDD guidance with domain contexts
+2025-06-20 1750415398 Merge pull request #39 from pkuppens/codex/retrofit-repository-to-ddd-principles
+2025-06-21 1750489551 frontend: message when query results are empty
+2025-06-21 1750491479 frontend: configurable API urls
+2025-06-21 1750493495 logging: include filename as link in debug log
+2025-06-21 1750537163 bug: attempts at progress bar fixing
+2025-06-22 1750600587 docs: refine test strategy
+2025-06-22 1750600599 Merge pull request #40 from pkuppens/codex/improve-testing-strategies-with-vibe-style
+2025-06-24 1750762696 Merge pull request #34 from pkuppens/codex/complete-document-uploading-and-embedding-workflow
+2025-06-25 1750834714 fix: github action test failed on logger parameter
+2025-06-25 1750836025 docs: clarify progress notifier
+2025-06-25 1750836053 Merge pull request #41 from pkuppens/codex/review-websocket-observer-pattern-implementation
+2025-06-26 1750969547 fix: WebSocket behavior testing
+2025-06-27 1751019417 refactoring of cursor rules
+2025-06-29 1751180794 chore: clean up pdf_embedding notebook
+2025-06-29 1751182651 fix: more PDFs: unicode hashing
+2025-06-29 1751183642 fix: skip node chunking for nodes that do not seem to have text
+2025-06-29 1751184600 docs: let gemini-cli read and describe the project, and suggest DDD refactoring for maintainability
+2025-07-01 1751355931 UI: Make App full browser width
+2025-07-01 1751357685 UI: Warnings on backend not running at :8000
+2025-07-01 1751358558 UI: fix preload pdf worker for previews
+2025-07-02 1751443450 fix: test embedding edge cases
+2025-07-02 1751460588 docs: VIBE coding styles
+2025-07-03 1751519679 test: working example of progress bar with dummy progress
+2025-07-03 1751522884 chore: requirements capture rule
+2025-07-03 1751524178 chore: relocate files that ended up in root
+2025-07-03 1751528761 fix: now progress up to 57% (chunking?!), not yet embedding
+2025-07-03 1751528819 fix: embedding now also reports progress
+2025-07-03 1751528906 Merge pull request #42 from pkuppens/feature/dummy_background_process
+2025-07-05 1751713947 temp commit for refactorings
+2025-07-05 1751715371  feat(refactor): implement modular agent and task architecture
+2025-07-05 1751716871 chore: git attributes for Unix script files
+2025-07-05 1751723085 chore: work towards refactor success demo
+2025-07-05 1751745205 fix: clean up some confusing logging
+2025-07-05 1751745473 Merge pull request #43 from pkuppens/feature/dummy_background_process
+2025-07-07 1751882473 fix: failing test detected by github actions
+2025-07-08 1751962641 docs: Context7 external documentation API MCP description.
+2025-07-11 1752219639 feat: health check granularity for LLM, API, Database separately
+2025-07-11 1752234650 test fix

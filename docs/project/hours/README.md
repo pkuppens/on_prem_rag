@@ -10,6 +10,8 @@ This system retrofits WBSO hours registration to achieve a 510+ hour target by c
 - **GitHub issues** (creation, management, investigation)
 - **Documentation work** and analysis activities
 - **Cross-repository coordination** and context switching
+- **Dedicated WBSO Google Calendar** with color-coded non-declarable activities
+- **Manual processes** are acceptable - not everything needs to be automated
 
 For detailed project planning, see [PROJECT_PLAN.md](PROJECT_PLAN.md).
 
@@ -94,11 +96,14 @@ python process_commits.py
 2. Detect cross-repository work sessions
 3. Optimize hour allocations to reach 510+ target
 
-#### Phase 4: Google Calendar Integration
+#### Phase 4: Dedicated WBSO Google Calendar and Conflict Detection
 
-1. Create dedicated WBSO activities calendar
-2. Generate calendar events for all work sessions
-3. Include proper descriptions and categorization
+1. Create dedicated "WBSO Activities" Google Calendar
+2. Implement color coding for WBSO vs non-declarable activities
+3. Manually review and identify non-declarable activities (appointments, personal time, etc.)
+4. Create WBSO calendar events for work sessions (avoiding conflicts)
+5. Include proper descriptions and WBSO categorization
+6. Set up manual calendar export and review processes
 
 #### Phase 5: Final Reporting
 
@@ -161,12 +166,17 @@ python process_commits.py
 - Add context switching and coordination time
 - Include research and investigation time
 
-#### Google Calendar Integration
+#### Dedicated WBSO Google Calendar and Conflict Detection
 
-- Create dedicated WBSO activities calendar
-- Generate calendar events for all work sessions
-- Include proper descriptions and categorization
-- Enable calendar sharing and export
+- Create dedicated "WBSO Activities" Google Calendar
+- Implement color coding for WBSO vs non-declarable activities
+- Manual calendar export and review processes
+- Detect conflicts with existing calendar items (appointments, personal time, etc.)
+- Identify and categorize non-declarable activities
+- Generate calendar events for work sessions (avoiding conflicts)
+- Include proper descriptions and WBSO categorization
+- Enable calendar-based WBSO reporting
+- Manual conflict resolution and editing processes
 
 #### Enhanced Reporting
 
@@ -210,7 +220,9 @@ The generated documentation includes:
 - Multi-repository data extraction and processing
 - GitHub issue analysis and hour allocation
 - Cross-repository work session detection
-- Google Calendar integration for comprehensive tracking
+- Dedicated WBSO Google Calendar with color coding
+- Manual calendar export and review processes
+- Calendar conflict detection and non-declarable activity identification
 - Hour optimization to reach 510+ target
 
 ## Hour Allocation Strategy
@@ -236,6 +248,15 @@ The generated documentation includes:
 - **Testing and Validation**: 1-2 hours per testing session
 - **Code Review**: 0.5-1 hour per review session
 
+### Non-Declarable Activities (Solo Developer Context)
+
+- **Personal Appointments**: Dentist, doctor, personal meetings, family time
+- **Break Time**: Lunch breaks, coffee breaks, personal time, exercise
+- **Travel Time**: Commuting, personal travel
+- **Administrative Tasks**: Non-technical paperwork, general administration
+- **Personal Development**: Non-R&D learning, hobbies, personal projects
+- **Health and Wellness**: Medical appointments, therapy, wellness activities
+
 ## Maintenance
 
 ### Current Maintenance
@@ -249,5 +270,6 @@ The generated documentation includes:
 
 - Multi-repository data synchronization
 - GitHub API rate limit management
-- Google Calendar integration maintenance
+- Manual WBSO calendar maintenance and updates
 - Regular compliance validation and updates
+- Calendar export and review process maintenance

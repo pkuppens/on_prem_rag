@@ -14,8 +14,10 @@
 2. **Multi-Repository**: Capture work across all development repositories
 3. **Comprehensive Coverage**: Include both commits and GitHub issues
 4. **Generous Allocation**: Justify higher hour allocations for thorough work documentation
-5. **Google Calendar Integration**: Create dedicated calendar for all WBSO activities
-6. **Reporting Tools**: Automated tools for hour calculation and reporting
+5. **Dedicated WBSO Google Calendar**: Create a specific Google Calendar for WBSO activities with color-coded non-declarable items
+6. **Conflict Detection**: Detect existing calendar items to avoid double-counting and identify non-declarable activities
+7. **Flexible Implementation**: Manual processes and calendar exports are acceptable; not everything needs to be automated
+8. **Reporting Tools**: Tools for hour calculation and reporting (can include manual processes)
 
 ### Secondary Requirements
 
@@ -39,6 +41,7 @@
 - ❌ Multi-repository aggregation
 - ❌ GitHub issue analysis
 - ❌ Google Calendar integration
+- ❌ Calendar conflict detection and non-declarable activity identification
 - ❌ 510+ hour target planning
 - ❌ Cross-repository work session detection
 - ❌ Issue creation as documentation work
@@ -132,34 +135,46 @@
 - Hour optimization strategy
 - Enhanced work session detection
 
-### Phase 4: Google Calendar Integration (Week 4)
+### Phase 4: Dedicated WBSO Google Calendar and Conflict Detection (Week 4)
 
-**Objective**: Create comprehensive calendar view of all WBSO activities
+**Objective**: Create a dedicated WBSO Google Calendar with proper categorization and conflict detection
 
 #### Tasks
 
-1. **Calendar Setup**
+1. **WBSO Calendar Setup**
 
-   - [ ] Create dedicated Google Calendar for WBSO activities
-   - [ ] Set up Google Calendar API access
-   - [ ] Design calendar event structure
+   - [ ] Create dedicated "WBSO Activities" Google Calendar
+   - [ ] Set up calendar color coding scheme (WBSO activities vs non-declarable items)
+   - [ ] Configure calendar sharing and export settings
+   - [ ] Design event structure for WBSO compliance
 
-2. **Event Generation**
+2. **Conflict Detection and Manual Review**
 
-   - [ ] Convert all work sessions to calendar events
-   - [ ] Include issue creation events
-   - [ ] Add proper descriptions and categorization
+   - [ ] Export existing calendar items from personal/professional calendars
+   - [ ] Manually review and identify non-declarable activities (appointments, personal time, etc.)
+   - [ ] Create conflict resolution strategy (manual editing acceptable)
+   - [ ] Document non-declarable time periods for reporting
 
-3. **Calendar Management**
-   - [ ] Implement recurring event patterns
-   - [ ] Add color coding for activity types
-   - [ ] Create calendar sharing and export features
+3. **WBSO Event Creation**
+
+   - [ ] Manually create WBSO calendar events for work sessions (avoiding conflicts)
+   - [ ] Include issue creation events as documentation work
+   - [ ] Add proper descriptions and WBSO categorization
+   - [ ] Color-code events: WBSO activities (primary color) vs non-declarable (different color)
+
+4. **Calendar Management and Reporting**
+   - [ ] Implement manual event creation process for ongoing WBSO activities
+   - [ ] Create calendar export functionality for reporting
+   - [ ] Generate conflict resolution documentation
+   - [ ] Set up manual review process for calendar accuracy
 
 #### Deliverables
 
-- Google Calendar integration script
-- WBSO activities calendar
-- Calendar management tools
+- Dedicated "WBSO Activities" Google Calendar with color coding
+- Manual calendar export and review process
+- Conflict resolution documentation and procedures
+- Non-declarable activity identification and reporting
+- Calendar-based WBSO reporting system
 
 ### Phase 5: Reporting and Validation (Week 5)
 
@@ -239,11 +254,15 @@ docs/project/hours/
 - Identify opportunities for additional hours
 - Implement generous but justifiable allocations
 
-#### 4. Calendar Integration
+#### 4. Dedicated WBSO Google Calendar and Conflict Detection
 
-- Create Google Calendar events
-- Include proper descriptions and categorization
-- Enable calendar sharing and export
+- Create dedicated "WBSO Activities" Google Calendar
+- Implement color coding for WBSO vs non-declarable activities
+- Manual calendar export and review processes
+- Detect conflicts with existing calendar items
+- Identify and categorize non-declarable activities
+- Generate conflict resolution documentation
+- Enable calendar-based WBSO reporting
 
 #### 5. Report Generator
 
@@ -273,6 +292,15 @@ docs/project/hours/
 - **Research and Learning**: 1-3 hours per research session
 - **Testing and Validation**: 1-2 hours per testing session
 - **Code Review**: 0.5-1 hour per review session
+
+### Non-Declarable Activities (Solo Developer Context)
+
+- **Personal Appointments**: Dentist, doctor, personal meetings, family time
+- **Break Time**: Lunch breaks, coffee breaks, personal time, exercise
+- **Travel Time**: Commuting, personal travel
+- **Administrative Tasks**: Non-technical paperwork, general administration
+- **Personal Development**: Non-R&D learning, hobbies, personal projects
+- **Health and Wellness**: Medical appointments, therapy, wellness activities
 
 ### Buffer Time Strategy
 
@@ -379,11 +407,13 @@ docs/project/hours/
 - [ ] Hour optimization strategy implemented
 - [ ] Cross-repo work session detection functional
 
-### Week 4: Calendar Integration
+### Week 4: Dedicated WBSO Google Calendar and Conflict Detection
 
-- [ ] Google Calendar integration complete
-- [ ] WBSO activities calendar populated
-- [ ] Calendar management tools functional
+- [ ] Dedicated "WBSO Activities" Google Calendar created
+- [ ] Color coding scheme implemented (WBSO vs non-declarable)
+- [ ] Manual conflict detection and review process established
+- [ ] WBSO calendar events populated
+- [ ] Calendar export and reporting system functional
 
 ### Week 5: Finalization
 
@@ -402,8 +432,9 @@ docs/project/hours/
 2. **Resource Requirements**
 
    - GitHub API access tokens
-   - Google Calendar API access
+   - Google Calendar access (manual exports acceptable)
    - Development time allocation
+   - Manual review and editing time for calendar management
 
 3. **Success Metrics**
    - Total hours achieved vs 510 target

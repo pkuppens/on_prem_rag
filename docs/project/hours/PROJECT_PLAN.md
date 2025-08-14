@@ -49,164 +49,496 @@
 - ❌ Cross-repository work session detection
 - ❌ Issue creation as documentation work
 
-## Project Structure
+## Detailed Action Plan
 
-### Phase 1: Repository Discovery and Analysis (Week 1)
+### Phase 1: Work Retrieval and Data Collection
 
-**Objective**: Identify all repositories and establish baseline data
+#### 1.1 Repository Discovery and Inventory
 
-#### Tasks
+**Pre-condition**: None - starting point
 
-1. **Repository Inventory**
+- [ ] **Step 1.1.1: Identify All WBSO-Related Repositories**
 
-   - [ ] Create repository list with URLs and access tokens
-   - [ ] Verify access to all repositories
-   - [ ] Document repository purposes and R&D relevance
+- **Goal**: Create a complete list of repositories where WBSO work was performed
+- **Execution**:
+  - List all GitHub repositories under your account
+  - Review each repository for AI agent, privacy, security, or RAG-related work
+  - Document repository name, URL, and primary WBSO relevance
+- **Validation**: CSV file `data/repositories.csv` with columns: repo_name, repo_url, wbso_relevance, notes
 
-2. **Data Extraction Setup**
+- [ ] **Step 1.1.2: Verify Repository Access**
 
-   - [ ] Create multi-repo git log extraction script
-   - [ ] Set up GitHub API access for issue analysis
-   - [ ] Establish data storage structure for multi-repo analysis
+- **Pre-condition**: Step 1.1.1 completed
+- **Goal**: Ensure all repositories are accessible for data extraction
+- **Execution**:
+  - Test git clone for each repository
+  - Verify GitHub API access with personal access token
+  - Document any access issues
+- **Validation**: All repositories successfully cloned or API access confirmed
 
-3. **Baseline Analysis**
-   - [ ] Extract commit history from all repositories
-   - [ ] Generate initial hour estimates
-   - [ ] Identify gaps and opportunities for additional hours
+#### 1.2 Git Commit Data Extraction
 
-#### Deliverables
+- [ ] **Step 1.2.1: Extract Git Logs for Each Repository**
 
-- Repository inventory document
-- Multi-repo data extraction scripts
-- Baseline hour analysis report
+- **Pre-condition**: Step 1.1.2 completed
+- **Goal**: Retrieve all commit data with timestamps and metadata
+- **Execution**:
+  - For each repository, run: `git log --pretty=format:"%H|%ad|%at|%s|%an" --date=iso --reverse --all`
+  - Save output to `data/commits/{repo_name}_commits.csv`
+- **Validation**: CSV files created for each repository with columns: commit_hash, date_iso, timestamp, message, author
 
-### Phase 2: GitHub Issue Analysis (Week 2)
+- [ ] **Step 1.2.2: Standardize Timestamp Format**
 
-**Objective**: Capture issue creation and management as documentation/investigation work
+- **Pre-condition**: Step 1.2.1 completed
+- **Goal**: Convert all timestamps to YYYY-MM-DD HH:MM:SS format
+- **Execution**:
+  - Parse Unix timestamps in timestamp column
+  - Convert to YYYY-MM-DD HH:MM:SS format
+  - Update CSV files with standardized datetime column
+- **Validation**: All timestamps in consistent YYYY-MM-DD HH:MM:SS format
 
-#### Tasks
+- [ ] **Step 1.2.3: Add Repository Context to Commits**
 
-1. **Issue Analysis Framework**
+- **Pre-condition**: Step 1.2.2 completed
+- **Goal**: Include repository information in commit data
+- **Execution**:
+  - Add repo_name column to each commit record
+  - Merge all commit files into single `data/all_commits.csv`
+- **Validation**: Single CSV file with all commits including repository context
 
-   - [ ] Create GitHub issue extraction script
-   - [ ] Define issue-to-hours mapping rules
-   - [ ] Establish issue categorization for WBSO compliance
+#### 1.3 GitHub Issue Data Extraction
 
-2. **Issue Processing**
+- [ ] **Step 1.3.1: Set Up GitHub API Access**
 
-   - [ ] Extract all issues with timestamps and descriptions
-   - [ ] Categorize issues by type (bug, feature, investigation, documentation)
-   - [ ] Assign realistic hour allocations based on issue complexity
+- **Pre-condition**: Step 1.1.2 completed
+- **Goal**: Configure GitHub API access for issue extraction
+- **Execution**:
+  - Create GitHub personal access token with repo scope
+  - Test API access with simple repository query
+  - Document API rate limits and usage
+- **Validation**: Successfully retrieve repository information via API
 
-3. **Issue-commit Correlation**
-   - [ ] Link issues to related commits
-   - [ ] Identify standalone documentation work
-   - [ ] Detect investigation and analysis activities
+- [ ] **Step 1.3.2: Extract Issues for Each Repository**
 
-#### Deliverables
+- **Pre-condition**: Step 1.3.1 completed
+- **Goal**: Retrieve all issues with creation dates and descriptions
+- **Execution**:
+  - Use GitHub API to fetch all issues for each repository
+  - Extract: issue_number, title, body, created_at, updated_at, state, labels
+  - Save to `data/issues/{repo_name}_issues.csv`
+- **Validation**: CSV files created for each repository with issue data
 
-- GitHub issue analysis script
-- Issue categorization framework
-- Issue-to-hours mapping document
+- [ ] **Step 1.3.3: Standardize Issue Timestamps**
 
-### Phase 3: Multi-Repository Integration (Week 3)
+- **Pre-condition**: Step 1.3.2 completed
+- **Goal**: Convert issue timestamps to consistent format
+- **Execution**:
+  - Parse GitHub API timestamps (ISO 8601 format)
+  - Convert to YYYY-MM-DD HH:MM:SS format
+  - Update CSV files with standardized datetime columns
+- **Validation**: All issue timestamps in YYYY-MM-DD HH:MM:SS format
 
-**Objective**: Combine all repositories into unified hour tracking
+### Phase 2: Data Processing and Work Item Creation
 
-#### Tasks
+#### 2.1 Data Consolidation
 
-1. **Data Aggregation**
+- [ ] **Step 2.1.1: Create Unified Data Store**
 
-   - [ ] Create unified data processing pipeline
-   - [ ] Implement cross-repository work session detection
-   - [ ] Handle overlapping time periods across repositories
+- **Pre-condition**: Steps 1.2.3 and 1.3.3 completed
+- **Goal**: Consolidate all data into single SQLite database
+- **Execution**:
+  - Create SQLite database `data/wbso_hours.db`
+  - Import commits from `data/all_commits.csv`
+  - Import issues from all `data/issues/*.csv` files
+  - Create indexes on timestamp and repository columns
+- **Validation**: SQLite database with commits and issues tables, proper indexes
 
-2. **Hour Optimization**
+- [ ] **Step 2.1.2: Group Items by Day**
 
-   - [ ] Analyze current hour totals vs 510 target
-   - [ ] Identify opportunities for additional hour allocation
-   - [ ] Implement generous but justifiable time allocations
+- **Pre-condition**: Step 2.1.1 completed
+- **Goal**: Organize all work items by calendar date
+- **Execution**:
+  - Extract date portion from timestamps (YYYY-MM-DD)
+  - Group commits and issues by date
+  - Create daily summary view in database
+- **Validation**: Database view showing all work items grouped by date
 
-3. **Work Session Enhancement**
-   - [ ] Detect related work across repositories
-   - [ ] Add realistic buffer times for context switching
-   - [ ] Include investigation and research time
+#### 2.2 Work Session Detection
 
-#### Deliverables
+- [ ] **Step 2.2.1: Define Work Session Rules**
 
-- Multi-repo processing pipeline
-- Hour optimization strategy
-- Enhanced work session detection
+- **Pre-condition**: Step 2.1.2 completed
+- **Goal**: Establish rules for grouping work into sessions
+- **Execution**:
+  - Define maximum gap between items (e.g., 2 hours)
+  - Define minimum session duration (e.g., 30 minutes)
+  - Define maximum session duration (e.g., 12 hours)
+  - Document rules in `config/session_rules.json`
+- **Validation**: Configuration file with clear session grouping rules
 
-### Phase 4: Dedicated WBSO Google Calendar and Conflict Detection (Week 4)
+- [ ] **Step 2.2.2: Group Work Items into Sessions**
 
-**Objective**: Create a dedicated WBSO Google Calendar with proper categorization and conflict detection
+- **Pre-condition**: Step 2.2.1 completed
+- **Goal**: Create work sessions from individual commits and issues
+- **Execution**:
+  - Apply session rules to group items by day
+  - Create session_id for each work session
+  - Calculate session start/end times
+  - Store sessions in database
+- **Validation**: Database table with work sessions, each containing multiple commits/issues
 
-#### Tasks
+- [ ] **Step 2.2.3: Adjust Sessions to Reasonable Work Blocks**
 
-1. **WBSO Calendar Setup**
+- **Pre-condition**: Step 2.2.2 completed
+- **Goal**: Ensure sessions represent realistic work periods
+- **Execution**:
+  - Review sessions longer than 8 hours and split if needed
+  - Add buffer time (30 min before/after) to sessions
+  - Ensure sessions don't overlap with non-work hours (e.g., 22:00-06:00)
+  - Update session records in database
+- **Validation**: All sessions represent realistic work periods with proper buffers
 
-   - [ ] Create dedicated "WBSO Activities" Google Calendar
-   - [ ] Set up calendar color coding scheme (WBSO activities vs non-declarable items)
-   - [ ] Configure calendar sharing and export settings
-   - [ ] Design event structure for WBSO compliance
+### Phase 3: Work Item to Hours Conversion
 
-2. **Conflict Detection and Manual Review**
+#### 3.1 Commit-Based Hour Allocation
 
-   - [ ] Export existing calendar items from personal/professional calendars
-   - [ ] Manually review and identify non-declarable activities (appointments, personal time, etc.)
-   - [ ] Create conflict resolution strategy (manual editing acceptable)
-   - [ ] Document non-declarable time periods for reporting
+- [ ] **Step 3.1.1: Define Commit Hour Allocation Rules**
 
-3. **WBSO Event Creation**
+- **Pre-condition**: Step 2.2.3 completed
+- **Goal**: Establish rules for converting commits to hours
+- **Execution**:
+  - Create rules for different commit types (AI framework, security, etc.)
+  - Define base hours per commit type
+  - Create complexity multipliers based on commit message analysis
+  - Document rules in `config/commit_hours.json`
+- **Validation**: Configuration file with commit-to-hours mapping rules
 
-   - [ ] Manually create WBSO calendar events for work sessions (avoiding conflicts)
-   - [ ] Include issue creation events as documentation work
-   - [ ] Add proper descriptions and WBSO categorization
-   - [ ] Color-code events: WBSO activities (primary color) vs non-declarable (different color)
+- [ ] **Step 3.1.2: Analyze Commit Messages for WBSO Relevance**
 
-4. **Calendar Management and Reporting**
-   - [ ] Implement manual event creation process for ongoing WBSO activities
-   - [ ] Create calendar export functionality for reporting
-   - [ ] Generate conflict resolution documentation
-   - [ ] Set up manual review process for calendar accuracy
+- **Pre-condition**: Step 3.1.1 completed
+- **Goal**: Categorize commits by WBSO project relevance
+- **Execution**:
+  - Scan commit messages for AI/privacy/security keywords
+  - Categorize commits as: AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY, SECURITY, GENERAL
+  - Apply WBSO relevance score (0-1) to each commit
+  - Update database with categorization
+- **Validation**: Database table with categorized commits and relevance scores
 
-#### Deliverables
+- [ ] **Step 3.1.3: Calculate Hours for Each Commit**
 
-- Dedicated "WBSO Activities" Google Calendar with color coding
-- Manual calendar export and review process
-- Conflict resolution documentation and procedures
-- Non-declarable activity identification and reporting
-- Calendar-based WBSO reporting system
+- **Pre-condition**: Step 3.1.2 completed
+- **Goal**: Assign hours to each commit based on rules and relevance
+- **Execution**:
+  - Apply base hours for commit type
+  - Multiply by WBSO relevance score
+  - Apply complexity multipliers
+  - Store calculated hours in database
+- **Validation**: Database table with hours assigned to each commit
 
-### Phase 5: Reporting and Validation (Week 5)
+#### 3.2 Issue-Based Hour Allocation
 
-**Objective**: Generate comprehensive reports and validate WBSO compliance
+- [ ] **Step 3.2.1: Define Issue Hour Allocation Rules**
 
-#### Tasks
+- **Pre-condition**: Step 3.1.3 completed
+- **Goal**: Establish rules for converting issues to hours
+- **Execution**:
+  - Create rules for different issue types (bug, feature, investigation)
+  - Define base hours per issue type
+  - Create complexity multipliers based on issue labels and content
+  - Document rules in `config/issue_hours.json`
+- **Validation**: Configuration file with issue-to-hours mapping rules
 
-1. **Report Generation**
+- [ ] **Step 3.2.2: Analyze Issues for WBSO Relevance**
 
-   - [ ] Create comprehensive WBSO hours report
-   - [ ] Generate weekly and monthly summaries
-   - [ ] Include activity breakdowns and justifications
+- **Pre-condition**: Step 3.2.1 completed
+- **Goal**: Categorize issues by WBSO project relevance
+- **Execution**:
+  - Scan issue titles and bodies for AI/privacy/security keywords
+  - Categorize issues as: TECHNICAL_INVESTIGATION, SECURITY_FEATURE, PRIVACY_COMPLIANCE, GENERAL
+  - Apply WBSO relevance score (0-1) to each issue
+  - Update database with categorization
+- **Validation**: Database table with categorized issues and relevance scores
 
-2. **Compliance Validation**
+- [ ] **Step 3.2.3: Calculate Hours for Each Issue**
 
-   - [ ] Review all activities for WBSO eligibility
-   - [ ] Ensure proper R&D activity categorization
-   - [ ] Validate time allocations against industry standards
+- **Pre-condition**: Step 3.2.2 completed
+- **Goal**: Assign hours to each issue based on rules and relevance
+- **Execution**:
+  - Apply base hours for issue type
+  - Multiply by WBSO relevance score
+  - Apply complexity multipliers
+  - Store calculated hours in database
+- **Validation**: Database table with hours assigned to each issue
 
-3. **Documentation**
-   - [ ] Create final WBSO documentation package
-   - [ ] Document methodology and assumptions
-   - [ ] Prepare audit trail documentation
+### Phase 4: Declarable Task Allocation
 
-#### Deliverables
+#### 4.1 WBSO Activity Categorization
 
-- Comprehensive WBSO report
-- Compliance validation document
-- Final documentation package
+- [ ] **Step 4.1.1: Define WBSO Activity Categories**
+
+- **Pre-condition**: Step 3.2.3 completed
+- **Goal**: Map work to approved WBSO activity categories
+- **Execution**:
+  - Define categories based on WBSO form: AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY_CLOUD, AUDIT_LOGGING, DATA_INTEGRITY
+  - Create mapping rules from commit/issue categories to WBSO categories
+  - Document mapping in `config/wbso_categories.json`
+- **Validation**: Configuration file with WBSO category mapping rules
+
+- [ ] **Step 4.1.2: Categorize All Work Items**
+
+- **Pre-condition**: Step 4.1.1 completed
+- **Goal**: Assign WBSO categories to all work items
+- **Execution**:
+  - Apply mapping rules to commits and issues
+  - Assign primary WBSO category to each work item
+  - Store categorization in database
+- **Validation**: Database table with WBSO categories assigned to all work items
+
+- [ ] **Step 4.1.3: Calculate Declarable Hours**
+
+- **Pre-condition**: Step 4.1.2 completed
+- **Goal**: Calculate total declarable hours by WBSO category
+- **Execution**:
+  - Sum hours for each WBSO category
+  - Calculate percentage distribution across categories
+  - Generate summary report
+- **Validation**: Report showing total hours and distribution by WBSO category
+
+#### 4.2 Hour Optimization and Target Achievement
+
+- [ ] **Step 4.2.1: Analyze Current Total vs 510 Target**
+
+- **Pre-condition**: Step 4.1.3 completed
+- **Goal**: Determine gap to 510-hour target
+- **Execution**:
+  - Calculate total declarable hours
+  - Compare to 510-hour target
+  - Identify shortfall or excess
+- **Validation**: Report showing current total vs target with gap analysis
+
+- [ ] **Step 4.2.2: Identify Optimization Opportunities**
+
+- **Pre-condition**: Step 4.2.1 completed
+- **Goal**: Find ways to reach 510-hour target
+- **Execution**:
+  - Review low-scoring commits/issues for missed hours
+  - Identify additional research/learning time
+  - Look for context switching and coordination time
+  - Document optimization opportunities
+- **Validation**: List of specific opportunities to increase hours
+
+- [ ] **Step 4.2.3: Apply Generous but Justifiable Allocations**
+
+- **Pre-condition**: Step 4.2.2 completed
+- **Goal**: Reach 510+ hours with reasonable justification
+- **Execution**:
+  - Apply additional hours to identified opportunities
+  - Add research and investigation time
+  - Include documentation and planning time
+  - Update database with optimized hours
+- **Validation**: Total hours >= 510 with clear justification for each addition
+
+### Phase 5: Calendar Integration and Conflict Detection
+
+#### 5.1 Calendar Setup and Access
+
+- [ ] **Step 5.1.1: Create Dedicated WBSO Google Calendar**
+
+- **Pre-condition**: Step 4.2.3 completed
+- **Goal**: Set up dedicated calendar for WBSO activities
+- **Execution**:
+  - Create new Google Calendar named "WBSO Activities"
+  - Set up color coding: WBSO activities (blue), non-declarable (red)
+  - Configure sharing settings for export
+- **Validation**: Dedicated Google Calendar created with proper settings
+
+- [ ] **Step 5.1.2: Export Existing Calendar Data**
+
+- **Pre-condition**: Step 5.1.1 completed
+- **Goal**: Get existing calendar items for conflict detection
+- **Execution**:
+  - Export personal calendar data for relevant time period
+  - Export work calendar data if applicable
+  - Save as CSV files for analysis
+- **Validation**: CSV files with existing calendar items
+
+- [ ] **Step 5.1.3: Identify Non-Declarable Activities**
+
+- **Pre-condition**: Step 5.1.2 completed
+- **Goal**: Mark existing calendar items as non-declarable
+- **Execution**:
+  - Review exported calendar items
+  - Mark appointments, personal time, breaks as non-declarable
+  - Create list of non-declarable time periods
+- **Validation**: List of non-declarable activities with time periods
+
+#### 5.2 WBSO Calendar Event Creation
+
+- [ ] **Step 5.2.1: Create WBSO Calendar Events**
+
+- **Pre-condition**: Step 5.1.3 completed
+- **Goal**: Add WBSO work sessions to calendar
+- **Execution**:
+  - For each work session, create calendar event
+  - Use session start/end times
+  - Add description with WBSO category and work details
+  - Color-code as WBSO activity (blue)
+- **Validation**: Calendar populated with WBSO work sessions
+
+- [ ] **Step 5.2.2: Add Non-Declarable Events**
+
+- **Pre-condition**: Step 5.2.1 completed
+- **Goal**: Mark non-declarable time periods in calendar
+- **Execution**:
+  - Create calendar events for non-declarable activities
+  - Use appropriate descriptions (e.g., "Dentist Appointment", "Lunch Break")
+  - Color-code as non-declarable (red)
+- **Validation**: Calendar shows both WBSO and non-declarable activities
+
+- [ ] **Step 5.2.3: Resolve Calendar Conflicts**
+
+- **Pre-condition**: Step 5.2.2 completed
+- **Goal**: Ensure no double-counting of time
+- **Execution**:
+  - Review overlapping events
+  - Adjust WBSO session times to avoid conflicts
+  - Document any time periods that cannot be allocated
+- **Validation**: No overlapping events, all conflicts resolved
+
+### Phase 6: Reporting and Validation
+
+#### 6.1 Generate Comprehensive Reports
+
+- [ ] **Step 6.1.1: Create Daily Work Reports**
+
+- **Pre-condition**: Step 5.2.3 completed
+- **Goal**: Generate detailed daily work summaries
+- **Execution**:
+  - Query database for work sessions by date
+  - Include commits, issues, hours, and WBSO categories
+  - Export as CSV: `reports/daily_work_{date}.csv`
+- **Validation**: Daily CSV reports for each work day
+
+- [ ] **Step 6.1.2: Create Weekly Summary Reports**
+
+- **Pre-condition**: Step 6.1.1 completed
+- **Goal**: Generate weekly hour summaries
+- **Execution**:
+  - Aggregate daily data by ISO week
+  - Calculate total hours per week
+  - Show breakdown by WBSO category
+  - Export as CSV: `reports/weekly_summary.csv`
+- **Validation**: Weekly summary with totals and breakdowns
+
+- [ ] **Step 6.1.3: Create Monthly Summary Reports**
+
+- **Pre-condition**: Step 6.1.2 completed
+- **Goal**: Generate monthly hour summaries
+- **Execution**:
+  - Aggregate weekly data by month
+  - Calculate total hours per month
+  - Show breakdown by WBSO category
+  - Export as CSV: `reports/monthly_summary.csv`
+- **Validation**: Monthly summary with totals and breakdowns
+
+#### 6.2 WBSO Compliance Validation
+
+- [ ] **Step 6.2.1: Validate WBSO Category Distribution**
+
+- **Pre-condition**: Step 6.1.3 completed
+- **Goal**: Ensure hours align with WBSO project requirements
+- **Execution**:
+  - Check distribution across WBSO categories
+  - Verify alignment with approved project phases
+  - Document any deviations
+- **Validation**: Report showing WBSO category alignment
+
+- [ ] **Step 6.2.2: Validate Time Allocations**
+
+- **Pre-condition**: Step 6.2.1 completed
+- **Goal**: Ensure time allocations are reasonable and justifiable
+- **Execution**:
+  - Review hour allocations for reasonableness
+  - Check for any unrealistic time periods
+  - Validate against industry standards
+- **Validation**: Report confirming reasonable time allocations
+
+- [ ] **Step 6.2.3: Create Final WBSO Documentation Package**
+
+- **Pre-condition**: Step 6.2.2 completed
+- **Goal**: Prepare complete documentation for tax authorities
+- **Execution**:
+  - Compile all reports into single package
+  - Create executive summary
+  - Include methodology documentation
+  - Prepare audit trail
+- **Validation**: Complete documentation package ready for submission
+
+### Phase 7: Final Validation and Delivery
+
+#### 7.1 Quality Assurance
+
+- [ ] **Step 7.1.1: Review Total Hours Achievement**
+
+- **Pre-condition**: Step 6.2.3 completed
+- **Goal**: Confirm 510+ hour target achieved
+- **Execution**:
+  - Calculate final total declarable hours
+  - Verify >= 510 hours
+  - Document final total and breakdown
+- **Validation**: Confirmation of 510+ hours achieved
+
+- [ ] **Step 7.1.2: Validate Calendar Integration**
+
+- **Pre-condition**: Step 7.1.1 completed
+- **Goal**: Ensure calendar accurately reflects all work
+- **Execution**:
+  - Review Google Calendar for completeness
+  - Verify all work sessions are represented
+  - Check color coding is correct
+- **Validation**: Calendar accurately shows all WBSO and non-declarable activities
+
+- [ ] **Step 7.1.3: Final Documentation Review**
+
+- **Pre-condition**: Step 7.1.2 completed
+- **Goal**: Ensure all documentation is complete and accurate
+- **Execution**:
+  - Review all generated reports
+  - Verify data consistency across reports
+  - Check for any missing information
+- **Validation**: All documentation complete and accurate
+
+#### 7.2 Project Completion
+
+- [ ] **Step 7.2.1: Create Project Summary**
+
+- **Pre-condition**: Step 7.1.3 completed
+- **Goal**: Document project completion and results
+- **Execution**:
+  - Write project completion summary
+  - Document total hours achieved
+  - List key deliverables created
+- **Validation**: Project summary document completed
+
+- [ ] **Step 7.2.2: Archive Project Data**
+
+- **Pre-condition**: Step 7.2.1 completed
+- **Goal**: Safely store all project data for future reference
+- **Execution**:
+  - Create backup of all data files
+  - Archive database and reports
+  - Document data location and access methods
+- **Validation**: All project data safely archived
+
+- [ ] **Step 7.2.3: Project Handover**
+
+- **Pre-condition**: Step 7.2.2 completed
+- **Goal**: Ensure project results are accessible for WBSO submission
+- **Execution**:
+  - Create handover document
+  - List all deliverables and their locations
+  - Provide instructions for using the system
+- **Validation**: Complete handover documentation ready
 
 ## Technical Implementation
 

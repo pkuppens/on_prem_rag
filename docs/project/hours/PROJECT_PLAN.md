@@ -62,9 +62,14 @@
 - **Goal**: Create a complete list of repositories where WBSO work was performed
 - **Execution**:
   - List all GitHub repositories under your account
-  - Review each repository for AI agent, privacy, security, or RAG-related work
-  - Document repository name, URL, and primary WBSO relevance
-- **Validation**: CSV file `data/repositories.csv` with columns: repo_name, repo_url, wbso_relevance, notes
+
+```
+    gh repo list pkuppens > data/repositories_all.csv
+```
+
+- Review each repository for AI agent, privacy, security, or RAG-related work
+- Document repository name, URL, and primary WBSO relevance
+- **Validation**: CSV file `data/repositories.csv` with columns: repo_name, repo_description, wbso_relevance
 
 - [ ] **Step 1.1.2: Verify Repository Access**
 

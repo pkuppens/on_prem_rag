@@ -144,6 +144,10 @@ data/
 # But keep the directory structure
 !data/.gitkeep
 
+# Exception: Keep docs/project/hours/data directory tracked
+!docs/project/hours/data/
+!docs/project/hours/data/**
+
 # Test data directory - explicitly track this directory
 !tests/test_data/
 !tests/test_data/**

@@ -1,106 +1,202 @@
-# Repository Management Scripts
+# Hours Registration Scripts
 
-This directory contains scripts for managing repository access as part of the WBSO Hours Registration Retrofit Project.
+This directory contains scripts for automating the extraction and processing of work hours data from Git repositories.
 
 ## Scripts Overview
 
-### 1. `clone_repositories.bat` (Windows Batch)
+### Shared Configuration
 
-- **Purpose**: Clone or update all repositories listed in `data/repositories.csv`
-- **Usage**: Double-click the file or run from command prompt
-- **Features**:
-  - Reads CSV file with repository information
-  - Checks if repositories already exist
-  - Updates existing repositories with `git pull`
-  - Clones new repositories with `git clone`
-  - Logs all operations to `data/clone_log.txt`
+- `config.bat` - Shared configuration file with paths and settings
+- `utils.bat` - Shared utility functions for common operations
 
-### 2. `clone_repositories.ps1` (PowerShell)
+### Repository Management
 
-- **Purpose**: Same functionality as batch file but with better CSV parsing
-- **Usage**: Run from PowerShell with execution policy that allows scripts
-- **Features**:
-  - Better CSV parsing using PowerShell's `Import-Csv`
-  - More detailed logging with timestamps
-  - Summary report generation
-  - Better error handling
+- `clone_repositories.bat` - Windows batch script to clone repositories
+- `clone_repositories.ps1` - PowerShell script to clone repositories
 
-## Prerequisites
+### Git Commit Data Extraction
 
-1. **Git**: Ensure Git is installed and accessible from command line
-2. **Repository Access**: Ensure you have access to all repositories in the CSV file
-3. **Directory Structure**: The script expects the following structure:
-   ```
-   docs/project/hours/
-   ├── scripts/
-   │   ├── clone_repositories.bat
-   │   ├── clone_repositories.ps1
-   │   └── README.md
-   └── data/
-       └── repositories.csv
-   ```
+- `extract_git_commits.bat` - Windows batch script to extract Git commit data
+- `extract_git_commits.ps1` - PowerShell script to extract Git commit data
 
-## Usage Instructions
+## Shared Configuration
 
-### Option 1: Windows Batch Script
+### Purpose
 
-1. Navigate to the scripts directory
-2. Double-click `clone_repositories.bat` or run from command prompt:
-   ```cmd
-   cd docs\project\hours\scripts
-   clone_repositories.bat
-   ```
+The scripts use shared configuration and utilities to ensure consistency and maintainability.
 
-### Option 2: PowerShell Script
+### Configuration Files
 
-1. Open PowerShell
-2. Navigate to the scripts directory
-3. Run the script:
-   ```powershell
-   cd docs\project\hours\scripts
-   .\clone_repositories.ps1
-   ```
+- **`config.bat`**: Contains all paths, settings, and Git options
 
-## Configuration
+  - Repository parent directory: `C:\Users\piete\Repos\pkuppens\`
+  - CSV file location: `../data/repositories.csv`
+  - Output directories and log files
+  - Git log format and options
 
-The scripts are configured to:
+- **`utils.bat`**: Contains common functions used by multiple scripts
+  - Log file initialization and message logging
+  - Directory creation and existence checks
+  - Repository path handling
+  - CSV file validation
 
-- **Repository Parent Directory**: `C:\Users\piete\Repos\pkuppens`
-- **CSV File**: `../data/repositories.csv`
-- **Log File**: `../data/clone_log.txt`
+### Benefits
 
-You can modify these paths in the script files if needed.
+- **Consistency**: All scripts use the same paths and settings
+- **Maintainability**: Changes to paths only need to be made in one place
+- **Reusability**: Common functions are shared between scripts
+- **Error Handling**: Standardized error checking and logging
 
-## Expected Output
+## Git Commit Data Extraction
 
-After running the script, you should have:
+### Purpose
 
-1. All repositories cloned/updated in `C:\Users\piete\Repos\pkuppens`
-2. A log file at `docs/project/hours/data/clone_log.txt` with operation details
-3. Console output showing progress for each repository
+Extract commit history from all repositories listed in `../data/repositories.csv` to support WBSO hours registration.
+
+### Prerequisites
+
+1. All repositories must be cloned to `C:\Users\piete\Repos\pkuppens\` (configured in `config.bat`)
+2. Git must be installed and accessible from command line
+3. `../data/repositories.csv` must exist with repository information
+
+### Usage
+
+#### Windows Batch Script
+
+```cmd
+cd docs/project/hours/scripts
+extract_git_commits.bat
+```
+
+#### PowerShell Script
+
+```powershell
+cd docs/project/hours/scripts
+.\extract_git_commits.ps1
+```
+
+### Output
+
+- **Commit files**: `../data/commits/{repo_name}.csv` for each repository
+- **Log file**: `../data/git_extraction_log.txt` with detailed execution log
+- **Format**: Each CSV contains commit data with columns: datetime, timestamp, message, author, hash
+
+### Git Log Format
+
+The scripts use the following Git log format:
+
+```
+git log --pretty=format:"%ad|%at|%s|%an|%H" --date=iso --reverse --all
+```
+
+This produces output with:
+
+- `%ad` - Author date (ISO format)
+- `%at` - Author date (Unix timestamp)
+- `%s` - Subject (commit message)
+- `%an` - Author name
+- `%H` - Commit hash
+
+**Note**: The batch script uses `%%ad|%%at|%%s|%%an|%%H` format (double percent signs) to properly escape the format string in batch files.
+
+### Error Handling
+
+- Scripts log all operations to `git_extraction_log.txt`
+- Missing repositories are reported but don't stop processing
+- Git errors are captured and logged
+- Summary statistics are provided at the end
+
+### Validation
+
+After running the script, verify:
+
+1. CSV files exist in `../data/commits/` for each repository
+2. Each CSV contains commit data with proper formatting
+3. Check `git_extraction_log.txt` for any errors or warnings
+
+### Testing Git Log Format
+
+To test the git log format manually:
+
+```cmd
+# Test batch script format
+git --no-pager log --pretty=format:"%%ad|%%at|%%s|%%an|%%H" --date=iso --reverse --all -n 3
+
+# Test PowerShell format
+git --no-pager log --pretty=format:"%ad|%at|%s|%an|%H" --date=iso --reverse --all -n 3
+```
+
+Or use the test script:
+
+```cmd
+cd docs/project/hours/scripts
+test_git_format.bat
+```
+
+## Repository Cloning
+
+### Purpose
+
+Clone all repositories listed in `../data/repositories.csv` for local processing.
+
+### Usage
+
+#### Windows Batch Script
+
+```cmd
+cd docs/project/hours/scripts
+clone_repositories.bat
+```
+
+#### PowerShell Script
+
+```powershell
+cd docs/project/hours/scripts
+.\clone_repositories.ps1
+```
+
+### Output
+
+- **Repositories**: Cloned to `C:\Users\piete\Repos\pkuppens\` (configured in `config.bat`)
+- **Log file**: `../data/clone_log.txt` with cloning results
+
+## File Structure
+
+```
+docs/project/hours/
+├── scripts/
+│   ├── config.bat              # Shared configuration
+│   ├── utils.bat               # Shared utilities
+│   ├── clone_repositories.bat
+│   ├── clone_repositories.ps1
+│   ├── extract_git_commits.bat
+│   ├── extract_git_commits.ps1
+│   └── README.md
+├── data/
+│   ├── repositories.csv
+│   ├── commits/
+│   │   └── {repo_name}.csv
+│   ├── clone_log.txt
+│   └── git_extraction_log.txt
+└── PROJECT_PLAN.md
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Git not found**: Ensure Git is installed and in your PATH
-2. **Access denied**: Check that you have access to the repositories
-3. **CSV file not found**: Verify the path to `repositories.csv` is correct
-4. **Network issues**: Check your internet connection for cloning operations
+1. **Repository not found**: Ensure repositories are cloned before running extraction
+2. **Git not found**: Verify Git is installed and in PATH
+3. **Permission errors**: Run scripts with appropriate permissions
+4. **CSV parsing errors**: Check repository names for special characters
+5. **Git log format issues**:
+   - Batch script uses `%%ad|%%at|%%s|%%an|%%H` (double percent signs for escaping)
+   - PowerShell script uses `%ad|%at|%s|%an|%H` (single percent signs)
+   - Use `--no-pager` flag to prevent paging issues
+6. **Empty output files**: Check if repositories have commits and git log permissions
 
-### Log File Analysis
+### Log Files
 
-The log file contains detailed information about each operation:
-
-- Repository names being processed
-- Success/failure status for each operation
-- Error messages for failed operations
-- Summary statistics
-
-## Next Steps
-
-After successfully running the repository management script:
-
-1. Verify all repositories are accessible
-2. Proceed to Step 1.2: Git Commit Data Extraction
-3. Check the log file for any issues that need resolution
+- Check `../data/git_extraction_log.txt` for detailed error information
+- Check `../data/clone_log.txt` for cloning issues
+- Both scripts provide summary statistics at completion

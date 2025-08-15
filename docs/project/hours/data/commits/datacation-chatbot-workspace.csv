@@ -1,0 +1,38 @@
+datetime|timestamp|message|author|hash
+2025-05-08 15:00:43 +0200|1746709243|Initial commit|Pieter Kuppens|a9b7debbb73ae4e09fcc2825ca7095dde574ae69
+2025-05-08 15:18:03 +0200|1746710283|Initial project plan and local dependencies|Pieter Kuppens|132c3bef90e8efd437dc46232a13db645bf1099b
+2025-05-08 15:21:19 +0200|1746710479|add langgraph dependency|Pieter Kuppens|39607c560956ec5bb3e65f2a370a8d3e8a6da1c6
+2025-05-08 15:49:12 +0200|1746712152|First 2 cells of workshop part 1 complete. Add the pre-commit stuff for workbook policies.|Pieter Kuppens|fe6aa1ddf9bca99e2bbedb3f7e49fbd78627ded6
+2025-05-08 15:55:16 +0200|1746712516|check off tasks, complete sync response|Pieter Kuppens|bfd13348817502e63bbb65d472e4c5cef9fd46b2
+2025-05-08 16:34:45 +0200|1746714885|Chatapp and search now work|Pieter Kuppens|7a299841552fd9a69185bb4352aa678a12c28753
+2025-05-08 16:50:08 +0200|1746715808|uv add datasets pandas sqlalchemy and project plan part 2|Pieter Kuppens|9ad90c73473db4a63a0010845f05d5c0d671c78b
+2025-05-08 17:40:39 +0200|1746718839|Crappy version that can query the database. We'll improve later.|Pieter Kuppens|14d6c807a1fbe4d79cb5a1fccaf0a90da4196453
+2025-05-08 21:05:09 +0200|1746731109|create titanic pandas tool|Pieter Kuppens|ec5edc6c43848003679bb77db505356d1916d435
+2025-05-08 21:05:34 +0200|1746731134|remove old titanic tool|Pieter Kuppens|a391a70495a008c3ee536c31b23830a793869d42
+2025-05-08 21:25:40 +0200|1746732340|try introduce Pandas Data Tool, but got a wroking base tool instead. Can only handle average age query.|Pieter Kuppens|7cdc4244a31da313a0d0300ea7048ca87286de71
+2025-05-08 21:45:21 +0200|1746733521|Document the PANDAS_TOOLs and a migration plan to use it.|Pieter Kuppens|6b7100fb44d07c19823b4466a47b824df30219b2
+2025-05-08 23:23:25 +0200|1746739405|Gemini 500 problems with testers|Pieter Kuppens|c29c76a4cc0b4b6066cf90fd1f5fcd54be3131de
+2025-05-09 22:01:13 +0200|1746820873|feat: implement titanic data pipeline with Prefect|Pieter Kuppens|3d9df04c3c18caf304fd3140161c62389a239614
+2025-05-09 22:29:09 +0200|1746822549|feat: implement environment-based configuration system|Pieter Kuppens|180902e633882dba0d1ad255ae21bd1ed602df71
+2025-05-09 23:42:27 +0200|1746826947|CLI more or less running, with tester in case 500 errors pop up.|Pieter Kuppens|3f7eb12e2ef5572c56bda027eca70242095256e5
+2025-05-10 15:58:27 +0200|1746885507|Clean up name in data pipeline and prevent in queries|Pieter Kuppens|af45c4b06ab86f4c6140625228fcf1e19dd902d8
+2025-05-10 16:04:43 +0200|1746885883|Fix error and prefect logging issue|Pieter Kuppens|9214d97e344f373e4f86b32d08c35e4ffcee2d81
+2025-05-10 21:44:49 +0200|1746906289|style: apply ruff formatting|Pieter Kuppens|d881cdf6e0f919cc7b461fbed7424ddc1e9a6128
+2025-05-10 21:44:56 +0200|1746906296|test: add pytest configuration and test files|Pieter Kuppens|90535998fa274baeb8d9634ad09a25a6a1f2d73a
+2025-05-10 21:48:00 +0200|1746906480|feat: add logging system with file and console handlers|Pieter Kuppens|c908d8b1ca19a1bbea51209d77b507875685e970
+2025-05-10 21:56:28 +0200|1746906988|chore: update package dependencies and lock file|Pieter Kuppens|ade68e97249a5c20b50d0a318fc9c2a6e8790fd4
+2025-05-10 21:56:32 +0200|1746906992|docs: add Chainlit documentation|Pieter Kuppens|05d1339e6b9dce61c35049c895a8f50588d69c09
+2025-05-10 21:56:42 +0200|1746907002|style: apply ruff formatting to tools and tests|Pieter Kuppens|5f8f7e02eb9f8ee52d62994b4b877e79188ef057
+2025-05-10 21:56:52 +0200|1746907012|refactor: split utils into specialized modules|Pieter Kuppens|594d969c2f8d731f03af8fbba55bf2d4c92c441c
+2025-05-10 21:56:56 +0200|1746907016|refactor: move pandas agent to dedicated module|Pieter Kuppens|b83bea54dbab0617d9a03b69c9e2da2097d7f92a
+2025-05-10 22:06:58 +0200|1746907618|test: unify settings|Pieter Kuppens|4dc638fd40276d5144f2f27123c976189e05c799
+2025-05-10 23:01:14 +0200|1746910874|chore: linting including markdown, configuration, pre-commit hooks, and manual fixes|Pieter Kuppens|0684878fba04cda040ac6ede1872a7e9ef1504fb
+2025-05-10 23:07:06 +0200|1746911226|test: run and fix the -m unit tests|Pieter Kuppens|e8e427016b4b24c0cb4c9ca08d04dc6c9b902884
+2025-05-10 23:36:30 +0200|1746912990|refactor: titanic-data-analyst-cli (rename and deduplicate, test and fix)|Pieter Kuppens|6583b82a52fe3639d0fac10d2da3df8294c29622
+2025-05-11 18:18:41 +0200|1746980321|notebook 1 can run as script|Pieter Kuppens|2c1714fc95a8e70d01b8a05f6c4bf0b08d772d13
+2025-05-11 19:23:05 +0200|1746984185|check of notebook 1 tasks from workshop in README|Pieter Kuppens|1de243181d1f8c26bccfd78db17978b204da25c9
+2025-05-11 20:41:53 +0200|1746988913|notebooks: unified the notebook runners|Pieter Kuppens|784873f20970f5d5bd49d1bc04723f19e32d365c
+2025-05-11 20:52:15 +0200|1746989535|docs: small README.md improvements|Pieter Kuppens|4df09f30737630277fda711ca2f67cfab710d3e2
+2025-05-12 08:58:08 +0200|1747033088|chore: show schema fixes|Pieter Kuppens|708b58027f315463e754306062f9cde4a28634ef
+2025-05-12 09:21:23 +0200|1747034483|chore: ruff check --fix . , including new check for unused imports|Pieter Kuppens|d92860bc42c7227ce7314e5bc43a109933695b39
+2025-05-12 14:42:04 +0200|1747053724|feat: add Cursor rules and improve project structure|Pieter Kuppens|9468eb642742a8bd710eacaa9109132b91faab2d

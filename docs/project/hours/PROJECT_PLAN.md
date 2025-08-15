@@ -123,24 +123,28 @@
   - [x] GitHub API access confirmed for all repositories
   - [x] No critical access issues preventing data extraction
   - [x] All repository directories contain expected content
-  NOTE: Script did not work for pulling when the directory existed, but that could be fixed with git_pull_all.sh script.
+        NOTE: Script did not work for pulling when the directory existed, but that could be fixed with git_pull_all.sh script.
 
 #### 1.2 Git Commit Data Extraction
 
-- [ ] **Step 1.2.1: Extract Git Logs for Each Repository**
+- [ ] **Step 1.2.1: Extract Git Logs for Each Repository** _(READY FOR EXECUTION)_
 
 - **Pre-condition**: Step 1.1.2 completed
 - **Goal**: Retrieve all commit data with timestamps and metadata
 - **Execution**:
-  - For each repository, run: `git log --pretty=format:"%H|%ad|%at|%s|%an" --date=iso --reverse --all`
-  - Save output to `data/commits/{repo_name}_commits.csv`
+  - For each repository, go to the repo and run: `git log --pretty=format:"%ad|%at|%s|%an|%H" --date=iso --reverse --all`
+  - Save output to this repo, relative to this file in: `data/commits/{repo_name}.csv`
+    - including column names: datetime, timestamp, message, author, hash
+  - **Scripts created**: `extract_git_commits.bat` and `extract_git_commits.ps1`
 - **Validation**:
 
-  - [ ] CSV files created for each repository with columns: commit_hash, date_iso, timestamp, message, author
+  - [ ] CSV files created for each repository with columns: datetime, timestamp, message, author, hash
   - [ ] All repositories processed successfully
   - [ ] No errors during git log extraction
 
-- [ ] **Step 1.2.2: Standardize Timestamp Format**
+- [x] **Step 1.2.2: Standardize Timestamp Format**
+
+_Obsolete, git log format is adequate_
 
 - **Pre-condition**: Step 1.2.1 completed
 - **Goal**: Convert all timestamps to YYYY-MM-DD HH:MM:SS format
@@ -150,9 +154,9 @@
   - Update CSV files with standardized datetime column
 - **Validation**:
 
-  - [ ] All timestamps in consistent YYYY-MM-DD HH:MM:SS format
-  - [ ] No timestamp parsing errors
-  - [ ] All commit files updated with standardized format
+  - [x] All timestamps in consistent YYYY-MM-DD HH:MM:SS format
+  - [x] No timestamp parsing errors
+  - [x] All commit files updated with standardized format
 
 - [ ] **Step 1.2.3: Add Repository Context to Commits**
 

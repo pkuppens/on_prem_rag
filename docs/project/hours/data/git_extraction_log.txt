@@ -1,0 +1,37 @@
+Git Commit Extraction Log - 15/08/2025 13:54:59,11
+========================================
+Processing repository: pkuppens/on_prem_rag
+WARNING: Repository directory not found: pkuppens/on_prem_rag
+Processing repository: pkuppens/WBSO-AICM-2025-01
+WARNING: Repository directory not found: pkuppens/WBSO-AICM-2025-01
+Processing repository: pkuppens/langflow_org
+WARNING: Repository directory not found: pkuppens/langflow_org
+Processing repository: pkuppens/context_engineering
+WARNING: Repository directory not found: pkuppens/context_engineering
+Processing repository: pkuppens/healthcare-aigent
+WARNING: Repository directory not found: pkuppens/healthcare-aigent
+Processing repository: pkuppens/ChatRTX
+WARNING: Repository directory not found: pkuppens/ChatRTX
+Processing repository: pkuppens/ai-agents-masterclass
+WARNING: Repository directory not found: pkuppens/ai-agents-masterclass
+Processing repository: pkuppens/motivatie-brieven-ai
+WARNING: Repository directory not found: pkuppens/motivatie-brieven-ai
+Processing repository: pkuppens/chrome_extensions
+WARNING: Repository directory not found: pkuppens/chrome_extensions
+Processing repository: pkuppens/gemini_agent
+WARNING: Repository directory not found: pkuppens/gemini_agent
+Processing repository: pkuppens/job_hunt
+WARNING: Repository directory not found: pkuppens/job_hunt
+Processing repository: pkuppens/gmail_summarize_draft
+WARNING: Repository directory not found: pkuppens/gmail_summarize_draft
+Processing repository: pkuppens/my_chat_gpt
+WARNING: Repository directory not found: pkuppens/my_chat_gpt
+Processing repository: pkuppens/genai-hackathon
+WARNING: Repository directory not found: pkuppens/genai-hackathon
+Processing repository: pkuppens/datacation-chatbot-workspace
+WARNING: Repository directory not found: pkuppens/datacation-chatbot-workspace
+========================================
+EXTRACTION SUMMARY
+Total repositories processed: 0
+Errors encountered: 15
+========================================

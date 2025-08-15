@@ -1,0 +1,19 @@
+datetime|timestamp|message|author|hash
+2025-06-14 18:00:37 +0200|1749916837|Initial commit|Pieter Kuppens|cb80587f4969987a7378210d11f4319402aac61c
+2025-06-14 22:40:54 +0200|1749933654|Revise planning with layered goals|Pieter Kuppens|98f5e7c6511d467aae1c41a6e57bfbd43b22de29
+2025-06-15 13:20:18 +0200|1749986418|Update planning guide with detailed steps|Pieter Kuppens|16420d16ab2e6a23ffbfddd6969824a6f0dcfa20
+2025-06-15 13:20:56 +0200|1749986456|Merge pull request #1 from pkuppens/codex/create-planning.md-with-project-roadmap|Pieter Kuppens|029b470e405b4af3b88257e8bc0e39a7714ca47b
+2025-06-15 23:39:27 +0200|1750023567|Update planning and pipeline comments|Pieter Kuppens|8cd925358b9210ce663deb527d91f913a197bc22
+2025-06-15 23:44:42 +0200|1750023882|Merge pull request #2 from pkuppens/codex/maak-lokale-autoscriber-versie|Pieter Kuppens|7e9dab283133a00312f6085cecf0d034c57edb1b
+2025-06-20 13:05:09 +0200|1750417509|Add self-improving agent with memory|Pieter Kuppens|a1d4c77dd70ea36235bb25f2ddb3ccabab9bafad
+2025-06-20 13:05:21 +0200|1750417521|Merge pull request #3 from pkuppens/codex/write-agent-with-memory-and-feedback|Pieter Kuppens|6df8d525fd375fc4650e1d66abd181acff446bb1
+2025-06-23 12:22:11 +0200|1750674131|Goal 1: Containerised LangFlow|Pieter Kuppens|510672cbd52999026cfcda2dc8bc53f2f0fad7a1
+2025-06-23 15:34:17 +0200|1750685657|switch to local langflow installation (uv iso docker)|Pieter Kuppens|b5a999ab9c60f4370f5411ea4728d37b3c35b22f
+2025-06-24 12:39:42 +0200|1750761582|Revise plan and add pydantic ai examples|Pieter Kuppens|ec291a1ee1d145767e093aa524f0909a16b7f729
+2025-06-24 12:40:00 +0200|1750761600|Merge pull request #4 from pkuppens/codex/create-agentic-system-with-pydantic-ai|Pieter Kuppens|b8f5ad117d3ceb29271a0156946b75d6f6f54ddb
+2025-06-24 16:21:57 +0200|1750774917|Integrate mem0ai for pydantic AI examples|Pieter Kuppens|841d4974ccb5de89ac83d88355c76cfda7c43ba1
+2025-07-14 18:47:36 +0200|1752511656|Add web search agent with persistent memory|Pieter Kuppens|ac40f69816e1a1ebb1cf178e437686a60f62d3ce
+2025-07-14 18:48:00 +0200|1752511680|Merge pull request #6 from pkuppens/codex/create-simple-n8n-example-using-context7|Pieter Kuppens|b038bdeff6fa9ce41f5660b6540cea408d194e06
+2025-07-18 10:41:08 +0200|1752828068|Merge pull request #5 from pkuppens/codex/integrate-mem0ai-for-long-term-memories|Pieter Kuppens|bf23029adac24b5ddf4b82f4803b5bdbc921ba0a
+2025-07-19 14:00:10 +0200|1752926410|Add CEO agent and demo|Pieter Kuppens|9b109569f9be2940af1f26a5814037f330ff7639
+2025-07-19 14:01:41 +0200|1752926501|Merge pull request #7 from pkuppens/codex/create-ceo-agent-demo-application|Pieter Kuppens|9b4e023d49eaeca87599681f0edf2fae62da4beb

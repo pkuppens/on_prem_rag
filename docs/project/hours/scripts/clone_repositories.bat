@@ -1,44 +1,37 @@
 @echo off
+setlocal enabledelayedexpansion
+
 REM Repository Management Script for WBSO Hours Project
 REM This script reads repositories.csv and clones/updates all repositories
 
-setlocal enabledelayedexpansion
-
-REM Set the repository parent directory
-set REPO_PARENT_DIR=C:\Users\piete\Repos\pkuppens
-set CSV_FILE=%~dp0..\data\repositories.csv
-set LOG_FILE=%~dp0..\data\clone_log.txt
-
 echo Repository Management Script - WBSO Hours Project
 echo ================================================
+
+REM Load shared configuration
+call "%~dp0config.bat"
+
+REM Load shared utilities
+call "%~dp0utils.bat"
+
+REM Initialize log file
+call :init_log "%CLONE_LOG_FILE%" "Repository Management"
+
 echo Parent Directory: %REPO_PARENT_DIR%
 echo CSV File: %CSV_FILE%
-echo Log File: %LOG_FILE%
+echo Log File: %CLONE_LOG_FILE%
 echo.
 
-REM Create log file header
-echo Repository Management Log - %date% %time% > %LOG_FILE%
-echo ================================================ >> %LOG_FILE%
-
 REM Check if parent directory exists
-if not exist "%REPO_PARENT_DIR%" (
-    echo Creating parent directory: %REPO_PARENT_DIR%
-    mkdir "%REPO_PARENT_DIR%"
-)
+call :create_dir_if_not_exists "%REPO_PARENT_DIR%"
 
 REM Change to parent directory
 cd /d "%REPO_PARENT_DIR%"
 
 REM Check if CSV file exists
-if not exist "%CSV_FILE%" (
-    echo ERROR: CSV file not found: %CSV_FILE%
-    echo ERROR: CSV file not found: %CSV_FILE% >> %LOG_FILE%
-    pause
-    exit /b 1
-)
+call :check_csv_exists "%CSV_FILE%"
 
 echo Starting repository processing...
-echo Starting repository processing... >> %LOG_FILE%
+call :log_message "%CLONE_LOG_FILE%" "Starting repository processing..."
 
 REM Skip header line and process each repository
 set /a line_count=0
@@ -54,7 +47,7 @@ for /f "usebackq tokens=1,2,3 delims=," %%a in ("%CSV_FILE%") do (
         REM Skip empty lines
         if not "!repo_name!"=="" (
             echo Processing repository: !repo_name!
-            echo Processing repository: !repo_name! >> %LOG_FILE%
+            call :log_message "%CLONE_LOG_FILE%" "Processing repository: !repo_name!"
 
             REM Convert repo name to GitHub URL
             set github_url=https://github.com/!repo_name!
@@ -62,27 +55,27 @@ for /f "usebackq tokens=1,2,3 delims=," %%a in ("%CSV_FILE%") do (
             REM Check if directory already exists
             if exist "!repo_name!" (
                 echo   Directory exists, updating...
-                echo   Directory exists, updating... >> %LOG_FILE%
+                call :log_message "%CLONE_LOG_FILE%" "  Directory exists, updating..."
                 cd /d "!repo_name!"
-                git pull >> %LOG_FILE% 2>&1
+                git pull >> %CLONE_LOG_FILE% 2>&1
                 if !errorlevel! equ 0 (
                     echo   ✓ Successfully updated
-                    echo   ✓ Successfully updated >> %LOG_FILE%
+                    call :log_message "%CLONE_LOG_FILE%" "  ✓ Successfully updated"
                 ) else (
                     echo   ✗ Failed to update
-                    echo   ✗ Failed to update >> %LOG_FILE%
+                    call :log_message "%CLONE_LOG_FILE%" "  ✗ Failed to update"
                 )
                 cd /d "%REPO_PARENT_DIR%"
             ) else (
                 echo   Directory does not exist, cloning...
-                echo   Directory does not exist, cloning... >> %LOG_FILE%
-                git clone !github_url! >> %LOG_FILE% 2>&1
+                call :log_message "%CLONE_LOG_FILE%" "  Directory does not exist, cloning..."
+                git clone !github_url! >> %CLONE_LOG_FILE% 2>&1
                 if !errorlevel! equ 0 (
                     echo   ✓ Successfully cloned
-                    echo   ✓ Successfully cloned >> %LOG_FILE%
+                    call :log_message "%CLONE_LOG_FILE%" "  ✓ Successfully cloned"
                 ) else (
                     echo   ✗ Failed to clone
-                    echo   ✗ Failed to clone >> %LOG_FILE%
+                    call :log_message "%CLONE_LOG_FILE%" "  ✗ Failed to clone"
                 )
             )
             echo.
@@ -91,8 +84,8 @@ for /f "usebackq tokens=1,2,3 delims=," %%a in ("%CSV_FILE%") do (
 )
 
 echo Repository processing complete!
-echo Repository processing complete! >> %LOG_FILE%
+call :log_message "%CLONE_LOG_FILE%" "Repository processing complete!"
 echo.
-echo Check the log file for details: %LOG_FILE%
+echo Check the log file for details: %CLONE_LOG_FILE%
 echo.
 pause

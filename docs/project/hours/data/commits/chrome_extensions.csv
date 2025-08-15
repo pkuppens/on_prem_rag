@@ -1,0 +1,6 @@
+datetime|timestamp|message|author|hash
+2025-07-17 13:22:12 +0200|1752751332|Initial commit|Pieter Kuppens|a92cc2616374a881fdf9cd72bf96a913616a7ee3
+2025-07-17 15:39:24 +0200|1752759564|Update README.md|Pieter Kuppens|a17176f15485fed5e74faf4401bb476a3aade4fe
+2025-07-20 22:16:31 +0200|1753042591|feat: Create initial project plan|Pieter Kuppens|67966f99db7559f85ade6be0227069cbf2ce4a59
+2025-07-20 22:31:17 +0200|1753043477|feat: Implement Phase 1 - Basic Chrome Extension|Pieter Kuppens|5048820bef6bb14a1e15a48b8c89302c4ffaa4b2
+2025-07-20 22:34:23 +0200|1753043663|feat: Implement Phase 2 - Page Interaction|Pieter Kuppens|26050dd4467b8be27e2f3925cf9c1de565770b99

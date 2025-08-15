@@ -1,0 +1,16 @@
+datetime|timestamp|message|author|hash
+2024-12-04 11:17:05 +0100|1733307425|Initial commit|Pieter Kuppens|e14ba06436084cbff42a94f461793b81e2d7d1f0
+2024-12-04 11:55:46 +0100|1733309746|Add backend structure with API endpoints, models, data management, security, and documentation|Pieter Kuppens|2d5eaea6791d13de948724ca0fd6d317787c0801
+2024-12-04 11:56:20 +0100|1733309780|Merge pull request #1 from pkuppens/add-backend-structure|Pieter Kuppens|b9f1acb56862de254649f1ffaf8f9b08447d63f1
+2024-12-04 12:40:28 +0100|1733312428|Install updates including mermaid on jupyter|Pieter Kuppens|bd15f8696d72ca5b9943b167f68669bb44c1b321
+2024-12-04 14:18:12 +0100|1733318292|Add speech recognition feature|Pieter Kuppens|69aa6e7baeee1787142240bdb197c9bf9368e967
+2024-12-04 14:19:52 +0100|1733318392|Merge pull request #2 from pkuppens/add-speech-recognition|Pieter Kuppens|3baf8f0eeb36e074bfe2bb3007d2a7c1c3078d9b
+2024-12-04 14:23:22 +0100|1733318602|Merge branch 'ghcw-session-f451-120424124037'|Pieter Kuppens|41e9d9aafaf2f1ab7ed61e99dce0ee331712d8ff
+2024-12-04 16:01:41 +0100|1733324501|small speech recognition PoC|Pieter Kuppens|e6d71d7eb4245257343ea9c79c3b18e3580bf767
+2024-12-13 14:28:48 +0100|1734096528|Add Dockerfile for MySQL server with data|Pieter Kuppens|82504f953a43be3f5cdfda7cf510488020d46575
+2024-12-13 21:38:31 +0100|1734122311|Merge pull request #3 from pkuppens/add-mysql-dockerfile|Pieter Kuppens|97c90387b4c8dae489291a834202fbac9537b36e
+2024-12-14 20:13:56 +0100|1734203636|fix Dockerfile up to package install (like fastapi)|Pieter Kuppens|78b2eb3d0f38e7cd6f7c26b937bc15abd0c94510
+2024-12-14 20:32:32 +0100|1734204752|Properly set up the FastAPI in backend, including the Dockerfile|Pieter Kuppens|92e596797dc04b204cea10a2c21be0d9f41be209
+2024-12-14 20:32:48 +0100|1734204768|Merge pull request #4 from pkuppens/setup-fastapi|Pieter Kuppens|7212b2eed8fd93d5cc11a90557a6739becc2590e
+2024-12-14 22:45:05 +0100|1734212705|Fix Dockerfile to working version with MySQL + OpenMRS data only|Pieter Kuppens|a6fb55376fadaa754fe01609153732d1dc28ba30
+2025-03-18 16:17:53 +0100|1742311073|Update README.md|Pieter Kuppens|5ce991d40dfe6d22d1e5a0ac6bab8ecabb7ae04b

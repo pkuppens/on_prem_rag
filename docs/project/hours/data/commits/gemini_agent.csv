@@ -1,0 +1,29 @@
+datetime|timestamp|message|author|hash
+2025-05-06 11:25:32 +0200|1746523532|Initial commit|Pieter Kuppens|7fb2896e3063a27747be4727f5282fc1665f273c
+2025-05-07 09:51:35 +0200|1746604295|project setup|Pieter Kuppens|2f05ce0568c3d1546443b68ea568f05b5cfd41c0
+2025-05-07 10:01:16 +0200|1746604876|Configure environment|Pieter Kuppens|633048b5982677dee65e1dd5f645fd3088b07f87
+2025-05-07 10:08:53 +0200|1746605333|check off configure environment|Pieter Kuppens|248042e803eae428f2701a77c0d97ccd125dc176
+2025-05-07 10:09:22 +0200|1746605362|Relocate and detail out dependency installation|Pieter Kuppens|79154e9bf2dc0ce78469eaddf3365a61d689847d
+2025-05-07 10:25:33 +0200|1746606333|Implement basic gemini integration|Pieter Kuppens|0d4b9d47be28402049a627423f40fea7bf8d8dea
+2025-05-07 10:35:45 +0200|1746606945|Create gemini-chat script that make a simple client call and prints the result|Pieter Kuppens|4fedc4ec752e7672915110ba5d0bd605d10ec666
+2025-05-07 10:49:47 +0200|1746607787|Implemented simple langchain conversation management|Pieter Kuppens|5ec3b37c00d768b794894131aa24e9725a3018b3
+2025-05-07 11:04:57 +0200|1746608697|LangChain/gemini-interactive -u parameter for a user message. Model 2.5 -> 2.0 with justification|Pieter Kuppens|afe5b1c820787591ca5ce131c4cdefab0c9e13e3
+2025-05-07 11:49:58 +0200|1746611398|gemini-web plan|Pieter Kuppens|d4c0fdaa7858e677786db610d8b18fb4126f91cb
+2025-05-07 12:12:15 +0200|1746612735|gemini-web: create a streamlit web app for a gemini web conversation.|Pieter Kuppens|de903f0999edbba61fa49318399dfc2cfc1992f8
+2025-05-07 13:51:00 +0200|1746618660|fix usage of system prompt with updates during chat. Add screenshot.|Pieter Kuppens|41087ada2b3c27621c20e36c3a03e251bb0dbe49
+2025-05-07 14:12:01 +0200|1746619921|Github public with MIT with Commercial Use Restriction license|Pieter Kuppens|a49860d545c4d43b772b44c6127cba9af3aeafce
+2025-05-07 20:38:09 +0200|1746643089|docs: improve UV installation documentation - Fix winget package name to astral-sh.uv - Clarify agreement acceptance behavior - Maintain correct venv activation sequence - Remove forced line wrapping for better readability|Pieter Kuppens|78ebcb018ae019bce905f45daa9820b0920bc711
+2025-05-07 20:40:18 +0200|1746643218|docs: reorganize documentation structure - Move LANGCHAIN.md to docs/ directory - Add documentation section to README.md with links to all docs - Keep LICENSE in root as per standard practice|Pieter Kuppens|d85e8ca442587fa3aa0d0bb1e16e78714ddb7b95
+2025-05-07 21:04:28 +0200|1746644668|Update environment settings handling and documentation|Pieter Kuppens|7d5c04752245b5d957fcce905378c7c7c17d2821
+2025-05-07 21:07:07 +0200|1746644827|Run ruff check and format with: uv run ruff check . && uv run ruff format .|Pieter Kuppens|776cdb78c468ddb960d48edd3ddacb5bae3f0f5b
+2025-05-07 21:22:59 +0200|1746645779|Testing simplified with documentation and coverage reports|Pieter Kuppens|0dec66d63fc05401770c9d8f876cb66df18f079b
+2025-05-07 21:48:47 +0200|1746647327|Add Voice Control to Project Plan, no implementations yet|Pieter Kuppens|41dd1039ece838ea0fd29f59ae8af5b15d20bbe5
+2025-05-07 22:43:21 +0200|1746650601|Whisper configuration, test, and docs|Pieter Kuppens|084fe7b8da88a154d589d8d1ddaa42e8ba276aa8
+2025-05-07 23:25:23 +0200|1746653123|Voice control - work in progress, need client side solution.|Pieter Kuppens|0bce0d95df81a5e3d5bd2cf99285c8cf1334662e
+2025-05-07 23:52:57 +0200|1746654777|Start with web search integration planning|Pieter Kuppens|9479facedaab7ede717373b5aaaeb454ae40964d
+2025-05-08 11:32:08 +0200|1746696728|Checked and fixes of whisper/torch/cuda set-up|Pieter Kuppens|0f9aa034b3944941ec56ecf8c2d99865b012fa38
+2025-05-08 11:46:15 +0200|1746697575|Separate STREAMLIT issue description and migration plan|Pieter Kuppens|bdd0b4e6e468c340fcda237491c91a644b7eb920
+2025-05-08 12:02:58 +0200|1746698578|Add a Data Analytics project plan|Pieter Kuppens|b75d089a80f4036c84d1af42810241a51aefc79b
+2025-05-08 12:52:06 +0200|1746701526|AI Agent plan|Pieter Kuppens|a40a2e3b87bf9c01b99c2d4c1b906eda486158c3
+2025-05-08 13:11:08 +0200|1746702668|create a set of agentic prompts|Pieter Kuppens|242c4f42a6d593534394d420680184e44e3198b7
+2025-07-15 10:20:56 +0200|1752567656|docs: gemini description and context setup|Pieter Kuppens|a025989dbfa564b2a2e39e39cd73eb3d741b2163

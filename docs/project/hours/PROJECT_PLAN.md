@@ -57,7 +57,7 @@
 
 **Pre-condition**: None - starting point
 
-- [ ] **Step 1.1.1: Identify All WBSO-Related Repositories**
+- [x] **Step 1.1.1: Identify All WBSO-Related Repositories**
 
 - **Goal**: Create a complete list of repositories where WBSO work was performed
 - **Execution**:
@@ -69,17 +69,60 @@
 
 - Review each repository for AI agent, privacy, security, or RAG-related work
 - Document repository name, URL, and primary WBSO relevance
-- **Validation**: CSV file `data/repositories.csv` with columns: repo_name, repo_description, wbso_relevance
+- **Validation**:
+
+  - [x] CSV file `data/repositories.csv` with columns: repo_name, repo_description, wbso_relevance
+  - [x] All repositories reviewed and categorized by WBSO relevance
+  - [x] Repository descriptions accurately reflect WBSO project alignment
 
 - [ ] **Step 1.1.2: Verify Repository Access**
 
 - **Pre-condition**: Step 1.1.1 completed
 - **Goal**: Ensure all repositories are accessible for data extraction
 - **Execution**:
-  - Test git clone for each repository
-  - Verify GitHub API access with personal access token
-  - Document any access issues
-- **Validation**: All repositories successfully cloned or API access confirmed
+
+  - **Step 1.1.2.1: Navigate to Repository Parent Directory**
+
+    - Change to the project parent directory: `C:\Users\piete\Repos\pkuppens`
+    - Verify current working directory is correct for repository management
+
+  - **Step 1.1.2.2: Parse Repository List**
+
+    - Read `data/repositories.csv` file (CSV with header and quoted fields)
+    - Extract repository names from the `repo_name` column
+    - Convert repository names to GitHub URLs (format: `https://github.com/{repo_name}`)
+    - Handle any special characters or formatting in repository names
+
+  - **Step 1.1.2.3: Create Repository Management Script**
+
+    - Create a batch file/shell script that:
+      - Reads the repository list from CSV
+      - For each repository:
+        - Check if directory already exists
+        - If exists: run `git pull` to update
+        - If not exists: run `git clone {github_url}`
+        - Handle errors gracefully (network issues, access denied, etc.)
+        - Log success/failure for each repository
+    - Script should be executable and handle all repositories in the list
+
+  - **Step 1.1.2.4: Execute Repository Management**
+
+    - Run the created script to clone/update all repositories
+    - Verify each repository is accessible and contains expected content
+    - Document any repositories that fail to clone or update
+    - Test GitHub API access with personal access token for each repository
+
+  - **Step 1.1.2.5: Document Access Status**
+    - Create a status report of all repositories
+    - List any access issues or failed operations
+    - Verify all repositories are ready for data extraction
+
+- **Validation**:
+  - [ ] All repositories successfully cloned or updated in `C:\Users\piete\Repos\pkuppens`
+  - [ ] Repository management script created and functional
+  - [ ] GitHub API access confirmed for all repositories
+  - [ ] No critical access issues preventing data extraction
+  - [ ] All repository directories contain expected content
 
 #### 1.2 Git Commit Data Extraction
 
@@ -90,7 +133,11 @@
 - **Execution**:
   - For each repository, run: `git log --pretty=format:"%H|%ad|%at|%s|%an" --date=iso --reverse --all`
   - Save output to `data/commits/{repo_name}_commits.csv`
-- **Validation**: CSV files created for each repository with columns: commit_hash, date_iso, timestamp, message, author
+- **Validation**:
+
+  - [ ] CSV files created for each repository with columns: commit_hash, date_iso, timestamp, message, author
+  - [ ] All repositories processed successfully
+  - [ ] No errors during git log extraction
 
 - [ ] **Step 1.2.2: Standardize Timestamp Format**
 
@@ -100,7 +147,11 @@
   - Parse Unix timestamps in timestamp column
   - Convert to YYYY-MM-DD HH:MM:SS format
   - Update CSV files with standardized datetime column
-- **Validation**: All timestamps in consistent YYYY-MM-DD HH:MM:SS format
+- **Validation**:
+
+  - [ ] All timestamps in consistent YYYY-MM-DD HH:MM:SS format
+  - [ ] No timestamp parsing errors
+  - [ ] All commit files updated with standardized format
 
 - [ ] **Step 1.2.3: Add Repository Context to Commits**
 
@@ -109,7 +160,10 @@
 - **Execution**:
   - Add repo_name column to each commit record
   - Merge all commit files into single `data/all_commits.csv`
-- **Validation**: Single CSV file with all commits including repository context
+- **Validation**:
+  - [ ] Single CSV file with all commits including repository context
+  - [ ] All repository commits successfully merged
+  - [ ] Repository context correctly added to all commits
 
 #### 1.3 GitHub Issue Data Extraction
 
@@ -121,7 +175,11 @@
   - Create GitHub personal access token with repo scope
   - Test API access with simple repository query
   - Document API rate limits and usage
-- **Validation**: Successfully retrieve repository information via API
+- **Validation**:
+
+  - [ ] Successfully retrieve repository information via API
+  - [ ] GitHub personal access token configured correctly
+  - [ ] API rate limits documented
 
 - [ ] **Step 1.3.2: Extract Issues for Each Repository**
 
@@ -131,7 +189,11 @@
   - Use GitHub API to fetch all issues for each repository
   - Extract: issue_number, title, body, created_at, updated_at, state, labels
   - Save to `data/issues/{repo_name}_issues.csv`
-- **Validation**: CSV files created for each repository with issue data
+- **Validation**:
+
+  - [ ] CSV files created for each repository with issue data
+  - [ ] All repositories processed for issues
+  - [ ] Issue data includes all required fields
 
 - [ ] **Step 1.3.3: Standardize Issue Timestamps**
 

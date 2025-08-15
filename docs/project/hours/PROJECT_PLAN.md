@@ -118,11 +118,12 @@
     - Verify all repositories are ready for data extraction
 
 - **Validation**:
-  - [ ] All repositories successfully cloned or updated in `C:\Users\piete\Repos\pkuppens`
-  - [ ] Repository management script created and functional
-  - [ ] GitHub API access confirmed for all repositories
-  - [ ] No critical access issues preventing data extraction
-  - [ ] All repository directories contain expected content
+  - [x] All repositories successfully cloned or updated in `C:\Users\piete\Repos\pkuppens`
+  - [x] Repository management script created and functional
+  - [x] GitHub API access confirmed for all repositories
+  - [x] No critical access issues preventing data extraction
+  - [x] All repository directories contain expected content
+  NOTE: Script did not work for pulling when the directory existed, but that could be fixed with git_pull_all.sh script.
 
 #### 1.2 Git Commit Data Extraction
 

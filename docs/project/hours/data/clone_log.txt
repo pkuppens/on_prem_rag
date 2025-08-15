@@ -1,0 +1,65 @@
+Repository Management Log - 15/08/2025 13:25:09,42
+================================================
+Starting repository processing...
+Processing repository: pkuppens/on_prem_rag
+  Directory does not exist, cloning...
+fatal: destination path 'on_prem_rag' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/WBSO-AICM-2025-01
+  Directory does not exist, cloning...
+fatal: destination path 'WBSO-AICM-2025-01' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/langflow_org
+  Directory does not exist, cloning...
+Cloning into 'langflow_org'...
+  ✓ Successfully cloned
+Processing repository: pkuppens/context_engineering
+  Directory does not exist, cloning...
+fatal: destination path 'context_engineering' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/healthcare-aigent
+  Directory does not exist, cloning...
+fatal: destination path 'healthcare-aigent' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/ChatRTX
+  Directory does not exist, cloning...
+Cloning into 'ChatRTX'...
+Filtering content:  66% (2/3)Filtering content: 100% (3/3)Filtering content: 100% (3/3), 549.78 MiB | 57.75 MiB/sFiltering content: 100% (3/3), 549.78 MiB | 50.99 MiB/s, done.
+  ✓ Successfully cloned
+Processing repository: pkuppens/ai-agents-masterclass
+  Directory does not exist, cloning...
+fatal: destination path 'ai-agents-masterclass' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/motivatie-brieven-ai
+  Directory does not exist, cloning...
+fatal: destination path 'motivatie-brieven-ai' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/chrome_extensions
+  Directory does not exist, cloning...
+fatal: destination path 'chrome_extensions' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/gemini_agent
+  Directory does not exist, cloning...
+fatal: destination path 'gemini_agent' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/job_hunt
+  Directory does not exist, cloning...
+fatal: destination path 'job_hunt' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/gmail_summarize_draft
+  Directory does not exist, cloning...
+Cloning into 'gmail_summarize_draft'...
+  ✓ Successfully cloned
+Processing repository: pkuppens/my_chat_gpt
+  Directory does not exist, cloning...
+fatal: destination path 'my_chat_gpt' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/genai-hackathon
+  Directory does not exist, cloning...
+fatal: destination path 'genai-hackathon' already exists and is not an empty directory.
+  ✗ Failed to clone
+Processing repository: pkuppens/datacation-chatbot-workspace
+  Directory does not exist, cloning...
+fatal: destination path 'datacation-chatbot-workspace' already exists and is not an empty directory.
+  ✗ Failed to clone
+Repository processing complete

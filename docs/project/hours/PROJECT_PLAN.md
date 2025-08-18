@@ -2,7 +2,12 @@
 
 ## Project Overview
 
-**Goal**: Retrofit WBSO hours registration across multiple repositories to reach/exceed 510 hours target by capturing both GitHub commits and issue creation/management activities.
+**Goal**:
+
+- Retrofit WBSO hours registration across multiple repositories to reach or exceed the 510-hour target by capturing GitHub commits and issue creation/management activities.
+- Use the hours-registration project as a worked example and use case for agentic development, aiming for a 100% accurate AI agent with curated inputs and outputs.
+- Document that initial hours registration started but paused after a few weeks pending project approval; those early records serve as ground truth for agent development.
+- Develop agent skills for new use cases such as interpreting local computer event logs for sign-on/sign-off events from natural language, without granting external or cloud agents direct access to the computer.
 
 **Scope**: Multi-repository analysis including development work, documentation, investigation, and work analysis tasks.
 
@@ -28,6 +33,7 @@
 4. **Time Validation**: Realistic time allocations with proper breaks
 5. **Approved Task Alignment**: Focus on technical development tasks that align with WBSO project goals
 6. **Technical Innovation Documentation**: Document technical challenges and innovative solutions
+7. **Verifiable Micro-Agents**: Implement small, focused AI agents with clear prompts and minimal tools so their transformations mirror example scripts.
 
 ## Current State Analysis
 
@@ -828,6 +834,7 @@ Based on your specific WBSO project "AI Agent Communicatie in een data-veilige e
 - **GitHub API Rate Limits**: Implement rate limiting and caching
 - **Repository Access Issues**: Maintain backup access methods
 - **Data Quality Issues**: Implement validation and error handling
+- **Incomplete Commit Coverage**: Prototypes or failed work may never be committed, leading to underreported hours. *Mitigation*: supplement commit data with sources like workstation login/logout logs or local file change histories.
 
 ### Compliance Risks
 
@@ -898,3 +905,11 @@ Based on your specific WBSO project "AI Agent Communicatie in een data-veilige e
    - Documentation completeness
 
 This project plan provides a comprehensive framework for achieving your 510+ hour WBSO target while maintaining compliance and creating a professional audit trail.
+
+## References
+
+- [README.md](README.md)
+
+## Code Files
+
+- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Single-repository commit processing example.

@@ -85,19 +85,25 @@ python process_commits.py
 2. Set up GitHub API access tokens
 3. Extract commit history from all repositories
 
-#### Phase 2: GitHub Issue Analysis
+#### Phase 2: Supplementary Activity Capture
+
+1. Identify gaps where commit history may miss discarded or uncommitted work.
+2. Collect supplementary sources such as workstation login/logout logs to capture complete effort.
+3. Reconcile these events with commit timelines to produce a realistic WBSO ground truth.
+
+#### Phase 3: GitHub Issue Analysis
 
 1. Extract issues using GitHub API
 2. Categorize issues by type and complexity
 3. Assign realistic hour allocations
 
-#### Phase 3: Multi-Repository Integration
+#### Phase 4: Multi-Repository Integration
 
 1. Combine all repository data
 2. Detect cross-repository work sessions
 3. Optimize hour allocations to reach 510+ target
 
-#### Phase 4: Dedicated WBSO Google Calendar and Conflict Detection
+#### Phase 5: Dedicated WBSO Google Calendar and Conflict Detection
 
 1. Create dedicated "WBSO Activities" Google Calendar
 2. Implement color coding for WBSO vs non-declarable activities
@@ -106,11 +112,24 @@ python process_commits.py
 5. Include proper descriptions and WBSO categorization
 6. Set up manual calendar export and review processes
 
-#### Phase 5: Final Reporting
+#### Phase 6: Final Reporting
 
 1. Generate comprehensive WBSO reports
 2. Validate compliance and time allocations
 3. Create final documentation package
+
+## AI Agent Implementation
+
+### Agent Prompts and Tools
+
+- Use existing scripts as ground truth for transformations.
+- Example prompt: "Given git_commit_history.txt, run process_commits.py to generate commit_analysis.txt, weekly_summary.txt, and wbso_activities.txt."
+- Required tools: `git` for history extraction and `python` for running analysis scripts.
+
+### Design Principles
+
+- Keep agents small and focused on single tasks.
+- Ensure outputs can be directly compared to script-generated files for easy verification.
 
 ## Features
 
@@ -286,3 +305,12 @@ The generated documentation includes:
 - Manual WBSO calendar maintenance and updates
 - Regular compliance validation and updates
 - Calendar export and review process maintenance
+
+## References
+
+- [PROJECT_PLAN.md](PROJECT_PLAN.md)
+
+## Code Files
+
+- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Single-repository commit processing example.
+- [docs/project/hours/scripts/](docs/project/hours/scripts/) - Helper scripts for multi-repository extraction.

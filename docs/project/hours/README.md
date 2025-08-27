@@ -26,6 +26,12 @@ For detailed project planning, see [PROJECT_PLAN.md](PROJECT_PLAN.md).
 - `wbso_activities.txt` - WBSO activity categorization summary
 - `process_commits.py` - Current single-repo processing script
 
+### Data Files
+
+- `data/system_events_*.csv` - System event logs for workstation activity tracking
+- `data/SYSTEM_EVENTS_FORMAT.md` - Documentation for system events data format
+- `data/repositories.csv` - Repository configuration for multi-repo extraction
+
 ### Planned Structure (Multi-Repository)
 
 ```

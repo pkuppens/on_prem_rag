@@ -316,6 +316,11 @@ The generated documentation includes:
 
 - [PROJECT_PLAN.md](PROJECT_PLAN.md)
 
+## Related Tasks
+
+- [TASK-025: System Events Work Block Analysis](../../project/team/tasks/TASK-025.md) - Analyze system events to define work blocks
+- [TASK-026: Integrate System Events Work Blocks with Git Commit Analysis](../../project/team/tasks/TASK-026.md) - Combine system events and Git commits for comprehensive hours tracking
+
 ## Code Files
 
 - [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Single-repository commit processing example.

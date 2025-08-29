@@ -1,0 +1,358 @@
+# Project Management Rule
+
+This rule ensures consistent project management practices across the On-Premises RAG solution, integrating SAFe methodology with development standards and documentation requirements.
+
+## SAFe Project Structure
+
+### Portfolio Level (`project/portfolio/`)
+
+- **Epics**: Large business initiatives requiring substantial investment
+- **Value Streams**: End-to-end workflows delivering customer value
+- **Strategy**: Strategic themes and portfolio planning
+
+### Program Level (`project/program/`)
+
+- **Features**: Program-level capabilities delivered over 2-3 PIs
+- **PI Planning**: Program Increment planning and coordination
+- **ART Sync**: Agile Release Train synchronization events
+
+### Team Level (`project/team/`)
+
+- **Stories**: User-focused functionality deliverable in 1-2 sprints
+- **Tasks**: Technical implementation work items
+- **Sprints**: Sprint planning and execution artifacts
+- **Demos**: Sprint review demonstrations and documentation
+
+## Task Management Standards
+
+### Task File Structure
+
+All tasks must follow the [task-template.mdc](mdc:.cursor/rules/task-template.mdc) format:
+
+```markdown
+# Task: [Descriptive Title]
+
+**ID**: TASK-XXX
+**Story**: [STORY-XXX: Story Title](../stories/STORY-XXX.md)
+**Assignee**: [Role]
+**Status**: [Not Started/In Progress/Completed/Blocked]
+**Effort**: [X hours]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## Description
+
+[Clear description of what needs to be done]
+
+## Acceptance Criteria
+
+- [ ] **Given** [context], **when** [action], **then** [expected result]
+- [ ] [Additional criteria...]
+
+## Implementation Details
+
+[Technical details, dependencies, constraints]
+
+## Dependencies
+
+- **Blocked by**: [TASK-XXX or external dependency]
+- **Blocks**: [TASK-XXX or dependent work]
+
+## Time Tracking
+
+- **Estimated**: [X hours]
+- **Actual**: [X hours]
+- **Remaining**: [X hours]
+
+## Validation
+
+- [ ] [Validation criteria 1]
+- [ ] [Validation criteria 2]
+```
+
+### Story File Structure
+
+All stories must follow the [story-template.mdc](mdc:.cursor/rules/story-template.mdc) format:
+
+```markdown
+# User Story: [Descriptive Title]
+
+**ID**: STORY-XXX
+**Feature**: [FEAT-XXX: Feature Title](../../program/features/FEAT-XXX.md)
+**Team**: [Team Name]
+**Status**: [Not Started/In Progress/Completed]
+**Priority**: [P1/P2/P3]
+**Points**: [Story points]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## User Story
+
+As a **[user role]**
+I want **[capability]**
+So that **[benefit]**
+
+## Business Context
+
+[Why this story matters to the business]
+
+## Acceptance Criteria
+
+- [ ] **Given** [context], **when** [action], **then** [expected result]
+- [ ] [Additional criteria...]
+
+## Tasks
+
+- [ ] **[TASK-XXX](../tasks/TASK-XXX.md)**: [Task description] - [Assignee] - [Effort]
+
+## Definition of Done
+
+- [ ] [Done criteria 1]
+- [ ] [Done criteria 2]
+```
+
+## Documentation Standards
+
+### Technical Documentation
+
+Follow [documentation-code-sync.mdc](mdc:.cursor/rules/documentation-code-sync.mdc) for bidirectional references between code and documentation.
+
+### Code Documentation
+
+- Follow [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) for comprehensive function standards
+- Use [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) for Python and TypeScript guidelines
+- Apply [language-preference.mdc](mdc:.cursor/rules/language-preference.mdc) for B2 English in comments
+
+### Test Documentation
+
+Follow [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) for comprehensive test documentation:
+
+```python
+def test_example(self):
+    """As a user I want [business objective], so I can [user benefit].
+    Technical: [specific technical requirement or validation approach].
+    Validation: [how the test validates the requirement - optional for complex tests].
+    """
+```
+
+## Development Workflow
+
+### 1. Planning Phase
+
+- Review [ARCHITECTURE.md](mdc:docs/technical/ARCHITECTURE.md) at start of new conversations
+- Check TASK.md before starting new work
+- Update task tracking during development
+- Document discovered sub-tasks
+
+### 2. Implementation Phase
+
+- One task per conversation
+- Use test driven development for new features
+- Write pytest unit tests for edge cases
+- Include docstrings and comments for interfaces and complex code
+- Follow [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) guidelines
+- Use SOLID principles with dependency injection for external interfaces
+
+### 3. Testing Standards
+
+- Create tests for every new feature
+- Test structure: 1 test for expected use, edge case tests, failure case test
+- Mock external service calls
+- Update tests when logic changes
+
+## Dependency Management
+
+### Critical Requirements
+
+- **ALWAYS use `uv add` for project dependencies - NEVER use `pip install`**
+- `pip install` only works locally and causes failures in fresh environments
+- All imported packages must exist in `pyproject.toml` dependencies
+- Before importing: check if package exists, add with `uv add`, then import
+- Use `uv sync` for installing dependencies in fresh environments
+
+### Workflow
+
+1. **Check if package exists**: `grep -i "package-name" pyproject.toml`
+2. **If missing, add properly**: `uv add package-name`
+3. **Then write import statements**: `import package-name`
+4. **Verify in fresh environment**: `uv run pytest`
+
+## File Organization
+
+### Project Structure
+
+Follow [file-organization.mdc](mdc:.cursor/rules/file-organization.mdc) guidelines:
+
+- **Test Files**: All test files must be placed in `tests/` directory
+- **Documentation**: Follow documentation hierarchy in project structure
+- **Root Directory**: Keep only essential project files
+- **Technical Documentation**: Place in appropriate `docs/` subdirectories
+- **Project Management**: Place in `project/` directory structure
+
+### Documentation Hierarchy
+
+1. Update working files (.gitignored)
+2. Update task-level documentation
+3. Update story/feature documentation
+4. Update epic-level documentation if needed
+5. Update architectural decisions in ARCHITECTURE.md
+6. Keep README.md current for project-wide changes
+
+## Security and Environment
+
+### Environment Management
+
+- Never trust AI with API keys
+- Implement environment variables manually
+- Use secure configuration patterns
+- Document all required variables
+
+### Security Best Practices
+
+Follow [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc):
+
+- Never expose sensitive data
+- Use environment variables for configuration
+- Follow security best practices
+- Document security considerations
+
+## Quality Gates
+
+### Code Quality
+
+- All linting rules pass with zero warnings
+- Test coverage >80% for core functionality
+- Documentation includes working code examples
+- Setup time <30 minutes for new developers
+
+### Documentation Quality
+
+- All code changes linked to stories/tasks using IDs
+- Documentation updated alongside code changes
+- "Reason:" comments for complex logic
+- Follow documentation hierarchy for updates
+
+## Sprint Management
+
+### Demo Documentation
+
+Follow [sprint-demo.mdc](mdc:.cursor/rules/sprint-demo.mdc) for sprint demo documentation:
+
+- Document features and changes for upcoming demonstration
+- Track success criteria and validation
+- Maintain demo history and templates
+
+### Progress Tracking
+
+- Update task status during implementation
+- Track actual vs estimated effort
+- Document blockers and dependencies
+- Update story completion criteria
+
+## Integration with Existing Rules
+
+### Core Rules Integration
+
+- [golden-rules.mdc](mdc:.cursor/rules/golden-rules.mdc): Core principles and practices
+- [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc): Package management standards
+- [feedback-integration.mdc](mdc:.cursor/rules/feedback-integration.mdc): Development workflow feedback
+- [requirement-capture.mdc](mdc:.cursor/rules/requirement-capture.mdc): Requirement documentation
+- [safe-project.mdc](mdc:.cursor/rules/safe-project.mdc): SAFe methodology integration
+
+### Specialized Rules
+
+- [markdown.mdc](mdc:.cursor/rules/markdown.mdc): Documentation formatting
+- [test-plan.mdc](mdc:.cursor/rules/test-plan.mdc): Testing strategy
+- [hours-registration.mdc](mdc:.cursor/rules/hours-registration.mdc): Time tracking
+- [scratch-file.mdc](mdc:.cursor/rules/scratch-file.mdc): Temporary documentation management
+
+## Task Completion Verification
+
+### Acceptance Criteria Tracking
+
+When implementing tasks:
+
+1. Mark acceptance criteria checkboxes as completed [x] when implementing each item
+2. Document the implementation details in the task description or comments
+3. Keep the task file updated throughout the implementation process
+
+### Verification Process
+
+1. **Self-verification**:
+
+   - Review all acceptance criteria
+   - Test each implemented feature
+   - Update documentation
+   - Mark completed items
+
+2. **Human verification**:
+   - Developer reviews the implementation
+   - Verifies all acceptance criteria
+   - Confirms documentation is complete
+   - Updates task status
+
+## Communication Standards
+
+### Code Comments
+
+- Follow [language-preference.mdc](mdc:.cursor/rules/language-preference.mdc) for English usage
+- Explain complex logic
+- Document assumptions and decisions
+- Include examples for unclear code
+
+### Documentation Updates
+
+- Follow [markdown.mdc](mdc:.cursor/rules/markdown.mdc) standards
+- Keep README files updated
+- Document breaking changes
+- Include setup instructions
+
+## AI Interaction Guidelines
+
+### Request Clarity
+
+- Be specific in requests
+- Provide relevant examples
+- Include necessary context
+- Specify acceptance criteria
+
+### Code Reviews
+
+- Follow review checklist
+- Document review findings
+- Track technical debt
+- Ensure documentation updates
+
+### AI Behavior Rules
+
+- Never assume missing context
+- Ask questions when uncertain
+- Never hallucinate libraries
+- Confirm file paths before use
+- Never delete code without explicit instruction
+- **When adding new imports, always use `uv add package-name` first**
+- **Never suggest `pip install` - always suggest `uv add`**
+- **Verify imported packages exist in `pyproject.toml` before using them**
+
+## Maintenance Guidelines
+
+### Regular Updates
+
+- Update task status weekly
+- Review and update documentation monthly
+- Validate cross-references quarterly
+- Update architectural decisions as needed
+
+### Quality Assurance
+
+- Verify all links are current and correct
+- Check for missing references in new code or documentation
+- Ensure descriptions accurately reflect current implementation
+- Maintain consistency across all project artifacts
+
+This rule ensures comprehensive project management that integrates with your existing SAFe structure, coding standards, and documentation requirements while maintaining consistency across all development activities.
+description:
+globs:
+alwaysApply: true
+
+---

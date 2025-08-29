@@ -1,0 +1,309 @@
+# Git Version Control Rule
+
+This rule establishes git version control standards for the On-Premises RAG solution, emphasizing small, clean commits that align with SAFe project structure and maintain code quality.
+
+## Commit Philosophy
+
+### Small, Clean Commits
+
+- **Commit size**: As small as subtasks, but never bigger than a task or story
+- **Working code**: All commits must contain working, tested code
+- **Single responsibility**: Each commit addresses one specific change or feature
+- **Atomic changes**: Commits should be atomic and self-contained
+
+### Commit Quality Standards
+
+- **Pre-commit testing**: All commits must pass pre-commit hooks
+- **No broken builds**: Commits should not break the build or tests
+- **Clean history**: Maintain a clean, readable git history
+- **Meaningful messages**: Clear, descriptive commit messages
+
+## Commit Structure
+
+### Commit Message Format
+
+Follow conventional commit format with SAFe integration:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+
+Refs: TASK-XXX, STORY-XXX
+```
+
+### Commit Types
+
+- **feat**: New feature (maps to story completion)
+- **fix**: Bug fix
+- **docs**: Documentation changes
+- **style**: Code style changes (formatting, etc.)
+- **refactor**: Code refactoring
+- **test**: Adding or updating tests
+- **chore**: Maintenance tasks, dependencies, etc.
+
+### Scope Examples
+
+- **auth**: Authentication-related changes
+- **rag**: RAG pipeline changes
+- **api**: API endpoint changes
+- **ui**: Frontend changes
+- **docs**: Documentation changes
+- **test**: Test-related changes
+
+## SAFe Integration
+
+### Task-Level Commits
+
+- **Size**: One commit per task or subtask
+- **Reference**: Include TASK-XXX in commit message
+- **Scope**: Focus on specific task requirements
+- **Testing**: Must pass all tests related to the task
+
+### Story-Level Commits
+
+- **Size**: Multiple commits per story (one per task)
+- **Reference**: Include STORY-XXX in commit message
+- **Completion**: Story complete when all related commits are merged
+- **Validation**: All story acceptance criteria met
+
+### Feature-Level Commits
+
+- **Size**: Multiple commits across stories
+- **Reference**: Include FEAT-XXX in commit message
+- **Integration**: Feature complete when all stories are done
+- **Documentation**: Update feature documentation with changes
+
+## Pre-Commit Requirements
+
+### Code Quality Checks
+
+```bash
+# Pre-commit hooks must pass
+pre-commit run --all-files
+```
+
+### Testing Requirements
+
+- **Unit tests**: All new code must have tests
+- **Integration tests**: API changes must have integration tests
+- **Existing tests**: All existing tests must pass
+- **Coverage**: Maintain or improve test coverage
+
+### Linting and Formatting
+
+- **Ruff**: All Python code must pass ruff checks
+- **TypeScript**: All TypeScript code must pass linting
+- **Formatting**: Code must be properly formatted
+- **Security**: No security vulnerabilities detected
+
+## Branch Strategy
+
+### Main Branch Protection
+
+- **Direct commits**: Not allowed to main branch
+- **Pull requests**: Required for all changes
+- **Code review**: Required for all pull requests
+- **CI/CD**: All checks must pass before merge
+
+### Feature Branch Naming
+
+```
+feature/TASK-XXX-short-description
+feature/STORY-XXX-short-description
+bugfix/TASK-XXX-short-description
+hotfix/urgent-fix-description
+```
+
+### Branch Lifecycle
+
+1. **Create**: From main branch
+2. **Develop**: Make small, focused commits
+3. **Test**: Ensure all tests pass
+4. **Review**: Create pull request
+5. **Merge**: After approval and CI/CD success
+6. **Delete**: After successful merge
+
+## Commit Examples
+
+### Good Commit Examples
+
+```bash
+# Task-level commit
+git commit -m "feat(rag): implement document chunking with overlap
+
+- Add SimpleNodeParser for document chunking
+- Implement configurable chunk size and overlap
+- Add unit tests for chunking functionality
+
+Refs: TASK-005"
+
+# Story-level commit
+git commit -m "feat(auth): add JWT token validation
+
+- Implement JWT token verification
+- Add user role-based access control
+- Update API documentation
+
+Refs: STORY-003, TASK-012"
+
+# Bug fix commit
+git commit -m "fix(api): resolve PDF processing memory leak
+
+- Fix memory leak in PDF text extraction
+- Add proper resource cleanup
+- Update error handling
+
+Refs: TASK-018"
+```
+
+### Bad Commit Examples
+
+```bash
+# Too large - multiple unrelated changes
+git commit -m "feat: implement authentication and document processing"
+
+# No reference to task/story
+git commit -m "fix: bug fix"
+
+# Vague description
+git commit -m "update code"
+```
+
+## Integration with Project Management
+
+### Task Tracking
+
+- **Commit references**: Include TASK-XXX in commit messages
+- **Progress tracking**: Update task status after commits
+- **Time tracking**: Link commits to hours registration
+- **Documentation**: Update task documentation with commit details
+
+### Story Completion
+
+- **Acceptance criteria**: Verify all criteria met in commits
+- **Testing**: Ensure all story tests pass
+- **Documentation**: Update story documentation
+- **Demo preparation**: Prepare demo materials
+
+### Feature Integration
+
+- **Cross-story coordination**: Coordinate commits across stories
+- **Integration testing**: Ensure feature-level tests pass
+- **Documentation updates**: Update feature documentation
+- **Release preparation**: Prepare for PI planning
+
+## Security Considerations
+
+### Commit Security
+
+- **No secrets**: Never commit API keys, passwords, or secrets
+- **Environment variables**: Use .env files (gitignored)
+- **Configuration**: Use env.example for templates
+- **Audit trail**: Maintain clear audit trail for security changes
+
+### Branch Security
+
+- **Protected branches**: Main and release branches protected
+- **Signed commits**: Required for critical changes
+- **Access control**: Limit direct access to main branch
+- **Security reviews**: Required for security-related changes
+
+## Workflow Integration
+
+### Development Workflow
+
+1. **Start task**: Create feature branch from main
+2. **Make changes**: Small, focused commits
+3. **Test changes**: Run tests and pre-commit hooks
+4. **Commit changes**: Use proper commit message format
+5. **Push changes**: Push to remote repository
+6. **Create PR**: Create pull request for review
+7. **Review and merge**: After approval and CI/CD success
+
+### CI/CD Integration
+
+- **Automated testing**: All commits trigger automated tests
+- **Code quality**: Automated linting and formatting checks
+- **Security scanning**: Automated security vulnerability scanning
+- **Deployment**: Automated deployment after merge to main
+
+## Documentation Integration
+
+### Code Documentation
+
+- **Inline comments**: Document complex logic in commits
+- **Function documentation**: Update docstrings with changes
+- **API documentation**: Update API docs with changes
+- **Architecture updates**: Update architecture docs when needed
+
+### Project Documentation
+
+- **Task updates**: Update task files with commit references
+- **Story updates**: Update story files with progress
+- **Feature updates**: Update feature documentation
+- **Release notes**: Document changes for releases
+
+## Quality Assurance
+
+### Commit Review Checklist
+
+- [ ] **Size appropriate**: Commit is not too large
+- [ ] **Tests pass**: All tests pass locally
+- [ ] **Linting clean**: No linting errors or warnings
+- [ ] **Message clear**: Commit message is descriptive
+- [ ] **References included**: Task/story references included
+- [ ] **Documentation updated**: Related docs updated
+- [ ] **Security reviewed**: No security issues introduced
+
+### Pull Request Checklist
+
+- [ ] **Small scope**: PR addresses single task or story
+- [ ] **Tests included**: New tests for new functionality
+- [ ] **Documentation updated**: Docs reflect changes
+- [ ] **Code reviewed**: Peer review completed
+- [ ] **CI/CD passes**: All automated checks pass
+- [ ] **Security reviewed**: Security implications considered
+
+## Integration with Existing Rules
+
+### Rule References
+
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc): SAFe project structure integration
+- [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc): Security considerations
+- [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc): Dependency changes
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc): Code quality standards
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc): Test requirements
+- [hours-registration.mdc](mdc:.cursor/rules/hours-registration.mdc): Time tracking integration
+
+### Workflow Integration
+
+- **Task completion**: Update task status after commits
+- **Story progress**: Track story completion through commits
+- **Feature delivery**: Coordinate commits across stories
+- **Release management**: Prepare releases from commit history
+
+## Maintenance Guidelines
+
+### Regular Maintenance
+
+- **Branch cleanup**: Regularly delete merged branches
+- **History cleanup**: Squash commits when appropriate
+- **Documentation sync**: Keep documentation in sync with code
+- **Security updates**: Regular security dependency updates
+
+### Quality Monitoring
+
+- **Commit size**: Monitor average commit size
+- **Test coverage**: Track test coverage trends
+- **Build stability**: Monitor build success rates
+- **Review quality**: Track code review effectiveness
+
+This rule ensures that git version control supports the SAFe development process while maintaining high code quality and clear project history.
+description:
+globs:
+alwaysApply: true
+
+---

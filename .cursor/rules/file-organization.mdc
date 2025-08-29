@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description: File Organization Guidelines
+globs:
 alwaysApply: false
 ---
+
 # File Organization Guidelines
 
 This rule ensures that all files are placed in their proper locations according to the project's organizational structure.
@@ -10,6 +11,7 @@ This rule ensures that all files are placed in their proper locations according 
 ## Root Directory Files
 
 **Keep in root directory:**
+
 - `README.md` - Project overview and main documentation
 - `AGENTS.md` - AI assistant guidance and context
 - `GEMINI.md` - Gemini AI workspace context
@@ -19,12 +21,14 @@ This rule ensures that all files are placed in their proper locations according 
 ## Test Files
 
 **All test files must be placed in `tests/` directory:**
+
 - Python test files: `test_*.py`
 - Test data files: `test_*.txt`, `test_*.json`, etc.
 - Test configuration files
 - Test utilities and helpers
 
 **Examples:**
+
 - `test_websocket_connection.py` → `tests/test_websocket_connection.py`
 - `test_progress_simulation.py` → `tests/test_progress_simulation.py`
 - `test_upload.txt` → `tests/test_upload.txt`
@@ -32,27 +36,32 @@ This rule ensures that all files are placed in their proper locations according 
 ## Documentation Organization
 
 ### Project Documentation (`project/`)
+
 - `EPIC-*.md` - Strategic initiatives and business objectives
 - `FEATURE-*.md` - Feature scope, constraints, and acceptance criteria
 - `STORY-*.md` - User stories with acceptance criteria and implementation notes
 - `TASK-*.md` - Technical implementation details and completion criteria
 
 ### Technical Documentation (`docs/`)
+
 - `SETUP.md` - Development environment setup instructions
 - `PRODUCT_REQUIREMENTS_DOCUMENT.md` - Product requirements and specifications
 - `ARCHITECTURE.md` - System architecture, technical decisions, and constraints
 
 ### Technical Subdirectories (`docs/technical/`)
+
 - Technical implementation details and fixes
 - Domain-specific documentation (e.g., `CHUNKING.md`, `EMBEDDING.md`)
 - Integration guides and API documentation
 - Progress reporting fixes and technical solutions
 
 ### Project Management (`docs/project/`)
+
 - Project management documentation
 - Sprint planning and progress tracking
 
 ### Archive (`docs/archive/`)
+
 - Historical documentation and temporary notes
 - Deprecated or outdated documentation
 - Scratch files and experimental ideas
@@ -60,11 +69,13 @@ This rule ensures that all files are placed in their proper locations according 
 ## File Naming Conventions
 
 ### Test Files
+
 - Use `test_` prefix for all test files
 - Follow the pattern: `test_<module_name>.py`
 - Test data files: `test_<purpose>.<extension>`
 
 ### Documentation Files
+
 - Use UPPERCASE for main documentation files
 - Use descriptive names that indicate content
 - Technical fixes: `PROGRESS_REPORTING_FIX.md`
@@ -73,6 +84,7 @@ This rule ensures that all files are placed in their proper locations according 
 ## Reference Updates
 
 When moving files, ensure all references are updated:
+
 - Update markdown links to reflect new paths
 - Update import statements in code
 - Update documentation references
@@ -89,6 +101,7 @@ When moving files, ensure all references are updated:
 ## Examples
 
 ### Correct Organization
+
 ```
 on_prem_rag/
 ├── README.md                    # Root - project overview
@@ -113,6 +126,7 @@ on_prem_rag/
 ```
 
 ### Incorrect Organization
+
 ```
 on_prem_rag/
 ├── test_websocket_connection.py  # ❌ Test file in root

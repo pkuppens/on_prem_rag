@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description: Security Best Practices for On-Premises RAG Application
+globs:
 alwaysApply: false
 ---
+
 # Security Best Practices for On-Premises RAG Application
 
 ## Core Security Principles
@@ -13,17 +14,20 @@ All security measures must align with **ISO27001** standards and high-security e
 ## Network Security Requirements
 
 ### ✅ ALLOWED During Development/Setup
+
 - NPM package installation
 - Initial dependency downloads
 - Development server CDN access for tooling
 
 ### ❌ PROHIBITED During Operations
+
 - **No CDN dependencies** in production code
 - **No external API calls** except explicitly configured endpoints
 - **No telemetry or analytics** data transmission
 - **No automatic updates** or version checking
 
 ### Implementation Examples
+
 - ✅ Local PDF.js worker: [pdfSetup.ts](mdc:frontend/src/utils/pdfSetup.ts)
 - ✅ Self-hosted static assets
 - ❌ CDN-based workers or libraries
@@ -31,21 +35,24 @@ All security measures must align with **ISO27001** standards and high-security e
 ## Data Protection & Privacy
 
 ### Confidential Data Handling
+
 - **Never log sensitive data** (user queries, document content, embeddings)
 - **Sanitize all logs** before persistence
 - **Encrypt data at rest** for uploaded documents
 - **Use secure file paths** to prevent directory traversal
 
 ### Implementation in Code
+
 ```typescript
 // ✅ Correct: Sanitized logging
-Logger.info('Document upload completed', filename_hash, file_size);
+Logger.info("Document upload completed", filename_hash, file_size);
 
 // ❌ Incorrect: Exposes content
-Logger.info('Query processed', user_query, results);
+Logger.info("Query processed", user_query, results);
 ```
 
 ### File Upload Security
+
 - **Validate file types** strictly: [FileDropzone.tsx](mdc:frontend/src/components/upload/FileDropzone.tsx)
 - **Sanitize filenames** to prevent path injection
 - **Limit file sizes** to prevent DoS attacks
@@ -54,12 +61,14 @@ Logger.info('Query processed', user_query, results);
 ## Authentication & Authorization
 
 ### Access Control Requirements
+
 - **Multi-factor authentication** for administrative access
 - **Role-based permissions** for different user levels
 - **Session management** with secure timeouts
 - **Audit trails** for all user actions
 
 ### API Security
+
 - **Input validation** on all endpoints: [file_ingestion.py](mdc:src/rag_pipeline/file_ingestion.py)
 - **Rate limiting** to prevent abuse
 - **CORS policies** restricted to known origins
@@ -68,14 +77,16 @@ Logger.info('Query processed', user_query, results);
 ## Infrastructure Security
 
 ### Environment Configuration
+
 - **Environment variables** for all secrets
 - **No hardcoded credentials** in source code
 - **Secure default configurations**
 - **Regular security updates** during maintenance windows
 
 ### Content Security Policy
+
 ```http
-Content-Security-Policy: 
+Content-Security-Policy:
   default-src 'self';
   worker-src 'self';
   script-src 'self' 'unsafe-inline';
@@ -87,18 +98,21 @@ Content-Security-Policy:
 ## Code Security Standards
 
 ### Input Validation
+
 - **Validate all user inputs** before processing
 - **Sanitize file uploads** and query parameters
 - **Prevent SQL/NoSQL injection** in vector database queries
 - **Escape output** to prevent XSS attacks
 
 ### Dependency Management
+
 - **Pin dependency versions** to prevent supply chain attacks
 - **Regular security audits** of dependencies
 - **Remove unused dependencies**
 - **Document all third-party components**
 
 ### Secure Coding Practices
+
 ```python
 # ✅ Correct: Input validation
 def validate_file_upload(file_path: Path) -> tuple[bool, str | None]:
@@ -112,18 +126,21 @@ def validate_file_upload(file_path: Path) -> tuple[bool, str | None]:
 ## ISO27001 Compliance Checklist
 
 ### Information Security Management
+
 - [ ] **Document security policies** and procedures
 - [ ] **Risk assessment** for all system components
 - [ ] **Access control matrix** with user permissions
 - [ ] **Incident response plan** for security breaches
 
 ### Technical Controls
+
 - [ ] **Encryption in transit** (HTTPS/TLS)
 - [ ] **Encryption at rest** for sensitive data
 - [ ] **Secure backup procedures**
 - [ ] **System monitoring** and alerting
 
 ### Operational Security
+
 - [ ] **Regular security testing** and penetration testing
 - [ ] **Vulnerability management** process
 - [ ] **Change management** for system updates
@@ -132,12 +149,14 @@ def validate_file_upload(file_path: Path) -> tuple[bool, str | None]:
 ## Deployment Security
 
 ### Production Environment
+
 - **Isolated network segments** for application components
 - **Firewall rules** restricting unnecessary ports
 - **Regular security patches** during maintenance windows
 - **Monitoring and alerting** for security events
 
 ### Container Security (if applicable)
+
 - **Minimal base images** without unnecessary tools
 - **Non-root user execution**
 - **Read-only file systems** where possible
@@ -146,31 +165,35 @@ def validate_file_upload(file_path: Path) -> tuple[bool, str | None]:
 ## Monitoring & Auditing
 
 ### Security Logging
+
 - **Authentication attempts** (success and failure)
 - **File access patterns** and uploads
 - **System errors** and exceptions
 - **Administrative actions**
 
 ### Log Security
+
 ```typescript
 // ✅ Secure logging implementation
-Logger.info('User action', 'FileUpload', {
+Logger.info("User action", "FileUpload", {
   user_id: hashUserId(userId),
   file_hash: computeFileHash(file),
   timestamp: new Date().toISOString(),
-  ip_hash: hashIP(request.ip)
+  ip_hash: hashIP(request.ip),
 });
 ```
 
 ## Emergency Procedures
 
 ### Security Incident Response
+
 1. **Isolate affected systems** immediately
 2. **Preserve evidence** for forensic analysis
 3. **Notify stakeholders** according to incident plan
 4. **Document lessons learned** for process improvement
 
 ### Backup & Recovery
+
 - **Regular encrypted backups** of all critical data
 - **Tested recovery procedures**
 - **Offline backup storage** for disaster recovery
@@ -179,12 +202,14 @@ Logger.info('User action', 'FileUpload', {
 ## Development Security
 
 ### Secure Development Lifecycle
+
 - **Security requirements** in all user stories
 - **Code reviews** with security focus
 - **Static code analysis** for vulnerability detection
 - **Security testing** before deployment
 
 ### Version Control Security
+
 - **No secrets in repositories**
 - **Signed commits** for critical changes
 - **Branch protection** for main branches

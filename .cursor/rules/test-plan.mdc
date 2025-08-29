@@ -1,8 +1,9 @@
 ---
-description:
+description: Test Plan Documentation
 globs:
 alwaysApply: false
 ---
+
 # Test Plan Documentation Standards
 
 ## Overview
@@ -18,6 +19,7 @@ Test plan files (`TEST-PLAN-*.md`) define integration and acceptance tests for s
 ## Test Plan Structure
 
 ### Header Section
+
 ```markdown
 # Test Plan: [Descriptive Title]
 
@@ -34,12 +36,14 @@ Test plan files (`TEST-PLAN-*.md`) define integration and acceptance tests for s
 ```
 
 ### Introduction Section
+
 - **Test Goal**: Clear statement of what functionality is being validated
 - **Scope**: What is included and excluded from testing
 - **Work Items Under Test**: Direct references to STORY, FEAT, DEMO, or EPIC items
 - **Success Criteria**: High-level criteria for test plan completion
 
 ### Test Environment Setup
+
 - **Prerequisites**: Required software, access, or configuration
 - **Environment Creation**: Step-by-step setup instructions
 - **Fresh Environment Requirements**: When to use new git clone, virtual environment, etc.
@@ -47,42 +51,51 @@ Test plan files (`TEST-PLAN-*.md`) define integration and acceptance tests for s
 - **Cleanup Instructions**: How to reset environment between test runs
 
 ### Test Cases Section
+
 Organize test cases by:
+
 - **Work Item Grouping**: Group tests by STORY, FEAT, or functional component
 - **Test Case Structure**:
+
   ```markdown
   #### Test Case TC-XXX: [Test Case Name]
+
   **Work Item**: [STORY-001](../stories/STORY-001.md)  
   **Objective**: What this test validates  
   **Preconditions**: Required setup or state  
   **Execution Steps**:
+
   1. Step-by-step instructions
   2. Include expected results at each step
   3. Specify verification points
-  
+
   **Acceptance Criteria**:
+
   - [ ] Specific, measurable criteria (checked by human)
   - [ ] Observable outcomes
   - [ ] Performance or quality gates
-  
+
   **Cleanup**: Steps to reset environment if needed
   ```
 
 ## Critical Requirements
 
 ### Human Validation
+
 - **IMPORTANT**: Test case checkboxes MUST be manually verified by human testers
 - AI agents will NOT check off test case completion boxes
 - Include clear acceptance criteria that humans can objectively verify
 - Each test case must have explicit verification steps
 
 ### SAFe Alignment
-- Follow existing documentation patterns from [STORY-*.md](mdc:project/team/stories/)
+
+- Follow existing documentation patterns from [STORY-\*.md](mdc:project/team/stories/)
 - Reference work items using relative paths
 - Maintain traceability to business objectives
 - Include appropriate stakeholder reviews
 
 ### Quality Standards
+
 - Test cases must be reproducible by different team members
 - Include both positive and negative test scenarios
 - Cover edge cases and error conditions
@@ -91,17 +104,20 @@ Organize test cases by:
 ## Integration with Development Workflow
 
 ### Pre-Test Planning
+
 1. Review linked work items for completeness
 2. Verify all dependencies are documented in Definition of Done
 3. Confirm test environment matches target deployment
 
 ### Test Execution
+
 1. Execute test cases in documented order
 2. Record actual results alongside expected results
 3. Document any deviations or issues discovered
 4. Update work item status based on test results
 
 ### Post-Test Activities
+
 1. Update test plan status and completion dates
 2. Document lessons learned and improvements
 3. Archive test artifacts and evidence

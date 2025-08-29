@@ -1,3 +1,178 @@
+---
+description: Record hours registration manually or programmatically.
+alwaysApply: false
+---
+
+# Hours Registration Standards
+
+## Purpose
+
+This rule defines standards for creating and maintaining hours registration documentation for WBSO (Dutch tax deduction for Research and Development) compliance.
+
+## File Structure
+
+Hours registration files should be stored in `docs/project/` with the naming convention `HOURS_REGISTRATION.md`.
+
+### Utility Files Directory
+
+All utility files, processing scripts, and analysis outputs should be stored in `docs/project/hours/`:
+
+- Git commit history files
+- Processing scripts
+- Analysis outputs
+- Temporary data files
+
+## Utility Commands
+
+### Git Commit History Extraction
+
+```bash
+# Extract complete commit history with timestamps
+git log --pretty=format:"%ad %at %s" --date=short --reverse --all > docs/project/hours/git_commit_history.txt
+
+# Extract commit history by date only
+git log --pretty=format:"%ad %s" --date=short --reverse --no-merges > docs/project/hours/git_commits_by_date.txt
+
+# Extract commit history with author information
+git log --pretty=format:"%ad %an %s" --date=short --reverse > docs/project/hours/git_commits_with_author.txt
+```
+
+### Processing Scripts
+
+Create Python scripts in `docs/project/hours/` for:
+
+- Timestamp conversion and analysis
+- Work session identification
+- WBSO activity categorization
+- Weekly summary generation
+
+### File Naming Convention
+
+- `git_commit_history.txt` - Raw git log output
+- `commit_analysis.txt` - Processed commit analysis
+- `weekly_summary.txt` - Weekly hours summary
+- `process_commits.py` - Processing script
+- `wbso_activities.py` - WBSO categorization script
+
+## Content Requirements
+
+### Header Information
+
+- Project name and description
+- WBSO justification statement
+- Reporting period (week numbers)
+- Total hours per week and period
+
+### Daily Entries Format
+
+Each day entry should include:
+
+- Date (YYYY-MM-DD format) (week number and day-of-week optional)
+- Time ranges (HH:MM format), rounded to 5 minutes
+- Research & Development task description
+- WBSO-justified activities
+- Hours worked
+
+### WBSO Qualification Criteria
+
+Activities must qualify as Research & Development:
+
+- **Research**: Systematic investigation to acquire new knowledge
+- **Development**: Application of research findings to create new or improved products/processes
+- **Technical uncertainty**: Activities with unknown outcomes
+- **Innovation**: Novel approaches or solutions
+
+### Task Descriptions
+
+Use clear, technical language that demonstrates:
+
+- Research methodology
+- Technical challenges overcome
+- Innovation aspects
+- Knowledge creation
+- Problem-solving approaches
+
+### Time Tracking
+
+- Group activities by week (include week numbers)
+- Use multiple entries per day for different time periods
+- Include a lunch break, with variations from 15 to 35 minutes, diner breaks of 1 to 1.5 hrs when evening commits occur.
+- Realistic time ranges based on commit patterns, but a commit at 11:00 could include all the work starting at e.g. 8:40.
+
+### Documentation Standards
+
+- Use markdown formatting
+- Include commit references where relevant
+- Maintain chronological order, fill gaps to morning, afternoon, and evening sessions if commits exist. E.g. 08:30-12:00 for project setup is acceptable
+- Provide sufficient detail for WBSO compliance
+- Link to technical documentation when applicable
+
+## Example Entry Format
+
+The examples are for the long format. The short format can be derived fro, the combination of date and hour-range lines.
+
+```markdown
+### Week 22 (2025-05-26 to 2025-06-01)
+
+#### 2025-05-30
+
+**08:30 - 12:00** - Initial project setup and architecture planning
+
+- Research and development of on-premises RAG system architecture
+- Investigation of semantic search implementation approaches
+- Technical feasibility analysis for secure document processing
+
+**12:00 - 12:30** - Lunch break
+
+**13:30 - 17:30** - Project documentation and planning
+
+- Development of comprehensive project plan with 6 research goals
+- Creation of SAFe project management framework
+- Documentation of technical requirements and constraints
+```
+
+## Processing Workflow
+
+### Step 1: Extract Git History
+
+```bash
+git log --pretty=format:"%ad %at %s" --date=short --reverse --all > docs/project/hours/git_commit_history.txt
+```
+
+### Step 2: Process Commits
+
+Create a Python script to:
+
+- Convert timestamps to readable format
+- Group commits by date and time
+- Identify work sessions
+- Generate WBSO activity descriptions
+
+### Step 3: Generate Analysis
+
+- Create detailed daily entries
+- Calculate weekly summaries
+- Validate time ranges and breaks
+- Ensure WBSO compliance
+
+### Step 4: Create Documentation
+
+- Format entries according to standards
+- Include proper breaks and realistic schedules
+- Add R&D justification
+- Link to technical documentation
+
+## Compliance Notes
+
+- All entries must demonstrate R&D activities
+- Avoid routine maintenance or administrative tasks
+- Focus on technical innovation and problem-solving
+- Maintain detailed records for tax authority review
+- Link activities to project objectives and outcomes
+- Keep utility files organized in `docs/project/hours/` directory
+
+---
+
 # Hours Registration Standards
 
 ## Purpose

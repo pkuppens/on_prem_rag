@@ -1,11 +1,13 @@
 ---
-description:
+description: Package Management with `uv`  instead of `pip`
 globs:
 alwaysApply: false
 ---
+
 # Dependency Management Rule
 
 ## Purpose
+
 Ensures all package dependencies are properly managed and persist across environments, preventing missing dependency errors in fresh environments like CI/CD and containerized deployments.
 
 ## Critical Rules
@@ -13,12 +15,14 @@ Ensures all package dependencies are properly managed and persist across environ
 ### 🚨 NEVER Use pip install for Project Dependencies
 
 **WRONG:**
+
 ```bash
 pip install httpx
 pip install requests
 ```
 
 **CORRECT:**
+
 ```bash
 uv add httpx
 uv add requests
@@ -27,7 +31,8 @@ uv add requests
 ### Why This Matters
 
 When you use `pip install`, the package is only installed in your current environment but is NOT added to `pyproject.toml`. This means:
-- ✅ Works in your local environment 
+
+- ✅ Works in your local environment
 - ❌ Fails in fresh environments (CI/CD, containers, other developers)
 - ❌ Causes build failures and test failures
 - ❌ Wastes time debugging "module not found" errors
@@ -40,7 +45,7 @@ When you use `pip install`, the package is only installed in your current enviro
 # For runtime dependencies
 uv add package-name
 
-# For development dependencies  
+# For development dependencies
 uv add --dev package-name
 
 # For specific versions
@@ -75,19 +80,26 @@ uv sync --dev
 ### Before Writing Code That Imports New Packages
 
 1. **Check if package exists in pyproject.toml**
+
    ```bash
    grep -i "package-name" pyproject.toml
    ```
 
 2. **If not found, add it properly**
+
    ```bash
    uv add package-name
    ```
 
 3. **Then write your import statements**
+
    ```python
    import httpx  # Now this will work in all environments
    ```
+
+4. **Fixing import errors**
+   On runtime or linting errors like: ModuleNotFoundError: No module named package-name
+   This indicates a missing package and use `uv add package-name`
 
 ### Code Review Checklist
 
@@ -108,25 +120,30 @@ If you discover missing dependencies:
 ## Environment-Specific Guidelines
 
 ### Development Environment
+
 - Always use `uv add` for new dependencies
 - Use `uv sync` to keep environment current
 - Never commit changes that use `pip install`
 
 ### CI/CD Environment
+
 - Relies on `pyproject.toml` and `uv.lock` for reproducible builds
 - Will fail if dependencies are not properly declared
 
-### Container Environment  
+### Container Environment
+
 - Uses `uv sync` during build process
 - Missing dependencies cause container build failures
 
 ## Common Mistakes to Avoid
 
 1. **Using pip install during development**
+
    - Temporarily "fixes" local environment
    - Breaks fresh environments
 
 2. **Forgetting to run uv add after manual installation**
+
    - Package works locally but not in CI/CD
 
 3. **Adding dependencies to wrong section**

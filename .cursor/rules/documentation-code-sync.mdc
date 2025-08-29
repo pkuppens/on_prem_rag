@@ -1,8 +1,9 @@
 ---
-description:
-globs:
+description: Bidirectional references between technical documentation and code files
+globs: *.py,*.md
 alwaysApply: false
 ---
+
 # Documentation-Code Synchronization Rule
 
 This rule ensures bidirectional references between technical documentation and code files to maintain synchronization and help developers and AI coders efficiently track relationships.
@@ -18,6 +19,7 @@ For technical documentation files (CHUNKING.md, EMBEDDING.md, LLM.md, VECTOR_STO
 3. **Use relative paths from project root**
 
 Example format:
+
 ```markdown
 ## Code Files
 
@@ -29,6 +31,7 @@ Example format:
 ### Non-Code Documentation
 
 For documentation without direct code dependencies (AGENTS.md, CODEX.md, etc.):
+
 - Either omit the "Code Files" section entirely
 - Or include it with note: "Intentionally left empty - no direct code dependencies"
 
@@ -58,7 +61,7 @@ Reference specific documentation sections:
 ```python
 class ChunkingResult:
     """Result from document chunking operations.
-    
+
     Configuration details documented in docs/technical/CHUNKING.md#implementation-details
     """
 ```
@@ -105,6 +108,7 @@ Use these patterns to maintain consistency:
 ## Examples
 
 ### Good Documentation Section
+
 ```markdown
 ## Code Files
 
@@ -114,6 +118,7 @@ Use these patterns to maintain consistency:
 ```
 
 ### Good Code Docstring
+
 ```python
 """Document chunking functionality for the RAG pipeline.
 

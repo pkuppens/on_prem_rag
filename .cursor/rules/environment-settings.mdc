@@ -1,8 +1,9 @@
 ---
-description:
+description: Working with environment variables
 globs:
 alwaysApply: false
 ---
+
 # Environment Settings Rule
 
 ## Environment Variable Management
@@ -37,7 +38,7 @@ The authentication service requires these environment variables:
 
 - **GOOGLE_CLIENT_ID** - Google OAuth2 application client identifier
 - **GOOGLE_CLIENT_SECRET** - Google OAuth2 application secret key
-- **MICROSOFT_CLIENT_ID** - Microsoft/Azure AD application client identifier  
+- **MICROSOFT_CLIENT_ID** - Microsoft/Azure AD application client identifier
 - **MICROSOFT_CLIENT_SECRET** - Microsoft/Azure AD application secret key
 - **MICROSOFT_TENANT_ID** - Azure AD tenant ID (use "common" for multi-tenant)
 - **SESSION_SECRET_KEY** - Random string for session encryption/signing
@@ -46,16 +47,20 @@ The authentication service requires these environment variables:
 ## Implementation Rules
 
 1. **When adding new environment variables:**
+
    - Add to `env.example` with empty value and descriptive comment
    - Document where/how to obtain the value
    - Update relevant documentation files
 
 2. **When referencing in code:**
+
    - Use `os.getenv("VARIABLE_NAME", "default_value")`
    - Provide sensible defaults where possible
    - Handle missing variables gracefully
+   - Values are strings that may need type conversions
 
 3. **For OAuth2 setup:**
+
    - Reference the detailed setup guides in [TEST_AUTHENTICATION.md](mdc:docs/TEST_AUTHENTICATION.md)
    - Include platform-specific instructions
    - Mention admin access requirements

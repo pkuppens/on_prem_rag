@@ -1,0 +1,538 @@
+DateTime,EventTitle,CalendarName,EventType,Duration,Description,Location,Attendees,Color,IsDeclarable,ConflictType,Notes
+2024-12-30 08:00:00,Vakantie Frankrijk,eva.mooren@gmail.com,work_sessions,6480,,,,#f691b2,True,None,WBSO Work Sessions
+2025-01-01 00:00:00,Nieuwjaarsdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-01-03 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-01-05 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-01-05 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-01-06 00:00:00,Week 2 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-01-06 14:00:00,14:15 Paspoort aanvragen Perron-3 Rosmalen - met pasfoto!,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-09 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-01-09 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-01-10 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-01-11 20:00:00,Soos satisfaction,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-01-13 00:00:00,Week 3 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-01-13 08:15:00,Huisarts crp bloed/gesprek,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-14 10:00:00,Tandarts controle 10:20 + reiniging 10:30,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-14 10:20:00,Afspraak C.L. Lopategui,pieter.kuppens@gmail.com,administrative,0,Dhr. P. Kuppens (15-05-1969),"Hesselsstraat 2D, 5213 XD 's-Hertogenbosch",,#16a765,False,work,Non-declarable: work
+2025-01-14 13:15:00,APK Keuring Profit Boxtel,pieter.kuppens@gmail.com,work_sessions,150,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-15 12:00:00,Bezorgen IKEA vaatwasser boven,pieter.kuppens@gmail.com,work_sessions,360,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-17 10:00:00,"Datum: 17-01-2025 Tijd: 10:05 - 10:10 uur Locatie: 1 Jeroen Bosch Ziekenhuis Rosmalen Adres: De Hoef 90, 5242CN Rosmalen Afspraakcode: M8GKZP",pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-17 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-01-17 11:30:00,Harm op bezoek,pieter.kuppens@gmail.com,work_sessions,240,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-18 10:00:00,Wandelen Wiesje,eva.mooren@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-01-18 10:00:00,Wandelen Wiesje,pieter.kuppens@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-01-20 00:00:00,Week 4 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-01-20 09:45:00,"Afspraak Tandarts Den Bosch, Mondzorgkliniek en verwijspraktijk",pieter.kuppens@gmail.com,administrative,0,Dhr. P. Kuppens (15-05-1969),,pieter.kuppens@gmail.com,#16a765,False,work,Non-declarable: work
+2025-01-21 10:00:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",,#16a765,True,None,WBSO Work Sessions
+2025-01-21 13:00:00,Interview Pieter - Lukkien,pieter.kuppens@gmail.com,travel_time,90,"Hallo Pieter,
+
+Hartelijk dank voor je interesse in de tijdelijke functie (3 maanden) van Back-End Python Developer bij Lukkien Digital in Ede. Graag nodig ik je uit voor een gesprek:
+
+Locatie: Lukkien, Ede
+
+We kijken ernaar uit je te ontmoeten en te bespreken hoe jouw ervaring aansluit bij de functie. Als je vooraf nog vragen hebt, neem dan gerust contact met me op.
+Met vriendelijke groet/With kind regards,
+
+Raymond Obbes
+Projectmanager Digital
+
+
+Lukkien. Digital solutions
+that bring results for brands and businesses.
+
+Copernicuslaan 15-17
+6716 BM Ede
+The Netherlands
+
+T: +31 318 698000 <mailto:+31%20318%20698000> | M: +31 6 5008 2068<tel:+31650082068> | r.obbes@lukkien.com<mailto:r.obbes@lukkien.com> | Lukkien.com<http://lukkien.com/>
+
+This message is for the designated recipient only and may contain
+privileged, proprietary, or otherwise private information. If you have
+received it in error, please notify the sender immediately and delete the
+original. Any other use of the email by you is prohibited.
+
+
+
+
+________________________________________________________________________________
+Microsoft Teams Need help?<https://aka.ms/JoinTeamsMeeting?omkt=en-GB>
+Join the meeting now<https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTg2N2RhOTMtMWZiNS00MGQ4LWJiZjctOTUyOTJiMDllMjg5%40thread.v2/0?context=%7b%22Tid%22%3a%22c0bbabf2-b5d4-417c-bcba-e81c9bb3fc0e%22%2c%22Oid%22%3a%22ba6ff0f2-dc36-4dce-bd31-906b8a11a913%22%7d>
+Meeting ID: 354 977 060 564
+Passcode: 2q4km6HH
+________________________________
+For organisers: Meeting options<https://teams.microsoft.com/meetingOptions/?organizerId=ba6ff0f2-dc36-4dce-bd31-906b8a11a913&tenantId=c0bbabf2-b5d4-417c-bcba-e81c9bb3fc0e&threadId=19_meeting_YTg2N2RhOTMtMWZiNS00MGQ4LWJiZjctOTUyOTJiMDllMjg5@thread.v2&messageId=0&language=en-GB>
+________________________________________________________________________________
+",Microsoft Teams Meeting,"r.obbes@lukkien.com,jose@matchingpool.nl,pieter.kuppens@gmail.com,a.vanschaik@lukkien.com,a.matin@lukkien.com",#16a765,False,travel,Non-declarable: travel
+2025-01-22 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-01-23 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-01-23 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-01-24 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-01-26 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-01-26 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-01-27 00:00:00,Week 5 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-01-30 08:30:00,Apk,pieter.kuppens@gmail.com,work_sessions,420,,,,#16a765,True,None,WBSO Work Sessions
+2025-01-31 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-01-31 11:30:00,Eva Nieuwegein NAH,eva.mooren@gmail.com,work_sessions,300,,,,#f691b2,True,None,WBSO Work Sessions
+2025-01-31 13:30:00,Mark SBA King,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-02-03 00:00:00,Week 6 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-02-06 08:00:00,Tenerife/La Gomera,eva.mooren@gmail.com,work_sessions,13020,,,,#f691b2,True,None,WBSO Work Sessions
+2025-02-06 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-02-06 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-02-07 08:00:00,Luca 18 jaar,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-02-07 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-02-10 00:00:00,Week 7 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-02-14 00:00:00,Valentijnsdag,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-02-14 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-02-16 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-02-16 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-02-17 00:00:00,Week 8 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-02-18 17:00:00,Piet eet mee + koffie p&r,eva.mooren@gmail.com,work_sessions,300,,,,#f691b2,True,None,WBSO Work Sessions
+2025-02-19 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-02-20 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-02-20 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-02-21 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-02-22 14:00:00,Tante Zus - voor de klussers,pieter.kuppens@gmail.com,work_sessions,300,,,,#16a765,True,None,WBSO Work Sessions
+2025-02-24 00:00:00,Week 9 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-02-24 14:20:00,Eva tandarts,eva.mooren@gmail.com,work_sessions,60,Controle + reiniging,,,#f691b2,True,None,WBSO Work Sessions
+2025-02-25 09:00:00,Kapper,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-02-28 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-03-01 08:00:00,Carnaval,eva.mooren@gmail.com,work_sessions,4380,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-01 16:00:00,Start F1 seizoen,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-03 00:00:00,Week 10 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-03-05 10:00:00,Wandelen Wiesje,eva.mooren@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-05 10:00:00,Wandelen Wiesje,pieter.kuppens@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-06 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-06 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-07 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-03-08 17:30:00,Uit eten Boa & Jurgen,eva.mooren@gmail.com,work_sessions,240,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-08 17:30:00,Uit eten Boa & Jurgen,pieter.kuppens@gmail.com,work_sessions,240,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-09 15:00:00,Verjaardag Yvonne ,eva.mooren@gmail.com,work_sessions,120,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-09 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-09 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-10 00:00:00,Week 11 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-03-10 08:00:00,Yvonne jarig,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-14 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-03-16 10:00:00,Autospeutocht Anja & Edith,eva.mooren@gmail.com,work_sessions,360,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-17 00:00:00,Week 12 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-03-18 10:00:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,Victorialaan 10 5213 JE ’s-Hertogenbosch,,#16a765,True,None,WBSO Work Sessions
+2025-03-19 11:00:00,Strijp en Leende,eva.mooren@gmail.com,work_sessions,480,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-19 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-03-20 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-20 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-21 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-03-22 16:00:00,Luca Pasta,pieter.kuppens@gmail.com,work_sessions,300,,,,#16a765,True,None,WBSO Work Sessions
+2025-03-24 00:00:00,Week 13 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-03-27 00:00:00,Stay at Don Giovanni 11,pieter.kuppens@gmail.com,work_sessions,7199,"To see detailed information for automatically created events like this one, use the official Google Calendar app. https://g.co/calendar
+
+This event was created from an email that you received in Gmail. https://mail.google.com/mail?extsrc=cal&plid=ACUX6DMV9DZpaMeRWMI6XDieozpipcdinlPDxY8
+","Don Giovanni 11, Milano",pieter.kuppens@gmail.com,#16a765,True,None,WBSO Work Sessions
+2025-03-27 08:00:00,Milaan ,eva.mooren@gmail.com,work_sessions,4980,,,,#f691b2,True,None,WBSO Work Sessions
+2025-03-27 14:00:00,DataCamp Radar: Skills Edition,pieter.kuppens@gmail.com,administrative,390,"Please join the event here: https://www.airmeet.com/e/d7b56b00-d1a3-11ef-912a-c7ec535686da?code=2952d86b-5aa1-4a26-a338-fa26804e0c90
+
+This link is only for you. Please don't share it with others.
+Airmeet is best experienced from your desktop and on latest Chrome browser(recommended)",https://www.airmeet.com/e/d7b56b00-d1a3-11ef-912a-c7ec535686da?code=2952d86b-5aa1-4a26-a338-fa26804e0c90,pieter.kuppens@gmail.com,#16a765,False,work,Non-declarable: work
+2025-03-28 08:33:08,"Reis naar Via Vetere, 11",eva.mooren@gmail.com,work_sessions,50,"Loop 4 min (280 m)
+
+
+Neem 2 naar P.Le Negrelli vanaf Bausan (vertrekt elke 10 min.), stap uit bij Via Torino Via S. Maria Valle (37 min., 19 haltes)
+
+
+Loop 10 min (650 m)
+
+
+Je komt aan om Via Vetere, 11
+
+
+https://goo.gl/maps/G89usqDXZZgfdjnm8",Bausan,"pieter.kuppens@gmail.com,eva.mooren@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-28 08:33:08,"Reis naar Via Vetere, 11",pieter.kuppens@gmail.com,work_sessions,50,"Loop 4 min (280 m)
+
+
+Neem 2 naar P.Le Negrelli vanaf Bausan (vertrekt elke 10 min.), stap uit bij Via Torino Via S. Maria Valle (37 min., 19 haltes)
+
+
+Loop 10 min (650 m)
+
+
+Je komt aan om Via Vetere, 11
+
+
+https://goo.gl/maps/G89usqDXZZgfdjnm8",Bausan,"pieter.kuppens@gmail.com,eva.mooren@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-28 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-03-30 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-03-30 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-03-31 00:00:00,Week 14 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-04-03 19:15:00,EISBRECHER! 20:30-20:45 bij Joost,pieter.kuppens@gmail.com,work_sessions,225,,,,#16a765,True,None,WBSO Work Sessions
+2025-04-03 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-04-03 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-04-04 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-04-05 19:00:00,Eva Verkade,eva.mooren@gmail.com,work_sessions,240,,,,#f691b2,True,None,WBSO Work Sessions
+2025-04-05 19:00:00,"Housewarming Feiko,",pieter.kuppens@gmail.com,work_sessions,255,,"De Josselin de Jongstraat 22, 5246 EC Rosmalen, Nederland",,#16a765,True,None,WBSO Work Sessions
+2025-04-06 13:00:00,Verjaardag Riet,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-04-07 00:00:00,Week 15 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-04-09 13:30:00,JADS AI Kansen voor het MKB,pieter.kuppens@gmail.com,administrative,240,"<h3><b>Voorlopig programma</b></h3><p>13:30 Welkom met koffie/thee<br>14:00 Keynote Prof. Dr. Eric Postma<br>15:00 Pauze<br>15:15 JADS MKB Datalab<br>15:45 Ondernemers aan het woord<br>16:30 Netwerken + Borrel</p><a href=""https://www.jads.nl/events/inspiratieevent-data-science-ai-voor-mkb/#u-Aanmelden""><b>Gratis aanmelden</b></a><br><br><a href=""https://www.jads.nl/events/inspiratieevent-data-science-ai-voor-mkb/?_gl=1*1fey4l*_up*MQ..*_ga*MTIyNDkxNzM3MC4xNzQyOTE1MzMy*_ga_67G91JH97X*MTc0MjkxNTMzMS4xLjAuMTc0MjkxNTMzMS4wLjAuOTI4NDQ5MTE4#u-Aanmelden"">https://www.jads.nl/events/inspiratieevent-data-science-ai-voor-mkb/?_gl=1*1fey4l*_up*MQ..*_ga*MTIyNDkxNzM3MC4xNzQyOTE1MzMy*_ga_67G91JH97X*MTc0MjkxNTMzMS4xLjAuMTc0MjkxNTMzMS4wLjAuOTI4NDQ5MTE4#u-Aanmelden</a>","Universiteit Jheronimus Academy of Data Science, Sint Janssingel 92, 5211 DK 's-Hertogenbosch, Netherlands",,#16a765,False,work,Non-declarable: work
+2025-04-11 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-04-11 20:00:00,Verj. Anja & Gert Jan,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-04-13 16:30:00,Pap komt eten,pieter.kuppens@gmail.com,work_sessions,210,"17:30 bij Bedrijvenweg 8b, St. Michielsgestel, daarna eten.",,,#16a765,True,None,WBSO Work Sessions
+2025-04-14 00:00:00,Week 16 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-04-16 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-04-17 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-04-17 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-04-18 00:00:00,Goede Vrijdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-04-18 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-04-18 15:30:00,Pieter / Paul Tondeur,pieter.kuppens@gmail.com,administrative,30,"Event: Meeting with Paul Tondeur
+
+Location: Google Meet web conference
+
+Scheduled with <a href=""https://www.notion.so/product/calendar?source=scheduledMeeting"">Notion Calendar</a>",,"pieter.kuppens@gmail.com,paul@paultondeur.com",#16a765,False,work,Non-declarable: work
+2025-04-20 00:00:00,Eerste Paasdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-04-20 11:00:00,Paasbrunch P&R,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-04-20 11:00:00,Pasen Moorens,pieter.kuppens@gmail.com,work_sessions,300,,,,#16a765,True,None,WBSO Work Sessions
+2025-04-20 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-04-20 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-04-21 00:00:00,Week 17 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-04-21 00:00:00,Tweede Paasdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-04-21 13:00:00,Leende Paaseieren zoeken..,pieter.kuppens@gmail.com,work_sessions,420,,,,#16a765,True,None,WBSO Work Sessions
+2025-04-25 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-04-26 00:00:00,Koningsdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-04-26 11:00:00,Koningsmarkt Vught Anja & Edith,eva.mooren@gmail.com,work_sessions,240,,,,#f691b2,True,None,WBSO Work Sessions
+2025-04-27 00:00:00,Koningsdag,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-04-28 00:00:00,Week 18 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-04-29 10:00:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",pieter.kuppens@gmail.com,#16a765,True,None,WBSO Work Sessions
+2025-04-29 14:00:00,Belletje Team Rockstars IT - Iris,pieter.kuppens@gmail.com,breaks_meals,45,,,,#16a765,False,break,Non-declarable: break
+2025-04-30 10:00:00,Fietsen Adriaan & Linda,eva.mooren@gmail.com,work_sessions,480,,,,#f691b2,True,None,WBSO Work Sessions
+2025-05-01 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-05-01 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-05-02 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-05-02 14:00:00,Turnhout,eva.mooren@gmail.com,work_sessions,360,,,,#f691b2,True,None,WBSO Work Sessions
+2025-05-04 08:00:00,Kanotocht,eva.mooren@gmail.com,work_sessions,600,,,,#f691b2,True,None,WBSO Work Sessions
+2025-05-05 00:00:00,Week 19 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-05-05 00:00:00,Bevrijdingsdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-05-07 10:00:00,Wandelen Wiesje,eva.mooren@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-05-07 10:00:00,Wandelen Wiesje,pieter.kuppens@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-05-07 16:00:00,Crowe Foederer,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-08 13:30:00,Datacation workshop AI agent bouwen,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-08 14:00:00,Datacation Deep Dive: Bouw je eigen AI Assistent met google Gemini,pieter.kuppens@gmail.com,travel_time,360,"Agenda:
+14:00   Inloop
+14:15   Start programma
+18:00   Pizza's en borrel
+
+
+Het evenement zal plaatsvinden in het AI Innovation Center op de High Tech Campus 5 in Eindhoven; dit is zowel met de auto als het OV goed bereikbaar:
+
+*	Auto: parkeren kan het beste bij parkeergarage P0. Vanaf de parkeergarage is het 2 minuten lopen naar HTC 5.
+*
+	OV: vanaf Eindhoven centraal kun je bus 408 pakken en uitstappen bij bushalte HTC/Vijver. Vanaf hier is het 4 minuten lopen naar HTC 5.
+
+
+Bij binnenkomst kun je je melden bij de receptie. Hier word je vervolgens opgehaald door een van onze collega’s.
+
+Team Datacation
+
+
+","AI Innovation Centre (High Tech Campus 5, 5656 AE Eindhoven North Brabant, Netherlands)",,#16a765,False,travel,Non-declarable: travel
+2025-05-09 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-05-11 00:00:00,Moederdag,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-05-11 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-05-11 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-05-12 00:00:00,Week 20 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-05-13 18:30:00,Kapster 18:45,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-14 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-05-15 00:00:00,Happy birthday!,pieter.kuppens@gmail.com,work_sessions,2879,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-15 10:30:00,Verjaardag Moorens gebak.,pieter.kuppens@gmail.com,work_sessions,120,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-15 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-05-15 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-05-16 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-05-16 17:30:00,Pieter borrelavond Eindhoven,pieter.kuppens@gmail.com,work_sessions,360,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-19 00:00:00,Week 21 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-05-20 00:00:00,Efteling Harm,pieter.kuppens@gmail.com,work_sessions,2879,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-23 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-05-24 18:00:00,Osgar en Jojanneke 40 jr,eva.mooren@gmail.com,work_sessions,355,,,,#f691b2,True,None,WBSO Work Sessions
+2025-05-25 10:00:00,Neven en nichtendag Kuppens,pieter.kuppens@gmail.com,work_sessions,345,,,,#16a765,True,None,WBSO Work Sessions
+2025-05-26 00:00:00,Week 22 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-05-29 00:00:00,Hemelvaartsdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-05-29 13:30:00,Verj. Arthur,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-05-29 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-05-29 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-05-30 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-05-31 18:00:00,Eten bij Boa & Jurgen,eva.mooren@gmail.com,work_sessions,300,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-01 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-06-01 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-02 00:00:00,Week 23 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-06-03 14:00:00,Struijk,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-03 14:00:00,Dhr Kuppens HT + evt intake 0641047445,pieter.kuppens@gmail.com,administrative,60,,,"eden@struijk-audiciens.nl,pieter.kuppens@gmail.com",#16a765,False,work,Non-declarable: work
+2025-06-05 11:30:00,Kennismaking Pieter <-> Karsten (Artisans IT),pieter.kuppens@gmail.com,work_sessions,30,,,"karsten@artisans-it.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-05 14:00:00,Pieter en Bas - AI,pieter.kuppens@gmail.com,work_sessions,15,,,"bashennekam@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-06 10:30:00,Pieter - Philippe,pieter.kuppens@gmail.com,work_sessions,30,"https://meet.google.com/yqy-fnbe-qpt
+",Google Meet,,#16a765,True,None,WBSO Work Sessions
+2025-06-07 08:00:00,Pinksteren,eva.mooren@gmail.com,work_sessions,3625,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-07 11:00:00,Willeke 40 jaar,eva.mooren@gmail.com,work_sessions,360,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-08 00:00:00,Eerste Pinksterdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-06-09 00:00:00,Week 24 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-06-09 00:00:00,Tweede Pinksterdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-06-10 09:30:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",,#16a765,True,None,WBSO Work Sessions
+2025-06-10 10:30:00,Kennismaking/matching Pieter Kuppens - Python programmeur,pieter.kuppens@gmail.com,breaks_meals,30,"Beste Pieter,
+
+Hierbij de Teams-link voor de kennismaking voor de tijdelijke functie Python programmeur bij Aa en Maas.
+Let op: we hadden reeds een andere kandidaat gepland om 10:00u, dus ik heb de vrijheid genomen om dit een half uurtje later in te plannen. Laat me weten als dat niet past
+________________________________________________________________________________
+Microsoft Teams Heeft u hulp nodig?<https://aka.ms/JoinTeamsMeeting?omkt=nl-NL>
+Nu deelnemen aan de vergadering<https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTQ5MjRmOTUtMThiYi00MTM1LTkxNDUtMjIzMmRmZjQzNmEw%40thread.v2/0?context=%7b%22Tid%22%3a%225d75e978-8a58-4197-a8d8-6eb786a5a8fa%22%2c%22Oid%22%3a%22356bd026-6af1-405a-a2c7-caa8d4c0fdf0%22%7d>
+Vergadering-id: 347 375 881 107 3
+Wachtwoordcode: Hs2av6a4
+________________________________
+Inbellen via telefoon
++31 20 399 9804,,768998464#<tel:+31203999804,,768998464> Nederland, Amsterdam
+Een lokaal nummer zoeken<https://dialin.teams.microsoft.com/d1408970-b595-4ff5-ab25-08a45ddb2d17?id=768998464>
+Telefonische vergadering-id: 768 998 464#
+Voor organisatoren: Vergaderopties<https://teams.microsoft.com/meetingOptions/?organizerId=356bd026-6af1-405a-a2c7-caa8d4c0fdf0&tenantId=5d75e978-8a58-4197-a8d8-6eb786a5a8fa&threadId=19_meeting_YTQ5MjRmOTUtMThiYi00MTM1LTkxNDUtMjIzMmRmZjQzNmEw@thread.v2&messageId=0&language=nl-NL> | Pincode voor inbellen opnieuw instellen<https://dialin.teams.microsoft.com/usp/pstnconferencing>
+[cid:image001.png@01DBD708.0E3758A0]
+________________________________________________________________________________
+
+",Microsoft Teams-vergadering,"pieter.kuppens@gmail.com,dhaverkamp@aaenmaas.nl,pvansanten@aaenmaas.nl,twalbeek@aaenmaas.nl",#16a765,False,break,Non-declarable: break
+2025-06-10 17:15:00,AI .NET Zuid @TOPIC,pieter.kuppens@gmail.com,work_sessions,210,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-11 08:00:00,Bloed geven,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-11 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-06-12 16:15:00,JADS Bijeenkomst AI Agents,pieter.kuppens@gmail.com,administrative,300,"<a href=""https://mail.google.com/mail/u/0/#inbox/FMfcgzQbfBvtsxPVmsbJbVRJcbnkRqzh"">https://mail.google.com/mail/u/0/#inbox/FMfcgzQbfBvtsxPVmsbJbVRJcbnkRqzh</a>","JADS MKB Datalab, Sint Janssingel 92, 5211 DA 's-Hertogenbosch, Netherlands",,#16a765,False,work,Non-declarable: work
+2025-06-12 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-06-12 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-13 11:00:00,Michel & Yvonne,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-15 00:00:00,Vaderdag,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-06-15 15:00:00,Wagenspel Paps,pieter.kuppens@gmail.com,work_sessions,240,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-16 00:00:00,Week 25 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-06-16 10:00:00,To70 Chat AI,pieter.kuppens@gmail.com,work_sessions,60,,,"bashennekam@gmail.com,pieter.kuppens@gmail.com,efe.kulaksizoglu@to70.eu,jan.vanmanen@to70.eu",#16a765,True,None,WBSO Work Sessions
+2025-06-17 09:30:00,Premium,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-17 16:30:00,Pieter // Thijs - kennismaking,pieter.kuppens@gmail.com,work_sessions,30,,,"pieter.kuppens@gmail.com,thijs@spaik.io",#16a765,True,None,WBSO Work Sessions
+2025-06-18 12:00:00,Den Helder,eva.mooren@gmail.com,work_sessions,480,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-19 09:00:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,60,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",,#16a765,True,None,WBSO Work Sessions
+2025-06-19 16:00:00,MyOffice Zomerborrel,pieter.kuppens@gmail.com,work_sessions,180,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-22 14:00:00,"12,5 jaar Arlette&Hidde",eva.mooren@gmail.com,work_sessions,240,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-22 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-06-22 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-23 00:00:00,Week 26 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-06-25 13:30:00,Dierenarts herhalingsspuit,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-25 14:00:00,Angiogenesis Analytics,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-06-26 09:00:00,Banenzwemmen,pieter.kuppens@gmail.com,work_sessions,60,,Sportfondsen 's-Hertogenbosch,,#16a765,True,None,WBSO Work Sessions
+2025-06-26 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-06-26 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-06-28 15:00:00,Verkade voorstelling,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-29 13:30:00,Verj. Sophie & Flora,eva.mooren@gmail.com,work_sessions,180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-29 17:00:00,Uit eten ballerina's,eva.mooren@gmail.com,work_sessions,300,,,,#f691b2,True,None,WBSO Work Sessions
+2025-06-30 00:00:00,Week 27 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-07-01 00:00:00,Keti Koti,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-07-01 11:00:00,Kapster,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-07-01 12:00:00,Contractgesprek,pieter.kuppens@gmail.com,breaks_meals,30,"
+________________________________________________________________________________
+Microsoft Teams Heeft u hulp nodig?<https://aka.ms/JoinTeamsMeeting?omkt=nl-NL>
+Nu deelnemen aan de vergadering<https://teams.microsoft.com/l/meetup-join/19%3ameeting_ODdlYzJiOGYtNTNhMS00Zjg3LTg2ZjEtOWQ4NGExZjIzNzAy%40thread.v2/0?context=%7b%22Tid%22%3a%221a5ee605-5df9-4824-aab0-6bfa4cfeda71%22%2c%22Oid%22%3a%224453d5b9-c52d-467e-9a41-8820a4886940%22%7d>
+Vergadering-id: 323 245 707 920 8
+Wachtwoordcode: os7Pz3kh
+________________________________
+Voor organisatoren: Vergaderopties<https://teams.microsoft.com/meetingOptions/?organizerId=4453d5b9-c52d-467e-9a41-8820a4886940&tenantId=1a5ee605-5df9-4824-aab0-6bfa4cfeda71&threadId=19_meeting_ODdlYzJiOGYtNTNhMS00Zjg3LTg2ZjEtOWQ4NGExZjIzNzAy@thread.v2&messageId=0&language=nl-NL>
+________________________________________________________________________________
+",Microsoft Teams-vergadering,"pieter.kuppens@gmail.com,mark.bloemendaal@angiogenesis-analytics.com",#16a765,False,break,Non-declarable: break
+2025-07-02 10:00:00,Wandelen Wiesje,eva.mooren@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-07-02 10:00:00,Wandelen Wiesje,pieter.kuppens@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-07-05 10:00:00,Kanoën Anja & Edith,eva.mooren@gmail.com,work_sessions,420,,,,#f691b2,True,None,WBSO Work Sessions
+2025-07-07 00:00:00,Week 28 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-07-08 10:30:00,"Afspraak Tandarts Den Bosch, Mondzorgkliniek en verwijspraktijk",pieter.kuppens@gmail.com,administrative,0,Dhr. P. Kuppens (15-05-1969),,pieter.kuppens@gmail.com,#16a765,False,work,Non-declarable: work
+2025-07-08 10:30:00,Tandarts reinigen en controle,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-07-08 11:00:00,"Afspraak Tandarts Den Bosch, Mondzorgkliniek en verwijspraktijk",pieter.kuppens@gmail.com,administrative,0,Dhr. P. Kuppens (15-05-1969),,pieter.kuppens@gmail.com,#16a765,False,work,Non-declarable: work
+2025-07-08 13:00:00,Mark en Pieter koffie,pieter.kuppens@gmail.com,work_sessions,30,"
+",,"pieter.kuppens@gmail.com,mark.bloemendaal@angiogenesis-analytics.com",#16a765,True,None,WBSO Work Sessions
+2025-07-08 14:00:00,Audiovisueel testen,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-07-09 09:00:00,Piet cardioversie,eva.mooren@gmail.com,work_sessions,240,,,,#f691b2,True,None,WBSO Work Sessions
+2025-07-09 17:30:00,Eten Leende voor pap zorgen na cardioversie,pieter.kuppens@gmail.com,work_sessions,60,,,,#16a765,True,None,WBSO Work Sessions
+2025-07-09 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-07-10 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-07-10 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-07-11 10:00:00,AI Literacy Webinar,pieter.kuppens@gmail.com,breaks_meals,60,"You’re registered for AI Literacy Webinar
+
+You’re registered for AI Literacy Webinar
+
+Hi Pieter,
+
+Your spot is reserved for this event.
+
+AI Literacy Webinar
+
+Fri, Jul 11, 2025 10:00 AM - 11:00 AM (UTC+02:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna
+
+We look forward to seeing you!
+
+Join event
+
+<https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzBjM2FhNmQtMzNiNC00M2ZjLWI5NzQtOWZlOTIzNjFlNGRl%40thread.v2/0?context=%7b%22Tid%22%3a%226c4ff59a-be74-463d-8393-9abed650796e%22%2c%22Oid%22%3a%225f5961fd-81d2-4dac-9a62-55c3ff6bbaf2%22%2c%22prid%22%3a%2215b76b9e-1e2b-4b9f-8c09-3697c79cea08%22%2c%22isPublic%22%3atrue%7d>
+
+Unable to attend?
+
+Cancel your registration
+
+<https://events.teams.microsoft.com/event/8f261684-ca9f-46ab-bddc-bab001a7b5a5@6c4ff59a-be74-463d-8393-9abed650796e/attendee/15b76b9e-1e2b-4b9f-8c09-3697c79cea08/cancel>
+
+CREATE regulatory consultancy
+This event is powered by Microsoft Teams, under the direction of the meeting organiser. The data processing that occurs for purposes of this event is subject to the terms of the meeting organiser. <https://privacy.microsoft.com/privacystatement> Microsoft Privacy Policy",,pieter.kuppens@gmail.com,#16a765,False,break,Non-declarable: break
+2025-07-13 15:00:00,Maastricht ,eva.mooren@gmail.com,work_sessions,3060,,,,#f691b2,True,None,WBSO Work Sessions
+2025-07-13 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-07-13 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-07-14 00:00:00,Week 29 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-07-18 00:00:00,Verjaardag van Feest Loeki,pieter.kuppens@gmail.com,work_sessions,2879,,,,#16a765,True,None,WBSO Work Sessions
+2025-07-18 13:00:00,Michel 50 jaar Turnhout,eva.mooren@gmail.com,work_sessions,3180,,,,#f691b2,True,None,WBSO Work Sessions
+2025-07-21 00:00:00,Week 30 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-07-23 08:00:00,Zoë Profit onderhoud,eva.mooren@gmail.com,work_sessions,540,,,,#f691b2,True,None,WBSO Work Sessions
+2025-07-24 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-07-24 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-07-26 18:00:00,Bbq Han&Chris,eva.mooren@gmail.com,administrative,300,,,,#f691b2,False,work,Non-declarable: work
+2025-07-28 00:00:00,Week 31 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-07-29 16:30:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",,#16a765,True,None,WBSO Work Sessions
+2025-07-30 10:00:00,BODYBALANCE (LesMills),eva.mooren@gmail.com,work_sessions,60,,Sportfondsen 's-Hertogenbosch,,#f691b2,True,None,WBSO Work Sessions
+2025-08-03 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-08-03 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-08-04 00:00:00,Week 32 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-08-04 20:15:00,BODYBALANCE (LesMills),eva.mooren@gmail.com,work_sessions,60,,Sportfondsen 's-Hertogenbosch,,#f691b2,True,None,WBSO Work Sessions
+2025-08-05 21:00:00,Buitenfilm F&H,eva.mooren@gmail.com,work_sessions,175,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-08-05 21:00:00,Buitenfilm F&H,pieter.kuppens@gmail.com,work_sessions,175,,,pieter.kuppens@gmail.com,#16a765,True,None,WBSO Work Sessions
+2025-08-06 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-08-07 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-08-07 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-08-08 14:30:00,JBZ Audiologisch centrum hoortest,pieter.kuppens@gmail.com,work_sessions,75,,,,#16a765,True,None,WBSO Work Sessions
+2025-08-08 14:30:00,Afspraak bij Audiometrie,pieter.kuppens@gmail.com,work_sessions,1,Afspraak bij Audiometrie Keel-Neus-Oor Heelkunde,JBZ locatie 's-Hertogenbosch,,#16a765,True,None,WBSO Work Sessions
+2025-08-08 15:45:00,Afspraak bij Dhr. C. Leunisse  (KNO-arts),pieter.kuppens@gmail.com,administrative,10,Afspraak bij Dhr. C. Leunisse  (KNO-arts) Keel-Neus-Oor Heelkunde,JBZ locatie 's-Hertogenbosch,,#16a765,False,work,Non-declarable: work
+2025-08-09 14:00:00,Mook Durea schoenen,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-08-09 23:00:00,Buitenfilm A&E,eva.mooren@gmail.com,work_sessions,60,,,,#f691b2,True,None,WBSO Work Sessions
+2025-08-11 00:00:00,Week 33 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-08-16 10:30:00,Verj. Floris,eva.mooren@gmail.com,work_sessions,255,,,,#f691b2,True,None,WBSO Work Sessions
+2025-08-18 00:00:00,Week 34 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-08-21 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-08-21 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-08-23 17:00:00,Leende,pieter.kuppens@gmail.com,work_sessions,195,,,,#16a765,True,None,WBSO Work Sessions
+2025-08-24 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-08-24 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-08-25 00:00:00,Week 35 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-08-25 17:30:00,Fam Mooren Wapen van Rosmalen ,eva.mooren@gmail.com,work_sessions,120,,,,#f691b2,True,None,WBSO Work Sessions
+2025-08-30 14:00:00,Kermis,eva.mooren@gmail.com,work_sessions,120,,,,#f691b2,True,None,WBSO Work Sessions
+2025-08-31 14:00:00,Pieter Gamers BBQ,pieter.kuppens@gmail.com,work_sessions,435,,,,#16a765,True,None,WBSO Work Sessions
+2025-09-01 00:00:00,Week 36 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-09-03 08:15:00,"Angio office day, opendoen GE scanner update",pieter.kuppens@gmail.com,work_sessions,75,,,,#16a765,True,None,WBSO Work Sessions
+2025-09-03 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-09-04 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-09-04 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-09-08 00:00:00,Week 37 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-09-14 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-09-14 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-09-15 00:00:00,Week 38 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-09-17 10:00:00,Wandelen Wiesje,eva.mooren@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieterkuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-09-17 10:00:00,Wandelen Wiesje,pieter.kuppens@gmail.com,work_sessions,180,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-09-18 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-09-18 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-09-21 13:00:00,Cis high tea Boxtel,eva.mooren@gmail.com,breaks_meals,150,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,False,break,Non-declarable: break
+2025-09-21 13:00:00,Cis high tea Boxtel,pieter.kuppens@gmail.com,breaks_meals,150,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,False,break,Non-declarable: break
+2025-09-22 00:00:00,Week 39 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-09-23 11:00:00,KNO Arts 'Controle' 11:20,pieter.kuppens@gmail.com,work_sessions,90,,,,#16a765,True,None,WBSO Work Sessions
+2025-09-26 16:00:00,Afspraak bij Sportfondsen 's-Hertogenbosch,pieter.kuppens@gmail.com,work_sessions,30,,"Victorialaan 10
+5213 JE
+’s-Hertogenbosch",,#16a765,True,None,WBSO Work Sessions
+2025-09-29 00:00:00,Week 40 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-10-01 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-10-02 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-02 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-10-05 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-05 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-10-06 00:00:00,Week 41 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-10-10 18:00:00,Stefano,eva.mooren@gmail.com,work_sessions,2940,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-10 18:00:00,Stefano,pieter.kuppens@gmail.com,work_sessions,2940,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-10-13 00:00:00,Week 42 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-10-16 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-16 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-10-17 08:00:00,Weekend weg Anja & Edith,eva.mooren@gmail.com,work_sessions,3480,,,,#f691b2,True,None,WBSO Work Sessions
+2025-10-20 00:00:00,Week 43 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-10-26 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-26 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-10-27 00:00:00,Week 44 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-10-29 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-10-30 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-10-30 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-11-03 00:00:00,Week 45 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-11-10 00:00:00,Week 46 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-11-13 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-11-13 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-11-16 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-11-16 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-11-17 00:00:00,Week 47 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-11-24 00:00:00,Week 48 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-11-26 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-11-27 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-11-27 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-12-01 00:00:00,Week 49 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-12-05 00:00:00,Sinterklaasavond,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-12-07 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-12-07 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-12-08 00:00:00,Week 50 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-12-11 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-12-11 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-12-15 00:00:00,Week 51 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-12-22 00:00:00,Week 52 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-12-23 10:00:00,Freek Vonk live A'dam,eva.mooren@gmail.com,work_sessions,120,,,,#f691b2,True,None,WBSO Work Sessions
+2025-12-24 00:00:00,Kerstavond,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2025-12-24 20:00:00,Papiercontainer aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,45,"http://www.denbosch.afvalstoffendienstkalender.nl/nl/5246AM/10/
+",,,#16a765,True,None,WBSO Work Sessions
+2025-12-25 00:00:00,Eerste Kerstdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-12-25 20:30:00,Groene container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-12-25 20:30:00,Groene container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-12-26 00:00:00,Tweede Kerstdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions
+2025-12-28 20:30:00,Grijze container aan de weg zetten,eva.mooren@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#f691b2,True,None,WBSO Work Sessions
+2025-12-28 20:30:00,Grijze container aan de weg zetten,pieter.kuppens@gmail.com,work_sessions,60,,,"eva.mooren@gmail.com,pieter.kuppens@gmail.com",#16a765,True,None,WBSO Work Sessions
+2025-12-29 00:00:00,Week 1 of 2025,Week Numbers,work_sessions,2879,,,,#a47ae2,True,None,WBSO Work Sessions
+2025-12-31 00:00:00,Oudejaarsavond,Feestdagen in Nederland,work_sessions,2879,"Viering
+Als je vieringen wilt verbergen, ga je naar de instellingen van Google Agenda > Feestdagen in Nederland",,,#42d692,True,None,WBSO Work Sessions
+2026-01-01 00:00:00,Nieuwjaarsdag,Feestdagen in Nederland,work_sessions,2879,Officiële feestdag,,,#42d692,True,None,WBSO Work Sessions

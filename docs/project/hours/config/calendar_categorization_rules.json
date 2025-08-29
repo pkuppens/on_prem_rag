@@ -1,0 +1,161 @@
+{
+  "version": "1.0",
+  "description": "Calendar event categorization rules for WBSO hours registration",
+  "last_updated": "2025-01-15",
+
+  "declarable_categories": {
+    "work_sessions": {
+      "description": "WBSO R&D work sessions and development activities",
+      "keywords": [
+        "development", "coding", "programming", "implementation",
+        "ai framework", "agent development", "security", "privacy",
+        "research", "investigation", "testing", "debugging",
+        "documentation", "technical writing", "architecture",
+        "system design", "algorithm", "optimization"
+      ],
+      "calendar_names": [
+        "work", "development", "research", "wbso", "ai", "tech"
+      ],
+      "hour_multiplier": 1.0
+    },
+    "technical_meetings": {
+      "description": "Technical meetings related to WBSO project",
+      "keywords": [
+        "technical review", "code review", "architecture review",
+        "security review", "privacy review", "system design",
+        "technical discussion", "development planning"
+      ],
+      "calendar_names": [
+        "work", "development", "tech meetings"
+      ],
+      "hour_multiplier": 0.8
+    },
+    "research_learning": {
+      "description": "Research and learning activities related to WBSO",
+      "keywords": [
+        "research", "learning", "study", "investigation",
+        "technology evaluation", "framework research",
+        "security research", "privacy research"
+      ],
+      "calendar_names": [
+        "research", "learning", "study"
+      ],
+      "hour_multiplier": 0.9
+    }
+  },
+
+  "non_declarable_categories": {
+    "personal_appointments": {
+      "description": "Personal appointments and medical visits",
+      "keywords": [
+        "dentist", "doctor", "medical", "appointment",
+        "checkup", "consultation", "therapy", "physio"
+      ],
+      "calendar_names": [
+        "personal", "health", "medical"
+      ],
+      "conflict_type": "personal"
+    },
+    "family_commitments": {
+      "description": "Family and personal commitments",
+      "keywords": [
+        "family", "personal", "home", "childcare",
+        "school", "parent", "family time", "vacation"
+      ],
+      "calendar_names": [
+        "family", "personal", "home"
+      ],
+      "conflict_type": "personal"
+    },
+    "travel_time": {
+      "description": "Travel and commuting time",
+      "keywords": [
+        "travel", "commute", "transport", "driving",
+        "flight", "train", "bus", "transit"
+      ],
+      "calendar_names": [
+        "travel", "commute"
+      ],
+      "conflict_type": "travel"
+    },
+    "breaks_meals": {
+      "description": "Break time and meals",
+      "keywords": [
+        "lunch", "dinner", "breakfast", "break",
+        "coffee", "tea", "rest", "meal"
+      ],
+      "calendar_names": [
+        "breaks", "meals"
+      ],
+      "conflict_type": "break"
+    },
+    "administrative": {
+      "description": "Non-technical administrative tasks",
+      "keywords": [
+        "admin", "paperwork", "billing", "invoicing",
+        "accounting", "hr", "general admin"
+      ],
+      "calendar_names": [
+        "admin", "administrative"
+      ],
+      "conflict_type": "work"
+    },
+    "social_events": {
+      "description": "Social and recreational events",
+      "keywords": [
+        "party", "social", "recreation", "hobby",
+        "sports", "exercise", "entertainment", "leisure"
+      ],
+      "calendar_names": [
+        "social", "recreation", "hobbies"
+      ],
+      "conflict_type": "personal"
+    }
+  },
+
+  "categorization_rules": {
+    "priority_order": [
+      "personal_appointments",
+      "family_commitments",
+      "travel_time",
+      "breaks_meals",
+      "work_sessions",
+      "technical_meetings",
+      "research_learning",
+      "administrative",
+      "social_events"
+    ],
+    "default_category": "work_sessions",
+    "confidence_threshold": 0.7,
+    "manual_review_keywords": [
+      "meeting", "call", "discussion", "review",
+      "planning", "coordination", "sync"
+    ]
+  },
+
+  "time_rules": {
+    "work_hours": {
+      "start": "06:00",
+      "end": "22:00",
+      "description": "Standard working hours for WBSO activities"
+    },
+    "break_duration": {
+      "minimum": 15,
+      "maximum": 120,
+      "description": "Break duration in minutes"
+    },
+    "session_duration": {
+      "minimum": 30,
+      "maximum": 480,
+      "description": "Work session duration in minutes"
+    }
+  },
+
+  "calendar_colors": {
+    "wbso_activities": "#4285F4",
+    "personal_conflicts": "#EA4335",
+    "work_conflicts": "#FBBC04",
+    "travel_conflicts": "#34A853",
+    "break_conflicts": "#FF6D01"
+  }
+}

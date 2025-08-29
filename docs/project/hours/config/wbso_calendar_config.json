@@ -1,0 +1,180 @@
+{
+  "version": "1.0",
+  "description": "WBSO Calendar configuration for dedicated R&D activities tracking",
+  "last_updated": "2025-01-15",
+
+  "calendar_settings": {
+    "name": "WBSO Activities 2025",
+    "description": "Dedicated calendar for tracking WBSO R&D activities and conflicts",
+    "timezone": "Europe/Amsterdam",
+    "access_level": "private",
+    "default_reminders": [
+      {
+        "method": "popup",
+        "minutes": 15
+      }
+    ]
+  },
+
+  "color_scheme": {
+    "wbso_work_sessions": {
+      "color": "#4285F4",
+      "description": "WBSO R&D work sessions",
+      "priority": "high"
+    },
+    "wbso_meetings": {
+      "color": "#34A853",
+      "description": "WBSO technical meetings",
+      "priority": "medium"
+    },
+    "wbso_research": {
+      "color": "#FBBC04",
+      "description": "WBSO research and learning",
+      "priority": "medium"
+    },
+    "personal_conflicts": {
+      "color": "#EA4335",
+      "description": "Personal appointments and conflicts",
+      "priority": "high"
+    },
+    "work_conflicts": {
+      "color": "#FF6D01",
+      "description": "Non-WBSO work activities",
+      "priority": "medium"
+    },
+    "travel_conflicts": {
+      "color": "#9C27B0",
+      "description": "Travel and commuting time",
+      "priority": "medium"
+    },
+    "break_conflicts": {
+      "color": "#795548",
+      "description": "Break time and meals",
+      "priority": "low"
+    },
+    "system_conflicts": {
+      "color": "#607D8B",
+      "description": "System maintenance and downtime",
+      "priority": "high"
+    }
+  },
+
+  "event_templates": {
+    "wbso_work_session": {
+      "title_template": "WBSO: {activity_type} - {description}",
+      "description_template": "WBSO R&D Activity\n\nCategory: {wbso_category}\nActivity: {activity_type}\nDescription: {description}\n\nHours: {duration_hours}\nDeclarable: {is_declarable}",
+      "location": "Home Office",
+      "transparency": "opaque"
+    },
+    "personal_conflict": {
+      "title_template": "Conflict: {event_title}",
+      "description_template": "Non-declarable activity\n\nType: {conflict_type}\nOriginal Event: {event_title}\nImpact: {impact_description}\n\nThis time period is excluded from WBSO hours.",
+      "transparency": "transparent"
+    },
+    "work_conflict": {
+      "title_template": "Work Conflict: {event_title}",
+      "description_template": "Non-WBSO work activity\n\nType: {conflict_type}\nOriginal Event: {event_title}\nImpact: {impact_description}\n\nWBSO hours may be reduced during this period.",
+      "transparency": "transparent"
+    }
+  },
+
+  "wbso_categories": {
+    "ai_framework": {
+      "description": "AI Framework Development",
+      "color": "#4285F4",
+      "hour_multiplier": 1.0,
+      "priority": "high"
+    },
+    "access_control": {
+      "description": "Access Control Systems",
+      "color": "#34A853",
+      "hour_multiplier": 1.0,
+      "priority": "high"
+    },
+    "privacy_cloud": {
+      "description": "Privacy-Preserving Cloud Integration",
+      "color": "#FBBC04",
+      "hour_multiplier": 1.0,
+      "priority": "high"
+    },
+    "audit_logging": {
+      "description": "Privacy-Friendly Audit Logging",
+      "color": "#FF6D01",
+      "hour_multiplier": 0.9,
+      "priority": "medium"
+    },
+    "data_integrity": {
+      "description": "Data Integrity & Protection Systems",
+      "color": "#9C27B0",
+      "hour_multiplier": 0.9,
+      "priority": "medium"
+    },
+    "research_investigation": {
+      "description": "Research and Technical Investigation",
+      "color": "#795548",
+      "hour_multiplier": 0.8,
+      "priority": "medium"
+    },
+    "documentation": {
+      "description": "Technical Documentation",
+      "color": "#607D8B",
+      "hour_multiplier": 0.7,
+      "priority": "low"
+    }
+  },
+
+  "export_settings": {
+    "csv_format": {
+      "encoding": "UTF-8",
+      "delimiter": ",",
+      "date_format": "YYYY-MM-DD",
+      "time_format": "HH:MM:SS",
+      "include_headers": true
+    },
+    "ical_format": {
+      "include_alarms": false,
+      "include_attendees": false,
+      "include_description": true
+    },
+    "backup_settings": {
+      "auto_backup": true,
+      "backup_frequency": "weekly",
+      "backup_retention_days": 365
+    }
+  },
+
+  "integration_settings": {
+    "sync_with_main_calendar": false,
+    "auto_populate_from_commits": true,
+    "auto_populate_from_issues": true,
+    "conflict_detection_enabled": true,
+    "manual_review_required": true
+  },
+
+  "reporting_settings": {
+    "daily_summary": {
+      "enabled": true,
+      "include_conflicts": true,
+      "include_hours_breakdown": true
+    },
+    "weekly_summary": {
+      "enabled": true,
+      "include_category_breakdown": true,
+      "include_conflict_analysis": true
+    },
+    "monthly_summary": {
+      "enabled": true,
+      "include_trends": true,
+      "include_compliance_check": true
+    }
+  },
+
+  "compliance_settings": {
+    "wbso_project_id": "WBSO-AICM-2025-01",
+    "minimum_hours_target": 510,
+    "maximum_daily_hours": 12,
+    "required_break_intervals": true,
+    "weekend_work_allowed": true,
+    "holiday_work_allowed": true
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "version": "1.0",
+  "description": "Conflict detection rules for calendar events in WBSO hours registration",
+  "last_updated": "2025-01-15",
+
+  "conflict_types": {
+    "personal": {
+      "description": "Personal appointments and family commitments",
+      "severity": "high",
+      "impact": "Cannot work during these periods",
+      "examples": [
+        "dentist appointments",
+        "doctor visits",
+        "family commitments",
+        "personal errands"
+      ]
+    },
+    "work": {
+      "description": "Non-WBSO work activities",
+      "severity": "medium",
+      "impact": "May reduce WBSO work time",
+      "examples": [
+        "client meetings",
+        "administrative tasks",
+        "non-technical work"
+      ]
+    },
+    "travel": {
+      "description": "Travel and commuting time",
+      "severity": "medium",
+      "impact": "Cannot work during travel",
+      "examples": [
+        "commuting",
+        "business travel",
+        "personal travel"
+      ]
+    },
+    "break": {
+      "description": "Break time and meals",
+      "severity": "low",
+      "impact": "Normal breaks, may be included in work time",
+      "examples": [
+        "lunch breaks",
+        "coffee breaks",
+        "rest periods"
+      ]
+    },
+    "system": {
+      "description": "System maintenance and downtime",
+      "severity": "high",
+      "impact": "Cannot work during system maintenance",
+      "examples": [
+        "system updates",
+        "maintenance windows",
+        "power outages"
+      ]
+    }
+  },
+
+  "overlap_detection": {
+    "minimum_overlap_minutes": 15,
+    "partial_overlap_threshold": 0.5,
+    "full_overlap_threshold": 0.9,
+    "time_buffer_minutes": 30
+  },
+
+  "conflict_resolution": {
+    "personal_conflicts": {
+      "action": "exclude_from_wbso",
+      "description": "Exclude personal conflicts from WBSO hours",
+      "buffer_minutes": 0
+    },
+    "work_conflicts": {
+      "action": "reduce_wbso_hours",
+      "description": "Reduce WBSO hours during work conflicts",
+      "buffer_minutes": 15
+    },
+    "travel_conflicts": {
+      "action": "exclude_from_wbso",
+      "description": "Exclude travel time from WBSO hours",
+      "buffer_minutes": 0
+    },
+    "break_conflicts": {
+      "action": "include_in_wbso",
+      "description": "Include breaks as part of work time",
+      "buffer_minutes": 0
+    },
+    "system_conflicts": {
+      "action": "exclude_from_wbso",
+      "description": "Exclude system downtime from WBSO hours",
+      "buffer_minutes": 0
+    }
+  },
+
+  "time_analysis": {
+    "work_hours": {
+      "start": "06:00",
+      "end": "22:00",
+      "description": "Standard working hours"
+    },
+    "weekend_work": {
+      "enabled": true,
+      "multiplier": 1.0,
+      "description": "Weekend work is counted normally"
+    },
+    "holiday_work": {
+      "enabled": true,
+      "multiplier": 1.0,
+      "description": "Holiday work is counted normally"
+    },
+    "overtime_hours": {
+      "start": "22:00",
+      "end": "06:00",
+      "multiplier": 0.8,
+      "description": "Late night work gets reduced multiplier"
+    }
+  },
+
+  "conflict_scoring": {
+    "exact_overlap": 1.0,
+    "partial_overlap": 0.7,
+    "adjacent_events": 0.3,
+    "same_day_conflicts": 0.1
+  },
+
+  "reporting": {
+    "conflict_summary": {
+      "include_daily_breakdown": true,
+      "include_weekly_summary": true,
+      "include_monthly_summary": true,
+      "include_category_breakdown": true
+    },
+    "impact_analysis": {
+      "calculate_lost_hours": true,
+      "calculate_available_hours": true,
+      "calculate_wbso_efficiency": true
+    }
+  },
+
+  "validation_rules": {
+    "maximum_daily_hours": 12,
+    "minimum_break_between_sessions": 15,
+    "maximum_consecutive_work_hours": 4,
+    "required_break_after_consecutive_hours": 30
+  }
+}

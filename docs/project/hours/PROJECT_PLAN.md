@@ -420,35 +420,39 @@ _Obsolete, git log format is adequate_
 
 #### 5.1 Calendar Setup and Access
 
-- [ ] **Step 5.1.1: Create Dedicated WBSO Google Calendar**
+- [ ] **Step 5.1.1: Implement Google Calendar Integration (TASK-005)**
 
 - **Pre-condition**: Step 4.2.3 completed
+- **Goal**: Extract and process all Google Calendar data for 2025
+- **Execution**:
+  - Implement Google Calendar API integration (see TASK-005)
+  - Extract all calendar events including personal, subscribed, and shared calendars
+  - Categorize events as declarable/non-declarable for WBSO
+  - Detect conflicts with existing calendar items
+  - Generate standardized CSV output format
+- **Validation**: Complete calendar data extraction with conflict detection
+- **Deliverables**: Calendar extraction scripts, configuration files, processed data
+
+- [ ] **Step 5.1.2: Create Dedicated WBSO Google Calendar**
+
+- **Pre-condition**: Step 5.1.1 completed
 - **Goal**: Set up dedicated calendar for WBSO activities
 - **Execution**:
-  - Create new Google Calendar named "WBSO Activities"
+  - Create new Google Calendar named "WBSO Activities 2025"
   - Set up color coding: WBSO activities (blue), non-declarable (red)
   - Configure sharing settings for export
 - **Validation**: Dedicated Google Calendar created with proper settings
 
-- [ ] **Step 5.1.2: Export Existing Calendar Data**
-
-- **Pre-condition**: Step 5.1.1 completed
-- **Goal**: Get existing calendar items for conflict detection
-- **Execution**:
-  - Export personal calendar data for relevant time period
-  - Export work calendar data if applicable
-  - Save as CSV files for analysis
-- **Validation**: CSV files with existing calendar items
-
-- [ ] **Step 5.1.3: Identify Non-Declarable Activities**
+- [ ] **Step 5.1.3: Populate WBSO Calendar with Work Sessions**
 
 - **Pre-condition**: Step 5.1.2 completed
-- **Goal**: Mark existing calendar items as non-declarable
+- **Goal**: Add WBSO work sessions to dedicated calendar
 - **Execution**:
-  - Review exported calendar items
-  - Mark appointments, personal time, breaks as non-declarable
-  - Create list of non-declarable time periods
-- **Validation**: List of non-declarable activities with time periods
+  - Import processed calendar data into WBSO calendar
+  - Color-code events according to WBSO categories
+  - Add conflict markers for non-declarable periods
+  - Ensure no double-counting of time
+- **Validation**: WBSO calendar populated with all relevant events and conflicts
 
 #### 5.2 WBSO Calendar Event Creation
 
@@ -834,7 +838,7 @@ Based on your specific WBSO project "AI Agent Communicatie in een data-veilige e
 - **GitHub API Rate Limits**: Implement rate limiting and caching
 - **Repository Access Issues**: Maintain backup access methods
 - **Data Quality Issues**: Implement validation and error handling
-- **Incomplete Commit Coverage**: Prototypes or failed work may never be committed, leading to underreported hours. *Mitigation*: supplement commit data with sources like workstation login/logout logs or local file change histories.
+- **Incomplete Commit Coverage**: Prototypes or failed work may never be committed, leading to underreported hours. _Mitigation_: supplement commit data with sources like workstation login/logout logs or local file change histories.
 
 ### Compliance Risks
 
@@ -909,7 +913,10 @@ This project plan provides a comprehensive framework for achieving your 510+ hou
 ## References
 
 - [README.md](README.md)
+- [TASK-005-GOOGLE-CALENDAR-INTEGRATION.md](TASK-005-GOOGLE-CALENDAR-INTEGRATION.md) - Detailed Google Calendar integration task
 
 ## Code Files
 
-- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Single-repository commit processing example.
+- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Single-repository commit processing example
+- [docs/project/hours/scripts/google_calendar_extractor.py](docs/project/hours/scripts/google_calendar_extractor.py) - Google Calendar API integration
+- [docs/project/hours/scripts/manual_calendar_export.py](docs/project/hours/scripts/manual_calendar_export.py) - Manual calendar export processing

@@ -172,3 +172,7 @@ tests/test_data/*.pdf
 !tests/test_data/2*.pdf
 src/frontend/test-results/*
 cache/
+
+# Credentials to access Google Calendar API
+docs/project/hours/scripts/credentials.json
+docs/project/hours/scripts/token.json

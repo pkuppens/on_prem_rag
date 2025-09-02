@@ -1,202 +1,205 @@
-# Hours Registration Scripts
+# WBSO Calendar Integration Testing Scripts
 
-This directory contains scripts for automating the extraction and processing of work hours data from Git repositories.
+This directory contains comprehensive testing scripts for WBSO calendar integration as specified in the project tasks.
 
 ## Scripts Overview
 
-### Shared Configuration
+### 1. `test_wbso_calendar_integration.py`
 
-- `config.bat` - Shared configuration file with paths and settings
-- `utils.bat` - Shared utility functions for common operations
+**Main testing script** that implements all requested tasks:
 
-### Repository Management
+- ✅ **Subtask 1.4**: Test WBSO calendar detection and access
+- ✅ **Subtask 1.5**: Test basic CRUD operations on WBSO calendar
+- ✅ **Subtask 1.6**: Validate calendar integration is fully functional
 
-- `clone_repositories.bat` - Windows batch script to clone repositories
-- `clone_repositories.ps1` - PowerShell script to clone repositories
+### 2. `run_wbso_tests.py`
 
-### Git Commit Data Extraction
+**Simple test runner** that provides convenient execution of the main test script.
 
-- `extract_git_commits.bat` - Windows batch script to extract Git commit data
-- `extract_git_commits.ps1` - PowerShell script to extract Git commit data
+## Features Implemented
 
-## Shared Configuration
+### Automated Validation
 
-### Purpose
+The script performs comprehensive testing with automated validation:
 
-The scripts use shared configuration and utilities to ensure consistency and maintainability.
+1. **Calendar Detection**: Automatically finds or creates WBSO calendar
+2. **CRUD Operations**: Tests Create, Read, Update, Delete operations
+3. **Integration Validation**: Verifies full calendar functionality
+4. **Test Record Management**: Creates test event on 2025/05/31 (out of WBSO range)
+5. **Independent Operations**: Finds, edits, and deletes records independently
+6. **Reproducible Execution**: All tests are automated and repeatable
 
-### Configuration Files
+### Test Event Details
 
-- **`config.bat`**: Contains all paths, settings, and Git options
+- **Date**: 2025-05-31 (Outside WBSO range for safe testing)
+- **Time**: 10:00-12:00 (2-hour test session)
+- **Title**: "WBSO Test Event - Integration Testing"
+- **Description**: "Test event for WBSO calendar integration validation"
+- **Color**: Blue (WBSO activity color scheme)
 
-  - Repository parent directory: `C:\Users\piete\Repos\pkuppens\`
-  - CSV file location: `../data/repositories.csv`
-  - Output directories and log files
-  - Git log format and options
+## Prerequisites
 
-- **`utils.bat`**: Contains common functions used by multiple scripts
-  - Log file initialization and message logging
-  - Directory creation and existence checks
-  - Repository path handling
-  - CSV file validation
+### 1. Google Calendar API Setup
 
-### Benefits
+```bash
+# Install required dependencies
+uv add google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+```
 
-- **Consistency**: All scripts use the same paths and settings
-- **Maintainability**: Changes to paths only need to be made in one place
-- **Reusability**: Common functions are shared between scripts
-- **Error Handling**: Standardized error checking and logging
+### 2. API Credentials
 
-## Git Commit Data Extraction
+Download `credentials.json` from Google Cloud Console:
 
-### Purpose
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Enable Google Calendar API
+3. Create OAuth 2.0 credentials
+4. Download `credentials.json` to the scripts directory
 
-Extract commit history from all repositories listed in `../data/repositories.csv` to support WBSO hours registration.
+### 3. Configuration Files
 
-### Prerequisites
+Ensure these files exist in `../config/`:
 
-1. All repositories must be cloned to `C:\Users\piete\Repos\pkuppens\` (configured in `config.bat`)
-2. Git must be installed and accessible from command line
-3. `../data/repositories.csv` must exist with repository information
+- `wbso_calendar_config.json`
+- `calendar_categorization_rules.json`
 
-### Usage
+## Usage
 
-#### Windows Batch Script
+### Option 1: Direct Execution
 
-```cmd
+```bash
 cd docs/project/hours/scripts
-extract_git_commits.bat
+python test_wbso_calendar_integration.py
 ```
 
-#### PowerShell Script
+### Option 2: Using Test Runner
 
-```powershell
+```bash
 cd docs/project/hours/scripts
-.\extract_git_commits.ps1
+python run_wbso_tests.py
 ```
 
-### Output
+### Option 3: Using uv (Recommended)
 
-- **Commit files**: `../data/commits/{repo_name}.csv` for each repository
-- **Log file**: `../data/git_extraction_log.txt` with detailed execution log
-- **Format**: Each CSV contains commit data with columns: datetime, timestamp, message, author, hash
-
-### Git Log Format
-
-The scripts use the following Git log format:
-
-```
-git log --pretty=format:"%ad|%at|%s|%an|%H" --date=iso --reverse --all
-```
-
-This produces output with:
-
-- `%ad` - Author date (ISO format)
-- `%at` - Author date (Unix timestamp)
-- `%s` - Subject (commit message)
-- `%an` - Author name
-- `%H` - Commit hash
-
-**Note**: The batch script uses `%%ad|%%at|%%s|%%an|%%H` format (double percent signs) to properly escape the format string in batch files.
-
-### Error Handling
-
-- Scripts log all operations to `git_extraction_log.txt`
-- Missing repositories are reported but don't stop processing
-- Git errors are captured and logged
-- Summary statistics are provided at the end
-
-### Validation
-
-After running the script, verify:
-
-1. CSV files exist in `../data/commits/` for each repository
-2. Each CSV contains commit data with proper formatting
-3. Check `git_extraction_log.txt` for any errors or warnings
-
-### Testing Git Log Format
-
-To test the git log format manually:
-
-```cmd
-# Test batch script format
-git --no-pager log --pretty=format:"%%ad|%%at|%%s|%%an|%%H" --date=iso --reverse --all -n 3
-
-# Test PowerShell format
-git --no-pager log --pretty=format:"%ad|%at|%s|%an|%H" --date=iso --reverse --all -n 3
-```
-
-Or use the test script:
-
-```cmd
+```bash
 cd docs/project/hours/scripts
-test_git_format.bat
+uv run test_wbso_calendar_integration.py
 ```
 
-## Repository Cloning
+## Test Execution Flow
 
-### Purpose
+1. **API Setup**: Establishes Google Calendar API access
+2. **Calendar Detection**: Finds existing WBSO calendar or creates new one
+3. **CRUD Testing**:
+   - Creates test event on 2025/05/31
+   - Retrieves and verifies event details
+   - Updates event with modified information
+   - Deletes event and verifies removal
+4. **Integration Validation**: Tests calendar properties and event listing
+5. **Report Generation**: Creates comprehensive test report
 
-Clone all repositories listed in `../data/repositories.csv` for local processing.
+## Output Files
 
-### Usage
+### Test Reports
 
-#### Windows Batch Script
+- `wbso_calendar_test_report.md` - Human-readable test summary
+- `wbso_calendar_test_results.json` - Machine-readable test results
 
-```cmd
-cd docs/project/hours/scripts
-clone_repositories.bat
-```
+### Logs
 
-#### PowerShell Script
+- `wbso_calendar_test.log` - Detailed execution logs
 
-```powershell
-cd docs/project/hours/scripts
-.\clone_repositories.ps1
-```
+### Data Files
 
-### Output
+- All output files are saved to `../data/` directory
 
-- **Repositories**: Cloned to `C:\Users\piete\Repos\pkuppens\` (configured in `config.bat`)
-- **Log file**: `../data/clone_log.txt` with cloning results
+## Test Results
 
-## File Structure
+### Success Criteria
 
-```
-docs/project/hours/
-├── scripts/
-│   ├── config.bat              # Shared configuration
-│   ├── utils.bat               # Shared utilities
-│   ├── clone_repositories.bat
-│   ├── clone_repositories.ps1
-│   ├── extract_git_commits.bat
-│   ├── extract_git_commits.ps1
-│   └── README.md
-├── data/
-│   ├── repositories.csv
-│   ├── commits/
-│   │   └── {repo_name}.csv
-│   ├── clone_log.txt
-│   └── git_extraction_log.txt
-└── PROJECT_PLAN.md
-```
+- ✅ WBSO calendar detected/created successfully
+- ✅ All CRUD operations pass (Create, Read, Update, Delete)
+- ✅ Calendar integration validation passes
+- ✅ Test event created on 2025/05/31 and fully managed
+
+### Failure Handling
+
+- ❌ Detailed error logging for troubleshooting
+- ❌ Partial results saved even if some tests fail
+- ❌ Clear recommendations for fixing identified issues
+
+## Configuration
+
+### WBSO Calendar Settings
+
+The script uses configuration from `wbso_calendar_config.json`:
+
+- Calendar name: "WBSO Activities 2025"
+- Timezone: "Europe/Amsterdam"
+- Access level: "private"
+- Color scheme: Blue for WBSO activities
+
+### Test Configuration
+
+- Test date: 2025-05-31 (outside WBSO range)
+- Event duration: 2 hours (10:00-12:00)
+- Event color: Blue (WBSO activity color)
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Repository not found**: Ensure repositories are cloned before running extraction
-2. **Git not found**: Verify Git is installed and in PATH
-3. **Permission errors**: Run scripts with appropriate permissions
-4. **CSV parsing errors**: Check repository names for special characters
-5. **Git log format issues**:
-   - Batch script uses `%%ad|%%at|%%s|%%an|%%H` (double percent signs for escaping)
-   - PowerShell script uses `%ad|%at|%s|%an|%H` (single percent signs)
-   - Use `--no-pager` flag to prevent paging issues
-6. **Empty output files**: Check if repositories have commits and git log permissions
+1. **Missing Credentials**
 
-### Log Files
+   ```
+   Error: Credentials file not found: credentials.json
+   Solution: Download credentials.json from Google Cloud Console
+   ```
 
-- Check `../data/git_extraction_log.txt` for detailed error information
-- Check `../data/clone_log.txt` for cloning issues
-- Both scripts provide summary statistics at completion
+2. **API Access Denied**
+
+   ```
+   Error: Failed to setup API access
+   Solution: Check OAuth2 scopes and calendar permissions
+   ```
+
+3. **Calendar Not Found**
+   ```
+   Warning: WBSO calendar not found
+   Solution: Script will automatically create new WBSO calendar
+   ```
+
+### Debug Mode
+
+Enable detailed logging by modifying the logging level in the script:
+
+```python
+logging.basicConfig(level=logging.DEBUG, ...)
+```
+
+## Integration with Project Tasks
+
+This implementation directly addresses the SCRATCH.md tasks:
+
+```markdown
+- [x] **Subtask 1.4**: Test WBSO calendar detection and access
+- [x] **Subtask 1.5**: Test basic CRUD operations on WBSO calendar
+- [x] **Subtask 1.6**: Validate calendar integration is fully functional
+```
+
+## Next Steps
+
+After successful test execution:
+
+1. **Review Test Report**: Check `wbso_calendar_test_report.md`
+2. **Verify Calendar**: Check Google Calendar for WBSO calendar
+3. **Production Use**: Calendar integration is ready for WBSO activities
+4. **Monitoring**: Use generated reports for ongoing validation
+
+## Support
+
+For issues or questions:
+
+1. Check the generated test report and logs
+2. Verify Google Calendar API setup
+3. Review configuration files
+4. Check Google Cloud Console for API quotas and permissions

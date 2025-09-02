@@ -52,6 +52,27 @@ Source code will be introduced as stories and tasks are implemented. The roadmap
 - **[Current PI Planning](program/pi-planning/)**: Active program increment
 - **[Current Sprint Demo](team/demos/current/semantic-search-demo.md)**: Upcoming demo details
 
+## WBSO Hours Registration Project
+
+**Status**: Active development in progress  
+**Location**: [docs/project/hours/](docs/project/hours/)  
+**Goal**: Achieve 510+ hours for Dutch R&D tax deduction compliance
+
+**Current Progress**:
+
+- ✅ **Baseline Complete**: 109.9 hours from single repository analysis
+- 🔄 **Multi-Repository Expansion**: Scripts ready, execution pending
+- 🔄 **Google Calendar Integration**: WBSO calendar created, testing in progress
+- ❌ **Final Integration**: Pending (expected 400+ additional hours)
+
+**Timeline**: 6-week implementation plan (Weeks 1-2: Foundation, Weeks 3-4: Integration, Weeks 5-6: Optimization)
+
+**Key Documents**:
+
+- [Project Plan](docs/project/hours/PROJECT_PLAN.md): Comprehensive implementation plan
+- [Hours Registration](docs/project/hours/HOURS_REGISTRATION.md): Current hours and status
+- [SCRATCH.md](../SCRATCH.md): Active development activities and task tracking
+
 ---
 
 **Last Updated**: 2025-06-06

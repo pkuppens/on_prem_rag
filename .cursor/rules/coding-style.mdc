@@ -5,6 +5,7 @@ globs:
   - "**/*.ts"
 alwaysApply: false
 ---
+
 # Coding Style Guidelines
 
 This rule defines the coding style preferences for Python and TypeScript applications, balancing structure with development pragmatism.
@@ -128,16 +129,19 @@ except Exception as e:
 ### Exception Handling Best Practices
 
 1. **Preserve Exception Details**
+
    - Always use `raise ... from e` when re-raising exceptions
    - Include original exception message in error details
    - Log both the original and wrapped exceptions
 
 2. **HTTP Exception Handling**
+
    - Use specific HTTP status codes (400, 401, 403, 404, 500)
    - Include clear error messages in the detail field
    - Preserve original exception context when wrapping
 
 3. **Logging Requirements**
+
    - Log exceptions before re-raising
    - Include relevant context (file names, IDs, etc.)
    - Use appropriate log levels (error for exceptions)
@@ -178,6 +182,10 @@ except Exception as e:
 ```
 
 ## Code Organization
+
+### Modular Architecture
+
+**For comprehensive modular architecture guidance, see [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc).**
 
 ### Layered Architecture (For Complex Applications)
 
@@ -420,6 +428,5 @@ Start simple and refactor toward these patterns as code matures:
 3. **Phase 3**: Full layered architecture, comprehensive testing
 
 Remember: These guidelines serve code quality and team productivity. Use judgment to apply them appropriately for your specific context and project needs.
-
 
 Remember: These guidelines serve code quality and team productivity. Use judgment to apply them appropriately for your specific context and project needs.

@@ -1,0 +1,598 @@
+---
+description: Modular Architecture and Black Box Design Principles
+globs:
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: false
+---
+
+# Modular Architecture and Black Box Design Principles
+
+This rule establishes standards for building modular, maintainable code using black box architecture principles. It focuses on creating systems that remain fast to develop regardless of scale, following Eskil Steenberg's methodology.
+
+## Development Philosophy
+
+**"It's faster to write five lines of code today than to write one line today and then have to edit it in the future."**
+
+### Core Principles
+
+- **Write code that never needs to be edited** - get it right the first time
+- **Modular boundaries** - clear separation between components
+- **Testable interfaces** - every module can be tested in isolation
+- **Debugging ease** - problems are easy to locate and fix
+- **Replacement readiness** - any module can be rewritten without breaking others
+
+## Black Box Implementation
+
+### 1. Hide Implementation Details
+
+**Python Example:**
+
+```python
+# ✅ Good - Clean interface, hidden implementation
+class DocumentProcessor:
+    """Process documents for the RAG pipeline.
+
+    This class provides a clean interface for document processing while
+    hiding the complexity of chunking, embedding, and storage operations.
+    """
+
+    def __init__(self, config: ProcessingConfig):
+        self._chunker = ChunkingService(config.chunking)
+        self._embedder = EmbeddingService(config.embedding)
+        self._storage = VectorStorage(config.storage)
+
+    def process_document(self, document: Document) -> ProcessingResult:
+        """Process a document through the complete pipeline.
+
+        Args:
+            document: Document to process
+
+        Returns:
+            ProcessingResult with chunks, embeddings, and metadata
+        """
+        chunks = self._chunker.chunk_document(document)
+        embeddings = self._embedder.embed_chunks(chunks)
+        result = self._storage.store_embeddings(embeddings)
+        return ProcessingResult(chunks=chunks, embeddings=embeddings, storage_id=result.id)
+
+# ❌ Poor - Exposes internal complexity
+class DocumentProcessor:
+    def process_document(self, document: Document) -> ProcessingResult:
+        # Exposes chunking algorithm details
+        chunks = self._simple_node_parser.get_nodes_from_documents([document])
+        # Exposes embedding model details
+        embeddings = self._sentence_transformer.encode([chunk.text for chunk in chunks])
+        # Exposes storage implementation
+        collection = self._chroma_client.get_collection("documents")
+        collection.add(embeddings=embeddings, documents=[chunk.text for chunk in chunks])
+```
+
+**TypeScript Example:**
+
+```typescript
+// ✅ Good - Clean interface, hidden implementation
+interface DocumentProcessor {
+  processDocument(document: Document): Promise<ProcessingResult>;
+}
+
+class RAGDocumentProcessor implements DocumentProcessor {
+  private chunker: ChunkingService;
+  private embedder: EmbeddingService;
+  private storage: VectorStorage;
+
+  constructor(config: ProcessingConfig) {
+    this.chunker = new ChunkingService(config.chunking);
+    this.embedder = new EmbeddingService(config.embedding);
+    this.storage = new VectorStorage(config.storage);
+  }
+
+  async processDocument(document: Document): Promise<ProcessingResult> {
+    const chunks = await this.chunker.chunkDocument(document);
+    const embeddings = await this.embedder.embedChunks(chunks);
+    const result = await this.storage.storeEmbeddings(embeddings);
+    return new ProcessingResult(chunks, embeddings, result.id);
+  }
+}
+```
+
+### 2. Design APIs First
+
+Define what the module does before how it does it:
+
+```python
+# ✅ Good - API-first design
+class EmbeddingService:
+    """Generate embeddings for text chunks.
+
+    This service provides a stable interface for embedding generation,
+    allowing different embedding models to be swapped without changing
+    the calling code.
+    """
+
+    def embed_chunks(self, chunks: list[Chunk]) -> list[Embedding]:
+        """Generate embeddings for a list of chunks.
+
+        Args:
+            chunks: List of text chunks to embed
+
+        Returns:
+            List of embeddings corresponding to input chunks
+
+        Raises:
+            EmbeddingError: If embedding generation fails
+        """
+        pass
+
+    def embed_text(self, text: str) -> Embedding:
+        """Generate embedding for a single text string.
+
+        Args:
+            text: Text to embed
+
+        Returns:
+            Embedding vector for the input text
+        """
+        pass
+
+# Implementation can be swapped without changing interface
+class SentenceTransformerEmbeddingService(EmbeddingService):
+    def __init__(self, model_name: str):
+        self._model = SentenceTransformer(model_name)
+
+    def embed_chunks(self, chunks: list[Chunk]) -> list[Embedding]:
+        texts = [chunk.text for chunk in chunks]
+        vectors = self._model.encode(texts)
+        return [Embedding(vector=vec, chunk_id=chunk.id) for vec, chunk in zip(vectors, chunks)]
+```
+
+### 3. Use Clear Naming
+
+Function/class names should explain purpose, not implementation:
+
+```python
+# ✅ Good - Purpose-driven naming
+def calculate_user_engagement_score(interactions: list[Interaction]) -> float:
+    """Calculate engagement score for personalization."""
+
+def detect_duplicate_content(text: str, existing_hashes: set[str]) -> bool:
+    """Check if content already exists in the system."""
+
+def validate_document_format(file_path: Path) -> ValidationResult:
+    """Validate document meets processing requirements."""
+
+# ❌ Poor - Implementation-driven naming
+def apply_algorithm_with_coefficients(data: list[float]) -> float:
+    """Apply mathematical algorithm with predefined coefficients."""
+
+def use_sentence_transformer_for_embedding(text: str) -> list[float]:
+    """Use sentence transformer model for embedding generation."""
+
+def check_with_regex_pattern(input_string: str) -> bool:
+    """Check input using regex pattern matching."""
+```
+
+## Modular Structure
+
+### 1. Single Responsibility
+
+Each module/class/function has one clear job:
+
+```python
+# ✅ Good - Single responsibility modules
+class ChunkingService:
+    """Handle document chunking operations."""
+    def chunk_document(self, document: Document) -> list[Chunk]:
+        pass
+
+class EmbeddingService:
+    """Handle embedding generation."""
+    def embed_chunks(self, chunks: list[Chunk]) -> list[Embedding]:
+        pass
+
+class VectorStorage:
+    """Handle vector storage operations."""
+    def store_embeddings(self, embeddings: list[Embedding]) -> StorageResult:
+        pass
+
+# ❌ Poor - Multiple responsibilities
+class DocumentProcessor:
+    """Handle document processing, chunking, embedding, and storage."""
+    def process_document(self, document: Document) -> ProcessingResult:
+        # Chunking logic
+        # Embedding logic
+        # Storage logic
+        # All mixed together
+        pass
+```
+
+### 2. Minimal Interfaces
+
+Expose as few functions/methods as possible:
+
+```python
+# ✅ Good - Minimal interface
+class AuthenticationService:
+    """Handle user authentication."""
+
+    def authenticate(self, credentials: Credentials) -> AuthResult:
+        """Authenticate user with credentials."""
+        pass
+
+    def refresh_token(self, refresh_token: str) -> TokenResult:
+        """Refresh authentication token."""
+        pass
+
+# ❌ Poor - Exposing too much
+class AuthenticationService:
+    def authenticate(self, credentials: Credentials) -> AuthResult:
+        pass
+
+    def _hash_password(self, password: str) -> str:  # Should be private
+        pass
+
+    def _validate_email_format(self, email: str) -> bool:  # Should be private
+        pass
+
+    def _generate_jwt_token(self, user_id: str) -> str:  # Should be private
+        pass
+
+    def _check_password_strength(self, password: str) -> bool:  # Should be private
+        pass
+```
+
+### 3. No Cross-Dependencies
+
+Modules communicate through defined interfaces only:
+
+```python
+# ✅ Good - Interface-based communication
+from abc import ABC, abstractmethod
+
+class VectorStorage(ABC):
+    """Abstract interface for vector storage operations."""
+
+    @abstractmethod
+    def store_embeddings(self, embeddings: list[Embedding]) -> StorageResult:
+        pass
+
+    @abstractmethod
+    def search_similar(self, query_embedding: Embedding, top_k: int) -> list[SearchResult]:
+        pass
+
+class ChromaVectorStorage(VectorStorage):
+    """ChromaDB implementation of vector storage."""
+    def store_embeddings(self, embeddings: list[Embedding]) -> StorageResult:
+        # ChromaDB-specific implementation
+        pass
+
+class PineconeVectorStorage(VectorStorage):
+    """Pinecone implementation of vector storage."""
+    def store_embeddings(self, embeddings: list[Embedding]) -> StorageResult:
+        # Pinecone-specific implementation
+        pass
+
+# Service depends on interface, not implementation
+class RAGService:
+    def __init__(self, storage: VectorStorage):  # Interface, not concrete class
+        self._storage = storage
+```
+
+### 4. Wrapper Layers
+
+Wrap external dependencies instead of using them directly:
+
+```python
+# ✅ Good - Wrapper pattern
+class FileStorage:
+    """Abstract interface for file storage operations."""
+
+    def save_file(self, filename: str, content: bytes) -> None:
+        pass
+
+    def load_file(self, filename: str) -> bytes:
+        pass
+
+    def delete_file(self, filename: str) -> None:
+        pass
+
+class LocalFileStorage(FileStorage):
+    """Local filesystem implementation."""
+    def __init__(self, base_path: Path):
+        self._base_path = base_path
+
+    def save_file(self, filename: str, content: bytes) -> None:
+        file_path = self._base_path / filename
+        file_path.write_bytes(content)
+
+class S3FileStorage(FileStorage):
+    """AWS S3 implementation."""
+    def __init__(self, bucket_name: str):
+        self._s3_client = boto3.client('s3')
+        self._bucket_name = bucket_name
+
+    def save_file(self, filename: str, content: bytes) -> None:
+        self._s3_client.put_object(Bucket=self._bucket_name, Key=filename, Body=content)
+
+# ❌ Poor - Direct dependency usage
+class DocumentService:
+    def save_document(self, filename: str, content: bytes) -> None:
+        # Direct dependency on boto3 - hard to test and swap
+        s3_client = boto3.client('s3')
+        s3_client.put_object(Bucket='my-bucket', Key=filename, Body=content)
+```
+
+## Testing Strategy
+
+### 1. Interface Testing
+
+Test the public API, not internal implementation:
+
+```python
+# ✅ Good - Interface testing
+def test_embedding_service_interface():
+    """Test embedding service through its public interface."""
+    service = EmbeddingService()
+
+    # Test with known input
+    chunks = [Chunk(text="test text", id="chunk1")]
+    embeddings = service.embed_chunks(chunks)
+
+    # Verify interface contract
+    assert len(embeddings) == len(chunks)
+    assert all(isinstance(emb, Embedding) for emb in embeddings)
+    assert all(emb.chunk_id == chunk.id for emb, chunk in zip(embeddings, chunks))
+
+# ❌ Poor - Testing implementation details
+def test_sentence_transformer_embedding():
+    """Test specific implementation details."""
+    service = SentenceTransformerEmbeddingService("all-MiniLM-L6-v2")
+
+    # Testing internal model behavior - brittle test
+    assert service._model.encode(["test"])[0].shape == (384,)
+    assert service._model.device == "cpu"
+```
+
+### 2. Black Box Validation
+
+Can you test without knowing how it works internally?
+
+```python
+# ✅ Good - Black box testing
+def test_document_processing_pipeline():
+    """Test complete document processing without knowing internal details."""
+    processor = DocumentProcessor(config=test_config)
+    document = Document(content="test content", filename="test.txt")
+
+    result = processor.process_document(document)
+
+    # Test only the interface contract
+    assert isinstance(result, ProcessingResult)
+    assert result.chunks is not None
+    assert result.embeddings is not None
+    assert result.storage_id is not None
+    assert len(result.chunks) > 0
+    assert len(result.embeddings) == len(result.chunks)
+
+# ❌ Poor - White box testing
+def test_document_processing_internals():
+    """Test internal implementation details."""
+    processor = DocumentProcessor(config=test_config)
+
+    # Testing internal state - breaks if implementation changes
+    assert processor._chunker._chunk_size == 512
+    assert processor._embedder._model_name == "all-MiniLM-L6-v2"
+    assert processor._storage._collection_name == "documents"
+```
+
+### 3. Replacement Testing
+
+Ensure modules can be swapped out:
+
+```python
+# ✅ Good - Replacement testing
+def test_storage_interface_compatibility():
+    """Test that different storage implementations work with the same interface."""
+    test_cases = [
+        ChromaVectorStorage(config=chroma_config),
+        PineconeVectorStorage(config=pinecone_config),
+        MockVectorStorage(),  # For testing
+    ]
+
+    for storage in test_cases:
+        service = RAGService(storage=storage)
+
+        # Same interface should work with all implementations
+        result = service.search_documents("test query", top_k=5)
+        assert isinstance(result, list)
+        assert len(result) <= 5
+```
+
+## Debugging Methodology
+
+### 1. Problem Isolation
+
+When debugging issues:
+
+1. **Identify the module boundary** - which black box contains the problem?
+2. **Test the interface** - is the module receiving correct inputs?
+3. **Verify outputs** - is the module producing expected results?
+4. **Check assumptions** - are interface contracts being followed?
+5. **Isolate dependencies** - is the problem in this module or its dependencies?
+
+### 2. Debugging Tools
+
+Build debugging capabilities into your architecture:
+
+```python
+# ✅ Good - Built-in debugging capabilities
+class DocumentProcessor:
+    def __init__(self, config: ProcessingConfig, debug: bool = False):
+        self._config = config
+        self._debug = debug
+        self._logger = self._setup_logger()
+
+    def process_document(self, document: Document) -> ProcessingResult:
+        if self._debug:
+            self._logger.info(f"Processing document: {document.filename}")
+
+        chunks = self._chunker.chunk_document(document)
+        if self._debug:
+            self._logger.info(f"Created {len(chunks)} chunks")
+
+        embeddings = self._embedder.embed_chunks(chunks)
+        if self._debug:
+            self._logger.info(f"Generated {len(embeddings)} embeddings")
+
+        result = self._storage.store_embeddings(embeddings)
+        if self._debug:
+            self._logger.info(f"Stored with ID: {result.id}")
+
+        return ProcessingResult(chunks=chunks, embeddings=embeddings, storage_id=result.id)
+
+    def get_processing_stats(self) -> dict:
+        """Get internal processing statistics for debugging."""
+        return {
+            "chunks_processed": self._chunker.get_stats(),
+            "embeddings_generated": self._embedder.get_stats(),
+            "storage_operations": self._storage.get_stats(),
+        }
+```
+
+## Development Patterns
+
+### 1. Plugin Architecture
+
+```python
+# ✅ Good - Plugin architecture
+from abc import ABC, abstractmethod
+
+class ProcessingPlugin(ABC):
+    """Base class for document processing plugins."""
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def version(self) -> str:
+        pass
+
+    @abstractmethod
+    def initialize(self, config: dict) -> None:
+        pass
+
+    @abstractmethod
+    def process(self, input_data: any) -> any:
+        pass
+
+    @abstractmethod
+    def cleanup(self) -> None:
+        pass
+
+class PluginManager:
+    """Manage and execute processing plugins."""
+
+    def __init__(self):
+        self._plugins: dict[str, ProcessingPlugin] = {}
+
+    def register_plugin(self, plugin: ProcessingPlugin) -> None:
+        """Register a new plugin."""
+        self._plugins[plugin.name] = plugin
+
+    def execute_plugin(self, plugin_name: str, input_data: any) -> any:
+        """Execute a plugin with input data."""
+        plugin = self._plugins.get(plugin_name)
+        if not plugin:
+            raise ValueError(f"Plugin '{plugin_name}' not found")
+        return plugin.process(input_data)
+```
+
+### 2. Configuration Isolation
+
+Module behavior controlled through parameters, not globals:
+
+```python
+# ✅ Good - Configuration isolation
+@dataclass
+class ChunkingConfig:
+    chunk_size: int = 512
+    chunk_overlap: int = 50
+    respect_page_boundaries: bool = True
+
+class ChunkingService:
+    def __init__(self, config: ChunkingConfig):
+        self._config = config
+        self._parser = SimpleNodeParser(
+            chunk_size=config.chunk_size,
+            chunk_overlap=config.chunk_overlap
+        )
+
+    def chunk_document(self, document: Document) -> list[Chunk]:
+        # Use self._config, not global variables
+        pass
+
+# ❌ Poor - Global configuration
+CHUNK_SIZE = 512  # Global variable
+CHUNK_OVERLAP = 50  # Global variable
+
+class ChunkingService:
+    def chunk_document(self, document: Document) -> list[Chunk]:
+        # Uses global variables - hard to test and configure
+        parser = SimpleNodeParser(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+        pass
+```
+
+## Code Quality Checks
+
+Always verify:
+
+- **Interface clarity** - can someone use this without reading the implementation?
+- **Error handling** - does the module handle failures gracefully?
+- **Resource management** - are resources properly allocated and cleaned up?
+- **Thread safety** - can this be used safely in concurrent environments?
+- **Memory efficiency** - does this avoid unnecessary allocations or leaks?
+
+## Red Flags in Code
+
+Watch out for:
+
+- **Tight coupling** - modules that know too much about each other's internals
+- **Leaky abstractions** - interfaces that expose implementation details
+- **Monolithic functions** - single functions doing multiple unrelated things
+- **Global state** - shared mutable state between modules
+- **Hard-coded dependencies** - direct references to specific implementations
+
+## Integration with Existing Rules
+
+This rule complements and extends:
+
+- **[function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc)** - Apply black box principles to function design
+- **[coding-style.mdc](mdc:.cursor/rules/coding-style.mdc)** - Use modular architecture in code organization
+- **[test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc)** - Test interfaces, not implementations
+- **[security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc)** - Apply security principles at module boundaries
+
+## Implementation Checklist
+
+When creating or reviewing modular code:
+
+- [ ] Module has a single, clear responsibility
+- [ ] Interface is minimal and focused
+- [ ] Implementation details are hidden
+- [ ] Module can be tested in isolation
+- [ ] Module can be replaced without breaking others
+- [ ] Dependencies are injected, not hard-coded
+- [ ] Configuration is isolated and parameterized
+- [ ] Error handling is comprehensive
+- [ ] Resources are properly managed
+- [ ] Debugging capabilities are built-in
+
+## References
+
+- [Eskil Steenberg's Black Box Architecture](https://www.quelsolaar.com/technology/black_box.html)
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+- [Dependency Injection Patterns](https://en.wikipedia.org/wiki/Dependency_injection)
+- [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle)

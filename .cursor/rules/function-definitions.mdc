@@ -1,8 +1,9 @@
 ---
 description: Function Definition Standards
-globs: 
+globs:
 alwaysApply: false
 ---
+
 # Function Definition Standards
 
 This rule establishes standards for function definitions across Python and TypeScript codebases.
@@ -14,6 +15,7 @@ by other rules that include function definition guidance.
 ### 1. Clear and Descriptive Function Names
 
 **Python Examples:**
+
 ```python
 # ✅ Good - Clear purpose and action
 def calculate_user_score(responses: list[str]) -> float:
@@ -27,21 +29,23 @@ def do_work(input: str) -> str:
 ```
 
 **TypeScript Examples:**
+
 ```typescript
 // ✅ Good - Clear purpose and action
-function calculateUserScore(responses: string[]): number
-function processBatch(items: Item[], batchSize: number = 100): BatchResult
-function validateInput(data: string): boolean
+function calculateUserScore(responses: string[]): number;
+function processBatch(items: Item[], batchSize: number = 100): BatchResult;
+function validateInput(data: string): boolean;
 
 // ❌ Poor - Unclear purpose
-function process(data: any[]): Record<string, any>
-function doWork(input: string): string
-function helper(items: any[]): any[]
+function process(data: any[]): Record<string, any>;
+function doWork(input: string): string;
+function helper(items: any[]): any[];
 ```
 
 ### 2. Comprehensive Inline Documentation
 
 **Python Docstring Format:**
+
 ```python
 def process_batch(
     items: list[Item],
@@ -74,10 +78,11 @@ def process_batch(
 ```
 
 **TypeScript JSDoc Format:**
-```typescript
+
+````typescript
 /**
  * Process items in batches with retry logic and progress tracking.
- * 
+ *
  * @param items - List of items to process
  * @param options - Configuration options
  * @param options.batchSize - Maximum number of items per batch
@@ -86,7 +91,7 @@ def process_batch(
  * @returns BatchResult containing processed items and summary statistics
  * @throws {Error} If batchSize is less than 1
  * @throws {ProcessingError} If all retry attempts fail
- * 
+ *
  * @example
  * ```typescript
  * const items = [new Item("a"), new Item("b")];
@@ -95,20 +100,21 @@ def process_batch(
  * ```
  */
 function processBatch(
-    items: Item[],
-    options: {
-        batchSize?: number;
-        maxRetries?: number;
-        callback?: (current: number, total: number) => void;
-    } = {}
-): Promise<BatchResult>
-```
+  items: Item[],
+  options: {
+    batchSize?: number;
+    maxRetries?: number;
+    callback?: (current: number, total: number) => void;
+  } = {}
+): Promise<BatchResult>;
+````
 
 ### 3. Easy-to-Extract Function Signatures
 
 Keep function signatures simple and focused on a single purpose:
 
 **Python:**
+
 ```python
 # ✅ Good - Clear signature with single purpose
 def calculate_hash(text: str) -> str:
@@ -116,37 +122,38 @@ def calculate_hash(text: str) -> str:
 
 def validate_min_length(data: str, min_length: int = 1) -> bool:
     """Check if data meets minimum length requirement.
-    
+
     Args:
         data: Input string to validate
         min_length: Minimum required length
-        
+
     Returns:
         True if data meets length requirement, False otherwise
     """
 
 # ❌ Poor - Complex signature, multiple purposes
 def process_and_validate_and_transform_data(
-    data: list, 
-    validate: bool, 
-    transform: bool, 
+    data: list,
+    validate: bool,
+    transform: bool,
     output_format: str
 ) -> dict:
 ```
 
 **TypeScript:**
+
 ```typescript
 // ✅ Good - Clear signature with single purpose
-function calculateHash(text: string): string
-function validateMinLength(data: string, minLength: number = 1): boolean
+function calculateHash(text: string): string;
+function validateMinLength(data: string, minLength: number = 1): boolean;
 
 // ❌ Poor - Complex signature, multiple purposes
 function processAndValidateAndTransformData(
-    data: any[],
-    validate: boolean,
-    transform: boolean,
-    outputFormat: string
-): Record<string, any>
+  data: any[],
+  validate: boolean,
+  transform: boolean,
+  outputFormat: string
+): Record<string, any>;
 ```
 
 ### 4. Testable Function Design
@@ -154,14 +161,15 @@ function processAndValidateAndTransformData(
 Design functions to be easily testable through dependency injection:
 
 **Python:**
+
 ```python
 # ✅ Good - Pure function, easy to test
 def calculate_hash(text: str) -> str:
     """Generate hash of text content.
-    
+
     Args:
         text: Input text to hash
-        
+
     Returns:
         SHA-256 hash as hexadecimal string
     """
@@ -182,20 +190,21 @@ def process_batch(items: list[Item]) -> BatchResult:
 ```
 
 **TypeScript:**
+
 ```typescript
 // ✅ Good - Pure function, easy to test
 function calculateHash(text: string): string {
-    return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+  return crypto.createHash("sha256").update(text, "utf8").digest("hex");
 }
 
 // ✅ Good - Dependency injection for testability
 function processBatch(
-    items: Item[],
-    dependencies: {
-        processor?: (item: Item) => ProcessedItem;
-        validator?: (item: ProcessedItem) => boolean;
-    } = {}
-): BatchResult
+  items: Item[],
+  dependencies: {
+    processor?: (item: Item) => ProcessedItem;
+    validator?: (item: ProcessedItem) => boolean;
+  } = {}
+): BatchResult;
 ```
 
 ### 5. Single Responsibility Principle
@@ -203,6 +212,7 @@ function processBatch(
 Each function should handle one logical operation:
 
 **Python:**
+
 ```python
 # ✅ Good - Single responsibility
 def calculate_hash(text: str) -> str:
@@ -211,10 +221,10 @@ def calculate_hash(text: str) -> str:
 
 def validate_item(item: Item) -> bool:
     """Check if item meets quality standards.
-    
+
     Args:
         item: Item to validate
-        
+
     Returns:
         True if item passes validation, False otherwise
     """
@@ -235,6 +245,7 @@ def process_validate_and_add_metadata(item: Item, source: str) -> Item:
 Function names should reflect business purpose, not implementation details:
 
 **Python:**
+
 ```python
 # ✅ Good - Reflects business goal
 def calculate_user_engagement_score(interactions: list[Interaction]) -> float:
@@ -249,30 +260,36 @@ def apply_algorithm_with_coefficients(data: list[float]) -> float:
 ```
 
 **TypeScript:**
+
 ```typescript
 // ✅ Good - Reflects business goal
 function calculateUserEngagementScore(interactions: Interaction[]): number {
-    // Implementation focused on business value
+  // Implementation focused on business value
 }
 
-function detectDuplicateContent(text: string, existingHashes: Set<string>): boolean {
-    // Implementation focused on business need
+function detectDuplicateContent(
+  text: string,
+  existingHashes: Set<string>
+): boolean {
+  // Implementation focused on business need
 }
 
 // ❌ Poor - Technical implementation details
 function applyAlgorithmWithCoefficients(data: number[]): number {
-    // Implementation focused on technical details
+  // Implementation focused on technical details
 }
 ```
 
 ## Function Size and Complexity Guidelines
 
 ### Size Limits
+
 - **Target**: Functions should be under 50 lines of code
 - **Maximum**: Functions should not exceed 60 lines
 - **Exception**: API handlers may be slightly longer due to validation needs
 
 ### Complexity Management
+
 - Break large functions into smaller, focused functions
 - Each function should handle one logical operation
 - Use helper functions to reduce complexity
@@ -280,6 +297,7 @@ function applyAlgorithmWithCoefficients(data: number[]): number {
 ## Inline Code Comments
 
 ### When to Use Comments
+
 ```python
 # ✅ Good - Explain business logic
 # Use exponential backoff to handle rate limiting
@@ -303,6 +321,7 @@ count = count + 1  # Increment count
 ## API Endpoint Patterns
 
 ### Separation of Concerns
+
 ```python
 # ✅ Good - API endpoint with separated concerns
 @router.post("/process")
@@ -310,14 +329,14 @@ async def process_items(request: ProcessRequest):
     """Handle item processing request."""
     # 1. API-level logging
     logger.info("POST /api/process", request_id=request.id)
-    
+
     # 2. Input validation
     if not request.items:
         raise HTTPException(status_code=400, detail="No items provided")
-    
+
     # 3. Business logic delegation
     result = await process_items_business_logic(request.items, request.options)
-    
+
     # 4. Response formatting
     return {"success": True, "processed_count": result.count}
 
@@ -347,6 +366,7 @@ When creating or reviewing functions, ensure they meet these criteria:
 
 For comprehensive guidance on related topics, refer to:
 
+- **Modular Architecture**: See [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc) for black box design and interface patterns
 - **Error Handling**: See [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) for structured error handling patterns
 - **Testing Standards**: See [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) for test documentation requirements
 - **Dependency Management**: See [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc) for package management guidelines

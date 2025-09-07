@@ -1,11 +1,13 @@
 ---
 description: Test Documentation Standards
-globs: 
+globs:
 alwaysApply: false
 ---
+
 # Test Documentation Standards
 
 ## Purpose
+
 This rule ensures that tests have clear, comprehensive documentation that explains the business objective and technical
 implementation details where applicable.
 
@@ -37,16 +39,19 @@ def test_get_fast_parameters():
 ## Required Elements
 
 ### 1. Business Objective (User Story)
+
 - Start with "As a user I want..."
 - Clearly state what the user wants to achieve
 - Include the benefit: "so I can..." or "so that..."
 
 ### 2. Technical Detail
+
 - Add empty line to separate business objective from technical part
 - Explain the specific technical requirement being tested
 - Include validation approach if not obvious
 
 ### 3. Validation Method (Optional)
+
 - Explain how the test validates the requirement
 - Required for complex or non-obvious test approaches
 
@@ -103,18 +108,21 @@ def test_chunking_works(self):
 ## Implementation Guidelines
 
 ### When Writing New Tests
+
 1. **Start with the user story** - What does the user want to achieve?
 2. **Add technical requirements** - What specific behavior must the system exhibit?
 3. **Include validation approach** - How will you test this requirement?
 4. **Keep it concise** - Aim for 2-3 lines maximum
 
 ### When Reviewing Tests
+
 1. **Check for business context** - Does it explain why this matters to users?
 2. **Verify technical clarity** - Is the technical requirement clear?
 3. **Assess validation approach** - Is it clear how the test validates the requirement?
 4. **Ensure completeness** - Does the docstring cover all necessary information?
 
 ### Edge Cases and Error Conditions
+
 For tests covering edge cases or error conditions:
 
 ```python
@@ -126,6 +134,7 @@ def test_handles_missing_file(self):
 ```
 
 ### Integration Tests
+
 For integration tests, emphasize the end-to-end user experience:
 
 ```python
@@ -159,3 +168,47 @@ This documentation standard provides:
 - Implement a dedicated test class for each significant story, feature, component, or bounded context.
 - Use module and class docstrings to clearly state what is under test and why it matters.
 - Within each class, include both functional tests and focused unit tests for edge cases.
+
+## Integration with Modular Architecture
+
+**For comprehensive testing strategies that align with modular architecture, see [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc).**
+
+### Interface Testing
+
+Test the public API, not internal implementation:
+
+```python
+def test_embedding_service_interface(self):
+    """As a user I want consistent embedding results, so I can rely on search accuracy.
+
+    Embedding service should provide stable interface regardless of internal model changes.
+    """
+    service = EmbeddingService()
+    chunks = [Chunk(text="test text", id="chunk1")]
+    embeddings = service.embed_chunks(chunks)
+
+    # Test interface contract, not implementation details
+    assert len(embeddings) == len(chunks)
+    assert all(isinstance(emb, Embedding) for emb in embeddings)
+```
+
+### Black Box Validation
+
+Test modules without knowing internal implementation:
+
+```python
+def test_document_processing_pipeline(self):
+    """As a user I want documents processed reliably, so I can trust the system works.
+
+    Document processing should work end-to-end regardless of internal algorithm changes.
+    """
+    processor = DocumentProcessor(config=test_config)
+    document = Document(content="test content", filename="test.txt")
+
+    result = processor.process_document(document)
+
+    # Test only the interface contract
+    assert isinstance(result, ProcessingResult)
+    assert result.chunks is not None
+    assert result.embeddings is not None
+```

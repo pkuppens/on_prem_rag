@@ -1,0 +1,647 @@
+---
+description: GitHub integration for issues, pull requests, branches, and project management
+alwaysApply: false
+---
+
+# GitHub Integration Guide
+
+This rule provides comprehensive GitHub integration capabilities for the On-Premises RAG project, enabling seamless workflow between GitHub issues, pull requests, and the existing SAFe project structure.
+
+## Overview
+
+The GitHub integration extends the existing project management system by:
+
+- Creating GitHub issues from STORY-_.md and TASK-_.md files
+- Managing pull requests with proper linking to project artifacts
+- Maintaining bidirectional synchronization between GitHub and local documentation
+- Supporting branch management and merge workflows
+- Enabling issue linking and dependency tracking
+
+## Prerequisites
+
+### GitHub CLI Setup
+
+Install and configure GitHub CLI for programmatic access:
+
+```bash
+# Install GitHub CLI (Windows)
+winget install GitHub.cli
+
+# Authenticate with GitHub
+gh auth login
+
+# Verify authentication
+gh auth status
+```
+
+### Environment Configuration
+
+Add GitHub configuration to your environment:
+
+```bash
+# Add to .env or environment variables
+GITHUB_TOKEN=your_personal_access_token
+GITHUB_REPO=your_username/on_prem_rag
+GITHUB_OWNER=your_username
+```
+
+### Required GitHub Permissions
+
+Your GitHub token needs these scopes:
+
+- `repo` (full repository access)
+- `issues` (create, read, update issues)
+- `pull_requests` (create, read, update pull requests)
+- `workflow` (for GitHub Actions integration)
+
+## Issue Management
+
+### Creating Issues from Project Artifacts
+
+#### From User Stories (STORY-\*.md)
+
+```bash
+# Create GitHub issue from story file
+gh issue create \
+  --title "STORY-XXX: [Story Title]" \
+  --body-file docs/project/team/stories/STORY-XXX.md \
+  --label "story,enhancement" \
+  --assignee @me
+```
+
+#### From Tasks (TASK-\*.md)
+
+```bash
+# Create GitHub issue from task file
+gh issue create \
+  --title "TASK-XXX: [Task Title]" \
+  --body-file docs/project/team/tasks/TASK-XXX.md \
+  --label "task,development" \
+  --assignee @me
+```
+
+### Issue Templates
+
+#### Story Issue Template
+
+```markdown
+## User Story
+
+**ID**: STORY-XXX
+**Feature**: [FEAT-XXX: Feature Name](../../program/features/FEAT-XXX.md)
+**Status**: [Backlog/To Do/In Progress/Review/Done/Blocked]
+**Priority**: [P0/P1/P2/P3]
+**Points**: [Story Points]
+
+As a **[User Role]**, I want **[capability]**, so that **[benefit]**.
+
+## Acceptance Criteria
+
+- [ ] **Given** [context], **when** [action], **then** [expected result]
+- [ ] [Additional criteria...]
+
+## Tasks
+
+- [ ] **[TASK-XXX](../tasks/TASK-XXX.md)**: [Task description]
+
+## Definition of Done
+
+- [ ] [Done criteria 1]
+- [ ] [Done criteria 2]
+
+## Links
+
+- **Local Story**: [STORY-XXX.md](docs/project/team/stories/STORY-XXX.md)
+- **Feature**: [FEAT-XXX.md](../../program/features/FEAT-XXX.md)
+```
+
+#### Task Issue Template
+
+```markdown
+## Task Details
+
+**ID**: TASK-XXX
+**Story**: [STORY-XXX: Story Title](../stories/STORY-XXX.md)
+**Status**: [Todo/In Progress/Review/Done]
+**Effort**: [X hours]
+
+## Description
+
+[Clear description of what needs to be done]
+
+## Implementation Hints
+
+- [ ] [Implementation step 1]
+- [ ] [Implementation step 2]
+
+## Acceptance Criteria
+
+- [ ] [Specific, measurable criterion 1]
+- [ ] [Specific, measurable criterion 2]
+
+## Dependencies
+
+- **Blocked by**: [TASK-XXX or None]
+- **Blocks**: [TASK-XXX or None]
+
+## Links
+
+- **Local Task**: [TASK-XXX.md](docs/project/team/tasks/TASK-XXX.md)
+- **Parent Story**: [STORY-XXX.md](../stories/STORY-XXX.md)
+```
+
+### Issue Management Commands
+
+#### Reading Issues
+
+```bash
+# List all open issues
+gh issue list --state open
+
+# Get specific issue details
+gh issue view ISSUE_NUMBER
+
+# List issues by label
+gh issue list --label "story,enhancement"
+
+# Search issues by text
+gh issue list --search "STORY-XXX"
+```
+
+#### Updating Issues
+
+```bash
+# Update issue title
+gh issue edit ISSUE_NUMBER --title "New Title"
+
+# Update issue body
+gh issue edit ISSUE_NUMBER --body-file updated_description.md
+
+# Add labels
+gh issue edit ISSUE_NUMBER --add-label "bug,priority-high"
+
+# Remove labels
+gh issue edit ISSUE_NUMBER --remove-label "bug"
+
+# Assign issue
+gh issue edit ISSUE_NUMBER --assignee @me
+
+# Close issue
+gh issue close ISSUE_NUMBER --comment "Completed as per acceptance criteria"
+```
+
+#### Linking Issues
+
+```bash
+# Link issues in comments
+gh issue comment ISSUE_NUMBER --body "Related to #OTHER_ISSUE_NUMBER"
+
+# Create issue dependencies
+gh issue comment ISSUE_NUMBER --body "Depends on: #BLOCKING_ISSUE_NUMBER"
+```
+
+## Pull Request Management
+
+### Creating Pull Requests
+
+#### From Feature Branches
+
+```bash
+# Create PR from current branch
+gh pr create \
+  --title "FEAT-XXX: [Feature Title]" \
+  --body-file pr_description.md \
+  --label "feature,enhancement" \
+  --assignee @me \
+  --reviewer @reviewer_username
+```
+
+#### From Task Branches
+
+```bash
+# Create PR for specific task
+gh pr create \
+  --title "TASK-XXX: [Task Title]" \
+  --body "Implements TASK-XXX as defined in [TASK-XXX.md](docs/project/team/tasks/TASK-XXX.md)" \
+  --label "task,development" \
+  --assignee @me
+```
+
+### Pull Request Templates
+
+#### Feature PR Template
+
+```markdown
+## Feature Implementation
+
+**Feature**: [FEAT-XXX: Feature Title](../../program/features/FEAT-XXX.md)
+**Related Stories**:
+
+- [STORY-XXX: Story Title](../../team/stories/STORY-XXX.md)
+
+## Changes Made
+
+- [ ] [Change 1]
+- [ ] [Change 2]
+
+## Testing
+
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manual testing completed
+
+## Documentation
+
+- [ ] Code comments added
+- [ ] Technical documentation updated
+- [ ] User documentation updated
+
+## Checklist
+
+- [ ] Code follows [coding-style.mdc](.cursor/rules/coding-style.mdc) guidelines
+- [ ] Tests follow [test-documentation.mdc](.cursor/rules/test-documentation.mdc) standards
+- [ ] Documentation follows [markdown.mdc](.cursor/rules/markdown.mdc) format
+- [ ] All acceptance criteria met
+- [ ] Ready for review
+
+## Links
+
+- **Feature**: [FEAT-XXX.md](../../program/features/FEAT-XXX.md)
+- **Related Issues**: #ISSUE_NUMBER
+```
+
+#### Task PR Template
+
+```markdown
+## Task Implementation
+
+**Task**: [TASK-XXX: Task Title](../../team/tasks/TASK-XXX.md)
+**Story**: [STORY-XXX: Story Title](../../team/stories/STORY-XXX.md)
+
+## Implementation Details
+
+[Description of what was implemented]
+
+## Acceptance Criteria Status
+
+- [x] [Criterion 1] - ✅ Completed
+- [x] [Criterion 2] - ✅ Completed
+
+## Testing
+
+- [ ] Unit tests added/updated
+- [ ] Manual testing completed
+- [ ] Edge cases tested
+
+## Documentation
+
+- [ ] Code comments added
+- [ ] Task documentation updated
+
+## Checklist
+
+- [ ] Implementation follows task requirements
+- [ ] Code quality standards met
+- [ ] All acceptance criteria satisfied
+- [ ] Ready for review
+
+## Links
+
+- **Task**: [TASK-XXX.md](../../team/tasks/TASK-XXX.md)
+- **Parent Story**: [STORY-XXX.md](../../team/stories/STORY-XXX.md)
+- **Related Issue**: #ISSUE_NUMBER
+```
+
+### Pull Request Management Commands
+
+#### Reading PRs
+
+```bash
+# List open pull requests
+gh pr list --state open
+
+# Get specific PR details
+gh pr view PR_NUMBER
+
+# List PRs by label
+gh pr list --label "feature,enhancement"
+
+# Get PR diff
+gh pr diff PR_NUMBER
+```
+
+#### Updating PRs
+
+```bash
+# Update PR title
+gh pr edit PR_NUMBER --title "New Title"
+
+# Update PR body
+gh pr edit PR_NUMBER --body-file updated_description.md
+
+# Add reviewers
+gh pr edit PR_NUMBER --add-reviewer @reviewer_username
+
+# Add labels
+gh pr edit PR_NUMBER --add-label "ready-for-review"
+
+# Merge PR
+gh pr merge PR_NUMBER --merge --delete-branch
+```
+
+## Branch Management
+
+### Creating Branches
+
+#### Feature Branches
+
+```bash
+# Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feature/FEAT-XXX-short-description
+
+# Push and set upstream
+git push -u origin feature/FEAT-XXX-short-description
+```
+
+#### Task Branches
+
+```bash
+# Create task branch from feature branch
+git checkout feature/FEAT-XXX-short-description
+git pull origin feature/FEAT-XXX-short-description
+git checkout -b task/TASK-XXX-short-description
+
+# Push and set upstream
+git push -u origin task/TASK-XXX-short-description
+```
+
+### Branch Naming Conventions
+
+- **Features**: `feature/FEAT-XXX-short-description`
+- **Tasks**: `task/TASK-XXX-short-description`
+- **Bugs**: `bug/BUG-XXX-short-description`
+- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
+
+### Branch Management Commands
+
+```bash
+# List all branches
+git branch -a
+
+# Delete local branch
+git branch -d branch-name
+
+# Delete remote branch
+git push origin --delete branch-name
+
+# Switch to branch
+git checkout branch-name
+
+# Create and switch to new branch
+git checkout -b new-branch-name
+```
+
+## Workflow Integration
+
+### SAFe Integration Workflow
+
+#### 1. Epic to Feature to Story to Task
+
+```bash
+# 1. Create feature branch from epic
+git checkout -b feature/FEAT-XXX-from-epic
+
+# 2. Create GitHub issue for feature
+gh issue create --title "FEAT-XXX: [Feature Title]" --body-file docs/project/program/features/FEAT-XXX.md
+
+# 3. Create story branches from feature
+git checkout -b story/STORY-XXX-from-feature
+
+# 4. Create GitHub issue for story
+gh issue create --title "STORY-XXX: [Story Title]" --body-file docs/project/team/stories/STORY-XXX.md
+
+# 5. Create task branches from story
+git checkout -b task/TASK-XXX-from-story
+
+# 6. Create GitHub issue for task
+gh issue create --title "TASK-XXX: [Task Title]" --body-file docs/project/team/tasks/TASK-XXX.md
+```
+
+#### 2. Development Workflow
+
+```bash
+# 1. Work on task
+git add .
+git commit -m "TASK-XXX: Implement [specific functionality]"
+
+# 2. Push changes
+git push origin task/TASK-XXX-from-story
+
+# 3. Create PR for task
+gh pr create --title "TASK-XXX: [Task Title]" --body "Implements TASK-XXX"
+
+# 4. After review and merge, update task status
+gh issue close TASK_ISSUE_NUMBER --comment "Task completed and merged"
+```
+
+#### 3. Story Completion Workflow
+
+```bash
+# 1. Merge all task PRs into story branch
+git checkout story/STORY-XXX-from-feature
+git merge task/TASK-XXX-from-story
+
+# 2. Create PR for story
+gh pr create --title "STORY-XXX: [Story Title]" --body "Implements STORY-XXX"
+
+# 3. After review and merge, update story status
+gh issue close STORY_ISSUE_NUMBER --comment "Story completed and merged"
+```
+
+### Issue Linking and Dependencies
+
+#### Creating Issue Dependencies
+
+```bash
+# Link task issue to story issue
+gh issue comment TASK_ISSUE_NUMBER --body "Parent story: #STORY_ISSUE_NUMBER"
+
+# Link story issue to feature issue
+gh issue comment STORY_ISSUE_NUMBER --body "Part of feature: #FEATURE_ISSUE_NUMBER"
+
+# Create blocking relationship
+gh issue comment BLOCKED_ISSUE_NUMBER --body "Blocked by: #BLOCKING_ISSUE_NUMBER"
+```
+
+#### Issue Status Management
+
+```bash
+# Update issue status with labels
+gh issue edit ISSUE_NUMBER --add-label "in-progress"
+gh issue edit ISSUE_NUMBER --remove-label "todo"
+
+# Close issue with completion comment
+gh issue close ISSUE_NUMBER --comment "Completed as per acceptance criteria in [TASK-XXX.md](docs/project/team/tasks/TASK-XXX.md)"
+```
+
+## Automation Scripts
+
+### Create Issue from Project File
+
+```bash
+#!/bin/bash
+# create_issue_from_file.sh
+
+FILE_PATH=$1
+ISSUE_TYPE=$2
+
+if [ -z "$FILE_PATH" ] || [ -z "$ISSUE_TYPE" ]; then
+    echo "Usage: $0 <file_path> <issue_type>"
+    echo "Issue types: story, task, feature"
+    exit 1
+fi
+
+# Extract ID from filename
+ID=$(basename "$FILE_PATH" .md)
+
+# Create issue based on type
+case $ISSUE_TYPE in
+    "story")
+        gh issue create --title "$ID: $(grep '^# User Story:' "$FILE_PATH" | cut -d':' -f2- | xargs)" --body-file "$FILE_PATH" --label "story,enhancement"
+        ;;
+    "task")
+        gh issue create --title "$ID: $(grep '^# Task:' "$FILE_PATH" | cut -d':' -f2- | xargs)" --body-file "$FILE_PATH" --label "task,development"
+        ;;
+    "feature")
+        gh issue create --title "$ID: $(grep '^# Feature:' "$FILE_PATH" | cut -d':' -f2- | xargs)" --body-file "$FILE_PATH" --label "feature,enhancement"
+        ;;
+    *)
+        echo "Invalid issue type. Use: story, task, feature"
+        exit 1
+        ;;
+esac
+```
+
+### Sync Project Status with GitHub
+
+```bash
+#!/bin/bash
+# sync_project_status.sh
+
+# Update all open issues with current project status
+gh issue list --state open --json number,title,labels --jq '.[] | select(.labels[].name == "story" or .labels[].name == "task") | .number' | while read -r issue_number; do
+    # Get issue details
+    issue_title=$(gh issue view "$issue_number" --json title --jq '.title')
+
+    # Extract ID from title
+    id=$(echo "$issue_title" | grep -o '^[A-Z]*-[0-9]*')
+
+    # Find corresponding project file
+    if [[ $id == STORY-* ]]; then
+        project_file="docs/project/team/stories/$id.md"
+    elif [[ $id == TASK-* ]]; then
+        project_file="docs/project/team/tasks/$id.md"
+    fi
+
+    if [ -f "$project_file" ]; then
+        # Update issue body with current project file content
+        gh issue edit "$issue_number" --body-file "$project_file"
+        echo "Updated issue $issue_number with content from $project_file"
+    fi
+done
+```
+
+## Integration with Existing Rules
+
+### Project Management Integration
+
+This GitHub integration rule works seamlessly with:
+
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc): SAFe methodology and task management
+- [story-template.mdc](mdc:.cursor/rules/story-template.mdc): User story structure and templates
+- [task-template.mdc](mdc:.cursor/rules/task-template.mdc): Task structure and templates
+
+### Documentation Integration
+
+- [documentation-code-sync.mdc](mdc:.cursor/rules/documentation-code-sync.mdc): Bidirectional references between code and documentation
+- [markdown.mdc](mdc:.cursor/rules/markdown.mdc): Documentation formatting standards
+
+### Development Standards
+
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc): Code quality and style guidelines
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc): Testing standards and documentation
+- [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc): Package management with `uv`
+
+## Best Practices
+
+### Issue Management
+
+1. **Always link issues to project files**: Include links to corresponding STORY-_.md or TASK-_.md files
+2. **Use consistent labeling**: Apply appropriate labels for filtering and organization
+3. **Update status regularly**: Keep issue status synchronized with project file status
+4. **Close with context**: Include completion details when closing issues
+
+### Pull Request Management
+
+1. **Link to project artifacts**: Always reference related stories, tasks, or features
+2. **Use templates**: Follow PR templates for consistent documentation
+3. **Include acceptance criteria**: Reference and verify acceptance criteria completion
+4. **Update documentation**: Ensure all related documentation is updated
+
+### Branch Management
+
+1. **Follow naming conventions**: Use consistent branch naming patterns
+2. **Keep branches focused**: One feature/story/task per branch
+3. **Clean up after merge**: Delete merged branches to maintain repository hygiene
+4. **Use descriptive commit messages**: Include project IDs in commit messages
+
+### Workflow Integration
+
+1. **Maintain bidirectional sync**: Keep GitHub issues and local project files synchronized
+2. **Use automation scripts**: Leverage provided scripts for common operations
+3. **Follow SAFe methodology**: Maintain alignment with existing project structure
+4. **Document decisions**: Update project documentation when making workflow changes
+
+## Troubleshooting
+
+### Common Issues
+
+#### Authentication Problems
+
+```bash
+# Re-authenticate with GitHub
+gh auth logout
+gh auth login
+
+# Check token permissions
+gh auth status
+```
+
+#### Branch Conflicts
+
+```bash
+# Resolve merge conflicts
+git status
+git add resolved_files
+git commit -m "TASK-XXX: Resolve merge conflicts"
+```
+
+#### Issue Creation Failures
+
+```bash
+# Check file format
+head -10 project_file.md
+
+# Validate markdown syntax
+markdownlint project_file.md
+```
+
+### Getting Help
+
+- **GitHub CLI Documentation**: `gh help`
+- **Project Management**: See [project-management.mdc](mdc:.cursor/rules/project-management.mdc)
+- **Documentation Standards**: See [markdown.mdc](mdc:.cursor/rules/markdown.mdc)
+
+This GitHub integration rule provides comprehensive workflow management that enhances your existing SAFe project structure while maintaining consistency with established coding and documentation standards.

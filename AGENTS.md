@@ -201,6 +201,117 @@ When implementing tasks:
 - Include testing instructions and results
 - Note any dependencies or prerequisites
 
+## GitHub Integration and Issue Management
+
+### Issue Management Workflow
+
+The project uses GitHub issues integrated with the SAFe project structure for comprehensive project management:
+
+#### Creating Issues from Project Artifacts
+
+1. **From User Stories (STORY-\*.md)**:
+
+   ```bash
+   gh issue create --title "STORY-XXX: [Story Title]" --body-file "project/team/stories/STORY-XXX.md" --assignee @me
+   ```
+
+2. **From Tasks (TASK-\*.md)**:
+   ```bash
+   gh issue create --title "TASK-XXX: [Task Title]" --body-file "project/team/tasks/TASK-XXX.md" --assignee @me
+   ```
+
+#### Issue Completion and Closure
+
+When tasks or stories are completed:
+
+1. **Update local project files** with completed checkboxes [x]
+2. **Close GitHub issues** with evidence of completion:
+   ```bash
+   gh issue close ISSUE_NUMBER --comment "Task completed successfully. All acceptance criteria met: ✅ [list criteria]"
+   ```
+
+### Branch Management Strategy
+
+#### Branch Naming Conventions
+
+- **Features**: `feature/FEAT-XXX-short-description`
+- **Tasks**: `task/TASK-XXX-short-description`
+- **Bugs**: `bug/BUG-XXX-short-description`
+- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
+
+#### Branch Creation Workflow
+
+1. **Feature Branches**:
+
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feature/FEAT-XXX-short-description
+   git push -u origin feature/FEAT-XXX-short-description
+   ```
+
+2. **Task Branches**:
+   ```bash
+   git checkout feature/FEAT-XXX-short-description
+   git pull origin feature/FEAT-XXX-short-description
+   git checkout -b task/TASK-XXX-short-description
+   git push -u origin task/TASK-XXX-short-description
+   ```
+
+### Pull Request Management
+
+#### Pre-PR Requirements
+
+**CRITICAL**: All pytest tests must pass before creating pull requests:
+
+```bash
+# Run all tests locally before creating PR
+uv run pytest -v
+
+# Check code quality
+uv run ruff check .
+uv run ruff format --check .
+
+# Fix formatting issues if needed
+uv run ruff format .
+```
+
+#### Creating Pull Requests
+
+```bash
+# Create PR from current branch
+gh pr create --title "TASK-XXX: [Task Title]" --body "Implements TASK-XXX as defined in [TASK-XXX.md](project/team/tasks/TASK-XXX.md)" --assignee @me
+```
+
+#### PR Templates
+
+All pull requests should reference:
+
+- Related project artifacts (STORY-_.md, TASK-_.md)
+- Acceptance criteria completion status
+- Testing evidence
+- Documentation updates
+
+### Quality Gates
+
+The project enforces quality standards through GitHub Actions:
+
+1. **Dependency Installation**: Uses `uv sync --dev` for proper dependency management
+2. **Linting**: Runs `ruff check` and `ruff format --check`
+3. **Testing**: Runs pytest with markers `-m "not internet and not slow"`
+4. **Failure Behavior**: PRs with failing tests are automatically blocked
+
+### Integration with SAFe Methodology
+
+The GitHub integration maintains alignment with the existing SAFe project structure:
+
+- **Epic → Feature → Story → Task** hierarchy preserved
+- **Bidirectional synchronization** between GitHub issues and local project files
+- **Acceptance criteria tracking** through checkbox completion
+- **Definition of Done** verification through automated testing
+
+See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) for comprehensive GitHub integration guidelines and automation scripts.
+
 ## Related Guidance
 
 See [agents/README.md](agents/README.md) for links to coding style, documentation style, project management and architecture rules.

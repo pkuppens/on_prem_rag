@@ -143,6 +143,7 @@ def test_example(self):
 - Check TASK.md before starting new work
 - Update task tracking during development
 - Document discovered sub-tasks
+- **Create GitHub issues** from STORY-_.md and TASK-_.md files using [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc)
 
 ### 2. Implementation Phase
 
@@ -152,6 +153,7 @@ def test_example(self):
 - Include docstrings and comments for interfaces and complex code
 - Follow [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) guidelines
 - Use SOLID principles with dependency injection for external interfaces
+- **Follow branch management strategy** with proper naming conventions (feature/, task/, bug/, hotfix/)
 
 ### 3. Testing Standards
 
@@ -159,6 +161,17 @@ def test_example(self):
 - Test structure: 1 test for expected use, edge case tests, failure case test
 - Mock external service calls
 - Update tests when logic changes
+- **All pytest tests must pass** before creating pull requests
+
+### 4. GitHub Integration Workflow
+
+Follow [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) for comprehensive GitHub integration:
+
+- **Issue Management**: Create GitHub issues from project artifacts (STORY-_.md, TASK-_.md)
+- **Branch Management**: Use proper naming conventions and creation workflows
+- **Pull Request Management**: Follow pre-PR requirements and quality gates
+- **Issue Closure**: Update local files and close GitHub issues with completion evidence
+- **Quality Gates**: Enforce standards through GitHub Actions integration
 
 ## Dependency Management
 

@@ -1,0 +1,374 @@
+---
+description: Temporary files management for GitHub operations and multiline content
+alwaysApply: false
+---
+
+# Temporary Files Management
+
+This rule defines standards for managing temporary files used in GitHub operations, multiline content handling, and evidence collection for task completion verification.
+
+## Overview
+
+Temporary files are used to:
+- Handle multiline GitHub comments and issue descriptions
+- Store evidence for task completion verification
+- Manage complex content that doesn't work well with command-line arguments
+- Provide audit trails for completed work
+
+## File Location and Naming
+
+### Directory Structure
+
+All temporary files should be stored in the `tmp/` directory at the project root:
+
+```
+tmp/
+├── github/
+│   ├── issue-comments/
+│   ├── issue-descriptions/
+│   └── pr-descriptions/
+├── evidence/
+│   ├── test-results/
+│   ├── verification-logs/
+│   └── completion-proofs/
+└── cleanup/
+    └── temp-cleanup.sh
+```
+
+### Naming Conventions
+
+#### GitHub Operations
+- **Issue Comments**: `tmp/github/issue-comments/issue-{NUMBER}-{TIMESTAMP}.md`
+- **Issue Descriptions**: `tmp/github/issue-descriptions/issue-{NUMBER}-{TIMESTAMP}.md`
+- **PR Descriptions**: `tmp/github/pr-descriptions/pr-{NUMBER}-{TIMESTAMP}.md`
+
+#### Evidence Files
+- **Test Results**: `tmp/evidence/test-results/{TASK-ID}-{TIMESTAMP}.txt`
+- **Verification Logs**: `tmp/evidence/verification-logs/{TASK-ID}-{TIMESTAMP}.log`
+- **Completion Proofs**: `tmp/evidence/completion-proofs/{TASK-ID}-{TIMESTAMP}.md`
+
+#### Timestamp Format
+Use ISO 8601 format: `YYYY-MM-DDTHH-MM-SS` (e.g., `2025-01-09T14-30-45`)
+
+## Usage Patterns
+
+### GitHub Issue Comments
+
+```bash
+#!/bin/bash
+# Create multiline comment for GitHub issue
+
+ISSUE_NUMBER=$1
+COMMENT_TYPE=$2  # "completion", "verification", "update"
+
+TIMESTAMP=$(date +"%Y-%m-%dT%H-%M-%S")
+COMMENT_FILE="tmp/github/issue-comments/issue-${ISSUE_NUMBER}-${TIMESTAMP}.md"
+
+# Create comment content
+cat > "$COMMENT_FILE" << 'EOF'
+## ✅ Task Completion Verified
+
+**Implementation Status**: COMPLETED
+**Verification Date**: $(date)
+**Files Implemented**: 
+- `src/backend/rag_pipeline/api/ask.py` - FastAPI endpoint implementation
+
+**Acceptance Criteria Met**:
+- ✅ Endpoint returns HTTP 200 with JSON answer format
+- ✅ Invalid input returns HTTP 400
+
+**Evidence of Completion**:
+```bash
+# Test the endpoint
+curl -X POST http://localhost:8000/api/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is AI?"}'
+
+# Expected output: HTTP 200 with JSON response
+```
+
+**Local Documentation Updated**: ✅
+**Ready for Closure**: ✅
+EOF
+
+# Use the temp file for GitHub comment
+gh issue comment "$ISSUE_NUMBER" --body-file "$COMMENT_FILE"
+```
+
+### Evidence Collection
+
+```bash
+#!/bin/bash
+# Collect evidence for task completion
+
+TASK_ID=$1
+TIMESTAMP=$(date +"%Y-%m-%dT%H-%M-%S")
+
+# Create evidence directory
+mkdir -p "tmp/evidence/test-results"
+mkdir -p "tmp/evidence/verification-logs"
+
+# Run tests and capture output
+TEST_LOG="tmp/evidence/test-results/${TASK_ID}-${TIMESTAMP}.txt"
+VERIFICATION_LOG="tmp/evidence/verification-logs/${TASK_ID}-${TIMESTAMP}.log"
+
+echo "Running tests for $TASK_ID..." | tee "$VERIFICATION_LOG"
+uv run pytest tests/test_qa_system.py -v > "$TEST_LOG" 2>&1
+TEST_EXIT_CODE=$?
+
+echo "Test exit code: $TEST_EXIT_CODE" | tee -a "$VERIFICATION_LOG"
+
+if [ $TEST_EXIT_CODE -eq 0 ]; then
+    echo "✅ All tests passed" | tee -a "$VERIFICATION_LOG"
+else
+    echo "❌ Tests failed" | tee -a "$VERIFICATION_LOG"
+    exit 1
+fi
+
+# Create completion proof
+PROOF_FILE="tmp/evidence/completion-proofs/${TASK_ID}-${TIMESTAMP}.md"
+cat > "$PROOF_FILE" << EOF
+# Task Completion Evidence: $TASK_ID
+
+**Date**: $(date)
+**Task ID**: $TASK_ID
+
+## Test Results
+\`\`\`
+$(cat "$TEST_LOG")
+\`\`\`
+
+## Verification Log
+\`\`\`
+$(cat "$VERIFICATION_LOG")
+\`\`\`
+
+## Implementation Files
+- \`src/backend/rag_pipeline/api/ask.py\` - FastAPI endpoint
+- \`src/backend/rag_pipeline/core/qa_system.py\` - Q&A system
+- \`src/backend/rag_pipeline/core/llm_providers.py\` - LLM integration
+
+## Acceptance Criteria Verification
+- [x] All tests pass
+- [x] Implementation files exist
+- [x] Documentation updated
+EOF
+
+echo "Evidence collected in: $PROOF_FILE"
+```
+
+### PR Descriptions
+
+```bash
+#!/bin/bash
+# Create comprehensive PR description
+
+PR_NUMBER=$1
+STORY_ID=$2
+TIMESTAMP=$(date +"%Y-%m-%dT%H-%M-%S")
+PR_FILE="tmp/github/pr-descriptions/pr-${PR_NUMBER}-${TIMESTAMP}.md"
+
+cat > "$PR_FILE" << 'EOF'
+## Feature Implementation
+
+**Story**: [STORY-003: Basic Q&A Interface](../../team/stories/STORY-003.md)
+
+## Changes Made
+
+- [x] **TASK-010**: Create Question Answering API Endpoint
+  - Implement `/api/ask` endpoint with AskRequest/AskResponse models
+  - Add comprehensive input validation and error handling
+  - Include health check endpoint for QA system monitoring
+  - Support configurable top_k and similarity_threshold parameters
+
+- [x] **TASK-011**: Implement Vector Search Retrieval Logic
+  - Create QASystem class with retrieve_relevant_chunks method
+  - Implement similarity threshold filtering
+  - Add comprehensive error handling and logging
+  - Integrate with existing query_embeddings function
+
+- [x] **TASK-012**: Integrate Ollama LLM for Answer Generation
+  - Enhance OllamaProvider with real API integration
+  - Implement proper HTTP client with timeout and error handling
+  - Add comprehensive error handling for connection and API errors
+  - Support configurable model parameters (temperature, top_p, max_tokens)
+
+## Testing
+
+- [x] Unit tests added/updated for QASystem class
+- [x] API endpoint tests with validation and error cases
+- [x] OllamaProvider tests with success and failure scenarios
+- [x] Edge cases and error handling tests included
+
+## Evidence of Completion
+
+### Test Results
+```bash
+$ uv run pytest tests/test_qa_system.py -v
+========================= test session starts =========================
+tests/test_qa_system.py::TestQASystem::test_qa_system_initialization PASSED
+tests/test_qa_system.py::TestQASystem::test_retrieve_relevant_chunks_success PASSED
+tests/test_qa_system.py::TestAskAPI::test_ask_endpoint_success PASSED
+========================= 15 passed in 2.34s =========================
+```
+
+### Implementation Verification
+```bash
+$ ls -la src/backend/rag_pipeline/api/ask.py
+-rw-r--r-- 1 user user 4433 Jan  9 22:48 src/backend/rag_pipeline/api/ask.py
+
+$ ls -la src/backend/rag_pipeline/core/qa_system.py
+-rw-r--r-- 1 user user 7760 Jan  9 22:44 src/backend/rag_pipeline/core/qa_system.py
+```
+
+## Documentation
+
+- [x] Code comments added following function-definitions standards
+- [x] Test documentation follows test-documentation standards
+- [x] Business context included in test docstrings
+
+## Checklist
+
+- [x] Code follows coding-style guidelines
+- [x] Tests follow test-documentation standards
+- [x] All acceptance criteria met
+- [x] Ready for review
+
+## Links
+
+- **Story**: [STORY-003.md](../../team/stories/STORY-003.md)
+- **Related Issues**: #46, #47, #48, #49
+EOF
+
+# Use the temp file for PR description
+gh pr edit "$PR_NUMBER" --body-file "$PR_FILE"
+```
+
+## Cleanup Procedures
+
+### Automatic Cleanup
+
+```bash
+#!/bin/bash
+# tmp/cleanup/temp-cleanup.sh
+
+# Clean up files older than 7 days
+find tmp/ -type f -mtime +7 -delete
+
+# Clean up empty directories
+find tmp/ -type d -empty -delete
+
+echo "Temporary files cleaned up"
+```
+
+### Manual Cleanup
+
+```bash
+# Clean all temporary files
+rm -rf tmp/*
+
+# Clean only GitHub temp files
+rm -rf tmp/github/*
+
+# Clean only evidence files
+rm -rf tmp/evidence/*
+```
+
+## Integration with GitHub Operations
+
+### Enhanced Issue Closing
+
+```bash
+#!/bin/bash
+# close_issue_with_evidence.sh
+
+ISSUE_NUMBER=$1
+TASK_ID=$2
+TIMESTAMP=$(date +"%Y-%m-%dT%H-%M-%S")
+
+# Collect evidence
+./scripts/collect_evidence.sh "$TASK_ID"
+
+# Create completion comment
+COMMENT_FILE="tmp/github/issue-comments/issue-${ISSUE_NUMBER}-${TIMESTAMP}.md"
+EVIDENCE_FILE="tmp/evidence/completion-proofs/${TASK_ID}-${TIMESTAMP}.md"
+
+cat > "$COMMENT_FILE" << EOF
+## ✅ Task Completion Verified
+
+**Implementation Status**: COMPLETED
+**Verification Date**: $(date)
+**Task ID**: $TASK_ID
+
+**Evidence of Completion**:
+$(cat "$EVIDENCE_FILE")
+
+**Local Documentation Updated**: ✅
+**Ready for Closure**: ✅
+EOF
+
+# Close issue with evidence
+gh issue comment "$ISSUE_NUMBER" --body-file "$COMMENT_FILE"
+gh issue close "$ISSUE_NUMBER" --comment "Task completed and verified with evidence. All acceptance criteria met."
+```
+
+## Best Practices
+
+### File Management
+
+1. **Always use temp files** for multiline GitHub operations
+2. **Include timestamps** in filenames for uniqueness
+3. **Organize by purpose** (github/, evidence/, etc.)
+4. **Clean up regularly** to avoid clutter
+5. **Document evidence** with actual test results and commands
+
+### Evidence Collection
+
+1. **Run actual tests** and capture output
+2. **Include command examples** that prove functionality
+3. **Show file existence** and modification dates
+4. **Document acceptance criteria** verification
+5. **Provide audit trail** for completed work
+
+### Security Considerations
+
+1. **Never commit temp files** (they're in .gitignore)
+2. **Sanitize sensitive data** before storing in temp files
+3. **Use appropriate permissions** for temp files
+4. **Clean up after operations** to avoid data leakage
+
+## Integration with Existing Rules
+
+This rule works with:
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc): Enhanced GitHub operations
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc): Task completion verification
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc): Evidence collection standards
+
+## Examples
+
+### Complete Task Completion Workflow
+
+```bash
+#!/bin/bash
+# complete_task_workflow.sh
+
+TASK_ID=$1
+GITHUB_ISSUE_NUMBER=$2
+
+# 1. Collect evidence
+./scripts/collect_evidence.sh "$TASK_ID"
+
+# 2. Update local documentation
+./scripts/update_task_status.sh "$TASK_ID" "completed"
+
+# 3. Create GitHub comment with evidence
+./scripts/create_completion_comment.sh "$GITHUB_ISSUE_NUMBER" "$TASK_ID"
+
+# 4. Close GitHub issue
+gh issue close "$GITHUB_ISSUE_NUMBER" --comment "Task completed and verified with evidence."
+
+# 5. Clean up temp files (optional)
+./tmp/cleanup/temp-cleanup.sh
+```
+
+This rule ensures proper handling of temporary files, comprehensive evidence collection, and reliable GitHub operations with multiline content.

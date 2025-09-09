@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from ..utils.logging import StructuredLogger
-from . import ask, documents, health, parameters, query, test, websocket
+from . import ask, documents, health, monitoring, parameters, query, test, websocket
 
 # Set root logger to DEBUG level
 logging.getLogger().setLevel(logging.DEBUG)
@@ -32,6 +32,7 @@ app.add_middleware(
 
 # Include all routers
 app.include_router(health.router)
+app.include_router(monitoring.router)
 app.include_router(parameters.router)
 app.include_router(documents.router)
 app.include_router(query.router)

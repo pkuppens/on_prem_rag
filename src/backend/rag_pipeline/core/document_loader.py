@@ -168,25 +168,86 @@ class DocumentLoader:
         }
 
     def _compute_file_hash(self, file_path: Path) -> str:
-        """Compute SHA-256 hash of file for duplicate detection."""
-        sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            for byte_block in iter(lambda: f.read(4096), b""):
-                sha256_hash.update(byte_block)
-        return sha256_hash.hexdigest()
+        """Compute SHA-256 hash of file for duplicate detection.
+
+        Args:
+            file_path: Path to the file to hash
+
+        Returns:
+            SHA-256 hash as hexadecimal string
+
+        Raises:
+            OSError: If file cannot be read or accessed
+        """
+        try:
+            sha256_hash = hashlib.sha256()
+            with open(file_path, "rb") as f:
+                for byte_block in iter(lambda: f.read(4096), b""):
+                    if not byte_block:  # End of file
+                        break
+                    sha256_hash.update(byte_block)
+            return sha256_hash.hexdigest()
+        except PermissionError as e:
+            raise OSError(f"Permission denied while computing hash for {file_path}: {str(e)}") from e
+        except OSError as e:
+            raise OSError(f"Cannot read file for hash computation {file_path}: {str(e)}") from e
+        except Exception as e:
+            raise OSError(f"Unexpected error computing hash for {file_path}: {str(e)}") from e
 
     def _validate_file(self, file_path: Path) -> tuple[bool, str | None]:
-        """Validate file format and size."""
-        if not file_path.exists():
-            return False, f"File not found: {file_path}"
+        """Validate file format, size, and permissions.
 
-        if file_path.suffix.lower() not in self.SUPPORTED_EXTENSIONS:
-            return False, f"Unsupported file format: {file_path.suffix}"
+        Args:
+            file_path: Path to the file to validate
 
-        if file_path.stat().st_size > self.MAX_FILE_SIZE:
-            return False, f"File too large: {file_path.stat().st_size} bytes"
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        try:
+            # Check if file exists
+            if not file_path.exists():
+                return False, f"File not found: {file_path}"
 
-        return True, None
+            # Check if path is a file (not directory or symlink)
+            if not file_path.is_file():
+                if file_path.is_dir():
+                    return False, f"Path is a directory, not a file: {file_path}"
+                elif file_path.is_symlink():
+                    return False, f"Path is a symbolic link, not a file: {file_path}"
+                else:
+                    return False, f"Path is not a regular file: {file_path}"
+
+            # Check file extension
+            if file_path.suffix.lower() not in self.SUPPORTED_EXTENSIONS:
+                return (
+                    False,
+                    f"Unsupported file format: {file_path.suffix}. Supported formats: {', '.join(self.SUPPORTED_EXTENSIONS)}",
+                )
+
+            # Check file size
+            try:
+                file_size = file_path.stat().st_size
+                if file_size == 0:
+                    return False, f"File is empty: {file_path}"
+                if file_size > self.MAX_FILE_SIZE:
+                    return False, f"File too large: {file_size} bytes (max: {self.MAX_FILE_SIZE} bytes)"
+            except OSError as e:
+                return False, f"Cannot access file size: {str(e)}"
+
+            # Check read permissions
+            try:
+                with open(file_path, "rb") as f:
+                    # Try to read first byte to verify read access
+                    f.read(1)
+            except PermissionError:
+                return False, f"Permission denied: cannot read file {file_path}"
+            except OSError as e:
+                return False, f"Cannot read file: {str(e)}"
+
+            return True, None
+
+        except Exception as e:
+            return False, f"Unexpected error during file validation: {str(e)}"
 
     def _get_metadata(self, file_path: Path, file_hash: str) -> DocumentMetadata:
         """Create metadata object for a document."""
@@ -208,45 +269,90 @@ class DocumentLoader:
             Tuple of (list of Document objects, DocumentMetadata)
 
         Raises:
+            ValueError: If file validation fails
             OSError: If file cannot be loaded or processed
+            RuntimeError: If document processing fails
         """
         file_path = Path(file_path)
+        logger.debug(f"Loading document: {file_path} with params_key: {params_key}")
 
         # Validate file
         is_valid, error_msg = self._validate_file(file_path)
         if not is_valid:
+            logger.warning(f"File validation failed: {error_msg}")
             raise ValueError(error_msg)
 
         # Check for duplicate files using file hash + parameter key
-        file_hash = self._compute_file_hash(file_path)
-        dedup_key = (file_hash, params_key)
-        if dedup_key in self.processed_files:
-            logger.debug(f"Skipping duplicate file: {file_path} ({params_key})")
-            return [], self._get_metadata(file_path, file_hash)
+        try:
+            file_hash = self._compute_file_hash(file_path)
+            dedup_key = (file_hash, params_key)
+            if dedup_key in self.processed_files:
+                logger.debug(f"Skipping duplicate file: {file_path} ({params_key})")
+                return [], self._get_metadata(file_path, file_hash)
+        except OSError as e:
+            logger.error(f"Failed to compute file hash: {str(e)}")
+            raise
 
         try:
             # Get appropriate processor
-            processor = self.processors[file_path.suffix.lower()]
-            documents = processor.load(file_path)
+            file_extension = file_path.suffix.lower()
+            if file_extension not in self.processors:
+                raise RuntimeError(f"No processor available for file type: {file_extension}")
+
+            processor = self.processors[file_extension]
+            logger.debug(f"Using processor: {type(processor).__name__} for {file_extension}")
+
+            # Load documents with processor-specific error handling
+            try:
+                documents = processor.load(file_path)
+                if not documents:
+                    logger.warning(f"Processor returned no documents for: {file_path}")
+                    documents = []
+            except Exception as e:
+                raise RuntimeError(f"Processor failed to load {file_path}: {str(e)}") from e
 
             # Update metadata
             metadata = self._get_metadata(file_path, file_hash)
-            if file_path.suffix.lower() == ".pdf":
+            metadata.processing_status = "completed"
+
+            # Set page count based on document type
+            if file_extension == ".pdf":
                 metadata.num_pages = len(documents)
-            elif file_path.suffix.lower() == ".docx":
+            elif file_extension == ".docx":
                 # For DOCX, we use paragraphs as the basic unit
                 metadata.num_pages = len(documents)
+            elif file_extension in [".txt", ".md"]:
+                # For text files, don't set page count (None)
+                metadata.num_pages = None
 
             # Mark as processed
             self.processed_files.add(dedup_key)
 
-            logger.info(f"Successfully loaded document: {file_path}")
+            logger.info(f"Successfully loaded document: {file_path} ({len(documents)} documents, {metadata.num_pages} pages)")
             return documents, metadata
 
+        except (ValueError, OSError):
+            # Re-raise validation and file system errors as-is
+            raise
         except Exception as e:
-            error_msg = f"Error processing file {file_path}: {str(e)}"
-            logger.error(error_msg)
-            metadata = self._get_metadata(file_path, file_hash)
-            metadata.processing_status = "error"
-            metadata.error_message = error_msg
+            error_msg = f"Unexpected error processing file {file_path}: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+
+            # Create error metadata
+            try:
+                metadata = self._get_metadata(file_path, file_hash)
+                metadata.processing_status = "error"
+                metadata.error_message = error_msg
+            except Exception as meta_error:
+                logger.error(f"Failed to create error metadata: {str(meta_error)}")
+                # Create minimal metadata
+                metadata = DocumentMetadata(
+                    file_path=str(file_path),
+                    file_hash="unknown",
+                    file_type=file_path.suffix.lower(),
+                    file_size=0,
+                    processing_status="error",
+                    error_message=error_msg,
+                )
+
             raise OSError(error_msg) from e

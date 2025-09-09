@@ -31,6 +31,7 @@ from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
 from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
 
 from ..utils.logging import StructuredLogger
+from .embedding_cache import get_embedding_cache
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -65,20 +66,26 @@ __all__ = [
 ]
 
 
-def embed_text_nodes(nodes: list[Union[BaseNode, TextNode]], model_name: str) -> list[list[float]]:
-    """Convert text nodes to embeddings using HuggingFace models.
+def embed_text_nodes(nodes: list[Union[BaseNode, TextNode]], model_name: str, use_cache: bool = True) -> list[list[float]]:
+    """Convert text nodes to embeddings using HuggingFace models with optional caching.
 
     Args:
         nodes: List of BaseNode objects containing text to embed
         model_name: Name of the HuggingFace embedding model
+        use_cache: Whether to use embedding cache
 
     Returns:
         List of embedding vectors
     """
-    logger.debug(f"Starting text embedding generation - model: {model_name}, nodes_to_embed: {len(nodes)}")
+    logger.debug(f"Starting text embedding generation - model: {model_name}, nodes_to_embed: {len(nodes)}, use_cache: {use_cache}")
 
     embed_model = get_embedding_model(model_name)
     embeddings = []
+    cache = get_embedding_cache() if use_cache else None
+
+    # Statistics for logging
+    cache_hits = 0
+    cache_misses = 0
 
     # Process each node to generate embeddings
     # This is typically the most time-consuming part of document processing
@@ -97,18 +104,48 @@ def embed_text_nodes(nodes: list[Union[BaseNode, TextNode]], model_name: str) ->
 
         logger.debug("Generating embedding for node", extra={"node_index": i, "total_nodes": len(nodes), "text_length": len(text)})
 
-        try:
-            embedding = embed_model.get_text_embedding(text)
-            embeddings.append(embedding)
-        except Exception as e:
-            logger.error(
-                f"Embedding attempt failed for node {i}: {str(e)}",
-                extra={"node_index": i, "text_preview": text[:100], "error": str(e)},
-            )
-            # Continue with next node instead of failing completely
-            continue
+        # Check cache first
+        embedding = None
+        if cache:
+            embedding = cache.get(text, model_name)
+            if embedding:
+                cache_hits += 1
+                logger.debug(f"Cache hit for node {i}")
+            else:
+                cache_misses += 1
 
-    logger.debug("Text embedding generation completed", extra={"model": model_name, "embeddings_generated": len(embeddings)})
+        # Generate embedding if not in cache
+        if embedding is None:
+            try:
+                embedding = embed_model.get_text_embedding(text)
+
+                # Store in cache if available
+                if cache:
+                    cache.put(text, model_name, embedding)
+                    logger.debug(f"Cached embedding for node {i}")
+
+            except Exception as e:
+                logger.error(
+                    f"Embedding attempt failed for node {i}: {str(e)}",
+                    extra={"node_index": i, "text_preview": text[:100], "error": str(e)},
+                )
+                # Continue with next node instead of failing completely
+                continue
+
+        embeddings.append(embedding)
+
+    # Log cache statistics
+    if cache:
+        logger.debug(
+            "Embedding generation completed with cache statistics",
+            model=model_name,
+            embeddings_generated=len(embeddings),
+            cache_hits=cache_hits,
+            cache_misses=cache_misses,
+            hit_rate=cache_hits / (cache_hits + cache_misses) if (cache_hits + cache_misses) > 0 else 0.0,
+        )
+    else:
+        logger.debug("Text embedding generation completed", extra={"model": model_name, "embeddings_generated": len(embeddings)})
 
     return embeddings
 

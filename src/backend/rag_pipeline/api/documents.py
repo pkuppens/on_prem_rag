@@ -267,6 +267,25 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         "application/json",
     ]
 
+    # Validate file size limits
+    max_file_size = 100 * 1024 * 1024  # 100MB
+    if file.size and file.size > max_file_size:
+        logger.warning("Upload rejected: file too large", filename=filename, size=file.size, max_size=max_file_size)
+        raise HTTPException(
+            status_code=413, detail=f"File too large: {file.size} bytes. Maximum allowed size: {max_file_size} bytes"
+        )
+
+    # Validate filename
+    if not filename or len(filename.strip()) == 0:
+        logger.warning("Upload rejected: empty filename")
+        raise HTTPException(status_code=400, detail="Filename cannot be empty")
+
+    # Check for path traversal attempts
+    if ".." in filename or "/" in filename or "\\" in filename:
+        logger.warning("Upload rejected: invalid filename", filename=filename, reason="Contains path traversal characters")
+        raise HTTPException(status_code=400, detail="Invalid filename: contains path traversal characters")
+
+    # Check for supported content types
     if (content_type := file.content_type) not in supported_types:
         logger.warning("Upload rejected: unsupported content type", filename=filename, content_type=content_type)
         raise HTTPException(
@@ -290,21 +309,53 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         file_path = uploaded_files_dir / filename
         logger.debug("File path resolved", file_path=str(file_path))
 
+        # Check if file already exists
+        if file_path.exists():
+            logger.warning("File already exists, will be overwritten", filename=filename, existing_size=file_path.stat().st_size)
+
         # Read file content first
-        file_content = await file.read()
-        logger.debug("File content read", content_size=len(file_content))
+        try:
+            file_content = await file.read()
+            logger.debug("File content read", content_size=len(file_content))
+
+            # Verify content was read
+            if not file_content:
+                raise ValueError("File content is empty after reading")
+
+        except Exception as e:
+            logger.error("Failed to read file content", filename=filename, error=str(e))
+            raise HTTPException(status_code=400, detail=f"Failed to read file content: {str(e)}") from e
 
         # Directory is already ensured to exist at module level
 
-        # Write file content
-        with open(file_path, "wb") as f:
-            f.write(file_content)
+        # Write file content with proper error handling
+        try:
+            with open(file_path, "wb") as f:
+                f.write(file_content)
+        except PermissionError as e:
+            logger.error("Permission denied writing file", filename=filename, file_path=str(file_path), error=str(e))
+            raise HTTPException(status_code=403, detail=f"Permission denied writing file: {str(e)}") from e
+        except OSError as e:
+            logger.error("OS error writing file", filename=filename, file_path=str(file_path), error=str(e))
+            raise HTTPException(status_code=500, detail=f"Failed to write file: {str(e)}") from e
+        except Exception as e:
+            logger.error("Unexpected error writing file", filename=filename, file_path=str(file_path), error=str(e))
+            raise HTTPException(status_code=500, detail=f"Unexpected error writing file: {str(e)}") from e
 
-        # Verify file was saved
-        if not file_path.exists():
-            raise RuntimeError(f"File was not saved successfully to {file_path}")
+        # Verify file was saved correctly
+        try:
+            if not file_path.exists():
+                raise RuntimeError(f"File was not saved successfully to {file_path}")
 
-        logger.debug("File saved successfully", filename=str(file_path), file_size=file_path.stat().st_size)
+            saved_size = file_path.stat().st_size
+            if saved_size != len(file_content):
+                raise RuntimeError(f"File size mismatch: expected {len(file_content)} bytes, got {saved_size} bytes")
+
+        except OSError as e:
+            logger.error("Failed to verify saved file", filename=filename, file_path=str(file_path), error=str(e))
+            raise HTTPException(status_code=500, detail=f"Failed to verify saved file: {str(e)}") from e
+
+        logger.debug("File saved successfully", filename=str(file_path), file_size=saved_size)
 
         await progress_notifier.notify(ProgressEvent(filename, 10, "File saved"))
 

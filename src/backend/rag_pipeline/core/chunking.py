@@ -31,6 +31,7 @@ from llama_index.core.node_parser import SimpleNodeParser
 
 from ..utils.logging import StructuredLogger
 from ..utils.text_cleaning import clean_chunk_text, get_text_statistics, validate_chunk_quality
+from .chunking_strategies import ChunkingConfig, ChunkingStrategy, chunk_documents_with_strategy
 
 logger = StructuredLogger(__name__)
 
@@ -258,6 +259,149 @@ def chunk_documents(
     )
 
 
+def chunk_documents_with_config(
+    documents: list[Document],
+    config: ChunkingConfig,
+    *,
+    source_path: str | Path | None = None,
+    enable_text_cleaning: bool = True,
+    min_chunk_length: int = 10,
+    progress_callback: Callable[[int, int], None] | None = None,
+    **kwargs,
+) -> ChunkingResult:
+    """Chunk documents using a configurable strategy.
+
+    This is the enhanced version of chunk_documents that supports multiple
+    chunking strategies including semantic, sentence-based, and hybrid approaches.
+
+    Args:
+        documents: List of Document objects to chunk
+        config: Chunking configuration with strategy selection
+        source_path: Optional source path for metadata
+        enable_text_cleaning: Whether to apply text cleaning to chunks
+        min_chunk_length: Minimum acceptable chunk length after cleaning
+        progress_callback: Optional callback for page processing progress
+        **kwargs: Additional strategy-specific parameters (e.g., embed_model)
+
+    Returns:
+        ChunkingResult with chunked documents and enhanced metadata
+    """
+    if not documents:
+        return ChunkingResult(
+            chunks=[],
+            file_name="",
+            file_path=str(source_path) if source_path else "",
+            file_size=0,
+            num_pages=None,
+            chunk_count=0,
+            chunking_params={"strategy": config.strategy.value, "chunk_size": config.chunk_size},
+            file_hash="",
+            pages_processed=0,
+            chunks_filtered=0,
+            text_cleaning_stats={},
+        )
+
+    logger.debug(
+        "Starting configurable document chunking",
+        strategy=config.strategy.value,
+        total_pages=len(documents),
+        chunk_size=config.chunk_size,
+        chunk_overlap=config.chunk_overlap,
+    )
+
+    # Use the new strategy-based chunking
+    chunks = chunk_documents_with_strategy(
+        documents=documents, config=config, source_path=source_path, progress_callback=progress_callback, **kwargs
+    )
+
+    # Apply text cleaning if enabled
+    if enable_text_cleaning:
+        cleaned_chunks = []
+        chunks_filtered = 0
+        text_cleaning_stats = {
+            "total_chunks": len(chunks),
+            "cleaned_chunks": 0,
+            "filtered_chunks": 0,
+            "avg_chunk_length": 0,
+            "avg_alphanumeric_ratio": 0.0,
+        }
+
+        for chunk in chunks:
+            # Clean the chunk text
+            cleaned_text = clean_chunk_text(chunk.text, min_length=min_chunk_length)
+
+            if cleaned_text is not None:
+                chunk.text = cleaned_text
+                cleaned_chunks.append(chunk)
+                text_cleaning_stats["cleaned_chunks"] += 1
+            else:
+                # Keep empty chunks for consistency
+                chunk.text = ""
+                chunk.metadata["is_empty_page"] = True
+                cleaned_chunks.append(chunk)
+                text_cleaning_stats["cleaned_chunks"] += 1
+                chunks_filtered += 1
+                text_cleaning_stats["filtered_chunks"] += 1
+
+        chunks = cleaned_chunks
+    else:
+        chunks_filtered = 0
+        text_cleaning_stats = {
+            "total_chunks": len(chunks),
+            "cleaned_chunks": len(chunks),
+            "filtered_chunks": 0,
+            "avg_chunk_length": 0,
+            "avg_alphanumeric_ratio": 0.0,
+        }
+
+    # Calculate statistics
+    if chunks:
+        total_length = sum(len(chunk.text) for chunk in chunks)
+        text_cleaning_stats["avg_chunk_length"] = total_length / len(chunks)
+
+        # Calculate average alphanumeric ratio
+        total_alphanumeric_ratio = 0
+        for chunk in chunks:
+            stats = get_text_statistics(chunk.text)
+            total_alphanumeric_ratio += stats["alphanumeric_ratio"]
+        text_cleaning_stats["avg_alphanumeric_ratio"] = total_alphanumeric_ratio / len(chunks)
+
+    # Calculate file information
+    source_path = Path(source_path) if source_path else Path("unknown")
+    file_size = source_path.stat().st_size if source_path.exists() else 0
+    num_pages = len(documents) if documents else None
+
+    # Generate file hash
+    combined_text = "\n".join(doc.text for doc in documents)
+    file_hash = generate_content_hash(combined_text)
+
+    logger.debug(
+        "Configurable document chunking completed",
+        strategy=config.strategy.value,
+        total_chunks=len(chunks),
+        chunks_filtered=chunks_filtered,
+        pages_processed=len(documents),
+    )
+
+    return ChunkingResult(
+        chunks=chunks,
+        file_name=source_path.name,
+        file_path=str(source_path),
+        file_size=file_size,
+        num_pages=num_pages,
+        chunk_count=len(chunks),
+        chunking_params={
+            "strategy": config.strategy.value,
+            "chunk_size": config.chunk_size,
+            "chunk_overlap": config.chunk_overlap,
+        },
+        file_hash=file_hash,
+        pages_processed=len(documents),
+        chunks_filtered=chunks_filtered,
+        text_cleaning_stats=text_cleaning_stats,
+    )
+
+
 def get_page_chunks(pdf_path: str | Path) -> dict[int, list[Document]]:
     """Get chunks organized by page number for analysis.
 
@@ -297,6 +441,7 @@ __all__ = [
     "ChunkingResult",
     "ChunkMetadata",
     "chunk_documents",
+    "chunk_documents_with_config",
     "get_page_chunks",
     "generate_content_hash",
 ]

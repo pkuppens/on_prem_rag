@@ -324,13 +324,14 @@ class TestOllamaProvider:
         with pytest.raises(RuntimeError, match="Unexpected error during answer generation"):
             provider.generate_answer("What is AI?")
 
+    @pytest.mark.asyncio
     @patch("httpx.AsyncClient")
     async def test_ollama_health_check_success(self, mock_client_class):
         """Test successful health check."""
         mock_client = Mock()
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_client.get.return_value = mock_response
+        mock_client.get = Mock(return_value=mock_response)
         mock_client_class.return_value.__aenter__.return_value = mock_client
 
         provider = OllamaProvider("mistral:7b", {})
@@ -338,11 +339,12 @@ class TestOllamaProvider:
 
         assert is_healthy is True
 
+    @pytest.mark.asyncio
     @patch("httpx.AsyncClient")
     async def test_ollama_health_check_failure(self, mock_client_class):
         """Test health check failure."""
         mock_client = Mock()
-        mock_client.get.side_effect = Exception("Connection failed")
+        mock_client.get = Mock(side_effect=Exception("Connection failed"))
         mock_client_class.return_value.__aenter__.return_value = mock_client
 
         provider = OllamaProvider("mistral:7b", {})

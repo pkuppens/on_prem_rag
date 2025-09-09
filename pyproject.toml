@@ -30,7 +30,7 @@ dependencies = [
     "pip>=25.1.1",
     "nbstripout>=0.8.1",
     "hf-xet>=1.1.2",
-    "pytest>=8.4.0",
+    "pytest>=7.4.0,<8.0.0",
     "python-multipart>=0.0.6",
     "ruff>=0.11.12",
     "crewai>=0.28.8",
@@ -43,7 +43,7 @@ dependencies = [
     "python-jose>=3.5.0",
     "passlib>=1.7.4",
     "docx2txt>=0.9",
-    "pytest-asyncio>=1.0.0",
+    "pytest-asyncio>=0.23.8",
     "pypdf2>=3.0.1",
     "pdfplumber>=0.11.7",
     "google-auth-oauthlib>=1.2.2",
@@ -76,7 +76,7 @@ upload-documents = "scripts.upload_documents:main"
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.3.5",
+    "pytest>=7.4.0,<8.0.0",
     "pytest-cov>=6.1.1",
     "ruff>=0.11.12",
     "pre-commit>=4.2.0",
@@ -180,6 +180,8 @@ markers = [
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
 # Configure test environment
 env_files = [".env.test"]
+# Configure pytest-asyncio
+asyncio_mode = "auto"
 
 [tool.uv]
 python-preference = "only-managed" # Use uv-managed Python installations
@@ -202,7 +204,7 @@ show_missing = true # Show line numbers of missing coverage
 [dependency-groups]
 dev = [
     "pre-commit>=4.2.0",
-    "pytest-asyncio>=1.0.0",
+    "pytest-asyncio>=0.23.8",
 ]
 
 

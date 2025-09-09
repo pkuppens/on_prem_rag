@@ -11,10 +11,12 @@ This document provides comprehensive documentation for the RAG pipeline API endp
 **Description**: Upload and process a document for the RAG pipeline.
 
 **Parameters**:
+
 - `file` (UploadFile, required): The document file to upload
 - `params_name` (string, optional): Parameter set name (default: "default")
 
 **Supported File Types**:
+
 - PDF: `application/pdf`
 - Text: `text/plain`
 - Markdown: `text/markdown`
@@ -24,16 +26,19 @@ This document provides comprehensive documentation for the RAG pipeline API endp
 - JSON: `application/json`
 
 **File Size Limits**:
+
 - Maximum file size: 100MB
 - Minimum file size: 1 byte
 
 **Request Validation**:
+
 - Filename is required and cannot be empty
 - Filename cannot contain path traversal characters (`..`, `/`, `\`)
 - File content type must be supported
 - File size must be within limits
 
 **Response**:
+
 ```json
 {
   "message": "Document uploaded successfully, processing started",
@@ -44,12 +49,14 @@ This document provides comprehensive documentation for the RAG pipeline API endp
 ```
 
 **Error Responses**:
+
 - `400 Bad Request`: Invalid file type, empty file, invalid filename
 - `413 Payload Too Large`: File exceeds size limit
 - `403 Forbidden`: Permission denied writing file
 - `500 Internal Server Error`: Server error during processing
 
 **Example**:
+
 ```bash
 curl -X POST "http://localhost:8000/api/documents/upload" \
   -F "file=@document.pdf" \
@@ -63,6 +70,7 @@ curl -X POST "http://localhost:8000/api/documents/upload" \
 **Description**: Get a list of uploaded document filenames.
 
 **Response**:
+
 ```json
 {
   "files": ["document1.pdf", "document2.docx", "document3.txt"]
@@ -70,6 +78,7 @@ curl -X POST "http://localhost:8000/api/documents/upload" \
 ```
 
 **Example**:
+
 ```bash
 curl -X GET "http://localhost:8000/api/documents/list"
 ```
@@ -81,16 +90,19 @@ curl -X GET "http://localhost:8000/api/documents/list"
 **Description**: Download or view an uploaded document file.
 
 **Parameters**:
+
 - `filename` (string, required): Name of the file to serve
 
 **Response**: File content with appropriate content-type headers
 
 **Error Responses**:
+
 - `400 Bad Request`: Invalid filename
 - `404 Not Found`: File not found
 - `500 Internal Server Error`: Server error accessing file
 
 **Example**:
+
 ```bash
 curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
   -o downloaded_document.pdf
@@ -105,6 +117,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 **Description**: Ask a question and get an answer using the RAG system.
 
 **Request Body**:
+
 ```json
 {
   "question": "What is the main topic of the document?",
@@ -114,6 +127,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 ```
 
 **Response**:
+
 ```json
 {
   "answer": "The main topic is...",
@@ -138,6 +152,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 **Description**: Search for relevant documents and text chunks.
 
 **Request Body**:
+
 ```json
 {
   "query": "search terms",
@@ -147,6 +162,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 ```
 
 **Response**:
+
 ```json
 {
   "results": [
@@ -156,7 +172,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
         "file_path": "document.pdf",
         "page_number": 2
       },
-      "similarity": 0.90
+      "similarity": 0.9
     }
   ]
 }
@@ -169,6 +185,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 **Description**: Real-time progress updates for document processing.
 
 **Message Format**:
+
 ```json
 {
   "file_id": "document.pdf",
@@ -178,6 +195,7 @@ curl -X GET "http://localhost:8000/api/documents/files/document.pdf" \
 ```
 
 **Progress Stages**:
+
 - 5%: Upload started
 - 10%: File saved
 - 15-95%: Processing (loading, chunking, embedding, storing)
@@ -229,6 +247,7 @@ CORS is configured to allow requests from `http://localhost:5173` (frontend deve
 **Description**: Check API health status.
 
 **Response**:
+
 ```json
 {
   "status": "healthy",

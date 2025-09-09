@@ -7,49 +7,58 @@
 **Priority**: P1  
 **Points**: 8  
 **Created**: 2025-05-31  
-**Updated**: 2025-01-09
+**Updated**: 2025-09-08
 
 ## User Story
+
 As a **user of the RAG system**,
 I want **to ask questions about uploaded documents**,
 So that **I can quickly find answers without reading entire files**.
 
 ## Business Context
+
 Delivering a minimal question-answering API demonstrates the value of the system early. A simple interface that returns answers with source context forms the core of the MVP and enables feedback from stakeholders.
 
 ## Acceptance Criteria
+
 - [x] **Given** indexed documents, **when** a query is submitted, **then** the system returns an answer with relevant document excerpts.
 - [x] **Given** a low-confidence result, **when** confidence falls below threshold, **then** the API indicates no answer found.
 - [x] **Given** multiple relevant documents, **when** results are merged, **then** the answer references each source correctly.
 
 ## Tasks
+
 - [x] **[TASK-010](../tasks/TASK-010.md)**: Create FastAPI endpoint for question answering - Backend Engineer - 6h
 - [x] **[TASK-011](../tasks/TASK-011.md)**: Implement vector search retrieval logic - Backend Engineer - 4h
 - [x] **[TASK-012](../tasks/TASK-012.md)**: Integrate Ollama LLM for answer generation - ML Engineer - 6h
 - [x] **[TASK-013](../tasks/TASK-013.md)**: Write API tests for Q&A flow - QA Engineer - 4h
 
 ## Definition of Done
+
 - [x] API endpoint `/ask` accepts text questions and optional parameters
 - [x] Retrieved context is passed to LLM and answer returned in JSON
 - [x] Sources for each answer segment included in the response
 - [x] Automated tests cover successful and failure scenarios
 
 ## Technical Requirements
+
 - **Framework**: FastAPI with async endpoints
 - **Vector DB**: ChromaDB for similarity search
 - **LLM**: Ollama with Mistral 7B model
 
 ## Risks & Mitigations
-| Risk | Impact | Mitigation |
-|------|--------|------------|
+
+| Risk                   | Impact | Mitigation                                            |
+| ---------------------- | ------ | ----------------------------------------------------- |
 | **Slow response time** | Medium | Cache frequent queries and tune similarity thresholds |
-| **Low answer quality** | Medium | Experiment with prompts and chunk sizes |
-| **API misuse** | Low | Rate limit endpoints and validate inputs |
+| **Low answer quality** | Medium | Experiment with prompts and chunk sizes               |
+| **API misuse**         | Low    | Rate limit endpoints and validate inputs              |
 
 ## Progress
+
 - 2025-06-09: Added `/api/query` endpoint and search page with PDF preview.
 
 ---
+
 **Story Owner**: Backend Engineer
 **Reviewer**: Lead Developer
 **Sprint**: TBD

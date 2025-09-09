@@ -13,6 +13,7 @@ Features:
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 import time
@@ -181,7 +182,7 @@ class DocumentObsoletionManager:
                     valid_from,
                     valid_until,
                     DocumentStatus.ACTIVE.value,
-                    str(metadata) if metadata else None,
+                    json.dumps(metadata) if metadata else None,
                 ),
             )
 
@@ -255,7 +256,7 @@ class DocumentObsoletionManager:
                     current_time,
                     reason,
                     obsoleted_by,
-                    str(metadata) if metadata else None,
+                    json.dumps(metadata) if metadata else None,
                 ),
             )
 
@@ -322,7 +323,7 @@ class DocumentObsoletionManager:
                     current_time,
                     reason,
                     invalidated_by,
-                    str(metadata) if metadata else None,
+                    json.dumps(metadata) if metadata else None,
                 ),
             )
 
@@ -359,7 +360,7 @@ class DocumentObsoletionManager:
             for row in cursor.fetchall():
                 document_id, version, file_path, file_hash, created_at, valid_from, valid_until, status, metadata_str = row
 
-                metadata = eval(metadata_str) if metadata_str else {}
+                metadata = json.loads(metadata_str) if metadata_str else {}
 
                 documents.append(
                     DocumentVersion(
@@ -402,7 +403,7 @@ class DocumentObsoletionManager:
             for row in cursor.fetchall():
                 document_id, version, file_path, file_hash, created_at, valid_from, valid_until, status, metadata_str = row
 
-                metadata = eval(metadata_str) if metadata_str else {}
+                metadata = json.loads(metadata_str) if metadata_str else {}
 
                 documents.append(
                     DocumentVersion(
@@ -458,7 +459,7 @@ class DocumentObsoletionManager:
             for row in cursor.fetchall():
                 document_id, version, obsoleted_at, reason, obsoleted_by, metadata_str = row
 
-                metadata = eval(metadata_str) if metadata_str else {}
+                metadata = json.loads(metadata_str) if metadata_str else {}
 
                 events.append(
                     ObsoletionEvent(

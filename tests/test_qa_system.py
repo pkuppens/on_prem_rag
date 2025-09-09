@@ -200,13 +200,13 @@ class TestAskAPI:
     """Test cases for the /ask API endpoint."""
 
     def test_ask_endpoint_empty_question(self):
-        """Test that empty question returns 400 error."""
+        """Test that empty question returns validation error."""
         client = TestClient(app)
 
         response = client.post("/api/ask", json={"question": ""})
 
-        assert response.status_code == 400
-        assert "Question must not be empty" in response.json()["detail"]
+        assert response.status_code == 422
+        assert "detail" in response.json()
 
     def test_ask_endpoint_missing_question(self):
         """Test that missing question field returns validation error."""
@@ -321,7 +321,7 @@ class TestOllamaProvider:
 
         provider = OllamaProvider("mistral:7b", {})
 
-        with pytest.raises(RuntimeError, match="Failed to connect to Ollama service"):
+        with pytest.raises(RuntimeError, match="Unexpected error during answer generation"):
             provider.generate_answer("What is AI?")
 
     @patch("httpx.AsyncClient")

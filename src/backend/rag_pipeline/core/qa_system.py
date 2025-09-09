@@ -62,7 +62,9 @@ class QASystem:
 
         try:
             # Get default parameter set for embedding model
-            params = get_param_set()
+            from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME
+
+            params = get_param_set(DEFAULT_PARAM_SET_NAME)
 
             # Query embeddings using existing function
             results = query_embeddings(

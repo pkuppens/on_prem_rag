@@ -30,9 +30,7 @@ jobs:
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Install dependencies
         run: |
-          uv venv
-          source .venv/bin/activate
-          uv pip install -e .[dev]
+          uv sync --dev
       - name: Cache HuggingFace models
         uses: actions/cache@v3
         with:
@@ -42,23 +40,20 @@ jobs:
             ${{ runner.os }}-huggingface-
       - name: Pre-download embedding models
         run: |
-          source .venv/bin/activate
           # Set cache directory to ensure consistent location
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          python scripts/setup_embedding_models.py
+          uv run python scripts/setup_embedding_models.py
       - name: Lint with ruff
         run: |
-          source .venv/bin/activate
-          ruff check .
-          ruff format --check .
+          uv run ruff check .
+          uv run ruff format --check .
       - name: Test with pytest
         run: |
-          source .venv/bin/activate
           # Set cache directories for offline mode
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run tests in offline mode, excluding internet-dependent tests
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 pytest -m "not internet and not slow"
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow"

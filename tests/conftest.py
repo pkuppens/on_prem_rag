@@ -14,6 +14,9 @@ import pytest
 
 from src.backend.rag_pipeline.utils.progress import progress_notifier
 
+# Configure pytest-asyncio
+pytest_plugins = ["pytest_asyncio"]
+
 # Ensure test data directory exists
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 TEST_DATA_DIR.mkdir(exist_ok=True)

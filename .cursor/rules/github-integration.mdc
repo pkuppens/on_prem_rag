@@ -202,6 +202,56 @@ gh issue comment ISSUE_NUMBER --body "Depends on: #BLOCKING_ISSUE_NUMBER"
 
 ## Pull Request Management
 
+### Pre-PR Requirements
+
+Before creating any pull request, ensure the following requirements are met:
+
+#### 1. Pytest Tests Must Pass
+
+**CRITICAL**: All pytest tests must pass before creating a pull request. This is enforced by GitHub Actions.
+
+```bash
+# Run all tests locally before creating PR
+uv run pytest -v
+
+# Run tests excluding slow and internet-dependent tests (matches CI)
+uv run pytest -m "not internet and not slow" -v
+
+# Run with coverage to ensure good test coverage
+uv run pytest --cov=src/backend --cov-report=term-missing
+```
+
+**Failure to pass tests will result in PR rejection by GitHub Actions.**
+
+#### 2. Code Quality Checks
+
+```bash
+# Lint with ruff (must pass)
+uv run ruff check .
+
+# Format check (must pass)
+uv run ruff format --check .
+
+# Fix formatting issues if needed
+uv run ruff format .
+```
+
+#### 3. Documentation Updates
+
+- [ ] Update relevant technical documentation
+- [ ] Update task/story files with completion status
+- [ ] Add code comments for complex logic
+- [ ] Update README if needed
+
+#### 4. Pre-PR Checklist
+
+- [ ] All tests pass (`uv run pytest -v`)
+- [ ] Code is properly formatted (`uv run ruff format --check .`)
+- [ ] No linting errors (`uv run ruff check .`)
+- [ ] Documentation is updated
+- [ ] Task/story acceptance criteria are met
+- [ ] Code follows [coding-style.mdc](.cursor/rules/coding-style.mdc) guidelines
+
 ### Creating Pull Requests
 
 #### From Feature Branches
@@ -246,9 +296,11 @@ gh pr create \
 
 ## Testing
 
+- [ ] **Pytest tests pass** (`uv run pytest -v`) - **REQUIRED**
 - [ ] Unit tests added/updated
 - [ ] Integration tests pass
 - [ ] Manual testing completed
+- [ ] Code coverage maintained/improved
 
 ## Documentation
 
@@ -289,9 +341,11 @@ gh pr create \
 
 ## Testing
 
+- [ ] **Pytest tests pass** (`uv run pytest -v`) - **REQUIRED**
 - [ ] Unit tests added/updated
 - [ ] Manual testing completed
 - [ ] Edge cases tested
+- [ ] Code coverage maintained/improved
 
 ## Documentation
 
@@ -402,6 +456,59 @@ git checkout branch-name
 # Create and switch to new branch
 git checkout -b new-branch-name
 ```
+
+## GitHub Actions Integration
+
+### Automated Quality Gates
+
+The project uses GitHub Actions to enforce quality standards before PRs can be merged:
+
+#### CI/CD Pipeline (`.github/workflows/python-ci.yml`)
+
+**Triggers**:
+
+- Push to `main` branch
+- Pull requests to `main` branch
+
+**Quality Gates**:
+
+1. **Dependency Installation**: Uses `uv sync --dev` for proper dependency management
+2. **Model Caching**: Pre-downloads embedding models for consistent testing
+3. **Linting**: Runs `ruff check` and `ruff format --check`
+4. **Testing**: Runs pytest with markers `-m "not internet and not slow"`
+
+**Failure Behavior**:
+
+- PRs with failing tests are automatically blocked
+- PRs with linting errors are automatically blocked
+- PRs with formatting issues are automatically blocked
+
+#### Local Development Workflow
+
+```bash
+# 1. Before creating PR, run full test suite
+uv run pytest -v
+
+# 2. Check code quality
+uv run ruff check .
+uv run ruff format --check .
+
+# 3. Fix any issues
+uv run ruff format .  # Auto-fix formatting
+# Fix linting issues manually
+
+# 4. Create PR only after all checks pass
+gh pr create --title "TASK-XXX: [Description]" --body-file pr_description.md
+```
+
+#### Bypassing Quality Gates
+
+**Not Recommended**: Quality gates should not be bypassed. If tests are failing:
+
+1. **Fix the failing tests** - Update test code to match implementation
+2. **Fix the implementation** - Update code to pass existing tests
+3. **Add missing tests** - Write tests for new functionality
+4. **Update test markers** - Mark slow/internet tests appropriately
 
 ## Workflow Integration
 

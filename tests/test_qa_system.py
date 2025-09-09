@@ -331,10 +331,14 @@ class TestOllamaProvider:
         mock_client = Mock()
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_client.get = Mock(return_value=mock_response)
+
+        async def mock_get(*args, **kwargs):
+            return mock_response
+
+        mock_client.get = mock_get
         mock_client_class.return_value.__aenter__.return_value = mock_client
 
-        provider = OllamaProvider("mistral:7b", {})
+        provider = OllamaProvider("mistral:7b", {"host": "http://localhost:11434"})
         is_healthy = await provider.health_check()
 
         assert is_healthy is True
@@ -344,10 +348,14 @@ class TestOllamaProvider:
     async def test_ollama_health_check_failure(self, mock_client_class):
         """Test health check failure."""
         mock_client = Mock()
-        mock_client.get = Mock(side_effect=Exception("Connection failed"))
+
+        async def mock_get_fail(*args, **kwargs):
+            raise Exception("Connection failed")
+
+        mock_client.get = mock_get_fail
         mock_client_class.return_value.__aenter__.return_value = mock_client
 
-        provider = OllamaProvider("mistral:7b", {})
+        provider = OllamaProvider("mistral:7b", {"host": "http://localhost:11434"})
         is_healthy = await provider.health_check()
 
         assert is_healthy is False

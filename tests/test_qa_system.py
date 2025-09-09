@@ -6,6 +6,7 @@ It covers the core QA system, API endpoints, and LLM integration.
 See STORY-003 for business context and acceptance criteria.
 """
 
+import socket
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
@@ -14,6 +15,18 @@ from fastapi.testclient import TestClient
 from backend.rag_pipeline.api.app import app
 from backend.rag_pipeline.core.llm_providers import OllamaProvider
 from backend.rag_pipeline.core.qa_system import QASystem
+
+
+def _ollama_available() -> bool:
+    """Check if Ollama service is available on localhost:11434."""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex(("localhost", 11434))
+        sock.close()
+        return result == 0
+    except Exception:
+        return False
 
 
 class TestQASystem:
@@ -350,7 +363,9 @@ class TestOllamaProvider:
         mock_client = Mock()
 
         async def mock_get_fail(*args, **kwargs):
-            raise Exception("Connection failed")
+            import httpx
+
+            raise httpx.RequestError("Connection failed")
 
         mock_client.get = mock_get_fail
         mock_client_class.return_value.__aenter__.return_value = mock_client

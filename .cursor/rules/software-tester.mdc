@@ -1,0 +1,566 @@
+---
+description: Software Tester quality assurance responsibilities and git handover workflow
+globs:
+  - "tests/**/*.py"
+  - "project/team/tests/**/*.md"
+  - "project/team/stories/**/*.md"
+  - "docs/technical/**/*.md"
+alwaysApply: false
+---
+
+# Software Tester Context and Workflow
+
+## Primary Responsibilities
+
+### Test Strategy and Planning
+
+- **Test Planning**: Develop comprehensive test strategies for features
+- **Test Case Design**: Create detailed test cases and scenarios
+- **Test Data Management**: Prepare and manage test data
+- **Test Environment**: Set up and maintain test environments
+
+### Quality Assurance
+
+- **Functional Testing**: Validate feature functionality against requirements
+- **Integration Testing**: Test system integrations and interactions
+- **Performance Testing**: Validate performance requirements
+- **Security Testing**: Ensure security controls are effective
+
+### Bug Management
+
+- **Bug Identification**: Identify and document bugs
+- **Bug Reporting**: Create detailed bug reports
+- **Bug Verification**: Verify bug fixes and regression testing
+- **Quality Metrics**: Track and report quality metrics
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [tests/](mdc:tests/) - Test implementation and execution
+- [project/team/tests/](mdc:project/team/tests/) - Test planning and documentation
+- [project/team/stories/](mdc:project/team/stories/) - User stories and acceptance criteria
+- [docs/technical/](mdc:docs/technical/) - Technical documentation and test specifications
+
+### Supporting Documentation
+
+- [docs/technical/TESTING_GUIDELINES.md](mdc:docs/technical/TESTING_GUIDELINES.md) - Testing standards
+- [docs/technical/TEST_PLAN.md](mdc:docs/technical/TEST_PLAN.md) - Overall testing strategy
+- [tests/README.md](mdc:tests/README.md) - Test documentation and guidelines
+
+## Git Handover Workflow
+
+### 1. Receiving Software Developer Handover
+
+When receiving handover from Software Developer:
+
+```bash
+# Check handover notes
+cat tmp/STORY-XXX-developer-tester-handover.md
+
+# Review implementation details
+cat src/rag_pipeline/STORY-XXX.py
+
+# Check existing tests
+cat tests/test_STORY-XXX.py
+
+# Review acceptance criteria
+cat project/team/stories/STORY-XXX.md
+```
+
+### 2. Test Strategy Development
+
+#### Test Planning and Analysis
+
+```bash
+# Analyze implementation and requirements
+# Develop test strategy
+# Identify test scenarios
+# Plan test execution approach
+
+# Create test plan
+echo "STORY-XXX Test Plan:
+- Test Strategy: [testing approach]
+- Test Scenarios: [list scenarios]
+- Test Data Requirements: [data needs]
+- Test Environment: [environment setup]
+- Acceptance Criteria Coverage: [coverage analysis]
+- Risk Assessment: [testing risks]" > project/team/tests/STORY-XXX-test-plan.md
+
+git add project/team/tests/STORY-XXX-test-plan.md
+git commit -m "STORY-XXX: Software Tester: test plan created"
+```
+
+#### Test Case Design
+
+```bash
+# Create detailed test cases
+# Design test scenarios
+# Prepare test data
+# Set up test environment
+
+# Create test cases
+git add project/team/tests/STORY-XXX-test-cases.md
+git commit -m "STORY-XXX: Software Tester: test cases designed"
+
+# Create test data
+git add tests/test_data/STORY-XXX/
+git commit -m "STORY-XXX: Software Tester: test data prepared"
+```
+
+### 3. Test Implementation and Execution
+
+#### Functional Testing
+
+```bash
+# Implement functional tests
+# Test all acceptance criteria
+# Validate user scenarios
+# Test edge cases and error conditions
+
+# Commit functional tests
+git add tests/test_STORY-XXX_functional.py
+git commit -m "STORY-XXX: Software Tester: add functional tests"
+
+# Run tests and commit results
+uv run pytest tests/test_STORY-XXX_functional.py -v
+git add tests/test_STORY-XXX_functional.py
+git commit -m "STORY-XXX: Software Tester: functional tests passing"
+```
+
+#### Integration Testing
+
+```bash
+# Test system integrations
+# Validate data flow
+# Test API endpoints
+# Test external service interactions
+
+# Commit integration tests
+git add tests/test_STORY-XXX_integration.py
+git commit -m "STORY-XXX: Software Tester: add integration tests"
+
+# Run integration tests
+uv run pytest tests/test_STORY-XXX_integration.py -v
+git add tests/test_STORY-XXX_integration.py
+git commit -m "STORY-XXX: Software Tester: integration tests passing"
+```
+
+#### Performance Testing
+
+```bash
+# Test performance requirements
+# Validate response times
+# Test system load
+# Monitor resource usage
+
+# Commit performance tests
+git add tests/test_STORY-XXX_performance.py
+git commit -m "STORY-XXX: Software Tester: add performance tests"
+
+# Run performance tests
+uv run pytest tests/test_STORY-XXX_performance.py -v
+git add tests/test_STORY-XXX_performance.py
+git commit -m "STORY-XXX: Software Tester: performance tests completed"
+```
+
+### 4. Bug Management and Quality Assurance
+
+#### Bug Identification and Reporting
+
+```bash
+# Identify bugs during testing
+# Create detailed bug reports
+# Document bug reproduction steps
+# Assign priority and severity
+
+# Create bug report
+echo "STORY-XXX Bug Report:
+- Bug ID: BUG-XXX
+- Severity: [High/Medium/Low]
+- Priority: [P1/P2/P3]
+- Description: [bug description]
+- Steps to Reproduce: [reproduction steps]
+- Expected Result: [expected behavior]
+- Actual Result: [actual behavior]
+- Environment: [test environment]
+- Test Data: [test data used]" > tmp/STORY-XXX-bug-report.md
+
+git add tmp/STORY-XXX-bug-report.md
+git commit -m "STORY-XXX: Software Tester: bug report created - BUG-XXX"
+
+# Update test results
+git add project/team/tests/STORY-XXX-test-results.md
+git commit -m "STORY-XXX: Software Tester: test results updated - [bug count] bugs found"
+```
+
+#### Bug Verification and Regression Testing
+
+```bash
+# Verify bug fixes
+# Run regression tests
+# Validate bug resolution
+# Update test results
+
+# Commit bug verification
+git add tests/test_STORY-XXX_regression.py
+git commit -m "STORY-XXX: Software Tester: add regression tests"
+
+# Run regression tests
+uv run pytest tests/test_STORY-XXX_regression.py -v
+git add tests/test_STORY-XXX_regression.py
+git commit -m "STORY-XXX: Software Tester: regression tests passing"
+```
+
+### 5. Quality Assurance and Handover
+
+#### Quality Assessment
+
+```bash
+# Assess overall quality
+# Validate acceptance criteria
+# Review test coverage
+# Prepare quality report
+
+# Create quality assessment
+echo "STORY-XXX Quality Assessment:
+- Acceptance Criteria Coverage: [coverage percentage]
+- Test Coverage: [test coverage percentage]
+- Bug Count: [total bugs found]
+- Critical Issues: [critical issues count]
+- Quality Status: [Pass/Fail/Conditional]
+- Recommendations: [quality recommendations]" > tmp/STORY-XXX-quality-assessment.md
+
+git add tmp/STORY-XXX-quality-assessment.md
+git commit -m "STORY-XXX: Software Tester: quality assessment completed"
+
+# Update story status
+git add project/team/stories/STORY-XXX.md
+git commit -m "STORY-XXX: Software Tester: update story status - [quality status]"
+```
+
+#### Handover to Product Owner
+
+```bash
+# Prepare testing handover
+# Document test results
+# Provide quality recommendations
+# Prepare demo validation
+
+# Create handover note for Product Owner
+echo "STORY-XXX handover to Product Owner:
+- Testing Status: [testing completed]
+- Quality Assessment: [quality status]
+- Acceptance Criteria: [all criteria met/not met]
+- Bug Status: [bugs resolved/pending]
+- Demo Readiness: [ready/not ready]
+- Recommendations: [quality recommendations]" > tmp/STORY-XXX-tester-po-handover.md
+
+"make necessary project documentation changes"
+git commit -m "STORY-XXX: Software Tester: handover to Product Owner - [quality summary]"
+```
+
+## Test Implementation Standards
+
+### Test Documentation Compliance
+
+All tests must follow [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc):
+
+```python
+def test_example_functionality(self):
+    """As a user I want [business objective], so I can [user benefit].
+    Technical: [specific technical requirement or validation approach].
+    Validation: [how the test validates the requirement - optional for complex tests].
+    """
+    # Test implementation
+    pass
+```
+
+### Test Case Design Standards
+
+#### Test Case Template
+
+```markdown
+# Test Case: [Test Case Name]
+
+**ID**: TC-XXX
+**Story**: [STORY-XXX: Story Title]
+**Priority**: [High/Medium/Low]
+**Type**: [Functional/Integration/Performance/Security]
+
+## Test Objective
+
+[What this test case validates]
+
+## Preconditions
+
+[Conditions that must be met before test execution]
+
+## Test Steps
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Expected Results
+
+[What should happen]
+
+## Test Data
+
+[Data required for test execution]
+
+## Postconditions
+
+[State after test execution]
+```
+
+#### Test Case Implementation
+
+```bash
+# Create comprehensive test cases
+# Cover all acceptance criteria
+# Include edge cases and error conditions
+# Prepare test data and environment
+
+git add project/team/tests/STORY-XXX-test-cases.md
+git commit -m "STORY-XXX: Software Tester: create comprehensive test cases"
+```
+
+## Quality Assurance Processes
+
+### Test Execution Standards
+
+- **Systematic Testing**: Follow structured test execution approach
+- **Documentation**: Document all test results and findings
+- **Traceability**: Link tests to requirements and acceptance criteria
+- **Coverage**: Ensure comprehensive test coverage
+
+### Test Execution Process
+
+```bash
+# Execute test cases systematically
+# Document test results
+# Track test coverage
+# Report quality metrics
+
+# Commit test execution results
+git add project/team/tests/STORY-XXX-test-results.md
+git commit -m "STORY-XXX: Software Tester: test execution completed"
+
+# Commit test coverage analysis
+git add tests/coverage/STORY-XXX-coverage.html
+git commit -m "STORY-XXX: Software Tester: test coverage analysis"
+```
+
+## Bug Management
+
+### Bug Reporting Standards
+
+- **Clear Description**: Detailed bug description
+- **Reproduction Steps**: Step-by-step reproduction instructions
+- **Expected vs Actual**: Clear comparison of expected and actual behavior
+- **Environment Details**: Complete environment information
+- **Priority Assignment**: Appropriate priority and severity levels
+
+### Bug Management Process
+
+```bash
+# Identify and document bugs
+# Create detailed bug reports
+# Track bug resolution
+# Verify bug fixes
+
+# Commit bug reports
+git add tmp/STORY-XXX-bug-*.md
+git commit -m "STORY-XXX: Software Tester: bug reports created"
+
+# Commit bug verification
+git add tests/test_STORY-XXX_bug-verification.py
+git commit -m "STORY-XXX: Software Tester: bug verification tests"
+```
+
+## Performance and Security Testing
+
+### Performance Testing
+
+```bash
+# Test performance requirements
+# Validate response times
+# Test system load
+# Monitor resource usage
+
+# Commit performance tests
+git add tests/test_STORY-XXX_performance.py
+git commit -m "STORY-XXX: Software Tester: performance testing completed"
+
+# Commit performance results
+git add tests/results/STORY-XXX-performance-results.md
+git commit -m "STORY-XXX: Software Tester: performance test results"
+```
+
+### Security Testing
+
+```bash
+# Test security controls
+# Validate authentication
+# Test authorization
+# Check data protection
+
+# Commit security tests
+git add tests/test_STORY-XXX_security.py
+git commit -m "STORY-XXX: Software Tester: security testing completed"
+
+# Commit security results
+git add tests/results/STORY-XXX-security-results.md
+git commit -m "STORY-XXX: Software Tester: security test results"
+```
+
+## Test Automation
+
+### Automated Test Implementation
+
+```bash
+# Implement automated tests
+# Set up continuous testing
+# Integrate with CI/CD pipeline
+# Monitor test execution
+
+# Commit automated tests
+git add tests/automated/test_STORY-XXX_automated.py
+git commit -m "STORY-XXX: Software Tester: automated tests implemented"
+
+# Commit CI/CD integration
+git add .github/workflows/test_STORY-XXX.yml
+git commit -m "STORY-XXX: Software Tester: CI/CD integration added"
+```
+
+### Test Maintenance
+
+```bash
+# Maintain test suite
+# Update tests for changes
+# Remove obsolete tests
+# Optimize test execution
+
+git add tests/
+git commit -m "STORY-XXX: Software Tester: test suite maintenance"
+```
+
+## Quality Gates
+
+### Testing Completion Checklist
+
+- [ ] All acceptance criteria tested
+- [ ] Functional tests implemented and passing
+- [ ] Integration tests completed
+- [ ] Performance tests executed
+- [ ] Security tests completed
+- [ ] Bug reports created and tracked
+- [ ] Test coverage analysis completed
+- [ ] Quality assessment documented
+- [ ] Demo validation completed
+- [ ] Handover documentation prepared
+
+### Quality Assurance Checklist
+
+- [ ] Test strategy documented
+- [ ] Test cases designed and implemented
+- [ ] Test data prepared
+- [ ] Test environment configured
+- [ ] Test execution completed
+- [ ] Bug management process followed
+- [ ] Quality metrics tracked
+- [ ] Test results documented
+- [ ] Recommendations provided
+- [ ] Handover completed
+
+## Communication Standards
+
+### Team Communication
+
+- **Test Planning**: Participate in test planning discussions
+- **Bug Reports**: Communicate bugs and quality issues
+- **Progress Updates**: Provide regular testing progress updates
+- **Quality Reviews**: Participate in quality review sessions
+
+### Stakeholder Communication
+
+- **Quality Reports**: Provide quality assessment reports
+- **Demo Validation**: Validate demo readiness
+- **Risk Communication**: Communicate quality risks
+- **Recommendations**: Provide quality improvement recommendations
+
+## Integration with Other Roles
+
+### Software Developer Collaboration
+
+- **Test Support**: Provide support for developer testing
+- **Bug Resolution**: Collaborate on bug fixes
+- **Test Data**: Provide test data and scenarios
+- **Integration Testing**: Coordinate integration testing
+
+### Product Owner Coordination
+
+- **Acceptance Criteria**: Validate acceptance criteria
+- **Demo Preparation**: Prepare demo validation
+- **Quality Assessment**: Provide quality recommendations
+- **User Acceptance**: Support user acceptance testing
+
+### Scrum Master Support
+
+- **Sprint Planning**: Provide input on testing effort
+- **Progress Tracking**: Update testing progress
+- **Impediment Reporting**: Report testing blockers
+- **Sprint Review**: Participate in sprint reviews
+
+## Related Rules
+
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) - Testing standards
+- [test-plan.mdc](mdc:.cursor/rules/test-plan.mdc) - Testing strategy
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - Project management
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow
+- [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
+
+## Retrospective Feedback
+
+### Learning and Improvement
+
+When tasks cannot be completed on the first try, document lessons learned:
+
+```bash
+# Create retrospective note (concatenate to allow multiple entries)
+echo "STORY-XXX Software Tester Retrospective:
+- Issue: [What went wrong or was unclear]
+- Root Cause: [Why it happened]
+- Solution: [What worked or should be done differently]
+- Recommendation: [Specific improvement for own or other roles]
+- Date: $(date)" >> tmp/retrospectives/software-tester-retrospectives.md
+```
+
+### Common Issues and Solutions
+
+- **Testing Complexity**: Break down complex test scenarios into smaller, manageable test cases
+- **Test Data Issues**: Better test data management and isolation
+- **Environment Problems**: Improve test environment setup and configuration
+- **Integration Testing**: Better coordination with development team for integration testing
+
+## Handover Messages
+
+### For Next Role (Product Owner)
+
+```
+"STORY-XXX testing is complete. Quality assessment: [Pass/Fail/Conditional],
+[X] bugs found and resolved, demo readiness: [Ready/Not Ready].
+Please review quality assessment and approve for demo."
+```
+
+### For User Review
+
+```
+"STORY-XXX testing completed. All acceptance criteria validated,
+quality assessment documented, and demo readiness confirmed.
+Ready for Product Owner handover. Please review test results and approve quality."
+```
+
+This rule ensures Software Testers can effectively plan, execute, and manage testing activities, providing comprehensive quality assurance and clear handover to Product Owners with proper git-based documentation and quality tracking throughout the testing process.

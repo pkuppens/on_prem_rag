@@ -1,0 +1,517 @@
+---
+description: Software Developer implementation responsibilities and git handover workflow
+globs:
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "project/team/tasks/**/*.md"
+  - "docs/technical/**/*.md"
+alwaysApply: false
+---
+
+# Software Developer Context and Workflow
+
+## Primary Responsibilities
+
+### Feature Implementation
+
+- **Code Development**: Implement features according to design specifications
+- **Unit Testing**: Write comprehensive unit tests for all code
+- **Code Quality**: Maintain high code quality and adherence to standards
+- **Documentation**: Document code with clear comments and docstrings
+
+### Technical Execution
+
+- **Design Implementation**: Follow architectural guidelines and design patterns
+- **Integration**: Implement system integrations and API endpoints
+- **Performance**: Optimize code for performance and efficiency
+- **Security**: Implement security best practices and controls
+
+### Quality Assurance
+
+- **Code Reviews**: Participate in peer code reviews
+- **Testing**: Ensure comprehensive test coverage
+- **Bug Fixes**: Identify and fix bugs in implementation
+- **Refactoring**: Continuously improve code quality
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [src/](mdc:src/) - Source code implementation
+- [tests/](mdc:tests/) - Test implementation and execution
+- [project/team/tasks/](mdc:project/team/tasks/) - Implementation tasks and assignments
+- [docs/technical/](mdc:docs/technical/) - Technical documentation and design specs
+
+### Supporting Documentation
+
+- [docs/technical/ARCHITECTURE.md](mdc:docs/technical/ARCHITECTURE.md) - System architecture
+- [docs/technical/CODING_STANDARDS.md](mdc:docs/technical/CODING_STANDARDS.md) - Coding guidelines
+- [docs/technical/DESIGN_PATTERNS.md](mdc:docs/technical/DESIGN_PATTERNS.md) - Design patterns
+
+## Git Handover Workflow
+
+### 1. Receiving Software Architect Handover
+
+When receiving handover from Software Architect:
+
+```bash
+# Check handover notes
+cat tmp/STORY-XXX-architect-developer-handover.md
+
+# Review design specification
+cat docs/technical/STORY-XXX-design.md
+
+# Check implementation tasks
+cat project/team/tasks/TASK-XXX-*.md
+
+# Review coding standards
+cat docs/technical/CODING_STANDARDS.md
+```
+
+### 2. Implementation Planning and Setup
+
+#### Development Environment Setup
+
+```bash
+# Set up development branch
+git checkout -b feature/STORY-XXX-implementation
+
+# Install dependencies
+uv sync --dev
+
+# Run existing tests to ensure clean state
+uv run pytest
+
+# Create implementation plan
+echo "STORY-XXX Implementation Plan:
+- Implementation Approach: [development strategy]
+- Code Structure: [file organization]
+- Testing Strategy: [testing approach]
+- Integration Points: [integration requirements]
+- Performance Considerations: [performance requirements]" > docs/technical/STORY-XXX-implementation-plan.md
+
+git add docs/technical/STORY-XXX-implementation-plan.md
+git commit -m "STORY-XXX: Software Developer: implementation plan created"
+```
+
+#### Task Breakdown and Estimation
+
+```bash
+# Break down implementation into smaller tasks
+# Estimate effort for each task
+# Create detailed task specifications
+# Set up task tracking
+
+# Create implementation tasks
+git add project/team/tasks/TASK-XXX-impl-*.md
+git commit -m "STORY-XXX: Software Developer: create implementation tasks"
+
+# Update task status
+git add project/team/tasks/TASK-XXX-*.md
+git commit -m "STORY-XXX: Software Developer: update task status to In Progress"
+```
+
+### 3. Implementation Execution
+
+#### Test-Driven Development
+
+```bash
+# Write failing tests first
+# Implement minimal code to pass tests
+# Refactor and improve code
+# Ensure all tests pass
+
+# Commit test implementation
+git add tests/test_STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: add unit tests - [test description]"
+
+# Commit implementation
+git add src/rag_pipeline/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: implement [feature description]"
+
+# Run tests and commit results
+uv run pytest tests/test_STORY-XXX.py -v
+git add tests/test_STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: tests passing - [test coverage]"
+```
+
+#### Code Quality and Standards
+
+```bash
+# Follow coding standards
+# Apply design patterns
+# Write comprehensive docstrings
+# Ensure code readability
+
+# Run linting and formatting
+uv run ruff check src/rag_pipeline/STORY-XXX.py
+uv run ruff format src/rag_pipeline/STORY-XXX.py
+
+# Commit code quality improvements
+git add src/rag_pipeline/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: code quality improvements - [specific improvements]"
+```
+
+### 4. Integration and Testing
+
+#### Integration Implementation
+
+```bash
+# Implement system integrations
+# Test integration points
+# Handle error conditions
+# Document integration behavior
+
+# Commit integration code
+git add src/rag_pipeline/integrations/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: implement integration - [integration description]"
+
+# Commit integration tests
+git add tests/test_STORY-XXX_integration.py
+git commit -m "STORY-XXX: Software Developer: add integration tests"
+```
+
+#### Performance Optimization
+
+```bash
+# Profile code performance
+# Optimize bottlenecks
+# Ensure performance requirements met
+# Document performance characteristics
+
+# Commit performance improvements
+git add src/rag_pipeline/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: performance optimization - [improvement details]"
+
+# Commit performance tests
+git add tests/test_STORY-XXX_performance.py
+git commit -m "STORY-XXX: Software Developer: add performance tests"
+```
+
+### 5. Handover to Software Tester
+
+#### Implementation Completion
+
+```bash
+# Complete all implementation tasks
+# Ensure all tests pass
+# Update documentation
+# Prepare for testing handover
+
+# Update task status
+git add project/team/tasks/TASK-XXX-*.md
+git commit -m "STORY-XXX: Software Developer: implementation completed"
+
+# Create handover note for Software Tester
+echo "STORY-XXX handover to Software Tester:
+- Implementation Status: [completed features]
+- Test Coverage: [test coverage percentage]
+- Integration Points: [list integrations]
+- Known Issues: [list any known issues]
+- Testing Requirements: [specific testing needs]
+- Demo Requirements: [demo preparation needs]" > tmp/STORY-XXX-developer-tester-handover.md
+
+"make necessary changes to project documentation"
+git commit -m "STORY-XXX: Software Developer: handover to Software Tester - [implementation summary]"
+```
+
+## Code Implementation Standards
+
+### Function Design Compliance
+
+All functions must follow [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc):
+
+```python
+def example_function(
+    param1: str,
+    param2: int,
+    optional_param: bool = False,
+) -> dict[str, any]:
+    """Brief one-line summary of function purpose.
+
+    More detailed description of what the function does, including
+    any important context or business logic.
+
+    Args:
+        param1 (str): Description of first parameter
+        param2 (int): Description of second parameter
+        optional_param (bool, optional): Description of optional parameter.
+            Defaults to False.
+
+    Returns:
+        dict[str, any]: Description of return value structure
+
+    Raises:
+        ValueError: When invalid parameters are provided
+        RuntimeError: When operation fails
+
+    Example:
+        >>> result = example_function("test", 42, True)
+        >>> print(result["status"])
+        "success"
+    """
+    # Implementation here
+    pass
+```
+
+### Coding Standards Enforcement
+
+#### Code Quality Checklist
+
+- [ ] Functions follow function-definitions.mdc standards
+- [ ] Code follows coding-style.mdc guidelines
+- [ ] All functions have comprehensive docstrings
+- [ ] Type hints are used for all parameters and returns
+- [ ] Error handling is implemented appropriately
+- [ ] Code is readable and well-structured
+- [ ] Design patterns are applied correctly
+
+#### Code Review Preparation
+
+```bash
+# Run all quality checks
+uv run ruff check src/
+uv run ruff format --check src/
+uv run pytest tests/ -v
+uv run pytest --cov=src tests/
+
+# Commit quality improvements
+git add src/
+git commit -m "STORY-XXX: Software Developer: code quality review - [improvements]"
+```
+
+## Testing Implementation
+
+### Unit Testing Standards
+
+All tests must follow [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc):
+
+```python
+def test_example_functionality(self):
+    """As a user I want [business objective], so I can [user benefit].
+    Technical: [specific technical requirement or validation approach].
+    Validation: [how the test validates the requirement - optional for complex tests].
+    """
+    # Test implementation
+    pass
+```
+
+### Test Implementation Process
+
+```bash
+# Write comprehensive unit tests
+# Test edge cases and error conditions
+# Ensure test coverage >80%
+# Mock external dependencies
+
+# Commit test implementation
+git add tests/test_STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: add comprehensive unit tests"
+
+# Run coverage analysis
+uv run pytest --cov=src --cov-report=html tests/
+git add htmlcov/
+git commit -m "STORY-XXX: Software Developer: test coverage analysis"
+```
+
+### Integration Testing
+
+```bash
+# Implement integration tests
+# Test system interactions
+# Validate data flow
+# Test error handling
+
+# Commit integration tests
+git add tests/test_STORY-XXX_integration.py
+git commit -m "STORY-XXX: Software Developer: add integration tests"
+```
+
+## Documentation and Comments
+
+### Code Documentation Standards
+
+- **Function Docstrings**: Comprehensive documentation for all public functions
+- **Class Documentation**: Clear class purpose and usage
+- **Module Documentation**: Module-level documentation and examples
+- **Inline Comments**: Comments for complex logic and business rules
+
+### Documentation Updates
+
+```bash
+# Update code documentation
+# Add usage examples
+# Document API changes
+# Update technical documentation
+
+git add src/rag_pipeline/STORY-XXX.py
+git add docs/technical/STORY-XXX-implementation.md
+git commit -m "STORY-XXX: Software Developer: update documentation"
+```
+
+## Performance and Optimization
+
+### Performance Monitoring
+
+```bash
+# Profile code performance
+# Identify bottlenecks
+# Optimize critical paths
+# Document performance characteristics
+
+# Commit performance improvements
+git add src/rag_pipeline/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: performance optimization - [details]"
+
+# Commit performance tests
+git add tests/test_STORY-XXX_performance.py
+git commit -m "STORY-XXX: Software Developer: add performance tests"
+```
+
+### Memory and Resource Management
+
+```bash
+# Optimize memory usage
+# Manage resource cleanup
+# Implement efficient algorithms
+# Monitor resource consumption
+
+git add src/rag_pipeline/STORY-XXX.py
+git commit -m "STORY-XXX: Software Developer: resource optimization"
+```
+
+## Security Implementation
+
+### Security Best Practices
+
+- **Input Validation**: Validate all user inputs
+- **Authentication**: Implement proper authentication
+- **Authorization**: Enforce access controls
+- **Data Protection**: Protect sensitive data
+
+### Security Implementation
+
+```bash
+# Implement security controls
+# Add security tests
+# Document security considerations
+# Follow security best practices
+
+git add src/rag_pipeline/security/STORY-XXX.py
+git add tests/test_STORY-XXX_security.py
+git commit -m "STORY-XXX: Software Developer: implement security controls"
+```
+
+## Quality Gates
+
+### Implementation Completion Checklist
+
+- [ ] All acceptance criteria implemented
+- [ ] Unit tests written and passing
+- [ ] Integration tests implemented
+- [ ] Code follows all standards
+- [ ] Documentation complete
+- [ ] Performance requirements met
+- [ ] Security requirements implemented
+- [ ] Code review completed
+- [ ] All linting checks pass
+- [ ] Test coverage >80%
+
+### Handover Readiness Checklist
+
+- [ ] Implementation completed and tested
+- [ ] All tasks marked as completed
+- [ ] Documentation updated
+- [ ] Handover notes created
+- [ ] Demo preparation completed
+- [ ] Code ready for testing
+- [ ] Integration points validated
+
+## Communication Standards
+
+### Team Communication
+
+- **Daily Standups**: Provide implementation progress updates
+- **Code Reviews**: Participate in peer code reviews
+- **Technical Discussions**: Engage in technical decision-making
+- **Problem Solving**: Collaborate on implementation challenges
+
+### Stakeholder Communication
+
+- **Progress Updates**: Regular updates on implementation progress
+- **Technical Issues**: Communicate technical challenges and solutions
+- **Demo Preparation**: Prepare and participate in demos
+- **Documentation**: Maintain clear technical documentation
+
+## Integration with Other Roles
+
+### Software Architect Collaboration
+
+- **Design Implementation**: Follow architectural guidelines
+- **Technical Decisions**: Collaborate on implementation decisions
+- **Code Reviews**: Participate in architecture-focused reviews
+- **Best Practices**: Apply architectural best practices
+
+### Software Tester Coordination
+
+- **Test Support**: Provide support for testing activities
+- **Bug Fixes**: Address bugs identified during testing
+- **Test Data**: Provide test data and scenarios
+- **Integration Testing**: Collaborate on integration testing
+
+### Scrum Master Support
+
+- **Task Updates**: Provide regular task progress updates
+- **Impediment Reporting**: Report blockers and challenges
+- **Sprint Planning**: Participate in sprint planning
+- **Demo Participation**: Participate in sprint demos
+
+## Related Rules
+
+- [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) - Function design standards
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Coding guidelines
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) - Testing standards
+- [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
+- [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc) - Package management
+
+## Retrospective Feedback
+
+### Learning and Improvement
+
+When tasks cannot be completed on the first try, document lessons learned:
+
+```bash
+# Create retrospective note (concatenate to allow multiple entries)
+echo "STORY-XXX Software Developer Retrospective:
+- Issue: [What went wrong or was unclear]
+- Root Cause: [Why it happened]
+- Solution: [What worked or should be done differently]
+- Recommendation: [Specific improvement for own or other roles]
+- Date: $(date)" >> tmp/retrospectives/software-developer-retrospectives.md
+```
+
+### Common Issues and Solutions
+
+- **Implementation Complexity**: Break down complex features into smaller, testable components
+- **Testing Challenges**: Write tests first (TDD) to clarify requirements
+- **Integration Issues**: Better upfront analysis of dependencies and interfaces
+- **Code Quality**: Regular refactoring and code review to maintain quality
+
+## Handover Messages
+
+### For Next Role (Software Tester)
+
+```
+"STORY-XXX implementation is complete. Test coverage is [X]%, integration points tested,
+and demo requirements met. Please review implementation and begin comprehensive testing."
+```
+
+### For User Review
+
+```
+"STORY-XXX implementation completed. All features implemented, tests written,
+and code quality standards met. Ready for Software Tester handover.
+Please review implementation and approve testing handover."
+```
+
+This rule ensures Software Developers can effectively implement features, maintain code quality, and hand over completed implementations to Software Testers with proper git-based documentation and testing throughout the development process.

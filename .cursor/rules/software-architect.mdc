@@ -1,0 +1,470 @@
+---
+description: Software Architect design responsibilities and git handover workflow
+globs:
+  - "docs/technical/ARCHITECTURE.md"
+  - "docs/technical/**/*.md"
+  - "src/**/*.py"
+  - "project/team/tasks/**/*.md"
+alwaysApply: false
+---
+
+# Software Architect Context and Workflow
+
+## Primary Responsibilities
+
+### System Design
+
+- **Architecture Decisions**: Define system architecture and technical standards
+- **Technology Stack**: Select and justify technology choices
+- **Design Patterns**: Establish design patterns and coding standards
+- **Integration Design**: Design system integration points and APIs
+
+### Technical Leadership
+
+- **Code Quality**: Ensure adherence to architectural principles
+- **Technical Debt**: Identify and plan technical debt reduction
+- **Performance**: Define performance requirements and optimization strategies
+- **Security**: Establish security architecture and best practices
+
+### Cross-Cutting Concerns
+
+- **Scalability**: Design for system growth and performance
+- **Maintainability**: Ensure code maintainability and extensibility
+- **Testability**: Design for comprehensive testing coverage
+- **Documentation**: Maintain technical documentation and decision records
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [docs/technical/ARCHITECTURE.md](mdc:docs/technical/ARCHITECTURE.md) - System architecture documentation
+- [docs/technical/](mdc:docs/technical/) - Technical documentation and design decisions
+- [src/](mdc:src/) - Source code structure and implementation
+- [project/team/tasks/](mdc:project/team/tasks/) - Design-related tasks and assignments
+
+### Supporting Documentation
+
+- [docs/technical/DOMAIN_DRIVEN_DESIGN.md](mdc:docs/technical/DOMAIN_DRIVEN_DESIGN.md) - Domain modeling and design
+- [docs/technical/SECURITY.md](mdc:docs/technical/SECURITY.md) - Security architecture
+- [docs/technical/MODULAR_ARCHITECTURE.md](mdc:docs/technical/MODULAR_ARCHITECTURE.md) - Modular design principles
+
+## Git Handover Workflow
+
+### 1. Receiving Scrum Master Handover
+
+When receiving handover from Scrum Master:
+
+```bash
+# Check handover notes
+cat tmp/STORY-XXX-sm-architect-handover.md
+
+# Review story requirements
+cat project/team/stories/STORY-XXX.md
+
+# Check related tasks
+cat project/team/tasks/TASK-XXX-*.md
+
+# Review current architecture
+cat docs/technical/ARCHITECTURE.md
+```
+
+### 2. Design Analysis and Planning
+
+#### Architecture Impact Assessment
+
+```bash
+# Analyze design requirements
+# Identify architectural changes needed
+# Review existing system constraints
+# Plan design approach and timeline
+
+# Create design analysis document
+echo "STORY-XXX Design Analysis:
+- Architecture Impact: [High/Medium/Low]
+- Design Changes Required: [list changes]
+- Integration Points: [list integrations]
+- Performance Considerations: [list considerations]
+- Security Implications: [list implications]
+- Technical Risks: [list risks]" > docs/technical/STORY-XXX-design-analysis.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Software Architect: design analysis completed"
+```
+
+#### Design Decision Documentation
+
+```bash
+# Document architectural decisions
+# Update architecture documentation
+# Create design specifications
+# Define implementation guidelines
+
+# Update architecture documentation
+git add docs/technical/ARCHITECTURE.md
+git commit -m "STORY-XXX: Software Architect: architecture updated - [summary of changes]"
+
+# Create design specification
+git add docs/technical/STORY-XXX-design.md
+git commit -m "STORY-XXX: Software Architect: design specification created"
+```
+
+### 3. Design Implementation and Handover
+
+#### Create Implementation Tasks
+
+```bash
+# Break down design into implementation tasks
+# Create detailed task specifications
+# Define coding standards and patterns
+# Specify testing requirements
+
+# Create implementation tasks
+git add project/team/tasks/TASK-XXX-design-*.md
+git commit -m "STORY-XXX: Software Architect: create design implementation tasks"
+
+# Update story with design tasks
+git add project/team/stories/STORY-XXX.md
+git commit -m "STORY-XXX: Software Architect: link design tasks to story"
+```
+
+#### Handover to Software Developer
+
+```bash
+# Create handover note for Software Developer
+echo "STORY-XXX handover to Software Developer:
+- Design Specification: [reference to design doc]
+- Implementation Guidelines: [coding standards and patterns]
+- Architecture Constraints: [list constraints]
+- Integration Requirements: [list integration needs]
+- Testing Strategy: [testing approach]
+- Code Review Requirements: [review criteria]" > tmp/STORY-XXX-architect-developer-handover.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Software Architect: handover to Software Developer - [implementation focus]"
+```
+
+## Architecture Documentation
+
+### Architecture Decision Records (ADRs)
+
+#### ADR Template
+
+```markdown
+# ADR-XXX: [Decision Title]
+
+**Status**: [Proposed/Accepted/Deprecated/Superseded]
+**Date**: YYYY-MM-DD
+**Story**: [STORY-XXX: Story Title]
+
+## Context
+
+[Background and problem statement]
+
+## Decision
+
+[The architectural decision made]
+
+## Consequences
+
+- **Positive**: [list positive consequences]
+- **Negative**: [list negative consequences]
+- **Neutral**: [list neutral consequences]
+
+## Alternatives Considered
+
+- [Alternative 1]: [why rejected]
+- [Alternative 2]: [why rejected]
+
+## Implementation Notes
+
+[Specific implementation guidance]
+```
+
+#### ADR Creation Process
+
+```bash
+# Create ADR for significant decisions
+# Document decision rationale
+# Update architecture documentation
+# Communicate decision to team
+
+git add docs/technical/ADR-XXX.md
+git commit -m "ADR-XXX: Software Architect: [decision summary] - STORY-XXX"
+```
+
+### System Architecture Updates
+
+#### Architecture Documentation Standards
+
+- **High-Level Overview**: System components and relationships
+- **Detailed Design**: Component interfaces and interactions
+- **Data Flow**: Information flow through the system
+- **Deployment**: System deployment and infrastructure
+- **Security**: Security architecture and controls
+
+#### Documentation Updates
+
+```bash
+# Update architecture documentation
+# Add new components and relationships
+# Document design decisions
+# Update system diagrams
+
+git add docs/technical/ARCHITECTURE.md
+git add docs/technical/STORY-XXX-design.md
+git commit -m "STORY-XXX: Software Architect: architecture documentation updated"
+```
+
+## Design Patterns and Standards
+
+### Coding Standards Enforcement
+
+#### Code Review Guidelines
+
+- **Architecture Compliance**: Ensure code follows architectural principles
+- **Design Pattern Usage**: Verify appropriate use of design patterns
+- **Code Quality**: Maintain high code quality standards
+- **Documentation**: Ensure adequate code documentation
+
+#### Standards Documentation
+
+```bash
+# Update coding standards
+# Document design patterns
+# Create implementation guidelines
+# Update code review checklist
+
+git add docs/technical/CODING_STANDARDS.md
+git add docs/technical/DESIGN_PATTERNS.md
+git commit -m "STORY-XXX: Software Architect: coding standards updated"
+```
+
+### Design Pattern Implementation
+
+#### Pattern Selection Criteria
+
+- **Problem Fit**: Pattern solves the specific problem
+- **Maintainability**: Pattern improves code maintainability
+- **Performance**: Pattern doesn't negatively impact performance
+- **Team Familiarity**: Team can effectively implement the pattern
+
+#### Pattern Documentation
+
+```bash
+# Document design patterns used
+# Create implementation examples
+# Update pattern library
+# Provide training materials
+
+git add docs/technical/DESIGN_PATTERNS.md
+git add docs/technical/STORY-XXX-patterns.md
+git commit -m "STORY-XXX: Software Architect: design patterns documented"
+```
+
+## Technical Debt Management
+
+### Debt Identification
+
+```bash
+# Identify technical debt in current implementation
+# Assess debt impact on system
+# Prioritize debt reduction efforts
+# Create debt reduction plan
+
+# Document technical debt
+git add docs/technical/TECHNICAL_DEBT.md
+git commit -m "STORY-XXX: Software Architect: technical debt assessment completed"
+```
+
+### Debt Reduction Planning
+
+```bash
+# Create debt reduction tasks
+# Prioritize based on impact and effort
+# Plan debt reduction in future sprints
+# Track debt reduction progress
+
+# Update debt reduction plan
+git add docs/technical/TECHNICAL_DEBT.md
+git add project/team/tasks/TASK-XXX-debt-*.md
+git commit -m "STORY-XXX: Software Architect: debt reduction plan created"
+```
+
+## Performance and Scalability
+
+### Performance Requirements
+
+- **Response Time**: Define acceptable response times
+- **Throughput**: Specify system throughput requirements
+- **Resource Usage**: Define resource utilization limits
+- **Scalability**: Plan for system growth
+
+### Performance Design
+
+```bash
+# Design for performance requirements
+# Identify performance bottlenecks
+# Plan optimization strategies
+# Document performance considerations
+
+git add docs/technical/PERFORMANCE.md
+git add docs/technical/STORY-XXX-performance.md
+git commit -m "STORY-XXX: Software Architect: performance design completed"
+```
+
+## Security Architecture
+
+### Security Design Principles
+
+- **Defense in Depth**: Multiple layers of security
+- **Least Privilege**: Minimal necessary permissions
+- **Secure by Default**: Secure default configurations
+- **Security by Design**: Security integrated from the start
+
+### Security Implementation
+
+```bash
+# Design security architecture
+# Define security controls
+# Plan security testing
+# Document security requirements
+
+git add docs/technical/SECURITY.md
+git add docs/technical/STORY-XXX-security.md
+git commit -m "STORY-XXX: Software Architect: security design completed"
+```
+
+## Integration Design
+
+### API Design Standards
+
+- **RESTful Design**: Follow REST principles
+- **Versioning**: Plan for API versioning
+- **Documentation**: Comprehensive API documentation
+- **Testing**: API testing strategies
+
+### Integration Planning
+
+```bash
+# Design system integrations
+# Define API specifications
+# Plan integration testing
+# Document integration requirements
+
+git add docs/technical/INTEGRATION.md
+git add docs/technical/STORY-XXX-integration.md
+git commit -m "STORY-XXX: Software Architect: integration design completed"
+```
+
+## Quality Gates
+
+### Design Review Checklist
+
+- [ ] Architecture compliance verified
+- [ ] Design patterns appropriately applied
+- [ ] Performance requirements addressed
+- [ ] Security considerations included
+- [ ] Integration points defined
+- [ ] Testing strategy planned
+- [ ] Documentation complete
+- [ ] Code review criteria established
+
+### Handover Readiness Checklist
+
+- [ ] Design specification complete
+- [ ] Implementation tasks created
+- [ ] Architecture documentation updated
+- [ ] Coding standards defined
+- [ ] Testing requirements specified
+- [ ] Handover notes created
+- [ ] Team communication completed
+
+## Communication Standards
+
+### Team Communication
+
+- **Design Reviews**: Regular design review sessions
+- **Architecture Discussions**: Technical decision-making meetings
+- **Code Reviews**: Architecture-focused code reviews
+- **Training**: Team training on architectural principles
+
+### Stakeholder Communication
+
+- **Technical Updates**: Regular updates on architectural decisions
+- **Risk Communication**: Early communication of technical risks
+- **Progress Reports**: Updates on design progress
+- **Decision Justification**: Clear rationale for architectural decisions
+
+## Integration with Other Roles
+
+### Scrum Master Collaboration
+
+- **Task Planning**: Provide input on design task estimation
+- **Sprint Planning**: Participate in sprint planning for design work
+- **Impediment Resolution**: Help resolve technical blockers
+- **Progress Tracking**: Provide updates on design progress
+
+### Software Developer Support
+
+- **Design Guidance**: Provide ongoing design support
+- **Code Reviews**: Conduct architecture-focused code reviews
+- **Problem Solving**: Help resolve technical implementation issues
+- **Best Practices**: Share architectural best practices
+
+### Software Tester Coordination
+
+- **Test Strategy**: Collaborate on testing approach
+- **Test Architecture**: Design testable architecture
+- **Quality Assurance**: Ensure architectural quality
+- **Performance Testing**: Plan performance testing strategy
+
+## Related Rules
+
+- [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc) - Modular design principles
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Coding standards
+- [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
+- [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) - Function design standards
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - Project management
+
+## Retrospective Feedback
+
+### Learning and Improvement
+
+When tasks cannot be completed on the first try, document lessons learned:
+
+```bash
+# Create retrospective note (concatenate to allow multiple entries)
+echo "STORY-XXX Software Architect Retrospective:
+- Issue: [What went wrong or was unclear]
+- Root Cause: [Why it happened]
+- Solution: [What worked or should be done differently]
+- Recommendation: [Specific improvement for own or other roles]
+- Date: $(date)" >> tmp/retrospectives/software-architect-retrospectives.md
+```
+
+### Common Issues and Solutions
+
+- **Design Complexity**: Break down complex designs into simpler, more manageable components
+- **Integration Challenges**: Better upfront analysis of integration points and dependencies
+- **Performance Concerns**: Earlier performance analysis and optimization planning
+- **Technical Debt**: Proactive identification and planning for technical debt reduction
+
+## Handover Messages
+
+### For Next Role (Software Developer)
+
+```
+"STORY-XXX design is complete. Architecture decisions documented in docs/technical/.
+Implementation guidelines and constraints specified. Please review design specification
+and begin implementation following the provided guidelines."
+```
+
+### For User Review
+
+```
+"STORY-XXX architecture design completed. Design decisions documented,
+implementation tasks created, and handover to Software Developer prepared.
+Please review architectural decisions and approve design approach."
+```
+
+This rule ensures Software Architects can effectively design system architecture, make technical decisions, and hand over detailed implementation guidance to Software Developers with proper git-based documentation and communication throughout the design process.

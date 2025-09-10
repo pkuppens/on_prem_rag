@@ -190,6 +190,183 @@ gh issue edit ISSUE_NUMBER --assignee @me
 gh issue close ISSUE_NUMBER --comment "Completed as per acceptance criteria"
 ```
 
+## Role-Based Commit Messages
+
+### Commit Message Format
+
+All commits should follow the role-based format to enable clear handover tracking:
+
+```
+[STORY/TASK-ID]: [Role]: [Action] - [Brief Description]
+```
+
+### Role-Specific Commit Examples
+
+#### Product Owner Commits
+
+```bash
+# Story prioritization and planning
+git commit -m "STORY-XXX: Product Owner: move to In Progress - [business justification]"
+git commit -m "STORY-XXX: Product Owner: add to Sprint [X] - [priority reason]"
+git commit -m "STORY-XXX: Product Owner: handover to Scrum Master - [handover summary]"
+```
+
+#### Scrum Master Commits
+
+```bash
+# Sprint planning and task delegation
+git commit -m "STORY-XXX: Scrum Master: create task breakdown - [task count] tasks created"
+git commit -m "STORY-XXX: Scrum Master: assign tasks to team members"
+git commit -m "STORY-XXX: Scrum Master: handover to Software Architect - [design focus]"
+git commit -m "STORY-XXX: Scrum Master: handover to Software Developer - [implementation focus]"
+git commit -m "STORY-XXX: Scrum Master: handover to Software Tester - [testing focus]"
+```
+
+#### Software Architect Commits
+
+```bash
+# Design and architecture decisions
+git commit -m "STORY-XXX: Software Architect: design analysis completed"
+git commit -m "STORY-XXX: Software Architect: architecture updated - [summary of changes]"
+git commit -m "STORY-XXX: Software Architect: design specification created"
+git commit -m "STORY-XXX: Software Architect: handover to Software Developer - [implementation focus]"
+```
+
+#### Software Developer Commits
+
+```bash
+# Implementation and code development
+git commit -m "STORY-XXX: Software Developer: implementation plan created"
+git commit -m "STORY-XXX: Software Developer: add unit tests - [test description]"
+git commit -m "STORY-XXX: Software Developer: implement [feature description]"
+git commit -m "STORY-XXX: Software Developer: code quality improvements - [specific improvements]"
+git commit -m "STORY-XXX: Software Developer: handover to Software Tester - [implementation summary]"
+```
+
+#### Software Tester Commits
+
+```bash
+# Testing and quality assurance
+git commit -m "STORY-XXX: Software Tester: test plan created"
+git commit -m "STORY-XXX: Software Tester: add functional tests"
+git commit -m "STORY-XXX: Software Tester: add integration tests"
+git commit -m "STORY-XXX: Software Tester: bug report created - BUG-XXX"
+git commit -m "STORY-XXX: Software Tester: handover to Product Owner - [quality summary]"
+```
+
+### Handover Tracking
+
+#### Handover Note Creation
+
+Each role should create handover notes in the `tmp/` directory:
+
+```bash
+# Create handover note
+echo "[Role] handover to [Next Role]:
+- [Key Information 1]: [details]
+- [Key Information 2]: [details]
+- [Key Information 3]: [details]
+- [Deadline]: [date]
+- [Special Requirements]: [requirements]" > tmp/STORY-XXX-[role]-handover.md
+
+# Commit handover note
+git add tmp/STORY-XXX-[role]-handover.md
+git commit -m "STORY-XXX: [Role]: handover to [Next Role] - [handover summary]"
+git push origin main
+```
+
+#### Handover Note Examples
+
+**Product Owner to Scrum Master:**
+
+```bash
+echo "STORY-XXX handover to Scrum Master:
+- Business Priority: High
+- Sprint Target: Sprint 3
+- Key Dependencies: TASK-001, TASK-002
+- Demo Requirements: Live demo with stakeholders
+- Acceptance Criteria: All criteria defined in story file" > tmp/STORY-XXX-po-handover.md
+```
+
+**Scrum Master to Software Architect:**
+
+```bash
+echo "STORY-XXX handover to Software Architect:
+- Design Requirements: API design and database schema
+- Technical Constraints: Must integrate with existing auth system
+- Architecture Decisions Needed: Caching strategy, error handling
+- Integration Points: User service, notification service
+- Deadline: Design complete by [date]" > tmp/STORY-XXX-sm-handover.md
+```
+
+**Software Architect to Software Developer:**
+
+```bash
+echo "STORY-XXX handover to Software Developer:
+- Design Specification: docs/technical/STORY-XXX-design.md
+- Implementation Guidelines: Follow existing patterns in auth_service/
+- Architecture Constraints: Use dependency injection, follow SOLID principles
+- Integration Requirements: Mock external services for testing
+- Testing Strategy: Unit tests for all public methods
+- Code Review Requirements: Architecture compliance check" > tmp/STORY-XXX-architect-handover.md
+```
+
+**Software Developer to Software Tester:**
+
+```bash
+echo "STORY-XXX handover to Software Tester:
+- Implementation Status: All features implemented
+- Test Coverage: 85% unit test coverage
+- Integration Points: API endpoints, database operations
+- Known Issues: None
+- Testing Requirements: Functional, integration, and performance testing
+- Demo Requirements: API testing with Postman collection" > tmp/STORY-XXX-developer-handover.md
+```
+
+**Software Tester to Product Owner:**
+
+```bash
+echo "STORY-XXX handover to Product Owner:
+- Testing Status: All tests completed
+- Quality Assessment: Pass - ready for demo
+- Acceptance Criteria: All criteria validated
+- Bug Status: 2 minor bugs found and resolved
+- Demo Readiness: Ready for stakeholder demo
+- Recommendations: Consider adding performance monitoring" > tmp/STORY-XXX-tester-handover.md
+```
+
+### Git Workflow Integration
+
+#### Branch Management with Role Tracking
+
+```bash
+# Create role-specific branches for handover
+git checkout -b feature/STORY-XXX-[role]-work
+git push -u origin feature/STORY-XXX-[role]-work
+
+# Work on role-specific tasks
+git add .
+git commit -m "STORY-XXX: [Role]: [specific work completed]"
+
+# Create handover and merge to main
+git checkout main
+git merge feature/STORY-XXX-[role]-work
+git push origin main
+```
+
+#### Handover Verification
+
+```bash
+# Verify handover completion
+git log --oneline --grep="STORY-XXX.*handover" | head -5
+
+# Check handover notes
+ls -la tmp/STORY-XXX-*-handover.md
+
+# Verify role progression
+git log --oneline --grep="STORY-XXX" | grep -E "(Product Owner|Scrum Master|Software Architect|Software Developer|Software Tester)"
+```
+
 #### Linking Issues
 
 ```bash

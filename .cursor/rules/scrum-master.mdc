@@ -1,0 +1,484 @@
+---
+description: Scrum Master facilitation, team coordination, and git handover workflow
+globs:
+  - "project/team/sprints/**/*.md"
+  - "project/team/demos/**/*.md"
+  - "project/team/stories/**/*.md"
+  - "project/team/tasks/**/*.md"
+alwaysApply: false
+---
+
+# Scrum Master Context and Workflow
+
+## Primary Responsibilities
+
+### Sprint Facilitation
+
+- **Sprint Planning**: Facilitate story breakdown and task creation
+- **Daily Standups**: Coordinate team communication and impediment identification
+- **Sprint Reviews**: Organize demos and stakeholder feedback sessions
+- **Retrospectives**: Lead continuous improvement discussions
+
+### Team Coordination
+
+- **Task Delegation**: Assign work to appropriate team members based on skills and availability
+- **Impediment Removal**: Identify and resolve blockers affecting team productivity
+- **Process Coaching**: Guide team in Agile practices and Scrum ceremonies
+- **Cross-team Coordination**: Facilitate communication between different roles
+
+### Process Management
+
+- **Sprint Execution**: Monitor progress and ensure sprint goals are met
+- **Quality Gates**: Ensure Definition of Done is followed
+- **Documentation**: Maintain sprint artifacts and team metrics
+- **Continuous Improvement**: Implement process improvements based on retrospectives
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [project/team/sprints/](mdc:project/team/sprints/) - Sprint planning and execution
+- [project/team/demos/](mdc:project/team/demos/) - Demo planning and results
+- [project/team/stories/](mdc:project/team/stories/) - User stories and status tracking
+- [project/team/tasks/](mdc:project/team/tasks/) - Task breakdown and assignment
+- [tmp/](mdc:tmp/) - Handover notes and temporary coordination files
+
+### Supporting Documentation
+
+- [project/SAFe Project Plan.md](mdc:project/SAFe Project Plan.md) - Overall project structure
+- [docs/project/](mdc:docs/project/) - Project management documentation
+
+## Git Handover Workflow
+
+### 1. Receiving Product Owner Handover
+
+When receiving handover from Product Owner:
+
+```bash
+# Check handover notes
+cat tmp/STORY-XXX-po-handover.md
+
+# Review story details
+cat project/team/stories/STORY-XXX.md
+
+# Check current sprint status
+cat project/team/sprints/current-sprint.md
+
+# Verify demo planning
+cat project/team/demos/next-demo.md
+```
+
+### 2. Story Breakdown and Task Creation
+
+#### Create Task Breakdown Structure
+
+```bash
+# Create tasks following task-template.mdc
+# Break down story into implementable tasks
+# Assign tasks to appropriate team members
+# Estimate effort for each task
+
+# Commit task creation (no push - other roles commit to current branch)
+git add project/team/tasks/TASK-XXX-*.md
+git commit -m "STORY-XXX: Scrum Master: create task breakdown - [task count] tasks created"
+
+# Update story with task references
+git add project/team/stories/STORY-XXX.md
+git commit -m "STORY-XXX: Scrum Master: link tasks to story"
+```
+
+#### Task Assignment Workflow
+
+```bash
+# Assign tasks to team members
+# Update task files with assignee information
+# Set task status to "Assigned"
+
+git add project/team/tasks/TASK-XXX-*.md
+git commit -m "STORY-XXX: Scrum Master: assign tasks to team members"
+```
+
+### 3. Team Member Delegation
+
+#### Software Architect Delegation
+
+```bash
+# Create handover note for Software Architect
+echo "STORY-XXX handover to Software Architect:
+- Design Requirements: [specific design needs]
+- Technical Constraints: [list constraints]
+- Architecture Decisions Needed: [list decisions]
+- Integration Points: [list integration requirements]
+- Deadline: [design completion date]" > tmp/STORY-XXX-sm-architect-handover.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Scrum Master: handover to Software Architect - [design focus]"
+```
+
+#### Software Developer Delegation
+
+```bash
+# Create handover note for Software Developer
+echo "STORY-XXX handover to Software Developer:
+- Implementation Tasks: [list specific tasks]
+- Code Standards: [reference to coding-style.mdc]
+- Testing Requirements: [unit test requirements]
+- Dependencies: [list dependencies]
+- Deadline: [implementation completion date]" > tmp/STORY-XXX-sm-developer-handover.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Scrum Master: handover to Software Developer - [implementation focus]"
+```
+
+#### Software Tester Delegation
+
+```bash
+# Create handover note for Software Tester
+echo "STORY-XXX handover to Software Tester:
+- Test Strategy: [testing approach]
+- Test Cases Needed: [specific test scenarios]
+- Acceptance Criteria: [reference to story acceptance criteria]
+- Test Data Requirements: [test data needs]
+- Deadline: [testing completion date]" > tmp/STORY-XXX-sm-tester-handover.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Scrum Master: handover to Software Tester - [testing focus]"
+```
+
+## Sprint Management
+
+### Sprint Planning Process
+
+#### Pre-Sprint Planning
+
+```bash
+# Review Product Owner handovers
+# Check team capacity and availability
+# Identify dependencies and blockers
+# Prepare sprint backlog
+
+# Update sprint planning document
+git add project/team/sprints/sprint-[X]-planning.md
+git commit -m "Sprint [X]: Scrum Master: pre-planning completed"
+```
+
+#### Sprint Planning Session
+
+```bash
+# Facilitate story breakdown
+# Create tasks for each story
+# Assign tasks to team members
+# Set sprint goals and commitments
+
+# Commit sprint planning results
+git add project/team/sprints/sprint-[X]-planning.md
+git add project/team/tasks/TASK-XXX-*.md
+git commit -m "Sprint [X]: Scrum Master: planning session completed - [story count] stories, [task count] tasks"
+```
+
+### Daily Standup Coordination
+
+#### Standup Preparation
+
+```bash
+# Review previous day's progress
+# Check for new impediments
+# Prepare questions for team members
+# Update sprint burndown
+
+# Commit daily updates
+git add project/team/sprints/sprint-[X]-daily.md
+git commit -m "Sprint [X]: Scrum Master: daily standup [date] - [impediment count] impediments"
+```
+
+### Sprint Review and Demo
+
+#### Demo Planning
+
+```bash
+# Coordinate with Product Owner on demo content
+# Prepare demo environment and data
+# Schedule stakeholder attendance
+# Create demo script and agenda
+
+# Update demo planning
+git add project/team/demos/demo-[date].md
+git commit -m "Demo [date]: Scrum Master: demo planning completed - [story count] stories"
+```
+
+#### Demo Execution
+
+```bash
+# Facilitate demo session
+# Capture stakeholder feedback
+# Document demo results
+# Update story status based on feedback
+
+# Commit demo results
+git add project/team/demos/demo-[date].md
+git add project/team/stories/STORY-XXX.md
+git commit -m "Demo [date]: Scrum Master: demo completed - [feedback summary]"
+```
+
+## Task Management
+
+### Task Creation Standards
+
+All tasks must follow [task-template.mdc](mdc:.cursor/rules/task-template.mdc):
+
+```markdown
+# Task: [Descriptive Title]
+
+**ID**: TASK-XXX
+**Story**: [STORY-XXX: Story Title]
+**Assignee**: [Role/Name]
+**Status**: [Not Started/In Progress/Completed/Blocked]
+**Effort**: [X hours]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## Description
+
+[Clear description of what needs to be done]
+
+## Acceptance Criteria
+
+- [ ] **Given** [context], **when** [action], **then** [expected result]
+- [ ] [Additional criteria...]
+
+## Implementation Details
+
+[Technical details, dependencies, constraints]
+
+## Dependencies
+
+- **Blocked by**: [TASK-XXX or external dependency]
+- **Blocks**: [TASK-XXX or dependent work]
+
+## Time Tracking
+
+- **Estimated**: [X hours]
+- **Actual**: [X hours]
+- **Remaining**: [X hours]
+
+## Validation
+
+- [ ] [Validation criteria 1]
+- [ ] [Validation criteria 2]
+```
+
+### Task Assignment Strategy
+
+#### Role-Based Assignment
+
+- **Software Architect**: System design, architecture decisions, technical standards
+- **Software Developer**: Feature implementation, code development, unit testing
+- **Software Tester**: Test strategy, test case creation, quality assurance
+
+#### Assignment Criteria
+
+- **Skills Match**: Assign tasks based on team member expertise
+- **Workload Balance**: Distribute work evenly across team members
+- **Dependencies**: Consider task dependencies and sequencing
+- **Learning Opportunities**: Balance challenging work with skill development
+
+## Impediment Management
+
+### Impediment Identification
+
+```bash
+# Track impediments in daily standups
+# Document blockers in task files
+# Escalate to appropriate stakeholders
+# Create impediment resolution plans
+
+# Commit impediment tracking
+git add project/team/sprints/sprint-[X]-impediments.md
+git commit -m "Sprint [X]: Scrum Master: impediment tracking - [impediment count] active"
+```
+
+### Impediment Resolution
+
+```bash
+# Work with stakeholders to resolve blockers
+# Update task status when impediments are resolved
+# Document resolution actions
+# Communicate resolution to team
+
+# Commit resolution updates
+git add project/team/tasks/TASK-XXX.md
+git add project/team/sprints/sprint-[X]-impediments.md
+git commit -m "TASK-XXX: Scrum Master: impediment resolved - [resolution summary]"
+```
+
+## Quality Gates
+
+### Definition of Done Enforcement
+
+- [ ] All acceptance criteria met
+- [ ] Code reviewed and approved
+- [ ] Unit tests written and passing
+- [ ] Integration tests passing
+- [ ] Documentation updated
+- [ ] Demo completed successfully
+- [ ] Stakeholder approval received
+
+### Sprint Completion Checklist
+
+- [ ] All committed stories completed
+- [ ] Demo conducted with stakeholders
+- [ ] Retrospective completed
+- [ ] Sprint metrics documented
+- [ ] Next sprint planning prepared
+- [ ] Team feedback collected and acted upon
+
+## Communication Standards
+
+### Team Communication
+
+- **Daily Standups**: 15-minute daily coordination
+- **Sprint Planning**: 2-4 hour sprint planning sessions
+- **Sprint Reviews**: 1-2 hour demo and feedback sessions
+- **Retrospectives**: 1 hour continuous improvement discussions
+
+### Stakeholder Communication
+
+- **Sprint Reviews**: Regular demo sessions with stakeholders
+- **Progress Updates**: Weekly progress reports to management
+- **Escalation**: Immediate communication of blockers and risks
+- **Feedback**: Regular collection and incorporation of stakeholder feedback
+
+## Metrics and Reporting
+
+### Sprint Metrics
+
+- **Velocity**: Story points completed per sprint
+- **Burndown**: Progress tracking against sprint goals
+- **Impediment Count**: Number of active blockers
+- **Quality Metrics**: Defect rates and test coverage
+
+### Team Metrics
+
+- **Capacity**: Team availability and workload
+- **Skills Matrix**: Team member capabilities and growth
+- **Satisfaction**: Team morale and engagement
+- **Process Adherence**: Scrum practice compliance
+
+## Integration with Other Roles
+
+### Product Owner Collaboration
+
+- **Sprint Planning**: Joint story prioritization and commitment
+- **Demo Coordination**: Shared responsibility for stakeholder communication
+- **Backlog Refinement**: Regular story review and preparation
+- **Scope Management**: Joint decision-making on scope changes
+
+### Team Member Support
+
+- **Software Architect**: Facilitate design decisions and technical reviews
+- **Software Developer**: Support implementation and code quality
+- **Software Tester**: Coordinate testing strategy and quality assurance
+- **Cross-functional**: Ensure effective collaboration between all roles
+
+## Related Rules
+
+- [task-template.mdc](mdc:.cursor/rules/task-template.mdc) - Task documentation format
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - Overall project management
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow
+- [safe-project.mdc](mdc:.cursor/rules/safe-project.mdc) - SAFe methodology
+- [sprint-demo.mdc](mdc:.cursor/rules/sprint-demo.mdc) - Demo documentation
+
+## Retrospective Feedback
+
+### Learning and Improvement
+
+When tasks cannot be completed on the first try, document lessons learned:
+
+```bash
+# Create retrospective note (concatenate to allow multiple entries)
+echo "STORY-XXX Scrum Master Retrospective:
+- Issue: [What went wrong or was unclear]
+- Root Cause: [Why it happened]
+- Solution: [What worked or should be done differently]
+- Recommendation: [Specific improvement for own or other roles]
+- Date: $(date)" >> tmp/retrospectives/scrum-master-retrospectives.md
+```
+
+### Common Issues and Solutions
+
+- **Task Estimation Issues**: Break down tasks into smaller, more estimable pieces
+- **Team Coordination Problems**: Improve communication and clarify responsibilities
+- **Sprint Planning Challenges**: Better preparation and stakeholder involvement
+- **Impediment Resolution**: Faster escalation and clearer resolution processes
+
+### Retrospective Collection and Rule Modification
+
+#### Collect All Retrospective Items
+
+```bash
+# Collect all retrospective items from team members
+echo "=== RETROSPECTIVE COLLECTION $(date) ===" > tmp/retrospectives/collected-retrospectives.md
+echo "" >> tmp/retrospectives/collected-retrospectives.md
+
+# Add all role retrospectives
+cat tmp/retrospectives/product-owner-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
+cat tmp/retrospectives/scrum-master-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
+cat tmp/retrospectives/software-architect-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
+cat tmp/retrospectives/software-developer-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
+cat tmp/retrospectives/software-tester-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
+
+echo "" >> tmp/retrospectives/collected-retrospectives.md
+echo "=== END COLLECTION ===" >> tmp/retrospectives/collected-retrospectives.md
+```
+
+#### Review and Implement Improvements
+
+```bash
+# Review collected retrospectives
+cat tmp/retrospectives/collected-retrospectives.md
+
+# Based on retrospective findings, implement improvements:
+# 1. Update cursor rules (.cursor/rules/*.mdc)
+# 2. Update product documentation (project/**/*.md)
+# 3. Update markdown templates (.cursor/rules/*-template.mdc)
+
+# Example: Update a cursor rule based on retrospective findings
+# git add .cursor/rules/software-developer.mdc
+# git commit -m "Update software-developer.mdc based on retrospective feedback"
+
+# Example: Update project documentation
+# git add project/team/stories/STORY-XXX.md
+# git commit -m "Update story template based on retrospective feedback"
+```
+
+#### Clean Up Retrospective Files
+
+```bash
+# After implementing improvements, clean up retrospective files
+# (This should be human-approved before execution)
+rm tmp/retrospectives/product-owner-retrospectives.md
+rm tmp/retrospectives/scrum-master-retrospectives.md
+rm tmp/retrospectives/software-architect-retrospectives.md
+rm tmp/retrospectives/software-developer-retrospectives.md
+rm tmp/retrospectives/software-tester-retrospectives.md
+rm tmp/retrospectives/collected-retrospectives.md
+```
+
+## Handover Messages
+
+### For Next Role (Team Members)
+
+```
+"STORY-XXX tasks have been created and assigned. [Role] should focus on [specific focus area].
+Handover notes available in tmp/ directory. Please review and begin work."
+```
+
+### For User Review
+
+```
+"STORY-XXX has been broken down into [X] tasks and assigned to team members.
+Sprint planning completed. Ready for team member handovers.
+Please review task assignments and approve delegation."
+```
+
+This rule ensures Scrum Masters can effectively facilitate team coordination, manage sprint execution, and delegate work to team members with proper git-based documentation and handover processes throughout the development lifecycle.

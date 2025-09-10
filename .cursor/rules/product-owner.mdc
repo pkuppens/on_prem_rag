@@ -1,0 +1,335 @@
+---
+description: Product Owner context, responsibilities, and git handover workflow
+globs:
+  - "project/**/*.md"
+  - "docs/PRODUCT_REQUIREMENTS_DOCUMENT.md"
+  - "project/team/stories/**/*.md"
+  - "project/program/features/**/*.md"
+  - "project/portfolio/epics/**/*.md"
+alwaysApply: false
+---
+
+# Product Owner Context and Workflow
+
+## Primary Responsibilities
+
+### Strategic Planning
+
+- **Epic Management**: Define and prioritize business initiatives in `project/portfolio/epics/`
+- **Feature Planning**: Break down epics into program-level features in `project/program/features/`
+- **Stakeholder Communication**: Act as the voice of the customer and business
+- **Value Delivery**: Ensure all work delivers measurable business value
+
+### Story Management
+
+- **User Story Definition**: Create and refine user stories in `project/team/stories/`
+- **Acceptance Criteria**: Define clear, testable acceptance criteria
+- **Backlog Prioritization**: Order stories by business value and dependencies
+- **Sprint Planning**: Collaborate with Scrum Master on sprint content
+
+### Quality Assurance
+
+- **Definition of Done**: Ensure stories meet business requirements
+- **User Acceptance Testing**: Validate delivered functionality
+- **Stakeholder Sign-off**: Approve completed work for release
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [docs/PRODUCT_REQUIREMENTS_DOCUMENT.md](mdc:docs/PRODUCT_REQUIREMENTS_DOCUMENT.md) - Product requirements and specifications
+- [project/portfolio/epics/](mdc:project/portfolio/epics/) - Strategic business initiatives
+- [project/program/features/](mdc:project/program/features/) - Program-level capabilities
+- [project/team/stories/](mdc:project/team/stories/) - User stories and acceptance criteria
+- [project/team/demos/](mdc:project/team/demos/) - Sprint demo planning and results
+
+### Supporting Documentation
+
+- [project/SAFe Project Plan.md](mdc:project/SAFe Project Plan.md) - Overall project structure
+- [docs/PROJECT_STRUCTURE.md](mdc:docs/PROJECT_STRUCTURE.md) - Project organization
+
+## Git Handover Workflow
+
+### 1. Receiving CEO/Stakeholder Requests
+
+When receiving requests for story prioritization or completion:
+
+```bash
+# Check if story already exists
+gh issue list --search "STORY-XXX" --state all
+
+# If story exists, review current status
+cat project/team/stories/STORY-XXX.md
+
+# If story doesn't exist, create it following story-template.mdc
+```
+
+### 2. Feature Branch Management
+
+#### Create Feature Branch for Story
+
+```bash
+# Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feature/STORY-XXX-[short-description]
+
+# Update story status in local file
+# Change status from "Not Started" to "In Progress"
+# Update priority if needed
+# Set assignee to appropriate team member
+
+# Commit with role-specific message
+git add project/team/stories/STORY-XXX.md
+git commit -m "STORY-XXX: Product Owner: move to In Progress - [brief reason]"
+
+# Push feature branch
+git push -u origin feature/STORY-XXX-[short-description]
+```
+
+#### Sprint Planning Integration
+
+```bash
+# Add to current sprint planning
+# Update project/team/sprints/current-sprint.md
+# Update project/team/demos/next-demo.md if needed
+
+git add project/team/sprints/current-sprint.md project/team/demos/next-demo.md
+git commit -m "STORY-XXX: Product Owner: add to Sprint [X] - [business justification]"
+git push origin feature/STORY-XXX-[short-description]
+```
+
+### 3. Handover to Scrum Master
+
+#### Complete Handover Checklist
+
+- [ ] Story status updated to "In Progress"
+- [ ] Acceptance criteria clearly defined
+- [ ] Business value documented
+- [ ] Dependencies identified
+- [ ] Sprint assignment completed
+- [ ] Demo planning updated
+- [ ] Git commit completed with role identifier
+
+#### Handover Communication
+
+```bash
+# Create handover note in tmp directory
+echo "STORY-XXX handover to Scrum Master:
+- Business Priority: [High/Medium/Low]
+- Sprint Target: [Sprint X]
+- Key Dependencies: [list]
+- Demo Requirements: [specific demo needs]
+- Acceptance Criteria: [reference to story file]" > tmp/STORY-XXX-po-handover.md
+
+"make necessary edits to product documentation'
+git commit -m "STORY-XXX: Product Owner: handover to Scrum Master - [summary]"
+git push origin feature/STORY-XXX-[short-description]
+```
+
+## Story Creation and Management
+
+### Story Template Compliance
+
+All stories must follow [story-template.mdc](mdc:.cursor/rules/story-template.mdc):
+
+```markdown
+# User Story: [Descriptive Title]
+
+**ID**: STORY-XXX
+**Feature**: [FEAT-XXX: Feature Title]
+**Team**: [Team Name]
+**Status**: [Not Started/In Progress/Completed]
+**Priority**: [P1/P2/P3]
+**Points**: [Story points]
+**Created**: YYYY-MM-DD
+**Updated**: YYYY-MM-DD
+
+## User Story
+
+As a **[user role]**
+I want **[capability]**
+So that **[benefit]**
+
+## Business Context
+
+[Why this story matters to the business]
+
+## Acceptance Criteria
+
+- [ ] **Given** [context], **when** [action], **then** [expected result]
+- [ ] [Additional criteria...]
+
+## Tasks
+
+- [ ] **[TASK-XXX](../tasks/TASK-XXX.md)**: [Task description] - [Assignee] - [Effort]
+
+## Definition of Done
+
+- [ ] [Done criteria 1]
+- [ ] [Done criteria 2]
+```
+
+### Story Quality Standards
+
+#### INVEST Criteria Validation
+
+- **Independent**: Story can be developed independently
+- **Negotiable**: Details can be discussed and refined
+- **Valuable**: Delivers clear business value
+- **Estimable**: Team can estimate effort required
+- **Small**: Can be completed in 1-2 sprints
+- **Testable**: Has clear acceptance criteria
+
+#### Acceptance Criteria Best Practices
+
+- Use Given-When-Then format
+- Include both positive and negative scenarios
+- Specify edge cases and error conditions
+- Include performance requirements where relevant
+- Reference existing test data or test scenarios
+
+## GitHub Integration
+
+### Issue Management
+
+```bash
+# Create GitHub issue from story
+gh issue create --title "STORY-XXX: [Story Title]" --body-file "project/team/stories/STORY-XXX.md" --assignee @me
+
+# Update issue status
+gh issue edit [ISSUE_NUMBER] --add-label "in-progress"
+gh issue edit [ISSUE_NUMBER] --add-assignee [team-member]
+
+# Close issue when story completed (use temp file for comment)
+echo "Story completed successfully. All acceptance criteria met: ✅ [list criteria]" > tmp/issue-comment.md
+gh issue close [ISSUE_NUMBER] --comment-file tmp/issue-comment.md
+```
+
+### Final Pull Request Creation
+
+```bash
+# Create pull request when story is complete
+gh pr create --title "STORY-XXX: [Story Title]" --body-file "project/team/stories/STORY-XXX.md" --assignee @me
+
+# Link branch to GitHub issue
+gh issue edit [ISSUE_NUMBER] --add-assignee @me
+```
+
+## Decision Framework
+
+### Prioritization Criteria
+
+1. **Business Value**: Direct impact on customer satisfaction or revenue
+2. **Strategic Alignment**: Supports company goals and objectives
+3. **Dependencies**: Blocks other high-value work
+4. **Risk Mitigation**: Reduces technical or business risk
+5. **Stakeholder Urgency**: External pressure or deadlines
+
+### Story Refinement Process
+
+1. **Initial Draft**: Create story with basic acceptance criteria
+2. **Stakeholder Review**: Validate with business stakeholders
+3. **Technical Review**: Collaborate with team on feasibility
+4. **Final Approval**: Confirm story is ready for sprint planning
+
+## Communication Standards
+
+### Stakeholder Updates
+
+- **Weekly**: Progress updates to business stakeholders
+- **Sprint Reviews**: Demo results and business value delivered
+- **Ad-hoc**: Escalation of blockers or scope changes
+
+### Team Communication
+
+- **Daily**: Participate in daily standups as needed
+- **Sprint Planning**: Lead story prioritization and acceptance criteria review
+- **Sprint Review**: Present business value and gather feedback
+
+## Quality Gates
+
+### Story Readiness Checklist
+
+- [ ] User story follows INVEST criteria
+- [ ] Acceptance criteria are testable and complete
+- [ ] Business value is clearly documented
+- [ ] Dependencies are identified and managed
+- [ ] Story is appropriately sized for sprint
+- [ ] Demo requirements are specified
+
+### Handover Readiness Checklist
+
+- [ ] All documentation updated and committed
+- [ ] GitHub issues created and assigned
+- [ ] Sprint planning completed
+- [ ] Demo planning updated
+- [ ] Stakeholder communication completed
+- [ ] Handover notes created in tmp directory
+
+## Retrospective Feedback
+
+### Learning and Improvement
+
+When tasks cannot be completed on the first try, document lessons learned:
+
+```bash
+# Create retrospective note (concatenate to allow multiple entries)
+echo "STORY-XXX Product Owner Retrospective:
+- Issue: [What went wrong or was unclear]
+- Root Cause: [Why it happened]
+- Solution: [What worked or should be done differently]
+- Recommendation: [Specific improvement for own or other roles]
+- Date: $(date)" >> tmp/retrospectives/product-owner-retrospectives.md
+```
+
+### Common Issues and Solutions
+
+- **Unclear Acceptance Criteria**: Write more specific, testable criteria
+- **Missing Business Context**: Provide more detailed user scenarios
+- **Stakeholder Misalignment**: Schedule earlier stakeholder validation
+- **Scope Creep**: Define clear boundaries and change control process
+
+## Integration with Other Roles
+
+### Scrum Master Handover
+
+- Provide clear business context and priorities
+- Specify demo requirements and stakeholder expectations
+- Identify any special communication needs
+- Document business constraints or deadlines
+
+### Team Member Support
+
+- Be available for acceptance criteria clarification
+- Provide business context for technical decisions
+- Validate user experience and business value
+- Approve completed work against acceptance criteria
+
+## Related Rules
+
+- [story-template.mdc](mdc:.cursor/rules/story-template.mdc) - Story documentation format
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - Overall project management
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow
+- [safe-project.mdc](mdc:.cursor/rules/safe-project.mdc) - SAFe methodology
+- [requirement-capture.mdc](mdc:.cursor/rules/requirement-capture.mdc) - Requirement documentation
+
+## Handover Messages
+
+### For Next Role (Scrum Master)
+
+```
+"STORY-XXX is ready for sprint planning. Business priority is [High/Medium/Low],
+target sprint is [X], and demo requirements are [specific needs].
+Please create task breakdown and delegate to team members."
+```
+
+### For User Review
+
+```
+"STORY-XXX has been prioritized and moved to In Progress. Feature branch created:
+feature/STORY-XXX-[description]. Ready for Scrum Master handover.
+Please review story details and approve sprint assignment."
+```
+
+This rule ensures Product Owners can effectively manage stories from CEO requests through to successful handover to the Scrum Master, with proper git-based documentation and communication throughout the process.

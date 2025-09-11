@@ -2,7 +2,7 @@ name: Python CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/*, task/*, bug/*, hotfix/*]
   pull_request:
     branches: [main]
 

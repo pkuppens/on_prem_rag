@@ -15,12 +15,15 @@ jobs:
   # Setup job that other jobs depend on
   setup:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.12
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -49,10 +52,10 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.12
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -71,10 +74,10 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.12
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh

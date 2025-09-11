@@ -142,6 +142,14 @@ This guide outlines the key principles and practices for AI-assisted development
 - **Issue Closure**: Update local files and close GitHub issues with completion evidence
 - **Quality Gates**: Enforce standards through GitHub Actions integration
 
+#### Git Commit Best Practices
+
+- **Selective Staging**: Always use `git add <specific-file>` to stage only the files that were intentionally changed
+- **Never `git add .`**: Avoid staging all changes - this can accidentally include temporary files, logs, or unintended modifications
+- **Review Before Commit**: Verify that only the intended files are staged using `git status` before committing
+- **Atomic Commits**: Each commit should represent a single logical change with a clear, descriptive message
+- **File-Specific Commits**: When making multiple changes, consider separate commits for different types of changes (e.g., code vs. documentation)
+
 ## Coding Standards
 
 ### General Principles

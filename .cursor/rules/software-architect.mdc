@@ -88,7 +88,9 @@ echo "STORY-XXX Design Analysis:
 - Technical Risks: [list risks]" > docs/technical/STORY-XXX-design-analysis.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Software Architect: design analysis completed"
+git add docs/technical/ARCHITECTURE.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Design Decision Documentation
@@ -101,11 +103,11 @@ git commit -m "STORY-XXX: Software Architect: design analysis completed"
 
 # Update architecture documentation
 git add docs/technical/ARCHITECTURE.md
-git commit -m "STORY-XXX: Software Architect: architecture updated - [summary of changes]"
 
 # Create design specification
 git add docs/technical/STORY-XXX-design.md
-git commit -m "STORY-XXX: Software Architect: design specification created"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Design Implementation and Handover
@@ -120,11 +122,11 @@ git commit -m "STORY-XXX: Software Architect: design specification created"
 
 # Create implementation tasks
 git add project/team/tasks/TASK-XXX-design-*.md
-git commit -m "STORY-XXX: Software Architect: create design implementation tasks"
 
 # Update story with design tasks
 git add project/team/stories/STORY-XXX.md
-git commit -m "STORY-XXX: Software Architect: link design tasks to story"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Handover to Software Developer
@@ -140,7 +142,9 @@ echo "STORY-XXX handover to Software Developer:
 - Code Review Requirements: [review criteria]" > tmp/STORY-XXX-architect-developer-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Software Architect: handover to Software Developer - [implementation focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ## Architecture Documentation
@@ -394,6 +398,45 @@ git commit -m "STORY-XXX: Software Architect: integration design completed"
 - **Risk Communication**: Early communication of technical risks
 - **Progress Reports**: Updates on design progress
 - **Decision Justification**: Clear rationale for architectural decisions
+
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add docs/technical/ARCHITECTURE.md
+git add docs/technical/STORY-XXX-design.md
+git add project/team/tasks/TASK-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review
+echo "STORY-XXX: Software Architect: [description of changes]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Continue with next steps in the workflow
+```
+
+This allows the user to review both the commit message and continuation context before proceeding.
 
 ## Integration with Other Roles
 

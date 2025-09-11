@@ -159,6 +159,216 @@ See [docs/SETUP.md](docs/SETUP.md) for additional details.
 | **Resource Requirements**    | Medium | Scalable deployment architecture                  |
 | **User Adoption**            | Low    | Intuitive UI design and comprehensive training    |
 
+## Troubleshooting
+
+### Common Setup Issues
+
+#### 1. Module Import Errors
+
+**Symptoms:**
+- `ModuleNotFoundError: No module named 'auth_service'`
+- `ModuleNotFoundError: No module named 'rag_pipeline'`
+- `ModuleNotFoundError: No module named 'httpx'`
+- Services fail to start with import-related errors
+
+**Solution:**
+```bash
+# Install package in editable mode (CRITICAL for src-layout projects)
+uv pip install -e .[dev]
+
+# Verify installation
+uv run pytest tests/test_imports.py -v
+```
+
+**Explanation:** The project uses a src-layout structure where all modules are inside the `src/` directory. For entry point scripts to work properly, the package must be installed in development mode.
+
+#### 2. uv Command Not Found
+
+**Symptoms:**
+- `uv: command not found`
+- `'uv' is not recognized as an internal or external command`
+
+**Solution:**
+```bash
+# Install uv using one of these methods:
+# Windows (using winget)
+winget install astral-sh.uv
+
+# Or using pip
+pip install uv
+
+# Or using curl (Linux/macOS)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Verify installation
+uv --version
+```
+
+#### 3. Python Version Issues
+
+**Symptoms:**
+- Wrong Python version being used
+- Version conflicts between system and project Python
+
+**Solution:**
+```bash
+# Check available Python versions
+uv python list
+
+# Install specific version
+uv python install 3.13.2
+
+# Create venv with specific version
+uv venv --python 3.13.2
+
+# Verify version
+python --version
+```
+
+#### 4. Dependency Installation Failures
+
+**Symptoms:**
+- Package installation fails
+- Network timeouts during installation
+- Disk space errors
+
+**Solution:**
+```bash
+# Check disk space
+df -h  # Linux/macOS
+dir C:\  # Windows
+
+# Clear caches and retry
+uv cache clean --all
+rm -rf ~/.cache/pip ~/.cache/uv
+
+# Force reinstall
+uv sync --force-reinstall
+
+# Verbose installation for debugging
+uv sync --verbose
+```
+
+#### 5. Network/Proxy Issues
+
+**Symptoms:**
+- Connection timeouts to PyPI
+- SSL certificate errors
+- Proxy authentication failures
+
+**Solution:**
+```bash
+# Configure proxy if needed
+export HTTP_PROXY=http://proxy.company.com:8080
+export HTTPS_PROXY=http://proxy.company.com:8080
+
+# Test connectivity
+curl -I https://pypi.org/simple/
+
+# Use alternative index
+uv sync --index-url https://pypi.org/simple/
+```
+
+#### 6. Pre-commit Hook Failures
+
+**Symptoms:**
+- Hooks fail during commit
+- Formatting or linting errors
+- Test failures in pre-commit
+
+**Solution:**
+```bash
+# Run hooks manually to see detailed errors
+pre-commit run --all-files
+
+# Fix formatting issues
+uv run ruff format .
+
+# Fix linting issues
+uv run ruff check . --fix
+
+# Run tests to identify failures
+uv run pytest
+```
+
+#### 7. Docker Compose Issues
+
+**Symptoms:**
+- Services fail to start
+- Port conflicts
+- Volume mounting errors
+
+**Solution:**
+```bash
+# Check for port conflicts
+netstat -tulpn | grep :5173  # Linux
+netstat -an | findstr :5173  # Windows
+
+# Clean up and restart
+docker-compose down
+docker-compose up --build
+
+# Check logs for specific service
+docker-compose logs [service-name]
+```
+
+#### 8. Frontend Development Issues
+
+**Symptoms:**
+- Blank page at http://localhost:5173
+- Console errors about missing modules
+- TypeScript compilation errors
+
+**Solution:**
+```bash
+cd src/frontend
+
+# Clear and reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# Build and start dev server
+npm run build
+npm run dev
+
+# Test isolated component (bypasses auth)
+# Visit: http://localhost:5173/?test=theme
+```
+
+### Environment-Specific Issues
+
+#### Windows-Specific
+
+- **Path issues**: Ensure Python and uv are in your PATH
+- **Permission errors**: Run terminal as Administrator if needed
+- **Line ending issues**: Use Git with `core.autocrlf=true`
+
+#### Linux/macOS-Specific
+
+- **Permission denied**: Use `chmod +x` for scripts
+- **Missing system dependencies**: Install build tools (`build-essential` on Ubuntu)
+
+### Getting Help
+
+1. **Check logs**: Look at service logs for detailed error messages
+2. **Verify environment**: Run `uv run pytest tests/test_imports.py -v`
+3. **Clean rebuild**: Remove `.venv` and `uv.lock`, then run `uv sync`
+4. **Check documentation**: See [docs/SETUP.md](docs/SETUP.md) for detailed setup instructions
+5. **Network issues**: Ensure access to required domains (pypi.org, huggingface.co, github.com)
+
+### Recovery Commands
+
+```bash
+# Complete environment reset
+rm -rf .venv uv.lock
+uv cache clean --all
+uv sync
+
+# Verify everything works
+uv run pytest
+docker-compose up --build
+```
+
 ## Next Steps for Leadership
 
 1. **Legal Review**: Engage legal team for licensing and liability framework

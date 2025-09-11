@@ -3,10 +3,10 @@
 **ID**: TASK-004
 **Story**: [STORY-001: Development Environment Setup](../stories/STORY-001.md)
 **Assignee**: Technical Writer
-**Status**: In Progress
+**Status**: Completed
 **Effort**: 4 hours
 **Created**: 2025-05-31
-**Updated**: 2025-06-08
+**Updated**: 2025-01-27
 
 ## Description
 
@@ -15,8 +15,8 @@ troubleshooting tips.
 
 ## Acceptance Criteria
 
-- [ ] README includes setup steps and command examples
-- [ ] Troubleshooting section covers common errors
+- [x] README includes setup steps and command examples
+- [x] Troubleshooting section covers common errors
 
 ## Dependencies
 

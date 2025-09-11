@@ -173,7 +173,7 @@ See [docs/SETUP.md](docs/SETUP.md) for additional details.
 
 **Solution:**
 ```bash
-# Install package in editable mode (CRITICAL for src-layout projects)
+# Install the current project in editable mode (CRITICAL for src-layout projects)
 uv pip install -e .[dev]
 
 # Verify installation
@@ -181,6 +181,13 @@ uv run pytest tests/test_imports.py -v
 ```
 
 **Explanation:** The project uses a src-layout structure where all modules are inside the `src/` directory. For entry point scripts to work properly, the package must be installed in development mode.
+
+**Important:** This uses `uv pip install -e .[dev]` to install the current project itself, not external dependencies. For adding new external packages, always use `uv add package-name`.
+
+**uv Command Usage:**
+- `uv add package-name` - Add external dependencies to pyproject.toml (use this for new packages)
+- `uv pip install -e .[dev]` - Install current project in editable mode (use this for project setup)
+- `uv sync` - Install all dependencies from pyproject.toml (use this in fresh environments)
 
 #### 2. uv Command Not Found
 

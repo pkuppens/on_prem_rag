@@ -34,7 +34,7 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
 
 ## Tasks
 
-- [ ] **[TASK-006A](../tasks/TASK-006A.md)**: Design document processing architecture - Software Architect - 4h
+- [x] **[TASK-006A](../tasks/TASK-006A.md)**: Design document processing architecture - Software Architect - 4h ✅
 - [ ] **[TASK-006B](../tasks/TASK-006B.md)**: Implement FastAPI file upload endpoints - Software Developer - 6h
 - [ ] **[TASK-006C](../tasks/TASK-006C.md)**: Implement WebSocket progress updates - Software Developer - 4h
 - [ ] **[TASK-006D](../tasks/TASK-006D.md)**: Integrate LlamaIndex document processing - Software Developer - 6h
@@ -117,6 +117,7 @@ This approach will help evaluate whether LlamaIndex satisfies the acceptance cri
 | **Embedding errors**    | Low    | Add thorough logging and fallback for problematic pages    |
 
 ## Progress
+
 - 2025-06-14: Added command-line upload script (TASK-023) for batch ingestion.
 - 2025-06-14: Enhanced upload script with direct processing and cleanup options.
 - 2025-06-16: Added parameter-set aware duplicate detection in DocumentLoader.

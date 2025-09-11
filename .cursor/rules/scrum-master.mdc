@@ -524,7 +524,9 @@ Handover notes available in tmp/ directory. Please review and begin work."
 "STORY-XXX has been broken down into [X] tasks and assigned to team members.
 Sprint planning completed. Ready for team member handovers.
 Changes are staged for review. Use 'commit and continue' to commit and proceed.
-Please review task assignments and approve delegation."
+Please review task assignments and approve delegation.
+
+Note: Handover context available in tmp/ directory for role transitions."
 ```
 
 This rule ensures Scrum Masters can effectively facilitate team coordination, manage sprint execution, and delegate work to team members with proper git-based documentation and handover processes throughout the development lifecycle.

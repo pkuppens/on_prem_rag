@@ -126,6 +126,7 @@ uv run pytest tests/test_STORY-XXX_functional.py -v
 git add tests/test_STORY-XXX_functional.py
 
 # Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# Note: Follow Software Architect's linting workflow before committing
 ```
 
 #### Integration Testing
@@ -582,6 +583,18 @@ git commit -F tmp/commit_msg.txt
 ```
 
 This allows the user to review both the commit message and continuation context before proceeding.
+
+## Code Quality Standards
+
+### Linting and Code Quality
+
+**Follow Software Architect's Linting Workflow**: The Software Architect defines and maintains the linting workflow for the repository. See [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) for the complete linting workflow.
+
+### Key Responsibilities
+
+- **Follow Standards**: Write tests according to Software Architect's quality standards
+- **Run Linting**: Use the linting workflow defined by Software Architect before committing
+- **Test Quality**: Ensure all tests meet the quality standards established by Software Architect
 
 ## Handover Messages
 

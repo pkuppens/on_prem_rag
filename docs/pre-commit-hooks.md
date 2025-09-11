@@ -58,6 +58,38 @@ Ruff is a fast Python linter and formatter:
     - `types-urllib3`
     - `types-python-dateutil`
 
+## Linting Workflow
+
+### Pre-Commit Linting Checks
+
+Always run linting checks before committing code:
+
+```bash
+# First run: Auto-fix issues
+uv run ruff check --fix .
+
+# Second run: Format code
+uv run ruff format .
+
+# Third run: Verify everything is clean
+uv run ruff check . && uv run ruff format --check .
+```
+
+### GitHub Actions Integration
+
+Before creating pull requests:
+
+1. **Check CI/CD Results**: Verify GitHub Actions pass
+2. **Local Validation**: Run full linting suite locally
+3. **Pre-commit Hooks**: Ensure pre-commit hooks are installed and working
+
+### Linting Best Practices
+
+- **Allow Two Ruff Runs**: First run fixes issues, second run formats code
+- **Address Fundamental Issues**: Only after auto-fixes are applied
+- **Regular Checks**: Run linting checks frequently during development
+- **IDE Integration**: Use ruff in your IDE for real-time feedback
+
 ## Usage
 
 To install the pre-commit hooks:
@@ -70,6 +102,17 @@ To run the hooks manually:
 
 ```bash
 pre-commit run --all-files
+```
+
+To run linting checks manually:
+
+```bash
+# Auto-fix and format
+uv run ruff check --fix .
+uv run ruff format .
+
+# Verify everything is clean
+uv run ruff check . && uv run ruff format --check .
 ```
 
 To update the secrets baseline (after first run):

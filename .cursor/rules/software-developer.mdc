@@ -428,8 +428,12 @@ git add project/team/stories/STORY-XXX.md
 When the user says "commit and continue", execute:
 
 ```bash
-# Create commit message file for review
-echo "STORY-XXX: Software Developer: [description of changes]" > tmp/commit_msg.txt
+# Create commit message file for review (follow commit-message-standards.mdc)
+echo "STORY-XXX: Software Developer: [description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Status update - references committed project file]" > tmp/commit_msg.txt
 
 # Create continuation context file
 echo "Next Steps:
@@ -443,6 +447,8 @@ git commit -F tmp/commit_msg.txt
 
 # Continue with next steps in the workflow
 ```
+
+**IMPORTANT**: Follow [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - commit messages should only reference committed files, not handover notes in tmp/ directory.
 
 This allows the user to review both the commit message and continuation context before proceeding.
 
@@ -532,6 +538,7 @@ This allows the user to review both the commit message and continuation context 
 - [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) - Testing standards
 - [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
 - [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc) - Package management
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover notes standards
 
 ## Retrospective Feedback
 

@@ -420,21 +420,30 @@ echo "STORY-XXX Scrum Master Retrospective:
 
 #### Collect All Retrospective Items
 
-```bash
-# Collect all retrospective items from team members
-echo "=== RETROSPECTIVE COLLECTION $(date) ===" > tmp/retrospectives/collected-retrospectives.md
-echo "" >> tmp/retrospectives/collected-retrospectives.md
+**Create file `tmp/retrospectives/collected-retrospectives.md` with content:**
 
-# Add all role retrospectives
-cat tmp/retrospectives/product-owner-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/scrum-master-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-architect-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-developer-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-tester-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-
-echo "" >> tmp/retrospectives/collected-retrospectives.md
-echo "=== END COLLECTION ===" >> tmp/retrospectives/collected-retrospectives.md
 ```
+=== RETROSPECTIVE COLLECTION [DATE] ===
+
+## Product Owner Retrospectives
+[Content from tmp/retrospectives/product-owner-retrospectives.md]
+
+## Scrum Master Retrospectives
+[Content from tmp/retrospectives/scrum-master-retrospectives.md]
+
+## Software Architect Retrospectives
+[Content from tmp/retrospectives/software-architect-retrospectives.md]
+
+## Software Developer Retrospectives
+[Content from tmp/retrospectives/software-developer-retrospectives.md]
+
+## Software Tester Retrospectives
+[Content from tmp/retrospectives/software-tester-retrospectives.md]
+
+=== END COLLECTION ===
+```
+
+**Note**: The AI assistant should read existing retrospective files and combine their content into the collected file.
 
 #### Review and Implement Improvements
 
@@ -489,14 +498,25 @@ When the user says "commit and continue", execute:
 
 ```bash
 # Create commit message file for review
-echo "STORY-XXX: Scrum Master: [description of changes]" > tmp/commit_msg.txt
+**Create file `tmp/commit_msg.txt` with content:**
+```
+
+STORY-XXX: Scrum Master: [description of changes]
+
+```
 
 # Create continuation context file
-echo "Next Steps:
+**Create file `tmp/continuation.txt` with content:**
+```
+
+Next Steps:
+
 1. [Specific next action]
 2. [Dependencies to check]
 3. [Handover requirements]
-4. [Timeline considerations]" > tmp/continuation.txt
+4. [Timeline considerations]
+
+```
 
 # Commit staged changes using message file
 git commit -F tmp/commit_msg.txt
@@ -528,5 +548,16 @@ Please review task assignments and approve delegation.
 
 Note: Handover context available in tmp/ directory for role transitions."
 ```
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [product-owner.mdc](mdc:.cursor/rules/product-owner.mdc) - Story management and handover coordination
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - Technical design and architecture handovers
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation and development handovers
+- [software-tester.mdc](mdc:.cursor/rules/software-tester.mdc) - Testing and quality assurance handovers
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover separation
+- [cross-platform-file-operations.mdc](mdc:.cursor/rules/cross-platform-file-operations.mdc) - Cross-platform file creation standards
 
 This rule ensures Scrum Masters can effectively facilitate team coordination, manage sprint execution, and delegate work to team members with proper git-based documentation and handover processes throughout the development lifecycle.

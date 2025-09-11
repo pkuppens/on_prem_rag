@@ -79,12 +79,12 @@ git checkout -b feature/STORY-XXX-[short-description]
 # Update priority if needed
 # Set assignee to appropriate team member
 
-# Commit with role-specific message
+# Stage changes for review (no commit - wait for user approval)
 git add project/team/stories/STORY-XXX.md
-git commit -m "STORY-XXX: Product Owner: move to In Progress - [brief reason]"
 
-# Push feature branch
-git push -u origin feature/STORY-XXX-[short-description]
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push -u origin feature/STORY-XXX-[short-description]
 ```
 
 #### Sprint Planning Integration
@@ -95,8 +95,10 @@ git push -u origin feature/STORY-XXX-[short-description]
 # Update project/team/demos/next-demo.md if needed
 
 git add project/team/sprints/current-sprint.md project/team/demos/next-demo.md
-git commit -m "STORY-XXX: Product Owner: add to Sprint [X] - [business justification]"
-git push origin feature/STORY-XXX-[short-description]
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push origin feature/STORY-XXX-[short-description]
 ```
 
 ### 3. Handover to Scrum Master
@@ -123,8 +125,11 @@ echo "STORY-XXX handover to Scrum Master:
 - Acceptance Criteria: [reference to story file]" > tmp/STORY-XXX-po-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Product Owner: handover to Scrum Master - [summary]"
-git push origin feature/STORY-XXX-[short-description]
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push origin feature/STORY-XXX-[short-description]
 ```
 
 ## Story Creation and Management
@@ -314,6 +319,46 @@ echo "STORY-XXX Product Owner Retrospective:
 - [safe-project.mdc](mdc:.cursor/rules/safe-project.mdc) - SAFe methodology
 - [requirement-capture.mdc](mdc:.cursor/rules/requirement-capture.mdc) - Requirement documentation
 
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add project/team/stories/STORY-XXX.md
+git add project/team/tasks/TASK-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review
+echo "STORY-XXX: Product Owner: [description of changes]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Push feature branch (if applicable)
+git push origin feature/STORY-XXX-[short-description]
+
+# Continue with next steps in the workflow
+```
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
 ## Handover Messages
 
 ### For Next Role (Scrum Master)
@@ -329,6 +374,7 @@ Please create task breakdown and delegate to team members."
 ```
 "STORY-XXX has been prioritized and moved to In Progress. Feature branch created:
 feature/STORY-XXX-[description]. Ready for Scrum Master handover.
+Changes are staged for review. Use 'commit and continue' to commit and proceed.
 Please review story details and approve sprint assignment."
 ```
 

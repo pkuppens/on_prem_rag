@@ -101,11 +101,11 @@ git commit -m "STORY-XXX: Software Tester: test plan created"
 
 # Create test cases
 git add project/team/tests/STORY-XXX-test-cases.md
-git commit -m "STORY-XXX: Software Tester: test cases designed"
 
 # Create test data
 git add tests/test_data/STORY-XXX/
-git commit -m "STORY-XXX: Software Tester: test data prepared"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Test Implementation and Execution
@@ -118,14 +118,14 @@ git commit -m "STORY-XXX: Software Tester: test data prepared"
 # Validate user scenarios
 # Test edge cases and error conditions
 
-# Commit functional tests
+# Stage functional tests
 git add tests/test_STORY-XXX_functional.py
-git commit -m "STORY-XXX: Software Tester: add functional tests"
 
-# Run tests and commit results
+# Run tests and stage results
 uv run pytest tests/test_STORY-XXX_functional.py -v
 git add tests/test_STORY-XXX_functional.py
-git commit -m "STORY-XXX: Software Tester: functional tests passing"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Integration Testing
@@ -136,14 +136,14 @@ git commit -m "STORY-XXX: Software Tester: functional tests passing"
 # Test API endpoints
 # Test external service interactions
 
-# Commit integration tests
+# Stage integration tests
 git add tests/test_STORY-XXX_integration.py
-git commit -m "STORY-XXX: Software Tester: add integration tests"
 
 # Run integration tests
 uv run pytest tests/test_STORY-XXX_integration.py -v
 git add tests/test_STORY-XXX_integration.py
-git commit -m "STORY-XXX: Software Tester: integration tests passing"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Performance Testing
@@ -545,6 +545,44 @@ echo "STORY-XXX Software Tester Retrospective:
 - **Environment Problems**: Improve test environment setup and configuration
 - **Integration Testing**: Better coordination with development team for integration testing
 
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add tests/test_STORY-XXX_*.py
+git add project/team/tests/STORY-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review
+echo "STORY-XXX: Software Tester: [description of changes]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Continue with next steps in the workflow
+```
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
 ## Handover Messages
 
 ### For Next Role (Product Owner)
@@ -560,7 +598,8 @@ Please review quality assessment and approve for demo."
 ```
 "STORY-XXX testing completed. All acceptance criteria validated,
 quality assessment documented, and demo readiness confirmed.
-Ready for Product Owner handover. Please review test results and approve quality."
+Ready for Product Owner handover. Changes are staged for review.
+Use 'commit and continue' to commit and proceed. Please review test results and approve quality."
 ```
 
 This rule ensures Software Testers can effectively plan, execute, and manage testing activities, providing comprehensive quality assurance and clear handover to Product Owners with proper git-based documentation and quality tracking throughout the testing process.

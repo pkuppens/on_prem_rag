@@ -78,13 +78,11 @@ cat project/team/demos/next-demo.md
 # Assign tasks to appropriate team members
 # Estimate effort for each task
 
-# Commit task creation (no push - other roles commit to current branch)
+# Stage task creation for review (no commit - wait for user approval)
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Scrum Master: create task breakdown - [task count] tasks created"
-
-# Update story with task references
 git add project/team/stories/STORY-XXX.md
-git commit -m "STORY-XXX: Scrum Master: link tasks to story"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Task Assignment Workflow
@@ -95,7 +93,8 @@ git commit -m "STORY-XXX: Scrum Master: link tasks to story"
 # Set task status to "Assigned"
 
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Scrum Master: assign tasks to team members"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Team Member Delegation
@@ -112,7 +111,9 @@ echo "STORY-XXX handover to Software Architect:
 - Deadline: [design completion date]" > tmp/STORY-XXX-sm-architect-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Architect - [design focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Software Developer Delegation
@@ -127,7 +128,9 @@ echo "STORY-XXX handover to Software Developer:
 - Deadline: [implementation completion date]" > tmp/STORY-XXX-sm-developer-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Developer - [implementation focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Software Tester Delegation
@@ -142,7 +145,9 @@ echo "STORY-XXX handover to Software Tester:
 - Deadline: [testing completion date]" > tmp/STORY-XXX-sm-tester-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Tester - [testing focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ## Sprint Management
@@ -464,6 +469,46 @@ rm tmp/retrospectives/software-tester-retrospectives.md
 rm tmp/retrospectives/collected-retrospectives.md
 ```
 
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add project/team/tasks/TASK-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review
+echo "STORY-XXX: Scrum Master: [description of changes]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Push feature branch (if applicable)
+git push origin feature/STORY-XXX-[short-description]
+
+# Continue with next steps in the workflow
+```
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
 ## Handover Messages
 
 ### For Next Role (Team Members)
@@ -478,6 +523,7 @@ Handover notes available in tmp/ directory. Please review and begin work."
 ```
 "STORY-XXX has been broken down into [X] tasks and assigned to team members.
 Sprint planning completed. Ready for team member handovers.
+Changes are staged for review. Use 'commit and continue' to commit and proceed.
 Please review task assignments and approve delegation."
 ```
 

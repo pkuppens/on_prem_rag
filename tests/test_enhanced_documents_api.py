@@ -22,6 +22,18 @@ from src.backend.rag_pipeline.models.document_models import ProcessingStatus, Up
 from src.backend.rag_pipeline.services.file_upload_service import FileUploadService
 
 
+class MockUploadFile:
+    """Mock UploadFile class for testing file validation functionality.
+
+    This class simulates the FastAPI UploadFile interface for testing purposes.
+    """
+
+    def __init__(self, filename: str, size: int, content_type: str):
+        self.filename = filename
+        self.size = size
+        self.content_type = content_type
+
+
 class TestEnhancedDocumentsAPI:
     """Test suite for enhanced documents API endpoints.
 
@@ -315,12 +327,6 @@ class TestFileUploadService:
         """
 
         # Create a mock UploadFile
-        class MockUploadFile:
-            def __init__(self, filename, size, content_type):
-                self.filename = filename
-                self.size = size
-                self.content_type = content_type
-
         mock_file = MockUploadFile("test.txt", 1024, "text/plain")
 
         # Test validation
@@ -335,12 +341,6 @@ class TestFileUploadService:
         Technical: The service should reject unsupported file types.
         Validation: Create file with unsupported type and verify rejection.
         """
-
-        class MockUploadFile:
-            def __init__(self, filename, size, content_type):
-                self.filename = filename
-                self.size = size
-                self.content_type = content_type
 
         mock_file = MockUploadFile("test.xyz", 1024, "application/octet-stream")
 
@@ -357,12 +357,6 @@ class TestFileUploadService:
         Technical: The service should enforce file size limits.
         Validation: Create oversized file and verify rejection.
         """
-
-        class MockUploadFile:
-            def __init__(self, filename, size, content_type):
-                self.filename = filename
-                self.size = size
-                self.content_type = content_type
 
         # Create file larger than MAX_FILE_SIZE (100MB)
         mock_file = MockUploadFile("test.txt", 200 * 1024 * 1024, "text/plain")

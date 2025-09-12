@@ -10,6 +10,7 @@ architecture specifications and implementation requirements.
 import asyncio
 import hashlib
 import mimetypes
+import shutil
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -248,8 +249,6 @@ class FileUploadService:
         safe_name = Path(filename).name
 
         # Add timestamp to avoid conflicts
-        import time
-
         timestamp = int(time.time())
         name_parts = safe_name.rsplit(".", 1)
         if len(name_parts) == 2:
@@ -305,8 +304,6 @@ class FileUploadService:
         try:
             task_dir = self.upload_dir / task_id
             if task_dir.exists():
-                import shutil
-
                 shutil.rmtree(task_dir)
                 logger.info("Task files cleaned up", task_id=task_id)
 

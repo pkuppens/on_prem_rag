@@ -1,5 +1,6 @@
 # Temporary files
 tmp/
+docs/archive/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -179,3 +180,4 @@ cache/
 # Credentials to access Google Calendar API
 docs/project/hours/scripts/credentials.json
 docs/project/hours/scripts/token.json
+docs/archive/retrospectives/commit-message-handover-retrospectives.md

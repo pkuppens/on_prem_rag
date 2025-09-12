@@ -101,11 +101,11 @@ git commit -m "STORY-XXX: Software Tester: test plan created"
 
 # Create test cases
 git add project/team/tests/STORY-XXX-test-cases.md
-git commit -m "STORY-XXX: Software Tester: test cases designed"
 
 # Create test data
 git add tests/test_data/STORY-XXX/
-git commit -m "STORY-XXX: Software Tester: test data prepared"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Test Implementation and Execution
@@ -118,14 +118,17 @@ git commit -m "STORY-XXX: Software Tester: test data prepared"
 # Validate user scenarios
 # Test edge cases and error conditions
 
-# Commit functional tests
+# Stage functional tests
 git add tests/test_STORY-XXX_functional.py
-git commit -m "STORY-XXX: Software Tester: add functional tests"
 
-# Run tests and commit results
-uv run pytest tests/test_STORY-XXX_functional.py -v
+# Run tests and stage results (with timeout to prevent hanging)
+Execute command: `uv run pytest tests/test_STORY-XXX_functional.py -v`
+**Timeout**: 90 seconds maximum execution time
+**Note**: If command exceeds timeout, break into smaller test chunks
 git add tests/test_STORY-XXX_functional.py
-git commit -m "STORY-XXX: Software Tester: functional tests passing"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# Note: Follow Software Architect's linting workflow before committing
 ```
 
 #### Integration Testing
@@ -136,14 +139,16 @@ git commit -m "STORY-XXX: Software Tester: functional tests passing"
 # Test API endpoints
 # Test external service interactions
 
-# Commit integration tests
+# Stage integration tests
 git add tests/test_STORY-XXX_integration.py
-git commit -m "STORY-XXX: Software Tester: add integration tests"
 
-# Run integration tests
-uv run pytest tests/test_STORY-XXX_integration.py -v
+# Run integration tests (with timeout to prevent hanging)
+Execute command: `uv run pytest tests/test_STORY-XXX_integration.py -v`
+**Timeout**: 120 seconds maximum execution time
+**Strategy**: Run individual test classes if full suite times out
 git add tests/test_STORY-XXX_integration.py
-git commit -m "STORY-XXX: Software Tester: integration tests passing"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Performance Testing
@@ -158,8 +163,11 @@ git commit -m "STORY-XXX: Software Tester: integration tests passing"
 git add tests/test_STORY-XXX_performance.py
 git commit -m "STORY-XXX: Software Tester: add performance tests"
 
-# Run performance tests
-uv run pytest tests/test_STORY-XXX_performance.py -v
+# Run performance tests (with timeout to prevent hanging)
+Execute command: `uv run pytest tests/test_STORY-XXX_performance.py -v`
+**Timeout**: 180 seconds maximum execution time
+**Strategy**: Break into individual test methods if full suite times out
+**Fallback**: Run with reduced test data if still timing out
 git add tests/test_STORY-XXX_performance.py
 git commit -m "STORY-XXX: Software Tester: performance tests completed"
 ```
@@ -206,8 +214,10 @@ git commit -m "STORY-XXX: Software Tester: test results updated - [bug count] bu
 git add tests/test_STORY-XXX_regression.py
 git commit -m "STORY-XXX: Software Tester: add regression tests"
 
-# Run regression tests
-uv run pytest tests/test_STORY-XXX_regression.py -v
+# Run regression tests (with timeout to prevent hanging)
+Execute command: `uv run pytest tests/test_STORY-XXX_regression.py -v`
+**Timeout**: 90 seconds maximum execution time
+**Note**: If command exceeds timeout, break into smaller test chunks
 git add tests/test_STORY-XXX_regression.py
 git commit -m "STORY-XXX: Software Tester: regression tests passing"
 ```
@@ -521,6 +531,7 @@ git commit -m "STORY-XXX: Software Tester: test suite maintenance"
 - [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - Project management
 - [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow
 - [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover notes standards
 
 ## Retrospective Feedback
 
@@ -544,6 +555,96 @@ echo "STORY-XXX Software Tester Retrospective:
 - **Test Data Issues**: Better test data management and isolation
 - **Environment Problems**: Improve test environment setup and configuration
 - **Integration Testing**: Better coordination with development team for integration testing
+- **Terminal Command Timeouts**: Use shorter, focused commands with explicit timeouts for long-running processes
+
+### Terminal Command Best Practices
+
+**CRITICAL**: Prevent terminal commands from hanging without output:
+
+```bash
+# Use explicit timeouts for long-running commands
+Execute command: `uv run pytest tests/test_specific.py -v`
+**Timeout**: 90 seconds maximum execution time
+**Note**: If command exceeds timeout, break into smaller test chunks
+
+Execute command: `uv run pytest tests/ -m "not slow" --maxfail=5`
+**Timeout**: 120 seconds maximum execution time
+**Strategy**: Run individual test files if full suite times out
+
+# Break down testing into smaller chunks
+uv run pytest tests/test_module1.py -v
+uv run pytest tests/test_module2.py -v
+
+# Use file-based results for long-running processes
+uv run pytest tests/ --junitxml=test-results.xml --tb=short
+```
+
+**Alternative Approach**: Use file-based testing results instead of relying on terminal output:
+
+```bash
+# Write test results to files for long-running processes
+uv run pytest tests/ --junitxml=tmp/test-results.xml > tmp/test-output.txt 2>&1
+
+# Check results from files
+cat tmp/test-output.txt
+cat tmp/test-results.xml
+```
+
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add tests/test_STORY-XXX_*.py
+git add project/team/tests/STORY-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review (follow commit-message-standards.mdc)
+echo "STORY-XXX: Software Tester: [description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Status update - references committed project file]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Continue with next steps in the workflow
+```
+
+**IMPORTANT**: Follow [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - commit messages should only reference committed files, not handover notes in tmp/ directory.
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
+## Code Quality Standards
+
+### Linting and Code Quality
+
+**Follow Software Architect's Linting Workflow**: The Software Architect defines and maintains the linting workflow for the repository. See [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) for the complete linting workflow.
+
+### Key Responsibilities
+
+- **Follow Standards**: Write tests according to Software Architect's quality standards
+- **Run Linting**: Use the linting workflow defined by Software Architect before committing
+- **Test Quality**: Ensure all tests meet the quality standards established by Software Architect
 
 ## Handover Messages
 
@@ -560,7 +661,19 @@ Please review quality assessment and approve for demo."
 ```
 "STORY-XXX testing completed. All acceptance criteria validated,
 quality assessment documented, and demo readiness confirmed.
-Ready for Product Owner handover. Please review test results and approve quality."
+Ready for Product Owner handover. Changes are staged for review.
+Use 'commit and continue' to commit and proceed. Please review test results and approve quality."
 ```
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [product-owner.mdc](mdc:.cursor/rules/product-owner.mdc) - Quality assurance and demo readiness coordination
+- [scrum-master.mdc](mdc:.cursor/rules/scrum-master.mdc) - Testing coordination and sprint management
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - Technical design and architecture testing
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation testing and bug management
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover separation
+- [cross-platform-file-operations.mdc](mdc:.cursor/rules/cross-platform-file-operations.mdc) - Cross-platform command execution and timeout handling
 
 This rule ensures Software Testers can effectively plan, execute, and manage testing activities, providing comprehensive quality assurance and clear handover to Product Owners with proper git-based documentation and quality tracking throughout the testing process.

@@ -118,10 +118,13 @@ ignore = [
     "PLR0912", # too many branches
     "PLR0911", # too many return statements
     "B006",    # mutable default argument
+    "B007",    # unused loop variable (prefer lenient style)
     "B008",    # depends in function definition
     "B904",    # raise exception from exception
     "F",       # all F* errors (Pyflakes)
     "UP035",   # X | Y for type sets,
+    "I001",    # unsorted-imports: Allow unsorted imports for flexibility in import organization,
+    # An issue has been filed for this: https://github.com/pkuppens/on_prem_rag/issues/53
 ]
 
 

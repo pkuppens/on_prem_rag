@@ -1,0 +1,329 @@
+---
+description: Commit message standards and handover notes separation guidelines
+globs:
+  - "**/*.md"
+  - "**/*.py"
+  - "**/*.yml"
+  - "**/*.yaml"
+  - "**/*.toml"
+alwaysApply: false
+---
+
+# Commit Message Standards and Handover Notes Separation
+
+## Core Principle: Separate Technical Content from Handover Context
+
+**CRITICAL**: Commit messages should only reference files that are actually committed to the repository. Handover notes in `tmp/` directory are for context and process information only, not technical documentation.
+
+## Commit Message Standards
+
+### What Commit Messages SHOULD Reference
+
+✅ **Committed Files Only**:
+
+- Files that are actually in the commit
+- Technical documentation that is committed
+- Code changes and configuration changes
+- Project artifacts (TASK-_.md, STORY-_.md files that are committed)
+
+✅ **Technical Content**:
+
+- Architecture decisions and design specifications
+- Implementation requirements and guidelines
+- Code quality improvements and fixes
+- Documentation updates and additions
+
+### What Commit Messages SHOULD NOT Reference
+
+❌ **Non-Committed Files**:
+
+- Handover notes in `tmp/` directory
+- Temporary context files
+- Process notes and workflow details
+- Scratch files and experimental content
+
+❌ **Process Context**:
+
+- Role transition information
+- Handover process details
+- Workflow and communication context
+- Temporary priorities and next steps
+
+## Two-Tier Documentation Approach
+
+### Tier 1: Technical Content (Committed)
+
+**Location**: Project documentation directories
+**Purpose**: Permanent technical documentation
+**Commit Status**: Always committed to repository
+
+**Examples**:
+
+- `docs/technical/ARCHITECTURE.md` - System architecture
+- `docs/technical/STORY-XXX-design.md` - Design specifications
+- `project/team/tasks/TASK-XXX.md` - Task documentation
+- `project/team/stories/STORY-XXX.md` - Story documentation
+- `src/` - Source code implementation
+- `tests/` - Test implementation
+
+**Commit Message Examples**:
+
+```
+TASK-006A: Complete document processing architecture design
+
+- Created comprehensive architecture document for document processing pipeline
+- Updated TASK-006A status to Completed with all acceptance criteria met
+- Applied centralized linting workflow (Software Architect's responsibility)
+- Architecture ready for implementation phase (TASK-006B, TASK-006C, TASK-006D)
+```
+
+### Tier 2: Handover Context (Not Committed)
+
+**Location**: `tmp/` directory (gitignored)
+**Purpose**: Role transition context and process information
+**Commit Status**: Never committed to repository
+
+**Examples**:
+
+- `tmp/STORY-XXX-architect-developer-handover.md` - Handover context
+- `tmp/STORY-XXX-developer-tester-handover.md` - Process information
+- `tmp/commit_msg.txt` - Temporary commit message
+- `tmp/continuation.txt` - Next steps context
+
+**What Goes in Handover Notes**:
+
+- Role-specific context and priorities
+- Immediate next steps for receiving role
+- Process workflow and handover details
+- Communication context and expectations
+- Temporary priorities and focus areas
+
+## Implementation Guidelines
+
+### For All Roles
+
+#### Before Committing
+
+1. **Verify Committed Content**: Ensure all referenced files are actually in the commit
+2. **Separate Technical from Process**: Keep technical content in project documentation
+3. **Use Handover Notes for Context**: Put role transition info in `tmp/` directory
+4. **Review Commit Message**: Check that message only references committed files
+
+#### Commit Message Template
+
+**Create file `tmp/commit_msg.txt` with content:**
+
+```
+STORY-XXX: [Role]: [technical description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Technical change 3 - references committed file]
+- [Status update - references committed project file]
+```
+
+#### Handover Note Template
+
+**Create file `tmp/STORY-XXX-[role]-handover.md` with content:**
+
+```
+# STORY-XXX handover to [Next Role]
+
+## Context
+- [role-specific context]
+
+## Priorities
+- [immediate priorities]
+
+## Next Steps
+- [specific next actions]
+
+## Process
+- [workflow details]
+```
+
+### Role-Specific Guidelines
+
+#### Software Architect
+
+**Technical Content (Committed)**:
+
+- Architecture decisions in `docs/technical/`
+- Design specifications and guidelines
+- Technical standards and patterns
+- Implementation requirements
+
+**Handover Context (Not Committed)**:
+
+- Design approach and rationale
+- Implementation priorities
+- Integration considerations
+- Next role expectations
+
+#### Software Developer
+
+**Technical Content (Committed)**:
+
+- Code implementation in `src/`
+- Unit tests in `tests/`
+- Code documentation and comments
+- Implementation specifications
+
+**Handover Context (Not Committed)**:
+
+- Implementation approach and decisions
+- Testing priorities and focus areas
+- Integration points and dependencies
+- Demo preparation requirements
+
+#### Software Tester
+
+**Technical Content (Committed)**:
+
+- Test implementation in `tests/`
+- Test documentation and results
+- Quality assessment reports
+- Bug reports and verification
+
+**Handover Context (Not Committed)**:
+
+- Testing approach and strategy
+- Quality priorities and focus areas
+- Demo validation requirements
+- Stakeholder communication needs
+
+#### Product Owner
+
+**Technical Content (Committed)**:
+
+- Story documentation in `project/team/stories/`
+- Task documentation in `project/team/tasks/`
+- Business requirements and acceptance criteria
+- Sprint planning and demo documentation
+
+**Handover Context (Not Committed)**:
+
+- Business priorities and context
+- Stakeholder expectations
+- Demo requirements and preparation
+- Sprint planning considerations
+
+## Quality Gates
+
+### Pre-Commit Checklist
+
+- [ ] All referenced files are actually in the commit
+- [ ] Technical content is in project documentation
+- [ ] Handover context is in `tmp/` directory
+- [ ] Commit message only references committed files
+- [ ] No process or workflow details in commit message
+
+### Post-Commit Verification
+
+- [ ] Git history accurately reflects committed content
+- [ ] Commit message matches actual changes
+- [ ] Technical documentation is properly committed
+- [ ] Handover context remains in `tmp/` directory
+
+## Benefits
+
+### Accurate Git History
+
+- Commit messages only reference committed files
+- Git history accurately reflects what was actually committed
+- No misleading references to non-committed content
+
+### Clear Documentation Separation
+
+- Technical content is properly documented in project files
+- Process context is clearly separated from technical documentation
+- Maintainable documentation structure
+
+### Proper Role Transitions
+
+- Handover context is preserved for role transitions
+- Technical content is accessible to all team members
+- Clear separation of concerns between documentation types
+
+## Examples
+
+### Good Commit Message
+
+```
+TASK-006A: Complete document processing architecture design
+
+- Created comprehensive architecture document for document processing pipeline
+- Updated TASK-006A status to Completed with all acceptance criteria met
+- Applied centralized linting workflow (Software Architect's responsibility)
+- Architecture ready for implementation phase (TASK-006B, TASK-006C, TASK-006D)
+```
+
+### Bad Commit Message (References Non-Committed Files)
+
+```
+TASK-006A: Complete document processing architecture design
+
+- Created comprehensive architecture document for document processing pipeline
+- Created handover notes for Software Developer (TASK-006B)  # ❌ Not committed
+- Updated TASK-006A status to Completed with all acceptance criteria met
+```
+
+### Good Handover Note (Not Referenced in Commit)
+
+```markdown
+# STORY-XXX handover to Software Developer
+
+## Context
+
+- Design specification completed and documented
+- Architecture decisions made and justified
+- Implementation guidelines established
+
+## Priorities
+
+- Focus on core implementation first
+- Follow established design patterns
+- Maintain code quality standards
+
+## Next Steps
+
+1. Review design specification
+2. Set up development environment
+3. Begin implementation following guidelines
+4. Coordinate with team for integration points
+
+## Process
+
+- Use established git workflow
+- Follow linting standards
+- Create comprehensive tests
+- Document implementation decisions
+```
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - Technical content standards
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation standards
+- [software-tester.mdc](mdc:.cursor/rules/software-tester.mdc) - Testing standards
+- [product-owner.mdc](mdc:.cursor/rules/product-owner.mdc) - Story management standards
+- [cross-platform-file-operations.mdc](mdc:.cursor/rules/cross-platform-file-operations.mdc) - Cross-platform file creation standards
+
+## Enforcement
+
+### Code Review Checklist
+
+- [ ] Commit messages only reference committed files
+- [ ] Technical content is in project documentation
+- [ ] Handover context is in `tmp/` directory
+- [ ] No process details in commit messages
+
+### Team Training
+
+- All team members understand the two-tier approach
+- Clear examples of good vs. bad commit messages
+- Regular review of commit message quality
+- Documentation of best practices
+
+This rule ensures that commit messages accurately reflect committed content while maintaining proper separation between technical documentation and handover context, leading to cleaner git history and better project documentation.

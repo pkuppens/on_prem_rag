@@ -11,17 +11,22 @@ env:
   TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface/hub
   SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/huggingface/sentence_transformers
 
+# Python versions to test - update all three jobs when changing versions
+# Current: ["3.12"]
+# For compatibility testing: ["3.11", "3.12", "3.13"]
+# Or when you are satisfied that e.g. linting is only on one version, you can accept the differences.
+
 jobs:
   # Setup job that other jobs depend on
   setup:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.12"] # See workflow-level comment for version management
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install uv
@@ -49,11 +54,14 @@ jobs:
   # Linting job - runs independently
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install uv
@@ -71,11 +79,14 @@ jobs:
   # Build and test job - runs in parallel with lint
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install uv

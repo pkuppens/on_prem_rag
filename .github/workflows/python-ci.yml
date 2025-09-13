@@ -185,7 +185,7 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run unit tests only - fast, always run
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow and not performance" --junitxml=test-results-unit.xml
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml
 
   # Performance test job - conditional execution
   test-performance:
@@ -232,8 +232,8 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Run performance tests only
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "performance" --junitxml=test-results-performance.xml
+          # Run slow tests only (performance-related)
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "slow and not internet" --junitxml=test-results-performance.xml
 
   # Integration test job - conditional execution
   test-integration:
@@ -280,5 +280,5 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Run integration tests (internet or ollama dependent)
-          uv run pytest -m "internet or ollama" --junitxml=test-results-integration.xml
+          # Run integration tests (internet dependent)
+          uv run pytest -m "internet" --junitxml=test-results-integration.xml

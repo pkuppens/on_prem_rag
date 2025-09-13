@@ -129,14 +129,28 @@ pre-commit install
 
 - **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
 - **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
+- **Linting**: All code must pass linting checks before commits. Run linting with:
+
+  ```bash
+  # First run: Auto-fix issues
+  uv run ruff check --fix .
+
+  # Second run: Format code
+  uv run ruff format .
+
+  # Third run: Verify everything is clean
+  uv run ruff check . && uv run ruff format --check .
+  ```
+
 - **Package Management**: Configuration is handled through `pyproject.toml` for portable development environments
 - **Dependency Management**:
   - **CRITICAL**: Always use `uv add package-name` for new dependencies - NEVER use `pip install`
   - `pip install` only works locally but fails in fresh environments (CI/CD, containers)
   - Before importing any package, verify it exists in `pyproject.toml` or add it with `uv add`
   - Use `uv sync` to install dependencies in fresh environments
+- **CI/CD**: Check GitHub Actions results before creating pull requests
 
-See [docs/SETUP.md](docs/SETUP.md) for additional details.
+See [docs/SETUP.md](docs/SETUP.md) and [docs/pre-commit-hooks.md](docs/pre-commit-hooks.md) for additional details.
 
 ### Phase 2: Enterprise Features (Weeks 5-8)
 
@@ -166,12 +180,14 @@ See [docs/SETUP.md](docs/SETUP.md) for additional details.
 #### 1. Module Import Errors
 
 **Symptoms:**
+
 - `ModuleNotFoundError: No module named 'auth_service'`
 - `ModuleNotFoundError: No module named 'rag_pipeline'`
 - `ModuleNotFoundError: No module named 'httpx'`
 - Services fail to start with import-related errors
 
 **Solution:**
+
 ```bash
 # Install the current project in editable mode (CRITICAL for src-layout projects)
 uv pip install -e .[dev]
@@ -185,6 +201,7 @@ uv run pytest tests/test_imports.py -v
 **Important:** This uses `uv pip install -e .[dev]` to install the current project itself, not external dependencies. For adding new external packages, always use `uv add package-name`.
 
 **uv Command Usage:**
+
 - `uv add package-name` - Add external dependencies to pyproject.toml (use this for new packages)
 - `uv pip install -e .[dev]` - Install current project in editable mode (use this for project setup)
 - `uv sync` - Install all dependencies from pyproject.toml (use this in fresh environments)
@@ -192,10 +209,12 @@ uv run pytest tests/test_imports.py -v
 #### 2. uv Command Not Found
 
 **Symptoms:**
+
 - `uv: command not found`
 - `'uv' is not recognized as an internal or external command`
 
 **Solution:**
+
 ```bash
 # Install uv using one of these methods:
 # Windows (using winget)
@@ -214,10 +233,12 @@ uv --version
 #### 3. Python Version Issues
 
 **Symptoms:**
+
 - Wrong Python version being used
 - Version conflicts between system and project Python
 
 **Solution:**
+
 ```bash
 # Check available Python versions
 uv python list
@@ -235,11 +256,13 @@ python --version
 #### 4. Dependency Installation Failures
 
 **Symptoms:**
+
 - Package installation fails
 - Network timeouts during installation
 - Disk space errors
 
 **Solution:**
+
 ```bash
 # Check disk space
 df -h  # Linux/macOS
@@ -259,11 +282,13 @@ uv sync --verbose
 #### 5. Network/Proxy Issues
 
 **Symptoms:**
+
 - Connection timeouts to PyPI
 - SSL certificate errors
 - Proxy authentication failures
 
 **Solution:**
+
 ```bash
 # Configure proxy if needed
 export HTTP_PROXY=http://proxy.company.com:8080
@@ -279,11 +304,13 @@ uv sync --index-url https://pypi.org/simple/
 #### 6. Pre-commit Hook Failures
 
 **Symptoms:**
+
 - Hooks fail during commit
 - Formatting or linting errors
 - Test failures in pre-commit
 
 **Solution:**
+
 ```bash
 # Run hooks manually to see detailed errors
 pre-commit run --all-files
@@ -301,11 +328,13 @@ uv run pytest
 #### 7. Docker Compose Issues
 
 **Symptoms:**
+
 - Services fail to start
 - Port conflicts
 - Volume mounting errors
 
 **Solution:**
+
 ```bash
 # Check for port conflicts
 netstat -tulpn | grep :5173  # Linux
@@ -322,11 +351,13 @@ docker-compose logs [service-name]
 #### 8. Frontend Development Issues
 
 **Symptoms:**
+
 - Blank page at http://localhost:5173
 - Console errors about missing modules
 - TypeScript compilation errors
 
 **Solution:**
+
 ```bash
 cd src/frontend
 

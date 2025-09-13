@@ -79,12 +79,12 @@ git checkout -b feature/STORY-XXX-[short-description]
 # Update priority if needed
 # Set assignee to appropriate team member
 
-# Commit with role-specific message
+# Stage changes for review (no commit - wait for user approval)
 git add project/team/stories/STORY-XXX.md
-git commit -m "STORY-XXX: Product Owner: move to In Progress - [brief reason]"
 
-# Push feature branch
-git push -u origin feature/STORY-XXX-[short-description]
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push -u origin feature/STORY-XXX-[short-description]
 ```
 
 #### Sprint Planning Integration
@@ -95,8 +95,10 @@ git push -u origin feature/STORY-XXX-[short-description]
 # Update project/team/demos/next-demo.md if needed
 
 git add project/team/sprints/current-sprint.md project/team/demos/next-demo.md
-git commit -m "STORY-XXX: Product Owner: add to Sprint [X] - [business justification]"
-git push origin feature/STORY-XXX-[short-description]
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push origin feature/STORY-XXX-[short-description]
 ```
 
 ### 3. Handover to Scrum Master
@@ -123,8 +125,11 @@ echo "STORY-XXX handover to Scrum Master:
 - Acceptance Criteria: [reference to story file]" > tmp/STORY-XXX-po-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Product Owner: handover to Scrum Master - [summary]"
-git push origin feature/STORY-XXX-[short-description]
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# After commit, push feature branch:
+# git push origin feature/STORY-XXX-[short-description]
 ```
 
 ## Story Creation and Management
@@ -202,7 +207,12 @@ gh issue edit [ISSUE_NUMBER] --add-label "in-progress"
 gh issue edit [ISSUE_NUMBER] --add-assignee [team-member]
 
 # Close issue when story completed (use temp file for comment)
-echo "Story completed successfully. All acceptance criteria met: ✅ [list criteria]" > tmp/issue-comment.md
+**Create file `tmp/issue-comment.md` with content:**
+```
+
+Story completed successfully. All acceptance criteria met: ✅ [list criteria]
+
+```
 gh issue close [ISSUE_NUMBER] --comment-file tmp/issue-comment.md
 ```
 
@@ -265,7 +275,7 @@ gh issue edit [ISSUE_NUMBER] --add-assignee @me
 - [ ] Sprint planning completed
 - [ ] Demo planning updated
 - [ ] Stakeholder communication completed
-- [ ] Handover notes created in tmp directory
+- [ ] Handover notes created in tmp directory (NOT committed to git)
 
 ## Retrospective Feedback
 
@@ -282,6 +292,52 @@ echo "STORY-XXX Product Owner Retrospective:
 - Recommendation: [Specific improvement for own or other roles]
 - Date: $(date)" >> tmp/retrospectives/product-owner-retrospectives.md
 ```
+
+### Date Verification Best Practices
+
+**CRITICAL**: Always verify the current date before updating 'Updated' fields in task files:
+
+```bash
+# Verify current date before updating task files
+date
+# Use actual current date, not assumed dates
+# Example: If today is 2025-01-15, use 2025-01-15, not 2025-01-27
+```
+
+### UV Command Documentation Standards
+
+**CRITICAL**: Always clarify uv command usage in documentation to prevent confusion:
+
+- **`uv add package-name`**: For adding external packages to project dependencies
+- **`uv pip install -e .`**: For installing the current project in development mode
+- **`uv sync --dev`**: For installing all dependencies including development dependencies
+- **`uv run command`**: For running commands in the project environment
+
+**Documentation Template**:
+
+```bash
+# Add external package to project dependencies
+uv add package-name
+
+# Install current project in development mode (if needed)
+uv pip install -e .
+
+# Install all dependencies for development
+uv sync --dev
+
+# Run commands in project environment
+uv run pytest
+uv run ruff check .
+```
+
+### TMP Directory Usage Guidelines
+
+**CRITICAL**: Remember that tmp directory is intentionally gitignored:
+
+- **Handover Notes**: Create in `tmp/` directory for context and process information
+- **NOT Committed**: tmp files should never be committed to git
+- **Alternative**: If handover notes need to be persistent, create them in project documentation instead
+- **Purpose**: tmp directory is for temporary scratch files and handover context only
 
 ### Common Issues and Solutions
 
@@ -313,6 +369,53 @@ echo "STORY-XXX Product Owner Retrospective:
 - [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow
 - [safe-project.mdc](mdc:.cursor/rules/safe-project.mdc) - SAFe methodology
 - [requirement-capture.mdc](mdc:.cursor/rules/requirement-capture.mdc) - Requirement documentation
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover notes standards
+
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add project/team/stories/STORY-XXX.md
+git add project/team/tasks/TASK-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review (follow commit-message-standards.mdc)
+echo "STORY-XXX: Product Owner: [description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Status update - references committed project file]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Push feature branch (if applicable)
+git push origin feature/STORY-XXX-[short-description]
+
+# Continue with next steps in the workflow
+```
+
+**IMPORTANT**: Follow [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - commit messages should only reference committed files, not handover notes in tmp/ directory.
+
+This allows the user to review both the commit message and continuation context before proceeding.
 
 ## Handover Messages
 
@@ -329,7 +432,19 @@ Please create task breakdown and delegate to team members."
 ```
 "STORY-XXX has been prioritized and moved to In Progress. Feature branch created:
 feature/STORY-XXX-[description]. Ready for Scrum Master handover.
+Changes are staged for review. Use 'commit and continue' to commit and proceed.
 Please review story details and approve sprint assignment."
 ```
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [scrum-master.mdc](mdc:.cursor/rules/scrum-master.mdc) - Story handover and sprint planning coordination
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - Technical design and architecture coordination
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation and development coordination
+- [software-tester.mdc](mdc:.cursor/rules/software-tester.mdc) - Testing and quality assurance coordination
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover separation
+- [cross-platform-file-operations.mdc](mdc:.cursor/rules/cross-platform-file-operations.mdc) - Cross-platform file creation standards
 
 This rule ensures Product Owners can effectively manage stories from CEO requests through to successful handover to the Scrum Master, with proper git-based documentation and communication throughout the process.

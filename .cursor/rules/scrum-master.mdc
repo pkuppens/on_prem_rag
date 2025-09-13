@@ -78,13 +78,11 @@ cat project/team/demos/next-demo.md
 # Assign tasks to appropriate team members
 # Estimate effort for each task
 
-# Commit task creation (no push - other roles commit to current branch)
+# Stage task creation for review (no commit - wait for user approval)
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Scrum Master: create task breakdown - [task count] tasks created"
-
-# Update story with task references
 git add project/team/stories/STORY-XXX.md
-git commit -m "STORY-XXX: Scrum Master: link tasks to story"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Task Assignment Workflow
@@ -95,7 +93,8 @@ git commit -m "STORY-XXX: Scrum Master: link tasks to story"
 # Set task status to "Assigned"
 
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Scrum Master: assign tasks to team members"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Team Member Delegation
@@ -112,7 +111,9 @@ echo "STORY-XXX handover to Software Architect:
 - Deadline: [design completion date]" > tmp/STORY-XXX-sm-architect-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Architect - [design focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Software Developer Delegation
@@ -127,7 +128,9 @@ echo "STORY-XXX handover to Software Developer:
 - Deadline: [implementation completion date]" > tmp/STORY-XXX-sm-developer-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Developer - [implementation focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Software Tester Delegation
@@ -142,7 +145,9 @@ echo "STORY-XXX handover to Software Tester:
 - Deadline: [testing completion date]" > tmp/STORY-XXX-sm-tester-handover.md
 
 "make necessary edits to product documentation'
-git commit -m "STORY-XXX: Scrum Master: handover to Software Tester - [testing focus]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ## Sprint Management
@@ -415,21 +420,30 @@ echo "STORY-XXX Scrum Master Retrospective:
 
 #### Collect All Retrospective Items
 
-```bash
-# Collect all retrospective items from team members
-echo "=== RETROSPECTIVE COLLECTION $(date) ===" > tmp/retrospectives/collected-retrospectives.md
-echo "" >> tmp/retrospectives/collected-retrospectives.md
+**Create file `tmp/retrospectives/collected-retrospectives.md` with content:**
 
-# Add all role retrospectives
-cat tmp/retrospectives/product-owner-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/scrum-master-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-architect-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-developer-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-cat tmp/retrospectives/software-tester-retrospectives.md >> tmp/retrospectives/collected-retrospectives.md 2>/dev/null || true
-
-echo "" >> tmp/retrospectives/collected-retrospectives.md
-echo "=== END COLLECTION ===" >> tmp/retrospectives/collected-retrospectives.md
 ```
+=== RETROSPECTIVE COLLECTION [DATE] ===
+
+## Product Owner Retrospectives
+[Content from tmp/retrospectives/product-owner-retrospectives.md]
+
+## Scrum Master Retrospectives
+[Content from tmp/retrospectives/scrum-master-retrospectives.md]
+
+## Software Architect Retrospectives
+[Content from tmp/retrospectives/software-architect-retrospectives.md]
+
+## Software Developer Retrospectives
+[Content from tmp/retrospectives/software-developer-retrospectives.md]
+
+## Software Tester Retrospectives
+[Content from tmp/retrospectives/software-tester-retrospectives.md]
+
+=== END COLLECTION ===
+```
+
+**Note**: The AI assistant should read existing retrospective files and combine their content into the collected file.
 
 #### Review and Implement Improvements
 
@@ -464,6 +478,57 @@ rm tmp/retrospectives/software-tester-retrospectives.md
 rm tmp/retrospectives/collected-retrospectives.md
 ```
 
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add project/team/tasks/TASK-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review
+**Create file `tmp/commit_msg.txt` with content:**
+```
+
+STORY-XXX: Scrum Master: [description of changes]
+
+```
+
+# Create continuation context file
+**Create file `tmp/continuation.txt` with content:**
+```
+
+Next Steps:
+
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]
+
+```
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Push feature branch (if applicable)
+git push origin feature/STORY-XXX-[short-description]
+
+# Continue with next steps in the workflow
+```
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
 ## Handover Messages
 
 ### For Next Role (Team Members)
@@ -478,7 +543,21 @@ Handover notes available in tmp/ directory. Please review and begin work."
 ```
 "STORY-XXX has been broken down into [X] tasks and assigned to team members.
 Sprint planning completed. Ready for team member handovers.
-Please review task assignments and approve delegation."
+Changes are staged for review. Use 'commit and continue' to commit and proceed.
+Please review task assignments and approve delegation.
+
+Note: Handover context available in tmp/ directory for role transitions."
 ```
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [product-owner.mdc](mdc:.cursor/rules/product-owner.mdc) - Story management and handover coordination
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - Technical design and architecture handovers
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation and development handovers
+- [software-tester.mdc](mdc:.cursor/rules/software-tester.mdc) - Testing and quality assurance handovers
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover separation
+- [cross-platform-file-operations.mdc](mdc:.cursor/rules/cross-platform-file-operations.mdc) - Cross-platform file creation standards
 
 This rule ensures Scrum Masters can effectively facilitate team coordination, manage sprint execution, and delegate work to team members with proper git-based documentation and handover processes throughout the development lifecycle.

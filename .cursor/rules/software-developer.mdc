@@ -91,7 +91,8 @@ echo "STORY-XXX Implementation Plan:
 - Performance Considerations: [performance requirements]" > docs/technical/STORY-XXX-implementation-plan.md
 
 git add docs/technical/STORY-XXX-implementation-plan.md
-git commit -m "STORY-XXX: Software Developer: implementation plan created"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Task Breakdown and Estimation
@@ -104,11 +105,11 @@ git commit -m "STORY-XXX: Software Developer: implementation plan created"
 
 # Create implementation tasks
 git add project/team/tasks/TASK-XXX-impl-*.md
-git commit -m "STORY-XXX: Software Developer: create implementation tasks"
 
 # Update task status
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Software Developer: update task status to In Progress"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 3. Implementation Execution
@@ -121,18 +122,18 @@ git commit -m "STORY-XXX: Software Developer: update task status to In Progress"
 # Refactor and improve code
 # Ensure all tests pass
 
-# Commit test implementation
+# Stage test implementation
 git add tests/test_STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: add unit tests - [test description]"
 
-# Commit implementation
+# Stage implementation
 git add src/rag_pipeline/STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: implement [feature description]"
 
-# Run tests and commit results
+# Run tests and stage results
 uv run pytest tests/test_STORY-XXX.py -v
 git add tests/test_STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: tests passing - [test coverage]"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+# Note: Follow Software Architect's linting workflow before committing
 ```
 
 #### Code Quality and Standards
@@ -147,9 +148,10 @@ git commit -m "STORY-XXX: Software Developer: tests passing - [test coverage]"
 uv run ruff check src/rag_pipeline/STORY-XXX.py
 uv run ruff format src/rag_pipeline/STORY-XXX.py
 
-# Commit code quality improvements
+# Stage code quality improvements
 git add src/rag_pipeline/STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: code quality improvements - [specific improvements]"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 4. Integration and Testing
@@ -162,13 +164,13 @@ git commit -m "STORY-XXX: Software Developer: code quality improvements - [speci
 # Handle error conditions
 # Document integration behavior
 
-# Commit integration code
+# Stage integration code
 git add src/rag_pipeline/integrations/STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: implement integration - [integration description]"
 
-# Commit integration tests
+# Stage integration tests
 git add tests/test_STORY-XXX_integration.py
-git commit -m "STORY-XXX: Software Developer: add integration tests"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 #### Performance Optimization
@@ -179,13 +181,13 @@ git commit -m "STORY-XXX: Software Developer: add integration tests"
 # Ensure performance requirements met
 # Document performance characteristics
 
-# Commit performance improvements
+# Stage performance improvements
 git add src/rag_pipeline/STORY-XXX.py
-git commit -m "STORY-XXX: Software Developer: performance optimization - [improvement details]"
 
-# Commit performance tests
+# Stage performance tests
 git add tests/test_STORY-XXX_performance.py
-git commit -m "STORY-XXX: Software Developer: add performance tests"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ### 5. Handover to Software Tester
@@ -200,7 +202,6 @@ git commit -m "STORY-XXX: Software Developer: add performance tests"
 
 # Update task status
 git add project/team/tasks/TASK-XXX-*.md
-git commit -m "STORY-XXX: Software Developer: implementation completed"
 
 # Create handover note for Software Tester
 echo "STORY-XXX handover to Software Tester:
@@ -212,7 +213,9 @@ echo "STORY-XXX handover to Software Tester:
 - Demo Requirements: [demo preparation needs]" > tmp/STORY-XXX-developer-tester-handover.md
 
 "make necessary changes to project documentation"
-git commit -m "STORY-XXX: Software Developer: handover to Software Tester - [implementation summary]"
+git add project/team/tasks/TASK-XXX-*.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
 
 ## Code Implementation Standards
@@ -399,8 +402,67 @@ git commit -m "STORY-XXX: Software Developer: resource optimization"
 
 git add src/rag_pipeline/security/STORY-XXX.py
 git add tests/test_STORY-XXX_security.py
-git commit -m "STORY-XXX: Software Developer: implement security controls"
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
 ```
+
+## Commit and Continue Workflow
+
+### Staging vs Committing
+
+All role changes are staged for review rather than committed directly:
+
+```bash
+# Stage changes for review
+git add src/rag_pipeline/STORY-XXX.py
+git add tests/test_STORY-XXX.py
+git add docs/technical/STORY-XXX-implementation.md
+git add project/team/tasks/TASK-XXX-*.md
+git add project/team/stories/STORY-XXX.md
+
+# Note: Changes are staged for review. Use "commit and continue" to commit and proceed.
+```
+
+### Commit and Continue Command
+
+When the user says "commit and continue", execute:
+
+```bash
+# Create commit message file for review (follow commit-message-standards.mdc)
+echo "STORY-XXX: Software Developer: [description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Status update - references committed project file]" > tmp/commit_msg.txt
+
+# Create continuation context file
+echo "Next Steps:
+1. [Specific next action]
+2. [Dependencies to check]
+3. [Handover requirements]
+4. [Timeline considerations]" > tmp/continuation.txt
+
+# Commit staged changes using message file
+git commit -F tmp/commit_msg.txt
+
+# Continue with next steps in the workflow
+```
+
+**IMPORTANT**: Follow [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - commit messages should only reference committed files, not handover notes in tmp/ directory.
+
+This allows the user to review both the commit message and continuation context before proceeding.
+
+## Code Quality Standards
+
+### Linting and Code Quality
+
+**Follow Software Architect's Linting Workflow**: The Software Architect defines and maintains the linting workflow for the repository. See [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) for the complete linting workflow.
+
+### Key Responsibilities
+
+- **Follow Standards**: Implement code according to Software Architect's quality standards
+- **Run Linting**: Use the linting workflow defined by Software Architect before committing
+- **Code Quality**: Ensure all code meets the quality standards established by Software Architect
 
 ## Quality Gates
 
@@ -414,8 +476,9 @@ git commit -m "STORY-XXX: Software Developer: implement security controls"
 - [ ] Performance requirements met
 - [ ] Security requirements implemented
 - [ ] Code review completed
-- [ ] All linting checks pass
+- [ ] All linting checks pass (follow Software Architect's workflow)
 - [ ] Test coverage >80%
+- [ ] GitHub Actions CI/CD checks pass
 
 ### Handover Readiness Checklist
 
@@ -426,6 +489,8 @@ git commit -m "STORY-XXX: Software Developer: implement security controls"
 - [ ] Demo preparation completed
 - [ ] Code ready for testing
 - [ ] Integration points validated
+- [ ] GitHub Actions CI/CD results verified
+- [ ] All linting and formatting checks pass (follow Software Architect's workflow)
 
 ## Communication Standards
 
@@ -473,6 +538,7 @@ git commit -m "STORY-XXX: Software Developer: implement security controls"
 - [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) - Testing standards
 - [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - Security guidelines
 - [dependency-management.mdc](mdc:.cursor/rules/dependency-management.mdc) - Package management
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - Commit message and handover notes standards
 
 ## Retrospective Feedback
 

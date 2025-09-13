@@ -181,6 +181,112 @@ except Exception as e:
     ) from e
 ```
 
+## Import Organization
+
+### Import Best Practices
+
+**CRITICAL**: Follow these import rules to prevent code review issues and maintain clean, readable code.
+
+#### Import Placement Rules
+
+1. **Prefer imports at module level**: Place most imports at the top of the file for clarity
+2. **No duplicate imports**: Never import the same module multiple times in the same file
+3. **Local imports when appropriate**: Use local imports for:
+   - Circular dependency resolution
+   - Lazy loading of heavy modules
+   - Conditional imports (modules that might not be available)
+   - Plugin systems and dynamic loading
+4. **Group imports logically**: Organize imports in this order:
+   - Standard library imports
+   - Third-party imports
+   - Project imports (absolute paths preferred)
+5. **Prefer absolute project imports**: Use `backend.rag_pipeline.models` instead of `..models`
+
+#### Import Organization Example
+
+```python
+# ✅ CORRECT - Imports at top, using absolute project imports
+import asyncio
+import hashlib
+import mimetypes
+import shutil
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+from uuid import uuid4
+
+from fastapi import UploadFile
+from fastapi.exceptions import HTTPException
+
+from backend.rag_pipeline.models.document_models import (
+    DocumentMetadata,
+    FileValidationError,
+    ProcessingStatus,
+    UploadResponse,
+)
+from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_uploaded_files_dir
+from backend.rag_pipeline.utils.logging import StructuredLogger
+```
+
+#### Common Import Mistakes to Avoid
+
+```python
+# ❌ WRONG - Duplicate import
+import time
+# ... later in the file ...
+def some_function():
+    import time  # DON'T DO THIS - time already imported at top
+
+# ❌ WRONG - Local import when not needed
+def cleanup_files():
+    import shutil  # DON'T DO THIS - move to top of file
+    shutil.rmtree(directory)
+
+# ❌ WRONG - Relative imports when absolute are clearer
+from ..models.document_models import DocumentMetadata  # Less clear
+from backend.rag_pipeline.models.document_models import DocumentMetadata  # Better
+```
+
+#### When Local Imports Are Acceptable
+
+Local imports are appropriate in these common scenarios:
+
+1. **Circular dependency resolution**: When modules need to import each other
+2. **Lazy loading for performance**: Heavy modules that are rarely used
+3. **Conditional imports**: When modules might not be available
+4. **Plugin systems**: Dynamic loading of optional functionality
+
+```python
+# ✅ ACCEPTABLE - Circular dependency resolution
+def process_document():
+    # Import here to avoid circular dependency
+    from backend.rag_pipeline.services.document_processor import DocumentProcessor
+    processor = DocumentProcessor()
+    return processor.process()
+
+# ✅ ACCEPTABLE - Lazy loading for performance
+def generate_complex_report():
+    import matplotlib.pyplot as plt  # Heavy import, only used in this function
+    # ... complex plotting code ...
+
+# ✅ ACCEPTABLE - Conditional import
+def optional_feature():
+    try:
+        import optional_package  # May not be installed
+        return optional_package.do_something()
+    except ImportError:
+        return None
+
+# ✅ ACCEPTABLE - Plugin system
+def load_plugin(plugin_name):
+    try:
+        module = __import__(f"plugins.{plugin_name}", fromlist=[plugin_name])
+        return module.Plugin()
+    except ImportError:
+        return None
+```
+
 ## Code Organization
 
 ### Modular Architecture
@@ -373,6 +479,96 @@ def calculate_total(items: List[dict], tax_rate: float = 0.08) -> Decimal:
 - Use descriptive test names that explain the scenario
 - Include both positive and negative test cases
 - Test error conditions and edge cases
+
+### Test Code Duplication Prevention
+
+**CRITICAL**: Prevent code duplication in test files to avoid review comments and improve maintainability.
+
+#### Mock Classes and Test Utilities
+
+1. **Create shared mock classes at module level**: Define mock classes once at the top of the test file
+2. **Use fixtures for reusable test data**: Create pytest fixtures for common test objects
+3. **Extract common test utilities**: Move repeated test logic into helper functions
+
+#### Test Code Organization Example
+
+```python
+# ✅ CORRECT - Mock class defined once at module level
+class MockUploadFile:
+    """Mock UploadFile class for testing file validation functionality.
+
+    This class simulates the FastAPI UploadFile interface for testing purposes.
+    """
+    def __init__(self, filename: str, size: int, content_type: str):
+        self.filename = filename
+        self.size = size
+        self.content_type = content_type
+
+class TestFileUploadService:
+    """Test suite for FileUploadService."""
+
+    def test_file_validation_valid_file(self, upload_service):
+        """Test validation of valid file."""
+        # Use the shared mock class
+        mock_file = MockUploadFile("test.txt", 1024, "text/plain")
+        result = asyncio.run(upload_service._validate_file(mock_file))
+        assert result["valid"] is True
+
+    def test_file_validation_invalid_type(self, upload_service):
+        """Test validation of invalid file type."""
+        # Reuse the same mock class
+        mock_file = MockUploadFile("test.xyz", 1024, "application/octet-stream")
+        result = asyncio.run(upload_service._validate_file(mock_file))
+        assert result["valid"] is False
+```
+
+#### Common Test Code Mistakes to Avoid
+
+```python
+# ❌ WRONG - Duplicate mock class definitions
+class TestFileUploadService:
+    def test_validation_valid(self):
+        class MockUploadFile:  # DON'T DO THIS - define once at module level
+            def __init__(self, filename, size, content_type):
+                self.filename = filename
+                self.size = size
+                self.content_type = content_type
+        # ... test code ...
+
+    def test_validation_invalid(self):
+        class MockUploadFile:  # DON'T DO THIS - same class defined again
+            def __init__(self, filename, size, content_type):
+                self.filename = filename
+                self.size = size
+                self.content_type = content_type
+        # ... test code ...
+```
+
+#### Test Fixtures for Complex Objects
+
+```python
+# ✅ CORRECT - Use fixtures for complex test setup
+@pytest.fixture
+def mock_upload_file():
+    """Create a mock UploadFile for testing."""
+    return MockUploadFile("test.txt", 1024, "text/plain")
+
+@pytest.fixture
+def large_mock_file():
+    """Create a large mock file for size testing."""
+    return MockUploadFile("large.txt", 200 * 1024 * 1024, "text/plain")
+
+class TestFileUploadService:
+    def test_valid_file(self, upload_service, mock_upload_file):
+        """Test with standard mock file."""
+        result = asyncio.run(upload_service._validate_file(mock_upload_file))
+        assert result["valid"] is True
+
+    def test_oversized_file(self, upload_service, large_mock_file):
+        """Test with large mock file."""
+        result = asyncio.run(upload_service._validate_file(large_mock_file))
+        assert result["valid"] is False
+```
 
 ### Test Structure
 

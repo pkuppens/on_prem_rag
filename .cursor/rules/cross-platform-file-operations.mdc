@@ -1,0 +1,494 @@
+---
+description: Cross-platform file operations for Windows and Unix systems
+globs:
+  - "**/*.md"
+  - "**/*.py"
+  - "**/*.yml"
+  - "**/*.yaml"
+  - "**/*.toml"
+alwaysApply: false
+---
+
+# Cross-Platform File Operations
+
+## Problem Statement
+
+Many cursor rules suggest using shell commands that are not cross-platform compatible:
+
+### File Creation Issues
+
+- **Windows CMD**: `echo "text" > file.txt` works but has limitations with special characters
+- **Windows PowerShell**: `echo "text" > file.txt` works but may have encoding issues
+- **Unix/Linux/macOS**: `echo "text" > file.txt` works but different syntax for multiline content
+- **Cross-platform**: No single command works reliably across all systems
+
+### Command Timeout Issues
+
+- **Windows CMD**: `timeout` command is not available by default
+- **Windows PowerShell**: `timeout` command exists but different syntax
+- **Unix/Linux/macOS**: `timeout` command works but may not be available on all systems
+- **Cross-platform**: No single timeout command works reliably across all systems
+
+## Solution: Use AI Assistant Capabilities
+
+Instead of shell commands, use the AI assistant's capabilities for reliable cross-platform operations:
+
+1. **File Creation**: Use AI assistant's file creation tools
+2. **Command Execution**: Use AI assistant's command execution with built-in timeout handling
+
+## File Creation Patterns
+
+### Pattern 1: Direct File Creation (Recommended)
+
+**Instead of**:
+
+```bash
+echo "STORY-XXX: [Role]: [description]" > tmp/commit_msg.txt
+```
+
+**Use**:
+
+```markdown
+Create file `tmp/commit_msg.txt` with content:
+```
+
+STORY-XXX: [Role]: [description]
+
+```
+
+```
+
+### Pattern 2: Template File Creation
+
+**Instead of**:
+
+```bash
+echo "=== RETROSPECTIVE COLLECTION $(date) ===" > tmp/retrospectives/collected-retrospectives.md
+echo "" >> tmp/retrospectives/collected-retrospectives.md
+```
+
+**Use**:
+
+```markdown
+Create file `tmp/retrospectives/collected-retrospectives.md` with content:
+```
+
+=== RETROSPECTIVE COLLECTION [DATE] ===
+
+[Content will be added here]
+
+=== END COLLECTION ===
+
+```
+
+```
+
+### Pattern 3: Multiline Content Creation
+
+**Instead of**:
+
+```bash
+echo "Story completed successfully. All acceptance criteria met: ✅ [list criteria]" > tmp/issue-comment.md
+```
+
+**Use**:
+
+```markdown
+Create file `tmp/issue-comment.md` with content:
+```
+
+Story completed successfully. All acceptance criteria met: ✅ [list criteria]
+
+```
+
+```
+
+## Command Execution Patterns
+
+### Pattern 1: Timeout-Free Command Execution (Recommended)
+
+**Instead of**:
+
+```bash
+timeout 90 uv run pytest tests/test_specific.py -v
+```
+
+**Use**:
+
+```markdown
+Execute command: `uv run pytest tests/test_specific.py -v`
+**Note**: AI assistant will handle timeout automatically if command takes too long
+```
+
+### Pattern 2: Explicit Timeout Instructions
+
+**Instead of**:
+
+```bash
+timeout 120 uv run pytest tests/ -m "not slow" --maxfail=5
+```
+
+**Use**:
+
+```markdown
+Execute command: `uv run pytest tests/ -m "not slow" --maxfail=5`
+**Timeout**: 120 seconds maximum execution time
+**Note**: If command exceeds timeout, AI assistant will terminate and report timeout
+```
+
+### Pattern 3: Chunked Execution for Long-Running Tasks
+
+**Instead of**:
+
+```bash
+timeout 180 uv run pytest tests/test_STORY-XXX_performance.py -v
+```
+
+**Use**:
+
+```markdown
+Execute command: `uv run pytest tests/test_STORY-XXX_performance.py -v`
+**Strategy**: Break into smaller chunks if timeout occurs
+**Fallback**: Run individual test methods if full suite times out
+```
+
+## Implementation Guidelines
+
+### For Rule Writers
+
+1. **Replace echo commands** with AI assistant file creation instructions
+2. **Replace timeout commands** with AI assistant command execution instructions
+3. **Use clear file paths** with proper directory structure
+4. **Include example content** in the rule documentation
+5. **Provide context** for when files should be created
+6. **Specify timeout expectations** for long-running commands
+
+### For AI Assistants
+
+1. **Use write tool** to create files with specified content
+2. **Use run_terminal_cmd tool** for command execution with built-in timeout handling
+3. **Ensure directory structure** exists before creating files
+4. **Use proper file extensions** (.txt, .md, etc.)
+5. **Include all necessary content** in the file creation
+6. **Monitor command execution time** and terminate if exceeding reasonable limits
+7. **Break down long-running tasks** into smaller chunks when needed
+
+### For Team Members
+
+1. **Request file creation** from AI assistant when needed
+2. **Specify exact content** and file path
+3. **Verify file creation** after AI assistant completes task
+4. **Use created files** as intended in workflows
+
+## Examples
+
+### Commit Message Creation
+
+**Rule Documentation**:
+
+```markdown
+#### Commit Message Template
+
+Create file `tmp/commit_msg.txt` with content:
+```
+
+STORY-XXX: [Role]: [technical description of changes]
+
+- [Technical change 1 - references committed file]
+- [Technical change 2 - references committed file]
+- [Technical change 3 - references committed file]
+- [Status update - references committed project file]
+
+```
+
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Create file `tmp/commit_msg.txt` with content:
+```
+
+TASK-006A: Software Architect: Complete document processing architecture design
+
+- Created comprehensive architecture document for document processing pipeline
+- Updated TASK-006A status to Completed with all acceptance criteria met
+- Applied centralized linting workflow (Software Architect's responsibility)
+- Architecture ready for implementation phase (TASK-006B, TASK-006C, TASK-006D)
+
+```
+
+```
+
+### Handover Note Creation
+
+**Rule Documentation**:
+
+```markdown
+#### Handover Note Template
+
+Create file `tmp/STORY-XXX-[role]-handover.md` with content:
+```
+
+# STORY-XXX handover to [Next Role]
+
+## Context
+
+- [role-specific context]
+
+## Priorities
+
+- [immediate priorities]
+
+## Next Steps
+
+1. [specific next actions]
+2. [specific next actions]
+
+## Process
+
+- [workflow details]
+
+```
+
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Create file `tmp/STORY-002-architect-developer-handover.md` with content:
+```
+
+# STORY-002 handover to Software Developer
+
+## Context
+
+- Design specification completed and documented
+- Architecture decisions made and justified
+- Implementation guidelines established
+
+## Priorities
+
+- Focus on core implementation first
+- Follow established design patterns
+- Maintain code quality standards
+
+## Next Steps
+
+1. Review design specification
+2. Set up development environment
+3. Begin implementation following guidelines
+4. Coordinate with team for integration points
+
+## Process
+
+- Use established git workflow
+- Follow linting standards
+- Create comprehensive tests
+- Document implementation decisions
+
+```
+
+```
+
+### Retrospective Collection
+
+**Rule Documentation**:
+
+```markdown
+#### Collect All Retrospective Items
+
+Create file `tmp/retrospectives/collected-retrospectives.md` with content:
+```
+
+=== RETROSPECTIVE COLLECTION [DATE] ===
+
+[Content from all role retrospectives will be collected here]
+
+=== END COLLECTION ===
+
+```
+
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Create file `tmp/retrospectives/collected-retrospectives.md` with content:
+```
+
+=== RETROSPECTIVE COLLECTION 2024-12-20 ===
+
+## Product Owner Retrospectives
+
+- Need better story estimation process
+- Stakeholder communication could be improved
+
+## Scrum Master Retrospectives
+
+- Team velocity tracking needs improvement
+- Retrospective format could be more engaging
+
+## Software Architect Retrospectives
+
+- Design documentation needs better organization
+- Architecture decisions should be more visible
+
+## Software Developer Retrospectives
+
+- Code review process is working well
+- Need better integration testing approach
+
+## Software Tester Retrospectives
+
+- Test coverage is good but could be better
+- Need more automated testing for edge cases
+
+=== END COLLECTION ===
+
+```
+
+```
+
+### Command Execution Examples
+
+#### Functional Testing
+
+**Rule Documentation**:
+
+```markdown
+#### Run Functional Tests
+
+Execute command: `uv run pytest tests/test_STORY-XXX_functional.py -v`
+**Timeout**: 90 seconds maximum execution time
+**Note**: If command exceeds timeout, break into smaller test chunks
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Execute command: `uv run pytest tests/test_STORY-002_functional.py -v`
+**Timeout**: 90 seconds maximum execution time
+**Note**: If command exceeds timeout, break into smaller test chunks
+```
+
+#### Integration Testing
+
+**Rule Documentation**:
+
+```markdown
+#### Run Integration Tests
+
+Execute command: `uv run pytest tests/test_STORY-XXX_integration.py -v`
+**Timeout**: 120 seconds maximum execution time
+**Strategy**: Run individual test classes if full suite times out
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Execute command: `uv run pytest tests/test_STORY-002_integration.py -v`
+**Timeout**: 120 seconds maximum execution time
+**Strategy**: Run individual test classes if full suite times out
+```
+
+#### Performance Testing
+
+**Rule Documentation**:
+
+```markdown
+#### Run Performance Tests
+
+Execute command: `uv run pytest tests/test_STORY-XXX_performance.py -v`
+**Timeout**: 180 seconds maximum execution time
+**Strategy**: Break into individual test methods if full suite times out
+**Fallback**: Run with reduced test data if still timing out
+```
+
+**AI Assistant Usage**:
+
+```markdown
+Execute command: `uv run pytest tests/test_STORY-002_performance.py -v`
+**Timeout**: 180 seconds maximum execution time
+**Strategy**: Break into individual test methods if full suite times out
+**Fallback**: Run with reduced test data if still timing out
+```
+
+## Benefits
+
+### Cross-Platform Compatibility
+
+- Works on Windows, macOS, and Linux
+- No shell command differences
+- Consistent behavior across systems
+- No encoding issues
+
+### Reliability
+
+- AI assistant ensures proper file creation
+- Directory structure is handled automatically
+- Content is exactly as specified
+- No command line parsing issues
+
+### Maintainability
+
+- Rules are easier to understand
+- No need to learn shell commands
+- Content is clearly visible in rules
+- Easy to modify and update
+
+### User Experience
+
+- Team members can request file creation
+- No need to remember shell syntax
+- AI assistant handles all technical details
+- Consistent file creation process
+
+## Migration Strategy
+
+### Phase 1: Update New Rules
+
+- All new rules use AI assistant file creation
+- No echo commands in new rule documentation
+- Clear examples and templates provided
+
+### Phase 2: Update Existing Rules
+
+- Replace echo commands with AI assistant instructions
+- Update examples and templates
+- Maintain backward compatibility where possible
+
+### Phase 3: Team Training
+
+- Train team members on new approach
+- Provide clear examples and guidelines
+- Document best practices and patterns
+
+## Integration with Existing Rules
+
+This rule works with:
+
+- [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc) - File creation for commit messages
+- [scrum-master.mdc](mdc:.cursor/rules/scrum-master.mdc) - File creation for retrospectives
+- [product-owner.mdc](mdc:.cursor/rules/product-owner.mdc) - File creation for issue comments
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - File creation for handover notes
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - File creation for handover notes
+- [software-tester.mdc](mdc:.cursor/rules/software-tester.mdc) - File creation for handover notes
+
+## Enforcement
+
+### Rule Review Checklist
+
+- [ ] No echo commands in rule documentation
+- [ ] AI assistant file creation instructions provided
+- [ ] Clear examples and templates included
+- [ ] Cross-platform compatibility ensured
+
+### Team Training
+
+- All team members understand new approach
+- Clear examples of file creation requests
+- Regular review of file creation quality
+- Documentation of best practices
+
+This rule ensures that all file operations are cross-platform compatible and reliable, eliminating shell command differences and providing a consistent experience across all systems.

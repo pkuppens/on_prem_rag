@@ -193,7 +193,7 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run unit tests with coverage reporting - fast, always run
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml --cov=src --cov-report=xml --cov-report=term-missing
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:

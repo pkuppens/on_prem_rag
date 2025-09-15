@@ -195,7 +195,7 @@ jobs:
           # Run unit tests with coverage reporting - fast, always run
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml --cov=src --cov-report=xml --cov-report=term-missing
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: |
@@ -258,7 +258,7 @@ jobs:
           # Run slow tests only (performance-related)
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "slow and not internet" --junitxml=test-results-performance.xml
       - name: Upload performance test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance-test-results
           path: test-results-performance.xml
@@ -319,7 +319,7 @@ jobs:
           # Run integration tests (internet dependent)
           uv run pytest -m "internet" --junitxml=test-results-integration.xml
       - name: Upload integration test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: integration-test-results
           path: test-results-integration.xml
@@ -365,7 +365,7 @@ jobs:
           uv run safety check --json --output safety-report.json || true
           uv run safety check || true
       - name: Upload security reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: security-reports
           path: |

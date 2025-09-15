@@ -209,6 +209,7 @@ dev = [
     "bandit>=1.8.6",
     "pre-commit>=4.2.0",
     "pytest-asyncio>=0.23.8",
+    "pytest-cov>=6.1.1",
     "safety>=3.2.11",
 ]
 

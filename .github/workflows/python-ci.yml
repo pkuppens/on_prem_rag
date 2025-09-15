@@ -178,14 +178,21 @@ jobs:
           key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-
-      - name: Run unit tests
+      - name: Run unit tests with coverage
         run: |
           # Set cache directories for offline mode
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Run unit tests only - fast, always run
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml
+          # Run unit tests with coverage reporting - fast, always run
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow" --junitxml=test-results-unit.xml --cov=src --cov-report=xml --cov-report=term-missing
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: |
+            coverage.xml
+            test-results-unit.xml
 
   # Performance test job - conditional execution
   test-performance:
@@ -234,6 +241,11 @@ jobs:
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run slow tests only (performance-related)
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "slow and not internet" --junitxml=test-results-performance.xml
+      - name: Upload performance test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-test-results
+          path: test-results-performance.xml
 
   # Integration test job - conditional execution
   test-integration:
@@ -282,3 +294,8 @@ jobs:
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run integration tests (internet dependent)
           uv run pytest -m "internet" --junitxml=test-results-integration.xml
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-results
+          path: test-results-integration.xml

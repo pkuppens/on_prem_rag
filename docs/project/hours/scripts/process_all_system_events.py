@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Updated System Events Computer-On Session Analysis Script
+Process All System Events for Computer-On Session Analysis
 
-This script analyzes the consolidated system events CSV file to identify computer-on sessions
-and extracts date fields for improved matching with commits.
+This script processes the complete all_system_events.csv file to identify computer-on sessions
+according to established criteria: no date crossing, proper startup/shutdown matching,
+and break calculations.
 
 Usage:
-    python analyze_system_events_updated.py [--input-file INPUT_FILE] [--output-file OUTPUT_FILE]
+    python process_all_system_events.py [--input-file INPUT_FILE] [--output-file OUTPUT_FILE]
 """
 
 import csv
@@ -14,8 +15,8 @@ import json
 import argparse
 import logging
 import sys
-from datetime import datetime
-from typing import List, Optional
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional
 from pathlib import Path
 
 # Add business layer to path for imports
@@ -29,17 +30,44 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
+# SystemEvent and WorkSession classes are now imported from business layer
+
+
 def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
-    """Parse datetime string with multiple format support."""
+    """Parse datetime string with multiple format support.
+
+    Args:
+        dt_str: DateTime string in various formats
+
+    Returns:
+        datetime object or None if parsing fails
+    """
+    if not dt_str or dt_str.strip() == "":
+        return None
+
+    # Clean the datetime string
+    clean_datetime = dt_str.strip()
+    if clean_datetime.startswith('"'):
+        clean_datetime = clean_datetime[1:]
+    if clean_datetime.endswith('"'):
+        clean_datetime = clean_datetime[:-1]
+    # Remove BOM if present
+    if clean_datetime.startswith("\ufeff"):
+        clean_datetime = clean_datetime[1:]
+
+    if not clean_datetime:
+        return None
+
     formats = [
         "%Y/%m/%d %H:%M:%S",  # 2025/06/24 07:30:54
         "%m/%d/%Y %I:%M:%S %p",  # 4/27/2025 9:21:21 AM
         "%Y-%m-%d %H:%M:%S",  # 2025-06-24 07:30:54
+        "%Y-%m-%dT%H:%M:%S",  # 2025-06-24T07:30:54
     ]
 
     for fmt in formats:
         try:
-            return datetime.strptime(dt_str, fmt)
+            return datetime.strptime(clean_datetime, fmt)
         except ValueError:
             continue
 
@@ -48,7 +76,14 @@ def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
 
 
 def extract_date_from_datetime(dt_str: str) -> str:
-    """Extract date (YYYY-MM-DD) from datetime string."""
+    """Extract date (YYYY-MM-DD) from datetime string.
+
+    Args:
+        dt_str: DateTime string in various formats
+
+    Returns:
+        Date string in YYYY-MM-DD format or empty string if parsing fails
+    """
     dt = parse_datetime_flexible(dt_str)
     if dt:
         return dt.strftime("%Y-%m-%d")
@@ -56,7 +91,14 @@ def extract_date_from_datetime(dt_str: str) -> str:
 
 
 def load_system_events(input_file: Path) -> List[SystemEvent]:
-    """Load system events from CSV file."""
+    """Load system events from CSV file.
+
+    Args:
+        input_file: Path to the CSV file containing system events
+
+    Returns:
+        List of SystemEvent objects
+    """
     events = []
 
     try:
@@ -64,8 +106,15 @@ def load_system_events(input_file: Path) -> List[SystemEvent]:
             reader = csv.DictReader(f)
 
             for row in reader:
+                # Handle the BOM and malformed header in the DateTime column
+                datetime_value = ""
+                for key, value in row.items():
+                    if "DateTime" in key or "datetime" in key.lower():
+                        datetime_value = value
+                        break
+
                 event = SystemEvent(
-                    datetime=row.get("DateTime", ""),
+                    datetime=datetime_value,
                     event_id=row.get("EventId", ""),
                     log_name=row.get("LogName", ""),
                     event_type=row.get("EventType", ""),
@@ -75,7 +124,7 @@ def load_system_events(input_file: Path) -> List[SystemEvent]:
                     message=row.get("Message", ""),
                     additional_info=row.get("AdditionalInfo", ""),
                     record_id=row.get("RecordId", ""),
-                    date=extract_date_from_datetime(row.get("DateTime", "")),
+                    date=extract_date_from_datetime(datetime_value),
                 )
                 events.append(event)
 
@@ -88,7 +137,19 @@ def load_system_events(input_file: Path) -> List[SystemEvent]:
 
 
 def identify_computer_on_sessions(events: List[SystemEvent]) -> List[WorkSession]:
-    """Identify computer-on sessions from system events."""
+    """Identify computer-on sessions from system events.
+
+    This function implements the established criteria:
+    - No date crossing (sessions must start and end on the same date)
+    - Proper startup/shutdown event matching
+    - Break calculations for different session types
+
+    Args:
+        events: List of system events sorted by datetime
+
+    Returns:
+        List of WorkSession objects
+    """
     sessions = []
     session_counter = 1
 
@@ -100,7 +161,7 @@ def identify_computer_on_sessions(events: List[SystemEvent]) -> List[WorkSession
         event = events[i]
 
         # Look for startup events (EventId 6005 or 6013)
-        if event.event_id in ["6005", "6013"] and "startup" in event.message.lower():
+        if event.event_id in ["6005", "6013"] and ("startup" in event.message.lower() or "started" in event.message.lower()):
             session_start = event.datetime
             session_date = event.date
 
@@ -112,7 +173,9 @@ def identify_computer_on_sessions(events: List[SystemEvent]) -> List[WorkSession
                 next_event = events[j]
 
                 # Check if we've moved to a different date (day boundary)
+                # This enforces the "no date crossing" criteria
                 if next_event.date != session_date:
+                    logger.debug(f"Session crosses date boundary: {session_date} -> {next_event.date}")
                     break
 
                 # Look for shutdown events (EventId 1074)
@@ -133,11 +196,11 @@ def identify_computer_on_sessions(events: List[SystemEvent]) -> List[WorkSession
                     duration = end_dt - start_dt
                     duration_hours = duration.total_seconds() / 3600
 
-                    # Determine session type and work hours
+                    # Determine session type and work hours based on duration
                     if duration_hours > 12:
                         session_type = "full_day"
                         work_hours = duration_hours - 1.0  # Subtract 1 hour for lunch
-                        lunch_break = "12:00:00"
+                        lunch_break = f"{session_date} 12:00:00"
                         dinner_break = None
                     elif duration_hours > 4:
                         session_type = "half_day"
@@ -176,61 +239,102 @@ def identify_computer_on_sessions(events: List[SystemEvent]) -> List[WorkSession
                     sessions.append(session)
                     session_counter += 1
 
+                    logger.info(
+                        f"Identified session {session.block_id}: {session_date} ({session.session_type}, {session.work_hours:.2f}h)"
+                    )
+
                     # Move to next event after shutdown
                     i = j + 1
-                    continue
-
-        i += 1
+                else:
+                    i += 1
+            else:
+                i += 1
+        else:
+            i += 1
 
     logger.info(f"Identified {len(sessions)} computer-on sessions")
     return sessions
 
 
-def save_sessions_to_json(sessions: List[WorkSession], output_file: Path) -> None:
-    """Save computer-on sessions to JSON file."""
+def create_processed_system_events_file(input_file: Path, output_file: Path) -> None:
+    """Create processed system events file with computer-on sessions.
+
+    Args:
+        input_file: Path to input CSV file
+        output_file: Path to output JSON file
+    """
+    logger.info(f"Processing system events from: {input_file}")
+
+    # Load system events
+    events = load_system_events(input_file)
+
+    if not events:
+        logger.error("No system events loaded. Exiting.")
+        return
+
+    # Identify computer-on sessions
+    sessions = identify_computer_on_sessions(events)
+
+    # Create output data structure
     output_data = {
-        "file_analyzed": str(output_file),
-        "total_events": len(sessions),
+        "file_analyzed": str(input_file),
+        "total_events": len(events),
         "computer_on_sessions": [session.to_dict() for session in sessions],
-        "metadata": {
-            "generated_at": datetime.now().isoformat(),
+        "analysis_metadata": {
+            "analysis_date": datetime.now().isoformat(),
             "total_sessions": len(sessions),
-            "date_range": {
-                "start": min(session.date for session in sessions) if sessions else None,
-                "end": max(session.date for session in sessions) if sessions else None,
-            },
+            "criteria_applied": [
+                "No date crossing - sessions must start and end on same date",
+                "Startup/shutdown event matching (EventId 6005/6013 -> 1074)",
+                "Break calculations: full_day (-1h lunch), half_day (-30min), short_session (no break)",
+            ],
         },
     }
 
+    # Write output file
     try:
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Successfully saved {len(sessions)} sessions to {output_file}")
+        logger.info(f"Successfully created processed system events file: {output_file}")
+        logger.info(f"Total sessions identified: {len(sessions)}")
+
+        # Print summary statistics
+        session_types = {}
+        total_work_hours = 0
+        for session in sessions:
+            session_type = session.session_type
+            session_types[session_type] = session_types.get(session_type, 0) + 1
+            total_work_hours += session.work_hours
+
+        logger.info("Session type summary:")
+        for session_type, count in session_types.items():
+            logger.info(f"  {session_type}: {count} sessions")
+        logger.info(f"Total work hours: {total_work_hours:.2f}")
 
     except Exception as e:
-        logger.error(f"Error saving sessions to {output_file}: {e}")
+        logger.error(f"Error writing output file {output_file}: {e}")
 
 
 def main():
-    """Main function to analyze system events."""
-    parser = argparse.ArgumentParser(description="Analyze consolidated system events to identify computer-on sessions")
+    """Main function to process command line arguments and run analysis."""
+    parser = argparse.ArgumentParser(description="Process all system events for computer-on session analysis")
     parser.add_argument(
         "--input-file",
         type=Path,
-        default=Path(__file__).parent.parent / "data" / "all_system_events.csv",
-        help="Input consolidated system events CSV file (default: docs/project/hours/data/all_system_events.csv)",
+        default=Path("docs/project/hours/data/all_system_events.csv"),
+        help="Input CSV file with system events (default: docs/project/hours/data/all_system_events.csv)",
     )
     parser.add_argument(
         "--output-file",
         type=Path,
-        default=Path(__file__).parent.parent / "data" / "all_system_events.json",
-        help="Output JSON file for computer-on sessions (default: docs/project/hours/data/all_system_events.json)",
+        default=Path("docs/project/hours/data/all_processed_system_events.json"),
+        help="Output JSON file with processed sessions (default: docs/project/hours/data/all_processed_system_events.json)",
     )
 
     args = parser.parse_args()
 
-    # Validate input file
+    # Validate input file exists
     if not args.input_file.exists():
         logger.error(f"Input file does not exist: {args.input_file}")
         return 1
@@ -238,17 +342,8 @@ def main():
     # Create output directory if it doesn't exist
     args.output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    # Load system events
-    events = load_system_events(args.input_file)
-    if not events:
-        logger.error("No system events loaded")
-        return 1
-
-    # Identify computer-on sessions
-    sessions = identify_computer_on_sessions(events)
-
-    # Save to JSON
-    save_sessions_to_json(sessions, args.output_file)
+    # Process the system events
+    create_processed_system_events_file(args.input_file, args.output_file)
 
     return 0
 

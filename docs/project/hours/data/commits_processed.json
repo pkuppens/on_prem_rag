@@ -1,0 +1,4847 @@
+{
+  "commits": [
+    {
+      "timestamp": "2023-05-03T11:38:52+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "eaa775890bb924b668fe71316a128806bb1bf149",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-03T20:21:37+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "initial commit, not tested, .py program bugged",
+      "hash": "21fbc2646b3938210a5c2a304a4498f9291f6a08",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-05T12:20:05+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "9 and 10 generate questions, prompt engineered",
+      "hash": "822bc613b81ed074d1015e10b87eec77d044a35d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-07T15:06:59+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "prompt improvements for Chapter 11: Questions first, Answers later.",
+      "hash": "462c0ce47762ce4d27239c882cd471a06ee3cf06",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-09T09:08:40+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Rename MPC_AvL to CollegeGPT",
+      "hash": "97dd9f6d405b966d3da2423b2ec010deafd4c3df",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-09T09:41:02+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "SuperPrompting, applied to College",
+      "hash": "c2646e2313a954f14dfd3759d2089384afaa3168",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-05-09T10:36:12+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add Chapters 1 & 3",
+      "hash": "b7cee2394142327140dc654caeaed111d2e49604",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-06-05T17:45:21+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Prompt for Mermaid flow charts",
+      "hash": "012517ce44408a8594b5087fb927d33e5a7f2fe5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-06-06T12:13:09+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add Communication.prompt and Requirements.prompt, and allow to work from PyCharm",
+      "hash": "78b1c450234a88107b4913bd3adac09f9a811179",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-06-12T09:12:22+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ChatGPT download to disable history & training",
+      "hash": "0443b7c9010ea82a4cfe308caff04b1ab84880c6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-06-12T09:12:26+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "6335b9e6fb194d37f80ac48604939bbca594c856",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-07-03T17:44:38+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "GitHub Issue prompt",
+      "hash": "328db31435f76a2fcb653049183251dcad3ab42f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2023-07-31T10:24:30+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Pair programmer, sudolang.",
+      "hash": "58c8bae247fd6e179e34016a3daed293140443a2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-01-02T16:39:37+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update README.md",
+      "hash": "d1d551085c1132bffcd40df25cfc663b2a232f15",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-04T21:42:55+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update README.md with Ollama - OpenWebUI - DSpy stuff",
+      "hash": "96355635c97a9ad2eecd89830f4469c32cc7c530",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-08T20:29:08+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Terminal Manual requirement prompt",
+      "hash": "85239bb040108a51c8a4eac2fd7539862ad0f510",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-08T20:29:13+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "b891217546db267ca721c0884307c20c79aac0dc",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-08T22:23:44+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add Llama.md",
+      "hash": "9f97875d077f53770c7f2c58db8174b432398c12",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-20T14:49:05+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Software Factory Plan",
+      "hash": "d8ef07f4cd791bf0089dd9079431af4d1e5b1b56",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-10-27T13:55:58+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update README.md",
+      "hash": "57d1ceb5032515909899e7da6df708e0e3f3098c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T09:56:09+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add LangChain/DSpy setup against a local Ollama container instance",
+      "hash": "773ee85eb93cb6816932d6b7bcf9ad1d87f4dc0a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T09:56:36+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #1 from pkuppens/add-langchain-dspy-ollama-setup",
+      "hash": "511258a0ebc4443fd5e0ba9258afee290accf28c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T10:07:07+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Convert project to pyproject.toml with best practices",
+      "hash": "e5578ede30887405acf3872cf39cdf00393e646c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T10:07:43+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #2 from pkuppens/convert-to-pyproject-toml",
+      "hash": "4138634741a8071c8cb70a07468dbf607b4214d9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T11:48:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add LangChain and DSpy integration with local Ollama model",
+      "hash": "d041ee270dc99f095b2baf42da11422d0a129b33",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T12:53:12+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Manual fixes zero shot",
+      "hash": "f4b03a5613835d841535db00fa77f4d63d8c8b29",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-28T13:06:06+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #3 from pkuppens/add-langchain-dspy-integration",
+      "hash": "c2fa01b28687604ff46dec1a0506906ccb91793a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-29T17:52:33+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "notebook check in office",
+      "hash": "22d78f7bb6755953a5f6d739a201eec59ad373b8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T13:17:16+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add React frontend for DSpy signatures",
+      "hash": "c3f4a7dfedb5ae155285e55cd3499f14c265bbc5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:17:30+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #4 from pkuppens/add-react-frontend",
+      "hash": "f94b9d0421d134f2b59f492556dd7ddfac893146",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:39:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Manual fix/merge react bootstrap and workspace generated code.",
+      "hash": "18fe21f1d0d3ec5fc7573825b8f1461e7e101c2c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:40:38+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Document javascript functions with signatures",
+      "hash": "aaf8a41b8787f76f2cc76890f7ec4e464251444d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:43:54+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #5 from pkuppens/add-react-frontend",
+      "hash": "b8e325fe7e9ce831e143334672f66263a9fee7c3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:53:32+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Refactor the signatures to a reusable component",
+      "hash": "f8eae6a93940fffa983229b898af9ce4cd0168cb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-11-30T14:55:16+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #6 from pkuppens/refactor-signatures",
+      "hash": "a70e6eef785210720c8531c21b88c3286cb60537",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-02T12:50:06+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add Hackathon/GenAI folder with README and DIAGRAM",
+      "hash": "f9e88ea22ebb7245051cf0ba25c60a054377946c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-02T12:52:07+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #7 from pkuppens/add-hackathon-genai",
+      "hash": "76eb7fc808d0e14ec1243d8c843821b7923287c8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-02T14:12:50+00:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Hackathon GenAI DIAGRAM",
+      "hash": "034974bff929d36358062b9854a66a65fa944eff",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-02T15:16:32+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #8 from pkuppens:improve-diagram-073",
+      "hash": "bbf38d2a593974b98daa3adda8d6533b45a24a9e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T11:17:05+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "e14ba06436084cbff42a94f461793b81e2d7d1f0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T11:55:46+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Add backend structure with API endpoints, models, data management, security, and documentation",
+      "hash": "2d5eaea6791d13de948724ca0fd6d317787c0801",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T11:56:20+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #1 from pkuppens/add-backend-structure",
+      "hash": "b9f1acb56862de254649f1ffaf8f9b08447d63f1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T12:40:28+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Install updates including mermaid on jupyter",
+      "hash": "bd15f8696d72ca5b9943b167f68669bb44c1b321",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T14:18:12+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Add speech recognition feature",
+      "hash": "69aa6e7baeee1787142240bdb197c9bf9368e967",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T14:19:52+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #2 from pkuppens/add-speech-recognition",
+      "hash": "3baf8f0eeb36e074bfe2bb3007d2a7c1c3078d9b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T14:23:22+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'ghcw-session-f451-120424124037'",
+      "hash": "41e9d9aafaf2f1ab7ed61e99dce0ee331712d8ff",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-04T16:01:41+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "small speech recognition PoC",
+      "hash": "e6d71d7eb4245257343ea9c79c3b18e3580bf767",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-13T14:28:48+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Add Dockerfile for MySQL server with data",
+      "hash": "82504f953a43be3f5cdfda7cf510488020d46575",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-13T21:38:31+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #3 from pkuppens/add-mysql-dockerfile",
+      "hash": "97c90387b4c8dae489291a834202fbac9537b36e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-14T20:13:56+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "fix Dockerfile up to package install (like fastapi)",
+      "hash": "78b2eb3d0f38e7cd6f7c26b937bc15abd0c94510",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-14T20:32:32+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Properly set up the FastAPI in backend, including the Dockerfile",
+      "hash": "92e596797dc04b204cea10a2c21be0d9f41be209",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-14T20:32:48+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #4 from pkuppens/setup-fastapi",
+      "hash": "7212b2eed8fd93d5cc11a90557a6739becc2590e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-14T22:45:05+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Fix Dockerfile to working version with MySQL + OpenMRS data only",
+      "hash": "a6fb55376fadaa754fe01609153732d1dc28ba30",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-19T22:44:28+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add refinement loop for software project management steps",
+      "hash": "f90a379dd1a9f7de9410affae947e25b05da14a5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-19T22:44:39+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #9 from pkuppens/add-refinement-loop",
+      "hash": "c01a596fa7946452aed2acd625088129fe78550f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-20T21:14:17+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "handle Docker Ollama not running gracefully",
+      "hash": "07a8e1ef0512646c737a50111360bdf4fef352ff",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-20T23:45:42+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Small changes towards dspy 2.5 and ChainOfThought for idea iteration",
+      "hash": "2c775542444854c29b06e69c8b0270f7e11fef71",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-21T22:56:03+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Drop pyproject in favor of requirements.txt, move to py -3.11 from 3.13, small notebook changes",
+      "hash": "82e0142df6ba875c415091d364ca10a18bfe7fed",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-22T09:57:12+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Rearrage/split notebooks in separate DSpy and LangChain notebooks",
+      "hash": "9769013547cfb9525dc724c46063312de5d54289",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2024-12-27T17:19:39+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Run of project idea generator with fixes and containing output for github",
+      "hash": "9217b02212025159fcd17289df2e953ecfdc25d6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-07T09:48:54+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cleaner notebook runs with output capture.",
+      "hash": "513eb2d36b23458ce449b2cd10020c1b3c1d7afd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-07T09:54:37+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "dependabot recommended security updates",
+      "hash": "154cb76f7a8c0b05eb32ebbaed3df133714172e0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-07T14:43:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "New pyproject attempt with uv. License file included.",
+      "hash": "fde7332a0b04ce7386332d6261d0fc3ab6ae3406",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-07T14:45:49+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #10 from pkuppens/ghcw-session-5f01",
+      "hash": "43cbd2f7cde22c4afa848d2f12ef39129bd1decd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T15:17:26+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add GitHub Action to comment on duplicate issues",
+      "hash": "da61e0308a9cd2e0f4894cb1fdf76c8f353cc527",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T16:14:58+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Local changes to github action for duplicate issue detection",
+      "hash": "2e02df6a4390d382e84c0e4626aab22fe43628fe",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T16:16:29+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #11 from pkuppens/add-duplicate-issue-comment",
+      "hash": "a446957de2d346c93635debec4408ea62df02ba2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T16:32:29+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix on self-detect",
+      "hash": "43f2968f51b0739ba1d076f69fffb3613ddb4454",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T16:34:14+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #13 from pkuppens/add-duplicate-issue-comment",
+      "hash": "6abb8874e7a3da49364938e104aa113aeb0f14e3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T16:43:14+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "add logging for github debugging",
+      "hash": "f739c14281a2bd29ce3917851501bc4baf9f87d1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T17:42:19+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Enhance logging in duplicate issue detection",
+      "hash": "3a93cb92138752da3d67884625b5d58b4c1c2590",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T17:42:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #15 from pkuppens/enhance-logging",
+      "hash": "aa7eac0b048c70cf65290af36a8ea163659b292e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T17:48:14+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix as with: statement that is unexpected/invalid",
+      "hash": "266560ff220a8164675b05267a4de6f50d8c110a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T18:03:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "log all similarity scores",
+      "hash": "71d7f92481485d36f28d7504e87a934b0ca3876c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T20:43:00+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Change the similarity scores and their meaning",
+      "hash": "531df5efe0fb4c023f9c091d7fbf10f9d8084eee",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-20T20:48:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #17 from pkuppens/update-similarity-scores",
+      "hash": "05bfb03d3cd4750d3b69ee52df17490cabfbe90a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-25T08:06:22+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add website scraping notebook using Playwright",
+      "hash": "7c34f992204cdfd9f4b6d9de7da074dfe4406579",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-25T10:27:57+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "starting point",
+      "hash": "300b8b1518104747c2026c8cbbe60228d4eea69d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-27T17:16:05+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Selenium login. Seems to work, but extraction becomes complex. Needs testing on articles as well.",
+      "hash": "bd91662ac81b04d08f3ba702644a55899d476da7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T14:29:26+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #18 from pkuppens/add-website-scraping-notebook",
+      "hash": "c2422adbcc98b7145e6b956db3b0094ba47f5027",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T14:31:48+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add files via upload",
+      "hash": "94fb393053aa5b7fc0919675fa9e9b46d2e6bbab",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T15:07:42+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add LangChain chat client with local Ollama model",
+      "hash": "3b5de31de2241f0622b432eefc02f49e20ee7db3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T16:28:44+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fixes and trial run of structured output on Joke example",
+      "hash": "a2163860e591b49c6cbe02cbeec3ab2dc1cde11a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T16:29:46+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "sample joke output",
+      "hash": "f57c45058658690a242aa406fcc0a7cd7f3d4296",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-01-30T16:31:09+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #20 from pkuppens/add-langchain-chat-client-example-cat-jokes",
+      "hash": "4a00616cbb5c82ad50c24a87853b00a0f8263dfc",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-21T11:59:49+01:00",
+      "repo_name": "ChatRTX",
+      "author": "Pieter Kuppens",
+      "message": "Add Markdown .md files to the default list of documents for RAG",
+      "hash": "2fe01b4a50d4892a09b9f931f5f903080eb41551",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-24T10:32:30+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "#19: useful links from LangChain, LinkedIn, Medium articles and more",
+      "hash": "7b0603ae139569e0d46810f9ac91bab60ec5fa05",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T14:24:53+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Github Analyze New Issue workflow",
+      "hash": "b0e1545e67af0902f3c52fd933ed40ca38956eab",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T14:32:04+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'add-langchain-chat-client-example-cat-jokes'",
+      "hash": "bbe0a4a984106da52d6aea86c4e4bbc7536f26fc",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T14:40:07+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix 'requests' missing",
+      "hash": "799251d5004e0cdce985bcbd85a6540abfc80d90",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T14:51:36+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Change o3-mini to gpt-4o-mini",
+      "hash": "a1486af10a7b82b6cbb55496ef43c238ad48b7b7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T14:52:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Only check duplicates on create.",
+      "hash": "5fb927e83d90adc0aca04581aab6bf27c716a09e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T17:28:02+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "test OpenAI API call with credits",
+      "hash": "43aa8ecca69346fb6c698f7c3e9534c17248e604",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-25T17:33:54+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Show just the OpenAI API result from a cheaper model for demonstration.",
+      "hash": "c8224f07592b4bd42c97c556589f828b3745427d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-26T16:20:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add issue review step using OpenAI LLM",
+      "hash": "7612946cbc000bdc0087891f73ab262f7f793e5a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-26T18:54:50+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "openai upgrade",
+      "hash": "67bb4b4a47b394434b7008f920697db65ba066c4",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-26T20:43:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #23 from pkuppens/add-issue-review",
+      "hash": "2dd70b6bc4945bfb9f956c6de548b628043cd4ef",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-27T17:39:28+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add local LLM code reviews",
+      "hash": "5b458cf56fe6be79a89ea13eae9eb3535eb14d42",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-28T16:27:09+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "rewrite first part of UV.md",
+      "hash": "8feb7aec85507b60406d04eec9f1be389837317c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-28T16:49:14+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' into add-local-llm-code-reviews",
+      "hash": "236e6c02a0582540ff240da31d4340c4f3eb0b08",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-02-28T22:17:00+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "smolagents start of code review agent",
+      "hash": "11eb88387403f3cc5ff872f2070363249cdb2036",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-01T16:10:10+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "clear execution count output",
+      "hash": "7a89fbc568e00d94bca8b885fa88d20c3f9b9ced",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-01T16:10:49+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "small litellm model code agent example on fibonacci numbers",
+      "hash": "3193419c46f2d607c061d798e9d8c25af9e68465",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-03T10:06:36+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add LangChain articles collection and display",
+      "hash": "4310e802b97a2800b1c188ee07e3528beac2f751",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-03T10:06:49+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #25 from pkuppens/add-langchain-articles",
+      "hash": "beef0e8bb919a390c5c8cf37caa43b577335cd4f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T17:42:56+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "standalone analyze_issue_prompt with placeholders, loader, and necessary code changes",
+      "hash": "3bc0b12ad711245ed9b5e4173c1775a7581fa5b0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T19:31:35+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "dspy-ai doesn't belong in src of project",
+      "hash": "a717c04d41073b389374fbfbe4a66fa8c45f6af1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T19:42:22+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "add project root to PYTHONPATH for workflow, such that SuperPrompt module can be found",
+      "hash": "0c7eac951c21fef5a7571f97aa800dd2be5aa07c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T19:52:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'add-local-llm-code-reviews'",
+      "hash": "a0571ac9034ccba0ac5815329f642b97ede0030e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T19:57:21+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "merge fixes",
+      "hash": "98b069a6d191115eadbcd48b316f08e497f5a12d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-04T20:44:49+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "issue with github token",
+      "hash": "f8ef36c1b1aa58d8ec5b9d175a328f67a7f58434",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T11:03:16+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "create v2 of identify duplicates with refactored and reusable code.",
+      "hash": "835c86356cc39e885cd90ae57a3f203b881aa001",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T15:49:04+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "rewrite analyze_issue to github package",
+      "hash": "ba7dd3f93d440182b0be3e9193aac8714aa90439",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T15:56:40+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "small fixes that need to be tested in CI/CD",
+      "hash": "494dfbeb9aa9c5a4d5886204c393880d5058d616",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T16:13:02+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "sklearn and logging",
+      "hash": "a080f4c3cac72e07648b54728a6830113089dc78",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T16:18:18+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "scikit-learn iso sklearn",
+      "hash": "0b1217fe8277459ffbaa582d79e8e56a80e900f7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-05T16:19:33+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "duplicate check only on creation",
+      "hash": "556ff5ce008f3466dc7d8dc42c301591f0521a05",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T09:08:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Create utils component for shared GitHub functionality",
+      "hash": "dee25a1fd0cabfcbe37045d6401f46b75bf931dd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T12:27:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "split prompt in system and user prompts",
+      "hash": "eef9a7a4c6dfac43220918c06799e752894edc32",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T12:35:27+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #28 from pkuppens/add-utils-component",
+      "hash": "90bd41c019a031e3a79407df17ac735d10b94dfb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T14:19:42+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "PlaceholderDict to resolve missing keys",
+      "hash": "18f3a3ed8744911d42b359c2600d7abd528c80da",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T14:20:03+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "PlaceholderDict to resolve missing keys",
+      "hash": "569a0881fc01f36719d2c96093b54e7d86ac3db1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T14:25:28+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "python-dotenv in requirements.txt and actions script",
+      "hash": "41e6e0041a279565c117b668d242083fd3a740ed",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T14:34:57+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "requirements.txt updates",
+      "hash": "012048324b7758153abb2e01f02dfcba698d8ffd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T14:44:52+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "remove requirements versions",
+      "hash": "8da951c940f53fbc58f4555cdd1fdacf03df6f5f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T16:45:05+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "try to get rid of browser-use that gives workflow issues",
+      "hash": "6d4887f42df2e22ba98ee6c80b4f0e68d5d746dd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-06T17:25:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Workflow fix for OS and 1GB limit",
+      "hash": "6ca2237cd9275db6ce956aa098659df54ab55c55",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-07T09:37:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix some potential incompatible packages",
+      "hash": "4c428fd15b3a8b6236c60e7719fdabe817a533ae",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-07T10:23:29+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix issue analyzer to re-raise exceptions and validate API key",
+      "hash": "b65b17b251ab905a23f503b94810ef30f39be7f9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-07T11:43:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #29 from pkuppens/fix-issue-analyzer",
+      "hash": "8eff773fbf6ead2fecec0f96a974841d28a179d9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-08T12:07:01+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix OpenAI response parsing and append complete response to issue comments",
+      "hash": "7a598860adf33cc3b94035be0f20160aebb2f5e1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-08T14:12:40+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Refactor code from scripts to utils",
+      "hash": "0e3d91c9811bf6516ee78d831e21428b49205862",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-08T14:13:16+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #30 from pkuppens/fix-openai-response-parsing",
+      "hash": "5f82828afcec6de230aa1b907f51a6e56a76194d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-08T14:38:43+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Configure Python linting for the project",
+      "hash": "c65557f3aea41d18a6a49f9b9ecbb30ec9359acd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-09T14:01:07+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #31 from pkuppens/configure-python-linting",
+      "hash": "8f8fe18f1cf036f44ba0a24548d2fd675b79e6d8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-10T10:17:40+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "python dependency minimizer",
+      "hash": "4d58064c59e531679ee456804bdefd9e1447657a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-10T10:17:54+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "90f9bec70bb506b8f9b5e014cc42cc80207386ce",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-10T11:03:58+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "disable too costly workflow",
+      "hash": "8819a5c87d3738e121670bec5f013e275652ebae",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-11T07:07:42+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "software architect ai prompt with 3 tier example",
+      "hash": "4c7255cd8d1e7bc4f237e17b1b4a7750e475baf7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-11T07:08:35+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'fix-openai-response-parsing'",
+      "hash": "99914884c57050910255f508d329e605ec3b916a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-12T13:52:51+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "black automatic linting",
+      "hash": "ce3779dff9c297e5dc9e05579ae901907d6b1371",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-12T13:52:55+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "a24a01a0fcae615507cd4f8874a138f80f76124c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-12T14:48:52+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "improved architect prompt in md and txt formats",
+      "hash": "580ac948e4eb1a28b78af7431e97e6c43843c31f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-13T15:49:16+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add software designer and tester prompts",
+      "hash": "d5b9b6ff51cd26475835deb607cb3b06a3edef49",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-13T16:36:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #32 from pkuppens/add-software-designer-tester-prompts",
+      "hash": "10b2315b0f7e3dbd5babf1dc5bfb0597cd3d2064",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-13T16:55:02+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add CODEOWNERS file for solo developer",
+      "hash": "c185d8c8c1d3ffac9160e7f77b690be1d927f863",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-13T16:55:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #33 from pkuppens/add-codeowners",
+      "hash": "a2ba111c7c4c0d3bc68c4505d5de9e1e4bf72d08",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-13T21:40:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "software project manager with delegation prompt",
+      "hash": "c2de255501286246289c3cd92a55d110fa27abb6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T11:23:06+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update of project manager for solo dev and game development",
+      "hash": "77705e0182006840257bfa9a2bf511f2bbcd6056",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T11:52:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update with processable output",
+      "hash": "0c006236f847176a851f02fd058e66152056fbac",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T16:04:06+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Add agentic software engineer for coding tasks",
+      "hash": "f763dd9abe053167f9e46e4454b51f5e05a3ab51",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T16:05:30+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #34 from pkuppens/add-agentic-software-engineer",
+      "hash": "0706ce16182f2f582635f85cea533cdfcd63297c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T16:26:58+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update SOFTWARE_FACTOR_AI.md with software project manager prompt (simplified)",
+      "hash": "34b77d24a7983afa47d44356d6b3d6c1542f8489",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T17:55:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix: Exception has occurred: ModuleNotFoundError",
+      "hash": "acc5ec9c148c16b418e3866f33fb6ce0c4678658",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T18:01:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ai software doc writer utils",
+      "hash": "d83517a0135ded8a43b7c8b60941cb32f68946e0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T21:08:13+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "utils module name collision fix, software factory LLMUI defintions",
+      "hash": "700a84fd163c67688a1b765e602adad991233e0f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T21:49:04+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "start with linting",
+      "hash": "246e6482fd9f26eec6278c84a60825f682902c72",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T21:49:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "start with linting - 2",
+      "hash": "32b78f75055b18c01ee68b569e51947ef3bf7c77",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T21:52:39+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #35 from pkuppens/fix-local-utils",
+      "hash": "ca69b39996e90dff4be03110368adba8ed76bb9a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-14T22:19:33+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "File Output Format specification for project managers.",
+      "hash": "b93e408ec4215c127f0b03bdc14565971827f889",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-15T10:02:37+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix imports that break GitHub Actions",
+      "hash": "a035b877f8851f46d04f9161fdd3faff32a800b2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-15T11:22:56+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix GitHub issue error",
+      "hash": "8a81f69d9f9fe8c0996d0739f00c01007b7dd2f8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-15T14:01:19+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "small review fixes during test",
+      "hash": "43d25bbd959e277ac1fe4c2d0d97bd87f81c7982",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-15T14:01:54+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #37 from pkuppens/fix-github-issue-error",
+      "hash": "dd52901df8af9f1e16bd2b3d735dcdd90af0653f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-16T17:17:33+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Python Programmer Superprompt",
+      "hash": "97c927b69ef9b92cd3a6b5e66aaaf155650eea18",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-16T22:08:20+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Agentic AI Framework Code prompt",
+      "hash": "7da803f5697af263e9bfeabf46bfa47e61d1143c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-17T14:38:48+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "analyze issue workflow fixes: KEYsm error handling, refactor, test",
+      "hash": "4e1d89f915cba05e53e6f0711e8bc1285db074a0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-17T14:55:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update to setuptools==76.0.0 to resolve vulnerable dependencies",
+      "hash": "c92da93e4d95dfc79334c019164c7c51e868f331",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-17T17:33:11+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: refactor documentation, Llama docs & Example",
+      "hash": "7010d334909f546404f6e94e55c2c936409fb570",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-17T19:37:10+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "HealthcareGPT markdown descriptions",
+      "hash": "5a51bca32dfd8fa7175245157b9e762ed0bd5578",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-17T20:42:38+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "AI Agent Role Defintion refactor",
+      "hash": "657421c31479a4ca64e4f115bb1ef4c48a70ad00",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T16:17:53+01:00",
+      "repo_name": "genai-hackathon",
+      "author": "Pieter Kuppens",
+      "message": "Update README.md",
+      "hash": "5ce991d40dfe6d22d1e5a0ac6bab8ecabb7ae04b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T21:39:07+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: analyze_issue under test, --no-verify commit, because not all tests succeed.",
+      "hash": "92584dbf18030b77ad001ebdd78c051f11600312",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T22:16:38+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: big pre-commit run that removes trailing whitespace",
+      "hash": "f624c92f4d5d51c7456f2f255d506777e28c4162",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T22:23:31+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: isort fix",
+      "hash": "7f839ecf495b7a96170c99526879defd5ab69a12",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T23:09:51+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "test: IDE pre-commit hooks",
+      "hash": "b5e6da9e2d88890c2533b254cd612e16693d1bb2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-18T23:20:57+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: Initialize CURSOR.md from earlier conversation",
+      "hash": "ab9e18abcb75c928b54dfd3b45e8d19243841a84",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T08:08:48+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: bring analyze_issue.py under test with new dependency fix",
+      "hash": "7b7f83e0a5c66db5ce770c3a5572e24bbbdbf30f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T08:34:43+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "setup fixes for -r requirements inclusion",
+      "hash": "fe17fb5eb830b8d2e8e10bab89d1da4a5e792bf2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T08:43:52+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "python-multipart 0.0.9 ok?!",
+      "hash": "a1ab90a083ed2838ba467c4cb0457398aca45385",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T09:24:56+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Cursor: pre-commit fixes including test fixes",
+      "hash": "77f982dfc518952db59e3d6cae303ffa197b2954",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T10:01:33+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix: Update setuptools to 65.5.1 to address PYSEC-2022-43012",
+      "hash": "719020232ea51141ef11a09955d0eeacb22645e8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T10:05:00+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix: Update python-multipart to 0.0.18 to address CVE-2024-53981",
+      "hash": "3449bc139cc74577cf403b0d1886533b251949cf",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T10:08:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "chore: Ensure consistent python-multipart version across all requirement files",
+      "hash": "8a2200b14a1cbde52346a548e2ff4c094778192b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-19T10:14:30+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #38 from pkuppens/fix/dependency-security-updates",
+      "hash": "b22409bde5dc74fcb48c7b4f959dc713dc7f9cff",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T14:46:15+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Apply Black formatting after isort removal",
+      "hash": "5e0588a750eb4d1628fcda17453b94a828a1f852",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T15:28:37+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "refactor: replace black with ruff and fix test file location",
+      "hash": "aa621298fa1b5e781c6580c9f1182f58d0bf1cd8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T15:35:08+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "chore: configure test explorer and add setup instructions",
+      "hash": "6344196febc7e4b78bc7eab0c1a3bbc868cfca95",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T15:43:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "chore: fix test explorer configuration and add separate test venv",
+      "hash": "ab054eb1330ebf7ce57e672c9c135ec6a8227588",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T15:59:40+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "docs: update test strategy with known issues and solutions",
+      "hash": "de9a6a25fda79b23db22a92e5ca7078054e59ead",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T16:06:34+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "docs: reorganize documentation structure and update README",
+      "hash": "9c984ec43c4f3538940e7395f35784e6717546e0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T16:11:24+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "docs: update pre-commit documentation with ruff and future recommendations",
+      "hash": "f1aa8189d6f40c1139aed35619b1e144ce68a0a9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T17:32:38+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Move TESTING-STRATEGY.md to docs/testing/TEST-STRATEGY.md",
+      "hash": "8aabb4e9248137f28f7e86a63f7d7de89d1f75be",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T18:16:45+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Tests and ruff",
+      "hash": "208566227a65b53368c72ed75e03bd3c35b4bb24",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T18:21:52+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff-format with --fix option",
+      "hash": "15752bc85390c3e2225238f68c992a27807ab7c3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T20:39:30+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #39 from pkuppens/check-ruff-switch",
+      "hash": "7caa04c282b3d64c740c92bd362171b60e9536b7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-20T21:18:03+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "cleanup-fix for actions",
+      "hash": "cbd88586f464cb4072b0ae31577e4ba91d4d09c6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-21T09:06:38+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "integration test: organize package management",
+      "hash": "0a2cb4d6355e9dc3ba095201ccc739d4464787d2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-21T09:08:47+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "pre-commit in dev requirements",
+      "hash": "f43ee6ce57bb04e41afb95a9e5cab99f5e0358c9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-21T09:50:25+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix actions fail on low code coverage",
+      "hash": "885ca290939dcd344c64cd5cd717a5275927df11",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-21T10:57:29+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix errorcode 5 test collection issue",
+      "hash": "693461dd060c50969aa5655ff3f30ff5ac1fbfbf",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-03-21T11:14:02+01:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "recover from test collection exit code 5",
+      "hash": "afbf93861441e2a82000fa25d6a2c7ea90e4daea",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T15:29:37+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "remove _v2 part of script after merging",
+      "hash": "0d5d2b40f55d04285e501edbfee3ffae309485fc",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T15:47:20+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Chore: fixes for: pre-commit run --all-files",
+      "hash": "3f93e18509ef974b8c0f38dba3575d2317a8f96a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T15:55:49+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix: github action failed on missing 'packaging' library",
+      "hash": "6399d1206925b4879c2596284b18034799c38461",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T16:05:15+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix test that was too strict",
+      "hash": "eab7d6ef770d30e9e23e220eb494246295dcedc4",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T16:40:14+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix: github action failed on 'packaging' install",
+      "hash": "e461eb895da8d54d9d9f3d822847df5a159ee806",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T16:53:57+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "local package fix?!",
+      "hash": "32cb966adc75f6267ed62a0f99f0eab0bcd592ae",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T19:07:08+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "test_dependencies",
+      "hash": "2882c37c41f61fe2fb1a1f4116aae5a5befccf19",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T21:38:36+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "create a local analyze_issue variation for debugging github action issue",
+      "hash": "23969fb862d7fb5915a4e82cf79496aee9624262",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-01T21:53:33+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "analyze issue should not throw ValueError on the GITHUB_REPOSITORY env variable in github actions",
+      "hash": "5a202c4178ebdbe905990cf79ed6e47d68201a84",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-02T10:51:16+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "fix: Verbeter foutafhandeling in GitHubLabelManager.add_labels_to_issue",
+      "hash": "6758d405a69577e28e13b421f9b134fc86ac7bb0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-02T10:56:17+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "better exception handling, Problem Cause Solution",
+      "hash": "96a40ed3d399bf0fe3b803e3247b66d7c07b6f8f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-02T12:05:13+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Unify and fix PYTHONPATH for Github actions",
+      "hash": "e30a050d26646492f4ddc9401095c7b0453305b4",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-02T14:38:00+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "clarify github user error in github actions",
+      "hash": "6df778bcbf813a23bc3b274799d0ca11abc893e9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-02T15:18:22+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "pre-commit fixes",
+      "hash": "67b6b108ec2b71fcefc3bc07017bf93ebd86bf89",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T12:56:07+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "cc9390188a906f1bfd95e04ef0d4509782ea799c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T13:29:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit: Healthcare multi-agent system PoC with agents, tasks, tools, and code quality setup",
+      "hash": "ace5b13971b46eb54a3152de096edc9f28461b21",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T16:51:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "docs: update and standardize project documentation - Update README with clearer project goals and structure - Add comprehensive documentation for architecture, CrewAI, testing, and development - Ensure consistency across all documentation files - Improve configuration documentation with YAML approach",
+      "hash": "51dc044712527b2ff68cec05150bf6d269e0669a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:25:38+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "docs: update documentation for CrewAI v0.28.0 and async tools",
+      "hash": "c782c4799895e88068d9ac5cb289e3e5b74a8656",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:27:32+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "test: configure pytest with async support and fixtures",
+      "hash": "8691ba175f8f801b67de40e59a2da0864b1ba7a7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:37:02+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor: improve code quality and documentation",
+      "hash": "7f286ebbf6917ef22999eab9f262893758a6bd64",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:50:42+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor: update LLM configuration and tool implementations - Update LLM config to use correct ChatOllama class - Fix task and tool implementations for async operations - Update database and logging tools for proper async handling - Fix test integration issues",
+      "hash": "bc7585659b501706ec55ac7b2671f81744453d32",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:52:44+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "src fixes ruff",
+      "hash": "3e27ae6866ffebb627426f8590c135744e57329c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-03T19:57:29+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "fix: resolve linting issues in test files - Add constants for magic numbers - Update test assertions to use constants",
+      "hash": "bf91e6a8836723cb1cad4d752e8ccdd46bf4cb7e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-04T10:37:31+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "fix: replace magic numbers with constants in test files",
+      "hash": "c8f7184b6c245406e4078d320654595e48c559e7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-04T10:43:31+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "test: add LLM connectivity and configuration tests - Add integration tests for LLM connectivity - Add unit tests for LLM configuration - Tests are failing as expected in TDD approach",
+      "hash": "8d8c87ec229c8438aa09bf1a98d9d3f3b1576b12",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-04T10:45:49+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "ruff format",
+      "hash": "728a13a7213136b132aa485945fc0a50acb14da7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-04T13:22:43+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Fix ruff issues",
+      "hash": "acdf526effd0179050e51b6b42cd736b213db01f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-05T16:26:01+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "create a progress.md for vibe coding.",
+      "hash": "d55339652f7eed90f62a036b78a322f7e9e25b4a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-05T16:35:19+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "allow self-update of progress.md",
+      "hash": "900bf1fcb0f04bd0b849720368779f6c0d82d8d3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-06T17:32:30+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Update progress.md with strategy changes and LLM config/factory task refinement",
+      "hash": "51757f5a46a49b6d41f8a03ef6d1d7bfcfdde85c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-06T19:57:35+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "initial LLM component",
+      "hash": "ed417fcbac974fc584333ec2153187f66a0e25a0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-07T09:29:40+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Initial SETUP.md doc",
+      "hash": "f37f571e1b9db2726e00390afe6a7bedbf86b55b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-07T10:08:43+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Small SETUP modernization",
+      "hash": "c670f525e50f989144091b7206e0a8f6ddda4c2a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-07T12:08:04+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Ollama installation and use instructions for local LLMs",
+      "hash": "3a62d07046955d15cd136a9a67f3f38941595a20",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-08T12:50:52+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "work breakdown for langflow proof-of-concept",
+      "hash": "c3f3c1b649f3282d976c69ddf0220cc93c82be33",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-08T12:57:47+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Task Refinement and Breakdown template",
+      "hash": "25e3861e6c58fe21b80f13d6c68cbec3bab14251",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-08T22:51:25+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "langflow install and ollama test",
+      "hash": "59a2ba6b3d9a9c55bd7c863be8f4aa2d0d60f128",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-08T23:14:13+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": ".gitattributes for CRLF/LF issue",
+      "hash": "6067ea94f18ce263521190a7d1117213049b5d07",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-09T10:45:04+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Switch to UV package manager and add development container support",
+      "hash": "142e09b97605dc076990c6ab9991423040144df8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-09T10:49:41+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "uv configuration file",
+      "hash": "75729aa50a63811395c6e9ab2f445f19b1506710",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-10T13:10:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "pytest setup",
+      "hash": "7c57a34d69958096dfed56fc449cd6d6e5d0d665",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-10T14:16:09+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Fix collect tests - prevent python 3.13 at all cost!!!",
+      "hash": "d6479ac6d4fb0fb64dc51530367b5683086d3c17",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-10T15:24:59+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "test clarifications, generated",
+      "hash": "d8f16d7fc550cb023cd0e355913ad770866d7466",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-10T21:28:41+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "more test clarifications",
+      "hash": "21bb6101f12011e78d7b27f5a89f980a00194b71",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-10T22:55:45+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "TDVC start",
+      "hash": "ded458b6cb91168b6d0b4bac812c11ce7222d503",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-11T09:42:59+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Configure UV as default project package manager",
+      "hash": "68243031e1f042bc2344cbd3ec0bc97482d9afbe",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-11T09:53:20+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Python 3.11 preference and uv install CI check",
+      "hash": "9759e38b5e7bb37fd79875db3319869e0aa7603e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-11T09:54:54+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "CI test matrix fix",
+      "hash": "eca8b4d3742999fdf3d1080f983dde1b76e721f1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-11T10:08:43+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Vibe coding language",
+      "hash": "d470a8f08bf89eb0394cda429f2d88fc11048590",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-11T10:09:03+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "CI action UV package manager fix",
+      "hash": "8defdeaa5a3d37f8d8cd3df6c8069751f6563b9a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-12T16:41:38+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor(llm): improve circuit breaker implementation and docs",
+      "hash": "ae33c708b59acec9082af540c20a81252018f3dc",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-12T16:49:08+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor(tasks): improve task implementations and tests",
+      "hash": "a0fcff88fb8d6a62f9e943665c09ed90f60ae5e0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-12T16:59:38+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor(circuit_breaker): replace global variables with class-based singleton pattern",
+      "hash": "a735ab4f3f7470c17821d15a56942b57430c1bfd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-13T09:41:56+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "move test files inside tests directory",
+      "hash": "87f8a4d9b477118e8a9bd49db803ca5fb54722e8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-13T09:57:02+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Remarks on Python version, especially 3.13 NOT yet supported",
+      "hash": "18ece3e00b14be045e437a2f235e60fb204225b3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-14T09:55:00+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "docs: add language guidelines for project communication",
+      "hash": "849de3c75e771aa34f2372ceeca2befaa60829b8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-14T10:26:16+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "tests: clarify, rearrange, deduplicate",
+      "hash": "804d3e577a598cec8571ac4a0c78b55b72ee5b6d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-15T08:13:37+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Replace magic numbers with named constants",
+      "hash": "f82f04e833f93ec8ec688663f24611d46911412a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-15T18:35:40+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ChatGPT created color blender (Verhuiscoach groen met pct wit)",
+      "hash": "c140d3dc6b276b8a0739bf1f1a3ec92dac1e1439",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-15T18:35:47+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "ed4415429ede5c67922596e922a5e115f54a16ca",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-16T11:50:35+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Add uv lock file for langflow",
+      "hash": "006e0a7a866a1d09d1932bf5a3cec7e1a7d29b6f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-17T15:36:09+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Ruff settings",
+      "hash": "a101426e0bb8d87b3598fc7ff300c9245ff30744",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-17T18:37:34+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "chore/format/ruff: pre-commit run --all-files",
+      "hash": "17ee5a6f1902492f224ecce785e26bffe66bf740",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T08:29:35+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "pre-commit ruff format",
+      "hash": "1027c1e490e559a378da34ce130aad6b390a4eda",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T08:33:03+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "84783abf6ca84b691920974fab89caafa3960c7f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T11:26:28+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Urenregistratie prompt, om achteraf uren te kunnen bepalen",
+      "hash": "24e4c6725cc657a11206c3539aa2977766d0a65d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T14:28:46+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Fix obsolete linting settings when opening Cursor",
+      "hash": "cc1b352dcd6f27cafec96d3ea50a51803eadb605",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T15:10:09+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Update Langflow proof of concept README.md to new and complete learning plan",
+      "hash": "4109bb15ba4cb1d156225375deba4768328e89a2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T15:12:54+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Fix: Ollama LLM deprecation warning",
+      "hash": "c6c1de288281deb83f1f6acc7ba82723f66e81ff",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-18T16:29:59+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Small Langflow start-up instructions update",
+      "hash": "fe4249a5ffbcf986dbf9755c6e5b22d9160f82cf",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-19T10:03:52+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Security patch",
+      "hash": "c9899a474ea7b2d9c09f84fa6b9d78aa386fc67b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-22T13:29:23+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "docs: CLAUDE.md announcement",
+      "hash": "718d6663c547500d45f9f9852e3d0fbbf11f68fb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-22T13:48:52+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Initial draft: Ansible.md. Only partial since Windows not fully/easily supported.",
+      "hash": "662404dbacb36cff8e342b655c5c7b588e05dcab",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-22T13:49:28+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Ruff format",
+      "hash": "abdd4e81f143bb9cd7526d9beab76573d05982f0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T13:28:26+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Add langflow workflows directory",
+      "hash": "21757e42f0b8496bad3926bfa347b122a3a55146",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T13:49:55+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Langflow launch configuration (via uv)",
+      "hash": "1ce2485db5916081d873be24a61fdec3af7bdeca",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T13:50:53+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Langflow install update with minimum 1.3.4 instead of fixed 1.3.2",
+      "hash": "0e27eb8d4768837e2e3fd2eaddd84dad80d7eb26",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T13:57:01+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "chore: remove uv.lock from version control",
+      "hash": "8fb5b4ee49a86c9e8d1a138ede6358f12efb8f8d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T13:58:41+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "chore: add uv.lock to gitignore",
+      "hash": "126b9e2f585bc44794221c6f8794d5af2c5b1eb5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T16:28:44+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "langflow environment variable check & fix",
+      "hash": "4ee956618e3c246560ed07d55d90d9e2f6691266",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T17:06:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "langflow environment secrets and settings in .env",
+      "hash": "c8004855b044995f4f270c9b1a025942d2f0507b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-23T17:55:52+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Langflow storage description",
+      "hash": "dd8033d6ae0a9778bf153f736ab3f467003c908c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-24T13:46:06+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Setup Ansible to create the local virtual environments",
+      "hash": "272c1982b2664e1da5cc9640d35de9859c1b5f04",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-24T13:51:23+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "ansible: separate the system setup and python environments",
+      "hash": "fca78351b43f9f87eb4db1faa110a64934af60f5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-24T14:17:32+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "ansible: vault for sudo password",
+      "hash": "f9db70a88f7437771141551f553c251c5abe7a27",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-24T14:37:56+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "ansible: vault password protection and verification",
+      "hash": "1f9b32b927dd7aca45984674a8733cfd4c24509a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-25T10:07:32+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #41 from pkuppens/dependabot/pip/h11-0.16.0",
+      "hash": "05b49a3d5d6746ec34e83b0726886567269c80e2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-25T10:16:55+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "h11 security/dependency fix",
+      "hash": "e0c5b4c92f7b4191317d42a36f7800c53b3a3881",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-29T09:36:41+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Fix ruff and pytest configurations",
+      "hash": "fa50bf4048314fad286f91280ef925e0c0bb2ac7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-29T12:21:38+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "use venv in github actions as well",
+      "hash": "27c4ac2a1f3e4e4994e2e36b47e0195dea2d8553",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-29T13:54:44+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "pre-commit fixes",
+      "hash": "9dadcc266bd0bc7e49b4d69ca75cea6512e666dd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-29T16:46:02+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "pre-commit fixes",
+      "hash": "d6ec4d4614552c90caeae09068e04a6970877b49",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-30T08:05:04+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "uv/ruff fixes from github actions",
+      "hash": "840f8c60e4036f9a692aaaaa08a7e82f5fff5559",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-30T08:11:37+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff format fixes for 132 character lines",
+      "hash": "b1307ef42b9f28c5b574590d7ad3fb123b0c3d5f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-04-30T08:41:18+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "document actions",
+      "hash": "f3bb2e9cfef0a7931d67b823f8a99db40bcc0ace",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-01T14:50:59+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "try fix pythonpath in CI/CD",
+      "hash": "90dd05bc5fe6d8d8aea2405d121ea6aeefec31c1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-01T16:52:08+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "use uv run instead/in front of pytest",
+      "hash": "a66125500d423bb3b8bc4645efb291d8b947156a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-01T21:08:15+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Add SpeakerVerse, a re-envisioned idea for healthcare-aigent speech parts.",
+      "hash": "398d63bcb7b2143a1200ce130fd31100b9443298",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-02T11:41:53+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Action install uv with astral-sh/setup-uv@v6",
+      "hash": "d04b68ff75f638ff26043ab18b2a031c8fce4398",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T15:52:20+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Vibe Coded Keen Solver Working Solution!",
+      "hash": "da66a506359f4523be0325789aad9402336eb23a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T16:04:13+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "small ruff fix",
+      "hash": "641a2334b8ff68d76b84e81fd6fcdef70e2fc868",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T16:31:21+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "yet another ruff check fix",
+      "hash": "d286c516dd4709f151871f580ed81caf5d8ee7d3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T17:30:22+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Start of 'Talk to Ollama' vibe coding example",
+      "hash": "be1358af8f6ed7bc1c6ead8dab2cbed3e7d3cd96",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T17:45:06+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Trying to solve recording issues.",
+      "hash": "2e348e7b1dc9e64b9925ffd64589fdfd8e960bcd",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T17:52:53+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "some debug instrumenting, since audio is not working properly (yet)",
+      "hash": "1b8f2b71e4eabb6f8529317490738eb8bfbb2537",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T17:53:41+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff check fix",
+      "hash": "541618ca9a1c3fe01fca8148bb0d9100b09cf80f",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-05T23:53:43+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Create an ollama_stack with ollama-plus (with vi, etc), langflow, openwebui attached to ollama volume",
+      "hash": "e56d9fdb94c2437580088d824b6ff3b0e64affef",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-06T10:10:13+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "doc: rewrite ollama stack docs for development mode",
+      "hash": "d7f2b8c55292297ffcfc7ea2ec88ab045f07f334",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-06T11:25:32+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "7fb2896e3063a27747be4727f5282fc1665f273c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-06T14:55:46+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "doc: describe vibe coding styles, Python, Javascript, SQL",
+      "hash": "c39322910558b05745a052c301da32ccb5a522d1",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T09:51:35+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "project setup",
+      "hash": "2f05ce0568c3d1546443b68ea568f05b5cfd41c0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:01:16+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Configure environment",
+      "hash": "633048b5982677dee65e1dd5f645fd3088b07f87",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:08:53+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "check off configure environment",
+      "hash": "248042e803eae428f2701a77c0d97ccd125dc176",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:09:22+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Relocate and detail out dependency installation",
+      "hash": "79154e9bf2dc0ce78469eaddf3365a61d689847d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:25:33+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Implement basic gemini integration",
+      "hash": "0d4b9d47be28402049a627423f40fea7bf8d8dea",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:35:45+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Create gemini-chat script that make a simple client call and prints the result",
+      "hash": "4fedc4ec752e7672915110ba5d0bd605d10ec666",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T10:49:47+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Implemented simple langchain conversation management",
+      "hash": "5ec3b37c00d768b794894131aa24e9725a3018b3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T11:04:57+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "LangChain/gemini-interactive -u parameter for a user message. Model 2.5 -> 2.0 with justification",
+      "hash": "afe5b1c820787591ca5ce131c4cdefab0c9e13e3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T11:49:58+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "gemini-web plan",
+      "hash": "d4c0fdaa7858e677786db610d8b18fb4126f91cb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T12:12:15+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "gemini-web: create a streamlit web app for a gemini web conversation.",
+      "hash": "de903f0999edbba61fa49318399dfc2cfc1992f8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T13:51:00+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "fix usage of system prompt with updates during chat. Add screenshot.",
+      "hash": "41087ada2b3c27621c20e36c3a03e251bb0dbe49",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T14:12:01+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Github public with MIT with Commercial Use Restriction license",
+      "hash": "a49860d545c4d43b772b44c6127cba9af3aeafce",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T20:38:09+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "docs: improve UV installation documentation - Fix winget package name to astral-sh.uv - Clarify agreement acceptance behavior - Maintain correct venv activation sequence - Remove forced line wrapping for better readability",
+      "hash": "78ebcb018ae019bce905f45daa9820b0920bc711",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T20:40:18+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "docs: reorganize documentation structure - Move LANGCHAIN.md to docs/ directory - Add documentation section to README.md with links to all docs - Keep LICENSE in root as per standard practice",
+      "hash": "d85e8ca442587fa3aa0d0bb1e16e78714ddb7b95",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T21:04:28+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Update environment settings handling and documentation",
+      "hash": "7d5c04752245b5d957fcce905378c7c7c17d2821",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T21:07:07+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Run ruff check and format with: uv run ruff check . && uv run ruff format .",
+      "hash": "776cdb78c468ddb960d48edd3ddacb5bae3f0f5b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T21:22:59+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Testing simplified with documentation and coverage reports",
+      "hash": "0dec66d63fc05401770c9d8f876cb66df18f079b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T21:48:47+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Add Voice Control to Project Plan, no implementations yet",
+      "hash": "41dd1039ece838ea0fd29f59ae8af5b15d20bbe5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T22:43:21+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Whisper configuration, test, and docs",
+      "hash": "084fe7b8da88a154d589d8d1ddaa42e8ba276aa8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T23:25:23+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Voice control - work in progress, need client side solution.",
+      "hash": "0bce0d95df81a5e3d5bd2cf99285c8cf1334662e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-07T23:52:57+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Start with web search integration planning",
+      "hash": "9479facedaab7ede717373b5aaaeb454ae40964d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T11:32:08+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Checked and fixes of whisper/torch/cuda set-up",
+      "hash": "0f9aa034b3944941ec56ecf8c2d99865b012fa38",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T11:46:15+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Separate STREAMLIT issue description and migration plan",
+      "hash": "bdd0b4e6e468c340fcda237491c91a644b7eb920",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T12:02:58+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "Add a Data Analytics project plan",
+      "hash": "b75d089a80f4036c84d1af42810241a51aefc79b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T12:52:06+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "AI Agent plan",
+      "hash": "a40a2e3b87bf9c01b99c2d4c1b906eda486158c3",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T13:11:08+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "create a set of agentic prompts",
+      "hash": "242c4f42a6d593534394d420680184e44e3198b7",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T15:00:43+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "a9b7debbb73ae4e09fcc2825ca7095dde574ae69",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T15:18:03+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Initial project plan and local dependencies",
+      "hash": "132c3bef90e8efd437dc46232a13db645bf1099b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T15:21:19+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "add langgraph dependency",
+      "hash": "39607c560956ec5bb3e65f2a370a8d3e8a6da1c6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T15:49:12+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "First 2 cells of workshop part 1 complete. Add the pre-commit stuff for workbook policies.",
+      "hash": "fe6aa1ddf9bca99e2bbedb3f7e49fbd78627ded6",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T15:55:16+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "check off tasks, complete sync response",
+      "hash": "bfd13348817502e63bbb65d472e4c5cef9fd46b2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T16:34:45+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Chatapp and search now work",
+      "hash": "7a299841552fd9a69185bb4352aa678a12c28753",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T16:50:08+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "uv add datasets pandas sqlalchemy and project plan part 2",
+      "hash": "9ad90c73473db4a63a0010845f05d5c0d671c78b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T17:40:39+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Crappy version that can query the database. We'll improve later.",
+      "hash": "14d6c807a1fbe4d79cb5a1fccaf0a90da4196453",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T21:05:09+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "create titanic pandas tool",
+      "hash": "ec5edc6c43848003679bb77db505356d1916d435",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T21:05:34+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "remove old titanic tool",
+      "hash": "a391a70495a008c3ee536c31b23830a793869d42",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T21:25:40+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "try introduce Pandas Data Tool, but got a wroking base tool instead. Can only handle average age query.",
+      "hash": "7cdc4244a31da313a0d0300ea7048ca87286de71",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T21:45:21+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Document the PANDAS_TOOLs and a migration plan to use it.",
+      "hash": "6b7100fb44d07c19823b4466a47b824df30219b2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-08T23:23:25+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Gemini 500 problems with testers",
+      "hash": "c29c76a4cc0b4b6066cf90fd1f5fcd54be3131de",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-09T22:01:13+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "feat: implement titanic data pipeline with Prefect",
+      "hash": "3d9df04c3c18caf304fd3140161c62389a239614",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-09T22:29:09+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "feat: implement environment-based configuration system",
+      "hash": "180902e633882dba0d1ad255ae21bd1ed602df71",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-09T23:42:27+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "CLI more or less running, with tester in case 500 errors pop up.",
+      "hash": "3f7eb12e2ef5572c56bda027eca70242095256e5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T15:58:27+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Clean up name in data pipeline and prevent in queries",
+      "hash": "af45c4b06ab86f4c6140625228fcf1e19dd902d8",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T16:04:43+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "Fix error and prefect logging issue",
+      "hash": "9214d97e344f373e4f86b32d08c35e4ffcee2d81",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:44:49+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "style: apply ruff formatting",
+      "hash": "d881cdf6e0f919cc7b461fbed7424ddc1e9a6128",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:44:56+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "test: add pytest configuration and test files",
+      "hash": "90535998fa274baeb8d9634ad09a25a6a1f2d73a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:48:00+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "feat: add logging system with file and console handlers",
+      "hash": "c908d8b1ca19a1bbea51209d77b507875685e970",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:56:28+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "chore: update package dependencies and lock file",
+      "hash": "ade68e97249a5c20b50d0a318fc9c2a6e8790fd4",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:56:32+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "docs: add Chainlit documentation",
+      "hash": "05d1339e6b9dce61c35049c895a8f50588d69c09",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:56:42+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "style: apply ruff formatting to tools and tests",
+      "hash": "5f8f7e02eb9f8ee52d62994b4b877e79188ef057",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:56:52+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "refactor: split utils into specialized modules",
+      "hash": "594d969c2f8d731f03af8fbba55bf2d4c92c441c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T21:56:56+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "refactor: move pandas agent to dedicated module",
+      "hash": "b83bea54dbab0617d9a03b69c9e2da2097d7f92a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T22:06:58+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "test: unify settings",
+      "hash": "4dc638fd40276d5144f2f27123c976189e05c799",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T23:01:14+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "chore: linting including markdown, configuration, pre-commit hooks, and manual fixes",
+      "hash": "0684878fba04cda040ac6ede1872a7e9ef1504fb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T23:07:06+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "test: run and fix the -m unit tests",
+      "hash": "e8e427016b4b24c0cb4c9ca08d04dc6c9b902884",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-10T23:36:30+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "refactor: titanic-data-analyst-cli (rename and deduplicate, test and fix)",
+      "hash": "6583b82a52fe3639d0fac10d2da3df8294c29622",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-11T18:18:41+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "notebook 1 can run as script",
+      "hash": "2c1714fc95a8e70d01b8a05f6c4bf0b08d772d13",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-11T19:23:05+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "check of notebook 1 tasks from workshop in README",
+      "hash": "1de243181d1f8c26bccfd78db17978b204da25c9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-11T20:41:53+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "notebooks: unified the notebook runners",
+      "hash": "784873f20970f5d5bd49d1bc04723f19e32d365c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-11T20:52:15+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "docs: small README.md improvements",
+      "hash": "4df09f30737630277fda711ca2f67cfab710d3e2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-12T08:58:08+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "chore: show schema fixes",
+      "hash": "708b58027f315463e754306062f9cde4a28634ef",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-12T09:21:23+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "chore: ruff check --fix . , including new check for unused imports",
+      "hash": "d92860bc42c7227ce7314e5bc43a109933695b39",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-12T14:42:04+02:00",
+      "repo_name": "datacation-chatbot-workspace",
+      "author": "Pieter Kuppens",
+      "message": "feat: add Cursor rules and improve project structure",
+      "hash": "9468eb642742a8bd710eacaa9109132b91faab2d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-13T22:23:14+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "proj: Initial project setup with readme, license file, and pyproject.",
+      "hash": "a1bc6c3d735439eeaecb2fcbf4e2c65a78341e83",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-13T22:23:47+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff format leftovers",
+      "hash": "e4f14a809e6a2672d9600f5c2c138ab7144b4113",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-13T22:57:52+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "proj: various cursor rules (initial versions)",
+      "hash": "f91c03ad4a5212bfd8ac1b3902fe2d36fff414c9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-14T15:54:02+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "7756bd1e7b8257049e955c8dbd84b69f66b8303e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-14T16:41:24+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Initiele README en LICENSE files",
+      "hash": "373a448c0a204bef630edde60167b229777134fb",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T09:43:41+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "README update semantic data query aspect",
+      "hash": "801afa9c293312614048e43744f7b7e4e9d2f835",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T09:56:33+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Project Cursor regels",
+      "hash": "4b3579118938e06018f9c041554a11d38c328008",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T10:28:37+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "update van regels",
+      "hash": "1d887b03bc60b82f842de164705b60178d9fb48c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T16:35:51+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Initiele planning",
+      "hash": "df059daa75c69498df7022410311bcdd2d32bc3b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T16:36:09+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Taak management cursor rule",
+      "hash": "621fc4f3ee88e6c84fa74ee010fbdc198f5a0c9d",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T22:40:20+02:00",
+      "repo_name": "motivatie-brieven-ai",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "f807e360d6a70f344602d701405bfc499e17d566",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-15T23:11:55+02:00",
+      "repo_name": "motivatie-brieven-ai",
+      "author": "Pieter Kuppens",
+      "message": "Initiele project beschrijving",
+      "hash": "2a58a837a2787cc7f7086f67eaf1904e62f5e4df",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-16T14:30:46+02:00",
+      "repo_name": "motivatie-brieven-ai",
+      "author": "Pieter Kuppens",
+      "message": "project fasering",
+      "hash": "6297a059de67665727b854e6b93d187ccf51bd6e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-16T14:52:42+02:00",
+      "repo_name": "motivatie-brieven-ai",
+      "author": "Pieter Kuppens",
+      "message": "voorstel projectstructuur",
+      "hash": "a6d3ccf17e433e9c86c59664e3e6d95700dee56a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-16T16:05:31+02:00",
+      "repo_name": "motivatie-brieven-ai",
+      "author": "Pieter Kuppens",
+      "message": "project plan",
+      "hash": "6f6de75f2281d58b141778dbf445dda04103e696",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-17T13:52:42+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Package updates",
+      "hash": "1ea01e1aeb46959f870f00a5d5045958290ea4b5",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-17T18:29:23+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "rules and architecture",
+      "hash": "0eaf6b13022a719a27471488a1fad4d5c9be6d8a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-17T21:35:39+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "initial version of WBSO app components",
+      "hash": "b32cb12a84e5b4e8f20c357023b17fb17aff8b33",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-18T09:44:25+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Maak WBSO aanvraag issue met bijgewerkte regels.",
+      "hash": "26a3d9e3e6f3896c9720b464345877d47e14643e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-19T16:46:20+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "WBSO projectformulier en handleiding",
+      "hash": "5577026336fe129dc59d46efb6bd6d7ab8dacc8a",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-19T17:55:16+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "projectformulier leeg/ingevuld v.0.1",
+      "hash": "009e5fd1fca67c52614c47bb2a57b2c722bbf18e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-20T21:38:20+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #43 from pkuppens/dependabot/pip/setuptools-78.1.1",
+      "hash": "4410b148fb206a366da02e849b89e6a160a86ffa",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-21T17:14:47+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "WBSO updates knelpunten/oplossingsrichting",
+      "hash": "a6b0231b8d3244ff62cf84496148605669dcf257",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-22T17:29:51+02:00",
+      "repo_name": "WBSO-AICM-2025-01",
+      "author": "Pieter Kuppens",
+      "message": "Volledig ingevuld WBSO project formulier (aanvraag)",
+      "hash": "4ac4e92f2bf436ede10cb3b4a6fb42f109f5a3bf",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-23T15:57:29+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "test settings",
+      "hash": "d497922b7ee97e3d53071b8c35d1731e09ce1e38",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-23T15:58:07+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "vibe coded knight bishop problem solver (stockitup programming test)",
+      "hash": "e91ee25b5709925759345dced9e4dc6e2d1c797c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-23T20:01:28+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "GitHub actions ruff and pytest fixes vibe coded knight-bishop-solver",
+      "hash": "3bc2ea03b66b0e899599c2f657e171b935e6579b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-24T16:53:04+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "hugging face MCP course start",
+      "hash": "c94aad2c2338b5b0b37d8ae58a5ac9ad47cc5494",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-25T21:18:05+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "MCP course, unit 2 progress",
+      "hash": "7984f2d6d9ba18ba396456e32fcadfea86121cd9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T14:19:45+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "More explicitly move to uv for dependency management",
+      "hash": "cdad30ad9013cd4849f52f13e48798002a10cc85",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T14:55:33+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Clean up README.md with license changed to MIT-Commercial Use restriction",
+      "hash": "7a538bd1490397a7e06113472905ee7348f2e64b",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T15:34:45+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "setup instructions unified",
+      "hash": "2ab37bcb5374e726b6c2081ffddb7c753661aea4",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T15:48:40+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Linting and related rearrangements",
+      "hash": "c0c712ebab775ca6b35fd91f2d2a04978f150b94",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T17:13:25+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Fix test_tools, including its configuration",
+      "hash": "1bd81dcc4270aabb5210146fd3ca521bdf131dd2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-26T17:20:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "llm config test rewrite",
+      "hash": "776541147fcd3c6df6c2da7b1f10f7fda217833e",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-27T16:17:26+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Implement unit2, task 3.2",
+      "hash": "cebbad0b58a58027b904d2d86efbef4b4f6cc011",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-28T10:33:32+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Update Unit2 Task 1&2 with verifiable scripts",
+      "hash": "e6c5ed4f055d3f175b10b41bddfa86368704b624",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-29T12:24:37+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Unit 2 Task 3 clarifications",
+      "hash": "cd3da72b5b152782531b4e856c3bde5be74de5d0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-29T12:24:43+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt",
+      "hash": "ca945e4b78852463eae2c52d298042f51fcaa9a2",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-29T12:43:00+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Remove some black/flake in favor of ruff",
+      "hash": "f759346b1c8f2f4a928c8643e6fd35453fefc59c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T12:39:39+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "7ccd28e63659ab302f20a2522be1edb8b6eb2cce",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T12:59:03+00:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "initiele README en PLANNING",
+      "hash": "74d8bf1de94ed312634dc23e2bc4d6d395fae8a9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T13:45:58+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Verification task implementationfor task 3",
+      "hash": "0099f35b8ca06f896dbf51966b36ade83d5b0b19",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T13:53:52+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff check",
+      "hash": "c916b75499a33a4f5ac0a9775be2ebebb6ebe18c",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T14:12:37+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Task32 verification complete with separate server/client startup",
+      "hash": "04a6790a985cf37581abcec9d9d4c2a4d14bd9c0",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T14:15:27+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "ruff format fix",
+      "hash": "0fa4e6ea36e5ba3ec90c659b869e7cbc79ae9ef9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-05-30T14:32:15+02:00",
+      "repo_name": "my_chat_gpt",
+      "author": "Pieter Kuppens",
+      "message": "Task32 verification with multiprocessing/background server/client tasks",
+      "hash": "0e2a7098857892f2cb0d4ac551fc67e09f426ad9",
+      "is_wbso": false,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-01T15:50:12+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "Commercial use license addition",
+      "hash": "8577e2a1619ed2e8fb0ff66ffc636ebdd7b7532a",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-01T16:40:42+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "merge in motivatie brief assisitent",
+      "hash": "079c074f62917bce8cb1f0b116ec0f1da54c4f14",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-14T17:52:37+02:00",
+      "repo_name": "gmail_summarize_draft",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "9a3364033d55f8740fbf5a08f4a289ac63b46872",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-14T18:00:37+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "cb80587f4969987a7378210d11f4319402aac61c",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-14T22:40:54+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Revise planning with layered goals",
+      "hash": "98f5e7c6511d467aae1c41a6e57bfbd43b22de29",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-15T13:20:18+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Update planning guide with detailed steps",
+      "hash": "16420d16ab2e6a23ffbfddd6969824a6f0dcfa20",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-15T13:20:56+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #1 from pkuppens/codex/create-planning.md-with-project-roadmap",
+      "hash": "029b470e405b4af3b88257e8bc0e39a7714ca47b",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-15T23:39:27+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Update planning and pipeline comments",
+      "hash": "8cd925358b9210ce663deb527d91f913a197bc22",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-15T23:44:42+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #2 from pkuppens/codex/maak-lokale-autoscriber-versie",
+      "hash": "7e9dab283133a00312f6085cecf0d034c57edb1b",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-20T13:05:09+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Add self-improving agent with memory",
+      "hash": "a1d4c77dd70ea36235bb25f2ddb3ccabab9bafad",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-20T13:05:21+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #3 from pkuppens/codex/write-agent-with-memory-and-feedback",
+      "hash": "6df8d525fd375fc4650e1d66abd181acff446bb1",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-23T12:22:11+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Goal 1: Containerised LangFlow",
+      "hash": "510672cbd52999026cfcda2dc8bc53f2f0fad7a1",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-23T15:34:17+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "switch to local langflow installation (uv iso docker)",
+      "hash": "b5a999ab9c60f4370f5411ea4728d37b3c35b22f",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-24T12:39:42+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Revise plan and add pydantic ai examples",
+      "hash": "ec291a1ee1d145767e093aa524f0909a16b7f729",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-24T12:40:00+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #4 from pkuppens/codex/create-agentic-system-with-pydantic-ai",
+      "hash": "b8f5ad117d3ceb29271a0156946b75d6f6f54ddb",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-06-24T16:21:57+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Integrate mem0ai for pydantic AI examples",
+      "hash": "841d4974ccb5de89ac83d88355c76cfda7c43ba1",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T10:04:51+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "chore: refactor using GEMINI and a plan",
+      "hash": "aca8b2db9b115d1c5e28f52c45534ffcd1bc64f8",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T10:07:13+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "refactor: first step in refactoring; ruff run and agents",
+      "hash": "f889041d570a603b49fcb6bc4fbf9a78201db1d4",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T10:58:25+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "feat: Integrate LLMFactory and refactor tasks module",
+      "hash": "4e9c8d7bb92c2600cb21844ead3bd15ed23c1739",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T11:26:10+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "feat: Implement API gateway for medical conversation processing",
+      "hash": "c39994e56a8f6af78b4e78b9faf7d980779cf36c",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T11:33:22+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "docs: API examples",
+      "hash": "fe12b5477e417576cc53adb6829ccf369cba854b",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T11:39:19+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #3 from pkuppens/refactor/system-architecture",
+      "hash": "dc9ec4bad8333ae01152c9a497465c72da5503f5",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T12:19:18+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "chore: cursor rules from GEMINI.md",
+      "hash": "6bfd7b4b36063dec810d8cc8fdcb5acc5f0b93e2",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-04T12:22:31+02:00",
+      "repo_name": "healthcare-aigent",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #4 from pkuppens/refactor/system-architecture",
+      "hash": "2a63c9ef0766a2f75573448e7ef4550ca018c491",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-06T10:05:56+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "docs: notes on development vision and strategy",
+      "hash": "a668adb921030685b0872264b7993fda986b2405",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-06T10:11:08+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "docs: Create GEMINI.md for project collaboration",
+      "hash": "01c24b394ab6697f145a3f1959ae27845fce96ed",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-06T14:50:18+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "chore: coding standards",
+      "hash": "f648e120f0c1318a08f1b14ffe6f03d6fbe01e5a",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-06T15:27:36+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "docs: Project structuring",
+      "hash": "79c961b7c6bc36beb7bcaa4aa7ce043afa8be752",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-06T15:58:32+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #3 from pkuppens/gemini/feature-expansion",
+      "hash": "3e27ea6a668801e0ba59c2c2d7a3304888db89c9",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-07T09:46:05+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "docs: update internal autonomous operation rules",
+      "hash": "b9bcf73774656efc9e151cbbed744d07727d7abe",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-07T09:49:49+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "docs: create git conventions and link from GEMINI.md",
+      "hash": "493570f3351cd9b5fcaf00fd61f85701495048f5",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-07T10:03:18+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "chore: git maintenance",
+      "hash": "3fe55f9465dd3b892f268ef82d5d27768b166512",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-07T17:28:05+02:00",
+      "repo_name": "job_hunt",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #4 from pkuppens/gemini-updates",
+      "hash": "ad5eaccbfd3acd7a1c70d4cba77b5b43a599bb46",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-09T13:15:02+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "3493ebe7f470f939698047d1c7fcf6256bb33633",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-09T13:22:25+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "Initial README.md",
+      "hash": "aacbc82356c79d84d99396440a74badc3d4d67fb",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-10T11:26:54+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: small README update, announcing mcp server for context7",
+      "hash": "634daf7558488af71e72882702f480848761fb2f",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-10T11:33:02+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "feat:Add_docs",
+      "hash": "bfb7dc53126f4befd6bee2ada9e83381b7db331c",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-10T11:45:48+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "feat: Add documentation for Context7 MCP server",
+      "hash": "85088cabe90aa6b2373497474f5f0ee00c083ed3",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-10T12:53:49+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "demo: simulated results of context engineered code assistents.",
+      "hash": "0e541cebee89d417c62f4b4296407bfef7a89092",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-12T09:06:53+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: n8n description",
+      "hash": "6b4a8665aa7e4734ef1feb11bcef92562ff965bb",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-12T10:24:01+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "chore: pre-commit hooks",
+      "hash": "9e4348271d8e94e65e19b5cacaa031045e87da3a",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-12T10:24:39+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #1 from pkuppens/feature/context7-server",
+      "hash": "0b47373b9de386504d78411e89138d40d095dd12",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-13T09:41:27+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: define a SOFTWARE_ENGINEER workflow",
+      "hash": "9d477c4f6a8473d9e8632a099d29bae1ec447ccb",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-13T09:42:07+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "Merge branch 'feature/context7-server'",
+      "hash": "984bd5b2aacc839c6f65af22c3a9423199e55731",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-14T18:47:36+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Add web search agent with persistent memory",
+      "hash": "ac40f69816e1a1ebb1cf178e437686a60f62d3ce",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-14T18:48:00+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #6 from pkuppens/codex/create-simple-n8n-example-using-context7",
+      "hash": "b038bdeff6fa9ce41f5660b6540cea408d194e06",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-15T10:20:56+02:00",
+      "repo_name": "gemini_agent",
+      "author": "Pieter Kuppens",
+      "message": "docs: gemini description and context setup",
+      "hash": "a025989dbfa564b2a2e39e39cd73eb3d741b2163",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-16T20:53:21+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: PRD for project, and a template for other projects",
+      "hash": "a20844d90f9117923d6605e1e881db5fedb4ace4",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-16T21:08:39+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: vibe coded task descriptions",
+      "hash": "fc800a91045ab9600b1fb9e4f533084f7948c3e4",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-16T22:46:53+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "feat: Implement Core Agent Framework",
+      "hash": "48943a0c667eb7bf22c13fac6a6b0562755746e7",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-16T22:51:41+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "feat: Implement Agent Specialization",
+      "hash": "6a9a54a79742e167cd3f4c66ef784e96369114e5",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-17T08:19:24+02:00",
+      "repo_name": "context_engineering",
+      "author": "Pieter Kuppens",
+      "message": "docs: expand on vibe coding instructions",
+      "hash": "152225960d011af08b22b4fb35cdae93722c86fd",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-17T13:22:12+02:00",
+      "repo_name": "chrome_extensions",
+      "author": "Pieter Kuppens",
+      "message": "Initial commit",
+      "hash": "a92cc2616374a881fdf9cd72bf96a913616a7ee3",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-17T15:39:24+02:00",
+      "repo_name": "chrome_extensions",
+      "author": "Pieter Kuppens",
+      "message": "Update README.md",
+      "hash": "a17176f15485fed5e74faf4401bb476a3aade4fe",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-18T10:41:08+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #5 from pkuppens/codex/integrate-mem0ai-for-long-term-memories",
+      "hash": "bf23029adac24b5ddf4b82f4803b5bdbc921ba0a",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-19T14:00:10+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Add CEO agent and demo",
+      "hash": "9b109569f9be2940af1f26a5814037f330ff7639",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-19T14:01:41+02:00",
+      "repo_name": "langflow_org",
+      "author": "Pieter Kuppens",
+      "message": "Merge pull request #7 from pkuppens/codex/create-ceo-agent-demo-application",
+      "hash": "9b4e023d49eaeca87599681f0edf2fae62da4beb",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-20T22:16:31+02:00",
+      "repo_name": "chrome_extensions",
+      "author": "Pieter Kuppens",
+      "message": "feat: Create initial project plan",
+      "hash": "67966f99db7559f85ade6be0227069cbf2ce4a59",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-20T22:31:17+02:00",
+      "repo_name": "chrome_extensions",
+      "author": "Pieter Kuppens",
+      "message": "feat: Implement Phase 1 - Basic Chrome Extension",
+      "hash": "5048820bef6bb14a1e15a48b8c89302c4ffaa4b2",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    },
+    {
+      "timestamp": "2025-07-20T22:34:23+02:00",
+      "repo_name": "chrome_extensions",
+      "author": "Pieter Kuppens",
+      "message": "feat: Implement Phase 2 - Page Interaction",
+      "hash": "26050dd4467b8be27e2f3925cf9c1de565770b99",
+      "is_wbso": true,
+      "work_block_id": null,
+      "outside_work_block": false
+    }
+  ],
+  "metadata": {
+    "total_commits": 482,
+    "wbso_commits": 60,
+    "repositories": [
+      "ChatRTX",
+      "WBSO-AICM-2025-01",
+      "chrome_extensions",
+      "context_engineering",
+      "datacation-chatbot-workspace",
+      "gemini_agent",
+      "genai-hackathon",
+      "gmail_summarize_draft",
+      "healthcare-aigent",
+      "job_hunt",
+      "langflow_org",
+      "motivatie-brieven-ai",
+      "my_chat_gpt"
+    ],
+    "date_range": {
+      "start": "2023-05-03T11:38:52+02:00",
+      "end": "2025-07-20T22:34:23+02:00"
+    }
+  }
+}

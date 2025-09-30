@@ -1,0 +1,383 @@
+{
+  "file_analyzed": "data/system_events_20250930.csv",
+  "total_events": 670,
+  "computer_on_sessions": [
+    {
+      "block_id": "cos_001",
+      "start_time": "2025/06/24 07:30:54",
+      "end_time": "2025/06/24 09:14:13",
+      "duration_hours": 1.7219444444444445,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 1.7219444444444445,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_002",
+      "start_time": "2025/06/26 19:23:36",
+      "end_time": "2025/06/26 20:21:21",
+      "duration_hours": 0.9625,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 0.9625,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_003",
+      "start_time": "2025/06/28 00:05:58",
+      "end_time": "2025/06/28 14:33:43",
+      "duration_hours": 14.4625,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 13.9625,
+      "lunch_break": "2025/06/28 12:03:00",
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_005",
+      "start_time": "2025/07/01 22:05:29",
+      "end_time": "2025/07/01 23:26:58",
+      "duration_hours": 1.3580555555555556,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 1.3580555555555556,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_006",
+      "start_time": "2025/07/07 07:33:57",
+      "end_time": "2025/07/07 17:29:37",
+      "duration_hours": 9.927777777777777,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 9.427777777777777,
+      "lunch_break": "2025/07/07 12:40:00",
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_007",
+      "start_time": "2025/07/07 20:51:00",
+      "end_time": "2025/07/07 23:04:11",
+      "duration_hours": 2.2197222222222224,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 2.2197222222222224,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_008",
+      "start_time": "2025/07/09 13:52:51",
+      "end_time": "2025/07/09 22:58:47",
+      "duration_hours": 9.098888888888888,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 8.598888888888888,
+      "lunch_break": null,
+      "dinner_break": "2025/07/09 18:15:00"
+    },
+    {
+      "block_id": "cos_010",
+      "start_time": "2025/07/11 07:31:31",
+      "end_time": "2025/07/11 17:15:02",
+      "duration_hours": 9.725277777777778,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 9.225277777777778,
+      "lunch_break": "2025/07/11 12:23:00",
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_011",
+      "start_time": "2025/07/22 21:28:45",
+      "end_time": "2025/07/22 22:47:47",
+      "duration_hours": 1.3172222222222223,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 1.3172222222222223,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_012",
+      "start_time": "2025/07/23 18:56:06",
+      "end_time": "2025/07/24 22:59:47",
+      "duration_hours": 28.06138888888889,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 28.06138888888889,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_014",
+      "start_time": "2025/07/25 14:08:31",
+      "end_time": "2025/07/26 11:57:02",
+      "duration_hours": 21.808611111111112,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 21.808611111111112,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_016",
+      "start_time": "2025/07/29 20:23:30",
+      "end_time": "2025/07/30 17:33:15",
+      "duration_hours": 21.1625,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 21.1625,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_017",
+      "start_time": "2025/08/08 21:40:58",
+      "end_time": "2025/08/08 23:23:46",
+      "duration_hours": 1.7133333333333334,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 1.7133333333333334,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_018",
+      "start_time": "2025/08/13 15:34:42",
+      "end_time": "2025/08/13 17:20:15",
+      "duration_hours": 1.7591666666666668,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 1.7591666666666668,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_019",
+      "start_time": "2025/08/14 09:49:17",
+      "end_time": "2025/08/14 23:00:15",
+      "duration_hours": 13.182777777777778,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 12.182777777777778,
+      "lunch_break": "2025/08/14 12:39:00",
+      "dinner_break": "2025/08/14 18:31:00"
+    },
+    {
+      "block_id": "cos_020",
+      "start_time": "2025/08/22 14:23:16",
+      "end_time": "2025/08/22 23:16:29",
+      "duration_hours": 8.886944444444444,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 8.386944444444444,
+      "lunch_break": null,
+      "dinner_break": "2025/08/22 18:26:00"
+    },
+    {
+      "block_id": "cos_022",
+      "start_time": "2025/09/05 15:02:11",
+      "end_time": "2025/09/05 23:13:44",
+      "duration_hours": 8.1925,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 7.692500000000001,
+      "lunch_break": null,
+      "dinner_break": "2025/09/05 18:03:00"
+    },
+    {
+      "block_id": "cos_023",
+      "start_time": "2025/09/06 07:44:37",
+      "end_time": "2025/09/06 10:25:19",
+      "duration_hours": 2.6783333333333332,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 2.6783333333333332,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_024",
+      "start_time": "2025/09/09 07:52:48",
+      "end_time": "2025/09/09 22:17:52",
+      "duration_hours": 14.417777777777777,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 13.417777777777777,
+      "lunch_break": "2025/09/09 12:01:00",
+      "dinner_break": "2025/09/09 18:20:00"
+    },
+    {
+      "block_id": "cos_025",
+      "start_time": "2025/09/09 22:18:33",
+      "end_time": "2025/09/10 23:10:01",
+      "duration_hours": 24.857777777777777,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 24.857777777777777,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_027",
+      "start_time": "2025/09/12 15:46:17",
+      "end_time": "2025/09/13 19:53:18",
+      "duration_hours": 28.116944444444446,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 28.116944444444446,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_029",
+      "start_time": "2025/09/16 06:42:50",
+      "end_time": "2025/09/16 07:20:24",
+      "duration_hours": 0.6261111111111111,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "short_session",
+      "work_hours": 0.6261111111111111,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_030",
+      "start_time": "2025/09/23 18:09:30",
+      "end_time": "2025/09/25 23:11:49",
+      "duration_hours": 53.03861111111111,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 53.03861111111111,
+      "lunch_break": null,
+      "dinner_break": null
+    },
+    {
+      "block_id": "cos_034",
+      "start_time": "2025/09/26 09:39:45",
+      "end_time": "2025/09/26 23:35:30",
+      "duration_hours": 13.929166666666667,
+      "confidence_score": 1.0,
+      "evidence": [
+        "startup_event_6005",
+        "shutdown_event_1074"
+      ],
+      "session_type": "full_day",
+      "work_hours": 12.929166666666667,
+      "lunch_break": "2025/09/26 12:27:00",
+      "dinner_break": "2025/09/26 18:35:00"
+    }
+  ],
+  "summary": {
+    "total_computer_on_sessions": 24,
+    "total_hours": 293.23,
+    "total_work_hours": 287.23,
+    "average_confidence": 1.0,
+    "average_hours_per_session": 12.22,
+    "average_work_hours_per_session": 11.97,
+    "sessions_with_breaks": {
+      "lunch_break": 6,
+      "dinner_break": 6
+    },
+    "session_types": {
+      "full_day": 15,
+      "half_day": 0,
+      "short_session": 9
+    }
+  }
+}

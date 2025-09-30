@@ -14,7 +14,7 @@ set SCRIPT_NAME=%~n0
 set SCRIPT_VERSION=1.0
 
 REM Git Settings
-set GIT_LOG_OPTIONS=--date=format-local:%%Y-%%m-%%d %%H:%%M:%%S --reverse --all
+set GIT_LOG_OPTIONS=--date=iso --reverse --all
 
 REM Display Configuration
 echo Configuration loaded:

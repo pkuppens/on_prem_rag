@@ -11,7 +11,7 @@ if exist ".git" (
     echo.
     echo "Expected format: datetime|timestamp|message|author|hash"
     echo.
-    git --no-pager log --pretty=format:"%%ad|%%at|%%s|%%an|%%H" --date=format-local:%%Y-%%m-%%d %%H:%%M:%%S --reverse --all -n 3
+    git --no-pager log --pretty=format:"%%ad|%%at|%%s|%%an|%%H" --date=iso --reverse --all -n 3
     echo.
     echo Format test completed.
 ) else (

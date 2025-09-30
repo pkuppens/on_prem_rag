@@ -1,17 +1,17 @@
 datetime|timestamp|message|author|hash
-2025-07-09 13:15:02 +0200|1752059702|Initial commit|Pieter Kuppens|3493ebe7f470f939698047d1c7fcf6256bb33633
-2025-07-09 13:22:25 +0200|1752060145|Initial README.md|Pieter Kuppens|aacbc82356c79d84d99396440a74badc3d4d67fb
-2025-07-10 11:26:54 +0200|1752139614|docs: small README update, announcing mcp server for context7|Pieter Kuppens|634daf7558488af71e72882702f480848761fb2f
-2025-07-10 11:33:02 +0200|1752139982|"feat:Add_docs"|Pieter Kuppens|bfb7dc53126f4befd6bee2ada9e83381b7db331c
-2025-07-10 11:45:48 +0200|1752140748|feat: Add documentation for Context7 MCP server|Pieter Kuppens|85088cabe90aa6b2373497474f5f0ee00c083ed3
-2025-07-10 12:53:49 +0200|1752144829|demo: simulated results of context engineered code assistents.|Pieter Kuppens|0e541cebee89d417c62f4b4296407bfef7a89092
-2025-07-12 09:06:53 +0200|1752304013|docs: n8n description|Pieter Kuppens|6b4a8665aa7e4734ef1feb11bcef92562ff965bb
-2025-07-12 10:24:01 +0200|1752308641|chore: pre-commit hooks|Pieter Kuppens|9e4348271d8e94e65e19b5cacaa031045e87da3a
-2025-07-12 10:24:39 +0200|1752308679|Merge pull request #1 from pkuppens/feature/context7-server|Pieter Kuppens|0b47373b9de386504d78411e89138d40d095dd12
-2025-07-13 09:41:27 +0200|1752392487|docs: define a SOFTWARE_ENGINEER workflow|Pieter Kuppens|9d477c4f6a8473d9e8632a099d29bae1ec447ccb
-2025-07-13 09:42:07 +0200|1752392527|Merge branch 'feature/context7-server'|Pieter Kuppens|984bd5b2aacc839c6f65af22c3a9423199e55731
-2025-07-16 20:53:21 +0200|1752692001|docs: PRD for project, and a template for other projects|Pieter Kuppens|a20844d90f9117923d6605e1e881db5fedb4ace4
-2025-07-16 21:08:39 +0200|1752692919|docs: vibe coded task descriptions|Pieter Kuppens|fc800a91045ab9600b1fb9e4f533084f7948c3e4
-2025-07-16 22:46:53 +0200|1752698813|feat: Implement Core Agent Framework|Pieter Kuppens|48943a0c667eb7bf22c13fac6a6b0562755746e7
-2025-07-16 22:51:41 +0200|1752699101|feat: Implement Agent Specialization|Pieter Kuppens|6a9a54a79742e167cd3f4c66ef784e96369114e5
-2025-07-17 08:19:24 +0200|1752733164|docs: expand on vibe coding instructions|Pieter Kuppens|152225960d011af08b22b4fb35cdae93722c86fd
+2025-07-09 13:15:02|1752059702|Initial commit|Pieter Kuppens|3493ebe7f470f939698047d1c7fcf6256bb33633
+2025-07-09 13:22:25|1752060145|Initial README.md|Pieter Kuppens|aacbc82356c79d84d99396440a74badc3d4d67fb
+2025-07-10 11:26:54|1752139614|docs: small README update, announcing mcp server for context7|Pieter Kuppens|634daf7558488af71e72882702f480848761fb2f
+2025-07-10 11:33:02|1752139982|"""feat:Add_docs"""|Pieter Kuppens|bfb7dc53126f4befd6bee2ada9e83381b7db331c
+2025-07-10 11:45:48|1752140748|feat: Add documentation for Context7 MCP server|Pieter Kuppens|85088cabe90aa6b2373497474f5f0ee00c083ed3
+2025-07-10 12:53:49|1752144829|demo: simulated results of context engineered code assistents.|Pieter Kuppens|0e541cebee89d417c62f4b4296407bfef7a89092
+2025-07-12 09:06:53|1752304013|docs: n8n description|Pieter Kuppens|6b4a8665aa7e4734ef1feb11bcef92562ff965bb
+2025-07-12 10:24:01|1752308641|chore: pre-commit hooks|Pieter Kuppens|9e4348271d8e94e65e19b5cacaa031045e87da3a
+2025-07-12 10:24:39|1752308679|Merge pull request #1 from pkuppens/feature/context7-server|Pieter Kuppens|0b47373b9de386504d78411e89138d40d095dd12
+2025-07-13 09:41:27|1752392487|docs: define a SOFTWARE_ENGINEER workflow|Pieter Kuppens|9d477c4f6a8473d9e8632a099d29bae1ec447ccb
+2025-07-13 09:42:07|1752392527|Merge branch 'feature/context7-server'|Pieter Kuppens|984bd5b2aacc839c6f65af22c3a9423199e55731
+2025-07-16 20:53:21|1752692001|docs: PRD for project, and a template for other projects|Pieter Kuppens|a20844d90f9117923d6605e1e881db5fedb4ace4
+2025-07-16 21:08:39|1752692919|docs: vibe coded task descriptions|Pieter Kuppens|fc800a91045ab9600b1fb9e4f533084f7948c3e4
+2025-07-16 22:46:53|1752698813|feat: Implement Core Agent Framework|Pieter Kuppens|48943a0c667eb7bf22c13fac6a6b0562755746e7
+2025-07-16 22:51:41|1752699101|feat: Implement Agent Specialization|Pieter Kuppens|6a9a54a79742e167cd3f4c66ef784e96369114e5
+2025-07-17 08:19:24|1752733164|docs: expand on vibe coding instructions|Pieter Kuppens|152225960d011af08b22b4fb35cdae93722c86fd

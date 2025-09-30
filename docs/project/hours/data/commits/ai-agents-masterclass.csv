@@ -1,43 +1,43 @@
 datetime|timestamp|message|author|hash
-2024-06-23 15:14:49 -0500|1719173689|Initial commit|Cole Medin|18e585b9e06b77063157fbf06df891735b19bd16
-2024-06-23 15:17:29 -0500|1719173849|Created AI Agents Masterclass Repo|Cole Medin|1a914e0d45673f3255a387c37d6890dccf462462
-2024-06-30 14:39:51 -0500|1719776391|Masterclass video #2 - AI Agents with LangChain|Cole Medin|74763f1e0eeb1cdb09d09b15288a78215fb214e9
-2024-07-02 07:53:06 -0500|1719924786|Adding streamlit chatbot|Cole Medin|3f8afcf52645d844afcbd6fb75639eb88ca8d40c
-2024-07-07 11:47:15 -0500|1720370835|Masterclass 3 - Chatbot UI for AI Agent|Cole Medin|51468602539746bdc48e1fd98b153ebf35aa9ec8
-2024-07-10 15:31:08 -0500|1720643468|Local LLM Tool Calling|Cole Medin|8444e3d2e666b09aa51170218c7ae82956ed2b08
-2024-07-14 13:51:37 -0500|1720983097|Masterclass #4 - Full Task Management Agent|Cole Medin|65333baddfb9c30c803ff370129bd5ad1bb55f2d
-2024-07-17 10:00:03 -0500|1721228403|AI Mad Libs|Cole Medin|0a215eb7cd39769a47e554b0cc6ce5259239c362
-2024-07-20 10:24:08 -0500|1721489048|Groq Llama 3 AI Agent|Cole Medin|f290a960cce5f4de59916d07d6110fdc2a03025f
-2024-07-27 17:03:04 -0500|1722117784|AI Agents Masterclass #5 - RAG|Cole Medin|0a7860b0fff8daeae9a27f8eddc32a154cffeb0d
-2024-07-31 11:34:32 -0500|1722443672|AI Router for Cost Saving with AI Agents|Cole Medin|2914135e96ef540d47b8463945fe06f50eab1850
-2024-08-02 14:47:55 -0500|1722628075|AI Agents Masterclass #6 - RAG AI Agent|Cole Medin|bf8d518c8251ad26b85426a8b9ac71421a9d3e80
-2024-08-04 17:24:41 -0500|1722810281|AI Agents Masterclass #7 - LangGraph Guide|Cole Medin|f0aef8ff6e38c26e01db90e1a0e81d31042307df
-2024-08-04 17:31:56 -0500|1722810716|Update README.md|Cole Medin|1497547ff45d1a294cade60aac776610adb68e8a
-2024-08-18 13:16:12 -0500|1724004972|AI Agents Masterclass #8 - n8n AI Agent|Cole Medin|3be0c4348b3e158e9f6908a41ae9ddcb340c57dc
-2024-08-21 16:36:57 -0500|1724276217|GHL SaaS Backend|Cole Medin|d2fdcb9c3b490e6fc24d141385f0b61ae6fc45f6
-2024-08-24 14:49:25 -0500|1724528965|AI Agents Masterclass #9 - n8n RAG Agent|Cole Medin|8cbd27ad1f170718a4904a1e52ca9024ef33dcb1
-2024-08-26 10:27:10 -0500|1724686030|Fixing typo and dependency conflict in a couple requirements.txt files|Cole Medin|3afefe9f61d0de84a2bd6f3c8f508f3b3a544e29
-2024-08-28 18:01:58 -0500|1724886118|LLM Eval Framework + Breaking LLMs|Cole Medin|ef5f6c7c43fd27a6e2bdf8c5f6d9e5221e5e1550
-2024-08-29 07:59:59 -0500|1724936399|AI Agents MC #10 - LangServe Deployment of AI Agent|Cole Medin|af684be17e3be971958e47cb646279e2d0167c25
-2024-08-30 12:41:06 -0500|1725039666|Couple small code changes for LangServe walkthrough|Cole Medin|b3438810d70fe26703935c4a12a5718a8c8cd963
-2024-09-04 17:13:41 -0500|1725488021|Supabase RAG Agent n8n Workflow|Cole Medin|fdea47562d4d6824c8a0dbe028676dcdfe3d8d89
-2024-09-08 17:37:30 -0500|1725835050|V0 + Claude - RAG AI Agent Frontend|Cole Medin|8bcf7b1b6237856a7ffa9a8cc6d64888e4db3b4b
-2024-09-11 16:34:24 -0500|1726090464|Local or Managed Services for LLMs/RAG|Cole Medin|83c97021e62f94477bd4060fed3d42b04996ed7b
-2024-09-14 07:59:21 -0500|1726318761|Packaged Local AI - n8n + Ollama + QDrant + Postgres|Cole Medin|c09ddfaa20f51abfc45f4322a8bb016f7b93055f
-2024-09-18 10:52:02 -0500|1726674722|o1 AI Agent|Cole Medin|13a1969254852c8168f0d9fc6b943babd7aa2822
-2024-09-20 08:38:23 -0500|1726839503|Korvus RAG testing... cool example of using a tool for easy RAG with Python|Cole Medin|9a3111d5781422fe0d3a761856356fed27df8be6
-2024-09-22 18:38:12 -0500|1727048292|n8n + Python + LangChain AI Agent|Cole Medin|0408d5b9f7ddd8896e05e3e9de7d5f7b27536742
-2024-09-28 21:15:54 -0500|1727576154|Updating LLM eval for Llama 3.2 testing|Cole Medin|07cd054a1b613a376b837ae40b79ab86d1b0a41b
-2024-10-02 17:19:39 -0500|1727907579|n8n Full Stack App with Streamlit + Claude + Supabase|Cole Medin|0e5e87ba60f063549566023fdd19ad1896fde5bc
-2024-10-09 17:15:20 -0500|1728512120|n8n RAG AI Agent with PDFs, Excel documents, and more|Cole Medin|0a6d1f430d82f3e8847a36e138fc9f4c81713a2f
-2024-10-16 16:16:41 -0500|1729113401|OpenAI Swarm implementation of an AI agent swarm to manage a SQL database|Cole Medin|0fa98dbdeec6743904d8836c20caa9921874e463
-2024-10-22 13:10:26 -0500|1729620626|Adding OpenWebUI to Local AI Starter Kit|Cole Medin|90dad49ff90a4ddd93281679498167504277d3a2
-2024-10-23 21:06:22 -0500|1729735582|Fixing small typo in n8n_pipe.py|Cole Medin|8fc8667a0db24b504757fe5fe369011f24c3cc8b
-2024-10-30 16:48:21 -0500|1730324901|Ollama + OpenAI Swarm|Cole Medin|db25e16fdee13fd29cbf7c999135cc39a3e474ba
-2024-11-13 09:08:59 -0600|1731510539|Updating the LLM eval agent to work with Ollama|Cole Medin|3900e0adebd98b43d601b8a02243ee7019efc405
-2024-12-04 10:10:31 -0600|1733328631|Adding Flowise to the Local AI Starter Kit|Cole Medin|80fc5c4464c09531b789766c0e3438ef11b0ae07
-2024-12-08 18:07:20 -0600|1733702840|Pydantic AI Web Research Agent|Cole Medin|3ce93a4c43b7e938677afabee4274aa7471be887
-2024-12-10 11:30:54 -0600|1733851854|Update README.md|Cole Medin|98392ca9d69febdbf114c0f8c6955eac99cce1c5
-2024-12-15 15:35:54 -0600|1734298554|Update README.md|Cole Medin|f1c4ef0911ec005b7e09f1805e4aea212386864f
-2025-01-14 09:30:33 -0500|1736865033|Getting chat_id to use as session_id|jeffwiegner|a91332afd9cde04b057dec8457ce4667b5eda395
-2025-01-14 10:15:41 -0600|1736871341|Merge pull request #35 from jeffwiegner/patch-chat_id|Cole Medin|1879176f4a000026786185841800fe404b9c12cb
+2024-06-23 22:14:49|1719173689|Initial commit|Cole Medin|18e585b9e06b77063157fbf06df891735b19bd16
+2024-06-23 22:17:29|1719173849|Created AI Agents Masterclass Repo|Cole Medin|1a914e0d45673f3255a387c37d6890dccf462462
+2024-06-30 21:39:51|1719776391|Masterclass video #2 - AI Agents with LangChain|Cole Medin|74763f1e0eeb1cdb09d09b15288a78215fb214e9
+2024-07-02 14:53:06|1719924786|Adding streamlit chatbot|Cole Medin|3f8afcf52645d844afcbd6fb75639eb88ca8d40c
+2024-07-07 18:47:15|1720370835|Masterclass 3 - Chatbot UI for AI Agent|Cole Medin|51468602539746bdc48e1fd98b153ebf35aa9ec8
+2024-07-10 22:31:08|1720643468|Local LLM Tool Calling|Cole Medin|8444e3d2e666b09aa51170218c7ae82956ed2b08
+2024-07-14 20:51:37|1720983097|Masterclass #4 - Full Task Management Agent|Cole Medin|65333baddfb9c30c803ff370129bd5ad1bb55f2d
+2024-07-17 17:00:03|1721228403|AI Mad Libs|Cole Medin|0a215eb7cd39769a47e554b0cc6ce5259239c362
+2024-07-20 17:24:08|1721489048|Groq Llama 3 AI Agent|Cole Medin|f290a960cce5f4de59916d07d6110fdc2a03025f
+2024-07-28 00:03:04|1722117784|AI Agents Masterclass #5 - RAG|Cole Medin|0a7860b0fff8daeae9a27f8eddc32a154cffeb0d
+2024-07-31 18:34:32|1722443672|AI Router for Cost Saving with AI Agents|Cole Medin|2914135e96ef540d47b8463945fe06f50eab1850
+2024-08-02 21:47:55|1722628075|AI Agents Masterclass #6 - RAG AI Agent|Cole Medin|bf8d518c8251ad26b85426a8b9ac71421a9d3e80
+2024-08-05 00:24:41|1722810281|AI Agents Masterclass #7 - LangGraph Guide|Cole Medin|f0aef8ff6e38c26e01db90e1a0e81d31042307df
+2024-08-05 00:31:56|1722810716|Update README.md|Cole Medin|1497547ff45d1a294cade60aac776610adb68e8a
+2024-08-18 20:16:12|1724004972|AI Agents Masterclass #8 - n8n AI Agent|Cole Medin|3be0c4348b3e158e9f6908a41ae9ddcb340c57dc
+2024-08-21 23:36:57|1724276217|GHL SaaS Backend|Cole Medin|d2fdcb9c3b490e6fc24d141385f0b61ae6fc45f6
+2024-08-24 21:49:25|1724528965|AI Agents Masterclass #9 - n8n RAG Agent|Cole Medin|8cbd27ad1f170718a4904a1e52ca9024ef33dcb1
+2024-08-26 17:27:10|1724686030|Fixing typo and dependency conflict in a couple requirements.txt files|Cole Medin|3afefe9f61d0de84a2bd6f3c8f508f3b3a544e29
+2024-08-29 01:01:58|1724886118|LLM Eval Framework + Breaking LLMs|Cole Medin|ef5f6c7c43fd27a6e2bdf8c5f6d9e5221e5e1550
+2024-08-29 14:59:59|1724936399|AI Agents MC #10 - LangServe Deployment of AI Agent|Cole Medin|af684be17e3be971958e47cb646279e2d0167c25
+2024-08-30 19:41:06|1725039666|Couple small code changes for LangServe walkthrough|Cole Medin|b3438810d70fe26703935c4a12a5718a8c8cd963
+2024-09-05 00:13:41|1725488021|Supabase RAG Agent n8n Workflow|Cole Medin|fdea47562d4d6824c8a0dbe028676dcdfe3d8d89
+2024-09-09 00:37:30|1725835050|V0 + Claude - RAG AI Agent Frontend|Cole Medin|8bcf7b1b6237856a7ffa9a8cc6d64888e4db3b4b
+2024-09-11 23:34:24|1726090464|Local or Managed Services for LLMs/RAG|Cole Medin|83c97021e62f94477bd4060fed3d42b04996ed7b
+2024-09-14 14:59:21|1726318761|Packaged Local AI - n8n + Ollama + QDrant + Postgres|Cole Medin|c09ddfaa20f51abfc45f4322a8bb016f7b93055f
+2024-09-18 17:52:02|1726674722|o1 AI Agent|Cole Medin|13a1969254852c8168f0d9fc6b943babd7aa2822
+2024-09-20 15:38:23|1726839503|Korvus RAG testing... cool example of using a tool for easy RAG with Python|Cole Medin|9a3111d5781422fe0d3a761856356fed27df8be6
+2024-09-23 01:38:12|1727048292|n8n + Python + LangChain AI Agent|Cole Medin|0408d5b9f7ddd8896e05e3e9de7d5f7b27536742
+2024-09-29 04:15:54|1727576154|Updating LLM eval for Llama 3.2 testing|Cole Medin|07cd054a1b613a376b837ae40b79ab86d1b0a41b
+2024-10-03 00:19:39|1727907579|n8n Full Stack App with Streamlit + Claude + Supabase|Cole Medin|0e5e87ba60f063549566023fdd19ad1896fde5bc
+2024-10-10 00:15:20|1728512120|n8n RAG AI Agent with PDFs, Excel documents, and more|Cole Medin|0a6d1f430d82f3e8847a36e138fc9f4c81713a2f
+2024-10-16 23:16:41|1729113401|OpenAI Swarm implementation of an AI agent swarm to manage a SQL database|Cole Medin|0fa98dbdeec6743904d8836c20caa9921874e463
+2024-10-22 20:10:26|1729620626|Adding OpenWebUI to Local AI Starter Kit|Cole Medin|90dad49ff90a4ddd93281679498167504277d3a2
+2024-10-24 04:06:22|1729735582|Fixing small typo in n8n_pipe.py|Cole Medin|8fc8667a0db24b504757fe5fe369011f24c3cc8b
+2024-10-30 22:48:21|1730324901|Ollama + OpenAI Swarm|Cole Medin|db25e16fdee13fd29cbf7c999135cc39a3e474ba
+2024-11-13 16:08:59|1731510539|Updating the LLM eval agent to work with Ollama|Cole Medin|3900e0adebd98b43d601b8a02243ee7019efc405
+2024-12-04 17:10:31|1733328631|Adding Flowise to the Local AI Starter Kit|Cole Medin|80fc5c4464c09531b789766c0e3438ef11b0ae07
+2024-12-09 01:07:20|1733702840|Pydantic AI Web Research Agent|Cole Medin|3ce93a4c43b7e938677afabee4274aa7471be887
+2024-12-10 18:30:54|1733851854|Update README.md|Cole Medin|98392ca9d69febdbf114c0f8c6955eac99cce1c5
+2024-12-15 22:35:54|1734298554|Update README.md|Cole Medin|f1c4ef0911ec005b7e09f1805e4aea212386864f
+2025-01-14 15:30:33|1736865033|Getting chat_id to use as session_id|jeffwiegner|a91332afd9cde04b057dec8457ce4667b5eda395
+2025-01-14 17:15:41|1736871341|Merge pull request #35 from jeffwiegner/patch-chat_id|Cole Medin|1879176f4a000026786185841800fe404b9c12cb

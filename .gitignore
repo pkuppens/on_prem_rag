@@ -151,6 +151,8 @@ data/
 # Exception: Keep docs/project/hours/data directory tracked
 !docs/project/hours/data/
 !docs/project/hours/data/**
+# But ignore large JSON files that exceed 500KB
+docs/project/hours/data/*.json
 
 # Test data directory - explicitly track this directory
 !tests/test_data/

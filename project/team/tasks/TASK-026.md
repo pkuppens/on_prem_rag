@@ -79,7 +79,7 @@ Integrate system events work blocks with the existing Git commit analysis to cre
 
 3. **Script Enhancement**
 
-   - Modify `process_commits.py` to accept system events input
+   - Create new integration script that combines system events work blocks with processed commit JSON data
    - Add system events processing pipeline
    - Implement integrated output generation
 
@@ -91,8 +91,9 @@ Integrate system events work blocks with the existing Git commit analysis to cre
 ## Dependencies
 
 - TASK-025 (System Events Work Block Analysis) completed
-- Existing `process_commits.py` script
+- TASK-027 (CSV Commit Data Processing to JSON Format) completed
 - System events CSV files and work block analysis results
+- Processed commit JSON data from TASK-027
 
 ## Definition of Done
 
@@ -117,6 +118,7 @@ This task creates the foundation for a comprehensive WBSO hours registration sys
 
 ## Related Files
 
-- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py)
+- [docs/project/hours/process_commits.py](docs/project/hours/process_commits.py) - Legacy commit processing script
 - [docs/project/hours/data/SYSTEM_EVENTS_FORMAT.md](docs/project/hours/data/SYSTEM_EVENTS_FORMAT.md)
 - [project/team/tasks/TASK-025.md](project/team/tasks/TASK-025.md) - System Events Work Block Analysis
+- [project/team/tasks/TASK-027.md](project/team/tasks/TASK-027.md) - CSV Commit Data Processing to JSON Format

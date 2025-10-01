@@ -395,8 +395,7 @@ class SessionDetector:
             evidence=None,
             session_type=None,
             work_hours=None,
-            lunch_break=None,
-            dinner_break=None,
+            # lunch_break and dinner_break will be calculated by __post_init__
             work_items=None,
             work_item_count=None,
             work_item_types=None,
@@ -448,8 +447,7 @@ class SessionDetector:
             evidence=None,
             session_type=None,
             work_hours=None,
-            lunch_break=None,
-            dinner_break=None,
+            # lunch_break and dinner_break will be calculated by __post_init__
             work_items=None,
             work_item_count=None,
             work_item_types=None,

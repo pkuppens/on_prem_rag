@@ -143,7 +143,7 @@ class WorkSession:
 
             # Check for lunch break eligibility
             if start_dt.time() < time(10, 0) and end_dt.time() > time(14, 0):
-                if self.lunch_break is None:
+                if not self.lunch_break:
                     # Generate random lunch break start time between 12:00-12:40
                     lunch_start_minute = random.randint(0, 40)  # 0-40 minutes past 12:00
                     lunch_start = time(12, lunch_start_minute)
@@ -153,7 +153,7 @@ class WorkSession:
 
             # Check for dinner break eligibility
             if start_dt.time() < time(16, 0) and end_dt.time() > time(20, 0):
-                if self.dinner_break is None:
+                if not self.dinner_break:
                     # Generate random dinner break start time between 17:50-18:30
                     dinner_start_minute = random.randint(50, 80)  # 50-80 minutes past 17:00
                     dinner_start_hour = 17 + (dinner_start_minute // 60)

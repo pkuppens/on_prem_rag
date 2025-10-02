@@ -1,7 +1,4 @@
-"""DateTime""",EventId,EventType,Message,RecordId
-2025-04-27 09:21:21,1074,System shutdown/restart initiated,The process Explorer.EXE has initiated the power off of computer AIGENT-4090 on behalf of user aigent-4090\piete for the following reason: Other (Unplanned)  Reason Code: 0x0  Shutdown Type: power off  Comment:,35730
-2025-04-27 09:21:24,7002,User logoff notification,User Logoff Notification for Customer Experience Improvement Program,35752
-2025-04-27 09:21:26,42,System entering sleep,The system is entering sleep.  Sleep Reason: Application API,35759
+DateTime,EventId,EventType,Message,RecordId
 2025-04-27 17:22:26,6013,System uptime report,The system uptime is 95380 seconds.,35766
 2025-04-27 17:22:37,7001,User logon notification,User Logon Notification for Customer Experience Improvement Program,35802
 2025-04-27 18:28:01,1074,System shutdown/restart initiated,The process Explorer.EXE has initiated the power off of computer AIGENT-4090 on behalf of user aigent-4090\piete for the following reason: Other (Unplanned)  Reason Code: 0x0  Shutdown Type: power off  Comment:,35881

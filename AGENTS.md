@@ -258,11 +258,42 @@ When tasks or stories are completed:
    git push -u origin task/TASK-XXX-short-description
    ```
 
+### Git Push Enforcement
+
+#### Pre-Push Hook Setup
+
+**CRITICAL**: Unit tests are automatically enforced on every git push via pre-push hooks:
+
+```bash
+# Set up the pre-push hook (run once after cloning)
+uv run python scripts/setup_git_hooks.py
+```
+
+The pre-push hook will:
+- Run unit tests automatically before every push
+- Block pushes if tests fail
+- Only run fast unit tests (excludes slow and internet-dependent tests)
+- Provide clear error messages and bypass instructions
+
+#### Emergency Bypass Options
+
+In emergency situations only, you can bypass the pre-push hook:
+
+```bash
+# Option 1: Environment variable bypass
+GIT_PUSH_BYPASS_TESTS=true git push
+
+# Option 2: Git no-verify flag
+git push --no-verify
+```
+
+**⚠️ WARNING**: These bypasses should only be used in genuine emergency situations. Always fix failing tests as soon as possible.
+
 ### Pull Request Management
 
 #### Pre-PR Requirements
 
-**CRITICAL**: All pytest tests must pass before creating pull requests:
+**CRITICAL**: All pytest tests must pass before creating pull requests (enforced by pre-push hook):
 
 ```bash
 # Run all tests locally before creating PR

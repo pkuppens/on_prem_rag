@@ -134,7 +134,16 @@ This guide outlines the key principles and practices for AI-assisted development
 - Update tests when logic changes
 - **All pytest tests must pass** before creating pull requests
 
-### 4. GitHub Integration Workflow
+### 4. Git Push Enforcement
+
+- **Pre-push hooks enforce unit test passing** on every git push
+- **Automatic validation**: Unit tests run before every push operation
+- **Fast feedback**: Only runs fast unit tests (excludes slow and internet tests)
+- **Push blocking**: Push is blocked if any tests fail
+- **Emergency bypass**: Use `GIT_PUSH_BYPASS_TESTS=true git push` or `git push --no-verify` only in genuine emergencies
+- **Setup required**: Run `uv run python scripts/setup_git_hooks.py` once after cloning
+
+### 5. GitHub Integration Workflow
 
 - **Issue Management**: Create GitHub issues from project artifacts (STORY-_.md, TASK-_.md)
 - **Branch Management**: Use proper naming conventions and creation workflows

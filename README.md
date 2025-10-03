@@ -121,9 +121,23 @@ source .venv/bin/activate
 # Install package in editable mode with development dependencies
 uv pip install -e .[dev]
 pre-commit install
+
+# Set up git hooks for unit test enforcement (run once after cloning)
+uv run python scripts/setup_git_hooks.py
 ```
 
 **Note**: The project uses editable installation (`-e`) to ensure proper Python module resolution. This allows the test suite to correctly import modules from `src/`, `scripts/`, and `project/` directories using absolute imports.
+
+### Git Push Enforcement
+
+The project enforces unit test passing on every git push via pre-push hooks:
+
+- **Automatic**: Unit tests run before every push
+- **Fast**: Only runs fast unit tests (excludes slow and internet tests)
+- **Blocking**: Push is blocked if tests fail
+- **Emergency Bypass**: Use `GIT_PUSH_BYPASS_TESTS=true git push` or `git push --no-verify` in emergencies
+
+See [docs/technical/GIT_HOOKS.md](docs/technical/GIT_HOOKS.md) for detailed documentation.
 
 ### Development Standards
 

@@ -30,6 +30,7 @@ class SystemEvent:
         datetime: Event timestamp as string (YYYY-MM-DD HH:mm:ss format)
         event_id: Windows event ID (7001=logon, 7002=logoff, 6013=uptime, etc.)
         event_type: Human-readable event type
+        username: User associated with the event
         message: Event message content
         record_id: Unique record identifier
         date: Extracted date field for processing (YYYY-MM-DD format)
@@ -38,6 +39,7 @@ class SystemEvent:
     datetime: str
     event_id: str
     event_type: str
+    username: str
     message: str
     record_id: str
     date: Optional[str] = None  # Extracted date field for processing

@@ -55,32 +55,20 @@ The pre-push hook performs the following actions:
    - Provides clear error messages and instructions
    - Shows bypass options for emergency situations
 
-## Emergency Bypass Mechanisms
+## Emergency Bypass Mechanism
 
-In genuine emergency situations, the hook can be bypassed using two methods:
-
-### Method 1: Environment Variable
-
-```bash
-# Unix-like systems
-GIT_PUSH_BYPASS_TESTS=true git push
-
-# Windows PowerShell
-$env:GIT_PUSH_BYPASS_TESTS="true"; git push
-```
-
-### Method 2: Git No-Verify Flag
+In genuine emergency situations, the hook can be bypassed using the git no-verify flag:
 
 ```bash
 git push --no-verify
 ```
 
-### Bypass Warnings
+### Bypass Warning
 
-When bypassing the hook, you'll see warning messages:
+When bypassing the hook, you'll see a warning message:
 
 ```
-[PRE-PUSH] BYPASS MODE: Skipping unit tests due to GIT_PUSH_BYPASS_TESTS=true
+[PRE-PUSH] BYPASS MODE: Skipping unit tests due to --no-verify flag
 [PRE-PUSH] This should only be used in emergency situations!
 ```
 
@@ -152,14 +140,14 @@ The pre-push hook complements the existing GitHub Actions CI/CD pipeline:
 ### For Developers
 
 1. **Run tests locally** before pushing to catch issues early
-2. **Use bypasses sparingly** and only in genuine emergencies
+2. **Use bypass sparingly** and only in genuine emergencies
 3. **Fix failing tests immediately** after using a bypass
 4. **Keep the hook updated** when test configuration changes
 
 ### For Project Maintenance
 
 1. **Update hook scripts** when test configuration changes
-2. **Document any new bypass mechanisms** in this file
+2. **Document any changes to bypass mechanisms** in this file
 3. **Monitor hook effectiveness** through CI/CD success rates
 4. **Review bypass usage** to identify potential process improvements
 

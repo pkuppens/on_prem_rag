@@ -140,7 +140,7 @@ This guide outlines the key principles and practices for AI-assisted development
 - **Automatic validation**: Unit tests run before every push operation
 - **Fast feedback**: Only runs fast unit tests (excludes slow and internet tests)
 - **Push blocking**: Push is blocked if any tests fail
-- **Emergency bypass**: Use `GIT_PUSH_BYPASS_TESTS=true git push` or `git push --no-verify` only in genuine emergencies
+- **Emergency bypass**: Use `git push --no-verify` only in genuine emergencies
 - **Setup required**: Run `uv run python scripts/setup_git_hooks.py` once after cloning
 
 ### 5. GitHub Integration Workflow

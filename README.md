@@ -135,7 +135,7 @@ The project enforces unit test passing on every git push via pre-push hooks:
 - **Automatic**: Unit tests run before every push
 - **Fast**: Only runs fast unit tests (excludes slow and internet tests)
 - **Blocking**: Push is blocked if tests fail
-- **Emergency Bypass**: Use `GIT_PUSH_BYPASS_TESTS=true git push` or `git push --no-verify` in emergencies
+- **Emergency Bypass**: Use `git push --no-verify` in emergencies
 
 See [docs/technical/GIT_HOOKS.md](docs/technical/GIT_HOOKS.md) for detailed documentation.
 

@@ -89,10 +89,9 @@ def main():
         print("• Before every git push, unit tests will run automatically")
         print("• If tests fail, the push will be blocked")
         print("• Only fast unit tests run (excludes slow and internet tests)")
-        print("\nEmergency bypass options:")
-        print("• Environment variable: GIT_PUSH_BYPASS_TESTS=true git push")
+        print("\nEmergency bypass option:")
         print("• Git flag: git push --no-verify")
-        print("\nThese bypasses should only be used in emergency situations!")
+        print("\nThis bypass should only be used in emergency situations!")
         print("=" * 60)
 
         if verify_hook_setup():

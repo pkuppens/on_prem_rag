@@ -275,19 +275,16 @@ The pre-push hook will:
 - Only run fast unit tests (excludes slow and internet-dependent tests)
 - Provide clear error messages and bypass instructions
 
-#### Emergency Bypass Options
+#### Emergency Bypass Option
 
 In emergency situations only, you can bypass the pre-push hook:
 
 ```bash
-# Option 1: Environment variable bypass
-GIT_PUSH_BYPASS_TESTS=true git push
-
-# Option 2: Git no-verify flag
+# Git no-verify flag
 git push --no-verify
 ```
 
-**⚠️ WARNING**: These bypasses should only be used in genuine emergency situations. Always fix failing tests as soon as possible.
+**⚠️ WARNING**: This bypass should only be used in genuine emergency situations. Always fix failing tests as soon as possible.
 
 ### Pull Request Management
 

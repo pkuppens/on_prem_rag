@@ -36,7 +36,7 @@ def parse_commit_timestamp(timestamp_str: str) -> datetime:
         return datetime.fromisoformat(timestamp_str)
     except ValueError as e:
         logger.error(f"Failed to parse commit timestamp '{timestamp_str}': {e}")
-        raise
+        raise ValueError(f"Failed to parse commit timestamp '{timestamp_str}': {e}")
 
 
 def parse_work_session_timestamp(timestamp_str: str) -> datetime:
@@ -58,7 +58,7 @@ def parse_work_session_timestamp(timestamp_str: str) -> datetime:
         return naive_dt.replace(tzinfo=timezone.utc)  # Assume UTC for consistency
     except ValueError as e:
         logger.error(f"Failed to parse work session timestamp '{timestamp_str}': {e}")
-        raise
+        raise ValueError(f"Failed to parse work session timestamp '{timestamp_str}': {e}")
 
 
 def filter_commits_by_date(commits: List[Dict], start_date: str) -> List[Dict]:
@@ -108,7 +108,12 @@ def assign_commits_to_sessions(work_sessions: List[Dict], commits: List[Dict]) -
             session_end = parse_work_session_timestamp(session["end_time"])
         except (ValueError, KeyError) as e:
             logger.warning(f"Skipping session {session.get('session_id', 'unknown')}: {e}")
-            enhanced_sessions.append(session)
+            # Create enhanced session with empty assigned_commits for invalid sessions
+            enhanced_session = session.copy()
+            enhanced_session["assigned_commits"] = []
+            enhanced_session["commit_count"] = 0
+            enhanced_session["is_wbso"] = False
+            enhanced_sessions.append(enhanced_session)
             continue
 
         # Find commits within session time range

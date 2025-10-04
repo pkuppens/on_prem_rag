@@ -22,9 +22,12 @@ from pathlib import Path
 
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "business"))
+# Add src directory to path for datetime utils
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
 
 from work_session import WorkSession
 from system_event import SystemEvent
+from backend.datetime_utils import parse_datetime_flexible
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -34,46 +37,7 @@ logger = logging.getLogger(__name__)
 # SystemEvent and WorkSession classes are now imported from business layer
 
 
-def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
-    """Parse datetime string with multiple format support.
-
-    Args:
-        dt_str: DateTime string in various formats
-
-    Returns:
-        datetime object or None if parsing fails
-    """
-    if not dt_str or dt_str.strip() == "":
-        return None
-
-    # Clean the datetime string
-    clean_datetime = dt_str.strip()
-    if clean_datetime.startswith('"'):
-        clean_datetime = clean_datetime[1:]
-    if clean_datetime.endswith('"'):
-        clean_datetime = clean_datetime[:-1]
-    # Remove BOM if present
-    if clean_datetime.startswith("\ufeff"):
-        clean_datetime = clean_datetime[1:]
-
-    if not clean_datetime:
-        return None
-
-    formats = [
-        "%Y/%m/%d %H:%M:%S",  # 2025/06/24 07:30:54
-        "%m/%d/%Y %I:%M:%S %p",  # 4/27/2025 9:21:21 AM
-        "%Y-%m-%d %H:%M:%S",  # 2025-06-24 07:30:54
-        "%Y-%m-%dT%H:%M:%S",  # 2025-06-24T07:30:54
-    ]
-
-    for fmt in formats:
-        try:
-            return datetime.strptime(clean_datetime, fmt)
-        except ValueError:
-            continue
-
-    logger.warning(f"Could not parse datetime: {dt_str}")
-    return None
+# parse_datetime_flexible function is now imported from datetime_utils module
 
 
 def extract_date_from_datetime(dt_str: str) -> str:

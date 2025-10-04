@@ -18,40 +18,19 @@ import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+import sys
+
+# Add src directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
+
+from backend.datetime_utils import parse_datetime_flexible
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
-    """Parse datetime string with multiple format support.
-
-    Args:
-        dt_str: Datetime string in various formats
-
-    Returns:
-        datetime object (timezone-aware) or None if parsing fails
-    """
-    formats = [
-        "%Y/%m/%d %H:%M:%S",  # 2025/06/24 07:30:54
-        "%Y-%m-%dT%H:%M:%S%z",  # 2025-06-24T07:30:54+02:00
-        "%Y-%m-%d %H:%M:%S",  # 2025-06-24 07:30:54
-        "%Y-%m-%dT%H:%M:%S",  # 2025-06-24T07:30:54
-    ]
-
-    for fmt in formats:
-        try:
-            dt = datetime.strptime(dt_str, fmt)
-            # If timezone-naive, assume UTC
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=datetime.now().astimezone().tzinfo)
-            return dt
-        except ValueError:
-            continue
-
-    logger.warning(f"Could not parse datetime: {dt_str}")
-    return None
+# parse_datetime_flexible function is now imported from datetime_utils module
 
 
 def is_commit_in_work_block(commit_timestamp: str, work_block_start: str, work_block_end: str) -> bool:

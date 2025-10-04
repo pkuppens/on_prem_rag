@@ -12,7 +12,6 @@ Purpose: Unified model for work session tracking, hours calculation, and work it
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any
 from datetime import datetime, time, timedelta
-import random
 import sys
 from pathlib import Path
 
@@ -141,8 +140,10 @@ class WorkSession:
         Business Rules:
         - Lunch break: Sessions starting before 10:00 and ending after 14:00
         - Dinner break: Sessions starting before 16:00 and ending after 20:00
-        - Lunch break: 30 minutes, random start between 12:00-12:40
-        - Dinner break: 45 minutes, random start between 17:50-18:30
+        - Lunch break: 30 minutes, deterministic start at 12:20 (middle of 12:00-12:40 range)
+        - Dinner break: 45 minutes, deterministic start at 18:10 (middle of 17:50-18:30 range)
+
+        Note: Break times are deterministic to ensure consistent test results in parallel execution.
         """
         try:
             start_dt = self._parse_datetime(self.start_time)
@@ -156,25 +157,18 @@ class WorkSession:
             # Check for lunch break eligibility
             if start_dt.time() < time(10, 0) and end_dt.time() > time(14, 0):
                 if not self.lunch_break:
-                    # Generate random lunch break start time between 12:00-12:40
-                    lunch_start_minute = random.randint(0, 40)  # 0-40 minutes past 12:00
-                    lunch_start = time(12, lunch_start_minute)
-                    lunch_end = time(12, lunch_start_minute + 30)
+                    # Use deterministic lunch break start time (middle of 12:00-12:40 range)
+                    lunch_start = time(12, 20)  # 12:20
+                    lunch_end = time(12, 50)  # 12:50 (30 minutes later)
                     self.lunch_break = f"{lunch_start.strftime('%H:%M')}-{lunch_end.strftime('%H:%M')}"
                 total_break_minutes += 30
 
             # Check for dinner break eligibility
             if start_dt.time() < time(16, 0) and end_dt.time() > time(20, 0):
                 if not self.dinner_break:
-                    # Generate random dinner break start time between 17:50-18:30
-                    dinner_start_minute = random.randint(50, 80)  # 50-80 minutes past 17:00
-                    dinner_start_hour = 17 + (dinner_start_minute // 60)
-                    dinner_start_minute = dinner_start_minute % 60
-                    dinner_start = time(dinner_start_hour, dinner_start_minute)
-                    dinner_end_minute = dinner_start_minute + 45
-                    dinner_end_hour = dinner_start_hour + (dinner_end_minute // 60)
-                    dinner_end_minute = dinner_end_minute % 60
-                    dinner_end = time(dinner_end_hour, dinner_end_minute)
+                    # Use deterministic dinner break start time (middle of 17:50-18:30 range)
+                    dinner_start = time(18, 10)  # 18:10
+                    dinner_end = time(18, 55)  # 18:55 (45 minutes later)
                     self.dinner_break = f"{dinner_start.strftime('%H:%M')}-{dinner_end.strftime('%H:%M')}"
                 total_break_minutes += 45
 

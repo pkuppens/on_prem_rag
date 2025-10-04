@@ -23,9 +23,24 @@ YYYY-MM-DD HH:mm:ss
 ```
 
 Examples:
+
 - `2025-05-03 14:30:45`
 - `2025-12-31 23:59:59`
 - `2025-01-01 00:00:00`
+
+## String Representation
+
+The default string representation uses ISO format without timezone for better compatibility:
+
+```
+YYYY-MM-DDTHH:mm:ss
+```
+
+Examples:
+
+- `2025-05-03T14:30:45`
+- `2025-12-31T23:59:59`
+- `2025-01-01T00:00:00`
 
 ### Why This Format?
 
@@ -39,14 +54,14 @@ Examples:
 
 The system can parse these existing formats found in the codebase:
 
-| Format | Example | Description |
-|--------|---------|-------------|
-| `%m/%d/%Y %I:%M:%S %p` | `5/9/2025 8:08:14 PM` | System events format |
-| `%Y/%m/%d %H:%M:%S` | `2025/06/24 07:30:54` | Alternative date format |
-| `%Y-%m-%d %H:%M:%S` | `2025-06-24 07:30:54` | Standard format |
-| `%Y-%m-%dT%H:%M:%S` | `2025-06-24T07:30:54` | ISO format without timezone |
-| `%Y-%m-%dT%H:%M:%S%z` | `2025-06-24T07:30:54+02:00` | ISO format with timezone |
-| `%Y-%m-%dT%H:%M:%S.%f` | `2025-06-24T07:30:54.123456` | ISO format with microseconds |
+| Format                   | Example                            | Description                               |
+| ------------------------ | ---------------------------------- | ----------------------------------------- |
+| `%m/%d/%Y %I:%M:%S %p`   | `5/9/2025 8:08:14 PM`              | System events format                      |
+| `%Y/%m/%d %H:%M:%S`      | `2025/06/24 07:30:54`              | Alternative date format                   |
+| `%Y-%m-%d %H:%M:%S`      | `2025-06-24 07:30:54`              | Standard format                           |
+| `%Y-%m-%dT%H:%M:%S`      | `2025-06-24T07:30:54`              | ISO format without timezone               |
+| `%Y-%m-%dT%H:%M:%S%z`    | `2025-06-24T07:30:54+02:00`        | ISO format with timezone                  |
+| `%Y-%m-%dT%H:%M:%S.%f`   | `2025-06-24T07:30:54.123456`       | ISO format with microseconds              |
 | `%Y-%m-%dT%H:%M:%S.%f%z` | `2025-06-24T07:30:54.123456+02:00` | ISO format with microseconds and timezone |
 
 ## Core Classes and Functions
@@ -69,6 +84,10 @@ dt = UnifiedDateTime()
 
 # Get standard format string
 standard_str = dt.to_standard_format()  # "2025-05-03 14:30:45"
+
+# Get ISO format string (default string representation)
+iso_str = dt.to_iso_format()  # "2025-05-03T14:30:45"
+str(dt)  # "2025-05-03T14:30:45" (same as to_iso_format)
 
 # Get datetime object
 dt_obj = dt.to_datetime()
@@ -161,20 +180,20 @@ from src.backend.datetime_utils import UnifiedDateTime
 
 def process_csv_with_datetime(csv_file):
     results = []
-    
+
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             # Parse datetime from any format
             dt = UnifiedDateTime(row['timestamp'])
-            
+
             if dt.is_valid():
                 # Convert to standard format for consistency
                 row['standard_timestamp'] = dt.to_standard_format()
                 results.append(row)
             else:
                 print(f"Invalid datetime: {row['timestamp']}")
-    
+
     return results
 ```
 

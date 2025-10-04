@@ -169,8 +169,8 @@ class TestUnifiedDateTime:
         Validation: Check that string representations are correct.
         """
         dt = UnifiedDateTime("2025-05-03 14:30:45")
-        assert str(dt) == "2025-05-03 14:30:45"
-        assert repr(dt) == "UnifiedDateTime('2025-05-03 14:30:45')"
+        assert str(dt) == "2025-05-03T14:30:45"  # ISO format
+        assert repr(dt) == "UnifiedDateTime('2025-05-03T14:30:45')"  # ISO format
 
         # Test invalid datetime
         invalid_dt = UnifiedDateTime("invalid")
@@ -189,6 +189,19 @@ class TestUnifiedDateTime:
         assert dt1.is_valid()
         assert dt2.is_valid()
         assert dt1 == dt2
+
+    def test_iso_format_method(self):
+        """As a user I want to get ISO format datetime strings, so I can use standard datetime formats.
+        Technical: Implement to_iso_format method correctly.
+        Validation: Check that ISO format is returned correctly.
+        """
+        dt = UnifiedDateTime("2025-05-03 14:30:45")
+        assert dt.is_valid()
+        assert dt.to_iso_format() == "2025-05-03T14:30:45"
+
+        # Test invalid datetime
+        invalid_dt = UnifiedDateTime("invalid")
+        assert invalid_dt.to_iso_format() == ""
 
 
 class TestBackwardCompatibilityFunctions:

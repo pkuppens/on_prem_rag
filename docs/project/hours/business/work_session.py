@@ -13,6 +13,18 @@ from dataclasses import dataclass
 from typing import List, Optional, Dict, Any
 from datetime import datetime, time, timedelta
 import random
+import sys
+from pathlib import Path
+
+# Add project root to path for imports
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+try:
+    from src.backend.datetime_utils import parse_datetime_flexible
+except ImportError:
+    # Fallback for when imported from different contexts
+    from backend.datetime_utils import parse_datetime_flexible
 
 
 @dataclass
@@ -175,7 +187,7 @@ class WorkSession:
             pass
 
     def _parse_datetime(self, dt_str: str) -> Optional[datetime]:
-        """Parse datetime string with multiple format support.
+        """Parse datetime string using unified datetime system.
 
         Args:
             dt_str: DateTime string in various formats
@@ -183,36 +195,7 @@ class WorkSession:
         Returns:
             datetime object or None if parsing fails
         """
-        if not dt_str or dt_str.strip() == "":
-            return None
-
-        # Clean the datetime string
-        clean_datetime = dt_str.strip()
-        if clean_datetime.startswith('"'):
-            clean_datetime = clean_datetime[1:]
-        if clean_datetime.endswith('"'):
-            clean_datetime = clean_datetime[:-1]
-        # Remove BOM if present
-        if clean_datetime.startswith("\ufeff"):
-            clean_datetime = clean_datetime[1:]
-
-        if not clean_datetime:
-            return None
-
-        formats = [
-            "%m/%d/%Y %I:%M:%S %p",  # 5/9/2025 8:08:14 PM
-            "%Y/%m/%d %H:%M:%S",  # 2025/06/24 07:30:54
-            "%Y-%m-%d %H:%M:%S",  # 2025-06-24 07:30:54
-            "%Y-%m-%dT%H:%M:%S",  # 2025-06-24T07:30:54
-        ]
-
-        for fmt in formats:
-            try:
-                return datetime.strptime(clean_datetime, fmt)
-            except ValueError:
-                continue
-
-        return None
+        return parse_datetime_flexible(dt_str)
 
     def add_work_item(self, work_item_id: str, work_item_type: str = "commit") -> None:
         """Add a work item to this session.

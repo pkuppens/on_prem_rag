@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 # Standard format used across the project
 STANDARD_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+# ISO format without timezone for string representation
+ISO_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
+
 # Supported input formats found in the codebase
 SUPPORTED_FORMATS = [
     "%m/%d/%Y %I:%M:%S %p",  # 5/9/2025 8:08:14 PM
@@ -124,6 +127,16 @@ class UnifiedDateTime:
             return ""
         return self._datetime.strftime(STANDARD_DATETIME_FORMAT)
 
+    def to_iso_format(self) -> str:
+        """Return datetime in ISO format without timezone (YYYY-MM-DDTHH:mm:ss).
+
+        Returns:
+            ISO datetime string or empty string if invalid
+        """
+        if not self.is_valid():
+            return ""
+        return self._datetime.strftime(ISO_DATETIME_FORMAT)
+
     def to_datetime(self) -> Optional[datetime]:
         """Return Python datetime object.
 
@@ -155,13 +168,13 @@ class UnifiedDateTime:
         return self._is_valid and self._datetime is not None
 
     def __str__(self) -> str:
-        """String representation in standard format."""
-        return self.to_standard_format()
+        """String representation in ISO format without timezone."""
+        return self.to_iso_format()
 
     def __repr__(self) -> str:
         """Detailed string representation."""
         if self.is_valid():
-            return f"UnifiedDateTime('{self.to_standard_format()}')"
+            return f"UnifiedDateTime('{self.to_iso_format()}')"
         else:
             return "UnifiedDateTime(invalid)"
 

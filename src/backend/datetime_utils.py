@@ -236,6 +236,10 @@ class UnifiedDateTime:
         """
         if not self.is_valid():
             return None
+
+        # Convert to timezone-naive datetime (local time)
+        if self._datetime.tzinfo is not None:
+            return self._datetime.replace(tzinfo=None)
         return self._datetime
 
     @classmethod

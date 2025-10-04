@@ -27,6 +27,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "docs" / "project" / "hours"))
 
 from business import WorkSession, SystemEvent
+from .datetime_utils import parse_datetime_flexible
 
 logger = logging.getLogger(__name__)
 
@@ -34,46 +35,7 @@ logger = logging.getLogger(__name__)
 # SystemEvent and WorkSession classes are now imported from business layer
 
 
-def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
-    """Parse datetime string with multiple format support.
-
-    Args:
-        dt_str: DateTime string in various formats
-
-    Returns:
-        datetime object or None if parsing fails
-    """
-    if not dt_str or dt_str.strip() == "":
-        return None
-
-    # Clean the datetime string
-    clean_datetime = dt_str.strip()
-    if clean_datetime.startswith('"'):
-        clean_datetime = clean_datetime[1:]
-    if clean_datetime.endswith('"'):
-        clean_datetime = clean_datetime[:-1]
-    # Remove BOM if present
-    if clean_datetime.startswith("\ufeff"):
-        clean_datetime = clean_datetime[1:]
-
-    if not clean_datetime:
-        return None
-
-    formats = [
-        "%m/%d/%Y %I:%M:%S %p",  # 5/9/2025 8:08:14 PM
-        "%Y/%m/%d %H:%M:%S",  # 2025/06/24 07:30:54
-        "%Y-%m-%d %H:%M:%S",  # 2025-06-24 07:30:54
-        "%Y-%m-%dT%H:%M:%S",  # 2025-06-24T07:30:54
-    ]
-
-    for fmt in formats:
-        try:
-            return datetime.strptime(clean_datetime, fmt)
-        except ValueError:
-            continue
-
-    logger.warning(f"Could not parse datetime: {dt_str}")
-    return None
+# parse_datetime_flexible function is now imported from datetime_utils module
 
 
 def calculate_break_duration(logoff_time: datetime, logon_time: datetime) -> int:

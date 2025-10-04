@@ -212,6 +212,7 @@ dev = [
     "bandit>=1.8.6",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.6",
+    "plotly>=6.3.1",
     "pre-commit>=4.2.0",
     "pytest-asyncio>=0.23.8",
     "pytest-cov>=6.1.1",

@@ -18,6 +18,9 @@ env:
 
 jobs:
   # Setup job that other jobs depend on
+  # Python 3.12 is pinned to avoid pypika build failures with Python 3.14
+  # See tests/ci/test_github_actions_setup.py for validation tests
+  # See docs/technical/CI_SETUP.md for detailed documentation
   setup:
     runs-on: ubuntu-latest
     strategy:

@@ -272,6 +272,7 @@ uv run python scripts/setup_git_hooks.py
 ```
 
 The pre-push hook will:
+
 - Run unit tests automatically before every push
 - Block pushes if tests fail
 - Only run fast unit tests (excludes slow and internet-dependent tests)

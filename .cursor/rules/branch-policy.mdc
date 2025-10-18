@@ -19,6 +19,7 @@ This rule defines when branches are required versus when direct commits to main 
 - **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
 
 **Examples of Branch-Required Changes**:
+
 - New API endpoints or routes
 - Database schema changes
 - New business logic implementation
@@ -39,7 +40,8 @@ This rule defines when branches are required versus when direct commits to main 
 - **Scripts**: Utility scripts for data processing, analysis, reporting
 
 **Examples of Direct-to-Main Changes**:
-- Updating task completion status in TASK-*.md files
+
+- Updating task completion status in TASK-\*.md files
 - Adding new project documentation
 - Updating coding standards or rules
 - CI pipeline improvements
@@ -52,6 +54,7 @@ This rule defines when branches are required versus when direct commits to main 
 ### AI Agent Behavior
 
 AI agents must:
+
 1. **Check change type** before suggesting commits
 2. **Create branches** for any feature/task implementation
 3. **Commit directly to main** only for documentation/config changes
@@ -60,6 +63,7 @@ AI agents must:
 ### Pre-commit Hooks
 
 The existing pre-push hooks enforce:
+
 - All pytest tests must pass
 - Code quality standards (ruff linting)
 - No direct enforcement of branch policy (relies on AI agent compliance)
@@ -67,6 +71,7 @@ The existing pre-push hooks enforce:
 ### Code Review
 
 During code reviews:
+
 - Verify branch usage for feature implementations
 - Confirm direct-to-main commits are documentation/config only
 - Check branch naming follows conventions

@@ -82,8 +82,10 @@ uv run pytest -m "not internet and not slow" -v
 git status
 ```
 
-**Expected**: "nothing to commit, working tree clean" (except `.cursor/commands/`)
+**Expected**: "nothing to commit, working tree clean"
 **If fails**: List uncommitted files and prompt to commit or stash
+
+**CRITICAL**: A PR should represent complete development work. All changes must be committed before creating the PR.
 
 #### 1.5 Branch and Task Validation
 
@@ -351,7 +353,80 @@ PR_NUMBER=$(gh pr list --head "$CURRENT_BRANCH" --json number --jq '.[0].number'
 PR_URL=$(gh pr view "$PR_NUMBER" --json url --jq '.url')
 ```
 
-#### 6.2 Update Local Documentation
+#### 6.2 GitHub Actions Validation
+
+**CRITICAL**: Verify GitHub Actions will pass before considering PR complete.
+
+**Option A: Local Simulation (Recommended)**
+
+```bash
+# Simulate GitHub Actions locally
+echo "🔍 Simulating GitHub Actions locally..."
+
+# 1. Test dependency installation
+echo "📦 Testing dependency installation..."
+uv sync --dev
+
+# 2. Test linting (matches GitHub Actions)
+echo "🔍 Testing linting..."
+uv run ruff check .
+uv run ruff format --check .
+
+# 3. Test unit tests (matches GitHub Actions)
+echo "🧪 Testing unit tests..."
+uv run pytest -m "not internet and not slow" -v
+
+echo "✅ Local simulation complete - GitHub Actions should pass"
+```
+
+**Option B: Poll GitHub Actions (Alternative)**
+
+```bash
+# Wait for GitHub Actions to start (30 seconds)
+echo "⏳ Waiting for GitHub Actions to start..."
+sleep 30
+
+# Poll GitHub Actions status
+echo "🔍 Checking GitHub Actions status..."
+gh run list --branch "$CURRENT_BRANCH" --limit 1
+
+# Get run ID and check status
+RUN_ID=$(gh run list --branch "$CURRENT_BRANCH" --limit 1 --json databaseId --jq '.[0].databaseId')
+if [ -n "$RUN_ID" ]; then
+    echo "📊 GitHub Actions Run ID: $RUN_ID"
+    echo "🔗 View at: https://github.com/$(gh repo view --json owner,name --jq '.owner.login + "/" + .name')/actions/runs/$RUN_ID"
+    
+    # Wait and check status (optional - can be done manually)
+    echo "⏳ Waiting 2 minutes for initial results..."
+    sleep 120
+    gh run view "$RUN_ID"
+fi
+```
+
+#### 6.3 Final Cleanup Validation
+
+**CRITICAL**: Ensure no uncommitted files remain after PR creation.
+
+```bash
+# Final git status check
+echo "🔍 Final cleanup validation..."
+git status
+
+# Should show: "nothing to commit, working tree clean"
+if [ -n "$(git status --porcelain)" ]; then
+    echo "❌ ERROR: Uncommitted files detected after PR creation!"
+    echo "Files:"
+    git status --porcelain
+    echo ""
+    echo "All development work must be committed before creating PR."
+    echo "Please commit these files and update the PR."
+    exit 1
+else
+    echo "✅ Cleanup validation passed - no uncommitted files"
+fi
+```
+
+#### 6.4 Update Local Documentation
 
 - Update task file status if needed
 - Commit any documentation updates
@@ -398,6 +473,27 @@ gh auth login
 - Provide specific linting error messages
 - Suggest manual fixes for complex issues
 
+#### GitHub Actions Python Version Issues
+
+**Issue**: GitHub Actions using Python 3.14 (prerelease) causing dependency build failures.
+
+**Solution**: Ensure GitHub Actions workflow specifies stable Python version:
+
+```yaml
+- name: Set up Python ${{ matrix.python-version }}
+  uses: actions/setup-python@v4
+  with:
+    python-version: ${{ matrix.python-version }}
+    allow-prereleases: false  # CRITICAL: Prevent prerelease versions
+```
+
+**Common Dependency Issues**:
+- `pypika` build failures with Python 3.14
+- `AttributeError: module 'ast' has no attribute 'Str'` errors
+- Package compatibility issues with prerelease Python versions
+
+**Prevention**: Always test with stable Python versions (3.11, 3.12, 3.13) and avoid prerelease versions in CI/CD.
+
 ## Usage Examples
 
 ### Example 1: Standard Task PR
@@ -436,6 +532,10 @@ A successful PR creation should result in:
 - ✅ Proper linking to task/story documentation
 - ✅ GitHub Actions will pass on first run
 - ✅ PR is ready for review without additional work
+- ✅ **Clean repository state**: No uncommitted files after PR creation
+- ✅ **GitHub Actions compatibility**: Python version issues resolved
+- ✅ **Local validation**: All GitHub Actions steps tested locally
+- ✅ **Complete development**: All work committed and included in PR
 
 ## Notes
 

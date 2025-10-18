@@ -8,15 +8,18 @@ alwaysApply: true
 
 This rule ensures consistent date formatting across all code, documentation, and AI-generated content.
 
-## CRITICAL: Always Use Current Date
+## CRITICAL: Always Use Accurate Dates
 
-**NEVER hardcode dates in code or documentation.** All dates must be 100% accurate and current. Always determine the current date dynamically from:
+**NEVER guess or randomly generate dates.** All dates must be 100% accurate and reflect the actual system date. Always determine the current date dynamically from:
 
 1. **System clock** (preferred for most cases)
 2. **MCP services** (when available and appropriate)
 3. **Environment variables** (for testing or specific scenarios)
 
-**Key Principle**: Dates in code files must always reflect the actual current date, never outdated hardcoded values.
+**Key Principles**: 
+- **Created dates**: Should reflect the actual system date when the file was created (for audit history)
+- **Updated dates**: Should reflect the actual current system date when the file was last modified
+- **Never guess dates**: Always use the actual system date, never random or outdated values
 
 ## Required Date Format
 
@@ -78,7 +81,8 @@ Date: 2025-01-19  # Must be current date, not hardcoded
 Work Sessions Merger for WBSO Hours Registration
 
 Author: AI Assistant
-Date: 2025-01-19  # Always current date
+Created: 2025-01-19  # Actual system date when file was created
+Updated: 2025-01-19  # Current system date when last modified
 """
 ```
 
@@ -109,32 +113,56 @@ def process_data_with_date():
 ```python
 # In configuration or metadata
 config = {
-    "generated_date": datetime.now().strftime("%Y-%m-%d"),
+    "created_date": datetime.now().strftime("%Y-%m-%d"),  # When config was created
+    "updated_date": datetime.now().strftime("%Y-%m-%d"),  # When config was last updated
     "version": "1.0.0"
 }
+```
+
+### 5. Project Documentation (TASK-*.md, STORY-*.md)
+
+```markdown
+# TASK-034: Synthetic Work Session Generation
+
+Created: 2025-01-19  # Actual system date when task was created
+Updated: 2025-01-19  # Current system date when task was last modified
+
+## Acceptance Criteria
+- [ ] Implementation complete
+- [ ] Tests written
 ```
 
 ## AI Assistant Behavior
 
 When AI assistants generate code or documentation:
 
-1. **Always use current date** - never hardcode dates
+1. **Use current date for Create: or Update: fields** - never guess dates
 2. **Use system clock** to determine current date
 3. **Format as YYYY-MM-DD** consistently
 4. **Update existing hardcoded dates** when modifying files
-5. **Include date generation logic** in code when appropriate
-6. **Ensure 100% accuracy** - dates must always reflect the actual current date
+5. **Do not update existing Create: dates** when modifying files
+6. **Include date generation logic** in code when appropriate
 
 ## Error Prevention
 
 ### Common Mistakes to Avoid
 
-1. **Hardcoded dates**: `Date: 2025-01-15` ❌
+1. **Guessing dates**: `Created: 2025-01-15` when it's actually 2025-10-19 ❌
 2. **Wrong format**: `Date: 1/15/2025` ❌
 3. **Missing leading zeros**: `Date: 2025-1-5` ❌
 4. **Inconsistent separators**: `Date: 2025.01.15` ❌
+5. **Updating existing Created dates**: `Created: 2025-10-19` when there was a previous value of 2025-06-01 ❌
+6. **Not using actual system date for new files**: `Created: 2025-01-15` for a new file when system date is 2025-10-19 ❌
+7. **Outdated Updated dates**: `Updated: 2025-01-15` when file was actually modified on 2025-10-19 ❌
 
 ### Validation
+
+Before writing code and documentation:
+
+- Determine the actual system clock date
+- Convert to YYYY-MM-DD format and maintain in memory
+- Use for Updated: fields and new Created: fields
+- Preserve existing Created: dates for audit history
 
 Before committing code:
 
@@ -158,16 +186,18 @@ This rule works with:
 # Dynamic date generation
 current_date = datetime.now().strftime("%Y-%m-%d")
 
-# File header with current date
+# File header with accurate dates
 """
 Script: data_processor.py
 Author: AI Assistant
-Date: 2025-01-19
+Created: 2025-01-19  # Actual system date when created
+Updated: 2025-10-19  # Current system date when last modified
 """
 
-# Configuration with current date
+# Configuration with accurate dates
 config = {
-    "created": datetime.now().strftime("%Y-%m-%d"),
+    "created": datetime.now().strftime("%Y-%m-%d"),  # When config was created
+    "updated": datetime.now().strftime("%Y-%m-%d"),  # When config was last updated
     "version": "1.0.0"
 }
 ```
@@ -175,11 +205,11 @@ config = {
 ### Bad Examples
 
 ```python
-# Hardcoded date (WRONG)
+# Guessed date (WRONG)
 """
 Script: data_processor.py
 Author: AI Assistant
-Date: 2025-01-15  # This will become outdated
+Created: 2025-01-15  # Random guess instead of actual system date
 """
 
 # Wrong format (WRONG)
@@ -187,6 +217,10 @@ current_date = "1/15/2025"  # Should be "2025-01-15"
 
 # Missing leading zero (WRONG)
 current_date = "2025-1-5"  # Should be "2025-01-05"
+
+# Updating existing Created date (WRONG)
+# Original: Created: 2025-06-01
+# Modified: Created: 2025-10-19  # Should preserve original Created date
 ```
 
 ## Enforcement
@@ -198,4 +232,4 @@ This rule is enforced by:
 - Pre-commit hooks (when applicable)
 - Documentation standards
 
-Remember: **Current date, current date, current date!** Never hardcode dates in any form of content generation. All dates must be 100% accurate and reflect the actual current date.
+Remember: **Accurate dates, accurate dates, accurate dates!** Never guess or randomly generate dates. All dates must be 100% accurate and reflect the actual system date. Preserve Created dates for audit history, update Updated dates with current system date.

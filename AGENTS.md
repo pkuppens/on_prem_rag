@@ -345,15 +345,16 @@ See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)
 
 ## Date Formatting Standards
 
-**CRITICAL**: Always use current date in YYYY-MM-DD format. Never hardcode dates in code or documentation. All dates must be 100% accurate and reflect the actual current date.
+**CRITICAL**: Always use accurate dates in YYYY-MM-DD format. Never guess or randomly generate dates. All dates must be 100% accurate and reflect the actual system date.
 
 ### Key Requirements
 
-1. **Always use current date** - determine from system clock or MCP services
+1. **Use actual system date** - determine from system clock or MCP services
 2. **Format as YYYY-MM-DD** - ISO 8601 standard format
-3. **Never hardcode dates** - they become outdated immediately
-4. **Update existing hardcoded dates** when modifying files
-5. **Ensure 100% accuracy** - dates must always reflect the actual current date
+3. **Never guess dates** - always use actual system date
+4. **Preserve Created dates** - maintain audit history in TASK-*.md files
+5. **Update Updated dates** - reflect current system date when modifying files
+6. **Ensure 100% accuracy** - dates must always reflect the actual system date
 
 ### Implementation
 
@@ -368,15 +369,18 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 Module description here.
 
 Author: AI Assistant
-Date: 2025-01-19  # Always current date
+Created: 2025-01-19  # Actual system date when created
+Updated: 2025-01-19  # Current system date when last modified
 """
 ```
 
 ### Common Mistakes to Avoid
 
-- ❌ `Date: 2025-01-15` (hardcoded, becomes outdated)
+- ❌ `Created: 2025-01-15` (guessed date instead of actual system date)
+- ❌ `Updated: 2025-01-15` (outdated when file was actually modified on 2025-10-19)
 - ❌ `Date: 1/15/2025` (wrong format)
 - ❌ `Date: 2025-1-5` (missing leading zeros)
+- ❌ Updating existing Created dates (should preserve audit history)
 
 See [.cursor/rules/date-formatting.mdc](.cursor/rules/date-formatting.mdc) for comprehensive date formatting guidelines.
 

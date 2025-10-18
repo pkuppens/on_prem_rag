@@ -352,7 +352,7 @@ See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)
 1. **Use actual system date** - determine from system clock or MCP services
 2. **Format as YYYY-MM-DD** - ISO 8601 standard format
 3. **Never guess dates** - always use actual system date
-4. **Preserve Created dates** - maintain audit history in TASK-*.md files
+4. **Preserve Created dates** - maintain audit history in TASK-\*.md files
 5. **Update Updated dates** - reflect current system date when modifying files
 6. **Ensure 100% accuracy** - dates must always reflect the actual system date
 

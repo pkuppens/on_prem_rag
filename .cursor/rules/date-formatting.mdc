@@ -16,7 +16,8 @@ This rule ensures consistent date formatting across all code, documentation, and
 2. **MCP services** (when available and appropriate)
 3. **Environment variables** (for testing or specific scenarios)
 
-**Key Principles**: 
+**Key Principles**:
+
 - **Created dates**: Should reflect the actual system date when the file was created (for audit history)
 - **Updated dates**: Should reflect the actual current system date when the file was last modified
 - **Never guess dates**: Always use the actual system date, never random or outdated values
@@ -119,15 +120,16 @@ config = {
 }
 ```
 
-### 5. Project Documentation (TASK-*.md, STORY-*.md)
+### 5. Project Documentation (TASK-_.md, STORY-_.md)
 
 ```markdown
 # TASK-034: Synthetic Work Session Generation
 
-Created: 2025-01-19  # Actual system date when task was created
-Updated: 2025-01-19  # Current system date when task was last modified
+Created: 2025-01-19 # Actual system date when task was created
+Updated: 2025-01-19 # Current system date when task was last modified
 
 ## Acceptance Criteria
+
 - [ ] Implementation complete
 - [ ] Tests written
 ```

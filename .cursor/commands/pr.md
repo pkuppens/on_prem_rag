@@ -33,6 +33,7 @@ Before running this command, ensure:
 - Use glob search as fallback: `**/TASK-030*.md`
 
 **Example**:
+
 ```bash
 # Branch: feature/TASK-030-pandas-integration
 # Task file: project/team/tasks/TASK-030.md (NOT TASK-030-pandas-integration.md)

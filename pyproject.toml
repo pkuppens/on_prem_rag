@@ -51,8 +51,9 @@ dependencies = [
     "google-api-python-client>=2.179.0",
     "nbformat>=5.10.4",
     "nbconvert>=7.16.6",
+    "pandas>=2.2.3",
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 
 # Configure the package to include src directory and make it importable
 [tool.setuptools.packages.find]
@@ -179,7 +180,8 @@ addopts = "-v"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')",
-    "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')"
+    "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')",
+    "ci_setup: marks tests that validate CI/CD setup and configuration (deselect with '-m \"not ci_setup\"')"
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
@@ -209,11 +211,15 @@ show_missing = true # Show line numbers of missing coverage
 [dependency-groups]
 dev = [
     "bandit>=1.8.6",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.6",
+    "plotly>=6.3.1",
     "pre-commit>=4.2.0",
     "pytest-asyncio>=0.23.8",
     "pytest-cov>=6.1.1",
     "pytest-xdist>=3.8.0",
     "safety>=3.2.11",
+    "seaborn>=0.13.2",
 ]
 
 

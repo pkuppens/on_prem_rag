@@ -16,13 +16,35 @@ Interactive visualization is essential for understanding work patterns and valid
 
 ## Acceptance Criteria
 
-- [ ] **Jupyter Environment Setup**: Configure Jupyter notebook environment with required dependencies
-- [ ] **Time Range Visualization**: Create interactive plots with zoom capabilities (hours, days, weeks, months)
-- [ ] **Work Session Visualization**: Visualize work sessions with system events and commit overlays
-- [ ] **Commit Pattern Analysis**: Interactive analysis of commit patterns and frequencies
-- [ ] **Time Series Plots**: Create time series plots for work activity analysis
-- [ ] **Export Capabilities**: Export visualizations and analysis results
-- [ ] **Documentation**: Comprehensive notebook documentation with usage examples
+- [x] **Jupyter Environment Setup**: Configure Jupyter notebook environment with required dependencies
+- [x] **Computer Activity Timeline**: Create daily timeline plot showing computer on/off periods using system events data
+- [x] **Commit Overlay Visualization**: Overlay commit markers on computer activity timeline with repo-specific styling
+- [x] **Interactive Time Range Selection**: Enable zoom capabilities (hours, days, weeks, months)
+- [x] **Dynamic Legend Management**: Show only active repositories in selected time range
+- [x] **Export Capabilities**: Export visualizations and analysis results
+- [x] **Documentation**: Comprehensive notebook documentation with usage examples
+
+## Concrete Deliverables
+
+### 1. Computer Activity Timeline Plot
+
+- **Data Source**: `all_system_events_processed.json` (work sessions)
+- **Visualization**: Semi-transparent bars showing computer on/off periods per day
+- **Time Granularity**: Daily view with hourly breakdown capability
+- **Styling**: Open or semi-transparent bars to allow overlay visibility
+
+### 2. Commit Overlay Markers
+
+- **Data Source**: `commits_processed.json` (processed/corrected timestamps)
+- **Visualization**: Markers overlaid on computer activity timeline
+- **Styling**: Different markers/colors based on `repo_name`
+- **Positioning**: Precise timestamp positioning on timeline
+
+### 3. Dynamic Repository Legend
+
+- **Functionality**: Show only repositories with commits in selected time range
+- **Enhancement**: Limit legend to active repos to reduce clutter
+- **Interaction**: Update automatically when time range changes
 
 ## Technical Requirements
 
@@ -160,13 +182,13 @@ def plot_with_zoom(data, start_time, end_time, period='day'):
 
 ## Definition of Done
 
-- [ ] Jupyter environment configured with all dependencies
-- [ ] Core visualization framework implemented
-- [ ] All planned notebooks created and functional
-- [ ] Interactive features working (zoom, time range selection)
-- [ ] Export capabilities implemented
-- [ ] Comprehensive documentation and examples
-- [ ] Code reviewed and committed
+- [x] Jupyter environment configured with all dependencies
+- [x] Core visualization framework implemented
+- [x] All planned notebooks created and functional
+- [x] Interactive features working (zoom, time range selection)
+- [x] Export capabilities implemented
+- [x] Comprehensive documentation and examples
+- [x] Code reviewed and committed
 
 ## Estimated Effort
 

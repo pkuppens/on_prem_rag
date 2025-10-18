@@ -19,15 +19,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Union
 
-# Import from the proper module structure
-import sys
-from pathlib import Path
-
-# Add src directory to path for imports
-src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
-
-from wbso.logging_config import get_logger
+from .logging_config import get_logger
 
 logger = get_logger("calendar_event")
 
@@ -78,6 +70,7 @@ class WBSOSession:
     is_synthetic: bool
     commit_count: int
     source_type: str
+    repository_name: str = ""
     wbso_justification: str = ""
     assigned_commits: List[str] = field(default_factory=list)
     confidence_score: float = 1.0
@@ -146,12 +139,13 @@ class WBSOSession:
             result.add_error(f"Invalid source_type: {self.source_type}")
 
         # Commit count validation
-        if self.commit_count < 0:
-            result.add_error("commit_count cannot be negative")
-        if len(self.assigned_commits) != self.commit_count:
-            result.add_warning(
-                f"commit_count ({self.commit_count}) doesn't match assigned_commits length ({len(self.assigned_commits)})"
-            )
+        if self.commit_count is not None:
+            if self.commit_count < 0:
+                result.add_error("commit_count cannot be negative")
+            if len(self.assigned_commits) != self.commit_count:
+                result.add_warning(
+                    f"commit_count ({self.commit_count}) doesn't match assigned_commits length ({len(self.assigned_commits)})"
+                )
 
         return result
 
@@ -170,6 +164,7 @@ class WBSOSession:
             "is_synthetic": self.is_synthetic,
             "commit_count": self.commit_count,
             "source_type": self.source_type,
+            "repository_name": self.repository_name,
             "wbso_justification": self.wbso_justification,
             "assigned_commits": self.assigned_commits,
             "confidence_score": self.confidence_score,
@@ -206,6 +201,7 @@ class WBSOSession:
             is_synthetic=data.get("is_synthetic", False),
             commit_count=data.get("commit_count", 0),
             source_type=data.get("source_type", ""),
+            repository_name=data.get("repository_name", ""),
             wbso_justification=data.get("wbso_justification", ""),
             assigned_commits=data.get("assigned_commits", []),
             confidence_score=data.get("confidence_score", 1.0),

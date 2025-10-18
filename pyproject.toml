@@ -75,6 +75,13 @@ start-auth = "backend.auth_service.main:start_server"
 start-test-app = "test_app:start_server"
 # Upload local files via CLI
 upload-documents = "scripts.upload_documents:main"
+# WBSO validation, upload, and reporting scripts
+wbso-validate = "wbso.validation:main"
+wbso-upload = "wbso.upload:main"
+wbso-report = "wbso.reporting:main"
+# WBSO database migration and reporting scripts
+wbso-migrate = "wbso.migration:main"
+wbso-db-report = "wbso.database_reporting:main"
 # start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]

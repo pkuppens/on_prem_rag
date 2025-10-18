@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
-WBSO Calendar Data Validation and Cleaning Script
+WBSO Calendar Data Validation and Cleaning Module
 
-This script validates WBSO calendar data for duplicates, overlaps, data quality,
-and generates comprehensive audit trails. It ensures data integrity before
-upload to Google Calendar.
+This module provides comprehensive validation for WBSO calendar data including
+duplicates, overlaps, data quality, and generates comprehensive audit trails.
 
 TASK-039: WBSO Calendar Data Validation, Upload, and Reporting System
 Story: STORY-008 (WBSO Hours Registration System)
@@ -15,22 +14,13 @@ Date: 2025-10-18
 """
 
 import json
-import logging
 import csv
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
-# Import from the proper module structure
-import sys
-from pathlib import Path
-
-# Add src directory to path for imports
-src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
-
-from wbso.calendar_event import WBSODataset, WBSOSession, ValidationResult
-from wbso.logging_config import get_logger
+from .calendar_event import WBSODataset, WBSOSession, ValidationResult
+from .logging_config import get_logger
 
 logger = get_logger("validation")
 
@@ -343,8 +333,8 @@ class WBSODataValidator:
 
         # Calculate summary statistics
         total_errors = (
-            len(validation_results["duplicates"]["session_id_duplicates"])
-            + len(validation_results["duplicates"]["datetime_duplicates"])
+            validation_results["duplicates"]["session_id_duplicates"]
+            + validation_results["duplicates"]["datetime_duplicates"]
             + len([i for i in validation_results["time_ranges"] if i["severity"] == "error"])
             + len([i for i in validation_results["overlaps"] if i["severity"] == "critical"])
             + len([i for i in validation_results["wbso_completeness"] if i["severity"] == "error"])
@@ -455,9 +445,9 @@ class WBSODataValidator:
 def main():
     """Main validation function."""
     # Set up paths
-    script_dir = Path(__file__).parent
-    data_dir = script_dir.parent / "data"
-    output_dir = script_dir.parent / "validation_output"
+    script_dir = Path(__file__).parent.parent.parent / "docs" / "project" / "hours"
+    data_dir = script_dir / "data"
+    output_dir = script_dir / "validation_output"
 
     # Create output directory
     output_dir.mkdir(exist_ok=True)

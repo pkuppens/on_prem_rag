@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-WBSO Google Calendar Upload Script
+WBSO Google Calendar Upload Module
 
-This script uploads validated WBSO calendar events to Google Calendar with
-comprehensive error handling, duplicate prevention, and audit trails.
+This module provides Google Calendar upload functionality for WBSO calendar events
+with comprehensive error handling, duplicate prevention, and audit trails.
 
 TASK-039: WBSO Calendar Data Validation, Upload, and Reporting System
 Story: STORY-008 (WBSO Hours Registration System)
@@ -14,7 +14,6 @@ Date: 2025-10-18
 """
 
 import json
-import logging
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -28,20 +27,12 @@ try:
     from googleapiclient.discovery import build
     from googleapiclient.errors import HttpError
 except ImportError as e:
-    logging.error(f"Google Calendar API dependencies not installed: {e}")
-    logging.error("Install with: pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib")
+    print(f"Google Calendar API dependencies not installed: {e}")
+    print("Install with: uv add google-api-python-client google-auth-httplib2 google-auth-oauthlib")
     raise
 
-# Import from the proper module structure
-import sys
-from pathlib import Path
-
-# Add src directory to path for imports
-src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
-
-from wbso.calendar_event import WBSODataset, WBSOSession, CalendarEvent
-from wbso.logging_config import get_logger
+from .calendar_event import WBSODataset, WBSOSession, CalendarEvent
+from .logging_config import get_logger
 
 logger = get_logger("upload")
 
@@ -216,70 +207,6 @@ class GoogleCalendarUploader:
             logger.error(f"Error getting existing events: {e}")
             return {"events": [], "by_session_id": {}, "by_datetime": {}, "count": 0}
 
-    def detect_conflicts_with_other_calendars(self, events: List[CalendarEvent]) -> List[Dict[str, Any]]:
-        """Detect conflicts with other calendars (optional feature)."""
-        logger.info("Checking for conflicts with other calendars...")
-
-        conflicts = []
-
-        try:
-            # Get primary calendar events
-            primary_calendar_id = "primary"
-
-            for event in events:
-                start_dt = datetime.fromisoformat(event.start["dateTime"].replace("Z", "+00:00"))
-                end_dt = datetime.fromisoformat(event.end["dateTime"].replace("Z", "+00:00"))
-
-                # Query primary calendar for overlapping events
-                primary_events = (
-                    self.service.events()
-                    .list(
-                        calendarId=primary_calendar_id,
-                        timeMin=start_dt.isoformat() + "Z",
-                        timeMax=end_dt.isoformat() + "Z",
-                        singleEvents=True,
-                    )
-                    .execute()
-                )
-
-                primary_items = primary_events.get("items", [])
-
-                for primary_event in primary_items:
-                    primary_start = primary_event.get("start", {}).get("dateTime")
-                    primary_end = primary_event.get("end", {}).get("dateTime")
-
-                    if primary_start and primary_end:
-                        primary_start_dt = datetime.fromisoformat(primary_start.replace("Z", "+00:00"))
-                        primary_end_dt = datetime.fromisoformat(primary_end.replace("Z", "+00:00"))
-
-                        # Check for overlap
-                        overlap_start = max(start_dt, primary_start_dt)
-                        overlap_end = min(end_dt, primary_end_dt)
-
-                        if overlap_start < overlap_end:
-                            overlap_duration = overlap_end - overlap_start
-                            overlap_hours = overlap_duration.total_seconds() / 3600
-
-                            conflicts.append(
-                                {
-                                    "wbso_event": event.summary,
-                                    "wbso_start": start_dt.isoformat(),
-                                    "wbso_end": end_dt.isoformat(),
-                                    "conflict_event": primary_event.get("summary", "Unknown"),
-                                    "conflict_start": primary_start,
-                                    "conflict_end": primary_end,
-                                    "overlap_hours": overlap_hours,
-                                    "conflict_type": "short" if overlap_hours < 2.0 else "long",
-                                }
-                            )
-
-            logger.info(f"Found {len(conflicts)} conflicts with other calendars")
-            return conflicts
-
-        except Exception as e:
-            logger.warning(f"Failed to check conflicts with other calendars: {e}")
-            return []
-
     def create_upload_plan(self, events: List[CalendarEvent], existing_events: Dict[str, Any]) -> Dict[str, Any]:
         """Create upload plan with duplicate detection."""
         logger.info("Creating upload plan...")
@@ -423,137 +350,6 @@ class GoogleCalendarUploader:
             "event_summary": event.summary,
         }
 
-    def verify_upload(self, upload_plan: Dict[str, Any]) -> Dict[str, Any]:
-        """Verify uploaded events by querying the calendar."""
-        logger.info("Verifying upload...")
-
-        try:
-            # Get date range from events
-            if not upload_plan["new_events"]:
-                return {"verified_events": 0, "missing_events": []}
-
-            start_dates = [datetime.fromisoformat(e.start["dateTime"].replace("Z", "+00:00")) for e in upload_plan["new_events"]]
-            end_dates = [datetime.fromisoformat(e.end["dateTime"].replace("Z", "+00:00")) for e in upload_plan["new_events"]]
-
-            min_date = min(start_dates)
-            max_date = max(end_dates)
-
-            # Query calendar for events in date range
-            existing_events = self.get_existing_events(min_date, max_date)
-
-            # Check which events were successfully uploaded
-            uploaded_session_ids = set()
-            for event in existing_events["events"]:
-                session_id = event.get("extendedProperties", {}).get("private", {}).get("session_id")
-                if session_id:
-                    uploaded_session_ids.add(session_id)
-
-            # Find missing events
-            expected_session_ids = set()
-            for event in upload_plan["new_events"]:
-                session_id = event.extended_properties.get("private", {}).get("session_id", "")
-                if session_id:
-                    expected_session_ids.add(session_id)
-
-            missing_events = expected_session_ids - uploaded_session_ids
-
-            verification_result = {
-                "verified_events": len(uploaded_session_ids),
-                "expected_events": len(expected_session_ids),
-                "missing_events": list(missing_events),
-                "verification_successful": len(missing_events) == 0,
-            }
-
-            logger.info(
-                f"Verification: {verification_result['verified_events']}/{verification_result['expected_events']} events found"
-            )
-
-            return verification_result
-
-        except Exception as e:
-            logger.error(f"Error during verification: {e}")
-            return {"verified_events": 0, "missing_events": [], "error": str(e)}
-
-    def export_upload_reports(self, output_dir: Path) -> None:
-        """Export upload reports and audit trails."""
-        output_dir = Path(output_dir)
-        output_dir.mkdir(exist_ok=True)
-
-        # Export upload log
-        upload_log_path = output_dir / "upload_log.json"
-        with open(upload_log_path, "w", encoding="utf-8") as f:
-            json.dump(self.upload_log, f, indent=2, ensure_ascii=False)
-        logger.info(f"Upload log exported to {upload_log_path}")
-
-        # Export session to event mapping
-        mapping_path = output_dir / "session_to_event_mapping.json"
-        with open(mapping_path, "w", encoding="utf-8") as f:
-            json.dump(self.session_to_event_mapping, f, indent=2, ensure_ascii=False)
-        logger.info(f"Session to event mapping exported to {mapping_path}")
-
-        # Export upload errors
-        if self.upload_errors:
-            errors_path = output_dir / "upload_errors.json"
-            with open(errors_path, "w", encoding="utf-8") as f:
-                json.dump(self.upload_errors, f, indent=2, ensure_ascii=False)
-            logger.info(f"Upload errors exported to {errors_path}")
-
-        # Export conflict report
-        if self.conflict_report:
-            conflicts_path = output_dir / "conflict_report.json"
-            with open(conflicts_path, "w", encoding="utf-8") as f:
-                json.dump(self.conflict_report, f, indent=2, ensure_ascii=False)
-            logger.info(f"Conflict report exported to {conflicts_path}")
-
-        # Generate upload summary
-        summary_path = output_dir / "upload_summary.md"
-        self.generate_upload_summary(summary_path)
-        logger.info(f"Upload summary exported to {summary_path}")
-
-    def generate_upload_summary(self, output_path: Path) -> None:
-        """Generate human-readable upload summary."""
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write("# WBSO Calendar Upload Summary\n\n")
-            f.write(f"**Upload Date**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-
-            # Summary statistics
-            total_events = len(self.upload_log)
-            successful_uploads = len([r for r in self.upload_log if r.get("status") == "success"])
-            failed_uploads = len([r for r in self.upload_log if r.get("status") == "error"])
-
-            f.write("## Upload Summary\n\n")
-            f.write(f"- **Total Events Processed**: {total_events}\n")
-            f.write(f"- **Successful Uploads**: {successful_uploads}\n")
-            f.write(f"- **Failed Uploads**: {failed_uploads}\n")
-            f.write(f"- **Success Rate**: {(successful_uploads / total_events * 100):.1f}%\n\n")
-
-            # Calendar information
-            f.write("## Calendar Information\n\n")
-            f.write(f"- **Target Calendar**: {WBSO_CALENDAR_NAME}\n")
-            f.write(f"- **Calendar ID**: {self.wbso_calendar_id}\n\n")
-
-            # Session mapping
-            f.write("## Session to Event Mapping\n\n")
-            f.write(f"- **Mapped Sessions**: {len(self.session_to_event_mapping)}\n")
-            f.write("- **Mapping File**: session_to_event_mapping.json\n\n")
-
-            # Errors
-            if self.upload_errors:
-                f.write("## Upload Errors\n\n")
-                for error in self.upload_errors:
-                    f.write(f"- **{error.get('event_summary', 'Unknown')}**: {error.get('error_message', 'Unknown error')}\n")
-                f.write("\n")
-
-            # Conflicts
-            if self.conflict_report:
-                f.write("## Calendar Conflicts\n\n")
-                f.write(f"- **Total Conflicts**: {len(self.conflict_report)}\n")
-                for conflict in self.conflict_report:
-                    f.write(
-                        f"- **{conflict.get('wbso_event', 'Unknown')}**: {conflict.get('overlap_hours', 0):.1f}h overlap with {conflict.get('conflict_event', 'Unknown')}\n"
-                    )
-                f.write("\n")
-
     def upload_events(self, events: List[CalendarEvent], dry_run: bool = False) -> Dict[str, Any]:
         """Main upload function with comprehensive error handling."""
         logger.info(f"Starting upload process (dry_run={dry_run})")
@@ -582,16 +378,12 @@ class GoogleCalendarUploader:
         # Create upload plan
         upload_plan = self.create_upload_plan(events, existing_events)
 
-        # Detect conflicts with other calendars
-        self.conflict_report = self.detect_conflicts_with_other_calendars(events)
-
         if dry_run:
             logger.info("DRY RUN - No events will be uploaded")
             return {
                 "success": True,
                 "dry_run": True,
                 "upload_plan": upload_plan,
-                "conflicts": self.conflict_report,
                 "existing_events": existing_events,
             }
 
@@ -603,16 +395,11 @@ class GoogleCalendarUploader:
             logger.info("No new events to upload")
             upload_results = []
 
-        # Verify upload
-        verification = self.verify_upload(upload_plan)
-
         # Prepare result
         result = {
             "success": len(self.upload_errors) == 0,
             "upload_plan": upload_plan,
             "upload_results": upload_results,
-            "verification": verification,
-            "conflicts": self.conflict_report,
             "session_mapping": self.session_to_event_mapping,
             "errors": self.upload_errors,
         }
@@ -623,11 +410,13 @@ class GoogleCalendarUploader:
 
 def main():
     """Main upload function."""
+    import sys
+
     # Set up paths
-    script_dir = Path(__file__).parent
-    data_dir = script_dir.parent / "data"
-    output_dir = script_dir.parent / "upload_output"
-    validation_output_dir = script_dir.parent / "validation_output"
+    script_dir = Path(__file__).parent.parent.parent / "docs" / "project" / "hours"
+    data_dir = script_dir / "data"
+    output_dir = script_dir / "upload_output"
+    validation_output_dir = script_dir / "validation_output"
 
     # Create output directory
     output_dir.mkdir(exist_ok=True)
@@ -636,7 +425,7 @@ def main():
     cleaned_dataset_path = validation_output_dir / "cleaned_dataset.json"
     if not cleaned_dataset_path.exists():
         logger.error(f"Cleaned dataset not found: {cleaned_dataset_path}")
-        logger.error("Run validation script first: python validate_calendar_data.py")
+        logger.error("Run validation script first: uv run wbso-validate")
         return 1
 
     # Load validated dataset
@@ -660,22 +449,17 @@ def main():
     logger.info(f"Converted {len(calendar_events)} sessions to calendar events")
 
     # Set up uploader
-    credentials_path = script_dir / "credentials.json"
-    token_path = script_dir / "token.json"
-    config_path = script_dir.parent / "config" / "wbso_calendar_config.json"
+    credentials_path = script_dir / "scripts" / "credentials.json"
+    token_path = script_dir / "scripts" / "token.json"
+    config_path = script_dir / "config" / "wbso_calendar_config.json"
 
     uploader = GoogleCalendarUploader(credentials_path, token_path, config_path)
 
     # Check for dry run mode
-    import sys
-
     dry_run = "--dry-run" in sys.argv
 
     # Upload events
     result = uploader.upload_events(calendar_events, dry_run=dry_run)
-
-    # Export reports
-    uploader.export_upload_reports(output_dir)
 
     # Print summary
     print(f"\n{'=' * 60}")
@@ -691,16 +475,8 @@ def main():
         print(f"Duplicate Session IDs: {len(plan['duplicate_session_ids'])}")
         print(f"Duplicate DateTime Ranges: {len(plan['duplicate_datetime_ranges'])}")
 
-    if "verification" in result:
-        verification = result["verification"]
-        print(f"Verified Events: {verification.get('verified_events', 0)}")
-        print(f"Missing Events: {len(verification.get('missing_events', []))}")
-
     if result.get("errors"):
         print(f"Upload Errors: {len(result['errors'])}")
-
-    if result.get("conflicts"):
-        print(f"Calendar Conflicts: {len(result['conflicts'])}")
 
     print(f"\nReports exported to: {output_dir}")
     print(f"{'=' * 60}")

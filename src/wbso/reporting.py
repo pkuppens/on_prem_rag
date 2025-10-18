@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-WBSO Reporting and Compliance Documentation Generator
+WBSO Reporting and Compliance Documentation Module
 
-This script generates comprehensive WBSO reports, calculates hours, and creates
+This module provides comprehensive WBSO reports, calculates hours, and creates
 compliance documentation for tax deduction purposes.
 
 TASK-039: WBSO Calendar Data Validation, Upload, and Reporting System
@@ -14,22 +14,13 @@ Date: 2025-10-18
 """
 
 import json
-import logging
 import csv
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
-# Import from the proper module structure
-import sys
-from pathlib import Path
-
-# Add src directory to path for imports
-src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
-
-from wbso.calendar_event import WBSODataset, WBSOSession
-from wbso.logging_config import get_logger
+from .calendar_event import WBSODataset, WBSOSession
+from .logging_config import get_logger
 
 logger = get_logger("reporting")
 
@@ -103,8 +94,34 @@ class WBSOReporter:
         """Calculate comprehensive WBSO hours breakdown."""
         logger.info("Calculating WBSO hours...")
 
+        # Project start date filter
+        project_start_date = datetime(2025, 6, 1).date()
+
+        # Filter sessions by project start date and WBSO eligibility
+        eligible_sessions = []
+        for session in self.dataset.sessions:
+            # Parse session date
+            try:
+                session_date = datetime.strptime(session.date, "%Y-%m-%d").date()
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid date format for session {session.session_id}: {session.date}")
+                continue
+
+            # Filter by project start date
+            if session_date < project_start_date:
+                # Sessions before project start are not WBSO eligible
+                session.is_wbso = False
+                logger.debug(f"Session {session.session_id} before project start date, marked as non-WBSO")
+
+            # Sessions without commits are not WBSO eligible
+            if session.commit_count is None or session.commit_count == 0:
+                session.is_wbso = False
+                logger.debug(f"Session {session.session_id} has no commits, marked as non-WBSO")
+
+            eligible_sessions.append(session)
+
         # Filter WBSO sessions
-        wbso_sessions = [s for s in self.dataset.sessions if s.is_wbso]
+        wbso_sessions = [s for s in eligible_sessions if s.is_wbso]
         real_sessions = [s for s in wbso_sessions if s.source_type == "real"]
         synthetic_sessions = [s for s in wbso_sessions if s.source_type == "synthetic"]
 
@@ -273,9 +290,96 @@ class WBSOReporter:
             "PRIVACY_CLOUD": "Privacy-preserving cloud integration techniques including data anonymization and AVG compliance mechanisms",
             "AUDIT_LOGGING": "Development of comprehensive audit logging systems for AI agent activities with privacy compliance",
             "DATA_INTEGRITY": "Data integrity protection mechanisms and corruption prevention systems for AI agent environments",
-            "GENERAL_RD": "General research and development activities supporting AI agent communication system development",
+            "GENERAL_RD": "Core R&D activities including project setup, documentation, testing frameworks, and foundational system architecture",
+            "PROJECT_SETUP": "Project initialization, configuration management, and development environment setup",
+            "DOCUMENTATION": "Technical documentation, API specifications, and knowledge management systems",
+            "TESTING_FRAMEWORK": "Test infrastructure, quality assurance systems, and automated testing frameworks",
+            "SYSTEM_ARCHITECTURE": "System design, modular architecture, and foundational infrastructure development",
         }
         return justifications.get(category, "Research and development activities")
+
+    def collect_repository_data(self) -> Dict[str, Any]:
+        """Collect repository and commit data for better categorization."""
+        logger.info("Collecting repository and commit data...")
+
+        # Load repository information
+        repo_data = {}
+        repositories_path = self.data_dir / "repositories.csv"
+        if repositories_path.exists():
+            import csv
+
+            with open(repositories_path, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    repo_name = row["repo_name"]
+                    repo_data[repo_name] = {"description": row["repo_description"], "wbso_relevance": row["wbso_relevance"]}
+
+        # Load commit data by repository
+        commit_data = {}
+        commits_dir = self.data_dir / "commits"
+        if commits_dir.exists():
+            for commit_file in commits_dir.glob("*.csv"):
+                repo_name = commit_file.stem
+                commit_data[repo_name] = []
+                try:
+                    with open(commit_file, "r", encoding="utf-8") as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            commit_data[repo_name].append(
+                                {
+                                    "datetime": row.get("datetime", ""),
+                                    "message": row.get("message", ""),
+                                    "author": row.get("author", ""),
+                                    "hash": row.get("hash", ""),
+                                }
+                            )
+                except Exception as e:
+                    logger.warning(f"Failed to load commit data from {commit_file}: {e}")
+                    continue
+
+        return {"repositories": repo_data, "commits": commit_data}
+
+    def infer_category_from_repos(self, session_repos: List[str], repo_data: Dict[str, Any]) -> str:
+        """Infer WBSO category from repository names and descriptions."""
+        if not session_repos:
+            return "UNKNOWN"
+
+        # Analyze repository relevance and descriptions
+        categories = []
+        for repo in session_repos:
+            if repo in repo_data:
+                relevance = repo_data[repo]["wbso_relevance"]
+                description = repo_data[repo]["description"].lower()
+
+                # Categorize based on repository content
+                if "ai" in description and ("agent" in description or "framework" in description):
+                    categories.append("AI_FRAMEWORK")
+                elif "auth" in description or "access" in description or "security" in description:
+                    categories.append("ACCESS_CONTROL")
+                elif "privacy" in description or "cloud" in description:
+                    categories.append("PRIVACY_CLOUD")
+                elif "audit" in description or "log" in description:
+                    categories.append("AUDIT_LOGGING")
+                elif "data" in description and ("integrity" in description or "corruption" in description):
+                    categories.append("DATA_INTEGRITY")
+                elif "test" in description or "testing" in description:
+                    categories.append("TESTING_FRAMEWORK")
+                elif "doc" in description or "readme" in description:
+                    categories.append("DOCUMENTATION")
+                elif "setup" in description or "config" in description:
+                    categories.append("PROJECT_SETUP")
+                elif "architect" in description or "system" in description:
+                    categories.append("SYSTEM_ARCHITECTURE")
+                else:
+                    categories.append("GENERAL_RD")
+
+        # Return most common category
+        if categories:
+            from collections import Counter
+
+            return Counter(categories).most_common(1)[0][0]
+
+        return "GENERAL_RD"
 
     def export_to_csv(self, output_dir: Path) -> None:
         """Export WBSO data to CSV format for submission."""
@@ -294,7 +398,8 @@ class WBSOReporter:
                 "end_time",
                 "work_hours",
                 "wbso_category",
-                "source_type",
+                "repository_name",
+                "is_wbso",
                 "is_synthetic",
                 "commit_count",
                 "confidence_score",
@@ -304,6 +409,13 @@ class WBSOReporter:
             writer.writeheader()
 
             for session in wbso_sessions:
+                # Determine repository name from source_type or session data
+                repository_name = ""
+                if hasattr(session, "repository_name") and session.repository_name:
+                    repository_name = session.repository_name
+                elif session.source_type and session.source_type != "synthetic":
+                    repository_name = session.source_type
+
                 writer.writerow(
                     {
                         "session_id": session.session_id,
@@ -312,7 +424,8 @@ class WBSOReporter:
                         "end_time": session.end_time.isoformat() if session.end_time else "",
                         "work_hours": session.work_hours,
                         "wbso_category": session.wbso_category,
-                        "source_type": session.source_type,
+                        "repository_name": repository_name,
+                        "is_wbso": session.is_wbso,
                         "is_synthetic": session.is_synthetic,
                         "commit_count": session.commit_count,
                         "confidence_score": session.confidence_score,
@@ -411,7 +524,8 @@ class WBSOReporter:
             "End Time",
             "Work Hours",
             "WBSO Category",
-            "Source Type",
+            "Repository Name",
+            "Is WBSO",
             "Is Synthetic",
             "Commit Count",
             "Confidence Score",
@@ -421,6 +535,13 @@ class WBSOReporter:
 
         # Data
         for session in wbso_sessions:
+            # Determine repository name from source_type or session data
+            repository_name = ""
+            if hasattr(session, "repository_name") and session.repository_name:
+                repository_name = session.repository_name
+            elif session.source_type and session.source_type != "synthetic":
+                repository_name = session.source_type
+
             sessions_ws.append(
                 [
                     session.session_id,
@@ -429,7 +550,8 @@ class WBSOReporter:
                     session.end_time.isoformat() if session.end_time else "",
                     session.work_hours,
                     session.wbso_category,
-                    session.source_type,
+                    repository_name,
+                    session.is_wbso,
                     session.is_synthetic,
                     session.commit_count,
                     session.confidence_score,
@@ -539,9 +661,9 @@ class WBSOReporter:
 def main():
     """Main reporting function."""
     # Set up paths
-    script_dir = Path(__file__).parent
-    data_dir = script_dir.parent / "data"
-    output_dir = script_dir.parent / "reporting_output"
+    script_dir = Path(__file__).parent.parent.parent / "docs" / "project" / "hours"
+    data_dir = script_dir / "data"
+    output_dir = script_dir / "reporting_output"
 
     # Create output directory
     output_dir.mkdir(exist_ok=True)
@@ -551,6 +673,9 @@ def main():
 
     # Load data
     reporter.load_data_sources()
+
+    # Collect repository data for better categorization
+    repo_data = reporter.collect_repository_data()
 
     # Calculate hours
     hours_data = reporter.calculate_wbso_hours()

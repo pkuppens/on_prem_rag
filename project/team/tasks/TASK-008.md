@@ -14,6 +14,12 @@ Create a production-grade vector store integration using ChromaDB through LlamaI
 Implement proper connection management, index versioning, and monitoring.
 Design the system to support different parameter sets and model selections.
 
+## MoSCoW Classification
+
+**Priority**: Won't Have
+
+**Rationale**: This task is part of the main RAG system development and is unrelated to the WBSO hours completion goal. The current focus is on completing the WBSO calendar with 510 hours of entries for tax deduction purposes. This task can be deferred until after the WBSO project is completed and the calendar is populated.
+
 ## Implementation Hints
 
 - [ ] Create a vector store abstraction layer

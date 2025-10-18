@@ -14,6 +14,12 @@ Create a robust FastAPI module that handles file uploads and processes PDF, DOCX
 The module should implement idempotent document processing with duplicate detection and tracking, including comprehensive
 validation, preprocessing, error handling, and logging.
 
+## MoSCoW Classification
+
+**Priority**: Won't Have
+
+**Rationale**: This task is part of the main RAG system development and is unrelated to the WBSO hours completion goal. The current focus is on completing the WBSO calendar with 510 hours of entries for tax deduction purposes. This task can be deferred until after the WBSO project is completed and the calendar is populated.
+
 ## Running the Servers
 
 The project uses `uv` for Python package management and script execution. The backend server can be started using a project script, while the frontend needs to be started separately as it's a Node.js application.

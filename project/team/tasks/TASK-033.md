@@ -14,6 +14,12 @@ Implement time range operations and zoom capabilities for analyzing work pattern
 
 Time-based analysis requires the ability to zoom into different time ranges to understand patterns at various granularities. Users need to analyze work sessions at hourly detail, daily patterns, weekly trends, and monthly summaries for comprehensive insights and WBSO compliance reporting.
 
+## MoSCoW Classification
+
+**Priority**: Could Have
+
+**Rationale**: This task provides advanced analysis features for time-based work pattern analysis, which would be valuable for detailed reporting and insights. However, for the current WBSO hours completion goal, basic reporting capabilities are sufficient. The task adds polish and future capabilities but is not essential for reaching the 510-hour target or generating compliance reports. This can be implemented after the core WBSO functionality is complete.
+
 ## Acceptance Criteria
 
 ### 1. Time Range Class and Operations

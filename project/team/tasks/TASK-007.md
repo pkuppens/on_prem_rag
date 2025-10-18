@@ -12,6 +12,12 @@
 
 Implement an advanced chunking and embedding system using **LlamaIndex** that supports configurable strategies, local model integration, and caching. The system should handle document obsoletion and support incremental ingestion.
 
+## MoSCoW Classification
+
+**Priority**: Won't Have
+
+**Rationale**: This task is part of the main RAG system development and is unrelated to the WBSO hours completion goal. The current focus is on completing the WBSO calendar with 510 hours of entries for tax deduction purposes. This task can be deferred until after the WBSO project is completed and the calendar is populated.
+
 ## Implementation Hints
 
 - [ ] Implement multiple chunking strategies:

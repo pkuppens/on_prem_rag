@@ -11,6 +11,12 @@
 ## Description
 Create a production-ready Dockerfile for the FastAPI application using a multi-stage build to minimize image size.
 
+## MoSCoW Classification
+
+**Priority**: Won't Have
+
+**Rationale**: This task is part of the main RAG system development and is unrelated to the WBSO hours completion goal. The current focus is on completing the WBSO calendar with 510 hours of entries for tax deduction purposes. This task can be deferred until after the WBSO project is completed and the calendar is populated.
+
 ## Acceptance Criteria
 - [ ] Dockerfile builds successfully on all supported platforms
 - [ ] Image exposes required ports and volumes

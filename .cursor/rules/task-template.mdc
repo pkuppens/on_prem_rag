@@ -27,6 +27,16 @@ Task files should be stored in `docs/project/team/tasks/` with the naming patter
 
 [Clear and concise description of the task. Use bullet points for complex requirements.]
 
+## MoSCoW Classification
+
+**Priority**: [Must Have | Should Have | Could Have | Won't Have]
+
+**Rationale**: [1-2 paragraphs explaining why this task has this priority level. Consider:
+- Direct contribution to project goals
+- Dependencies and blockers
+- Business value and urgency
+- Available workarounds or alternatives]
+
 ## Acceptance Criteria
 
 ### 1. [High-level requirement 1]

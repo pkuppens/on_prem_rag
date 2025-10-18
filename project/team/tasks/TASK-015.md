@@ -17,6 +17,12 @@ Create a production-ready Docker Compose configuration based on the development 
 - Setting up proper volume management for production data
 - Configuring production-grade networking and security
 
+## MoSCoW Classification
+
+**Priority**: Won't Have
+
+**Rationale**: This task is part of the main RAG system development and is unrelated to the WBSO hours completion goal. The current focus is on completing the WBSO calendar with 510 hours of entries for tax deduction purposes. This task can be deferred until after the WBSO project is completed and the calendar is populated.
+
 The production stack will include:
 
 - FastAPI application with production settings

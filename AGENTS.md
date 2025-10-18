@@ -345,7 +345,7 @@ See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)
 
 ## Date Formatting Standards
 
-**CRITICAL**: Always use current date in YYYY-MM-DD format. Never hardcode dates in code or documentation.
+**CRITICAL**: Always use current date in YYYY-MM-DD format. Never hardcode dates in code or documentation. All dates must be 100% accurate and reflect the actual current date.
 
 ### Key Requirements
 
@@ -353,6 +353,7 @@ See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)
 2. **Format as YYYY-MM-DD** - ISO 8601 standard format
 3. **Never hardcode dates** - they become outdated immediately
 4. **Update existing hardcoded dates** when modifying files
+5. **Ensure 100% accuracy** - dates must always reflect the actual current date
 
 ### Implementation
 

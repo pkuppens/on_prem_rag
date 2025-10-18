@@ -10,11 +10,13 @@ This rule ensures consistent date formatting across all code, documentation, and
 
 ## CRITICAL: Always Use Current Date
 
-**NEVER hardcode dates in code or documentation.** Always determine the current date dynamically from:
+**NEVER hardcode dates in code or documentation.** All dates must be 100% accurate and current. Always determine the current date dynamically from:
 
 1. **System clock** (preferred for most cases)
 2. **MCP services** (when available and appropriate)
 3. **Environment variables** (for testing or specific scenarios)
+
+**Key Principle**: Dates in code files must always reflect the actual current date, never outdated hardcoded values.
 
 ## Required Date Format
 
@@ -121,6 +123,7 @@ When AI assistants generate code or documentation:
 3. **Format as YYYY-MM-DD** consistently
 4. **Update existing hardcoded dates** when modifying files
 5. **Include date generation logic** in code when appropriate
+6. **Ensure 100% accuracy** - dates must always reflect the actual current date
 
 ## Error Prevention
 
@@ -195,4 +198,4 @@ This rule is enforced by:
 - Pre-commit hooks (when applicable)
 - Documentation standards
 
-Remember: **Current date, current date, current date!** Never hardcode dates in any form of content generation.
+Remember: **Current date, current date, current date!** Never hardcode dates in any form of content generation. All dates must be 100% accurate and reflect the actual current date.

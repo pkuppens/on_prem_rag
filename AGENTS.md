@@ -343,6 +343,42 @@ The GitHub integration maintains alignment with the existing SAFe project struct
 
 See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) for comprehensive GitHub integration guidelines and automation scripts.
 
+## Date Formatting Standards
+
+**CRITICAL**: Always use current date in YYYY-MM-DD format. Never hardcode dates in code or documentation.
+
+### Key Requirements
+
+1. **Always use current date** - determine from system clock or MCP services
+2. **Format as YYYY-MM-DD** - ISO 8601 standard format
+3. **Never hardcode dates** - they become outdated immediately
+4. **Update existing hardcoded dates** when modifying files
+
+### Implementation
+
+```python
+from datetime import datetime
+
+# Get current date in correct format
+current_date = datetime.now().strftime("%Y-%m-%d")
+
+# Use in file headers, docstrings, etc.
+"""
+Module description here.
+
+Author: AI Assistant
+Date: 2025-01-19  # Always current date
+"""
+```
+
+### Common Mistakes to Avoid
+
+- ❌ `Date: 2025-01-15` (hardcoded, becomes outdated)
+- ❌ `Date: 1/15/2025` (wrong format)
+- ❌ `Date: 2025-1-5` (missing leading zeros)
+
+See [.cursor/rules/date-formatting.mdc](.cursor/rules/date-formatting.mdc) for comprehensive date formatting guidelines.
+
 ## Related Guidance
 
 See [agents/README.md](agents/README.md) for links to coding style, documentation style, project management and architecture rules.

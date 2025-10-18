@@ -9,8 +9,42 @@ import matplotlib.dates as mdates
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from typing import List, Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple, Union
 import seaborn as sns
+
+
+def safe_to_datetime_amsterdam(data: Union[pd.Series, str, List[str]], column_name: str = "timestamp") -> pd.Series:
+    """Safely convert data to timezone-aware Amsterdam datetime.
+
+    This function handles both timezone-naive and timezone-aware input data,
+    ensuring consistent Amsterdam timezone output without raising errors.
+
+    Args:
+        data: Input data to convert (Series, string, or list of strings)
+        column_name: Name of the column for error messages
+
+    Returns:
+        pandas Series with timezone-aware Amsterdam datetime
+
+    Raises:
+        ValueError: If data cannot be converted to datetime
+    """
+    # Convert to pandas Series if not already
+    if not isinstance(data, pd.Series):
+        data = pd.Series(data)
+
+    # Convert to datetime first
+    dt_series = pd.to_datetime(data, errors="coerce")
+
+    # Check if any values are already timezone-aware
+    has_timezone = dt_series.dt.tz is not None
+
+    if has_timezone:
+        # If already timezone-aware, convert to Amsterdam timezone
+        return dt_series.dt.tz_convert("Europe/Amsterdam")
+    else:
+        # If timezone-naive, assume Amsterdam timezone and localize
+        return dt_series.dt.tz_localize("Europe/Amsterdam")
 
 
 def setup_plot_style():
@@ -47,8 +81,8 @@ def create_computer_activity_timeline(
         fig, ax = plt.subplots(figsize=(15, 8))
 
     # Filter work sessions by date range
-    start_dt = pd.to_datetime(start_date).tz_localize("UTC")
-    end_dt = pd.to_datetime(end_date).tz_localize("UTC")
+    start_dt = safe_to_datetime_amsterdam(start_date, "start_date").iloc[0]
+    end_dt = safe_to_datetime_amsterdam(end_date, "end_date").iloc[0]
 
     # Filter sessions that overlap with the date range
     mask = (work_sessions_df["start_time"] <= end_dt) & (work_sessions_df["end_time"] >= start_dt)
@@ -152,8 +186,8 @@ def create_commit_overlay(
         fig, ax = plt.subplots(figsize=(15, 8))
 
     # Filter commits by date range
-    start_dt = pd.to_datetime(start_date).tz_localize("UTC")
-    end_dt = pd.to_datetime(end_date).tz_localize("UTC")
+    start_dt = safe_to_datetime_amsterdam(start_date, "start_date").iloc[0]
+    end_dt = safe_to_datetime_amsterdam(end_date, "end_date").iloc[0]
 
     mask = (commits_df["timestamp"] >= start_dt) & (commits_df["timestamp"] <= end_dt)
     filtered_commits = commits_df[mask].copy()

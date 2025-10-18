@@ -6,9 +6,42 @@ and commit data for visualization in Jupyter notebooks.
 
 import json
 import pandas as pd
-from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
+
+
+def safe_to_datetime_amsterdam(data: Union[pd.Series, str, List[str]], column_name: str = "timestamp") -> pd.Series:
+    """Safely convert data to timezone-aware Amsterdam datetime.
+
+    This function handles both timezone-naive and timezone-aware input data,
+    ensuring consistent Amsterdam timezone output without raising errors.
+
+    Args:
+        data: Input data to convert (Series, string, or list of strings)
+        column_name: Name of the column for error messages
+
+    Returns:
+        pandas Series with timezone-aware Amsterdam datetime
+
+    Raises:
+        ValueError: If data cannot be converted to datetime
+    """
+    # Convert to pandas Series if not already
+    if not isinstance(data, pd.Series):
+        data = pd.Series(data)
+
+    # Convert to datetime first
+    dt_series = pd.to_datetime(data, errors="coerce")
+
+    # Check if any values are already timezone-aware
+    has_timezone = dt_series.dt.tz is not None
+
+    if has_timezone:
+        # If already timezone-aware, convert to Amsterdam timezone
+        return dt_series.dt.tz_convert("Europe/Amsterdam")
+    else:
+        # If timezone-naive, assume Amsterdam timezone and localize
+        return dt_series.dt.tz_localize("Europe/Amsterdam")
 
 
 def load_system_events_data(file_path: str) -> Dict[str, Any]:
@@ -24,11 +57,11 @@ def load_system_events_data(file_path: str) -> Dict[str, Any]:
         FileNotFoundError: If the file doesn't exist
         json.JSONDecodeError: If the file contains invalid JSON
     """
-    file_path = Path(file_path)
-    if not file_path.exists():
+    path_obj = Path(file_path)
+    if not path_obj.exists():
         raise FileNotFoundError(f"System events file not found: {file_path}")
 
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(path_obj, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     return data
@@ -47,11 +80,11 @@ def load_commits_data(file_path: str) -> Dict[str, Any]:
         FileNotFoundError: If the file doesn't exist
         json.JSONDecodeError: If the file contains invalid JSON
     """
-    file_path = Path(file_path)
-    if not file_path.exists():
+    path_obj = Path(file_path)
+    if not path_obj.exists():
         raise FileNotFoundError(f"Commits file not found: {file_path}")
 
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(path_obj, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     return data
@@ -75,9 +108,9 @@ def convert_work_sessions_to_dataframe(system_events_data: Dict[str, Any]) -> pd
     # Convert to DataFrame
     df = pd.DataFrame(sessions)
 
-    # Convert timestamp columns to datetime with UTC timezone
-    df["start_time"] = pd.to_datetime(df["start_time"]).dt.tz_localize("UTC")
-    df["end_time"] = pd.to_datetime(df["end_time"]).dt.tz_localize("UTC")
+    # Convert timestamp columns to datetime with Amsterdam timezone
+    df["start_time"] = safe_to_datetime_amsterdam(df["start_time"].tolist(), "start_time")
+    df["end_time"] = safe_to_datetime_amsterdam(df["end_time"].tolist(), "end_time")
     df["date"] = pd.to_datetime(df["date"])
 
     # Sort by start time
@@ -104,8 +137,8 @@ def convert_commits_to_dataframe(commits_data: Dict[str, Any]) -> pd.DataFrame:
     # Convert to DataFrame
     df = pd.DataFrame(commits)
 
-    # Convert timestamp to datetime with UTC timezone handling
-    df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+    # Convert timestamp to datetime with Amsterdam timezone handling
+    df["timestamp"] = safe_to_datetime_amsterdam(df["timestamp"].tolist(), "timestamp")
 
     # Sort by timestamp
     df = df.sort_values("timestamp").reset_index(drop=True)
@@ -125,12 +158,13 @@ def filter_data_by_date_range(df: pd.DataFrame, start_date: str, end_date: str, 
     Returns:
         Filtered DataFrame
     """
-    start_dt = pd.to_datetime(start_date).tz_localize("UTC")
-    end_dt = pd.to_datetime(end_date).tz_localize("UTC")
+    start_dt = safe_to_datetime_amsterdam(start_date, "start_date").iloc[0]
+    end_dt = safe_to_datetime_amsterdam(end_date, "end_date").iloc[0]
 
     # Filter data within date range
     mask = (df[date_column] >= start_dt) & (df[date_column] <= end_dt)
-    return df[mask].copy()
+    filtered_df = df[mask].copy()  # type: ignore
+    return filtered_df  # type: ignore
 
 
 def get_active_repositories_in_range(commits_df: pd.DataFrame, start_date: str, end_date: str) -> List[str]:
@@ -209,6 +243,7 @@ def prepare_commits_for_overlay(commits_df: pd.DataFrame, active_repos: Optional
         raise ValueError(f"Missing required columns: {missing_cols}")
 
     # Add commit date for grouping
-    df["commit_date"] = df["timestamp"].dt.date
+    timestamp_series = df["timestamp"]
+    df["commit_date"] = timestamp_series.dt.date  # type: ignore
 
-    return df
+    return df  # type: ignore

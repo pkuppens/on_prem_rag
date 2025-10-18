@@ -395,7 +395,7 @@ RUN_ID=$(gh run list --branch "$CURRENT_BRANCH" --limit 1 --json databaseId --jq
 if [ -n "$RUN_ID" ]; then
     echo "📊 GitHub Actions Run ID: $RUN_ID"
     echo "🔗 View at: https://github.com/$(gh repo view --json owner,name --jq '.owner.login + "/" + .name')/actions/runs/$RUN_ID"
-    
+
     # Wait and check status (optional - can be done manually)
     echo "⏳ Waiting 2 minutes for initial results..."
     sleep 120
@@ -484,10 +484,11 @@ gh auth login
   uses: actions/setup-python@v4
   with:
     python-version: ${{ matrix.python-version }}
-    allow-prereleases: false  # CRITICAL: Prevent prerelease versions
+    allow-prereleases: false # CRITICAL: Prevent prerelease versions
 ```
 
 **Common Dependency Issues**:
+
 - `pypika` build failures with Python 3.14
 - `AttributeError: module 'ast' has no attribute 'Str'` errors
 - Package compatibility issues with prerelease Python versions

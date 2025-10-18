@@ -9,10 +9,8 @@ See docs/technical/CI_SETUP.md for detailed setup documentation.
 """
 
 import re
-import sys
 import tomllib
 from pathlib import Path
-from typing import Any
 
 import pytest
 

@@ -11,12 +11,29 @@ Analyze system events data to define work blocks that can supplement Git commit 
 
 ## Acceptance Criteria
 
-- [x] **Work Block Definition**: Define clear criteria for what constitutes a work block from system events
-- [x] **Event Pattern Analysis**: Identify patterns in system startup/shutdown events that indicate work sessions
-- [x] **Time Boundary Detection**: Create logic to detect work session start/end times from system events
-- [x] **Data Processing Script**: Develop Python script to process system events CSV files into work blocks
-- [x] **Work Block Output**: Generate structured output with work block definitions (start time, end time, duration, confidence score)
-- [x] **Integration Planning**: Document how work blocks will integrate with existing Git commit analysis
+### 1. Work Block Definition
+
+- [x] **Sub-criteria 1.1**: Define clear criteria for what constitutes a work block from system events
+- [x] **Sub-criteria 1.2**: Create logic to detect work session start/end times from system events
+- [x] **Sub-criteria 1.3**: Implement confidence scoring based on event completeness and timing
+
+### 2. Event Pattern Analysis
+
+- [x] **Sub-criteria 2.1**: Identify patterns in system startup/shutdown events that indicate work sessions
+- [x] **Sub-criteria 2.2**: Map event sequences to work sessions with proper time boundaries
+- [x] **Sub-criteria 2.3**: Handle edge cases (unexpected shutdowns, missing events)
+
+### 3. Data Processing Implementation
+
+- [x] **Sub-criteria 3.1**: Develop Python script to process system events CSV files into work blocks
+- [x] **Sub-criteria 3.2**: Generate structured output with work block definitions (start time, end time, duration, confidence score)
+- [x] **Sub-criteria 3.3**: Implement error handling for malformed CSV data
+
+### 4. Integration Planning
+
+- [x] **Sub-criteria 4.1**: Document how work blocks will integrate with existing Git commit analysis
+- [x] **Sub-criteria 4.2**: Define output format compatible with downstream processing
+- [x] **Sub-criteria 4.3**: Create validation rules for work block data quality
 
 ## Technical Requirements
 
@@ -76,6 +93,37 @@ Analyze system events data to define work blocks that can supplement Git commit 
    - Test with existing system events data
    - Validate work block definitions against known patterns
    - Compare with Git commit timestamps for correlation
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/analyze_system_events.py` - Located in hours processing scripts directory for logical grouping
+- **Data Model Impact**: New `work_block` data structure with fields: block_id, start_time, end_time, duration_hours, confidence_score, evidence, session_type
+- **Integration Points**: Output format designed to integrate with existing Git commit analysis in TASK-026
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, pandas>=2.0.0 for CSV processing
+- **Configuration**: No external configuration required - uses hardcoded event type mappings
+- **Documentation**: Add work block detection rules to `docs/project/hours/data/SYSTEM_EVENTS_FORMAT.md`
+
+### Example Implementation
+
+```python
+def detect_work_blocks(events_df):
+    """Detect work blocks from system events data.
+
+    Work block rules:
+    1. Start: System startup (EventId 6005) during work hours (8:00-18:00)
+    2. End: System shutdown (EventId 1074) or sleep (EventId 42)
+    3. Minimum duration: 30 minutes
+    4. Maximum duration: 12 hours
+    """
+    work_blocks = []
+    # Implementation details...
+    return work_blocks
+```
 
 ## Dependencies
 

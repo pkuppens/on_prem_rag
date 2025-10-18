@@ -11,13 +11,23 @@ Process CSV commit data files into a structured JSON format for further analysis
 
 ## Acceptance Criteria
 
-- [x] **CSV Processing**: Process all CSV files in `docs/project/hours/data/commits/` directory
-- [x] **JSON Output**: Generate structured JSON records with required fields (timestamp, repo name, author, message, hash)
-- [x] **Author Filtering**: Identify commits by 'kuppens' (case insensitive) for work block analysis
-- [x] **Data Validation**: Ensure all required fields are present and properly formatted
-- [x] **Error Handling**: Handle malformed CSV data gracefully with proper logging
-- [x] **Output Format**: Create standardized JSON structure for downstream processing
-- [x] **Integration Ready**: Output format compatible with work block analysis and agenda generation
+### 1. CSV Processing Pipeline
+
+- [x] **Sub-criteria 1.1**: Process all CSV files in `docs/project/hours/data/commits/` directory
+- [x] **Sub-criteria 1.2**: Handle different CSV formats and encodings gracefully
+- [x] **Sub-criteria 1.3**: Implement error handling for malformed records
+
+### 2. Data Transformation and Validation
+
+- [x] **Sub-criteria 2.1**: Generate structured JSON records with required fields (timestamp, repo name, author, message, hash)
+- [x] **Sub-criteria 2.2**: Identify commits by 'kuppens' (case insensitive substring) for work block analysis
+- [x] **Sub-criteria 2.3**: Ensure all required fields are present and properly formatted
+
+### 3. Output Generation and Integration
+
+- [x] **Sub-criteria 3.1**: Create standardized JSON structure for downstream processing
+- [x] **Sub-criteria 3.2**: Output format compatible with work block analysis and agenda generation
+- [x] **Sub-criteria 3.3**: Include metadata with summary statistics and date ranges
 
 ## Technical Requirements
 
@@ -87,6 +97,37 @@ Process CSV commit data files into a structured JSON format for further analysis
    - Test with existing CSV files
    - Validate JSON output format
    - Ensure error handling works correctly
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/process_commit_csvs.py` - Located in hours processing scripts directory for logical grouping
+- **Data Model Impact**: New `commit` data structure with fields: timestamp, repo_name, author, message, hash, is_wbso, work_block_id, outside_work_block
+- **Integration Points**: Output format designed for integration with work block analysis (TASK-025) and agenda generation
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, pandas>=2.0.0 for CSV processing
+- **Configuration**: Author filtering rules defined in script constants (case-insensitive 'kuppens' matching)
+- **Documentation**: Add CSV processing rules to `docs/project/hours/data/COMMIT_PROCESSING_RULES.md`
+
+### Example Implementation
+
+```python
+def process_commit_csvs(csv_directory):
+    """Process CSV commit files into structured JSON format.
+
+    Processing rules:
+    1. Parse datetime strings to ISO 8601 format
+    2. Extract repository names from filenames
+    3. Identify WBSO commits with case-insensitive 'kuppens' matching
+    4. Validate all required fields are present
+    """
+    commits = []
+    # Implementation details...
+    return commits
+```
 
 ## Dependencies
 

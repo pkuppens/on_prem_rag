@@ -19,13 +19,23 @@ When populating the WBSO Google Calendar, conflicts with existing personal appoi
 
 ## Acceptance Criteria
 
-- [x] **Conflict Detection**: Detect overlaps between WBSO events and existing calendar events
-- [x] **Conflict Classification**: Classify conflicts as short (<2 hours) or long (≥2 hours)
-- [x] **Short Conflict Handling**: Automatically adjust WBSO session times for short conflicts
-- [x] **Long Conflict Handling**: Flag long conflicts for manual review
-- [x] **Conflict Reporting**: Generate detailed conflict reports for review
-- [x] **Event Processing**: Process all WBSO events with conflict information
-- [x] **Calendar Compatibility**: Ensure processed events are ready for Google Calendar API
+### 1. Conflict Detection and Classification
+
+- [x] **Sub-criteria 1.1**: Detect overlaps between WBSO events and existing calendar events
+- [x] **Sub-criteria 1.2**: Classify conflicts as short (<2 hours) or long (≥2 hours)
+- [x] **Sub-criteria 1.3**: Calculate overlap duration and conflict details
+
+### 2. Conflict Resolution and Processing
+
+- [x] **Sub-criteria 2.1**: Automatically adjust WBSO session times for short conflicts
+- [x] **Sub-criteria 2.2**: Flag long conflicts for manual review
+- [x] **Sub-criteria 2.3**: Process all WBSO events with conflict information
+
+### 3. Reporting and Integration
+
+- [x] **Sub-criteria 3.1**: Generate detailed conflict reports for review
+- [x] **Sub-criteria 3.2**: Ensure processed events are ready for Google Calendar API
+- [x] **Sub-criteria 3.3**: Include conflict metadata in event properties
 
 ## Technical Requirements
 
@@ -155,6 +165,35 @@ def detect_conflicts(wbso_event, existing_events):
    - Test conflict detection accuracy
    - Validate event processing logic
    - Ensure proper metadata handling
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/populate_wbso_calendar.py` - Located in hours processing scripts directory
+- **Data Model Impact**: Enhanced `calendar_event` data structure with conflict metadata in extendedProperties
+- **Integration Points**: Uses WBSO calendar events from TASK-035, processes existing calendar events, outputs Google Calendar-compatible events
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in)
+- **Configuration**: Conflict resolution rules defined in script constants (short <2 hours, long ≥2 hours)
+- **Documentation**: Add calendar conflict resolution guide to `docs/project/hours/CALENDAR_CONFLICTS.md`
+
+### Example Implementation
+
+```python
+def detect_conflicts(wbso_event, existing_events):
+    """Detect conflicts between WBSO event and existing calendar events.
+
+    Conflict resolution rules:
+    - Short conflicts (<2 hours): Automatically adjust WBSO session times
+    - Long conflicts (≥2 hours): Flag for manual review
+    """
+    conflicts = []
+    # Implementation details...
+    return conflicts
+```
 
 ## Dependencies
 

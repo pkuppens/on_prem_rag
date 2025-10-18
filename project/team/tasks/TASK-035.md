@@ -16,13 +16,23 @@ For WBSO tax deduction compliance, each work session must have detailed R&D acti
 
 ## Acceptance Criteria
 
-- [x] **WBSO Activity Templates**: Create detailed templates for each WBSO category
-- [x] **Calendar Event Generation**: Generate Google Calendar-compatible events
-- [x] **R&D Justifications**: Include comprehensive R&D activity descriptions
-- [x] **Technical Details**: Provide specific technical activities and methodologies
-- [x] **Repository Context**: Include relevant repository and project information
-- [x] **WBSO Compliance**: Ensure all events meet WBSO tax deduction requirements
-- [x] **Event Metadata**: Include WBSO project reference and categorization
+### 1. WBSO Activity Templates and Justifications
+
+- [x] **Sub-criteria 1.1**: Create detailed templates for each WBSO category
+- [x] **Sub-criteria 1.2**: Include comprehensive R&D activity descriptions
+- [x] **Sub-criteria 1.3**: Provide specific technical activities and methodologies
+
+### 2. Calendar Event Generation and Compliance
+
+- [x] **Sub-criteria 2.1**: Generate Google Calendar-compatible events
+- [x] **Sub-criteria 2.2**: Include relevant repository and project information
+- [x] **Sub-criteria 2.3**: Ensure all events meet WBSO tax deduction requirements
+
+### 3. Event Metadata and Integration
+
+- [x] **Sub-criteria 3.1**: Include WBSO project reference and categorization
+- [x] **Sub-criteria 3.2**: Add session metadata (work hours, commit count, synthetic flag)
+- [x] **Sub-criteria 3.3**: Ensure proper timezone handling (Europe/Amsterdam)
 
 ## Technical Requirements
 
@@ -139,6 +149,36 @@ wbso_activity_templates = {
    - Set appropriate timezone (Europe/Amsterdam)
    - Use blue color coding for WBSO activities
    - Set private visibility
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/wbso_justification_generator.py` - Located in hours processing scripts directory
+- **Data Model Impact**: New `calendar_event` data structure with Google Calendar API compatibility, WBSO metadata in extendedProperties
+- **Integration Points**: Uses work log from TASK-034, integrates with WBSO categorization system, outputs Google Calendar-compatible events
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in)
+- **Configuration**: WBSO activity templates defined in script constants, Google Calendar API format requirements
+- **Documentation**: Add WBSO justification guide to `docs/project/hours/WBSO_JUSTIFICATION.md`
+
+### Example Implementation
+
+```python
+def generate_wbso_calendar_events(work_sessions):
+    """Generate WBSO calendar events with comprehensive justifications.
+
+    WBSO categories:
+    - AI_FRAMEWORK: AI agent development, NLP, intent recognition
+    - ACCESS_CONTROL: Authentication, authorization, security systems
+    - PRIVACY_CLOUD: Privacy-preserving cloud integration
+    """
+    calendar_events = []
+    # Implementation details...
+    return calendar_events
+```
 
 ## Dependencies
 

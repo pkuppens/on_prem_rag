@@ -4,59 +4,163 @@ globs:
   - "**/TASK-*.md"
 alwaysApply: false
 ---
+
 # Task Template Guide
 
-This guide defines the standard format for task documentation files (TASK-*.md) in the project.
+This guide defines the standard format for task documentation files (TASK-\*.md) in the project.
 
 ## File Location
+
 Task files should be stored in `docs/project/team/tasks/` with the naming pattern `TASK-XXX.md` where XXX is a sequential number.
 
 ## Template Structure
 
-```markdown
-# Task: [Task Title]
+````markdown
+# TASK-XXX: [Task Title]
 
-**ID**: TASK-XXX  
-**Story**: [STORY-XXX: Story Title](../stories/STORY-XXX.md)  
-**Assignee**: [Role/Name]  
-**Status**: [Todo/In Progress/Review/Done]  
-**Effort**: [X hours/days]  
-**Created**: YYYY-MM-DD  
-**Updated**: YYYY-MM-DD
+## Story Reference
 
-## Description
+- **Story**: STORY-XXX (Story Title)
+- **Epic**: EPIC-XXX (Epic Title)
+
+## Task Description
+
 [Clear and concise description of the task. Use bullet points for complex requirements.]
 
-## Implementation Hints
-- [ ] [Implementation step 1]  
-    [Code or command examples if needed]
-- [ ] [Implementation step 2]  
-    [Additional details or examples]
-
 ## Acceptance Criteria
-- [ ] [Specific, measurable criterion 1]
-- [ ] [Specific, measurable criterion 2]
+
+### 1. [High-level requirement 1]
+
+- [ ] **Sub-criteria 1.1**: [Specific requirement to meet criterion 1]
+- [ ] **Sub-criteria 1.2**: [Specific requirement to meet criterion 1]
+- [ ] **Sub-criteria 1.3**: [Specific requirement to meet criterion 1]
+
+### 2. [High-level requirement 2]
+
+- [ ] **Sub-criteria 2.1**: [Specific requirement to meet criterion 2]
+- [ ] **Sub-criteria 2.2**: [Specific requirement to meet criterion 2]
+
+## Technical Requirements
+
+### Input Data
+
+[Specify input data sources, formats, and requirements]
+
+### Output Format
+
+[Specify expected output format with examples]
+
+### Processing Rules
+
+[Define business logic and processing rules]
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: [Recommended file path based on project architecture]
+- **Data Model Impact**: [Required changes to existing data models]
+- **Integration Points**: [How this task integrates with existing systems]
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: [Specific version requirements for tools/libraries]
+- **Configuration**: [Where and how to configure tools]
+- **Documentation**: [What and where to document]
+
+### Example Implementation
+
+```python
+# Example code or configuration snippets
+```
+````
 
 ## Dependencies
+
 - **Blocked by**: [TASK-XXX or None]
 - **Blocks**: [TASK-XXX or None]
 
----
-**Implementer**: [Name/Role]  
-**Reviewer**: [Name/Role]  
-**Target Completion**: [Date or TBD]
+## Definition of Done
+
+- [ ] [Specific completion criteria 1]
+- [ ] [Specific completion criteria 2]
+
+## Estimated Effort
+
+- **Component 1**: X hours
+- **Component 2**: Y hours
+- **Total**: Z hours
+
+## Related Files
+
+- [Link to related documentation]
+- [Link to related code files]
+
+## Code Files
+
+- [Link to implementation files with descriptions]
+
 ```
+
+## Three-Level Hierarchy Requirements
+
+### 1. Acceptance Criteria (Requirements)
+- **Purpose**: Define what needs to be accomplished at a high level
+- **Format**: Use numbered sections (### 1. [Requirement])
+- **Content**: Business objectives and functional requirements
+- **Example**: "Use ruff for code linting"
+
+### 2. Sub-Criteria (Sub-Requirements)
+- **Purpose**: Break down each acceptance criterion into specific, measurable requirements
+- **Format**: Use bullet points with **Sub-criteria X.Y**: labels
+- **Content**: Specific requirements that must be met to satisfy the parent criterion
+- **Example**:
+  - **Sub-criteria 1.1**: Decide on a unique version
+  - **Sub-criteria 1.2**: Configure it according to best practices
+  - **Sub-criteria 1.3**: Document the usage
+
+### 3. Implementation Details (Choices)
+- **Purpose**: Provide recommended implementation choices, configurations, and examples
+- **Format**: Use structured sections with specific subsections
+- **Content**: Version numbers, file locations, configuration examples, documentation requirements
+- **Example**:
+  - **Tool Versions**: ruff>=0.1.0
+  - **Configuration**: pyproject.toml with permissive line length (132)
+  - **Documentation**: Add to docs/SETUP.md with examples
+
+## Required Detail Level
+
+### Architecture Considerations
+Every task must include:
+- **Script Location**: Recommended file path based on project architecture
+- **Data Model Impact**: Required changes to existing data models
+- **Integration Points**: How this task integrates with existing systems
+
+### Tool Specifications
+Every task using tools must specify:
+- **Version Numbers**: Specific version requirements (e.g., ruff>=0.1.0)
+- **Configuration Location**: Where to configure the tool
+- **Documentation Requirements**: What and where to document
+
+### Cross-Referencing
+- Link acceptance criteria to implementation details
+- Reference related tasks and dependencies
+- Include code file links with descriptions
 
 ## Guidelines
 1. Use clear, action-oriented task titles
 2. Keep descriptions concise but complete
-3. Break down complex tasks into implementation hints
+3. Break down complex tasks into three-level hierarchy
 4. Make acceptance criteria specific and measurable
-5. Update the "Updated" date when making changes
-6. Use checkboxes (- [ ]) for tracking progress
-7. Include relevant code examples or commands in implementation hints
-8. Link related stories and tasks using markdown links
-9. Allow trailing double spaces after each line in lists for proper rendering
+5. Ensure sub-criteria are detailed enough for implementation
+6. Provide concrete implementation choices in implementation details
+7. Update the "Updated" date when making changes
+8. Use checkboxes (- [ ]) for tracking progress
+9. Include relevant code examples or commands in implementation details
+10. Link related stories and tasks using markdown links
+11. Allow trailing double spaces after each line in lists for proper rendering
+12. Mark incomplete criteria if they don't meet new standards
 
 ## Example
 See [TASK-006.md](mdc:docs/project/team/tasks/TASK-006.md) for a complete example.
+```

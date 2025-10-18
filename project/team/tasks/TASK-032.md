@@ -16,13 +16,23 @@ Different data sources use different datetime formats, making data integration c
 
 ## Acceptance Criteria
 
-- [x] **Format Auto-Detection**: Automatically detect datetime formats from input strings
-- [x] **Multi-Source Support**: Handle formats from system events, git commits, CSV files, and JSON data
-- [x] **Robust Error Handling**: Graceful handling of malformed or ambiguous datetime strings
-- [x] **Performance Optimization**: Efficient parsing suitable for large datasets
-- [x] **Format Validation**: Validate detected formats before conversion
-- [x] **Logging and Debugging**: Comprehensive logging for format detection and conversion
-- [x] **Integration Testing**: Test with real data from all sources
+### 1. Smart Format Detection
+
+- [x] **Sub-criteria 1.1**: Automatically detect datetime formats from input strings
+- [x] **Sub-criteria 1.2**: Handle formats from system events, git commits, CSV files, and JSON data
+- [x] **Sub-criteria 1.3**: Implement confidence scoring for format detection accuracy
+
+### 2. Robust Processing and Performance
+
+- [x] **Sub-criteria 2.1**: Implement graceful handling of malformed or ambiguous datetime strings
+- [x] **Sub-criteria 2.2**: Ensure efficient parsing suitable for large datasets
+- [x] **Sub-criteria 2.3**: Validate detected formats before conversion
+
+### 3. Integration and Testing
+
+- [x] **Sub-criteria 3.1**: Implement comprehensive logging for format detection and conversion
+- [x] **Sub-criteria 3.2**: Test with real data from all sources
+- [x] **Sub-criteria 3.3**: Integrate with existing unified datetime system from TASK-029
 
 ## Technical Requirements
 
@@ -177,6 +187,35 @@ class DataSourceParser:
    - Replace existing parsing functions
    - Update data loading utilities
    - Ensure compatibility with unified datetime system
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `src/backend/datetime_utils/smart_parser.py` - Smart parsing system module
+- **Data Model Impact**: New `SmartDatetimeParser` and `DataSourceParser` classes that enhance the unified datetime system
+- **Integration Points**: Extends TASK-029 unified datetime system with intelligent format detection
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in), regex module (built-in)
+- **Configuration**: Format patterns defined in script constants for different data sources
+- **Documentation**: Add smart parsing guide to `docs/technical/SMART_PARSING.md`
+
+### Example Implementation
+
+```python
+class SmartDatetimeParser:
+    """Intelligent datetime parser with automatic format detection."""
+
+    def __init__(self):
+        """Initialize with common format patterns."""
+        # Implementation details...
+
+    def detect_format(self, datetime_str: str, source_type: str = None) -> Optional[str]:
+        """Detect the most likely datetime format for the input string."""
+        # Implementation details...
+```
 
 ## Dependencies
 

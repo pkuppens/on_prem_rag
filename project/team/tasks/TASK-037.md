@@ -16,14 +16,23 @@ After integrating real and synthetic work sessions, we need to calculate the tot
 
 ## Acceptance Criteria
 
-- [x] **Total Hours Calculation**: Calculate total WBSO hours from complete work log
-- [x] **Gap Analysis**: Identify gap to 510-hour target
-- [x] **Category Breakdown**: Analyze hours by WBSO category
-- [x] **Time Period Analysis**: Break down hours by month and week
-- [x] **Source Analysis**: Compare real vs synthetic hours
-- [x] **Repository Analysis**: Analyze hours by project/repository
-- [x] **Session Type Analysis**: Break down by session type (morning/afternoon/evening)
-- [x] **Achievement Status**: Determine if target is achieved or in progress
+### 1. Basic Totals and Gap Analysis
+
+- [x] **Sub-criteria 1.1**: Calculate total WBSO hours from complete work log
+- [x] **Sub-criteria 1.2**: Identify gap to 510-hour target
+- [x] **Sub-criteria 1.3**: Determine if target is achieved or in progress
+
+### 2. Category and Source Analysis
+
+- [x] **Sub-criteria 2.1**: Analyze hours by WBSO category
+- [x] **Sub-criteria 2.2**: Compare real vs synthetic hours
+- [x] **Sub-criteria 2.3**: Analyze hours by project/repository
+
+### 3. Time Period and Session Analysis
+
+- [x] **Sub-criteria 3.1**: Break down hours by month and week
+- [x] **Sub-criteria 3.2**: Break down by session type (morning/afternoon/evening)
+- [x] **Sub-criteria 3.3**: Generate comprehensive analysis report with all metrics
 
 ## Technical Requirements
 
@@ -153,6 +162,36 @@ def calculate_gap_analysis(wbso_hours, target_hours=510.0):
    - Group sessions by type (morning/afternoon/evening)
    - Calculate hours per session type
    - Identify work patterns
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/calculate_wbso_totals.py` - Located in hours processing scripts directory
+- **Data Model Impact**: New `wbso_analysis` data structure with comprehensive metrics and breakdowns
+- **Integration Points**: Uses complete work log from previous tasks, integrates with WBSO categorization system
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in)
+- **Configuration**: Analysis parameters defined in script constants (target hours, category mappings)
+- **Documentation**: Add WBSO totals analysis guide to `docs/project/hours/WBSO_TOTALS_ANALYSIS.md`
+
+### Example Implementation
+
+```python
+def calculate_wbso_totals(work_sessions):
+    """Calculate comprehensive WBSO hours totals and gap analysis.
+
+    Analysis includes:
+    - Basic totals (sessions, hours, WBSO percentage)
+    - Gap analysis (target vs current, achievement status)
+    - Category breakdown (AI_FRAMEWORK, ACCESS_CONTROL, etc.)
+    """
+    analysis = {}
+    # Implementation details...
+    return analysis
+```
 
 ## Dependencies
 

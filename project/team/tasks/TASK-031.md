@@ -16,13 +16,23 @@ Interactive visualization is essential for understanding work patterns and valid
 
 ## Acceptance Criteria
 
-- [x] **Jupyter Environment Setup**: Configure Jupyter notebook environment with required dependencies
-- [x] **Computer Activity Timeline**: Create daily timeline plot showing computer on/off periods using system events data
-- [x] **Commit Overlay Visualization**: Overlay commit markers on computer activity timeline with repo-specific styling
-- [x] **Interactive Time Range Selection**: Enable zoom capabilities (hours, days, weeks, months)
-- [x] **Dynamic Legend Management**: Show only active repositories in selected time range
-- [x] **Export Capabilities**: Export visualizations and analysis results
-- [x] **Documentation**: Comprehensive notebook documentation with usage examples
+### 1. Jupyter Environment Setup
+
+- [x] **Sub-criteria 1.1**: Configure Jupyter notebook environment with required dependencies
+- [x] **Sub-criteria 1.2**: Set up notebook directory structure for time analysis
+- [x] **Sub-criteria 1.3**: Create reusable visualization helper functions
+
+### 2. Core Visualization Components
+
+- [x] **Sub-criteria 2.1**: Create daily timeline plot showing computer on/off periods using system events data
+- [x] **Sub-criteria 2.2**: Overlay commit markers on computer activity timeline with repo-specific styling
+- [x] **Sub-criteria 2.3**: Implement dynamic legend management showing only active repositories in selected time range
+
+### 3. Interactive Features and Documentation
+
+- [x] **Sub-criteria 3.1**: Enable zoom capabilities (hours, days, weeks, months)
+- [x] **Sub-criteria 3.2**: Implement export capabilities for visualizations and analysis results
+- [x] **Sub-criteria 3.3**: Create comprehensive notebook documentation with usage examples
 
 ## Concrete Deliverables
 
@@ -172,6 +182,35 @@ def plot_with_zoom(data, start_time, end_time, period='day'):
    - Document notebook usage and examples
    - Create tutorial notebooks for new users
    - Add visualization best practices guide
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `notebooks/time_analysis/` - New directory for time analysis notebooks
+- **Data Model Impact**: New `TimeBasedVisualizer` class that integrates with pandas DataFrames from TASK-030
+- **Integration Points**: Uses TimeSeriesAnalyzer from TASK-030, works with existing system events and commit data
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: jupyter>=1.0.0, matplotlib>=3.7.0, seaborn>=0.12.0, plotly>=5.15.0, ipywidgets>=8.0.0
+- **Configuration**: Notebook environment configured for interactive visualization
+- **Documentation**: Add visualization guide to `docs/technical/VISUALIZATION_GUIDE.md`
+
+### Example Implementation
+
+```python
+class TimeBasedVisualizer:
+    """Interactive time-based visualization for work session analysis."""
+
+    def __init__(self, analyzer: TimeSeriesAnalyzer):
+        """Initialize with time series analyzer."""
+        # Implementation details...
+
+    def create_interactive_dashboard(self) -> None:
+        """Create interactive dashboard with zoom controls."""
+        # Implementation details...
+```
 
 ## Dependencies
 

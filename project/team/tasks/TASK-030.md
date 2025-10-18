@@ -16,13 +16,23 @@ Pandas provides powerful time series capabilities essential for analyzing work p
 
 ## Acceptance Criteria
 
-- [x] **Pandas Dependency**: Add pandas to project dependencies using `uv add`
-- [x] **Data Loading Utilities**: Create utilities to load system events and commit data into pandas DataFrames
-- [x] **Time Series Indexing**: Implement proper datetime indexing for time-based operations
-- [x] **Data Aggregation**: Create functions for time-based aggregation (hourly, daily, weekly, monthly)
-- [x] **Time Range Filtering**: Implement efficient filtering by time ranges
-- [x] **Integration with UnifiedDateTime**: Ensure compatibility with TASK-029 datetime system
-- [x] **Performance Optimization**: Optimize for large datasets with appropriate data types
+### 1. Pandas Integration Setup
+
+- [x] **Sub-criteria 1.1**: Add pandas to project dependencies using `uv add`
+- [x] **Sub-criteria 1.2**: Add related packages for visualization: `uv add --dev jupyter matplotlib seaborn`
+- [x] **Sub-criteria 1.3**: Update environment setup documentation
+
+### 2. Data Loading and Processing
+
+- [x] **Sub-criteria 2.1**: Create utilities to load system events and commit data into pandas DataFrames
+- [x] **Sub-criteria 2.2**: Implement proper datetime indexing for time-based operations
+- [x] **Sub-criteria 2.3**: Ensure compatibility with TASK-029 unified datetime system
+
+### 3. Time Series Analysis Framework
+
+- [x] **Sub-criteria 3.1**: Create functions for time-based aggregation (hourly, daily, weekly, monthly)
+- [x] **Sub-criteria 3.2**: Implement efficient filtering by time ranges
+- [x] **Sub-criteria 3.3**: Optimize for large datasets with appropriate data types
 
 ## Technical Requirements
 
@@ -113,6 +123,35 @@ def prepare_time_series_data(system_events_df: pd.DataFrame, commits_df: pd.Data
    - Test with existing data files
    - Validate time series operations
    - Performance testing with large datasets
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `src/backend/data_analysis/` - New directory for pandas-based analysis modules
+- **Data Model Impact**: New `TimeSeriesAnalyzer` class that works with pandas DataFrames for system events and commits
+- **Integration Points**: Uses unified datetime system from TASK-029, integrates with existing CSV/JSON data sources
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: pandas>=2.0.0, jupyter>=1.0.0, matplotlib>=3.7.0, seaborn>=0.12.0
+- **Configuration**: Data loading utilities configured for existing data file formats
+- **Documentation**: Add pandas integration guide to `docs/technical/PANDAS_INTEGRATION.md`
+
+### Example Implementation
+
+```python
+class TimeSeriesAnalyzer:
+    """Pandas-based time series analysis for work session data."""
+
+    def __init__(self, system_events_df: pd.DataFrame, commits_df: pd.DataFrame):
+        """Initialize with system events and commits data."""
+        # Implementation details...
+
+    def filter_by_time_range(self, start_time: str, end_time: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """Filter data by time range for zoom operations."""
+        # Implementation details...
+```
 
 ## Dependencies
 

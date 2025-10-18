@@ -16,13 +16,23 @@ Time is the horizontal axis for project analysis, making unified datetime handli
 
 ## Acceptance Criteria
 
-- [x] **Unified Datetime Class**: Create a standardized datetime class with consistent format (YYYY-MM-DD HH:mm:ss)
-- [x] **Smart Parsing System**: Implement intelligent parsing for multiple input formats from different data sources
-- [x] **Timezone Handling**: Standardize to local user timestamp without timezone complexity
-- [x] **Sortable Format**: Ensure datetime strings are naturally sortable in lexicographic order
-- [x] **Integration Points**: Replace existing `parse_datetime_flexible()` functions across the codebase
-- [x] **Error Handling**: Robust error handling for malformed datetime strings
-- [x] **Performance**: Efficient parsing suitable for large datasets
+### 1. Unified Datetime Class
+
+- [x] **Sub-criteria 1.1**: Create a standardized datetime class with consistent format (YYYY-MM-DD HH:mm:ss)
+- [x] **Sub-criteria 1.2**: Implement flexible input types (string, datetime, None) with proper initialization
+- [x] **Sub-criteria 1.3**: Ensure datetime strings are naturally sortable in lexicographic order
+
+### 2. Smart Parsing System
+
+- [x] **Sub-criteria 2.1**: Implement intelligent parsing for multiple input formats from different data sources
+- [x] **Sub-criteria 2.2**: Support all existing formats found in the codebase (system events, git commits, CSV files)
+- [x] **Sub-criteria 2.3**: Standardize to local user timestamp without timezone complexity
+
+### 3. Integration and Performance
+
+- [x] **Sub-criteria 3.1**: Replace existing `parse_datetime_flexible()` functions across the codebase
+- [x] **Sub-criteria 3.2**: Implement robust error handling for malformed datetime strings
+- [x] **Sub-criteria 3.3**: Ensure efficient parsing suitable for large datasets
 
 ## Technical Requirements
 
@@ -101,6 +111,40 @@ class UnifiedDateTime:
    - Document the unified datetime system
    - Create migration guide for existing code
    - Update all affected modules
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `src/backend/datetime_utils.py` - Core utility module for datetime operations
+- **Data Model Impact**: New `UnifiedDateTime` class that standardizes all datetime operations across the project
+- **Integration Points**: Replaces scattered `parse_datetime_flexible()` functions in session_detection.py and hours processing scripts
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in), typing module (built-in)
+- **Configuration**: No external configuration required - uses hardcoded format patterns
+- **Documentation**: Add unified datetime system documentation to `docs/technical/DATETIME_SYSTEM.md`
+
+### Example Implementation
+
+```python
+class UnifiedDateTime:
+    """Unified datetime handling for project time-based analysis.
+
+    Provides consistent datetime operations with standardized format
+    and smart parsing capabilities for multiple data sources.
+    """
+
+    def __init__(self, datetime_input: Union[str, datetime, None] = None):
+        """Initialize with flexible input types."""
+        # Implementation details...
+
+    @classmethod
+    def parse_flexible(cls, dt_str: str) -> 'UnifiedDateTime':
+        """Parse datetime string with multiple format support."""
+        # Implementation details...
+```
 
 ## Dependencies
 

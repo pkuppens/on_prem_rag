@@ -11,12 +11,29 @@ Integrate system events work blocks with the existing Git commit analysis to cre
 
 ## Acceptance Criteria
 
-- [ ] **Data Source Integration**: Combine system events work blocks with Git commit sessions
-- [ ] **Conflict Resolution**: Handle cases where system events and Git commits show different activity patterns
-- [ ] **Gap Analysis**: Identify periods of uncommitted work activity using system events
-- [ ] **Enhanced Hour Calculation**: Improve hour allocation by considering both data sources
-- [ ] **Validation Logic**: Create validation rules to ensure consistency between data sources
-- [ ] **Updated Processing Pipeline**: Modify existing `process_commits.py` to include system events data
+### 1. Data Source Integration
+
+- [ ] **Sub-criteria 1.1**: Combine system events work blocks with Git commit sessions
+- [ ] **Sub-criteria 1.2**: Create mapping between work blocks and Git sessions based on time ranges
+- [ ] **Sub-criteria 1.3**: Implement data structure to hold integrated session information
+
+### 2. Conflict Resolution
+
+- [ ] **Sub-criteria 2.1**: Handle cases where system events and Git commits show different activity patterns
+- [ ] **Sub-criteria 2.2**: Implement confidence-based decision making when sources disagree
+- [ ] **Sub-criteria 2.3**: Create reasoning documentation for conflict resolution decisions
+
+### 3. Gap Analysis and Hour Calculation
+
+- [ ] **Sub-criteria 3.1**: Identify periods of uncommitted work activity using system events
+- [ ] **Sub-criteria 3.2**: Improve hour allocation by considering both data sources
+- [ ] **Sub-criteria 3.3**: Ensure final hours don't exceed system session duration
+
+### 4. Validation and Pipeline Updates
+
+- [ ] **Sub-criteria 4.1**: Create validation rules to ensure consistency between data sources
+- [ ] **Sub-criteria 4.2**: Modify existing `process_commits.py` to include system events data
+- [ ] **Sub-criteria 4.3**: Ensure backward compatibility with existing outputs
 
 ## Technical Requirements
 
@@ -87,6 +104,37 @@ Integrate system events work blocks with the existing Git commit analysis to cre
    - Test integration with existing data
    - Validate hour calculations against known patterns
    - Ensure backward compatibility with existing outputs
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/integrate_system_events_commits.py` - New integration script that combines outputs from TASK-025 and TASK-027
+- **Data Model Impact**: Enhanced `integrated_session` data structure with fields: session_id, start_time, end_time, duration_hours, data_sources (git_commits, system_events), final_hours, reasoning
+- **Integration Points**: Uses work blocks from TASK-025 and processed commits from TASK-027, outputs integrated sessions for downstream processing
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, pandas>=2.0.0 for data processing
+- **Configuration**: Integration rules defined in script constants (primary source, conflict resolution logic)
+- **Documentation**: Add integration rules to `docs/project/hours/data/INTEGRATION_RULES.md`
+
+### Example Implementation
+
+```python
+def integrate_data_sources(work_blocks, git_sessions):
+    """Integrate system events work blocks with Git commit sessions.
+
+    Integration rules:
+    1. Primary source: System events for session boundaries
+    2. Secondary source: Git commits for activity details
+    3. Conflict resolution: Use higher confidence score
+    4. Gap filling: Use system events for uncommitted work periods
+    """
+    integrated_sessions = []
+    # Implementation details...
+    return integrated_sessions
+```
 
 ## Dependencies
 

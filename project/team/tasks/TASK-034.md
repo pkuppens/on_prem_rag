@@ -16,13 +16,23 @@ The work log integration identified 291 unassigned commits (60.2% of total commi
 
 ## Acceptance Criteria
 
-- [x] **Synthetic Session Generator**: Create script to generate work sessions from unassigned commits
-- [x] **Session Type Detection**: Intelligently determine morning/afternoon/evening sessions based on commit timestamps
-- [x] **WBSO Categorization**: Apply WBSO activity categorization based on commit messages
-- [x] **Reasonable Time Estimates**: Generate realistic work session durations (3-4 hours per session)
-- [x] **Session Templates**: Use predefined templates for different session types
-- [x] **Output Format**: Generate structured JSON output compatible with work log merger
-- [x] **Documentation**: Include WBSO justification for each synthetic session
+### 1. Synthetic Session Generation
+
+- [x] **Sub-criteria 1.1**: Create script to generate work sessions from unassigned commits
+- [x] **Sub-criteria 1.2**: Intelligently determine morning/afternoon/evening sessions based on commit timestamps
+- [x] **Sub-criteria 1.3**: Generate realistic work session durations (3-4 hours per session)
+
+### 2. WBSO Categorization and Compliance
+
+- [x] **Sub-criteria 2.1**: Apply WBSO activity categorization based on commit messages
+- [x] **Sub-criteria 2.2**: Use predefined templates for different session types
+- [x] **Sub-criteria 2.3**: Include WBSO justification for each synthetic session
+
+### 3. Output and Integration
+
+- [x] **Sub-criteria 3.1**: Generate structured JSON output compatible with work log merger
+- [x] **Sub-criteria 3.2**: Mark sessions as synthetic with appropriate indicators
+- [x] **Sub-criteria 3.3**: Ensure output format integrates with existing work session data
 
 ## Technical Requirements
 
@@ -108,6 +118,36 @@ session_templates = {
 5. **Output Generation**
    - Create structured JSON with all required fields
    - Include summary statistics and category breakdown
+
+## Implementation Details
+
+### Architecture Decisions
+
+- **Script Location**: `docs/project/hours/scripts/generate_synthetic_sessions.py` - Located in hours processing scripts directory
+- **Data Model Impact**: New `synthetic_session` data structure with fields: session_id, start_time, end_time, duration_hours, work_hours, session_type, confidence_score, source_commits, is_wbso, wbso_category, wbso_justification
+- **Integration Points**: Uses work log from TASK-028, integrates with WBSO categorization system, outputs compatible with work log merger
+
+### Tool and Dependency Specifications
+
+- **Tool Versions**: Python>=3.12, datetime module (built-in)
+- **Configuration**: Session templates defined in script constants, WBSO categorization rules configured
+- **Documentation**: Add synthetic session generation guide to `docs/project/hours/SYNTHETIC_SESSIONS.md`
+
+### Example Implementation
+
+```python
+def generate_synthetic_sessions(unassigned_commits):
+    """Generate synthetic work sessions from unassigned commits.
+
+    Session templates:
+    - Morning: 8:00-12:00 (4 hours, 3.5 work hours)
+    - Afternoon: 13:00-17:00 (4 hours, 3.5 work hours)
+    - Evening: 19:00-22:00 (3 hours, 3.0 work hours)
+    """
+    synthetic_sessions = []
+    # Implementation details...
+    return synthetic_sessions
+```
 
 ## Dependencies
 

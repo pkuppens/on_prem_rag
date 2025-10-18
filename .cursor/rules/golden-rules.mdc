@@ -122,6 +122,7 @@ This guide outlines the key principles and practices for AI-assisted development
 - Follow coding style guidelines
 - Use SOLID principles where applicable, like dependency injection for external interfaces.
 - **Follow branch management strategy** with proper naming conventions (feature/, task/, bug/, hotfix/)
+- **Branch Policy**: Feature/task implementation MUST use branches; documentation/config can go directly to main (see [branch-policy.mdc](mdc:.cursor/rules/branch-policy.mdc))
 
 ### 3. Testing Standards
 

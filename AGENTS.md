@@ -12,7 +12,9 @@ This document provides a practical example of how OpenAI Codex is integrated int
 
 1. **Branch Management**
 
-   - Codex is utilized on the main branch to ensure consistency and avoid conflicts.
+   - **Feature/Task Implementation**: MUST use feature/task branches (feature/FEAT-XXX, task/TASK-XXX)
+   - **Direct to Main Allowed**: Documentation updates, CI/build configurations, agentic rules only
+   - **Branch Naming**: Follow conventions in github-integration.mdc
    - Regular merges from feature branches to keep the main branch updated.
 
 2. **Commit Strategy**

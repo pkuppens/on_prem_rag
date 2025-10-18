@@ -1,0 +1,134 @@
+---
+description: Branch management policy for feature/task implementation vs documentation
+alwaysApply: true
+---
+
+# Branch Policy
+
+This rule defines when branches are required versus when direct commits to main are allowed.
+
+## Branch Requirements
+
+### MUST Use Branches
+
+**Feature/Task Implementation** - All code changes that implement new functionality:
+
+- **Feature Development**: `feature/FEAT-XXX-short-description`
+- **Task Implementation**: `task/TASK-XXX-short-description`
+- **Bug Fixes**: `bug/BUG-XXX-short-description`
+- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
+
+**Examples of Branch-Required Changes**:
+- New API endpoints or routes
+- Database schema changes
+- New business logic implementation
+- Configuration changes that affect runtime behavior
+- New dependencies or package updates
+- Test implementations for new features
+- Refactoring of existing functionality
+
+### Direct to Main Allowed
+
+**Documentation and Configuration** - Changes that don't affect runtime behavior:
+
+- **Documentation Updates**: README, technical docs, project management docs
+- **CI/Build Configuration**: GitHub Actions, Docker configs, build scripts
+- **Agentic Rules**: `.cursor/rules/*.mdc` files
+- **Project Management**: Task files, story files, epic files
+- **Configuration Files**: Environment examples, linting configs
+- **Scripts**: Utility scripts for data processing, analysis, reporting
+
+**Examples of Direct-to-Main Changes**:
+- Updating task completion status in TASK-*.md files
+- Adding new project documentation
+- Updating coding standards or rules
+- CI pipeline improvements
+- Documentation corrections or additions
+- WBSO hours processing scripts
+- Project status reports
+
+## Enforcement
+
+### AI Agent Behavior
+
+AI agents must:
+1. **Check change type** before suggesting commits
+2. **Create branches** for any feature/task implementation
+3. **Commit directly to main** only for documentation/config changes
+4. **Follow branch naming conventions** from github-integration.mdc
+
+### Pre-commit Hooks
+
+The existing pre-push hooks enforce:
+- All pytest tests must pass
+- Code quality standards (ruff linting)
+- No direct enforcement of branch policy (relies on AI agent compliance)
+
+### Code Review
+
+During code reviews:
+- Verify branch usage for feature implementations
+- Confirm direct-to-main commits are documentation/config only
+- Check branch naming follows conventions
+
+## Branch Naming Conventions
+
+Follow the conventions defined in [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc):
+
+- **Features**: `feature/FEAT-XXX-short-description`
+- **Tasks**: `task/TASK-XXX-short-description`
+- **Bugs**: `bug/BUG-XXX-short-description`
+- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
+
+## Examples
+
+### ✅ Correct: Use Branch
+
+```bash
+# Feature implementation
+git checkout -b feature/FEAT-003-rag-pipeline
+# ... implement RAG pipeline code ...
+git commit -m "FEAT-003: Implement RAG pipeline core functionality"
+git push -u origin feature/FEAT-003-rag-pipeline
+```
+
+### ✅ Correct: Direct to Main
+
+```bash
+# Documentation update
+git add project/team/tasks/TASK-034.md
+git commit -m "TASK-034: Update task completion status"
+git push origin main
+```
+
+### ❌ Incorrect: Direct to Main for Feature
+
+```bash
+# This should use a branch
+git add src/backend/new_feature.py
+git commit -m "Add new feature implementation"  # WRONG - should be on branch
+```
+
+### ❌ Incorrect: Branch for Documentation
+
+```bash
+# This is unnecessary overhead
+git checkout -b docs/update-readme  # WRONG - can go directly to main
+git add README.md
+git commit -m "Update README"
+```
+
+## Integration with SAFe Methodology
+
+This branch policy aligns with the SAFe project structure:
+
+- **Epic → Feature → Story → Task** hierarchy preserved
+- **Feature branches** for epic-level implementations
+- **Task branches** for story-level implementations
+- **Direct commits** for project management artifacts
+
+## Related Rules
+
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - Branch naming and workflow
+- [golden-rules.mdc](mdc:.cursor/rules/golden-rules.mdc) - Core development principles
+- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - SAFe methodology

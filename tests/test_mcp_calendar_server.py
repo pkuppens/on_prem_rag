@@ -133,6 +133,47 @@ class MCPCalendarServerTester:
             print(f"❌ Failed: {e}")
             return False
 
+    def cleanup_old_test_events(self) -> None:
+        """Clean up old test events from previous test runs.
+
+        This ensures a clean state before creating new test events.
+        """
+        try:
+            # Read events from December 2024
+            start_date = datetime(TEST_YEAR, TEST_MONTH, 1, 0, 0, 0)
+            end_date = datetime(TEST_YEAR, TEST_MONTH, 31, 23, 59, 59)
+
+            events_result = (
+                self.service.events()
+                .list(
+                    calendarId=self.calendar_id,
+                    timeMin=start_date.isoformat() + "Z",
+                    timeMax=end_date.isoformat() + "Z",
+                    singleEvents=True,
+                    orderBy="startTime",
+                )
+                .execute()
+            )
+
+            events = events_result.get("items", [])
+
+            # Find and delete all test events
+            test_events = [e for e in events if e.get("summary", "").startswith(TEST_EVENT_PREFIX)]
+
+            deleted_count = 0
+            for event in test_events:
+                try:
+                    self.service.events().delete(calendarId=self.calendar_id, eventId=event["id"]).execute()
+                    deleted_count += 1
+                except Exception:
+                    pass  # Ignore errors for individual deletions
+
+            if deleted_count > 0:
+                print(f"🧹 Cleaned up {deleted_count} old test events")
+
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to clean up old test events: {e}")
+
     def test_create_dummy_events(self) -> bool:
         """Create dummy events in December 2024 for testing.
 
@@ -140,6 +181,9 @@ class MCPCalendarServerTester:
             True if events created successfully
         """
         print("Testing create_calendar_event...")
+
+        # Clean up old test events first
+        self.cleanup_old_test_events()
 
         try:
             # Create 3 test events in December 2024
@@ -396,9 +440,7 @@ class MCPCalendarServerTester:
 
             event_body = {"summary": updated_summary, "description": updated_description}
 
-            updated_event = (
-                self.service.events().patch(calendarId=self.calendar_id, eventId=event_id, body=event_body).execute()
-            )
+            updated_event = self.service.events().patch(calendarId=self.calendar_id, eventId=event_id, body=event_body).execute()
 
             if updated_event["summary"] == updated_summary:
                 print(f"✅ Successfully edited event: {updated_summary}")
@@ -557,5 +599,3 @@ def test_mcp_calendar_server_integration():
                     tester.service.events().delete(calendarId=tester.calendar_id, eventId=event_id).execute()
                 except Exception:
                     pass  # Ignore cleanup errors
-
-

@@ -205,8 +205,6 @@ markers = [
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
-# Configure test environment
-env_files = [".env.test"]
 # Configure pytest-asyncio
 asyncio_mode = "auto"
 

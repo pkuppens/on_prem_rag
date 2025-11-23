@@ -1,0 +1,36 @@
+{
+  "list_calendars": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "create_events": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "read_events": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "summarize_events": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "detect_duplicates": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "edit_event": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "delete_events": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  },
+  "full_workflow": {
+    "status": "PENDING",
+    "message": "Initial placeholder - run tests to generate actual results"
+  }
+}
+
+

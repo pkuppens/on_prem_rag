@@ -297,3 +297,49 @@ datetime|timestamp|message|author|hash
 2025-09-30 13:50:15|1759233015|TASK-025: Computer On System Events|Pieter Kuppens|e97eeeb942a71af662751c803108021246bd4c3b
 2025-09-30 14:09:36|1759234176|TASK-027 for commit processing definition|Pieter Kuppens|5ed89d419b7b7c7f9a34be49b71884539cbf39bf
 2025-09-30 14:28:29|1759235309|TASK-027: Commit data to JSON processing.|Pieter Kuppens|3602b78d88dacb5a1ad4693ac92ce340461bfa2a
+2025-09-30 16:42:52|1759243372|feat: unify timestamp format in data files and extraction scripts|Pieter Kuppens|1e5fd26e715b842048bc4ab6ecbcb21a8a5ff40e
+2025-09-30 16:44:09|1759243449|feat: add processing scripts for unified datetime format|Pieter Kuppens|aa17594bd02b6abd62263625d686ab58d0a7992b
+2025-09-30 16:46:08|1759243568|fix: correct git datetime format in batch files|Pieter Kuppens|56d8308aa2ef88441accd56a96ba89f8fc81a73c
+2025-09-30 22:41:42|1759264902|trying to get work sessions|Pieter Kuppens|f6b4634aecfc621b06b7c875a1e6f6732d4af618
+2025-10-01 07:49:26|1759297766|Fix lunch break assignment issue in session detection|Pieter Kuppens|e8084e223b39aa11d3f5a8a9ea397e84e2b22486
+2025-10-02 21:48:43|1759434523|clean up all_system_events..csv|Pieter Kuppens|09cbb82cb52737560d34963733afecfa73561bd6
+2025-10-02 22:02:27|1759435347|removed initial event so we can start with a log on|Pieter Kuppens|9156755c91be18f876ff3f545a78404fb37c5fb0
+2025-10-02 22:59:56|1759438796|some break tweaking|Pieter Kuppens|8af2ce8ee33aac74889b6fc382461f853d3a68ba
+2025-10-02 23:16:38|1759439798|TASK-028.md: definition|Pieter Kuppens|7510eaaa110aa5a71d03b8f4a65abdcbc528e5ae
+2025-10-03 08:08:02|1759471682|feat: implement git push hooks to enforce unit test passing|Pieter Kuppens|15503b455dd427b476cb2985a2f0c5ca293aa66c
+2025-10-03 08:09:32|1759471772|docs: update documentation for git push enforcement|Pieter Kuppens|78460aaa916871d1de037495e696554b8db89f1f
+2025-10-03 08:26:39|1759472799|refactor: simplify git push bypass to use only --no-verify|Pieter Kuppens|aaccc063691c7dbf28f8b3cdf43897d72c14ea2f
+2025-10-03 08:32:39|1759473159|fix: add missing username parameter to SystemEvent class|Pieter Kuppens|b47b035e4846eeedd633488e53a23f29977b04d0
+2025-10-03 19:26:12|1759512372|TASK-028: but not happy about large number of unassigned commits.|Pieter Kuppens|ffe5a41d6e8b11ac765a9bbd6496119ed2402dfc
+2025-10-04 09:35:09|1759563309|tasks that help make datetime based analysis|Pieter Kuppens|81ce44e2d7ced6df9d2d4c1ff0898785c66cfc92
+2025-10-04 09:42:26|1759563746|TASK-029: Implement unified datetime handling system|Pieter Kuppens|f4351931e51aa7d0d1cbce321745c752b4b40906
+2025-10-04 11:49:15|1759571355|TASK-029: Address code review comments for unified datetime system|Pieter Kuppens|f587cdfdc69c7df801a92c1dc9735c556ddff14c
+2025-10-04 12:03:01|1759572181|chore: parallel test execution|Pieter Kuppens|8336fed9acc4d9128a3589f5791b75fbee2c2f53
+2025-10-04 12:11:56|1759572716|Fix parallel test execution issues in session detection tests|Pieter Kuppens|2f507dc318bdaafb487cb6f8ed97591cd7c5208c
+2025-10-04 12:33:45|1759574025|Merge pull request #59 from pkuppens/task/TASK-029-unified-datetime-system|Pieter Kuppens|b23e98edb7c5c2d345c0f4f26d381b36af328b3a
+2025-10-04 12:43:55|1759574635|TASK-030: Implement pandas integration for time-based data analysis|Pieter Kuppens|03d0aad1601679c0212c81f4c5be1c036c174392
+2025-10-04 13:15:42|1759576542|TASK-032: Complete smart datetime parsing system implementation|Pieter Kuppens|061a5437f39608c1698b5e6b1808fc18149dccc7
+2025-10-04 14:03:34|1759579414|TASK-031: Implement Jupyter notebook infrastructure for time-based visualization|Pieter Kuppens|96307e55c238bf1869f00756e0a904098d4e8fde
+2025-10-04 14:05:10|1759579510|Fix timezone handling in datetime_utils.py|Pieter Kuppens|fe70c209dc32f62dd438741bb2e149f4475074c5
+2025-10-18 10:00:04|1760774404|Add PR command for automated pull request creation with lessons learned|Pieter Kuppens|0c4dc9f6d298f72d85a85343a53498c811c58530
+2025-10-18 10:12:55|1760775175|Fix formatting in PR command file|Pieter Kuppens|c081ccb5b43509ecd766dc86c40c7f4d5b214582
+2025-10-18 10:14:03|1760775243|Fix GitHub Actions Python version issue and enhance PR command|Pieter Kuppens|8899462124a11e17effd959631c683f6dcc28352
+2025-10-18 10:14:47|1760775287|Fix final formatting in PR command file|Pieter Kuppens|1951808bd1fa8eba344bd93cbfab7c447752e910
+2025-10-18 10:46:41|1760777201|Fix GitHub Actions setup failure with Python 3.14|Pieter Kuppens|0d5ab3e8a75f5d2128cb636f3f507c95613ec510
+2025-10-18 11:39:45|1760780385|Fix timezone handling bug: Convert from UTC to Amsterdam timezone|Pieter Kuppens|8a10f1d9d87d03c04cbf68752d8dcc1bd7549390
+2025-10-18 11:59:56|1760781596|Merge pull request #60 from pkuppens/feature/TASK-030-pandas-integration|Pieter Kuppens|609594048da4f6847a251d925fef783eefbfbda2
+2025-10-18 15:42:28|1760794948|RULES: Enforce branch policy for feature/task implementation|Pieter Kuppens|6b5d5a05bf88c7312f24c8586e6c20033e61570a
+2025-10-18 15:42:37|1760794957|TASK-034, TASK-035, TASK-036: Add WBSO synthetic sessions and calendar integration tasks|Pieter Kuppens|2ef5e4e9cf07cd28fa9c6385cf3bd9acb6c72e15
+2025-10-18 15:42:45|1760794965|TASK-037, TASK-038: Add WBSO totals calculation and Friday work plan tasks|Pieter Kuppens|da6cd1d61082dd281a48e28ae6062d9e9bcc2bc7
+2025-10-18 15:42:57|1760794977|WBSO: Add final report and Friday work plan documentation|Pieter Kuppens|df83aa740ef514d8b047f0dfa49dfdc97c5106d7
+2025-10-18 15:43:24|1760795004|WBSO: Add hours processing scripts for synthetic sessions and calendar integration|Pieter Kuppens|9836d127c9f2f4146a343a98f2c94041ffd43c12
+2025-10-18 15:53:28|1760795608|docs: improve markdown formatting with blank lines for readability|Pieter Kuppens|56e2e9454963a4b58e1b738785903d92822f09eb
+2025-10-18 17:40:10|1760802010|reflection: enhance task template with three-level hierarchy and retrofit all tasks 025-038|Pieter Kuppens|423d425b7cf2fe6081c38f16b3723d9600bf4563
+2025-10-18 18:41:17|1760805677|TASK-039: Implement WBSO Calendar Data Validation, Upload, and Reporting System|Pieter Kuppens|b6d561350aad849e78f486b373de173a728a77bc
+2025-10-19 00:51:15|1760827875|FEAT-003: Implement database normalization for WBSO system|Pieter Kuppens|2a857ce80548774bef3c1de7f357960dabbc7807
+2025-10-19 01:16:06|1760829366|Add comprehensive date formatting standards and fix hardcoded dates|Pieter Kuppens|65ae3feb7978534ce0bde48e7c7467648a9b34cd
+2025-10-19 01:17:13|1760829433|Clarify date formatting rule: emphasize 100% accuracy requirement|Pieter Kuppens|9dd473d87ee62c3d0692bdae883896cdf061a8d7
+2025-10-19 01:35:27|1760830527|Clarify date formatting rule: distinguish Created vs Updated dates|Pieter Kuppens|cbed9adf53779175dcec9783e893481b32f78dac
+2025-10-19 01:37:05|1760830625|Fix formatting in date formatting rule documentation|Pieter Kuppens|63dc9e9b9b52b6baf39ec758f654ebc761b6db1e
+2025-10-19 13:35:10|1760873710|correct creation and update times|Pieter Kuppens|5592c04d8699f0048ad201a71c70e3157b36f1ed
+2025-10-19 14:37:07|1760877427|TASK-039: Add comprehensive deliverables section documenting all created artifacts|Pieter Kuppens|da9c231efcbee6923d668277b2697b28f3c1010b

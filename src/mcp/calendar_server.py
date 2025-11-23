@@ -656,9 +656,7 @@ async def handle_detect_duplicates_conflicts(arguments: Dict[str, Any]) -> Dict[
                 check_start = check_event.get("start", {}).get("dateTime")
                 check_end = check_event.get("end", {}).get("dateTime")
                 if check_start == start and check_end == end:
-                    duplicates_by_datetime.append(
-                        {"datetime_range": f"{start}-{end}", "existing_event_id": event.get("id")}
-                    )
+                    duplicates_by_datetime.append({"datetime_range": f"{start}-{end}", "existing_event_id": event.get("id")})
 
     # Check for conflicts (overlapping events)
     conflicts = []
@@ -766,7 +764,10 @@ async def handle_edit_calendar_event(arguments: Dict[str, Any]) -> Dict[str, Any
                         existing_event[key] = {"dateTime": dt.strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Europe/Amsterdam"}
                     except (ValueError, TypeError):
                         # If parsing fails, use value as-is but ensure timezone
-                        existing_event[key] = {"dateTime": value, "timeZone": existing_event.get(key, {}).get("timeZone", "Europe/Amsterdam")}
+                        existing_event[key] = {
+                            "dateTime": value,
+                            "timeZone": existing_event.get(key, {}).get("timeZone", "Europe/Amsterdam"),
+                        }
                 else:
                     existing_event[key] = value
             else:
@@ -867,11 +868,11 @@ async def main():
     print("Server is now running. Waiting for MCP client connections...", file=sys.stderr)
     print("=" * 70, file=sys.stderr)
     print("", file=sys.stderr)
-    
+
     logger.info("MCP Calendar Server starting with stdio transport")
     logger.info(f"Credentials path: {credentials_path}")
     logger.info(f"Token path: {token_path}")
-    
+
     try:
         async with stdio_server() as (read_stream, write_stream):
             logger.info("MCP server initialized, entering event loop")
@@ -904,4 +905,3 @@ def main_sync():
 
 if __name__ == "__main__":
     main_sync()
-

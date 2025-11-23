@@ -113,9 +113,7 @@ async def test_mcp_connection():
                         # Check for WBSO calendar
                         from wbso.upload import WBSO_CALENDAR_NAME
 
-                        wbso_found = any(
-                            cal.get("summary") == WBSO_CALENDAR_NAME for cal in calendars
-                        )
+                        wbso_found = any(cal.get("summary") == WBSO_CALENDAR_NAME for cal in calendars)
                         if wbso_found:
                             print(f"  [OK] WBSO calendar '{WBSO_CALENDAR_NAME}' is accessible")
                         else:
@@ -172,4 +170,3 @@ def main_sync():
 
 if __name__ == "__main__":
     main_sync()
-

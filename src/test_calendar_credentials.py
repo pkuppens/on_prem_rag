@@ -19,13 +19,10 @@ if str(scripts_dir) not in sys.path:
 
 # Import main from the scripts directory
 import importlib.util
-spec = importlib.util.spec_from_file_location(
-    "test_calendar_credentials_script",
-    scripts_dir / "test_calendar_credentials.py"
-)
+
+spec = importlib.util.spec_from_file_location("test_calendar_credentials_script", scripts_dir / "test_calendar_credentials.py")
 test_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(test_module)
 main = test_module.main
 
 __all__ = ["main"]
-

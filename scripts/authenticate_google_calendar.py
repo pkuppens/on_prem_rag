@@ -67,7 +67,7 @@ def authenticate():
     if token_path.exists():
         print(f"[INFO] Existing token found at: {token_path}")
         response = input("Delete existing token and re-authenticate? (y/n): ").strip().lower()
-        if response == 'y':
+        if response == "y":
             try:
                 token_path.unlink()
                 print("[OK] Existing token deleted")
@@ -105,10 +105,10 @@ def authenticate():
     try:
         # Create OAuth flow
         flow = InstalledAppFlow.from_client_secrets_file(str(credentials_path), SCOPES)
-        
+
         # Run the OAuth flow - this will open a browser
         creds = flow.run_local_server(port=0)
-        
+
         print()
         print("[OK] Authentication successful!")
         print()
@@ -130,7 +130,7 @@ def authenticate():
             calendar_list = service.calendarList().list().execute()
             calendars = calendar_list.get("items", [])
             print(f"[OK] Successfully connected! Found {len(calendars)} calendar(s)")
-            
+
             if calendars:
                 print()
                 print("Accessible calendars:")
@@ -172,4 +172,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

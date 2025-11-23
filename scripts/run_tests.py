@@ -343,10 +343,7 @@ class TestDetector:
             if re.search(r"integration.*test", content, re.IGNORECASE):
                 return True
             # Check for service dependencies
-            if any(
-                service in content.lower()
-                for service in ["docker", "chromadb", "ollama", "mcp", "calendar", "websocket"]
-            ):
+            if any(service in content.lower() for service in ["docker", "chromadb", "ollama", "mcp", "calendar", "websocket"]):
                 return True
         except Exception:
             pass
@@ -453,6 +450,7 @@ class TestRunner:
             # Check if pytest-xdist is available
             try:
                 import xdist
+
                 if workers:
                     pytest_args.extend(["-n", str(workers)])
                 else:
@@ -467,7 +465,7 @@ class TestRunner:
         # This avoids pyvenv.cfg errors by preferring direct execution
         use_uv = False
         pytest_cmd = None
-        
+
         # First, try pytest directly (if installed in PATH or current environment)
         try:
             result = subprocess.run(
@@ -507,7 +505,7 @@ class TestRunner:
                     pytest_cmd = [sys.executable, "-m", "pytest"]
                     if self.verbose:
                         print("   [WARN] pytest not found, attempting python -m pytest")
-        
+
         if pytest_cmd is None:
             pytest_cmd = [sys.executable, "-m", "pytest"]
 
@@ -532,7 +530,7 @@ class TestRunner:
             if result.stderr and "pyvenv.cfg" not in result.stderr.lower():
                 # Only print stderr if it's not the pyvenv.cfg error
                 print(result.stderr, file=sys.stderr)
-            
+
             # Check if there was a pyvenv.cfg error in stderr
             if result.stderr and ("pyvenv.cfg" in result.stderr.lower() or "failed to locate" in result.stderr.lower()):
                 if use_uv:
@@ -546,7 +544,7 @@ class TestRunner:
                         cwd=PROJECT_ROOT,
                         timeout=3600,
                     )
-            
+
             exit_code = result.returncode
         except subprocess.TimeoutExpired:
             print("   [FAIL] Test execution timed out")
@@ -584,6 +582,7 @@ def check_dependencies() -> bool:
     """
     try:
         import pytest
+
         return True
     except ImportError:
         print("[FAIL] pytest not installed. Run: uv sync --dev")
@@ -600,9 +599,7 @@ def main() -> int:
     if not check_dependencies():
         return 1
 
-    parser = argparse.ArgumentParser(
-        description="Test Agent: Detect and execute tests with service management"
-    )
+    parser = argparse.ArgumentParser(description="Test Agent: Detect and execute tests with service management")
     parser.add_argument(
         "--file",
         type=str,
@@ -752,4 +749,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

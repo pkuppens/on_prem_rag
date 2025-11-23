@@ -44,8 +44,7 @@ def validate_wbso_calendar_write(
     """
     if not allowed_calendar_id:
         error_msg = (
-            "WBSO calendar ID not found. Cannot validate write operation. "
-            "Write operations are only allowed to the WBSO calendar."
+            "WBSO calendar ID not found. Cannot validate write operation. Write operations are only allowed to the WBSO calendar."
         )
         logger.error(error_msg)
         return False, error_msg
@@ -60,9 +59,7 @@ def validate_wbso_calendar_write(
         logger.error(error_msg)
         return False, error_msg
 
-    logger.debug(
-        f"Write operation validated: calendar '{calendar_id}' matches WBSO calendar '{WBSO_CALENDAR_NAME}'"
-    )
+    logger.debug(f"Write operation validated: calendar '{calendar_id}' matches WBSO calendar '{WBSO_CALENDAR_NAME}'")
     return True, ""
 
 
@@ -82,4 +79,3 @@ def validate_calendar_id_for_read(calendar_id: Optional[str]) -> bool:
         logger.warning("Read operation attempted without calendar_id - will use default WBSO calendar")
         return False
     return True
-

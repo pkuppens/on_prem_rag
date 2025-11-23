@@ -29,7 +29,7 @@ class TestReportGenerator:
             # Default to tests directory
             results_file = Path(__file__).parent.parent.parent / "tests" / "test_results_mcp_calendar.json"
         self.results_file = Path(results_file)
-        
+
         if output_file is None:
             # Default output file
             output_file = Path(__file__).parent.parent.parent / "tests" / "test_report_mcp_calendar.md"
@@ -265,7 +265,9 @@ class TestReportGenerator:
             report_lines.append("The following tests were skipped:\n")
             for test_name, result in self.results.items():
                 if result.get("status") == "SKIP":
-                    report_lines.append(f"- **{test_name.replace('_', ' ').title()}**: {result.get('reason', 'No reason provided')}")
+                    report_lines.append(
+                        f"- **{test_name.replace('_', ' ').title()}**: {result.get('reason', 'No reason provided')}"
+                    )
             report_lines.append("")
 
         if failed_tests == 0 and skipped_tests == 0:
@@ -313,4 +315,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

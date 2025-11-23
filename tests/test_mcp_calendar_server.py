@@ -376,11 +376,9 @@ class MCPCalendarServerTester:
                 event_id = event.get("id")
                 private_props = event.get("extendedProperties", {}).get("private", {})
                 test_marker = private_props.get("test_marker")
-                
+
                 # Include if it has our test marker or is one of our created event IDs
-                if (test_marker == "mcp_integration_test" and event_id in self.test_event_ids) or (
-                    event_id in self.test_event_ids
-                ):
+                if (test_marker == "mcp_integration_test" and event_id in self.test_event_ids) or (event_id in self.test_event_ids):
                     created_events.append(event)
 
             # Calculate summary only for events we created
@@ -422,8 +420,7 @@ class MCPCalendarServerTester:
                 )
             else:
                 print(
-                    f"[WARN] Found {total_items} created events (expected 3). "
-                    f"Summary: {len(unique_days)} days, {total_hours} hours"
+                    f"[WARN] Found {total_items} created events (expected 3). Summary: {len(unique_days)} days, {total_hours} hours"
                 )
                 result["status"] = "FAIL"
 

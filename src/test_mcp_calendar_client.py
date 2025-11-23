@@ -19,13 +19,10 @@ if str(scripts_dir) not in sys.path:
 
 # Import main_sync from the scripts directory
 import importlib.util
-spec = importlib.util.spec_from_file_location(
-    "test_mcp_calendar_client_script",
-    scripts_dir / "test_mcp_calendar_client.py"
-)
+
+spec = importlib.util.spec_from_file_location("test_mcp_calendar_client_script", scripts_dir / "test_mcp_calendar_client.py")
 test_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(test_module)
 main_sync = test_module.main_sync
 
 __all__ = ["main_sync"]
-

@@ -280,7 +280,7 @@ class GoogleCalendarUploader:
 
     def upload_single_event(self, event: CalendarEvent) -> Dict[str, Any]:
         """Upload a single event with retry logic.
-        
+
         Security: This function only writes to the WBSO calendar (self.wbso_calendar_id).
         The calendar ID is set during initialization and validated before any writes.
         """

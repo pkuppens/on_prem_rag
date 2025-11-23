@@ -5,6 +5,7 @@
 This command creates well-structured commit messages following project standards, with automatic linting and formatting fixes, support for quality checks, partial commits, and automatic tag inference from branch names and changes.
 
 **Key Features:**
+
 - **Automatic linting**: Always runs `ruff check --fix` and `ruff format` before committing to prevent CI/CD failures
 - **Auto-fix integration**: Automatically fixes linting issues and re-stages modified files
 - **Quality checks**: Optional test execution with "require tests" hint
@@ -223,7 +224,7 @@ if [ "$SKIP_LINTING" = false ]; then
     }
 
     echo "✅ Linting and formatting complete!"
-    
+
     # Re-stage any files that were auto-fixed
     echo "Re-staging auto-fixed files..."
     git add -u
@@ -259,7 +260,7 @@ if (-not $SKIP_LINTING) {
     }
 
     Write-Host "✅ Linting and formatting complete!" -ForegroundColor Green
-    
+
     # Re-stage any files that were auto-fixed
     Write-Host "Re-staging auto-fixed files..." -ForegroundColor Cyan
     git add -u
@@ -749,8 +750,8 @@ Refs:
   - Automatically fixes all fixable linting issues
   - Fails if non-fixable issues remain (must be fixed manually)
   - Prevents linting errors in CI/CD pipelines
-  
 - **Formatting**: Runs `uv run ruff format .`
+
   - Automatically formats all code files
   - Ensures consistent code style
   - Prevents formatting errors in CI/CD pipelines

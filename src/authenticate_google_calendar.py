@@ -19,13 +19,12 @@ if str(scripts_dir) not in sys.path:
 
 # Import main from the scripts directory
 import importlib.util
+
 spec = importlib.util.spec_from_file_location(
-    "authenticate_google_calendar_script",
-    scripts_dir / "authenticate_google_calendar.py"
+    "authenticate_google_calendar_script", scripts_dir / "authenticate_google_calendar.py"
 )
 auth_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(auth_module)
 main = auth_module.main
 
 __all__ = ["main"]
-

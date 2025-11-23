@@ -101,11 +101,11 @@ jobs:
           # Run ruff check with --fix to automatically fix issues
           echo "Running ruff check --fix..."
           uv run ruff check --fix . || true
-          
+
           # Run ruff format to automatically format code
           echo "Running ruff format..."
           uv run ruff format . || true
-          
+
           # Verify no remaining linting issues after auto-fix
           echo "Verifying no remaining linting issues..."
           uv run ruff check .

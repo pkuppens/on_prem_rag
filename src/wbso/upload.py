@@ -13,11 +13,10 @@ Author: AI Assistant
 Created: 2025-10-18
 """
 
-import json
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 
 # Google Calendar API imports
 try:
@@ -31,7 +30,7 @@ except ImportError as e:
     print("Install with: uv add google-api-python-client google-auth-httplib2 google-auth-oauthlib")
     raise
 
-from .calendar_event import WBSODataset, WBSOSession, CalendarEvent
+from .calendar_event import WBSODataset, CalendarEvent
 from .logging_config import get_logger
 
 logger = get_logger("upload")
@@ -80,7 +79,12 @@ class GoogleCalendarUploader:
                     creds.refresh(Request())
                     logger.info("Refreshed expired credentials")
                 except Exception as e:
-                    logger.error(f"Failed to refresh credentials: {e}")
+                    error_msg = (
+                        f"Failed to refresh expired credentials: {e}\n\n"
+                        f"Your Google Calendar OAuth token has expired. "
+                        f"See docs/project/hours/REFRESH_GOOGLE_CALENDAR_TOKEN.md for instructions."
+                    )
+                    logger.error(error_msg)
                     return False
             else:
                 if not self.credentials_path.exists():
@@ -275,15 +279,30 @@ class GoogleCalendarUploader:
         return upload_results
 
     def upload_single_event(self, event: CalendarEvent) -> Dict[str, Any]:
-        """Upload a single event with retry logic."""
+        """Upload a single event with retry logic.
+        
+        Security: This function only writes to the WBSO calendar (self.wbso_calendar_id).
+        The calendar ID is set during initialization and validated before any writes.
+        """
         session_id = event.extended_properties.get("private", {}).get("session_id", "")
+
+        # Security: Ensure we have a valid WBSO calendar ID
+        if not self.wbso_calendar_id:
+            error_msg = "WBSO calendar ID not set. Cannot upload events."
+            logger.error(error_msg)
+            return {
+                "session_id": session_id,
+                "status": "error",
+                "error_message": error_msg,
+                "event_summary": event.summary,
+            }
 
         for attempt in range(MAX_RETRIES):
             try:
                 # Convert to Google Calendar format
                 event_body = event.to_google_format()
 
-                # Upload event
+                # Upload event (only to WBSO calendar - enforced by self.wbso_calendar_id)
                 created_event = self.service.events().insert(calendarId=self.wbso_calendar_id, body=event_body).execute()
 
                 # Store mapping
@@ -414,7 +433,6 @@ def main():
 
     # Set up paths
     script_dir = Path(__file__).parent.parent.parent / "docs" / "project" / "hours"
-    data_dir = script_dir / "data"
     output_dir = script_dir / "upload_output"
     validation_output_dir = script_dir / "validation_output"
 

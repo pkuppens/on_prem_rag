@@ -10,17 +10,34 @@ This rule ensures consistent date formatting across all code, documentation, and
 
 ## CRITICAL: Always Use Accurate Dates
 
-**NEVER guess or randomly generate dates.** All dates must be 100% accurate and reflect the actual system date. Always determine the current date dynamically from:
+**NEVER guess or randomly generate dates.** All dates must be 100% accurate and reflect the actual system date.
 
-1. **System clock** (preferred for most cases)
-2. **MCP services** (when available and appropriate)
-3. **Environment variables** (for testing or specific scenarios)
+### Date Evaluation Process
+
+1. **Always evaluate today's date in YYYY-MM-DD format based on the system clock** before creating or updating files
+2. **Use system clock** (preferred for most cases) - query the actual system date using `datetime.now().strftime("%Y-%m-%d")`
+3. **MCP services** (when available and appropriate)
+4. **Environment variables** (for testing or specific scenarios only)
+
+### File Date Tag Management
+
+**When Creating New Files** (documentation and code files that require date tags):
+
+- Add `Created: YYYY-MM-DD` tag with the current system date
+- Format: `Created: 2025-11-22` (use actual system date)
+
+**When Updating Existing Files**:
+
+- **DO NOT modify** the existing `Created:` tag (preserve for audit history)
+- **DO update** the `Updated:` tag with the current system date
+- Format: `Updated: 2025-11-22` (use actual system date)
 
 **Key Principles**:
 
-- **Created dates**: Should reflect the actual system date when the file was created (for audit history)
-- **Updated dates**: Should reflect the actual current system date when the file was last modified
+- **Created dates**: Should reflect the actual system date when the file was created (for audit history) - NEVER update this
+- **Updated dates**: Should reflect the actual current system date when the file was last modified - ALWAYS update this when modifying files
 - **Never guess dates**: Always use the actual system date, never random or outdated values
+- **Always check system clock**: Before adding or updating date tags, query the system clock for the current date
 
 ## Required Date Format
 
@@ -138,11 +155,16 @@ Updated: 2025-01-19 # Current system date when task was last modified
 
 When AI assistants generate code or documentation:
 
-1. **Use current date for Create: or Update: fields** - never guess dates
-2. **Use system clock** to determine current date
-3. **Format as YYYY-MM-DD** consistently
-4. **Update existing hardcoded dates** when modifying files
-5. **Do not update existing Create: dates** when modifying files
+1. **Evaluate today's date** - Always query the system clock using `datetime.now().strftime("%Y-%m-%d")` to get the current date in YYYY-MM-DD format
+2. **When creating new files** (documentation and code files):
+   - Add `Created: YYYY-MM-DD` tag with the current system date
+   - Example: `Created: 2025-11-22`
+3. **When updating existing files**:
+   - **Preserve** the existing `Created:` tag (do not modify)
+   - **Update** the `Updated:` tag with the current system date
+   - Example: `Updated: 2025-11-22`
+4. **Format as YYYY-MM-DD** consistently (ISO 8601 format)
+5. **Never guess dates** - always use the actual system date from the system clock
 6. **Include date generation logic** in code when appropriate
 
 ## Error Prevention
@@ -161,10 +183,12 @@ When AI assistants generate code or documentation:
 
 Before writing code and documentation:
 
-- Determine the actual system clock date
-- Convert to YYYY-MM-DD format and maintain in memory
-- Use for Updated: fields and new Created: fields
-- Preserve existing Created: dates for audit history
+1. **Evaluate today's date**: Query the system clock using `datetime.now().strftime("%Y-%m-%d")` to get current date in YYYY-MM-DD format
+2. **For new files**: Add `Created: YYYY-MM-DD` tag with the evaluated date
+3. **For existing files**:
+   - Preserve existing `Created:` tag (do not modify)
+   - Update `Updated:` tag with the evaluated date
+4. **Maintain date in memory**: Keep the evaluated date available throughout the editing session
 
 Before committing code:
 

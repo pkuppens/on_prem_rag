@@ -52,6 +52,8 @@ dependencies = [
     "nbformat>=5.10.4",
     "nbconvert>=7.16.6",
     "pandas>=2.2.3",
+    "openagents>=0.6.12",
+    "mcp>=1.0.0",
 ]
 requires-python = ">=3.12,<3.14"
 
@@ -63,6 +65,10 @@ include = ["*"]
 [tool.setuptools.package-dir]
 "" = "src"
 scripts = "scripts"
+
+# Explicitly include standalone modules in src
+[tool.setuptools]
+py-modules = ["test_calendar_credentials", "test_mcp_calendar_client", "test_app", "authenticate_google_calendar"]
 
 # Entry points executed via ``uv run``. ``start-backend`` uses the fully
 # qualified package path so imports work without manually adjusting
@@ -82,6 +88,13 @@ wbso-report = "wbso.reporting:main"
 # WBSO database migration and reporting scripts
 wbso-migrate = "wbso.migration:main"
 wbso-db-report = "wbso.database_reporting:main"
+# MCP Calendar Server
+mcp-calendar-server = "mcp.calendar_server:main_sync"
+mcp-test-report = "mcp.test_report_generator:main"
+# Calendar credential and connection testing
+test-calendar-credentials = "test_calendar_credentials:main"
+test-mcp-calendar-client = "test_mcp_calendar_client:main_sync"
+authenticate-google-calendar = "authenticate_google_calendar:main"
 # start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]

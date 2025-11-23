@@ -2,7 +2,14 @@
 
 ## Purpose
 
-This command creates well-structured commit messages following project standards, with support for quality checks, partial commits, and automatic tag inference from branch names and changes.
+This command creates well-structured commit messages following project standards, with automatic linting and formatting fixes, support for quality checks, partial commits, and automatic tag inference from branch names and changes.
+
+**Key Features:**
+- **Automatic linting**: Always runs `ruff check --fix` and `ruff format` before committing to prevent CI/CD failures
+- **Auto-fix integration**: Automatically fixes linting issues and re-stages modified files
+- **Quality checks**: Optional test execution with "require tests" hint
+- **Smart commit messages**: Infers tags from branch names and change types
+- **Partial commits**: Support for creating focused, smaller commits
 
 ## When to Use
 
@@ -179,20 +186,101 @@ if ($STAGED_FILES -match "\.(py|ts|tsx|js|jsx)$") {
 }
 ```
 
-### Step 2: Handle Hints and Options
+### Step 2: Automatic Linting and Formatting
 
-#### 2.1 Parse User Hints
+**CRITICAL**: This step always runs before committing to ensure code quality and prevent GitHub Actions failures.
+
+#### 2.1 Run Automatic Linting Fixes
+
+**Check for "skip linting" hint:**
+
+Before running linting, check if user requested to skip it (not recommended):
+
+**Cross-platform:**
+
+```bash
+# Check for skip linting hint
+SKIP_LINTING=false
+if [[ "$*" =~ (skip[[:space:]]+linting|skip[[:space:]]+lint) ]]; then
+    SKIP_LINTING=true
+    echo "⚠️  Skipping automatic linting (not recommended - may cause CI failures)"
+fi
+
+if [ "$SKIP_LINTING" = false ]; then
+    # Run ruff check with --fix to automatically fix linting issues
+    echo "Running ruff check --fix..."
+    uv run ruff check --fix . || {
+        echo "❌ Linting failed. Some issues could not be auto-fixed."
+        echo "Please review and fix remaining issues before committing."
+        exit 1
+    }
+
+    # Run ruff format to automatically format code
+    echo "Running ruff format..."
+    uv run ruff format . || {
+        echo "❌ Formatting failed."
+        exit 1
+    }
+
+    echo "✅ Linting and formatting complete!"
+    
+    # Re-stage any files that were auto-fixed
+    echo "Re-staging auto-fixed files..."
+    git add -u
+fi
+```
+
+**Windows PowerShell:**
+
+```powershell
+# Check for skip linting hint
+$SKIP_LINTING = $false
+if ($args -match "(skip\s+linting|skip\s+lint)") {
+    $SKIP_LINTING = $true
+    Write-Host "⚠️  Skipping automatic linting (not recommended - may cause CI failures)" -ForegroundColor Yellow
+}
+
+if (-not $SKIP_LINTING) {
+    # Run ruff check with --fix to automatically fix linting issues
+    Write-Host "Running ruff check --fix..." -ForegroundColor Cyan
+    uv run ruff check --fix .
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "❌ Linting failed. Some issues could not be auto-fixed." -ForegroundColor Red
+        Write-Host "Please review and fix remaining issues before committing." -ForegroundColor Yellow
+        exit 1
+    }
+
+    # Run ruff format to automatically format code
+    Write-Host "Running ruff format..." -ForegroundColor Cyan
+    uv run ruff format .
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "❌ Formatting failed." -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "✅ Linting and formatting complete!" -ForegroundColor Green
+    
+    # Re-stage any files that were auto-fixed
+    Write-Host "Re-staging auto-fixed files..." -ForegroundColor Cyan
+    git add -u
+}
+```
+
+### Step 3: Handle Hints and Options
+
+#### 3.1 Parse User Hints
 
 The command accepts hints in the user's request:
 
 - **"require tests"** or **"run tests"**: Run tests before committing
 - **"partial commit"** or **"small commit"**: Create a smaller, focused commit
 - **"skip tests"**: Skip test execution (not recommended)
+- **"skip linting"**: Skip automatic linting (not recommended, may cause CI failures)
 - **"description: [text]"**: Add custom description to commit message
 - **"type: [feat|fix|docs|test|chore]"**: Override commit type
 - **"scope: [scope]"**: Override commit scope
 
-#### 2.2 Quality Checks (if "require tests" hint)
+#### 3.2 Quality Checks (if "require tests" hint)
 
 **Cross-platform:**
 
@@ -258,9 +346,9 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "✅ All quality checks passed!" -ForegroundColor Green
 ```
 
-### Step 3: Generate Commit Message
+### Step 4: Generate Commit Message
 
-#### 3.1 Build Commit Message
+#### 4.1 Build Commit Message
 
 **Cross-platform:**
 
@@ -387,7 +475,7 @@ if ($BUG_ID) { Add-Content -Path $COMMIT_MSG_FILE -Value "  - $BUG_ID" }
 if ($HOTFIX_ID) { Add-Content -Path $COMMIT_MSG_FILE -Value "  - $HOTFIX_ID" }
 ```
 
-#### 3.2 Review Commit Message
+#### 4.2 Review Commit Message
 
 **Cross-platform:**
 
@@ -430,9 +518,9 @@ if ($response -eq "n" -or $response -eq "N") {
 }
 ```
 
-### Step 4: Handle Partial Commits
+### Step 5: Handle Partial Commits
 
-#### 4.1 Interactive Staging (if "partial commit" hint)
+#### 5.1 Interactive Staging (if "partial commit" hint)
 
 **Cross-platform:**
 
@@ -475,9 +563,9 @@ $FILES_TO_STAGE -split ' ' | ForEach-Object {
 # (Repeat Step 3.1)
 ```
 
-### Step 5: Execute Commit
+### Step 6: Execute Commit
 
-#### 5.1 Commit with Generated Message
+#### 6.1 Commit with Generated Message
 
 **Cross-platform:**
 
@@ -520,6 +608,8 @@ git log -1 --stat
 
 - Analyzes current branch for tags
 - Analyzes staged changes for type and scope
+- **Runs automatic linting and formatting** (`ruff check --fix` and `ruff format`)
+- Re-stages any auto-fixed files
 - Generates commit message following project standards
 - Creates `tmp/commit_msg.txt` with commit message
 - Commits using the generated message
@@ -535,11 +625,12 @@ git log -1 --stat
 
 **Expected Behavior:**
 
-- Runs linting check
-- Runs formatting check
+- Runs automatic linting and formatting (always runs)
 - Runs tests (fast unit tests only)
 - Only proceeds if all checks pass
 - Generates and commits with message
+
+**Note**: Linting and formatting run automatically even without this hint. This hint only adds test execution.
 
 ### Example 3: Partial Commit
 
@@ -593,13 +684,15 @@ When user requests to create a commit:
 
 1. **Read this command file**: `.cursor/commands/commit.md`
 2. **Analyze context**: Extract branch name, tags, and staged changes
-3. **Parse hints**: Check for "require tests", "partial commit", custom description, etc.
-4. **Run quality checks**: If "require tests" hint, run linting, formatting, and tests
-5. **Generate commit message**: Create well-structured message following project standards
-6. **Handle partial commits**: If requested, allow interactive file selection
-7. **Review message**: Display generated message for user review
-8. **Execute commit**: Commit using the generated message file
-9. **Report success**: Show commit summary
+3. **Run automatic linting**: Always run `ruff check --fix` and `ruff format` to fix issues automatically
+4. **Re-stage auto-fixed files**: Stage any files modified by ruff auto-fix
+5. **Parse hints**: Check for "require tests", "partial commit", custom description, etc.
+6. **Run quality checks**: If "require tests" hint, run tests
+7. **Generate commit message**: Create well-structured message following project standards
+8. **Handle partial commits**: If requested, allow interactive file selection
+9. **Review message**: Display generated message for user review
+10. **Execute commit**: Commit using the generated message file
+11. **Report success**: Show commit summary
 
 ## Success Criteria
 
@@ -648,24 +741,29 @@ Refs:
 
 ## Quality Checks
 
-### Linting Check
+### Automatic Linting and Formatting (Always Runs)
 
-- Runs `uv run ruff check .`
-- Fails if linting errors found
-- Must be fixed before committing (unless skipped)
+**CRITICAL**: These checks run automatically before every commit to prevent GitHub Actions failures.
 
-### Formatting Check
+- **Linting**: Runs `uv run ruff check --fix .`
+  - Automatically fixes all fixable linting issues
+  - Fails if non-fixable issues remain (must be fixed manually)
+  - Prevents linting errors in CI/CD pipelines
+  
+- **Formatting**: Runs `uv run ruff format .`
+  - Automatically formats all code files
+  - Ensures consistent code style
+  - Prevents formatting errors in CI/CD pipelines
 
-- Runs `uv run ruff format --check .`
-- Warns if formatting issues found
-- Can be skipped with user confirmation
+- **Auto-fixed files**: After running ruff, modified files are automatically re-staged with `git add -u`
 
-### Test Execution
+### Test Execution (Optional - Requires "require tests" hint)
 
 - Runs `uv run pytest -m "not internet and not slow" -v`
 - Only runs fast unit tests (excludes slow and internet-dependent tests)
 - Fails if any tests fail
 - Must be fixed before committing
+- Can be skipped with "skip tests" hint (not recommended)
 
 ## Partial Commits
 
@@ -701,12 +799,15 @@ Tags are automatically inferred from:
 
 ## Notes
 
+- **Automatic linting and formatting always runs** before committing to prevent CI/CD failures
 - Commit messages are saved to `tmp/commit_msg.txt` for review and reuse
 - The command follows [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc)
 - Commit messages only reference committed files (not tmp/ directory)
-- Quality checks can be skipped but are recommended
+- Auto-fixed files are automatically re-staged after ruff runs
+- Test execution is optional (requires "require tests" hint)
 - Partial commits help maintain clean git history
 - Tag inference works best with proper branch naming conventions
+- Use "skip linting" hint only in emergency situations (may cause CI failures)
 
 ## Related Files
 

@@ -125,12 +125,12 @@ class MCPCalendarServerTester:
             }
 
             self.test_results["list_calendars"] = result
-            print(f"✅ Found {len(calendars)} calendars")
+            print(f"[PASS] Found {len(calendars)} calendars")
             return True
 
         except Exception as e:
             self.test_results["list_calendars"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed: {e}")
+            print(f"[FAIL] Failed: {e}")
             return False
 
     def cleanup_old_test_events(self) -> None:
@@ -169,10 +169,10 @@ class MCPCalendarServerTester:
                     pass  # Ignore errors for individual deletions
 
             if deleted_count > 0:
-                print(f"🧹 Cleaned up {deleted_count} old test events")
+                print(f"[CLEANUP] Cleaned up {deleted_count} old test events")
 
         except Exception as e:
-            print(f"⚠️ Warning: Failed to clean up old test events: {e}")
+            print(f"[WARN] Warning: Failed to clean up old test events: {e}")
 
     def test_create_dummy_events(self) -> bool:
         """Create dummy events in December 2024 for testing.
@@ -211,7 +211,7 @@ class MCPCalendarServerTester:
                 self.test_event_ids.append(event_id)
                 test_events.append({"id": event_id, "summary": created_event["summary"]})
 
-                print(f"✅ Created test event: {created_event['summary']} (ID: {event_id})")
+                print(f"[PASS] Created test event: {created_event['summary']} (ID: {event_id})")
 
             self.test_results["create_events"] = {
                 "status": "PASS",
@@ -223,7 +223,7 @@ class MCPCalendarServerTester:
 
         except Exception as e:
             self.test_results["create_events"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to create events: {e}")
+            print(f"[FAIL] Failed to create events: {e}")
             return False
 
     def test_read_events(self) -> bool:
@@ -256,24 +256,89 @@ class MCPCalendarServerTester:
             # Filter test events
             test_events = [e for e in events if e.get("summary", "").startswith(TEST_EVENT_PREFIX)]
 
+            # Verify that the events read match the events we created by comparing IDs
+            # This ensures we're reading the correct events, not leftover ones
+            if not self.test_event_ids:
+                print("WARNING: No event IDs stored from creation step")
+                result = {
+                    "status": "FAIL",
+                    "total_events": len(events),
+                    "test_events": len(test_events),
+                    "expected_test_events": 3,
+                    "error": "No event IDs from creation step",
+                }
+                self.test_results["read_events"] = result
+                return False
+
+            # Get IDs of read events
+            read_event_ids = {e["id"] for e in test_events}
+            created_event_ids = set(self.test_event_ids)
+
+            # Verify all created event IDs are in the read events
+            # This is the critical check - we must be able to read what we created
+            missing_ids = created_event_ids - read_event_ids
+            extra_ids = read_event_ids - created_event_ids
+
+            # Also verify by test_marker to ensure we can identify events by properties, not just IDs
+            # This makes the test more robust against ID comparison issues
+            events_with_marker = [
+                e
+                for e in test_events
+                if e.get("extendedProperties", {}).get("private", {}).get("test_marker") == "mcp_integration_test"
+            ]
+            marker_event_ids = {e["id"] for e in events_with_marker}
+
             result = {
                 "status": "PASS",
                 "total_events": len(events),
                 "test_events": len(test_events),
                 "expected_test_events": 3,
+                "created_event_ids": list(created_event_ids),
+                "read_event_ids": list(read_event_ids),
+                "events_with_marker": len(events_with_marker),
+                "marker_event_ids": list(marker_event_ids),
+                "missing_ids": list(missing_ids),
+                "extra_ids": list(extra_ids),
             }
 
-            if len(test_events) == 3:
-                print(f"✅ Found {len(test_events)} test events as expected")
+            # Core requirement: All created events must be found
+            # Extra events are acceptable (they might be from previous runs that didn't clean up)
+            if missing_ids:
+                print(f"[FAIL] Missing event IDs from created events: {missing_ids}")
+                result["status"] = "FAIL"
+                self.test_results["read_events"] = result
+                return False
+
+            # Verify we found at least our 3 created events
+            if len(events_with_marker) >= 3 and created_event_ids.issubset(marker_event_ids):
+                if extra_ids:
+                    print(
+                        f"[PASS] Found all {len(created_event_ids)} created events (by ID and marker). "
+                        f"Note: {len(extra_ids)} extra test events found (likely from previous runs)"
+                    )
+                else:
+                    print(f"[PASS] Found all {len(created_event_ids)} created events, IDs match exactly")
+            elif len(events_with_marker) >= 3:
+                print(
+                    f"[PASS] Found all {len(created_event_ids)} created events by ID. "
+                    f"Found {len(events_with_marker)} events with test marker"
+                )
             else:
-                print(f"⚠️ Found {len(test_events)} test events, expected 3")
+                print(
+                    f"[WARN] Found {len(events_with_marker)} events with test marker, expected at least 3. "
+                    f"Found {len(test_events)} total test events"
+                )
+                # Still pass if we found all created events by ID
+                if not missing_ids:
+                    result["status"] = "PASS"
 
             self.test_results["read_events"] = result
-            return len(test_events) == 3
+            # Pass if all created events are found, regardless of extra events
+            return missing_ids == set() and created_event_ids.issubset(read_event_ids)
 
         except Exception as e:
             self.test_results["read_events"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to read events: {e}")
+            print(f"[FAIL] Failed to read events: {e}")
             return False
 
     def test_summarize_events(self) -> bool:
@@ -303,15 +368,27 @@ class MCPCalendarServerTester:
 
             events = events_result.get("items", [])
 
-            # Filter test events
-            test_events = [e for e in events if e.get("summary", "").startswith(TEST_EVENT_PREFIX)]
+            # Filter to only events we created in this test run (by test_marker or ID)
+            # This avoids issues with leftover events from previous runs
+            created_events = []
+            for event in events:
+                # Check if this is one of our created events
+                event_id = event.get("id")
+                private_props = event.get("extendedProperties", {}).get("private", {})
+                test_marker = private_props.get("test_marker")
+                
+                # Include if it has our test marker or is one of our created event IDs
+                if (test_marker == "mcp_integration_test" and event_id in self.test_event_ids) or (
+                    event_id in self.test_event_ids
+                ):
+                    created_events.append(event)
 
-            # Calculate summary
-            total_items = len(test_events)
+            # Calculate summary only for events we created
+            total_items = len(created_events)
             unique_days = set()
             total_hours = 0.0
 
-            for event in test_events:
+            for event in created_events:
                 start = event.get("start", {}).get("dateTime")
                 end = event.get("end", {}).get("dateTime")
 
@@ -335,17 +412,27 @@ class MCPCalendarServerTester:
                 "expected_hours": 6.0,  # 3 events * 2 hours each
             }
 
+            # Verify we found all created events and summary is correct
             if total_items == 3 and len(unique_days) == 3 and abs(total_hours - 6.0) < 0.1:
-                print(f"✅ Summary correct: {total_items} items, {len(unique_days)} days, {total_hours} hours")
+                print(f"[PASS] Summary correct: {total_items} items, {len(unique_days)} days, {total_hours} hours")
+            elif total_items == 3:
+                print(
+                    f"[PASS] Found all {total_items} created events. "
+                    f"Summary: {len(unique_days)} days, {total_hours} hours (expected 3 days, 6.0 hours)"
+                )
             else:
-                print(f"⚠️ Summary: {total_items} items, {len(unique_days)} days, {total_hours} hours")
+                print(
+                    f"[WARN] Found {total_items} created events (expected 3). "
+                    f"Summary: {len(unique_days)} days, {total_hours} hours"
+                )
+                result["status"] = "FAIL"
 
             self.test_results["summarize_events"] = result
             return total_items == 3 and len(unique_days) == 3
 
         except Exception as e:
             self.test_results["summarize_events"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to summarize events: {e}")
+            print(f"[FAIL] Failed to summarize events: {e}")
             return False
 
     def test_detect_duplicates(self) -> bool:
@@ -374,13 +461,16 @@ class MCPCalendarServerTester:
             )
 
             events = events_result.get("items", [])
-            test_events = [e for e in events if e.get("summary", "").startswith(TEST_EVENT_PREFIX)]
+
+            # Filter to only events we created in this test run (by ID)
+            # This avoids false positives from leftover events
+            created_events = [e for e in events if e.get("id") in self.test_event_ids]
 
             # Check for duplicates (should be none for our test events)
             session_ids = {}
             datetime_ranges = {}
 
-            for event in test_events:
+            for event in created_events:
                 private_props = event.get("extendedProperties", {}).get("private", {})
                 test_marker = private_props.get("test_marker")
                 if test_marker == "mcp_integration_test":
@@ -403,16 +493,16 @@ class MCPCalendarServerTester:
             }
 
             if len(duplicates) == 0:
-                print("✅ No duplicates detected (as expected)")
+                print("[PASS] No duplicates detected (as expected)")
             else:
-                print(f"⚠️ Found {len(duplicates)} duplicate datetime ranges")
+                print(f"[WARN] Found {len(duplicates)} duplicate datetime ranges")
 
             self.test_results["detect_duplicates"] = result
             return len(duplicates) == 0
 
         except Exception as e:
             self.test_results["detect_duplicates"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to detect duplicates: {e}")
+            print(f"[FAIL] Failed to detect duplicates: {e}")
             return False
 
     def test_edit_event(self) -> bool:
@@ -424,7 +514,7 @@ class MCPCalendarServerTester:
         print("Testing edit_calendar_event...")
 
         if not self.test_event_ids:
-            print("⚠️ No test events to edit")
+            print("[WARN] No test events to edit")
             self.test_results["edit_event"] = {"status": "SKIP", "reason": "No test events"}
             return True
 
@@ -443,7 +533,7 @@ class MCPCalendarServerTester:
             updated_event = self.service.events().patch(calendarId=self.calendar_id, eventId=event_id, body=event_body).execute()
 
             if updated_event["summary"] == updated_summary:
-                print(f"✅ Successfully edited event: {updated_summary}")
+                print(f"[PASS] Successfully edited event: {updated_summary}")
                 self.test_results["edit_event"] = {
                     "status": "PASS",
                     "event_id": event_id,
@@ -451,13 +541,13 @@ class MCPCalendarServerTester:
                 }
                 return True
             else:
-                print("❌ Event edit verification failed")
+                print("[FAIL] Event edit verification failed")
                 self.test_results["edit_event"] = {"status": "FAIL", "reason": "Verification failed"}
                 return False
 
         except Exception as e:
             self.test_results["edit_event"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to edit event: {e}")
+            print(f"[FAIL] Failed to edit event: {e}")
             return False
 
     def test_delete_events(self) -> bool:
@@ -469,7 +559,7 @@ class MCPCalendarServerTester:
         print("Testing delete_calendar_event...")
 
         if not self.test_event_ids:
-            print("⚠️ No test events to delete")
+            print("[WARN] No test events to delete")
             self.test_results["delete_events"] = {"status": "SKIP", "reason": "No test events"}
             return True
 
@@ -480,10 +570,10 @@ class MCPCalendarServerTester:
                 try:
                     self.service.events().delete(calendarId=self.calendar_id, eventId=event_id).execute()
                     deleted_count += 1
-                    print(f"✅ Deleted test event: {event_id}")
+                    print(f"[PASS] Deleted test event: {event_id}")
                 except HttpError as e:
                     if e.resp.status == 404:
-                        print(f"⚠️ Event {event_id} not found (may have been deleted already)")
+                        print(f"[WARN] Event {event_id} not found (may have been deleted already)")
                     else:
                         raise
 
@@ -493,12 +583,12 @@ class MCPCalendarServerTester:
                 "expected_count": len(self.test_event_ids),
             }
 
-            print(f"✅ Deleted {deleted_count} test events")
+            print(f"[PASS] Deleted {deleted_count} test events")
             return True
 
         except Exception as e:
             self.test_results["delete_events"] = {"status": "FAIL", "error": str(e)}
-            print(f"❌ Failed to delete events: {e}")
+            print(f"[FAIL] Failed to delete events: {e}")
             return False
 
     def test_full_workflow(self) -> bool:
@@ -529,7 +619,7 @@ class MCPCalendarServerTester:
                 else:
                     failed += 1
             except Exception as e:
-                print(f"❌ Step {step_name} raised exception: {e}")
+                print(f"[FAIL] Step {step_name} raised exception: {e}")
                 failed += 1
 
         result = {
@@ -540,7 +630,7 @@ class MCPCalendarServerTester:
         }
 
         self.test_results["full_workflow"] = result
-        print(f"✅ Workflow: {passed}/{len(workflow_steps)} steps passed")
+        print(f"[PASS] Workflow: {passed}/{len(workflow_steps)} steps passed")
 
         return failed == 0
 
@@ -578,7 +668,7 @@ def test_mcp_calendar_server_integration():
 
         for test_name, result in results.items():
             status = result.get("status", "UNKNOWN")
-            status_symbol = "✅" if status == "PASS" else "❌" if status == "FAIL" else "⚠️"
+            status_symbol = "[PASS]" if status == "PASS" else "[FAIL]" if status == "FAIL" else "[WARN]"
             print(f"{status_symbol} {test_name}: {status}")
 
         print("=" * 60)

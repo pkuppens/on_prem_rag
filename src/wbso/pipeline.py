@@ -33,6 +33,7 @@ from .pipeline_steps import (
     step_store_activity_blocks,
     step_conflict_detect,
     step_assign_activities,
+    step_assign_commits_to_sessions,
     step_detect_commits_without_system_events,
     step_content_polish,
     step_event_convert,
@@ -98,6 +99,7 @@ class WBSOCalendarPipeline:
             step_store_activity_blocks,  # Store polished activity blocks for human review
             step_conflict_detect,  # Detect calendar conflicts
             step_assign_activities,  # Assign WBSO activities based on commits and repo purpose
+            step_assign_commits_to_sessions,  # Assign commits to sessions by timestamp
             step_detect_commits_without_system_events,  # Detect commits on days without system events
             step_content_polish,  # Polish event content
             step_event_convert,  # Convert to calendar events

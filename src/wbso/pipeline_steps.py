@@ -20,6 +20,7 @@ from typing import Dict, List, Any, Optional, Callable
 import subprocess
 import sys
 import csv
+import json
 
 from zoneinfo import ZoneInfo
 
@@ -1939,6 +1940,131 @@ def step_assign_activities(context: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
+def step_assign_commits_to_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
+    """Step: Assign commits to sessions based on timestamp, handling commits outside sessions."""
+    logger.info("=" * 60)
+    logger.info("STEP: ASSIGN COMMITS TO SESSIONS")
+    logger.info("=" * 60)
+
+    dataset = context.get("dataset")
+    if not dataset:
+        return create_step_report("assign_commits_to_sessions", False, message="No dataset available")
+
+    # Load git commits
+    commits_by_repo = context.get("commits_by_repo")
+    if not commits_by_repo:
+        commits_by_repo = _load_git_commits_by_repo()
+        context["commits_by_repo"] = commits_by_repo
+
+    # Flatten all commits into a single list with timestamp
+    all_commits = []
+    for repo_name, commits in commits_by_repo.items():
+        for commit in commits:
+            all_commits.append(commit)
+
+    # Sort commits by datetime
+    all_commits.sort(key=lambda c: c["datetime"])
+
+    # Sort sessions by start_time
+    sessions = sorted([s for s in dataset.sessions if s.is_wbso and s.start_time], key=lambda s: s.start_time)
+
+    # Initialize commit assignment tracking
+    session_commits_map: Dict[str, List[str]] = {}  # session_id -> list of commit messages
+    commits_assigned_to_sessions = set()  # Track which commits are assigned to avoid duplicates
+    commits_outside_sessions = []  # Commits that don't fall in any session
+
+    # First pass: assign commits that fall within session time ranges
+    for commit in all_commits:
+        commit_dt = commit["datetime"]
+        assigned = False
+
+        for session in sessions:
+            if session.start_time <= commit_dt <= session.end_time:
+                # Commit falls within this session
+                if session.session_id not in session_commits_map:
+                    session_commits_map[session.session_id] = []
+
+                session_commits_map[session.session_id].append(commit["message"])
+                commits_assigned_to_sessions.add(commit["hash"])
+                assigned = True
+                break
+
+        if not assigned:
+            commits_outside_sessions.append(commit)
+
+    # Second pass: assign commits outside sessions to both previous and next sessions
+    for commit in commits_outside_sessions:
+        commit_dt = commit["datetime"]
+        commit_hash = commit["hash"]
+
+        # Find previous session (last session that ends before this commit)
+        previous_session = None
+        for session in reversed(sessions):
+            if session.end_time < commit_dt:
+                previous_session = session
+                break
+
+        # Find next session (first session that starts after this commit)
+        next_session = None
+        for session in sessions:
+            if session.start_time > commit_dt:
+                next_session = session
+                break
+
+        # Assign to previous session if exists
+        if previous_session:
+            if previous_session.session_id not in session_commits_map:
+                session_commits_map[previous_session.session_id] = []
+            session_commits_map[previous_session.session_id].append(commit["message"])
+            commits_assigned_to_sessions.add(commit_hash)
+
+        # Assign to next session if exists
+        if next_session:
+            if next_session.session_id not in session_commits_map:
+                session_commits_map[next_session.session_id] = []
+            session_commits_map[next_session.session_id].append(commit["message"])
+            commits_assigned_to_sessions.add(commit_hash)
+
+    # Update sessions with commit messages and counts
+    sessions_with_commits = 0
+    total_hours_with_commits = 0.0
+    for session in dataset.sessions:
+        if session.session_id in session_commits_map:
+            session.commit_messages = session_commits_map[session.session_id]
+            session.commit_count = len(session.commit_messages)
+            sessions_with_commits += 1
+            total_hours_with_commits += session.work_hours
+
+    # Export session_id -> commit messages mapping to JSON
+    output_file = VALIDATION_OUTPUT_DIR / "session_commits_mapping.json"
+    VALIDATION_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(session_commits_map, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"✅ Commit assignment complete:")
+    logger.info(f"   - {len(commits_assigned_to_sessions)} commits assigned to sessions")
+    logger.info(f"   - {sessions_with_commits} sessions have commits assigned")
+    logger.info(f"   - {total_hours_with_commits:.2f} hours in sessions with commits")
+    logger.info(f"   - {len(commits_outside_sessions)} commits outside sessions (assigned to adjacent sessions)")
+    logger.info(f"   - Mapping exported to: {output_file}")
+
+    context["session_commits_map"] = session_commits_map
+    context["sessions_with_commits"] = sessions_with_commits
+    context["total_hours_with_commits"] = total_hours_with_commits
+
+    return create_step_report(
+        "assign_commits_to_sessions",
+        True,
+        commits_assigned=len(commits_assigned_to_sessions),
+        sessions_with_commits=sessions_with_commits,
+        total_hours_with_commits=total_hours_with_commits,
+        commits_outside_sessions=len(commits_outside_sessions),
+        output_file=str(output_file),
+        message=f"Assigned {len(commits_assigned_to_sessions)} commits to {sessions_with_commits} sessions ({total_hours_with_commits:.2f} hours)",
+    )
+
+
 def step_detect_commits_without_system_events(context: Dict[str, Any]) -> Dict[str, Any]:
     """Step: Detect git commits on days that do not have system events (work on different computers)."""
     logger.info("=" * 60)
@@ -2303,12 +2429,28 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
         if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
     )
 
+    # Get commit assignment statistics from context
+    sessions_with_commits = context.get("sessions_with_commits", 0)
+    total_hours_with_commits = context.get("total_hours_with_commits", 0.0)
+    session_commits_map = context.get("session_commits_map", {})
+
+    # Filter hours with commits by date range
+    hours_with_commits_in_range = sum(
+        s.work_hours
+        for s in wbso_sessions
+        if s.session_id in session_commits_map
+        and s.start_time
+        and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+    )
+
     report_data = {
         "calculated_hours": calculated_hours,
         "calendar_hours": calendar_hours,
         "computer_on_hours": computer_on_hours,
         "total_sessions": len(wbso_sessions),
         "computer_on_sessions": len(computer_on_sessions),
+        "sessions_with_commits": sessions_with_commits,
+        "hours_with_commits": hours_with_commits_in_range,
         "gap": calculated_hours - calendar_hours,
         "target_hours": 510.0,
         "target_gap": 510.0 - calendar_hours,
@@ -2322,8 +2464,10 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
     logger.info(f"Total Sessions: {len(wbso_sessions)}")
     logger.info(f"Computer-On Sessions: {len(computer_on_sessions)}")
+    logger.info(f"Sessions with Commits: {sessions_with_commits}")
     logger.info(f"Calculated Hours: {calculated_hours:.2f} hours")
     logger.info(f"Computer-On Hours: {computer_on_hours:.2f} hours")
+    logger.info(f"Hours in Sessions with Commits: {hours_with_commits_in_range:.2f} hours")
     logger.info(f"Calendar Hours (Booked): {calendar_hours:.2f} hours")
     logger.info(f"Target Hours: 510.0 hours")
     logger.info(f"Target Achievement: {(calendar_hours / 510.0 * 100):.1f}%")

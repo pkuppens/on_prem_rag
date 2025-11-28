@@ -47,13 +47,15 @@ $EventDefinitions = @{
     42   = @{Log = "System"; Description = "System entering sleep" }
     # 1 = @{Log="System"; Description="System resumed from sleep"}  # Too many events - commented out
 
+    # User logon/logoff notifications (required for computer-on detection)
+    7001 = @{Log = "System"; Description = "User logon notification" }
+    7002 = @{Log = "System"; Description = "User logoff notification" }
+
     # Additional potentially interesting events (commented out for now):
     # 4800 = @{Log="Security"; Description="Workstation locked"}
     # 4801 = @{Log="Security"; Description="Workstation unlocked"}
     # 4802 = @{Log="Security"; Description="Screen saver invoked"}
     # 4803 = @{Log="Security"; Description="Screen saver dismissed"}
-    # 7001 = @{Log="System"; Description="User logon notification"}
-    # 7002 = @{Log="System"; Description="User logoff notification"}
     # 104 = @{Log="System"; Description="Event log cleared"}
     # 6009 = @{Log="System"; Description="System processor information at startup"}
     # 12 = @{Log="System"; Description="Operating system started"}

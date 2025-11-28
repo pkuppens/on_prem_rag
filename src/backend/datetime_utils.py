@@ -8,10 +8,14 @@ See project/team/tasks/TASK-029.md for detailed requirements and implementation 
 
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Union, Optional, List, Dict, Any
+from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
+
+# Amsterdam timezone (handles DST automatically)
+AMSTERDAM_TZ = ZoneInfo("Europe/Amsterdam")
 
 # Standard format used across the project
 STANDARD_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -28,6 +32,8 @@ SUPPORTED_FORMATS = [
     "%Y-%m-%dT%H:%M:%S%z",  # 2025-06-24T07:30:54+02:00
     "%Y-%m-%dT%H:%M:%S.%f",  # 2025-06-24T07:30:54.123456
     "%Y-%m-%dT%H:%M:%S.%f%z",  # 2025-06-24T07:30:54.123456+02:00
+    "%Y-%m-%d %H:%M:%S%z",  # 2025-06-24 07:30:54+02:00
+    "%Y/%m/%d %H:%M:%S%z",  # 2025/06/24 07:30:54+02:00
 ]
 
 
@@ -152,6 +158,29 @@ class UnifiedDateTime:
                 candidates.append({"format": pattern, "confidence": confidence, "parsed": parsed, "source_type": source_type})
             except ValueError:
                 continue
+
+        # Try parsing with +0100/+0200 format (without colon)
+        # Pattern: YYYY-MM-DD HH:MM:SS+0100 or YYYY-MM-DD HH:MM:SS+0200
+        tz_offset_pattern = re.match(r"^(.+?)([+-])(\d{4})$", datetime_str)
+        if tz_offset_pattern:
+            base_str, sign, offset_str = tz_offset_pattern.groups()
+            # Try parsing base datetime
+            for base_pattern in ["%Y-%m-%d %H:%M:%S", "%Y/%m/%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S"]:
+                try:
+                    base_dt = datetime.strptime(base_str, base_pattern)
+                    # Parse offset (e.g., +0100 -> +01:00)
+                    hours = int(offset_str[:2])
+                    minutes = int(offset_str[2:])
+                    offset = timedelta(hours=hours, minutes=minutes) if sign == "+" else timedelta(hours=-hours, minutes=-minutes)
+                    tz = timezone(offset)
+                    parsed = base_dt.replace(tzinfo=tz)
+                    confidence = self._calculate_confidence(datetime_str, f"{base_pattern}+offset", parsed)
+                    candidates.append(
+                        {"format": f"{base_pattern}+offset", "confidence": confidence, "parsed": parsed, "source_type": source_type}
+                    )
+                    break
+                except ValueError:
+                    continue
 
         # Try ISO format parsing as fallback
         try:
@@ -403,6 +432,58 @@ def parse_datetime_flexible(dt_str: str) -> Optional[datetime]:
     if unified_dt.is_valid():
         return unified_dt.to_datetime()
     return None
+
+
+def parse_datetime_with_timezone(dt_str: str, default_tz: ZoneInfo = AMSTERDAM_TZ) -> Optional[datetime]:
+    """Parse datetime string with timezone support, returning timezone-aware datetime.
+
+    Supports formats including:
+    - Standard formats: YYYY-MM-DD HH:MM:SS, YYYY/MM/DD HH:MM:SS
+    - ISO formats: YYYY-MM-DDTHH:MM:SS, YYYY-MM-DDTHH:MM:SS+02:00
+    - Timezone offsets: +0100, +0200 (without colon)
+    - AM/PM formats: M/D/YYYY H:MM:SS AM/PM
+
+    If timezone information is missing, assumes default_tz (default: Amsterdam).
+
+    Args:
+        dt_str: DateTime string in various formats
+        default_tz: Default timezone to use if timezone info is missing (default: Europe/Amsterdam)
+
+    Returns:
+        Timezone-aware datetime object or None if parsing fails
+    """
+    if not dt_str or dt_str.strip() == "":
+        return None
+
+    # Clean the datetime string
+    clean_datetime = dt_str.strip()
+    if clean_datetime.startswith('"'):
+        clean_datetime = clean_datetime[1:]
+    if clean_datetime.endswith('"'):
+        clean_datetime = clean_datetime[:-1]
+    if clean_datetime.startswith("\ufeff"):
+        clean_datetime = clean_datetime[1:]
+
+    if not clean_datetime:
+        return None
+
+    unified_dt = UnifiedDateTime(clean_datetime)
+    if not unified_dt.is_valid():
+        return None
+
+    # Get the parsed datetime (may be timezone-aware or naive)
+    dt = unified_dt._datetime
+    if dt is None:
+        return None
+
+    # If timezone-naive, assume default timezone
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=default_tz)
+    else:
+        # If timezone-aware, convert to default timezone
+        dt = dt.astimezone(default_tz)
+
+    return dt
 
 
 def convert_to_standard_format(dt_input: Union[str, datetime]) -> str:

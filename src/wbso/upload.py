@@ -216,7 +216,7 @@ class GoogleCalendarUploader:
         logger.info("Creating upload plan...")
 
         upload_plan = {"new_events": [], "skip_events": [], "duplicate_session_ids": [], "duplicate_datetime_ranges": []}
-        
+
         # Track session_ids and datetime ranges within the upload batch
         seen_session_ids = set()
         seen_datetime_ranges = set()

@@ -17,7 +17,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Union
+from typing import Dict, List, Any, Union, Optional
 
 from .logging_config import get_logger
 from .time_utils import round_to_quarter_hour
@@ -75,6 +75,10 @@ class WBSOSession:
     wbso_justification: str = ""
     assigned_commits: List[str] = field(default_factory=list)
     confidence_score: float = 1.0
+    activity_id: str = ""  # WBSO activity ID from activities list
+    commit_messages: List[str] = field(default_factory=list)  # Commit messages for activity assignment
+    has_computer_on: bool = False  # Whether session has computer on event
+    is_weekend: bool = False  # Whether session is on weekend
 
     def validate(self) -> ValidationResult:
         """Validate session data and return result."""
@@ -169,6 +173,10 @@ class WBSOSession:
             "wbso_justification": self.wbso_justification,
             "assigned_commits": self.assigned_commits,
             "confidence_score": self.confidence_score,
+            "activity_id": self.activity_id,
+            "commit_messages": self.commit_messages,
+            "has_computer_on": self.has_computer_on,
+            "is_weekend": self.is_weekend,
         }
 
     @classmethod
@@ -206,6 +214,10 @@ class WBSOSession:
             wbso_justification=data.get("wbso_justification", ""),
             assigned_commits=data.get("assigned_commits", []),
             confidence_score=data.get("confidence_score", 1.0),
+            activity_id=data.get("activity_id", ""),
+            commit_messages=data.get("commit_messages", []),
+            has_computer_on=data.get("has_computer_on", False),
+            is_weekend=data.get("is_weekend", False),
         )
 
     def get_duration(self) -> timedelta:
@@ -285,48 +297,67 @@ class CalendarEvent:
         }
 
     @classmethod
-    def from_wbso_session(cls, session: WBSOSession) -> "CalendarEvent":
-        """Create from WBSOSession."""
+    def from_wbso_session(cls, session: WBSOSession, activity_name_nl: Optional[str] = None) -> "CalendarEvent":
+        """Create from WBSOSession with Dutch text and activity-based title."""
+        from .activities import WBSOActivities
+
         # Round times to 5-minute intervals
         rounded_start = round_to_quarter_hour(session.start_time)
         rounded_end = round_to_quarter_hour(session.end_time)
-        
-        # Generate event title (remove WBSO: prefix as it's implicit from calendar name)
-        category_name = session.wbso_category.replace('_', ' ').title() if session.wbso_category else "General R&D"
-        session_type_name = session.session_type.replace('_', ' ').title()
-        title = f"{category_name} - {session_type_name}"
 
-        # Generate WBSO-worthy description
-        category_description = {
-            "AI_FRAMEWORK": "Development and implementation of AI agent frameworks, natural language processing capabilities, and intelligent communication systems for data-secure environments.",
-            "ACCESS_CONTROL": "Research and development of authentication and authorization systems, security mechanisms, and access control protocols for privacy-preserving applications.",
-            "PRIVACY_CLOUD": "Development of privacy-preserving cloud integration solutions, data protection mechanisms, and secure cloud communication protocols.",
-            "AUDIT_LOGGING": "Implementation of comprehensive audit logging systems, privacy-friendly monitoring solutions, and compliance tracking mechanisms.",
-            "DATA_INTEGRITY": "Research and development of data integrity protection systems, corruption prevention mechanisms, and validation frameworks.",
-            "GENERAL_RD": "General research and development activities supporting the WBSO-AICM-2025-01 project objectives.",
-        }.get(session.wbso_category, "Research and development activities for AI agent communication in data-secure and privacy-conscious environments.")
+        # Generate event title using activity name (Dutch) - no session type tags
+        if activity_name_nl:
+            title = activity_name_nl
+        else:
+            # Fallback: use category name in Dutch
+            category_names_nl = {
+                "AI_FRAMEWORK": "AI Framework Ontwikkeling",
+                "ACCESS_CONTROL": "Toegangscontrole Ontwikkeling",
+                "PRIVACY_CLOUD": "Privacy-bewuste Cloud Integratie",
+                "AUDIT_LOGGING": "Audit Logging Ontwikkeling",
+                "DATA_INTEGRITY": "Data Integriteit Ontwikkeling",
+                "GENERAL_RD": "Algemeen R&D Werk",
+            }
+            title = category_names_nl.get(session.wbso_category, "Algemeen R&D Werk")
+
+        # Generate WBSO-worthy description in Dutch (with English jargon allowed)
+        category_descriptions_nl = {
+            "AI_FRAMEWORK": "Ontwikkeling en implementatie van AI agent frameworks, natural language processing capabilities, en intelligente communicatiesystemen voor data-veilige omgevingen.",
+            "ACCESS_CONTROL": "Onderzoek en ontwikkeling van authenticatie- en autorisatiesystemen, beveiligingsmechanismen, en toegangscontrole protocollen voor privacy-bewuste applicaties.",
+            "PRIVACY_CLOUD": "Ontwikkeling van privacy-bewuste cloud integratieoplossingen, data protection mechanismen, en veilige cloud communicatie protocollen.",
+            "AUDIT_LOGGING": "Implementatie van uitgebreide audit logging systemen, privacy-vriendelijke monitoring oplossingen, en compliance tracking mechanismen.",
+            "DATA_INTEGRITY": "Onderzoek en ontwikkeling van data integriteit beschermingssystemen, corruptie preventie mechanismen, en validatie frameworks.",
+            "GENERAL_RD": "Algemene research en development activiteiten ter ondersteuning van de WBSO-AICM-2025-01 projectdoelstellingen.",
+        }
+        category_description = category_descriptions_nl.get(
+            session.wbso_category,
+            "Research en development activiteiten voor AI agent communicatie in data-veilige en privacy-bewuste omgevingen.",
+        )
+
+        # Determine location: 'Thuiswerk' if computer on commit or weekend, 'Kantoor' otherwise
+        location = "Thuiswerk" if (session.has_computer_on or session.is_weekend) else "Kantoor"
 
         description = f"""WBSO Project: WBSO-AICM-2025-01
 AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 
-R&D Activity: {category_description}
+R&D Activiteit: {category_description}
 
-Technical Work Performed:
+Technisch Werk Uitgevoerd:
 {session.wbso_justification}
 
-Session Details:
-- Category: {session.wbso_category.replace('_', ' ').title()}
-- Session Type: {session_type_name}
-- Work Duration: {session.work_hours:.2f} hours
-- Date: {session.date}
+Sessie Details:
+- Categorie: {session.wbso_category.replace("_", " ").title()}
+- Werk Duur: {session.work_hours:.2f} uur
+- Datum: {session.date}
+- Locatie: {location}
 
-Source Information:
-- Data Source: {"Synthetic session generated from unassigned commits" if session.is_synthetic else "Real session from system event logs"}
-- Commit Count: {session.commit_count}
+Bron Informatie:
+- Data Bron: {"Synthetische sessie gegenereerd uit niet-toegewezen commits" if session.is_synthetic else "Echte sessie uit system event logs"}
+- Commit Aantal: {session.commit_count}
 - Confidence Score: {session.confidence_score:.2f}
 
-WBSO Eligibility:
-This work session qualifies for WBSO tax deduction under category {session.wbso_category} as part of the approved R&D project WBSO-AICM-2025-01."""
+WBSO Kwalificatie:
+Deze werksessie kwalificeert voor WBSO belastingaftrek onder categorie {session.wbso_category} als onderdeel van het goedgekeurde R&D project WBSO-AICM-2025-01."""
 
         # Format datetime for Google Calendar (using rounded times)
         start_dt = rounded_start.strftime("%Y-%m-%dT%H:%M:%S")
@@ -343,6 +374,7 @@ This work session qualifies for WBSO tax deduction under category {session.wbso_
                 "commit_count": str(session.commit_count),
                 "source_type": session.source_type,
                 "confidence_score": str(session.confidence_score),
+                "activity_id": session.activity_id if session.activity_id else "",
             }
         }
 
@@ -353,7 +385,7 @@ This work session qualifies for WBSO tax deduction under category {session.wbso_
             end={"dateTime": end_dt, "timeZone": "Europe/Amsterdam"},
             color_id="1",  # Blue color for WBSO events
             extended_properties=extended_properties,
-            location="Home Office",
+            location=location,
             transparency="opaque",
         )
 

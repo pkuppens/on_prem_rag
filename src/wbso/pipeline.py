@@ -20,10 +20,20 @@ from typing import Dict, List, Any, Callable
 
 from .pipeline_steps import (
     step_data_refresh,
+    step_consolidate_system_events,
+    step_filter_logon_logoff,
+    step_polish_logon_logoff,
+    step_data_summary,
+    step_load_activities,
+    step_load_polished_sessions,
+    step_system_events_summary,
     step_validate,
     step_time_polish,
     step_deduplicate,
+    step_store_activity_blocks,
     step_conflict_detect,
+    step_assign_activities,
+    step_detect_commits_without_system_events,
     step_content_polish,
     step_event_convert,
     step_calendar_replace,
@@ -45,34 +55,55 @@ TARGET_END_DATE = datetime.now()
 class WBSOCalendarPipeline:
     """Unified pipeline for WBSO calendar upload with extensible step architecture."""
 
-    def __init__(self, force_validation: bool = False, dry_run: bool = False, force_refresh: bool = False):
+    def __init__(
+        self,
+        force_validation: bool = False,
+        dry_run: bool = False,
+        force_refresh: bool = False,
+        force_regenerate_activities: bool = False,
+        force_regenerate_system_events: bool = False,
+    ):
         """Initialize pipeline."""
         self.force_validation = force_validation
         self.dry_run = dry_run
         self.force_refresh = force_refresh
-        
+        self.force_regenerate_activities = force_regenerate_activities
+        self.force_regenerate_system_events = force_regenerate_system_events
+
         # Pipeline context (shared state between steps)
         self.context = {
             "force_validation": force_validation,
             "dry_run": dry_run,
             "force_refresh": force_refresh,
+            "force_regenerate_activities": force_regenerate_activities,
+            "force_regenerate_system_events": force_regenerate_system_events,
         }
-        
+
         # Step reports (array of individual step reports)
         self.step_reports: List[Dict[str, Any]] = []
-        
+
         # Define pipeline steps (easily extensible - just add/remove/reorder)
         self.pipeline_steps: List[Callable[[Dict[str, Any]], Dict[str, Any]]] = [
-            step_data_refresh,      # Refresh data sources
-            step_validate,           # Validate data
-            step_time_polish,        # Round times, add breaks
-            step_deduplicate,        # Remove duplicates
-            step_conflict_detect,    # Detect calendar conflicts
-            step_content_polish,     # Polish event content
-            step_event_convert,      # Convert to calendar events
-            step_calendar_replace,   # Replace calendar events (delete old, upload new)
-            step_verify,             # Verify upload
-            step_report,             # Generate report
+            step_data_refresh,  # Refresh data sources (extract new CSV files)
+            step_consolidate_system_events,  # Consolidate all system_events_*.csv into all_system_events.csv (one-off)
+            step_filter_logon_logoff,  # Filter logon/logoff events (7001/7002) and create sessions
+            step_polish_logon_logoff,  # Polish logon/logoff timestamps (round to 5 minutes, add breaks)
+            step_data_summary,  # Summarize data collection date ranges
+            step_load_activities,  # Load/generate WBSO activities list
+            step_load_polished_sessions,  # Load polished logon/logoff sessions into WBSODataset
+            step_system_events_summary,  # Summarize system events coverage and hours
+            step_validate,  # Validate data
+            step_time_polish,  # Round times, add breaks, clip to max hours
+            step_deduplicate,  # Remove duplicates
+            step_store_activity_blocks,  # Store polished activity blocks for human review
+            step_conflict_detect,  # Detect calendar conflicts
+            step_assign_activities,  # Assign WBSO activities based on commits and repo purpose
+            step_detect_commits_without_system_events,  # Detect commits on days without system events
+            step_content_polish,  # Polish event content
+            step_event_convert,  # Convert to calendar events
+            step_calendar_replace,  # Replace calendar events (delete old, upload new)
+            step_verify,  # Verify upload
+            step_report,  # Generate report
         ]
 
     def run(self) -> int:
@@ -92,20 +123,20 @@ class WBSOCalendarPipeline:
                 logger.info(f"\n{'=' * 60}")
                 logger.info(f"Executing: {step_name}")
                 logger.info(f"{'=' * 60}")
-                
+
                 try:
                     # Execute step
                     step_report = step_func(self.context)
-                    
+
                     # Store step report
                     self.step_reports.append(step_report)
-                    
+
                     # Check if step failed
                     if not step_report.get("success", False):
                         logger.error(f"Step {step_name} failed: {step_report.get('message', 'Unknown error')}")
                         # Continue to next step (some steps can fail without stopping pipeline)
                         # Critical steps should return False and we can check here
-                    
+
                 except Exception as e:
                     logger.error(f"Step {step_name} raised exception: {e}", exc_info=True)
                     # Create error report for this step
@@ -114,22 +145,22 @@ class WBSOCalendarPipeline:
                         "success": False,
                         "timestamp": datetime.now().isoformat(),
                         "error": str(e),
-                        "message": f"Step failed with exception: {e}"
+                        "message": f"Step failed with exception: {e}",
                     }
                     self.step_reports.append(error_report)
                     # Continue to next step
-            
+
             # Generate final pipeline report
             self.generate_pipeline_report()
-            
+
             # Determine success
             if self.dry_run:
                 logger.info("✅ Pipeline completed (dry run)")
                 return 0
-            
+
             verification_report = next((r for r in self.step_reports if r.get("step_name") == "verify"), None)
             calendar_hours = verification_report.get("total_hours", 0.0) if verification_report else 0.0
-            
+
             if calendar_hours >= 400.0:
                 logger.info(f"✅ Pipeline completed successfully: {calendar_hours:.2f} hours in calendar")
                 return 0
@@ -146,16 +177,26 @@ class WBSOCalendarPipeline:
         logger.info("=" * 60)
         logger.info("GENERATING PIPELINE REPORT")
         logger.info("=" * 60)
-        
+
         # Get summary data from context
         dataset = self.context.get("dataset")
         verification_results = self.context.get("verification_results", {})
-        
+        polished_summary = self.context.get("polished_logon_logoff_summary", {})
+
         # Calculate totals
-        wbso_sessions = [s for s in dataset.sessions if s.is_wbso] if dataset else []
-        calculated_hours = sum(s.work_hours for s in wbso_sessions if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()) if dataset else 0.0
-        calendar_hours = verification_results.get("total_hours", 0.0)
-        
+        from .calendar_event import WBSODataset, WBSOSession
+
+        wbso_sessions: List[WBSOSession] = []
+        if isinstance(dataset, WBSODataset):
+            wbso_sessions = [s for s in dataset.sessions if s.is_wbso]  # type: ignore[attr-defined]
+
+        calculated_hours = 0.0
+        for s in wbso_sessions:
+            if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date():
+                calculated_hours += s.work_hours
+
+        calendar_hours = verification_results.get("total_hours", 0.0) if isinstance(verification_results, dict) else 0.0
+
         # Create comprehensive report
         report = {
             "pipeline_timestamp": datetime.now().isoformat(),
@@ -172,15 +213,16 @@ class WBSOCalendarPipeline:
                 "target_gap": 510.0 - calendar_hours,
                 "target_achievement_percent": (calendar_hours / 510.0 * 100) if 510.0 > 0 else 0,
             },
+            "polished_logon_logoff": polished_summary,  # Add polished logon/logoff summary
             "steps": self.step_reports,  # Array of step reports
         }
-        
+
         # Save report
         UPLOAD_OUTPUT_DIR.mkdir(exist_ok=True)
         report_path = UPLOAD_OUTPUT_DIR / "pipeline_report.json"
         with open(report_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
-        
+
         # Print summary
         print(f"\n{'=' * 60}")
         print("WBSO CALENDAR PIPELINE SUMMARY")
@@ -192,7 +234,7 @@ class WBSOCalendarPipeline:
         print(f"Target Hours: 510.0 hours")
         print(f"Target Gap: {510.0 - calendar_hours:.2f} hours")
         print(f"Target Achievement: {(calendar_hours / 510.0 * 100):.1f}%")
-        
+
         # Print step summary
         print(f"\nPipeline Steps ({len(self.step_reports)}):")
         for step_report in self.step_reports:
@@ -201,10 +243,10 @@ class WBSOCalendarPipeline:
             message = step_report.get("message", "")
             status = "✅" if success else "❌"
             print(f"  {status} {step_name}: {message}")
-        
+
         print(f"\nReport saved to: {report_path}")
         print(f"{'=' * 60}\n")
-        
+
         logger.info(f"✅ Report generated: {report_path}")
 
 
@@ -215,13 +257,19 @@ def main():
     parser = argparse.ArgumentParser(description="WBSO Calendar Upload Pipeline")
     parser.add_argument("--force-validation", action="store_true", help="Force re-validation even if validated data exists")
     parser.add_argument("--force-refresh", action="store_true", help="Force data refresh")
+    parser.add_argument("--force-regenerate-activities", action="store_true", help="Force regenerate WBSO activities list")
+    parser.add_argument(
+        "--force-regenerate-system-events", action="store_true", help="Force regenerate consolidated system events file"
+    )
     parser.add_argument("--dry-run", action="store_true", help="Dry run mode - don't actually upload")
     args = parser.parse_args()
 
     pipeline = WBSOCalendarPipeline(
         force_validation=args.force_validation,
         dry_run=args.dry_run,
-        force_refresh=args.force_refresh
+        force_refresh=args.force_refresh,
+        force_regenerate_activities=args.force_regenerate_activities,
+        force_regenerate_system_events=args.force_regenerate_system_events,
     )
     exit_code = pipeline.run()
     sys.exit(exit_code)

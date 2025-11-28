@@ -54,6 +54,7 @@ dependencies = [
     "pandas>=2.2.3",
     "openagents>=0.6.12",
     "mcp>=1.0.0",
+    "tzdata>=2025.2",
 ]
 requires-python = ">=3.12,<3.14"
 
@@ -134,6 +135,7 @@ select = [
 ignore = [
     "E402",    # Module level import not at top of file
     "E501",    # line too long
+    "E722",    # bare except (not important for this project)
     "PLR2004", # magic value used in comparison
     "E741",    # ambiguous variable name (we fixed this one)
     "C901",    # too complex

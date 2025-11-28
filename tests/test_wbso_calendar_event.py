@@ -435,7 +435,7 @@ class TestCalendarEvent:
         )
 
         event = CalendarEvent.from_wbso_session(session)
-        assert "WBSO: Ai Framework" in event.summary
+        assert "AI Framework Ontwikkeling" in event.summary
         assert "AI_FRAMEWORK" in event.description
         assert event.start["dateTime"] == "2025-10-18T09:00:00"
         assert event.end["dateTime"] == "2025-10-18T17:00:00"

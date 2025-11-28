@@ -1,345 +1,363 @@
-datetime|timestamp|message|author|hash
-2025-05-30 20:33:36|1748630016|Initial commit|Pieter Kuppens|6eb925fc66ad0feabdee45d0f4b3bc2d986c1fcc
-2025-05-30 22:10:33|1748635833|Update README.md with project plan - needs review and formatting|Pieter Kuppens|1e91114759a8edd78326dfd800bc238d6c12ea32
-2025-05-31 11:39:59|1748684399|LICENSE: MIT with Commercial Use Restriction|Pieter Kuppens|bdcb73909cfeed2df7d4bd9bc557b22ea6ff2263
-2025-05-31 12:21:59|1748686919|Extensive project planning divided in 6 goals|Pieter Kuppens|697b55b047c22d3602cc21e1c4826d5633b44b93
-2025-05-31 14:41:12|1748695272|SAFe and Language cursor rules|Pieter Kuppens|545d3f77467e571e14e472f276d466b17c19d1c0
-2025-05-31 15:12:56|1748697176|Rewrite to SAFe project management|Pieter Kuppens|7107bb23336afe58fd5b5e2e3bfed32bbdca628d
-2025-06-01 10:06:09|1748765169|Add a refine cursor rule|Pieter Kuppens|d3492b0d7401b1689beab73ebe4d2acc84c27776
-2025-06-01 19:07:00|1748797620|Fix YAML front matter in cursor rule files|Pieter Kuppens|5b81dc862430b61063978371e65492b504a04e1d
-2025-06-01 19:15:41|1748798141|Merge pull request #2 from pkuppens/codex/find-and-fix-a-bug-in-codebase|Pieter Kuppens|5edb0062c81ca9d2b9c482ec091cdd0e17c701cb
-2025-06-01 19:16:47|1748798207|Language preference cursor rule no longer limited to markdown, but applicable to all files.|Pieter Kuppens|33d9b1e16f13c993a9f728f20a266ddb190f470d
-2025-06-01 19:17:48|1748798268|Merge pull request #3 from pkuppens/codex/find-and-fix-a-bug-in-codebase|Pieter Kuppens|f5b9f4f268a6f27a2dd8e968b417ddbc886894cb
-2025-06-01 19:29:50|1748798990|docs: update repository overview|Pieter Kuppens|25e9275b7731c41753da94ff81bc1d9a322be5ac
-2025-06-01 19:31:13|1748799073|Merge pull request #4 from pkuppens/codex/explain-codebase-structure-and-key-elements|Pieter Kuppens|2622f61de297208c5c2e53044c95e49d11f0484b
-2025-06-01 19:43:54|1748799834|Add basic tests directory with placeholder|Pieter Kuppens|e6c2b01c521f14320bd9665378245d2dc4b9d05b
-2025-06-01 19:44:56|1748799896|docs: update repository overview|Pieter Kuppens|5855b2b52f6f67a23315a00a5143d01092fe786f
-2025-06-01 19:45:27|1748799927|Merge pull request #6 from pkuppens/eg23c1-codex/explain-codebase-structure-and-key-elements|Pieter Kuppens|80c0d3f8eb1595994ca1b072a3145cc268f4e1ae
-2025-06-01 19:45:53|1748799953|Merge pull request #5 from pkuppens/codex/create-test-directory-and-placeholder-file|Pieter Kuppens|69d3498f77789d42861d161902dfd37bbb36357d
-2025-06-01 19:47:55|1748800075|docs: add placeholders for stories 005-009|Pieter Kuppens|9810db3fec9026ffee8ad9ff3ba39a3783a3620f
-2025-06-01 19:48:08|1748800088|Merge pull request #7 from pkuppens/codex/add-placeholder-markdown-files-for-story-005-to-story-009|Pieter Kuppens|67dbce6091de35c99297e399b329f7b5ce88a9aa
-2025-06-01 19:48:45|1748800125|Link roadmap bullets to feature files|Pieter Kuppens|9647a9c5d254d17ba4493e5bc104ff536ccad681
-2025-06-01 19:49:36|1748800176|Merge pull request #8 from pkuppens/codex/update-readme.md-with-feature-links|Pieter Kuppens|8a9c9d7f93458f447c242de90f2878c658dd90f0
-2025-06-01 19:50:39|1748800239|chore: add trailing newline to FEAT-002|Pieter Kuppens|9584470091628e2fd1b9ee1f4471f1314d8a294c
-2025-06-01 19:51:00|1748800260|Merge pull request #9 from pkuppens/codex/add-newline-to-feat-002.md|Pieter Kuppens|ea53c96ec69f43e84dd35103030dd9bb22be3c52
-2025-06-01 20:08:03|1748801283|Add detailed stories and tasks for MVP|Pieter Kuppens|266c2e5323ee64ee8ac39db658e831bdf8c80aa0
-2025-06-01 20:09:05|1748801345|Merge pull request #10 from pkuppens/codex/drill-down-stories-and-tasks-for-feat-001|Pieter Kuppens|73b16212df1e0a830e99a0d9e64b06a50cd4a1d4
-2025-06-01 21:05:03|1748804703|Fix doc links and story formatting|Pieter Kuppens|af7076e9702d7062e22d2b6f384ebb25d837d71c
-2025-06-01 21:05:45|1748804745|Merge pull request #11 from pkuppens/codex/fix-markdown-links-and-formatting|Pieter Kuppens|3c1c547d4e219ab904529677e4dabf7b8fbd9cbf
-2025-06-01 21:39:01|1748806741|Update TASK-001.md|Pieter Kuppens|d2e99ec366dca7b8c773d8dd9e588cdb5071ce78
-2025-06-01 22:39:09|1748810349|task: 001: initial project setup|Pieter Kuppens|041645009884f0b1d02d62e105ba7c837e60a7ca
-2025-06-01 22:40:45|1748810445|chore: check of completed Acceptance Criteria|Pieter Kuppens|8f7122a258119a4ddc54ed5cb67fabf4b935c86b
-2025-06-02 13:42:11|1748864531|docs: update STORY-002 to use LlamaIndex|Pieter Kuppens|8e07ece8826c8079ce5d098c8254d7f9178ebd7a
-2025-06-02 13:42:58|1748864578|Merge pull request #13 from pkuppens/codex/update-story-002-with-llamaindex-solution|Pieter Kuppens|0e568160090cfdc73cbcfef502962a14c3ff3aea
-2025-06-02 13:58:28|1748865508|Create a cursor-rules cursor rule with /Generate Cursor Rules|Pieter Kuppens|ed707af6ca22956e97edbbd98d78ef2d3e32ddad
-2025-06-02 14:32:19|1748867539|chore: cursor rule for TASK templates|Pieter Kuppens|ecff6d397a1ceac20056378f0d6a04d54352e55c
-2025-06-02 17:15:21|1748877321|task: 006: Initial Local RAG System definition. Add data for exploration.|Pieter Kuppens|0967ec1c612fb683cabff01f4c35d30973f3f4a1
-2025-06-02 20:00:37|1748887237|pre-commit fixes with markdown and trailing whitespace|Pieter Kuppens|a55a4c982fe5ad9b8c6059166eee974d7dc85522
-2025-06-02 22:19:08|1748895548|notebook exploration of local data|Pieter Kuppens|060aad37e542a7a30879fdb8a184fba6f98e249b
-2025-06-03 09:49:15|1748936955|exploration: RAG notebook additions|Pieter Kuppens|1919c4d1e2b16a7ab92147ef88d2c2cf749d0570
-2025-06-04 12:12:59|1749031979|some more linting warning prevention attempts|Pieter Kuppens|3edc00e66bdead64be864933e3550328a02754fc
-2025-06-04 13:24:22|1749036262|chore: pre-commit hooks|Pieter Kuppens|53c13107025647d63db2706735cb6d40f922fb70
-2025-06-04 13:27:05|1749036425|chore: directory utils|Pieter Kuppens|40fec8dba7a35c8345ff50d710bc6e174c9ba206
-2025-06-04 17:34:05|1749051245|configuration sets of parameters|Pieter Kuppens|e2b3425f702d94057dfd73723fbcd39710483c4b
-2025-06-04 17:44:33|1749051873|chore: better linting descriptions|Pieter Kuppens|692bd854690362ec7d73276d9f671450274a5574
-2025-06-04 23:13:40|1749071620|lint less strict|Pieter Kuppens|b89a380f82a36d4ead88a75d3104f14168c93358
-2025-06-05 08:42:10|1749105730|Switch to FAST_ANSWERS parameter set in exploration|Pieter Kuppens|2890324a5f61393e5fba37907130edd119c1910c
-2025-06-05 09:04:29|1749107069|proj: progress update|Pieter Kuppens|eea6aee216897f2fd0978b4c9bbccd252ce5a805
-2025-06-05 09:39:21|1749109161|docs: STORY-002 refinement|Pieter Kuppens|717f5226e932d632f1115b44409d9bb4188844f8
-2025-06-05 10:11:42|1749111102|TASK-006: document loader|Pieter Kuppens|e4a713268ea5da34ca7a79365395c55ec524c099
-2025-06-05 13:10:28|1749121828|TASK-009: document loader testing|Pieter Kuppens|11f34c0ab317434c4ebf8d9b0e0b870ac3c76f13
-2025-06-05 16:04:54|1749132294|FEAT-002 refinement|Pieter Kuppens|b53ce0c76f3c56aa4fcace552286a1c260bdb4ad
-2025-06-05 16:12:28|1749132748|chore: add pytest to default dependencies to prevent some pre-commit & github action issues|Pieter Kuppens|d22ece87dbe6c9f9dda74ff22580b441bb8bde49
-2025-06-06 08:30:14|1749191414|chore: project golden rules update for coding with AI Coding Assistants|Pieter Kuppens|6848f786992991c171bd6e00c5fdd08c1d49f6d5
-2025-06-06 09:27:43|1749194863|project: sprint-demo management|Pieter Kuppens|4df48207c63f82396406bc33361ca25714e42e28
-2025-06-06 10:05:29|1749197129|chore: demo templating improvements|Pieter Kuppens|32a4a951f22c812acb3b82dafc399a40c738c430
-2025-06-06 10:27:59|1749198479|chore: semantic search demo story linking|Pieter Kuppens|03fec5e675d1814c9688614ddc82a9dd0c96a943
-2025-06-06 11:19:30|1749201570|UI: task definitions|Pieter Kuppens|e7db8f7b7f2bb6e9e2ea8cf76b04aaed290aad70
-2025-06-06 13:14:08|1749208448|TASK-006 & TASK-022: UI for document upload with backend app receivers.|Pieter Kuppens|5f506f15317edcc541ca67310263029f2e5279e5
-2025-06-06 14:46:33|1749213993|docs: add initial versions of technical documentation|Pieter Kuppens|2a73ea352d4ab97bd9cd04aeb96a66ba1c770bf4
-2025-06-06 16:37:30|1749220650|Add docker compose and vector store manager (#14)|Pieter Kuppens|c891e0ef206b21aca1c7ad5d9ec67011aa1e73a8
-2025-06-06 20:52:32|1749235952|feat: enable selectable RAG parameter sets|Pieter Kuppens|aefc4ba520bd2eee87d2355411e5d8f0cd626bea
-2025-06-06 21:52:40|1749239560|fix: enhance logging in file ingestion|Pieter Kuppens|9daf3390e5c7a3fd247b0d78394228367910dcf1
-2025-06-06 22:33:35|1749242015|fix: file ingestion progress not showing because of UI starvation|Pieter Kuppens|3aab2e2107d24ad7662ff7b843089fe7b0a2473b
-2025-06-06 22:34:01|1749242041|ui: compact representation of selected parameters|Pieter Kuppens|4cbab62ffadca446602961373699fd3d352fc436
-2025-06-07 08:21:59|1749277319|Implement RAG parameter selection and backend processing (#15)|Pieter Kuppens|02e338328cda13f20de0e6734867ff2e0944376b
-2025-06-07 09:25:29|1749281129|Update AGENTS.md with practical implementation details and internet access for package installation as per SCRATCH.md task|Pieter Kuppens|170f49086c1231e47cbabffc5ea316b00fc59a5a
-2025-06-07 09:26:25|1749281185|docs: technical CODEX description|Pieter Kuppens|f6a07bd85f95fc48e8ba56b32ba8676f6bf1b9c4
-2025-06-07 09:28:11|1749281291|Codex/implement document embedding with UI uploads (#16)|Pieter Kuppens|bacaa0a7bc2830201450f1d9e905a983117a0b73
-2025-06-07 09:29:17|1749281357|Merge branch 'codex/implement-document-embedding-with-ui-uploads'|Pieter Kuppens|2ba9c39ca79ba3933652368de8878d66c6ec17f8
-2025-06-07 10:58:40|1749286720|test: add some test data that will not be gitignored|Pieter Kuppens|f2c80f26173d403925176290ec231ed75056017a
-2025-06-07 12:06:14|1749290774|Add PDF embedding utilities and tests|Pieter Kuppens|66e8334db47adc1b0c642360493a59baf57b296d
-2025-06-07 12:44:49|1749293089|feat(auth): add authentication service and frontend login|Pieter Kuppens|63c9110a00729c0a3ff1d19035d1619d88556c20
-2025-06-07 17:56:12|1749311772|chore: jupyter-notebook cursor rules (applied)|Pieter Kuppens|80354a3f7322cf9284ce94eb3ae5b2cc2d2de2ff
-2025-06-07 23:02:44|1749330164|analysis: compare embeddings in two notebooks|Pieter Kuppens|10a66cc60ec41a1355f5cbc6f1966bc323ab661d
-2025-06-07 23:22:31|1749331351|exploration: initial exploration of PDF document chunking with FAST_ANSWERS chunking|Pieter Kuppens|0290446553c9a8cf1e770b421e954124e56a8362
-2025-06-08 09:15:54|1749366954|Install dev packages and update setup docs|Pieter Kuppens|bde00916de28f0b8fed543a2b9017bff54142a2f
-2025-06-08 14:12:15|1749384735|chore: factor out chunking from embedding|Pieter Kuppens|d0974f11b65c5c6ca65cd3c43d452ea94bde66bd
-2025-06-08 14:12:44|1749384764|chore: factor out chunking from embedding part 2|Pieter Kuppens|7aa3ef96cd7534f9679e5cf07c70f0dfbf7e121a
-2025-06-08 14:48:26|1749386906|chore: feedback integration cursor rule|Pieter Kuppens|d407ab9dfd469139dd1864da10ea4b07fd2c8c6a
-2025-06-08 09:15:54|1749366954|Install dev packages and update setup docs|Pieter Kuppens|a41392f442b09dcf7f6761d1259be760a0bdab07
-2025-06-08 14:12:15|1749384735|chore: factor out chunking from embedding|Pieter Kuppens|efc7c7b0346a64dd08c4e865ec99b97df2094f5b
-2025-06-08 14:12:44|1749384764|chore: factor out chunking from embedding part 2|Pieter Kuppens|7a072af5487478f001cf9776466cc63e5e778203
-2025-06-08 14:48:26|1749386906|chore: feedback integration cursor rule|Pieter Kuppens|ce8c2467c6c49ad40c15fcc4dcdfb8e3a07bc3c2
-2025-06-08 14:54:13|1749387253|Merge branch 'codex/refactor-jupyter-notebooks-and-remove-duplication' into codex/explore-processing-and-analysis-of-pdf-with-embeddings|Pieter Kuppens|33b2143594c5d633f310f00e7f81f74e51e33692
-2025-06-08 14:59:01|1749387541|Merge pull request #20 from pkuppens/codex/explore-processing-and-analysis-of-pdf-with-embeddings|Pieter Kuppens|da7372e55c7ced637b6c9ec18383d8f2caf50554
-2025-06-08 15:00:41|1749387641|Merge remote-tracking branch 'origin/main' into codex/implement-flexible-frontend-authentication|Pieter Kuppens|08df4b3df9ae675a84a3384fd3caef8ebcee4c7c
-2025-06-08 18:02:10|1749398530|auth: start implement login with Google/Microsoft|Pieter Kuppens|332a653b7965fe2ea10303f701733e97fe89d275
-2025-06-08 19:21:36|1749403296|docs: reorganize project and technical documentation|Pieter Kuppens|7bf4fe4316fc066330fe040e20f7e1929bdf230a
-2025-06-08 19:42:30|1749404550|feat: enhance authentication flow and logging create account|Pieter Kuppens|795216b81b9a3775a7340d1f84e48e566aee2f8b
-2025-06-08 20:18:25|1749406705|Merge pull request #18 from pkuppens/codex/implement-flexible-frontend-authentication|Pieter Kuppens|e819957609e6ad6637a7df319ce60c3fb2187b6e
-2025-06-08 22:35:10|1749414910|Fix tests setup and offline instructions|Pieter Kuppens|e15cc95ced4a832797b2d9cf91ab247cfe45934c
-2025-06-08 22:36:15|1749414975|Merge pull request #21 from pkuppens/codex/fix-test-failures-and-environment-setup|Pieter Kuppens|b336f2d938f1e64aa51d543492d299a5044408b5
-2025-06-08 20:43:02|1749408182|chore: new cursor rule to sync documentation and code|Pieter Kuppens|10ec635b18d7eac07cbc4f16a4eb0dcc4f36b8e7
-2025-06-08 20:44:18|1749408258|chore: file wasnt saved|Pieter Kuppens|c7e6f0f17991ad0492ab9e72b9e1d1edfcef80b6
-2025-06-08 22:31:11|1749414671|test: auth_service|Pieter Kuppens|a00bd4d7700acd92daf7a4983763e2cbb4ac8243
-2025-06-08 22:35:10|1749414910|Fix tests setup and offline instructions|Pieter Kuppens|1490750a70e0ac4287a0c2fb0a8ccab854522160
-2025-06-08 22:32:18|1749414738|embedding generator now processes all 144 pages of the test document|Pieter Kuppens|34a758eb2e84ecb1364cae274e91c7af8489f22e
-2025-06-08 23:12:49|1749417169|Fix tests setup and offline instructions|Pieter Kuppens|5f679ff0d2ce25ccbbcb36da79767a93d6cded26
-2025-06-09 08:22:19|1749450139|fix: setup embedding models for offline environments like github actions|Pieter Kuppens|d6728bb629cccbf9d82c0a2eb3eadfdaa084e2cb
-2025-06-09 08:40:07|1749451207|fix: setup embedding test error that only occurred on github actions|Pieter Kuppens|d4c83f375ebae3927c04dc41bda1961e8f1724d9
-2025-06-09 10:56:18|1749459378|Add query endpoint and PDF preview UI|Pieter Kuppens|740458ae0776da549ad8d75a17bf245881c62456
-2025-06-09 16:16:42|1749478602|UI: connect the UI query search to the backend|Pieter Kuppens|ed6861e37b9cd57a1e9b0f8faebc6a720c568277
-2025-06-09 16:56:22|1749480982|security: introduce new cursor rule after finding CDN issues|Pieter Kuppens|08b84755d0daa9e1df43eeba13709d7d6c86d7eb
-2025-06-09 19:00:08|1749488408|fix: frontend now showing PDF preview on on-prem config|Pieter Kuppens|e8c1c86643b3cdf2da5251935c71c78c89abd066
-2025-06-10 09:08:22|1749539302|fix: github actions tests did not have uploaded_files folder.|Pieter Kuppens|8fad9e84de814c145ec50b935387c7a8e1c4bb2e
-2025-06-10 12:22:41|1749550961|test: RAG Demo works on Learning Langchain upload|Pieter Kuppens|52912c4f678440e88d82ec3be15078d7b1047a2e
-2025-06-10 14:10:07|1749557407|Merge pull request #22 from pkuppens/codex/implement-document-search-with-preview-feature|Pieter Kuppens|5ccbc04167fe26a01f4e2a609dcefcb60aeeea37
-2025-06-10 14:43:33|1749559413|TASK-002: refinement|Pieter Kuppens|597994c125503ef2a4d7d58a7c5bb456fc6361b3
-2025-06-10 16:36:56|1749566216|refactor: restructure project layout - Move backend and frontend into src directory - Reorganize auth_service and rag_pipeline under backend|Pieter Kuppens|f2afdab6c6e8fdc2d5044cf80d9ea696bc252257
-2025-06-10 16:37:08|1749566228|refactor: update imports and paths for new project structure - Update pyproject.toml for new src layout - Adjust test imports|Pieter Kuppens|a38d09db74d41982ca1c7cc4c4333a535c1fef56
-2025-06-10 16:37:19|1749566239|docs: update documentation for new project structure - Add Docker technical documentation - Add project structure documentation - Update task documentation|Pieter Kuppens|ca7be028b0da621ec5784efbc06c779cc826a8e2
-2025-06-10 16:37:29|1749566249|docker: update Docker configuration for new project structure - Add .dockerignore - Update main Dockerfile - Update docker-compose.yml - Add backend Dockerfile|Pieter Kuppens|f1c3e2c9b0e3d9c50ee674a5ad16b2268378a059
-2025-06-10 16:37:56|1749566276|chore: remove old frontend directory - Files have been moved to src/frontend/frontend|Pieter Kuppens|95141a64eb2f4fdd04e5c59dba48e8fe97f185cf
-2025-06-10 16:39:12|1749566352|chore: remove old backend directories src/auth_service and src/rag_pipeline after migration to src/backend|Pieter Kuppens|c1ed7e60dda30269d6c8f9ca581f2fab676c14b4
-2025-06-11 07:12:57|1749618777|fix entrypoint imports and add param set test|Pieter Kuppens|ac41c220cb8e1896263c309e5dd283fb726fa227
-2025-06-11 07:26:08|1749619568|fix: imports in pyproject  project scripts|Pieter Kuppens|33c6bf8c4d6f6d30d505154e265f18827ccad9a3
-2025-06-11 07:46:13|1749620773|ruff check|Pieter Kuppens|88930b570efe3994d190719b9ec1cee3cd2b3bd1
-2025-06-11 09:02:36|1749625356|Merge pull request #23 from pkuppens/codex/fix-relative-import-issues-in-pyproject-scripts|Pieter Kuppens|c899b4de50622950d15be5964009b364b2632bba
-2025-06-11 13:06:07|1749639967|Add PDF inspection utilities and tests|Pieter Kuppens|1000a72f8b475fb79b5b1899b1fd883d6a283a68
-2025-06-11 13:20:46|1749640846|ruff: whitespace fixes|Pieter Kuppens|63109849e76ecae5160aa69127912f96747fa9d0
-2025-06-11 13:39:27|1749641967|Merge branch 'codex/create-python-tools-for-pdf-conversion,-chunking,-and-embedd' into feature/restructure-project-layout|Pieter Kuppens|454f0c0ad1819d6ee214f6d186e0d37d297ad104
-2025-06-11 14:34:54|1749645294|refactor: move frontend directory|Pieter Kuppens|13de5668bb2ea3fc3fbf553a0b48cc504051da65
-2025-06-11 15:24:48|1749648288|fix: page numbering in PDF for reference with react-pdf|Pieter Kuppens|d282805914d1cee557edc1aa2087fc97cf99f94d
-2025-06-11 15:36:38|1749648998|chore: improve vibe coding with better assertions and checks before coding completes|Pieter Kuppens|05ba12b6519eacb923d5791940f43f196af1cc58
-2025-06-11 16:36:11|1749652571|fix: didn't put learninglangchain in repo, so skip tests these tests in cloud|Pieter Kuppens|c3026f7937339b4d3481897023a4e84d8a657f0d
-2025-06-11 19:30:14|1749663014|fix: describe project directory structure|Pieter Kuppens|58e7dacd4cb06f710ac2791983330e8d6bca78d4
-2025-06-11 20:11:42|1749665502|chore: python version for dev sync to 3.13.2 on dev PCs|Pieter Kuppens|ce8f0d75f1c10eb84d52183cc013f7c0d9575ffd
-2025-06-11 22:19:38|1749673178|chore: pre-commit hook|Pieter Kuppens|a0524a14e3af91197a7a1999425b86db749962c1
-2025-06-12 08:22:22|1749709342|chore: add GitHub issue templates|Pieter Kuppens|6232ef3c5afbf94aa3a57ef453d50aea94a6beea
-2025-06-12 08:23:50|1749709430|Merge branch 'main' into codex/complete-story-001.md-and-update-tasks|Pieter Kuppens|ad2382cdcbf2855fa162c05d68f4e2b6c448c1f6
-2025-06-12 08:40:14|1749710414|fix: pytest failed in codex, improved dependency management|Pieter Kuppens|1b2d508e323ae953e4508fa5fa77455f1a33c816
-2025-06-12 08:46:27|1749710787|Merge pull request #26 from pkuppens/codex/complete-story-001.md-and-update-tasks|Pieter Kuppens|5a9eba550dac95f8506dcf2c57507ea4196b8f8f
-2025-06-12 10:28:11|1749716891|chore: codex environment improvement|Pieter Kuppens|05e0ab5bc6c23e1bcb9b43cd6dd3b4fd34a51883
-2025-06-12 10:31:28|1749717088|fix: syntax error in script|Pieter Kuppens|e74f69d6fee27c17cbd3c0f22729b4f0ae64a732
-2025-06-12 10:50:53|1749718253|chore: ruff|Pieter Kuppens|8e6acf0e604a82d6dedd4a01a7c90366a6cff129
-2025-06-12 10:53:40|1749718420|docs: expand semantic search demo|Pieter Kuppens|fbe90284e32434e364716b13c779336927acdef1
-2025-06-12 10:55:57|1749718557|Merge remote-tracking branch 'origin/codex/complete-demo-flow-for-presentation'|Pieter Kuppens|4c757247fac638b238ea5b4b1edcb94c20b0dddd
-2025-06-12 10:59:07|1749718747|codex: skip slow tests on workspace start|Pieter Kuppens|9f70a36b8e0a3f08d089bbc0053615e11cb5a8bc
-2025-06-12 11:32:19|1749720739|FEAT-003: document provider modules|Pieter Kuppens|465dfe1c98226178b7e2b6cd88fe853bcc89f2cd
-2025-06-12 14:07:10|1749730030|test: test plan cursor rule and initial test plans|Pieter Kuppens|8c410abd8c1973f4ebf5cac7a79c5c8e65cae7d2
-2025-06-12 14:26:18|1749731178|Update README.md with app preview|Pieter Kuppens|25a40166e88e15c1a05547a6ce72c37dbab3469b
-2025-06-12 14:59:22|1749733162|test: disable internet tests on github|Pieter Kuppens|27fcbceb78a4a37ffd2e5ade8802d79c1093af9f
-2025-06-12 15:05:07|1749733507|UI: better PDF page linking|Pieter Kuppens|b1897d25aff4d00914ad9e8e9681b746b6d8e0e0
-2025-06-12 15:39:03|1749735543|UI: Hover text with full chunk|Pieter Kuppens|b7427c2a883dbf535178c880a2b1e27f929236bd
-2025-06-12 15:40:26|1749735626|refactor: unify chunking and embedding|Pieter Kuppens|c058fe7c004a9dc1168281e30af73802bee18562
-2025-06-12 15:43:13|1749735793|Merge pull request #28 from pkuppens/codex/review-and-implement-tasks-for-feat-files|Pieter Kuppens|bac40fe69a5cc387b24661c31e75cc7625d1f3f6
-2025-06-12 19:02:32|1749747752|Rename top_n to top_k and document network tests|Pieter Kuppens|6b6c056496a17718d0edca3e6e932ebdeda5e715
-2025-06-13 10:58:38|1749805118|fix: tests|Pieter Kuppens|c5a688a82f0366b405532c1d397455f1364e893f
-2025-06-13 13:28:34|1749814114|exploration: top_k comparison 5 and 50 results (performance and its top 5 are equal)|Pieter Kuppens|3fcd742b4ca0fd9b2e0f07cb739a4f6ea5d1ff7c
-2025-06-13 13:54:19|1749815659|fix: setup_notebook imports, and explore unrelated queries|Pieter Kuppens|8d36cd6f1239892f796f9c96db76b366605fd28e
-2025-06-13 13:58:36|1749815916|Merge main into feature branch, resolve test marker conflict|Pieter Kuppens|b3f0e77937d60abc64279803d3b9484ebc6beaeb
-2025-06-13 14:41:20|1749818480|fix: tests and merge fix|Pieter Kuppens|8ff4bda3b2076fb0ea15d6a09117cc560146d1e3
-2025-06-13 14:58:59|1749819539|fix: unify huggingface cache to limit storage|Pieter Kuppens|18b410f2c3d15f7bc6962017ffdc0d0032226eee
-2025-06-13 15:18:04|1749820684|"fix: cache: ""pip"" issue break github action?"|Pieter Kuppens|199d9fd04d02d2d874072f38642c4fc760f5d937
-2025-06-13 15:36:02|1749821762|fix: try fix github action|Pieter Kuppens|a2b5f9647c20eca896d6eef9307d8b8338d3135b
-2025-06-13 16:11:05|1749823865|fix: tests in CICD|Pieter Kuppens|c95863221d856bcfb61077fb47c7e0d7f9715148
-2025-06-13 17:15:09|1749827709|fix: remove test mock call assertions that are too sensitive|Pieter Kuppens|ed60cbb0d245571cb9301dda946759ef84e1bbb8
-2025-06-13 19:01:28|1749834088|fix: ruff whitespace|Pieter Kuppens|44c84f42f7347ca901aa04c321c617b460d303be
-2025-06-13 19:51:30|1749837090|Merge pull request #29 from pkuppens/codex/create-jupyter-notebook-for-top-n-answers-analysis|Pieter Kuppens|df1c2e97f61c0b573e40ab287dc0ccc13b4b48f8
-2025-06-13 09:28:54|1749799734|Add upload script and tests|Pieter Kuppens|5ea9c8df92dcf3be5d12188f8e8b7fc5b37a5207
-2025-06-13 22:16:16|1749845776|docx: chunking and preview snippet, no DOCXViewer yet.|Pieter Kuppens|8c379e491b881fc7e42bcceb9639e5bda778f08c
-2025-06-14 10:57:55|1749891475|Merge pull request #31 from pkuppens/codex/create-document-upload-script-with-api-support|Pieter Kuppens|347e05a4b69a01089e6e552e97268dfc94caddea
-2025-06-14 11:58:40|1749895120|feat(frontend): support text previews and copy|Pieter Kuppens|98301f7579567ffd63f4c4f00b1ae7fc2d0ea7ac
-2025-06-14 14:10:53|1749903053|Mark internet-dependent tests|Pieter Kuppens|92b068df3f03262f9d384a400a76c5bd316b3f58
-2025-06-14 14:11:00|1749903060|Improve offline test handling and add viewer test pages|Pieter Kuppens|bab60f5fb49b7501d2257740717d702c10601d27
-2025-06-14 16:19:04|1749910744|fix: uploaded file not present|Pieter Kuppens|a67d832d0aef471d08162f663943f3cac533a527
-2025-06-14 16:25:36|1749911136|Merge pull request #32 from pkuppens/codex/update-demo-with-enhanced-file-preview-features|Pieter Kuppens|e3037ae3888b8d54bcab7266878c7687973e9589
-2025-06-14 17:32:29|1749915149|feat: expand upload script|Pieter Kuppens|2aeba4c1550f4f11d2d6bc9fceeea449a0a68887
-2025-06-16 13:41:00|1750074060|UI: Frontend fixes for upload progress|Pieter Kuppens|11972f49435267f34ab89d24023e02f8de8165b9
-2025-06-16 14:46:41|1750078001|Merge pull request #33 from pkuppens/codex/implement-document-upload-script-with-additional-options|Pieter Kuppens|30857d15d85545711c2f1a7f0423195eda55070d
-2025-06-16 19:31:00|1750095060|Implement parameter-aware duplicate detection|Pieter Kuppens|16795da77b8d6d3346b4cbdf554c07b993e0511a
-2025-06-16 21:06:48|1750100808|create 30 second ping to keep websocket alive|Pieter Kuppens|6e544a2f6909b50bb56786b55c5d4b1bd62bab4b
-2025-06-17 11:17:53|1750151873|docs: add high-level requirements and planning|Pieter Kuppens|eb3dbfc8330056cf57a9e34d85f1e427c36912a8
-2025-06-17 11:24:34|1750152274|Merge pull request #35 from pkuppens/codex/update-top-level-project-documentation|Pieter Kuppens|47834434c06b3714f3121f849a11dd86cce67257
-2025-06-17 13:34:42|1750160082|refactor api into smaller files|Pieter Kuppens|ca981704946d52a776c75c96089070d339238a9d
-2025-06-14 17:32:29|1749915149|feat: expand upload script|Pieter Kuppens|e6de34e818a779e8609ec2fc376245c46d5cdf70
-2025-06-16 13:41:00|1750074060|UI: Frontend fixes for upload progress|Pieter Kuppens|7b1605bb2bb79a67c5d12bcb956332623567bf00
-2025-06-17 11:17:53|1750151873|docs: add high-level requirements and planning|Pieter Kuppens|7c024664f9072f7d2a766e8c73edb7c8dbd1230c
-2025-06-17 13:36:40|1750160200|Merge branch 'main' of https://github.com/pkuppens/on_prem_rag|Pieter Kuppens|bb30ccf22dd616432f5f46313dfdbebdaeddd0fe
-2025-06-18 09:21:38|1750231298|DDD for agents|Pieter Kuppens|d261b46b54c840cda20f348e3e773ba4566c1290
-2025-06-18 10:15:58|1750234558|docs: introduce MCP architecture|Pieter Kuppens|6c02e12bea066a51f4c65d29b1ca70ac4ae1d073
-2025-06-18 10:42:35|1750236155|Merge pull request #36 from pkuppens/codex/update-documentation-for-model-context-protocol|Pieter Kuppens|f337a28d3feb8b3c68f74b9e2502637d83ab781d
-2025-06-19 20:01:57|1750356117|Add agents directory and shared guidance|Pieter Kuppens|e444b8f400aecb941cb30a5a45273c6e5432dd74
-2025-06-19 20:02:28|1750356148|Merge pull request #37 from pkuppens/codex/organize-shared-rules-for-ai-assisted-coding|Pieter Kuppens|8e19f8c53190f0a2c1e52745b6de59c108581bfa
-2025-06-20 12:29:42|1750415382|docs: expand DDD guidance with domain contexts|Pieter Kuppens|e202d4efe82fd552c9c5519969ebd0ca02c9c98e
-2025-06-20 12:29:58|1750415398|Merge pull request #39 from pkuppens/codex/retrofit-repository-to-ddd-principles|Pieter Kuppens|44fb8049dc30038207eecb18875098ba46f28348
-2025-06-21 09:05:51|1750489551|frontend: message when query results are empty|Pieter Kuppens|1cea853e49a52e79f354ac62f0c7195e6762c6f5
-2025-06-21 09:37:59|1750491479|frontend: configurable API urls|Pieter Kuppens|eb35eb9b3e5f3d1d14eb459b5f49e689cff6ca00
-2025-06-21 10:11:35|1750493495|logging: include filename as link in debug log|Pieter Kuppens|009ccd4b4d5fddadc1ad1f3604e1aeefd3db5cc7
-2025-06-21 22:19:23|1750537163|bug: attempts at progress bar fixing|Pieter Kuppens|527046f326d43ecf42120c8b6f098e471441a8a2
-2025-06-22 15:56:27|1750600587|docs: refine test strategy|Pieter Kuppens|09d0fce80133f98e98f887fb8cbdfd6a2695dcf8
-2025-06-22 15:56:39|1750600599|Merge pull request #40 from pkuppens/codex/improve-testing-strategies-with-vibe-style|Pieter Kuppens|1efc45a4c768613a508ad78c4d6379728eeb2a48
-2025-06-24 12:58:16|1750762696|Merge pull request #34 from pkuppens/codex/complete-document-uploading-and-embedding-workflow|Pieter Kuppens|89ee0e2a72453337162faa065d2515f1b90df6cc
-2025-06-25 08:58:34|1750834714|fix: github action test failed on logger parameter|Pieter Kuppens|9d1576705d6131e74b5e44b194caab0705e1b3cb
-2025-06-25 09:20:25|1750836025|docs: clarify progress notifier|Pieter Kuppens|7c7753a952eec566c630545037e8021334517583
-2025-06-25 09:20:53|1750836053|Merge pull request #41 from pkuppens/codex/review-websocket-observer-pattern-implementation|Pieter Kuppens|de58c068a1814a24cea85eb0e5c950c14c4ef9db
-2025-06-26 22:25:47|1750969547|fix: WebSocket behavior testing|Pieter Kuppens|5019d47a4efda963375640ac74ff7d6b723b86ec
-2025-06-27 12:16:57|1751019417|refactoring of cursor rules|Pieter Kuppens|e0f055fed03fb87a4169dcfa8dc21e6325bca262
-2025-06-29 09:06:34|1751180794|chore: clean up pdf_embedding notebook|Pieter Kuppens|168b80004c99dfbc12c707f3d63906de49672323
-2025-06-29 09:37:31|1751182651|fix: more PDFs: unicode hashing|Pieter Kuppens|3c6e65dec4f0947186b4d809dfff7f724048df18
-2025-06-29 09:54:02|1751183642|fix: skip node chunking for nodes that do not seem to have text|Pieter Kuppens|0883e0c19d285ff8b3cd19e6efcea6be00ad3e1f
-2025-06-29 10:10:00|1751184600|docs: let gemini-cli read and describe the project, and suggest DDD refactoring for maintainability|Pieter Kuppens|c7be8571e48f764c7804fa050a4bbcb89b74aaeb
-2025-07-01 09:45:31|1751355931|UI: Make App full browser width|Pieter Kuppens|fe24752ef359c82d1fa86ce43110bd83e016edb1
-2025-07-01 10:14:45|1751357685|UI: Warnings on backend not running at :8000|Pieter Kuppens|ef7bbd011303b51ef092a89b4da8b5d135b8676d
-2025-07-01 10:29:18|1751358558|UI: fix preload pdf worker for previews|Pieter Kuppens|60c02a14c7efa533854a19eae101626f0a2ba2dd
-2025-07-02 10:04:10|1751443450|fix: test embedding edge cases|Pieter Kuppens|6d5989b5e1a98f1899ac74a0f1561622a01dc48f
-2025-07-02 14:49:48|1751460588|docs: VIBE coding styles|Pieter Kuppens|079a5dea318327df59fc9f7bc0a873a213f3c888
-2025-07-03 07:14:39|1751519679|test: working example of progress bar with dummy progress|Pieter Kuppens|ed0477985f10714618c1ee1e8034f5b8fd0ea8a8
-2025-07-03 08:08:04|1751522884|chore: requirements capture rule|Pieter Kuppens|2c73d7ff7c525e9f54d776a08bc1fe96e3402977
-2025-07-03 08:29:38|1751524178|chore: relocate files that ended up in root|Pieter Kuppens|cb31ef00044ee25f38a90bee163b4eb9afb952e7
-2025-07-03 09:46:01|1751528761|fix: now progress up to 57% (chunking?!), not yet embedding|Pieter Kuppens|850a13a52d530ea1b3a8a3e93e86785f8b701985
-2025-07-03 09:46:59|1751528819|fix: embedding now also reports progress|Pieter Kuppens|3c0b9cd51dc638b5ba981c1d0818a3e70833dce3
-2025-07-03 09:48:26|1751528906|Merge pull request #42 from pkuppens/feature/dummy_background_process|Pieter Kuppens|7df58f6bdaf01df79cd9647004e3ea33c5896f05
-2025-07-05 13:12:27|1751713947|temp commit for refactorings|Pieter Kuppens|2cd868076c5613f170519389453904a35e0314e6
-2025-07-05 13:36:11|1751715371| feat(refactor): implement modular agent and task architecture|Pieter Kuppens|e52eefcccde840d3469dba697b3f14537e56c803
-2025-07-05 14:01:11|1751716871|chore: git attributes for Unix script files|Pieter Kuppens|0e14fa867cd061a10f40ca0d4f2a6eeee08fc1e4
-2025-07-05 15:44:45|1751723085|chore: work towards refactor success demo|Pieter Kuppens|5358c08054b5761dbb38426bee95374e68b92f6b
-2025-07-05 21:53:25|1751745205|fix: clean up some confusing logging|Pieter Kuppens|3d8eebab96271864e11be28f76c0f82fa5f8b6ee
-2025-07-05 21:57:53|1751745473|Merge pull request #43 from pkuppens/feature/dummy_background_process|Pieter Kuppens|fba2a3204925ae8d63e14d85a6620ded7ee1d6ea
-2025-07-07 12:01:13|1751882473|fix: failing test detected by github actions|Pieter Kuppens|eac74c3110a520bb634c3115f23c14f8a20ae510
-2025-07-08 10:17:21|1751962641|docs: Context7 external documentation API MCP description.|Pieter Kuppens|36917b9e2fd9e452114bfc687779b8ceafb88753
-2025-07-11 09:40:39|1752219639|feat: health check granularity for LLM, API, Database separately|Pieter Kuppens|a0a58167adb812938e2944552c437de421ffc2c5
-2025-07-11 13:50:50|1752234650|test fix|Pieter Kuppens|e5b849849a16381ae3267c7a400a3c79e8d5e669
-2025-08-14 10:09:23|1755158963|collect initial data and plan for WBSO retrofit|Pieter Kuppens|c448ab9e3126440bd65438de3b9e5cffe10adef3
-2025-08-14 10:40:48|1755160848|Adjust hours retrofit for solo developer effort|Pieter Kuppens|a9db38c0133233d5f0f380284acb0f4b59a90563
-2025-08-14 11:18:37|1755163117|Add PDF project form to the repo, for hours registration sub-project|Pieter Kuppens|0b4d530df26c5c04afb6721939f2eab841c27535
-2025-08-14 13:12:47|1755169967|Add checkboxes to project plan for completeness checks|Pieter Kuppens|739ea552fa8c9866855e5c6edc2d60a2804241d5
-2025-08-15 11:03:32|1755248612|Create list of repos under WBSO activities|Pieter Kuppens|4dca5aa123e671422030f8950d472a682cd16fea
-2025-08-15 11:11:53|1755249113|WBSO-repo relevance determination|Pieter Kuppens|7ee6e3d491b1dc6d3253f290c0dec3fd103d30eb
-2025-08-15 13:24:32|1755257072|Update hour registration plan with cloning relevant repos|Pieter Kuppens|ee25d77da7d282b9a3a0021b7d90cb5cdee95a5b
-2025-08-15 13:33:13|1755257593|Complete all WBSO repo cloning and updating|Pieter Kuppens|2c6ea6bc7b4c3f11b968dc8aa4c685ed257ee85d
-2025-08-15 15:45:21|1755265521|Collect the commits, repo, timestamp, message.|Pieter Kuppens|0680b4f6cddc055c15f4bfa92297c1d88f5d82f3
-2025-08-18 12:43:33|1755513813|docs: expand hours goals and workflow|Pieter Kuppens|9976552284b554c6f55aced5fcf3920628d0d5d9
-2025-08-18 12:52:59|1755514379|Merge pull request #45 from pkuppens/codex/add-wbso-development-hours-tracking|Pieter Kuppens|dca071318220e51a03beb920f0b4264ab914543f
-2025-08-21 08:12:34|1755756754|Determine system events with powershell for hours registration|Pieter Kuppens|3416b45a0b6e1cb42fe66d563d9ff598b38735e2
-2025-08-21 08:14:24|1755756864|More events.. In comments.|Pieter Kuppens|db3d84a27816b04f1c2e6bb7d21029eb440cb876
-2025-08-26 19:28:33|1756229313|Add a new system events log with better date format. Also found out that the event log is rolling over|Pieter Kuppens|1eff3de9b1e34591e0c6c1c2cd107d4ee88494c8
-2025-08-27 23:18:24|1756329504|Add systems events format|Pieter Kuppens|6bf94b8385537e4c57636529b9cd066582c96ee4
-2025-08-27 23:21:36|1756329696|Create new tasks for AI agent supported task-effort analysis|Pieter Kuppens|ae273d9ad286305eab141876920f816fe097e7a0
-2025-08-29 12:58:28|1756465108|Fix cursor rule triggers|Pieter Kuppens|e26f5c2cc96e1891bd5a607b8754e79e9a42cb61
-2025-08-29 14:38:33|1756471113|Google Calendar Events programmatic download|Pieter Kuppens|b25c19165b90b88a7f34e7450d552d398e81ae78
-2025-08-29 14:51:47|1756471907|Cursor rule for project management|Pieter Kuppens|c254570e6d6e57118a876e01e95cec28cdafdd3e
-2025-08-29 14:57:53|1756472273|git version control rule|Pieter Kuppens|7546c702e4efcfe8235bc45d0698837053d9484d
-2025-09-02 08:16:14|1756793774|Hours registration project plan updates|Pieter Kuppens|c8a69117329e8afd0c4d58b31a825ba5ce3e59eb
-2025-09-02 08:29:39|1756794579|WBSO calendar integration with tests|Pieter Kuppens|8d73ccf187073b46aa7775aeddd1801596f296ab
-2025-09-07 13:29:44|1757244584|Modular Architecture rules|Pieter Kuppens|581ecedb2cca5e46810c3c86c41b880c33771039
-2025-09-08 21:57:22|1757361442|add cursor rule for github issue integration|Pieter Kuppens|7b488d6e174d6648664fe89f024a06fd680e9785
-2025-09-08 22:48:40|1757364520|STORY-003: start|Pieter Kuppens|7676552213f9acd1a577464aaf7f490997149ded
-2025-09-08 23:15:43|1757366143|story-003 steps|Pieter Kuppens|90a781357189f5608624c4e0e186970f187980fc
-2025-09-09 09:39:28|1757403568|Run tests in PR|Pieter Kuppens|4b15ec88bf05c3f1aa11ac5107327097e26310d1
-2025-09-09 11:34:15|1757410455|Update STORY-003 and related tasks with completion status and formatting improvements|Pieter Kuppens|9d90477b1670289be16976162c82247eeae461a1
-2025-09-09 12:03:15|1757412195|pytest asyncio fix|Pieter Kuppens|960d1eb63f34a6ca6026e55da2f124c8609f8da4
-2025-09-09 12:13:14|1757412794|mock await fix|Pieter Kuppens|a60d623548a3c65094a1162768ba21ef9ce34641
-2025-09-09 12:40:37|1757414437|Fix Ollama health check test mock - Fix httpx.AsyncClient mock path to properly intercept HTTP calls - Change exception type from generic Exception to httpx.RequestError - Add helper function to check Ollama service availability - All Ollama tests now pass without requiring actual Ollama service - Fixes GitHub CI test failure where Ollama service is not available|Pieter Kuppens|a96a3895e7932c15e4e2f0d13407a44a121dc3e3
-2025-09-09 13:09:47|1757416187|Merge pull request #50 from pkuppens/feature/STORY-003-basic-qa-interface|Pieter Kuppens|a9e94bcadeccf806182de1c89fcdc05364671c99
-2025-09-09 14:59:17|1757422757|complete story 1|Pieter Kuppens|dfbd1a7f5ab0fe7c5643058567c979981bcea850
-2025-09-09 15:12:48|1757423568|Git management rules|Pieter Kuppens|08e1d05b12f7b4ba9cda55a0a6df85128002dca2
-2025-09-10 23:08:08|1757538488|cursor rules for scrum project roles|Pieter Kuppens|85aae1a2da16e17969a496a63935a709e33a7f4b
-2025-09-11 08:20:10|1757571610|TASK-004: Product Owner: complete setup documentation - comprehensive troubleshooting section added to README.md|Pieter Kuppens|7a86f6da89110355cbada099d3f590ad0689bb46
-2025-09-11 08:28:09|1757572089|TASK-004: Product Owner: fix code review issues - correct date to 2025-09-11 and clarify uv command usage|Pieter Kuppens|29ebc2e7d871de195be2d7f5326e0dce3b38b840
-2025-09-11 08:46:45|1757573205|TASK-005: Software Tester: complete cross-platform validation - Windows tested, Linux/macOS validated, quality assessment completed|Pieter Kuppens|d2884681e6b867f622ed24f875604644b5554152
-2025-09-11 08:51:24|1757573484|STORY-002: Product Owner: move to In Progress - document processing pipeline prioritized for MVP|Pieter Kuppens|5e2b3afaca60f3cd177efb303cfd468a1df0e0f2
-2025-09-11 09:03:13|1757574193|STORY-002: Scrum Master: create task breakdown - 5 tasks created for document processing pipeline|Pieter Kuppens|ba29556f0321e3218a4840717a338f8dec148069
-2025-09-11 09:58:24|1757577504|Update role rules: implement staging workflow with commit message and continuation files|Pieter Kuppens|47c5740d9a002b17558116f358cc490947a3621e
-2025-09-11 12:00:26|1757584826|Update software-architect and software-developer rules: implement staging workflow|Pieter Kuppens|ddfcdf249ab161f794a6b06ef9b3e272950ac541
-2025-09-11 12:11:35|1757585495|ruff check before commit|Pieter Kuppens|ce13f8916039b108879ce8cd1c8d0faafc0629ff
-2025-09-11 12:26:50|1757586410|Refactor linting workflow: centralize responsibility with Software Architect|Pieter Kuppens|4ff53f5082acba872a8916f39e08a8a9322ff4e9
-2025-09-11 13:00:10|1757588410|TASK-006A: Complete document processing architecture design|Pieter Kuppens|670f6946619dfb82ea0686fc34c54e9b192a316d
-2025-09-11 16:32:31|1757601151|STORY-002 update, with workflow fix for commit message standards: separate technical content from handover context - Updated STORY-002 to mark TASK-006A as completed âœ… - Updated commit message to only reference committed files and changes - Removed references to non-committed handover notes from commit messages - Clarified distinction between technical content (in project documentation) and handover context (in tmp/) - Updated scrum-master rule to clarify handover context availability - Applied retrospective lessons learned about commit message accuracy - Ensures git history accurately reflects committed content only - Technical handover content properly documented in project files - Handover context remains in tmp/ directory for role transitions|Pieter Kuppens|5fa40cbd89ecf4a8ca8c358eb65fe18033640b24
-2025-09-11 19:41:15|1757612475|TASK-006B: Fix test failures and complete FastAPI file upload implementation|Pieter Kuppens|93ec558357075e562c71f0132ce281bd2b7da54b
-2025-09-11 19:41:57|1757612517|forgot to commit pyproject.toml|Pieter Kuppens|8676caf775dd78975dd7703855f7be6fa3c6823f
-2025-09-11 20:17:24|1757614644|retrospective: cross-platform compatibility|Pieter Kuppens|57be2866e88afa066f0323de13ea5a71225097c2
-2025-09-11 22:25:21|1757622321|feat: enable CI on feature branches|Pieter Kuppens|b3bf2b52ee29c802fc3e3b5571e90d2887be08a4
-2025-09-11 22:33:57|1757622837|refactor: split linting into separate parallel job|Pieter Kuppens|d7867759694b313246da1323edce3ca4ab4f09fa
-2025-09-11 22:42:07|1757623327|fix: restore Python version matrix strategy|Pieter Kuppens|2d86ba1d33f00895395fe5dbcecee7f6624daff8
-2025-09-11 22:47:53|1757623673|gitignore archive files, e.g. for retros and handovers|Pieter Kuppens|7e8e3d90dd0777a64f60b44795793fd0eb52ffe5
-2025-09-11 22:56:10|1757624170|git commit best practice|Pieter Kuppens|c091a785030a50983248118d483281c81e5fbab6
-2025-09-11 23:05:20|1757624720|fix: temporarily suppress ruff I001 import sorting check|Pieter Kuppens|e9c97541a93ae594d413fb0ff2a7801eb3228f5c
-2025-09-12 07:38:42|1757655522|isort/I001 fix|Pieter Kuppens|d21b112f3bc88b57a7048be00684e3e815c89882
-2025-09-12 08:47:28|1757659648|Code review (copilot) with lessons learned|Pieter Kuppens|b49d91e1acc9f1ab23389542bfb6735420e5e3bd
-2025-09-12 08:57:35|1757660255|Merge pull request #54 from pkuppens/feature/STORY-002-document-processing-pipeline|Pieter Kuppens|f5d92613ca4a40103d0b60f33da901a3d4c71460
-2025-09-13 16:20:36|1757773236|ci test strategy fix|Pieter Kuppens|6e98545887723a7130f7d62cee1e0949d478ca62
-2025-09-13 16:34:17|1757774057|Squashed commit of the following:|Pieter Kuppens|ea874ec5fbd05252e0cd1640a06e1c34b6dc3a3f
-2025-09-13 16:52:21|1757775141|feat: implement CI workflow improvements steps 3-6C|Pieter Kuppens|b6cd4309e07cfe6c916ff916f8dc3a0317e4e630
-2025-09-13 17:15:51|1757776551|fix: correct pytest markers in CI workflow|Pieter Kuppens|2b56882e21537101f205e3b67383fe75afd5660d
-2025-09-15 09:45:38|1757922338|Merge pull request #56 from pkuppens/task/ci-split|Pieter Kuppens|6a1759caab2ad044a8dbc07902b583101caf5340
-2025-09-15 10:10:29|1757923829|feat(ci): Add enhanced test reporting with coverage and artifacts|Pieter Kuppens|01d30ed6a4a302970001991be00194d9b033d7b3
-2025-09-15 10:13:14|1757923994|feat(ci): Complete CI workflow improvements with security, summary, and advanced caching|Pieter Kuppens|7b3aa875ecbea715036b0cf9acd32db614172f2e
-2025-09-15 11:44:22|1757929462|actions/upload-artifact@v4 update|Pieter Kuppens|6dcce4e98316d7f02ce8d57677155dfa332b68a7
-2025-09-15 12:25:58|1757931958|Fix CI unit test coverage issue|Pieter Kuppens|db5fad9c57f620ceb75fe057f3879064be33ca95
-2025-09-15 15:29:09|1757942949|Merge pull request #57 from pkuppens/main|Pieter Kuppens|5051861db9625290fdb18bba697e02c1e480b078
-2025-09-15 15:39:38|1757943578|fix overly broad coverage measurement|Pieter Kuppens|055dbcb992c4fd0dcad83a00bdde8c22b3c32f7c
-2025-09-15 16:43:56|1757947436|Merge pull request #58 from pkuppens/task/ci-split|Pieter Kuppens|80077a6947446aad8dd9e60a84b5635e6febd2fc
-2025-09-26 10:01:23|1758873683|CI: wrap up in cursor rule|Pieter Kuppens|78cff7f35c45bb669b110c49b7105bb8a116e5c5
-2025-09-26 10:03:46|1758873826|Merge branch 'task/ci-split'|Pieter Kuppens|7017f787fdfbf8d1c38e2dc60635249cc50b536b
-2025-09-26 13:23:55|1758885835|Jupyter notebook maintenance, should still demonstrate the essential features of on prem rag|Pieter Kuppens|3a1ed9a39b118d4b991c518a0b07f6d16807a879
-2025-09-30 13:50:15|1759233015|TASK-025: Computer On System Events|Pieter Kuppens|e97eeeb942a71af662751c803108021246bd4c3b
-2025-09-30 14:09:36|1759234176|TASK-027 for commit processing definition|Pieter Kuppens|5ed89d419b7b7c7f9a34be49b71884539cbf39bf
-2025-09-30 14:28:29|1759235309|TASK-027: Commit data to JSON processing.|Pieter Kuppens|3602b78d88dacb5a1ad4693ac92ce340461bfa2a
-2025-09-30 16:42:52|1759243372|feat: unify timestamp format in data files and extraction scripts|Pieter Kuppens|1e5fd26e715b842048bc4ab6ecbcb21a8a5ff40e
-2025-09-30 16:44:09|1759243449|feat: add processing scripts for unified datetime format|Pieter Kuppens|aa17594bd02b6abd62263625d686ab58d0a7992b
-2025-09-30 16:46:08|1759243568|fix: correct git datetime format in batch files|Pieter Kuppens|56d8308aa2ef88441accd56a96ba89f8fc81a73c
-2025-09-30 22:41:42|1759264902|trying to get work sessions|Pieter Kuppens|f6b4634aecfc621b06b7c875a1e6f6732d4af618
-2025-10-01 07:49:26|1759297766|Fix lunch break assignment issue in session detection|Pieter Kuppens|e8084e223b39aa11d3f5a8a9ea397e84e2b22486
-2025-10-02 21:48:43|1759434523|clean up all_system_events..csv|Pieter Kuppens|09cbb82cb52737560d34963733afecfa73561bd6
-2025-10-02 22:02:27|1759435347|removed initial event so we can start with a log on|Pieter Kuppens|9156755c91be18f876ff3f545a78404fb37c5fb0
-2025-10-02 22:59:56|1759438796|some break tweaking|Pieter Kuppens|8af2ce8ee33aac74889b6fc382461f853d3a68ba
-2025-10-02 23:16:38|1759439798|TASK-028.md: definition|Pieter Kuppens|7510eaaa110aa5a71d03b8f4a65abdcbc528e5ae
-2025-10-03 08:08:02|1759471682|feat: implement git push hooks to enforce unit test passing|Pieter Kuppens|15503b455dd427b476cb2985a2f0c5ca293aa66c
-2025-10-03 08:09:32|1759471772|docs: update documentation for git push enforcement|Pieter Kuppens|78460aaa916871d1de037495e696554b8db89f1f
-2025-10-03 08:26:39|1759472799|refactor: simplify git push bypass to use only --no-verify|Pieter Kuppens|aaccc063691c7dbf28f8b3cdf43897d72c14ea2f
-2025-10-03 08:32:39|1759473159|fix: add missing username parameter to SystemEvent class|Pieter Kuppens|b47b035e4846eeedd633488e53a23f29977b04d0
-2025-10-03 19:26:12|1759512372|TASK-028: but not happy about large number of unassigned commits.|Pieter Kuppens|ffe5a41d6e8b11ac765a9bbd6496119ed2402dfc
-2025-10-04 09:35:09|1759563309|tasks that help make datetime based analysis|Pieter Kuppens|81ce44e2d7ced6df9d2d4c1ff0898785c66cfc92
-2025-10-04 09:42:26|1759563746|TASK-029: Implement unified datetime handling system|Pieter Kuppens|f4351931e51aa7d0d1cbce321745c752b4b40906
-2025-10-04 11:49:15|1759571355|TASK-029: Address code review comments for unified datetime system|Pieter Kuppens|f587cdfdc69c7df801a92c1dc9735c556ddff14c
-2025-10-04 12:03:01|1759572181|chore: parallel test execution|Pieter Kuppens|8336fed9acc4d9128a3589f5791b75fbee2c2f53
-2025-10-04 12:11:56|1759572716|Fix parallel test execution issues in session detection tests|Pieter Kuppens|2f507dc318bdaafb487cb6f8ed97591cd7c5208c
-2025-10-04 12:33:45|1759574025|Merge pull request #59 from pkuppens/task/TASK-029-unified-datetime-system|Pieter Kuppens|b23e98edb7c5c2d345c0f4f26d381b36af328b3a
-2025-10-04 12:43:55|1759574635|TASK-030: Implement pandas integration for time-based data analysis|Pieter Kuppens|03d0aad1601679c0212c81f4c5be1c036c174392
-2025-10-04 13:15:42|1759576542|TASK-032: Complete smart datetime parsing system implementation|Pieter Kuppens|061a5437f39608c1698b5e6b1808fc18149dccc7
-2025-10-04 14:03:34|1759579414|TASK-031: Implement Jupyter notebook infrastructure for time-based visualization|Pieter Kuppens|96307e55c238bf1869f00756e0a904098d4e8fde
-2025-10-04 14:05:10|1759579510|Fix timezone handling in datetime_utils.py|Pieter Kuppens|fe70c209dc32f62dd438741bb2e149f4475074c5
-2025-10-18 10:00:04|1760774404|Add PR command for automated pull request creation with lessons learned|Pieter Kuppens|0c4dc9f6d298f72d85a85343a53498c811c58530
-2025-10-18 10:12:55|1760775175|Fix formatting in PR command file|Pieter Kuppens|c081ccb5b43509ecd766dc86c40c7f4d5b214582
-2025-10-18 10:14:03|1760775243|Fix GitHub Actions Python version issue and enhance PR command|Pieter Kuppens|8899462124a11e17effd959631c683f6dcc28352
-2025-10-18 10:14:47|1760775287|Fix final formatting in PR command file|Pieter Kuppens|1951808bd1fa8eba344bd93cbfab7c447752e910
-2025-10-18 10:46:41|1760777201|Fix GitHub Actions setup failure with Python 3.14|Pieter Kuppens|0d5ab3e8a75f5d2128cb636f3f507c95613ec510
-2025-10-18 11:39:45|1760780385|Fix timezone handling bug: Convert from UTC to Amsterdam timezone|Pieter Kuppens|8a10f1d9d87d03c04cbf68752d8dcc1bd7549390
-2025-10-18 11:59:56|1760781596|Merge pull request #60 from pkuppens/feature/TASK-030-pandas-integration|Pieter Kuppens|609594048da4f6847a251d925fef783eefbfbda2
-2025-10-18 15:42:28|1760794948|RULES: Enforce branch policy for feature/task implementation|Pieter Kuppens|6b5d5a05bf88c7312f24c8586e6c20033e61570a
-2025-10-18 15:42:37|1760794957|TASK-034, TASK-035, TASK-036: Add WBSO synthetic sessions and calendar integration tasks|Pieter Kuppens|2ef5e4e9cf07cd28fa9c6385cf3bd9acb6c72e15
-2025-10-18 15:42:45|1760794965|TASK-037, TASK-038: Add WBSO totals calculation and Friday work plan tasks|Pieter Kuppens|da6cd1d61082dd281a48e28ae6062d9e9bcc2bc7
-2025-10-18 15:42:57|1760794977|WBSO: Add final report and Friday work plan documentation|Pieter Kuppens|df83aa740ef514d8b047f0dfa49dfdc97c5106d7
-2025-10-18 15:43:24|1760795004|WBSO: Add hours processing scripts for synthetic sessions and calendar integration|Pieter Kuppens|9836d127c9f2f4146a343a98f2c94041ffd43c12
-2025-10-18 15:53:28|1760795608|docs: improve markdown formatting with blank lines for readability|Pieter Kuppens|56e2e9454963a4b58e1b738785903d92822f09eb
-2025-10-18 17:40:10|1760802010|reflection: enhance task template with three-level hierarchy and retrofit all tasks 025-038|Pieter Kuppens|423d425b7cf2fe6081c38f16b3723d9600bf4563
-2025-10-18 18:41:17|1760805677|TASK-039: Implement WBSO Calendar Data Validation, Upload, and Reporting System|Pieter Kuppens|b6d561350aad849e78f486b373de173a728a77bc
-2025-10-19 00:51:15|1760827875|FEAT-003: Implement database normalization for WBSO system|Pieter Kuppens|2a857ce80548774bef3c1de7f357960dabbc7807
-2025-10-19 01:16:06|1760829366|Add comprehensive date formatting standards and fix hardcoded dates|Pieter Kuppens|65ae3feb7978534ce0bde48e7c7467648a9b34cd
-2025-10-19 01:17:13|1760829433|Clarify date formatting rule: emphasize 100% accuracy requirement|Pieter Kuppens|9dd473d87ee62c3d0692bdae883896cdf061a8d7
-2025-10-19 01:35:27|1760830527|Clarify date formatting rule: distinguish Created vs Updated dates|Pieter Kuppens|cbed9adf53779175dcec9783e893481b32f78dac
-2025-10-19 01:37:05|1760830625|Fix formatting in date formatting rule documentation|Pieter Kuppens|63dc9e9b9b52b6baf39ec758f654ebc761b6db1e
-2025-10-19 13:35:10|1760873710|correct creation and update times|Pieter Kuppens|5592c04d8699f0048ad201a71c70e3157b36f1ed
-2025-10-19 14:37:07|1760877427|TASK-039: Add comprehensive deliverables section documenting all created artifacts|Pieter Kuppens|da9c231efcbee6923d668277b2697b28f3c1010b
+﻿datetime|timestamp|message|author|hash
+2025-05-30 20:33:36 +0200|1748630016|Initial commit|Pieter Kuppens|6eb925fc66ad0feabdee45d0f4b3bc2d986c1fcc
+2025-05-30 22:10:33 +0200|1748635833|Update README.md with project plan - needs review and formatting|Pieter Kuppens|1e91114759a8edd78326dfd800bc238d6c12ea32
+2025-05-31 11:39:59 +0200|1748684399|LICENSE: MIT with Commercial Use Restriction|Pieter Kuppens|bdcb73909cfeed2df7d4bd9bc557b22ea6ff2263
+2025-05-31 12:21:59 +0200|1748686919|Extensive project planning divided in 6 goals|Pieter Kuppens|697b55b047c22d3602cc21e1c4826d5633b44b93
+2025-05-31 14:41:12 +0200|1748695272|SAFe and Language cursor rules|Pieter Kuppens|545d3f77467e571e14e472f276d466b17c19d1c0
+2025-05-31 15:12:56 +0200|1748697176|Rewrite to SAFe project management|Pieter Kuppens|7107bb23336afe58fd5b5e2e3bfed32bbdca628d
+2025-06-01 10:06:09 +0200|1748765169|Add a refine cursor rule|Pieter Kuppens|d3492b0d7401b1689beab73ebe4d2acc84c27776
+2025-06-01 19:07:00 +0200|1748797620|Fix YAML front matter in cursor rule files|Pieter Kuppens|5b81dc862430b61063978371e65492b504a04e1d
+2025-06-01 19:15:41 +0200|1748798141|Merge pull request #2 from pkuppens/codex/find-and-fix-a-bug-in-codebase|Pieter Kuppens|5edb0062c81ca9d2b9c482ec091cdd0e17c701cb
+2025-06-01 17:16:47 +0000|1748798207|Language preference cursor rule no longer limited to markdown, but applicable to all files.|Pieter Kuppens|33d9b1e16f13c993a9f728f20a266ddb190f470d
+2025-06-01 19:17:48 +0200|1748798268|Merge pull request #3 from pkuppens/codex/find-and-fix-a-bug-in-codebase|Pieter Kuppens|f5b9f4f268a6f27a2dd8e968b417ddbc886894cb
+2025-06-01 19:29:50 +0200|1748798990|docs: update repository overview|Pieter Kuppens|25e9275b7731c41753da94ff81bc1d9a322be5ac
+2025-06-01 19:31:13 +0200|1748799073|Merge pull request #4 from pkuppens/codex/explain-codebase-structure-and-key-elements|Pieter Kuppens|2622f61de297208c5c2e53044c95e49d11f0484b
+2025-06-01 19:43:54 +0200|1748799834|Add basic tests directory with placeholder|Pieter Kuppens|e6c2b01c521f14320bd9665378245d2dc4b9d05b
+2025-06-01 19:44:56 +0200|1748799896|docs: update repository overview|Pieter Kuppens|5855b2b52f6f67a23315a00a5143d01092fe786f
+2025-06-01 19:45:27 +0200|1748799927|Merge pull request #6 from pkuppens/eg23c1-codex/explain-codebase-structure-and-key-elements|Pieter Kuppens|80c0d3f8eb1595994ca1b072a3145cc268f4e1ae
+2025-06-01 19:45:53 +0200|1748799953|Merge pull request #5 from pkuppens/codex/create-test-directory-and-placeholder-file|Pieter Kuppens|69d3498f77789d42861d161902dfd37bbb36357d
+2025-06-01 19:47:55 +0200|1748800075|docs: add placeholders for stories 005-009|Pieter Kuppens|9810db3fec9026ffee8ad9ff3ba39a3783a3620f
+2025-06-01 19:48:08 +0200|1748800088|Merge pull request #7 from pkuppens/codex/add-placeholder-markdown-files-for-story-005-to-story-009|Pieter Kuppens|67dbce6091de35c99297e399b329f7b5ce88a9aa
+2025-06-01 19:48:45 +0200|1748800125|Link roadmap bullets to feature files|Pieter Kuppens|9647a9c5d254d17ba4493e5bc104ff536ccad681
+2025-06-01 19:49:36 +0200|1748800176|Merge pull request #8 from pkuppens/codex/update-readme.md-with-feature-links|Pieter Kuppens|8a9c9d7f93458f447c242de90f2878c658dd90f0
+2025-06-01 19:50:39 +0200|1748800239|chore: add trailing newline to FEAT-002|Pieter Kuppens|9584470091628e2fd1b9ee1f4471f1314d8a294c
+2025-06-01 19:51:00 +0200|1748800260|Merge pull request #9 from pkuppens/codex/add-newline-to-feat-002.md|Pieter Kuppens|ea53c96ec69f43e84dd35103030dd9bb22be3c52
+2025-06-01 20:08:03 +0200|1748801283|Add detailed stories and tasks for MVP|Pieter Kuppens|266c2e5323ee64ee8ac39db658e831bdf8c80aa0
+2025-06-01 20:09:05 +0200|1748801345|Merge pull request #10 from pkuppens/codex/drill-down-stories-and-tasks-for-feat-001|Pieter Kuppens|73b16212df1e0a830e99a0d9e64b06a50cd4a1d4
+2025-06-01 21:05:03 +0200|1748804703|Fix doc links and story formatting|Pieter Kuppens|af7076e9702d7062e22d2b6f384ebb25d837d71c
+2025-06-01 21:05:45 +0200|1748804745|Merge pull request #11 from pkuppens/codex/fix-markdown-links-and-formatting|Pieter Kuppens|3c1c547d4e219ab904529677e4dabf7b8fbd9cbf
+2025-06-01 21:39:01 +0200|1748806741|Update TASK-001.md|Pieter Kuppens|d2e99ec366dca7b8c773d8dd9e588cdb5071ce78
+2025-06-01 22:39:09 +0200|1748810349|task: 001: initial project setup|Pieter Kuppens|041645009884f0b1d02d62e105ba7c837e60a7ca
+2025-06-01 22:40:45 +0200|1748810445|chore: check of completed Acceptance Criteria|Pieter Kuppens|8f7122a258119a4ddc54ed5cb67fabf4b935c86b
+2025-06-02 13:42:11 +0200|1748864531|docs: update STORY-002 to use LlamaIndex|Pieter Kuppens|8e07ece8826c8079ce5d098c8254d7f9178ebd7a
+2025-06-02 13:42:58 +0200|1748864578|Merge pull request #13 from pkuppens/codex/update-story-002-with-llamaindex-solution|Pieter Kuppens|0e568160090cfdc73cbcfef502962a14c3ff3aea
+2025-06-02 13:58:28 +0200|1748865508|Create a cursor-rules cursor rule with /Generate Cursor Rules|Pieter Kuppens|ed707af6ca22956e97edbbd98d78ef2d3e32ddad
+2025-06-02 14:32:19 +0200|1748867539|chore: cursor rule for TASK templates|Pieter Kuppens|ecff6d397a1ceac20056378f0d6a04d54352e55c
+2025-06-02 17:15:21 +0200|1748877321|task: 006: Initial Local RAG System definition. Add data for exploration.|Pieter Kuppens|0967ec1c612fb683cabff01f4c35d30973f3f4a1
+2025-06-02 20:00:37 +0200|1748887237|pre-commit fixes with markdown and trailing whitespace|Pieter Kuppens|a55a4c982fe5ad9b8c6059166eee974d7dc85522
+2025-06-02 22:19:08 +0200|1748895548|notebook exploration of local data|Pieter Kuppens|060aad37e542a7a30879fdb8a184fba6f98e249b
+2025-06-03 09:49:15 +0200|1748936955|exploration: RAG notebook additions|Pieter Kuppens|1919c4d1e2b16a7ab92147ef88d2c2cf749d0570
+2025-06-04 12:12:59 +0200|1749031979|some more linting warning prevention attempts|Pieter Kuppens|3edc00e66bdead64be864933e3550328a02754fc
+2025-06-04 13:24:22 +0200|1749036262|chore: pre-commit hooks|Pieter Kuppens|53c13107025647d63db2706735cb6d40f922fb70
+2025-06-04 13:27:05 +0200|1749036425|chore: directory utils|Pieter Kuppens|40fec8dba7a35c8345ff50d710bc6e174c9ba206
+2025-06-04 17:34:05 +0200|1749051245|configuration sets of parameters|Pieter Kuppens|e2b3425f702d94057dfd73723fbcd39710483c4b
+2025-06-04 17:44:33 +0200|1749051873|chore: better linting descriptions|Pieter Kuppens|692bd854690362ec7d73276d9f671450274a5574
+2025-06-04 23:13:40 +0200|1749071620|lint less strict|Pieter Kuppens|b89a380f82a36d4ead88a75d3104f14168c93358
+2025-06-05 08:42:10 +0200|1749105730|Switch to FAST_ANSWERS parameter set in exploration|Pieter Kuppens|2890324a5f61393e5fba37907130edd119c1910c
+2025-06-05 09:04:29 +0200|1749107069|proj: progress update|Pieter Kuppens|eea6aee216897f2fd0978b4c9bbccd252ce5a805
+2025-06-05 09:39:21 +0200|1749109161|docs: STORY-002 refinement|Pieter Kuppens|717f5226e932d632f1115b44409d9bb4188844f8
+2025-06-05 10:11:42 +0200|1749111102|TASK-006: document loader|Pieter Kuppens|e4a713268ea5da34ca7a79365395c55ec524c099
+2025-06-05 13:10:28 +0200|1749121828|TASK-009: document loader testing|Pieter Kuppens|11f34c0ab317434c4ebf8d9b0e0b870ac3c76f13
+2025-06-05 16:04:54 +0200|1749132294|FEAT-002 refinement|Pieter Kuppens|b53ce0c76f3c56aa4fcace552286a1c260bdb4ad
+2025-06-05 16:12:28 +0200|1749132748|chore: add pytest to default dependencies to prevent some pre-commit & github action issues|Pieter Kuppens|d22ece87dbe6c9f9dda74ff22580b441bb8bde49
+2025-06-06 08:30:14 +0200|1749191414|chore: project golden rules update for coding with AI Coding Assistants|Pieter Kuppens|6848f786992991c171bd6e00c5fdd08c1d49f6d5
+2025-06-06 09:27:43 +0200|1749194863|project: sprint-demo management|Pieter Kuppens|4df48207c63f82396406bc33361ca25714e42e28
+2025-06-06 10:05:29 +0200|1749197129|chore: demo templating improvements|Pieter Kuppens|32a4a951f22c812acb3b82dafc399a40c738c430
+2025-06-06 10:27:59 +0200|1749198479|chore: semantic search demo story linking|Pieter Kuppens|03fec5e675d1814c9688614ddc82a9dd0c96a943
+2025-06-06 11:19:30 +0200|1749201570|UI: task definitions|Pieter Kuppens|e7db8f7b7f2bb6e9e2ea8cf76b04aaed290aad70
+2025-06-06 13:14:08 +0200|1749208448|TASK-006 & TASK-022: UI for document upload with backend app receivers.|Pieter Kuppens|5f506f15317edcc541ca67310263029f2e5279e5
+2025-06-06 14:46:33 +0200|1749213993|docs: add initial versions of technical documentation|Pieter Kuppens|2a73ea352d4ab97bd9cd04aeb96a66ba1c770bf4
+2025-06-06 16:37:30 +0200|1749220650|Add docker compose and vector store manager (#14)|Pieter Kuppens|c891e0ef206b21aca1c7ad5d9ec67011aa1e73a8
+2025-06-06 20:52:32 +0200|1749235952|feat: enable selectable RAG parameter sets|Pieter Kuppens|aefc4ba520bd2eee87d2355411e5d8f0cd626bea
+2025-06-06 21:52:40 +0200|1749239560|fix: enhance logging in file ingestion|Pieter Kuppens|9daf3390e5c7a3fd247b0d78394228367910dcf1
+2025-06-06 22:33:35 +0200|1749242015|fix: file ingestion progress not showing because of UI starvation|Pieter Kuppens|3aab2e2107d24ad7662ff7b843089fe7b0a2473b
+2025-06-06 22:34:01 +0200|1749242041|ui: compact representation of selected parameters|Pieter Kuppens|4cbab62ffadca446602961373699fd3d352fc436
+2025-06-07 08:21:59 +0200|1749277319|Implement RAG parameter selection and backend processing (#15)|Pieter Kuppens|02e338328cda13f20de0e6734867ff2e0944376b
+2025-06-07 09:25:29 +0200|1749281129|Update AGENTS.md with practical implementation details and internet access for package installation as per SCRATCH.md task|Pieter Kuppens|170f49086c1231e47cbabffc5ea316b00fc59a5a
+2025-06-07 09:26:25 +0200|1749281185|docs: technical CODEX description|Pieter Kuppens|f6a07bd85f95fc48e8ba56b32ba8676f6bf1b9c4
+2025-06-07 09:28:11 +0200|1749281291|Codex/implement document embedding with UI uploads (#16)|Pieter Kuppens|bacaa0a7bc2830201450f1d9e905a983117a0b73
+2025-06-07 09:29:17 +0200|1749281357|Merge branch 'codex/implement-document-embedding-with-ui-uploads'|Pieter Kuppens|2ba9c39ca79ba3933652368de8878d66c6ec17f8
+2025-06-07 10:58:40 +0200|1749286720|test: add some test data that will not be gitignored|Pieter Kuppens|f2c80f26173d403925176290ec231ed75056017a
+2025-06-07 12:06:14 +0200|1749290774|Add PDF embedding utilities and tests|Pieter Kuppens|66e8334db47adc1b0c642360493a59baf57b296d
+2025-06-07 12:44:49 +0200|1749293089|feat(auth): add authentication service and frontend login|Pieter Kuppens|63c9110a00729c0a3ff1d19035d1619d88556c20
+2025-06-07 17:56:12 +0200|1749311772|chore: jupyter-notebook cursor rules (applied)|Pieter Kuppens|80354a3f7322cf9284ce94eb3ae5b2cc2d2de2ff
+2025-06-07 23:02:44 +0200|1749330164|analysis: compare embeddings in two notebooks|Pieter Kuppens|10a66cc60ec41a1355f5cbc6f1966bc323ab661d
+2025-06-07 23:22:31 +0200|1749331351|exploration: initial exploration of PDF document chunking with FAST_ANSWERS chunking|Pieter Kuppens|0290446553c9a8cf1e770b421e954124e56a8362
+2025-06-08 09:15:54 +0200|1749366954|Install dev packages and update setup docs|Pieter Kuppens|bde00916de28f0b8fed543a2b9017bff54142a2f
+2025-06-08 14:12:15 +0200|1749384735|chore: factor out chunking from embedding|Pieter Kuppens|d0974f11b65c5c6ca65cd3c43d452ea94bde66bd
+2025-06-08 14:12:44 +0200|1749384764|chore: factor out chunking from embedding part 2|Pieter Kuppens|7aa3ef96cd7534f9679e5cf07c70f0dfbf7e121a
+2025-06-08 14:48:26 +0200|1749386906|chore: feedback integration cursor rule|Pieter Kuppens|d407ab9dfd469139dd1864da10ea4b07fd2c8c6a
+2025-06-08 09:15:54 +0200|1749366954|Install dev packages and update setup docs|Pieter Kuppens|a41392f442b09dcf7f6761d1259be760a0bdab07
+2025-06-08 14:12:15 +0200|1749384735|chore: factor out chunking from embedding|Pieter Kuppens|efc7c7b0346a64dd08c4e865ec99b97df2094f5b
+2025-06-08 14:12:44 +0200|1749384764|chore: factor out chunking from embedding part 2|Pieter Kuppens|7a072af5487478f001cf9776466cc63e5e778203
+2025-06-08 14:48:26 +0200|1749386906|chore: feedback integration cursor rule|Pieter Kuppens|ce8c2467c6c49ad40c15fcc4dcdfb8e3a07bc3c2
+2025-06-08 14:54:13 +0200|1749387253|Merge branch 'codex/refactor-jupyter-notebooks-and-remove-duplication' into codex/explore-processing-and-analysis-of-pdf-with-embeddings|Pieter Kuppens|33b2143594c5d633f310f00e7f81f74e51e33692
+2025-06-08 14:59:01 +0200|1749387541|Merge pull request #20 from pkuppens/codex/explore-processing-and-analysis-of-pdf-with-embeddings|Pieter Kuppens|da7372e55c7ced637b6c9ec18383d8f2caf50554
+2025-06-08 15:00:41 +0200|1749387641|Merge remote-tracking branch 'origin/main' into codex/implement-flexible-frontend-authentication|Pieter Kuppens|08df4b3df9ae675a84a3384fd3caef8ebcee4c7c
+2025-06-08 18:02:10 +0200|1749398530|auth: start implement login with Google/Microsoft|Pieter Kuppens|332a653b7965fe2ea10303f701733e97fe89d275
+2025-06-08 19:21:36 +0200|1749403296|docs: reorganize project and technical documentation|Pieter Kuppens|7bf4fe4316fc066330fe040e20f7e1929bdf230a
+2025-06-08 19:42:30 +0200|1749404550|feat: enhance authentication flow and logging create account|Pieter Kuppens|795216b81b9a3775a7340d1f84e48e566aee2f8b
+2025-06-08 20:18:25 +0200|1749406705|Merge pull request #18 from pkuppens/codex/implement-flexible-frontend-authentication|Pieter Kuppens|e819957609e6ad6637a7df319ce60c3fb2187b6e
+2025-06-08 22:35:10 +0200|1749414910|Fix tests setup and offline instructions|Pieter Kuppens|e15cc95ced4a832797b2d9cf91ab247cfe45934c
+2025-06-08 22:36:15 +0200|1749414975|Merge pull request #21 from pkuppens/codex/fix-test-failures-and-environment-setup|Pieter Kuppens|b336f2d938f1e64aa51d543492d299a5044408b5
+2025-06-08 20:43:02 +0200|1749408182|chore: new cursor rule to sync documentation and code|Pieter Kuppens|10ec635b18d7eac07cbc4f16a4eb0dcc4f36b8e7
+2025-06-08 20:44:18 +0200|1749408258|chore: file wasnt saved|Pieter Kuppens|c7e6f0f17991ad0492ab9e72b9e1d1edfcef80b6
+2025-06-08 22:31:11 +0200|1749414671|test: auth_service|Pieter Kuppens|a00bd4d7700acd92daf7a4983763e2cbb4ac8243
+2025-06-08 22:35:10 +0200|1749414910|Fix tests setup and offline instructions|Pieter Kuppens|1490750a70e0ac4287a0c2fb0a8ccab854522160
+2025-06-08 22:32:18 +0200|1749414738|embedding generator now processes all 144 pages of the test document|Pieter Kuppens|34a758eb2e84ecb1364cae274e91c7af8489f22e
+2025-06-08 23:12:49 +0200|1749417169|Fix tests setup and offline instructions|Pieter Kuppens|5f679ff0d2ce25ccbbcb36da79767a93d6cded26
+2025-06-09 08:22:19 +0200|1749450139|fix: setup embedding models for offline environments like github actions|Pieter Kuppens|d6728bb629cccbf9d82c0a2eb3eadfdaa084e2cb
+2025-06-09 08:40:07 +0200|1749451207|fix: setup embedding test error that only occurred on github actions|Pieter Kuppens|d4c83f375ebae3927c04dc41bda1961e8f1724d9
+2025-06-09 10:56:18 +0200|1749459378|Add query endpoint and PDF preview UI|Pieter Kuppens|740458ae0776da549ad8d75a17bf245881c62456
+2025-06-09 16:16:42 +0200|1749478602|UI: connect the UI query search to the backend|Pieter Kuppens|ed6861e37b9cd57a1e9b0f8faebc6a720c568277
+2025-06-09 16:56:22 +0200|1749480982|security: introduce new cursor rule after finding CDN issues|Pieter Kuppens|08b84755d0daa9e1df43eeba13709d7d6c86d7eb
+2025-06-09 19:00:08 +0200|1749488408|fix: frontend now showing PDF preview on on-prem config|Pieter Kuppens|e8c1c86643b3cdf2da5251935c71c78c89abd066
+2025-06-10 09:08:22 +0200|1749539302|fix: github actions tests did not have uploaded_files folder.|Pieter Kuppens|8fad9e84de814c145ec50b935387c7a8e1c4bb2e
+2025-06-10 12:22:41 +0200|1749550961|test: RAG Demo works on Learning Langchain upload|Pieter Kuppens|52912c4f678440e88d82ec3be15078d7b1047a2e
+2025-06-10 14:10:07 +0200|1749557407|Merge pull request #22 from pkuppens/codex/implement-document-search-with-preview-feature|Pieter Kuppens|5ccbc04167fe26a01f4e2a609dcefcb60aeeea37
+2025-06-10 14:43:33 +0200|1749559413|TASK-002: refinement|Pieter Kuppens|597994c125503ef2a4d7d58a7c5bb456fc6361b3
+2025-06-10 16:36:56 +0200|1749566216|refactor: restructure project layout - Move backend and frontend into src directory - Reorganize auth_service and rag_pipeline under backend|Pieter Kuppens|f2afdab6c6e8fdc2d5044cf80d9ea696bc252257
+2025-06-10 16:37:08 +0200|1749566228|refactor: update imports and paths for new project structure - Update pyproject.toml for new src layout - Adjust test imports|Pieter Kuppens|a38d09db74d41982ca1c7cc4c4333a535c1fef56
+2025-06-10 16:37:19 +0200|1749566239|docs: update documentation for new project structure - Add Docker technical documentation - Add project structure documentation - Update task documentation|Pieter Kuppens|ca7be028b0da621ec5784efbc06c779cc826a8e2
+2025-06-10 16:37:29 +0200|1749566249|docker: update Docker configuration for new project structure - Add .dockerignore - Update main Dockerfile - Update docker-compose.yml - Add backend Dockerfile|Pieter Kuppens|f1c3e2c9b0e3d9c50ee674a5ad16b2268378a059
+2025-06-10 16:37:56 +0200|1749566276|chore: remove old frontend directory - Files have been moved to src/frontend/frontend|Pieter Kuppens|95141a64eb2f4fdd04e5c59dba48e8fe97f185cf
+2025-06-10 16:39:12 +0200|1749566352|chore: remove old backend directories src/auth_service and src/rag_pipeline after migration to src/backend|Pieter Kuppens|c1ed7e60dda30269d6c8f9ca581f2fab676c14b4
+2025-06-11 07:12:57 +0200|1749618777|fix entrypoint imports and add param set test|Pieter Kuppens|ac41c220cb8e1896263c309e5dd283fb726fa227
+2025-06-11 07:26:08 +0200|1749619568|fix: imports in pyproject  project scripts|Pieter Kuppens|33c6bf8c4d6f6d30d505154e265f18827ccad9a3
+2025-06-11 07:46:13 +0200|1749620773|ruff check|Pieter Kuppens|88930b570efe3994d190719b9ec1cee3cd2b3bd1
+2025-06-11 09:02:36 +0200|1749625356|Merge pull request #23 from pkuppens/codex/fix-relative-import-issues-in-pyproject-scripts|Pieter Kuppens|c899b4de50622950d15be5964009b364b2632bba
+2025-06-11 13:06:07 +0200|1749639967|Add PDF inspection utilities and tests|Pieter Kuppens|1000a72f8b475fb79b5b1899b1fd883d6a283a68
+2025-06-11 13:20:46 +0200|1749640846|ruff: whitespace fixes|Pieter Kuppens|63109849e76ecae5160aa69127912f96747fa9d0
+2025-06-11 13:39:27 +0200|1749641967|Merge branch 'codex/create-python-tools-for-pdf-conversion,-chunking,-and-embedd' into feature/restructure-project-layout|Pieter Kuppens|454f0c0ad1819d6ee214f6d186e0d37d297ad104
+2025-06-11 14:34:54 +0200|1749645294|refactor: move frontend directory|Pieter Kuppens|13de5668bb2ea3fc3fbf553a0b48cc504051da65
+2025-06-11 15:24:48 +0200|1749648288|fix: page numbering in PDF for reference with react-pdf|Pieter Kuppens|d282805914d1cee557edc1aa2087fc97cf99f94d
+2025-06-11 15:36:38 +0200|1749648998|chore: improve vibe coding with better assertions and checks before coding completes|Pieter Kuppens|05ba12b6519eacb923d5791940f43f196af1cc58
+2025-06-11 16:36:11 +0200|1749652571|fix: didn't put learninglangchain in repo, so skip tests these tests in cloud|Pieter Kuppens|c3026f7937339b4d3481897023a4e84d8a657f0d
+2025-06-11 19:30:14 +0200|1749663014|fix: describe project directory structure|Pieter Kuppens|58e7dacd4cb06f710ac2791983330e8d6bca78d4
+2025-06-11 20:11:42 +0200|1749665502|chore: python version for dev sync to 3.13.2 on dev PCs|Pieter Kuppens|ce8f0d75f1c10eb84d52183cc013f7c0d9575ffd
+2025-06-11 22:19:38 +0200|1749673178|chore: pre-commit hook|Pieter Kuppens|a0524a14e3af91197a7a1999425b86db749962c1
+2025-06-12 08:22:22 +0200|1749709342|chore: add GitHub issue templates|Pieter Kuppens|6232ef3c5afbf94aa3a57ef453d50aea94a6beea
+2025-06-12 08:23:50 +0200|1749709430|Merge branch 'main' into codex/complete-story-001.md-and-update-tasks|Pieter Kuppens|ad2382cdcbf2855fa162c05d68f4e2b6c448c1f6
+2025-06-12 08:40:14 +0200|1749710414|fix: pytest failed in codex, improved dependency management|Pieter Kuppens|1b2d508e323ae953e4508fa5fa77455f1a33c816
+2025-06-12 08:46:27 +0200|1749710787|Merge pull request #26 from pkuppens/codex/complete-story-001.md-and-update-tasks|Pieter Kuppens|5a9eba550dac95f8506dcf2c57507ea4196b8f8f
+2025-06-12 10:28:11 +0200|1749716891|chore: codex environment improvement|Pieter Kuppens|05e0ab5bc6c23e1bcb9b43cd6dd3b4fd34a51883
+2025-06-12 10:31:28 +0200|1749717088|fix: syntax error in script|Pieter Kuppens|e74f69d6fee27c17cbd3c0f22729b4f0ae64a732
+2025-06-12 10:50:53 +0200|1749718253|chore: ruff|Pieter Kuppens|8e6acf0e604a82d6dedd4a01a7c90366a6cff129
+2025-06-12 10:53:40 +0200|1749718420|docs: expand semantic search demo|Pieter Kuppens|fbe90284e32434e364716b13c779336927acdef1
+2025-06-12 10:55:57 +0200|1749718557|Merge remote-tracking branch 'origin/codex/complete-demo-flow-for-presentation'|Pieter Kuppens|4c757247fac638b238ea5b4b1edcb94c20b0dddd
+2025-06-12 10:59:07 +0200|1749718747|codex: skip slow tests on workspace start|Pieter Kuppens|9f70a36b8e0a3f08d089bbc0053615e11cb5a8bc
+2025-06-12 11:32:19 +0200|1749720739|FEAT-003: document provider modules|Pieter Kuppens|465dfe1c98226178b7e2b6cd88fe853bcc89f2cd
+2025-06-12 14:07:10 +0200|1749730030|test: test plan cursor rule and initial test plans|Pieter Kuppens|8c410abd8c1973f4ebf5cac7a79c5c8e65cae7d2
+2025-06-12 14:26:18 +0200|1749731178|Update README.md with app preview|Pieter Kuppens|25a40166e88e15c1a05547a6ce72c37dbab3469b
+2025-06-12 14:59:22 +0200|1749733162|test: disable internet tests on github|Pieter Kuppens|27fcbceb78a4a37ffd2e5ade8802d79c1093af9f
+2025-06-12 15:05:07 +0200|1749733507|UI: better PDF page linking|Pieter Kuppens|b1897d25aff4d00914ad9e8e9681b746b6d8e0e0
+2025-06-12 15:39:03 +0200|1749735543|UI: Hover text with full chunk|Pieter Kuppens|b7427c2a883dbf535178c880a2b1e27f929236bd
+2025-06-12 15:40:26 +0200|1749735626|refactor: unify chunking and embedding|Pieter Kuppens|c058fe7c004a9dc1168281e30af73802bee18562
+2025-06-12 15:43:13 +0200|1749735793|Merge pull request #28 from pkuppens/codex/review-and-implement-tasks-for-feat-files|Pieter Kuppens|bac40fe69a5cc387b24661c31e75cc7625d1f3f6
+2025-06-12 19:02:32 +0200|1749747752|Rename top_n to top_k and document network tests|Pieter Kuppens|6b6c056496a17718d0edca3e6e932ebdeda5e715
+2025-06-13 10:58:38 +0200|1749805118|fix: tests|Pieter Kuppens|c5a688a82f0366b405532c1d397455f1364e893f
+2025-06-13 13:28:34 +0200|1749814114|exploration: top_k comparison 5 and 50 results (performance and its top 5 are equal)|Pieter Kuppens|3fcd742b4ca0fd9b2e0f07cb739a4f6ea5d1ff7c
+2025-06-13 13:54:19 +0200|1749815659|fix: setup_notebook imports, and explore unrelated queries|Pieter Kuppens|8d36cd6f1239892f796f9c96db76b366605fd28e
+2025-06-13 13:58:36 +0200|1749815916|Merge main into feature branch, resolve test marker conflict|Pieter Kuppens|b3f0e77937d60abc64279803d3b9484ebc6beaeb
+2025-06-13 14:41:20 +0200|1749818480|fix: tests and merge fix|Pieter Kuppens|8ff4bda3b2076fb0ea15d6a09117cc560146d1e3
+2025-06-13 14:58:59 +0200|1749819539|fix: unify huggingface cache to limit storage|Pieter Kuppens|18b410f2c3d15f7bc6962017ffdc0d0032226eee
+2025-06-13 15:18:04 +0200|1749820684|fix: cache: "pip" issue break github action?|Pieter Kuppens|199d9fd04d02d2d874072f38642c4fc760f5d937
+2025-06-13 15:36:02 +0200|1749821762|fix: try fix github action|Pieter Kuppens|a2b5f9647c20eca896d6eef9307d8b8338d3135b
+2025-06-13 16:11:05 +0200|1749823865|fix: tests in CICD|Pieter Kuppens|c95863221d856bcfb61077fb47c7e0d7f9715148
+2025-06-13 17:15:09 +0200|1749827709|fix: remove test mock call assertions that are too sensitive|Pieter Kuppens|ed60cbb0d245571cb9301dda946759ef84e1bbb8
+2025-06-13 19:01:28 +0200|1749834088|fix: ruff whitespace|Pieter Kuppens|44c84f42f7347ca901aa04c321c617b460d303be
+2025-06-13 19:51:30 +0200|1749837090|Merge pull request #29 from pkuppens/codex/create-jupyter-notebook-for-top-n-answers-analysis|Pieter Kuppens|df1c2e97f61c0b573e40ab287dc0ccc13b4b48f8
+2025-06-13 09:28:54 +0200|1749799734|Add upload script and tests|Pieter Kuppens|5ea9c8df92dcf3be5d12188f8e8b7fc5b37a5207
+2025-06-13 22:16:16 +0200|1749845776|docx: chunking and preview snippet, no DOCXViewer yet.|Pieter Kuppens|8c379e491b881fc7e42bcceb9639e5bda778f08c
+2025-06-14 10:57:55 +0200|1749891475|Merge pull request #31 from pkuppens/codex/create-document-upload-script-with-api-support|Pieter Kuppens|347e05a4b69a01089e6e552e97268dfc94caddea
+2025-06-14 11:58:40 +0200|1749895120|feat(frontend): support text previews and copy|Pieter Kuppens|98301f7579567ffd63f4c4f00b1ae7fc2d0ea7ac
+2025-06-14 14:10:53 +0200|1749903053|Mark internet-dependent tests|Pieter Kuppens|92b068df3f03262f9d384a400a76c5bd316b3f58
+2025-06-14 14:11:00 +0200|1749903060|Improve offline test handling and add viewer test pages|Pieter Kuppens|bab60f5fb49b7501d2257740717d702c10601d27
+2025-06-14 16:19:04 +0200|1749910744|fix: uploaded file not present|Pieter Kuppens|a67d832d0aef471d08162f663943f3cac533a527
+2025-06-14 16:25:36 +0200|1749911136|Merge pull request #32 from pkuppens/codex/update-demo-with-enhanced-file-preview-features|Pieter Kuppens|e3037ae3888b8d54bcab7266878c7687973e9589
+2025-06-14 17:32:29 +0200|1749915149|feat: expand upload script|Pieter Kuppens|2aeba4c1550f4f11d2d6bc9fceeea449a0a68887
+2025-06-16 13:41:00 +0200|1750074060|UI: Frontend fixes for upload progress|Pieter Kuppens|11972f49435267f34ab89d24023e02f8de8165b9
+2025-06-16 14:46:41 +0200|1750078001|Merge pull request #33 from pkuppens/codex/implement-document-upload-script-with-additional-options|Pieter Kuppens|30857d15d85545711c2f1a7f0423195eda55070d
+2025-06-16 19:31:00 +0200|1750095060|Implement parameter-aware duplicate detection|Pieter Kuppens|16795da77b8d6d3346b4cbdf554c07b993e0511a
+2025-06-16 21:06:48 +0200|1750100808|create 30 second ping to keep websocket alive|Pieter Kuppens|6e544a2f6909b50bb56786b55c5d4b1bd62bab4b
+2025-06-17 11:17:53 +0200|1750151873|docs: add high-level requirements and planning|Pieter Kuppens|eb3dbfc8330056cf57a9e34d85f1e427c36912a8
+2025-06-17 11:24:34 +0200|1750152274|Merge pull request #35 from pkuppens/codex/update-top-level-project-documentation|Pieter Kuppens|47834434c06b3714f3121f849a11dd86cce67257
+2025-06-17 13:34:42 +0200|1750160082|refactor api into smaller files|Pieter Kuppens|ca981704946d52a776c75c96089070d339238a9d
+2025-06-14 17:32:29 +0200|1749915149|feat: expand upload script|Pieter Kuppens|e6de34e818a779e8609ec2fc376245c46d5cdf70
+2025-06-16 13:41:00 +0200|1750074060|UI: Frontend fixes for upload progress|Pieter Kuppens|7b1605bb2bb79a67c5d12bcb956332623567bf00
+2025-06-17 11:17:53 +0200|1750151873|docs: add high-level requirements and planning|Pieter Kuppens|7c024664f9072f7d2a766e8c73edb7c8dbd1230c
+2025-06-17 13:36:40 +0200|1750160200|Merge branch 'main' of https://github.com/pkuppens/on_prem_rag|Pieter Kuppens|bb30ccf22dd616432f5f46313dfdbebdaeddd0fe
+2025-06-18 09:21:38 +0200|1750231298|DDD for agents|Pieter Kuppens|d261b46b54c840cda20f348e3e773ba4566c1290
+2025-06-18 10:15:58 +0200|1750234558|docs: introduce MCP architecture|Pieter Kuppens|6c02e12bea066a51f4c65d29b1ca70ac4ae1d073
+2025-06-18 10:42:35 +0200|1750236155|Merge pull request #36 from pkuppens/codex/update-documentation-for-model-context-protocol|Pieter Kuppens|f337a28d3feb8b3c68f74b9e2502637d83ab781d
+2025-06-19 20:01:57 +0200|1750356117|Add agents directory and shared guidance|Pieter Kuppens|e444b8f400aecb941cb30a5a45273c6e5432dd74
+2025-06-19 20:02:28 +0200|1750356148|Merge pull request #37 from pkuppens/codex/organize-shared-rules-for-ai-assisted-coding|Pieter Kuppens|8e19f8c53190f0a2c1e52745b6de59c108581bfa
+2025-06-20 12:29:42 +0200|1750415382|docs: expand DDD guidance with domain contexts|Pieter Kuppens|e202d4efe82fd552c9c5519969ebd0ca02c9c98e
+2025-06-20 12:29:58 +0200|1750415398|Merge pull request #39 from pkuppens/codex/retrofit-repository-to-ddd-principles|Pieter Kuppens|44fb8049dc30038207eecb18875098ba46f28348
+2025-06-21 09:05:51 +0200|1750489551|frontend: message when query results are empty|Pieter Kuppens|1cea853e49a52e79f354ac62f0c7195e6762c6f5
+2025-06-21 09:37:59 +0200|1750491479|frontend: configurable API urls|Pieter Kuppens|eb35eb9b3e5f3d1d14eb459b5f49e689cff6ca00
+2025-06-21 10:11:35 +0200|1750493495|logging: include filename as link in debug log|Pieter Kuppens|009ccd4b4d5fddadc1ad1f3604e1aeefd3db5cc7
+2025-06-21 22:19:23 +0200|1750537163|bug: attempts at progress bar fixing|Pieter Kuppens|527046f326d43ecf42120c8b6f098e471441a8a2
+2025-06-22 15:56:27 +0200|1750600587|docs: refine test strategy|Pieter Kuppens|09d0fce80133f98e98f887fb8cbdfd6a2695dcf8
+2025-06-22 15:56:39 +0200|1750600599|Merge pull request #40 from pkuppens/codex/improve-testing-strategies-with-vibe-style|Pieter Kuppens|1efc45a4c768613a508ad78c4d6379728eeb2a48
+2025-06-24 12:58:16 +0200|1750762696|Merge pull request #34 from pkuppens/codex/complete-document-uploading-and-embedding-workflow|Pieter Kuppens|89ee0e2a72453337162faa065d2515f1b90df6cc
+2025-06-25 08:58:34 +0200|1750834714|fix: github action test failed on logger parameter|Pieter Kuppens|9d1576705d6131e74b5e44b194caab0705e1b3cb
+2025-06-25 09:20:25 +0200|1750836025|docs: clarify progress notifier|Pieter Kuppens|7c7753a952eec566c630545037e8021334517583
+2025-06-25 09:20:53 +0200|1750836053|Merge pull request #41 from pkuppens/codex/review-websocket-observer-pattern-implementation|Pieter Kuppens|de58c068a1814a24cea85eb0e5c950c14c4ef9db
+2025-06-26 22:25:47 +0200|1750969547|fix: WebSocket behavior testing|Pieter Kuppens|5019d47a4efda963375640ac74ff7d6b723b86ec
+2025-06-27 12:16:57 +0200|1751019417|refactoring of cursor rules|Pieter Kuppens|e0f055fed03fb87a4169dcfa8dc21e6325bca262
+2025-06-29 09:06:34 +0200|1751180794|chore: clean up pdf_embedding notebook|Pieter Kuppens|168b80004c99dfbc12c707f3d63906de49672323
+2025-06-29 09:37:31 +0200|1751182651|fix: more PDFs: unicode hashing|Pieter Kuppens|3c6e65dec4f0947186b4d809dfff7f724048df18
+2025-06-29 09:54:02 +0200|1751183642|fix: skip node chunking for nodes that do not seem to have text|Pieter Kuppens|0883e0c19d285ff8b3cd19e6efcea6be00ad3e1f
+2025-06-29 10:10:00 +0200|1751184600|docs: let gemini-cli read and describe the project, and suggest DDD refactoring for maintainability|Pieter Kuppens|c7be8571e48f764c7804fa050a4bbcb89b74aaeb
+2025-07-01 09:45:31 +0200|1751355931|UI: Make App full browser width|Pieter Kuppens|fe24752ef359c82d1fa86ce43110bd83e016edb1
+2025-07-01 10:14:45 +0200|1751357685|UI: Warnings on backend not running at :8000|Pieter Kuppens|ef7bbd011303b51ef092a89b4da8b5d135b8676d
+2025-07-01 10:29:18 +0200|1751358558|UI: fix preload pdf worker for previews|Pieter Kuppens|60c02a14c7efa533854a19eae101626f0a2ba2dd
+2025-07-02 10:04:10 +0200|1751443450|fix: test embedding edge cases|Pieter Kuppens|6d5989b5e1a98f1899ac74a0f1561622a01dc48f
+2025-07-02 14:49:48 +0200|1751460588|docs: VIBE coding styles|Pieter Kuppens|079a5dea318327df59fc9f7bc0a873a213f3c888
+2025-07-03 07:14:39 +0200|1751519679|test: working example of progress bar with dummy progress|Pieter Kuppens|ed0477985f10714618c1ee1e8034f5b8fd0ea8a8
+2025-07-03 08:08:04 +0200|1751522884|chore: requirements capture rule|Pieter Kuppens|2c73d7ff7c525e9f54d776a08bc1fe96e3402977
+2025-07-03 08:29:38 +0200|1751524178|chore: relocate files that ended up in root|Pieter Kuppens|cb31ef00044ee25f38a90bee163b4eb9afb952e7
+2025-07-03 09:46:01 +0200|1751528761|fix: now progress up to 57% (chunking?!), not yet embedding|Pieter Kuppens|850a13a52d530ea1b3a8a3e93e86785f8b701985
+2025-07-03 09:46:59 +0200|1751528819|fix: embedding now also reports progress|Pieter Kuppens|3c0b9cd51dc638b5ba981c1d0818a3e70833dce3
+2025-07-03 09:48:26 +0200|1751528906|Merge pull request #42 from pkuppens/feature/dummy_background_process|Pieter Kuppens|7df58f6bdaf01df79cd9647004e3ea33c5896f05
+2025-07-05 13:12:27 +0200|1751713947|temp commit for refactorings|Pieter Kuppens|2cd868076c5613f170519389453904a35e0314e6
+2025-07-05 13:36:11 +0200|1751715371| feat(refactor): implement modular agent and task architecture|Pieter Kuppens|e52eefcccde840d3469dba697b3f14537e56c803
+2025-07-05 14:01:11 +0200|1751716871|chore: git attributes for Unix script files|Pieter Kuppens|0e14fa867cd061a10f40ca0d4f2a6eeee08fc1e4
+2025-07-05 15:44:45 +0200|1751723085|chore: work towards refactor success demo|Pieter Kuppens|5358c08054b5761dbb38426bee95374e68b92f6b
+2025-07-05 21:53:25 +0200|1751745205|fix: clean up some confusing logging|Pieter Kuppens|3d8eebab96271864e11be28f76c0f82fa5f8b6ee
+2025-07-05 21:57:53 +0200|1751745473|Merge pull request #43 from pkuppens/feature/dummy_background_process|Pieter Kuppens|fba2a3204925ae8d63e14d85a6620ded7ee1d6ea
+2025-07-07 12:01:13 +0200|1751882473|fix: failing test detected by github actions|Pieter Kuppens|eac74c3110a520bb634c3115f23c14f8a20ae510
+2025-07-08 10:17:21 +0200|1751962641|docs: Context7 external documentation API MCP description.|Pieter Kuppens|36917b9e2fd9e452114bfc687779b8ceafb88753
+2025-07-11 09:40:39 +0200|1752219639|feat: health check granularity for LLM, API, Database separately|Pieter Kuppens|a0a58167adb812938e2944552c437de421ffc2c5
+2025-07-11 13:50:50 +0200|1752234650|test fix|Pieter Kuppens|e5b849849a16381ae3267c7a400a3c79e8d5e669
+2025-08-14 10:09:23 +0200|1755158963|collect initial data and plan for WBSO retrofit|Pieter Kuppens|c448ab9e3126440bd65438de3b9e5cffe10adef3
+2025-08-14 10:40:48 +0200|1755160848|Adjust hours retrofit for solo developer effort|Pieter Kuppens|a9db38c0133233d5f0f380284acb0f4b59a90563
+2025-08-14 11:18:37 +0200|1755163117|Add PDF project form to the repo, for hours registration sub-project|Pieter Kuppens|0b4d530df26c5c04afb6721939f2eab841c27535
+2025-08-14 13:12:47 +0200|1755169967|Add checkboxes to project plan for completeness checks|Pieter Kuppens|739ea552fa8c9866855e5c6edc2d60a2804241d5
+2025-08-15 11:03:32 +0200|1755248612|Create list of repos under WBSO activities|Pieter Kuppens|4dca5aa123e671422030f8950d472a682cd16fea
+2025-08-15 11:11:53 +0200|1755249113|WBSO-repo relevance determination|Pieter Kuppens|7ee6e3d491b1dc6d3253f290c0dec3fd103d30eb
+2025-08-15 13:24:32 +0200|1755257072|Update hour registration plan with cloning relevant repos|Pieter Kuppens|ee25d77da7d282b9a3a0021b7d90cb5cdee95a5b
+2025-08-15 13:33:13 +0200|1755257593|Complete all WBSO repo cloning and updating|Pieter Kuppens|2c6ea6bc7b4c3f11b968dc8aa4c685ed257ee85d
+2025-08-15 15:45:21 +0200|1755265521|Collect the commits, repo, timestamp, message.|Pieter Kuppens|0680b4f6cddc055c15f4bfa92297c1d88f5d82f3
+2025-08-18 12:43:33 +0200|1755513813|docs: expand hours goals and workflow|Pieter Kuppens|9976552284b554c6f55aced5fcf3920628d0d5d9
+2025-08-18 12:52:59 +0200|1755514379|Merge pull request #45 from pkuppens/codex/add-wbso-development-hours-tracking|Pieter Kuppens|dca071318220e51a03beb920f0b4264ab914543f
+2025-08-21 08:12:34 +0200|1755756754|Determine system events with powershell for hours registration|Pieter Kuppens|3416b45a0b6e1cb42fe66d563d9ff598b38735e2
+2025-08-21 08:14:24 +0200|1755756864|More events.. In comments.|Pieter Kuppens|db3d84a27816b04f1c2e6bb7d21029eb440cb876
+2025-08-26 19:28:33 +0200|1756229313|Add a new system events log with better date format. Also found out that the event log is rolling over|Pieter Kuppens|1eff3de9b1e34591e0c6c1c2cd107d4ee88494c8
+2025-08-27 23:18:24 +0200|1756329504|Add systems events format|Pieter Kuppens|6bf94b8385537e4c57636529b9cd066582c96ee4
+2025-08-27 23:21:36 +0200|1756329696|Create new tasks for AI agent supported task-effort analysis|Pieter Kuppens|ae273d9ad286305eab141876920f816fe097e7a0
+2025-08-29 12:58:28 +0200|1756465108|Fix cursor rule triggers|Pieter Kuppens|e26f5c2cc96e1891bd5a607b8754e79e9a42cb61
+2025-08-29 14:38:33 +0200|1756471113|Google Calendar Events programmatic download|Pieter Kuppens|b25c19165b90b88a7f34e7450d552d398e81ae78
+2025-08-29 14:51:47 +0200|1756471907|Cursor rule for project management|Pieter Kuppens|c254570e6d6e57118a876e01e95cec28cdafdd3e
+2025-08-29 14:57:53 +0200|1756472273|git version control rule|Pieter Kuppens|7546c702e4efcfe8235bc45d0698837053d9484d
+2025-09-02 08:16:14 +0200|1756793774|Hours registration project plan updates|Pieter Kuppens|c8a69117329e8afd0c4d58b31a825ba5ce3e59eb
+2025-09-02 08:29:39 +0200|1756794579|WBSO calendar integration with tests|Pieter Kuppens|8d73ccf187073b46aa7775aeddd1801596f296ab
+2025-09-07 13:29:44 +0200|1757244584|Modular Architecture rules|Pieter Kuppens|581ecedb2cca5e46810c3c86c41b880c33771039
+2025-09-08 21:57:22 +0200|1757361442|add cursor rule for github issue integration|Pieter Kuppens|7b488d6e174d6648664fe89f024a06fd680e9785
+2025-09-08 22:48:40 +0200|1757364520|STORY-003: start|Pieter Kuppens|7676552213f9acd1a577464aaf7f490997149ded
+2025-09-08 23:15:43 +0200|1757366143|story-003 steps|Pieter Kuppens|90a781357189f5608624c4e0e186970f187980fc
+2025-09-09 09:39:28 +0200|1757403568|Run tests in PR|Pieter Kuppens|4b15ec88bf05c3f1aa11ac5107327097e26310d1
+2025-09-09 11:34:15 +0200|1757410455|Update STORY-003 and related tasks with completion status and formatting improvements|Pieter Kuppens|9d90477b1670289be16976162c82247eeae461a1
+2025-09-09 12:03:15 +0200|1757412195|pytest asyncio fix|Pieter Kuppens|960d1eb63f34a6ca6026e55da2f124c8609f8da4
+2025-09-09 12:13:14 +0200|1757412794|mock await fix|Pieter Kuppens|a60d623548a3c65094a1162768ba21ef9ce34641
+2025-09-09 12:40:37 +0200|1757414437|Fix Ollama health check test mock - Fix httpx.AsyncClient mock path to properly intercept HTTP calls - Change exception type from generic Exception to httpx.RequestError - Add helper function to check Ollama service availability - All Ollama tests now pass without requiring actual Ollama service - Fixes GitHub CI test failure where Ollama service is not available|Pieter Kuppens|a96a3895e7932c15e4e2f0d13407a44a121dc3e3
+2025-09-09 13:09:47 +0200|1757416187|Merge pull request #50 from pkuppens/feature/STORY-003-basic-qa-interface|Pieter Kuppens|a9e94bcadeccf806182de1c89fcdc05364671c99
+2025-09-09 14:59:17 +0200|1757422757|complete story 1|Pieter Kuppens|dfbd1a7f5ab0fe7c5643058567c979981bcea850
+2025-09-09 15:12:48 +0200|1757423568|Git management rules|Pieter Kuppens|08e1d05b12f7b4ba9cda55a0a6df85128002dca2
+2025-09-10 23:08:08 +0200|1757538488|cursor rules for scrum project roles|Pieter Kuppens|85aae1a2da16e17969a496a63935a709e33a7f4b
+2025-09-11 08:20:10 +0200|1757571610|TASK-004: Product Owner: complete setup documentation - comprehensive troubleshooting section added to README.md|Pieter Kuppens|7a86f6da89110355cbada099d3f590ad0689bb46
+2025-09-11 08:28:09 +0200|1757572089|TASK-004: Product Owner: fix code review issues - correct date to 2025-09-11 and clarify uv command usage|Pieter Kuppens|29ebc2e7d871de195be2d7f5326e0dce3b38b840
+2025-09-11 08:46:45 +0200|1757573205|TASK-005: Software Tester: complete cross-platform validation - Windows tested, Linux/macOS validated, quality assessment completed|Pieter Kuppens|d2884681e6b867f622ed24f875604644b5554152
+2025-09-11 08:51:24 +0200|1757573484|STORY-002: Product Owner: move to In Progress - document processing pipeline prioritized for MVP|Pieter Kuppens|5e2b3afaca60f3cd177efb303cfd468a1df0e0f2
+2025-09-11 09:03:13 +0200|1757574193|STORY-002: Scrum Master: create task breakdown - 5 tasks created for document processing pipeline|Pieter Kuppens|ba29556f0321e3218a4840717a338f8dec148069
+2025-09-11 09:58:24 +0200|1757577504|Update role rules: implement staging workflow with commit message and continuation files|Pieter Kuppens|47c5740d9a002b17558116f358cc490947a3621e
+2025-09-11 12:00:26 +0200|1757584826|Update software-architect and software-developer rules: implement staging workflow|Pieter Kuppens|ddfcdf249ab161f794a6b06ef9b3e272950ac541
+2025-09-11 12:11:35 +0200|1757585495|ruff check before commit|Pieter Kuppens|ce13f8916039b108879ce8cd1c8d0faafc0629ff
+2025-09-11 12:26:50 +0200|1757586410|Refactor linting workflow: centralize responsibility with Software Architect|Pieter Kuppens|4ff53f5082acba872a8916f39e08a8a9322ff4e9
+2025-09-11 13:00:10 +0200|1757588410|TASK-006A: Complete document processing architecture design|Pieter Kuppens|670f6946619dfb82ea0686fc34c54e9b192a316d
+2025-09-11 16:32:31 +0200|1757601151|STORY-002 update, with workflow fix for commit message standards: separate technical content from handover context - Updated STORY-002 to mark TASK-006A as completed Γ£à - Updated commit message to only reference committed files and changes - Removed references to non-committed handover notes from commit messages - Clarified distinction between technical content (in project documentation) and handover context (in tmp/) - Updated scrum-master rule to clarify handover context availability - Applied retrospective lessons learned about commit message accuracy - Ensures git history accurately reflects committed content only - Technical handover content properly documented in project files - Handover context remains in tmp/ directory for role transitions|Pieter Kuppens|5fa40cbd89ecf4a8ca8c358eb65fe18033640b24
+2025-09-11 19:41:15 +0200|1757612475|TASK-006B: Fix test failures and complete FastAPI file upload implementation|Pieter Kuppens|93ec558357075e562c71f0132ce281bd2b7da54b
+2025-09-11 19:41:57 +0200|1757612517|forgot to commit pyproject.toml|Pieter Kuppens|8676caf775dd78975dd7703855f7be6fa3c6823f
+2025-09-11 20:17:24 +0200|1757614644|retrospective: cross-platform compatibility|Pieter Kuppens|57be2866e88afa066f0323de13ea5a71225097c2
+2025-09-11 22:25:21 +0200|1757622321|feat: enable CI on feature branches|Pieter Kuppens|b3bf2b52ee29c802fc3e3b5571e90d2887be08a4
+2025-09-11 22:33:57 +0200|1757622837|refactor: split linting into separate parallel job|Pieter Kuppens|d7867759694b313246da1323edce3ca4ab4f09fa
+2025-09-11 22:42:07 +0200|1757623327|fix: restore Python version matrix strategy|Pieter Kuppens|2d86ba1d33f00895395fe5dbcecee7f6624daff8
+2025-09-11 22:47:53 +0200|1757623673|gitignore archive files, e.g. for retros and handovers|Pieter Kuppens|7e8e3d90dd0777a64f60b44795793fd0eb52ffe5
+2025-09-11 22:56:10 +0200|1757624170|git commit best practice|Pieter Kuppens|c091a785030a50983248118d483281c81e5fbab6
+2025-09-11 23:05:20 +0200|1757624720|fix: temporarily suppress ruff I001 import sorting check|Pieter Kuppens|e9c97541a93ae594d413fb0ff2a7801eb3228f5c
+2025-09-12 07:38:42 +0200|1757655522|isort/I001 fix|Pieter Kuppens|d21b112f3bc88b57a7048be00684e3e815c89882
+2025-09-12 08:47:28 +0200|1757659648|Code review (copilot) with lessons learned|Pieter Kuppens|b49d91e1acc9f1ab23389542bfb6735420e5e3bd
+2025-09-12 08:57:35 +0200|1757660255|Merge pull request #54 from pkuppens/feature/STORY-002-document-processing-pipeline|Pieter Kuppens|f5d92613ca4a40103d0b60f33da901a3d4c71460
+2025-09-13 16:20:36 +0200|1757773236|ci test strategy fix|Pieter Kuppens|6e98545887723a7130f7d62cee1e0949d478ca62
+2025-09-13 16:34:17 +0200|1757774057|Squashed commit of the following:|Pieter Kuppens|ea874ec5fbd05252e0cd1640a06e1c34b6dc3a3f
+2025-09-13 16:52:21 +0200|1757775141|feat: implement CI workflow improvements steps 3-6C|Pieter Kuppens|b6cd4309e07cfe6c916ff916f8dc3a0317e4e630
+2025-09-13 17:15:51 +0200|1757776551|fix: correct pytest markers in CI workflow|Pieter Kuppens|2b56882e21537101f205e3b67383fe75afd5660d
+2025-09-15 09:45:38 +0200|1757922338|Merge pull request #56 from pkuppens/task/ci-split|Pieter Kuppens|6a1759caab2ad044a8dbc07902b583101caf5340
+2025-09-15 10:10:29 +0200|1757923829|feat(ci): Add enhanced test reporting with coverage and artifacts|Pieter Kuppens|01d30ed6a4a302970001991be00194d9b033d7b3
+2025-09-15 10:13:14 +0200|1757923994|feat(ci): Complete CI workflow improvements with security, summary, and advanced caching|Pieter Kuppens|7b3aa875ecbea715036b0cf9acd32db614172f2e
+2025-09-15 11:44:22 +0200|1757929462|actions/upload-artifact@v4 update|Pieter Kuppens|6dcce4e98316d7f02ce8d57677155dfa332b68a7
+2025-09-15 12:25:58 +0200|1757931958|Fix CI unit test coverage issue|Pieter Kuppens|db5fad9c57f620ceb75fe057f3879064be33ca95
+2025-09-15 15:29:09 +0200|1757942949|Merge pull request #57 from pkuppens/main|Pieter Kuppens|5051861db9625290fdb18bba697e02c1e480b078
+2025-09-15 15:39:38 +0200|1757943578|fix overly broad coverage measurement|Pieter Kuppens|055dbcb992c4fd0dcad83a00bdde8c22b3c32f7c
+2025-09-15 16:43:56 +0200|1757947436|Merge pull request #58 from pkuppens/task/ci-split|Pieter Kuppens|80077a6947446aad8dd9e60a84b5635e6febd2fc
+2025-09-26 10:01:23 +0200|1758873683|CI: wrap up in cursor rule|Pieter Kuppens|78cff7f35c45bb669b110c49b7105bb8a116e5c5
+2025-09-26 10:03:46 +0200|1758873826|Merge branch 'task/ci-split'|Pieter Kuppens|7017f787fdfbf8d1c38e2dc60635249cc50b536b
+2025-09-26 13:23:55 +0200|1758885835|Jupyter notebook maintenance, should still demonstrate the essential features of on prem rag|Pieter Kuppens|3a1ed9a39b118d4b991c518a0b07f6d16807a879
+2025-09-30 13:50:15 +0200|1759233015|TASK-025: Computer On System Events|Pieter Kuppens|e97eeeb942a71af662751c803108021246bd4c3b
+2025-09-30 14:09:36 +0200|1759234176|TASK-027 for commit processing definition|Pieter Kuppens|5ed89d419b7b7c7f9a34be49b71884539cbf39bf
+2025-09-30 14:28:29 +0200|1759235309|TASK-027: Commit data to JSON processing.|Pieter Kuppens|3602b78d88dacb5a1ad4693ac92ce340461bfa2a
+2025-09-30 16:42:52 +0200|1759243372|feat: unify timestamp format in data files and extraction scripts|Pieter Kuppens|1e5fd26e715b842048bc4ab6ecbcb21a8a5ff40e
+2025-09-30 16:44:09 +0200|1759243449|feat: add processing scripts for unified datetime format|Pieter Kuppens|aa17594bd02b6abd62263625d686ab58d0a7992b
+2025-09-30 16:46:08 +0200|1759243568|fix: correct git datetime format in batch files|Pieter Kuppens|56d8308aa2ef88441accd56a96ba89f8fc81a73c
+2025-09-30 22:41:42 +0200|1759264902|trying to get work sessions|Pieter Kuppens|f6b4634aecfc621b06b7c875a1e6f6732d4af618
+2025-10-01 07:49:26 +0200|1759297766|Fix lunch break assignment issue in session detection|Pieter Kuppens|e8084e223b39aa11d3f5a8a9ea397e84e2b22486
+2025-10-02 21:48:43 +0200|1759434523|clean up all_system_events..csv|Pieter Kuppens|09cbb82cb52737560d34963733afecfa73561bd6
+2025-10-02 22:02:27 +0200|1759435347|removed initial event so we can start with a log on|Pieter Kuppens|9156755c91be18f876ff3f545a78404fb37c5fb0
+2025-10-02 22:59:56 +0200|1759438796|some break tweaking|Pieter Kuppens|8af2ce8ee33aac74889b6fc382461f853d3a68ba
+2025-10-02 23:16:38 +0200|1759439798|TASK-028.md: definition|Pieter Kuppens|7510eaaa110aa5a71d03b8f4a65abdcbc528e5ae
+2025-10-03 08:08:02 +0200|1759471682|feat: implement git push hooks to enforce unit test passing|Pieter Kuppens|15503b455dd427b476cb2985a2f0c5ca293aa66c
+2025-10-03 08:09:32 +0200|1759471772|docs: update documentation for git push enforcement|Pieter Kuppens|78460aaa916871d1de037495e696554b8db89f1f
+2025-10-03 08:26:39 +0200|1759472799|refactor: simplify git push bypass to use only --no-verify|Pieter Kuppens|aaccc063691c7dbf28f8b3cdf43897d72c14ea2f
+2025-10-03 08:32:39 +0200|1759473159|fix: add missing username parameter to SystemEvent class|Pieter Kuppens|b47b035e4846eeedd633488e53a23f29977b04d0
+2025-10-03 19:26:12 +0200|1759512372|TASK-028: but not happy about large number of unassigned commits.|Pieter Kuppens|ffe5a41d6e8b11ac765a9bbd6496119ed2402dfc
+2025-10-04 09:35:09 +0200|1759563309|tasks that help make datetime based analysis|Pieter Kuppens|81ce44e2d7ced6df9d2d4c1ff0898785c66cfc92
+2025-10-04 09:42:26 +0200|1759563746|TASK-029: Implement unified datetime handling system|Pieter Kuppens|f4351931e51aa7d0d1cbce321745c752b4b40906
+2025-10-04 11:49:15 +0200|1759571355|TASK-029: Address code review comments for unified datetime system|Pieter Kuppens|f587cdfdc69c7df801a92c1dc9735c556ddff14c
+2025-10-04 12:03:01 +0200|1759572181|chore: parallel test execution|Pieter Kuppens|8336fed9acc4d9128a3589f5791b75fbee2c2f53
+2025-10-04 12:11:56 +0200|1759572716|Fix parallel test execution issues in session detection tests|Pieter Kuppens|2f507dc318bdaafb487cb6f8ed97591cd7c5208c
+2025-10-04 12:33:45 +0200|1759574025|Merge pull request #59 from pkuppens/task/TASK-029-unified-datetime-system|Pieter Kuppens|b23e98edb7c5c2d345c0f4f26d381b36af328b3a
+2025-10-04 12:43:55 +0200|1759574635|TASK-030: Implement pandas integration for time-based data analysis|Pieter Kuppens|03d0aad1601679c0212c81f4c5be1c036c174392
+2025-10-04 13:15:42 +0200|1759576542|TASK-032: Complete smart datetime parsing system implementation|Pieter Kuppens|061a5437f39608c1698b5e6b1808fc18149dccc7
+2025-10-04 14:03:34 +0200|1759579414|TASK-031: Implement Jupyter notebook infrastructure for time-based visualization|Pieter Kuppens|96307e55c238bf1869f00756e0a904098d4e8fde
+2025-10-04 14:05:10 +0200|1759579510|Fix timezone handling in datetime_utils.py|Pieter Kuppens|fe70c209dc32f62dd438741bb2e149f4475074c5
+2025-10-18 10:00:04 +0200|1760774404|Add PR command for automated pull request creation with lessons learned|Pieter Kuppens|0c4dc9f6d298f72d85a85343a53498c811c58530
+2025-10-18 10:12:55 +0200|1760775175|Fix formatting in PR command file|Pieter Kuppens|c081ccb5b43509ecd766dc86c40c7f4d5b214582
+2025-10-18 10:14:03 +0200|1760775243|Fix GitHub Actions Python version issue and enhance PR command|Pieter Kuppens|8899462124a11e17effd959631c683f6dcc28352
+2025-10-18 10:14:47 +0200|1760775287|Fix final formatting in PR command file|Pieter Kuppens|1951808bd1fa8eba344bd93cbfab7c447752e910
+2025-10-18 10:46:41 +0200|1760777201|Fix GitHub Actions setup failure with Python 3.14|Pieter Kuppens|0d5ab3e8a75f5d2128cb636f3f507c95613ec510
+2025-10-18 11:39:45 +0200|1760780385|Fix timezone handling bug: Convert from UTC to Amsterdam timezone|Pieter Kuppens|8a10f1d9d87d03c04cbf68752d8dcc1bd7549390
+2025-10-18 11:59:56 +0200|1760781596|Merge pull request #60 from pkuppens/feature/TASK-030-pandas-integration|Pieter Kuppens|609594048da4f6847a251d925fef783eefbfbda2
+2025-10-18 15:42:28 +0200|1760794948|RULES: Enforce branch policy for feature/task implementation|Pieter Kuppens|6b5d5a05bf88c7312f24c8586e6c20033e61570a
+2025-10-18 15:42:37 +0200|1760794957|TASK-034, TASK-035, TASK-036: Add WBSO synthetic sessions and calendar integration tasks|Pieter Kuppens|2ef5e4e9cf07cd28fa9c6385cf3bd9acb6c72e15
+2025-10-18 15:42:45 +0200|1760794965|TASK-037, TASK-038: Add WBSO totals calculation and Friday work plan tasks|Pieter Kuppens|da6cd1d61082dd281a48e28ae6062d9e9bcc2bc7
+2025-10-18 15:42:57 +0200|1760794977|WBSO: Add final report and Friday work plan documentation|Pieter Kuppens|df83aa740ef514d8b047f0dfa49dfdc97c5106d7
+2025-10-18 15:43:24 +0200|1760795004|WBSO: Add hours processing scripts for synthetic sessions and calendar integration|Pieter Kuppens|9836d127c9f2f4146a343a98f2c94041ffd43c12
+2025-10-18 15:53:28 +0200|1760795608|docs: improve markdown formatting with blank lines for readability|Pieter Kuppens|56e2e9454963a4b58e1b738785903d92822f09eb
+2025-10-18 17:40:10 +0200|1760802010|reflection: enhance task template with three-level hierarchy and retrofit all tasks 025-038|Pieter Kuppens|423d425b7cf2fe6081c38f16b3723d9600bf4563
+2025-10-18 18:41:17 +0200|1760805677|TASK-039: Implement WBSO Calendar Data Validation, Upload, and Reporting System|Pieter Kuppens|b6d561350aad849e78f486b373de173a728a77bc
+2025-10-19 00:51:15 +0200|1760827875|FEAT-003: Implement database normalization for WBSO system|Pieter Kuppens|2a857ce80548774bef3c1de7f357960dabbc7807
+2025-10-19 01:16:06 +0200|1760829366|Add comprehensive date formatting standards and fix hardcoded dates|Pieter Kuppens|65ae3feb7978534ce0bde48e7c7467648a9b34cd
+2025-10-19 01:17:13 +0200|1760829433|Clarify date formatting rule: emphasize 100% accuracy requirement|Pieter Kuppens|9dd473d87ee62c3d0692bdae883896cdf061a8d7
+2025-10-19 01:35:27 +0200|1760830527|Clarify date formatting rule: distinguish Created vs Updated dates|Pieter Kuppens|cbed9adf53779175dcec9783e893481b32f78dac
+2025-10-19 01:37:05 +0200|1760830625|Fix formatting in date formatting rule documentation|Pieter Kuppens|63dc9e9b9b52b6baf39ec758f654ebc761b6db1e
+2025-10-19 13:35:10 +0200|1760873710|correct creation and update times|Pieter Kuppens|5592c04d8699f0048ad201a71c70e3157b36f1ed
+2025-10-19 14:37:07 +0200|1760877427|TASK-039: Add comprehensive deliverables section documenting all created artifacts|Pieter Kuppens|da9c231efcbee6923d668277b2697b28f3c1010b
+2025-11-23 14:25:42 +0100|1763904342|chore(config): FEAT-003: update project dependencies and date formatting rules|Pieter Kuppens|1dfdfd8b31d1e384a6f57065e34cbddf22879cdd
+2025-11-23 14:25:50 +0100|1763904350|docs(config): FEAT-003: add cursor command documentation for commit, test, and update workflows|Pieter Kuppens|bd94c697f04023e50ebe0b2124e0445755cc55d7
+2025-11-23 14:25:57 +0100|1763904357|feat(scripts): FEAT-003: add utility scripts for calendar authentication, testing, and date management|Pieter Kuppens|f12a85e62869986dfe7e350f7d8a15039d65dd10
+2025-11-23 14:26:05 +0100|1763904365|feat(wbso): FEAT-003: implement MCP calendar server and enhance calendar upload security|Pieter Kuppens|106f73c0663207dd22888cd2efadd427b04591db
+2025-11-23 14:26:12 +0100|1763904372|test(wbso): FEAT-003: add MCP calendar server integration tests and test utilities|Pieter Kuppens|be7757a04cda6e6c99746d91fe332fda6e82543c
+2025-11-23 14:26:22 +0100|1763904382|docs(wbso): FEAT-003: add comprehensive documentation for MCP calendar integration|Pieter Kuppens|644eb12f8a11c0e5031e39e9267056f385640316
+2025-11-23 15:03:09 +0100|1763906589|Fix test failures and pytest configuration warnings|Pieter Kuppens|08a6166293683cf4929945bda17d9f92f12e5dc6
+2025-11-23 18:51:11 +0100|1763920271|fix(test): FEAT-003: improve MCP calendar server integration test reliability|Pieter Kuppens|97d25e69047fd8acc3cc2048678df8515cf1cb8f
+2025-11-23 21:13:57 +0100|1763928837|feat(config): FEAT-003: update commit command to always run ruff linting with --fix|Pieter Kuppens|18cc7b493cba1ae3bb58fa2696a6ec4232e02890
+2025-11-23 21:16:11 +0100|1763928971|style: FEAT-003: apply ruff linting and formatting fixes across codebase|Pieter Kuppens|544cd916e4e1cf06e156fb5ce252fae66e514997
+2025-11-23 21:22:08 +0100|1763929328|feat(ci): FEAT-003: add automatic ruff linting with --fix to pre-push hooks and GitHub Actions|Pieter Kuppens|ace34d56636ac8abe94e676a1411175a7fb9508a
+2025-11-23 21:23:32 +0100|1763929412|chore: FEAT-003: update pre-push hooks with automatic ruff linting|Pieter Kuppens|9a56bfbb61e4483e1e6e8d17eb59c649fcaad19c
+2025-11-28 07:52:34 +0100|1764312754|fix CRLF issue|Pieter Kuppens|d13d077acf4e86729e99b626733a69c351d9c64f
+2025-11-28 08:24:11 +0100|1764314651|TOC: Try "Theory of Constraints" approach. Starter document.|Pieter Kuppens|97682b51e61809f19a80033efdd8e04718b62dd0
+2025-11-28 08:32:52 +0100|1764315172|TOC-AUTO-001: No Calendar Entries in WBSO Calendar (CRITICAL)|Pieter Kuppens|24448c8138393a22ef78b25f487ded1a50595a42
+2025-11-28 09:29:52 +0100|1764318592|Fix time rounding, duplicate detection, descriptions, and document data flow|Pieter Kuppens|faef8e42e4acf88ba813a7a4f837f0919a29b4d7
+2025-11-28 10:25:40 +0100|1764321940|Refactor pipeline to extensible step-based architecture|Pieter Kuppens|f6c1c681a0f666441a921b536c6e645465f09c95
+2025-11-28 12:29:10 +0100|1764329350|Fix time zone issue|Pieter Kuppens|88872d25f3f27c2a01e9d94b119d96e4109761df

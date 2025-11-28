@@ -4,8 +4,6 @@
 "pkuppens/langflow_org","Create an Organization of AI Agents with LangFlow/AutoGen","Highly relevant - AI agent organization and coordination directly supports WBSO agent framework development"
 "pkuppens/context_engineering","Exploring Context Engineering","Highly relevant - Context-aware processing essential for WBSO role-based access control and intent recognition"
 "pkuppens/healthcare-aigent","Healthcare AI Agent system proof of concept","Highly relevant - Healthcare domain requires same privacy/security concerns as WBSO project, good reference implementation"
-"pkuppens/ChatRTX","A developer reference project for creating Retrieval Augmented Generation (RAG) chatbots on Windows using TensorRT-LLM","Highly relevant - RAG chatbot implementation with local LLM processing directly applicable to WBSO on-premises approach"
-"pkuppens/ai-agents-masterclass","Follow along with Cole Medin AI Agents Masterclass videos! All of the code I create and use in this series on YouTube will be here for you to use and even build on top of!","Highly relevant - AI agent development fundamentals and best practices essential for WBSO agent framework"
 "pkuppens/motivatie-brieven-ai","Voor het schrijven van motivatie brieven met behulp van AI","Highly relevant - Handles confidential CV/resume data with RAG techniques for job matching, directly applicable to WBSO privacy-aware data processing"
 "pkuppens/chrome_extensions","Create one or more Chrome Extensions for personal use based on RAG document storage and retrieval","Related - RAG document storage/retrieval techniques applicable to WBSO project"
 "pkuppens/gemini_agent","Datacation Deep Dive Google Gemini Agent Workshop","Related - Agent development techniques and LLM integration relevant to WBSO AI agent framework"

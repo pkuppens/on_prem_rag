@@ -1,37 +1,50 @@
-Git Commit Extraction Log - 15/08/2025 13:54:59,11
+﻿Git Commit Extraction Log - 2025-11-28 14:08:52
 ========================================
-Processing repository: pkuppens/on_prem_rag
-WARNING: Repository directory not found: pkuppens/on_prem_rag
-Processing repository: pkuppens/WBSO-AICM-2025-01
-WARNING: Repository directory not found: pkuppens/WBSO-AICM-2025-01
-Processing repository: pkuppens/langflow_org
-WARNING: Repository directory not found: pkuppens/langflow_org
-Processing repository: pkuppens/context_engineering
-WARNING: Repository directory not found: pkuppens/context_engineering
-Processing repository: pkuppens/healthcare-aigent
-WARNING: Repository directory not found: pkuppens/healthcare-aigent
-Processing repository: pkuppens/ChatRTX
-WARNING: Repository directory not found: pkuppens/ChatRTX
-Processing repository: pkuppens/ai-agents-masterclass
-WARNING: Repository directory not found: pkuppens/ai-agents-masterclass
-Processing repository: pkuppens/motivatie-brieven-ai
-WARNING: Repository directory not found: pkuppens/motivatie-brieven-ai
-Processing repository: pkuppens/chrome_extensions
-WARNING: Repository directory not found: pkuppens/chrome_extensions
-Processing repository: pkuppens/gemini_agent
-WARNING: Repository directory not found: pkuppens/gemini_agent
-Processing repository: pkuppens/job_hunt
-WARNING: Repository directory not found: pkuppens/job_hunt
-Processing repository: pkuppens/gmail_summarize_draft
-WARNING: Repository directory not found: pkuppens/gmail_summarize_draft
-Processing repository: pkuppens/my_chat_gpt
-WARNING: Repository directory not found: pkuppens/my_chat_gpt
-Processing repository: pkuppens/genai-hackathon
-WARNING: Repository directory not found: pkuppens/genai-hackathon
-Processing repository: pkuppens/datacation-chatbot-workspace
-WARNING: Repository directory not found: pkuppens/datacation-chatbot-workspace
+Processing repository: on_prem_rag
+SUCCESS: Commit data extracted for on_prem_rag (362 commits)
+Processing repository: WBSO-AICM-2025-01
+SUCCESS: Commit data extracted for WBSO-AICM-2025-01 (12 commits)
+Processing repository: langflow_org
+SUCCESS: Commit data extracted for langflow_org (18 commits)
+Processing repository: context_engineering
+SUCCESS: Commit data extracted for context_engineering (16 commits)
+Processing repository: healthcare-aigent
+SUCCESS: Commit data extracted for healthcare-aigent (80 commits)
+Processing repository: motivatie-brieven-ai
+SUCCESS: Commit data extracted for motivatie-brieven-ai (5 commits)
+Processing repository: chrome_extensions
+SUCCESS: Commit data extracted for chrome_extensions (5 commits)
+Processing repository: gemini_agent
+SUCCESS: Commit data extracted for gemini_agent (28 commits)
+Processing repository: job_hunt
+SUCCESS: Commit data extracted for job_hunt (13 commits)
+Processing repository: gmail_summarize_draft
+SUCCESS: Commit data extracted for gmail_summarize_draft (1 commits)
+Processing repository: my_chat_gpt
+SUCCESS: Commit data extracted for my_chat_gpt (254 commits)
+Processing repository: genai-hackathon
+SUCCESS: Commit data extracted for genai-hackathon (15 commits)
+Processing repository: datacation-chatbot-workspace
+SUCCESS: Commit data extracted for datacation-chatbot-workspace (37 commits)
 ========================================
 EXTRACTION SUMMARY
-Total repositories processed: 0
-Errors encountered: 15
+Total repositories processed: 13
+Total commits extracted: 846
+Errors encountered: 0
 ========================================
+
+COMMIT COUNTS BY REPOSITORY:
+----------------------------------------
+chrome_extensions : 5 commits
+context_engineering : 16 commits
+datacation-chatbot-workspace : 37 commits
+gemini_agent : 28 commits
+genai-hackathon : 15 commits
+gmail_summarize_draft : 1 commits
+healthcare-aigent : 80 commits
+job_hunt : 13 commits
+langflow_org : 18 commits
+motivatie-brieven-ai : 5 commits
+my_chat_gpt : 254 commits
+on_prem_rag : 362 commits
+WBSO-AICM-2025-01 : 12 commits

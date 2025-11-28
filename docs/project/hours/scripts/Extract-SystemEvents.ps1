@@ -4,15 +4,24 @@
 # Date: 2025
 
 param(
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [DateTime]$StartDate = (Get-Date "2025-01-01"),
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [DateTime]$EndDate = (Get-Date),
 
-    [Parameter(Mandatory=$false)]
-    [string]$OutputPath = ".\system_events_$(Get-Date -Format 'yyyyMMdd').csv"
+    [Parameter(Mandatory = $false)]
+    [string]$OutputPath = ""
 )
+
+# Set default output path to data directory if not provided
+if ([string]::IsNullOrEmpty($OutputPath)) {
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $dataDir = Join-Path $scriptDir "..\data"
+    $dataDir = [System.IO.Path]::GetFullPath($dataDir)
+    $dateStr = Get-Date -Format 'yyyyMMdd'
+    $OutputPath = Join-Path $dataDir "system_events_$dateStr.csv"
+}
 
 Write-Host "Extracting Windows events from $StartDate to $EndDate"
 Write-Host "Output file: $OutputPath"
@@ -20,22 +29,22 @@ Write-Host "Output file: $OutputPath"
 # Define event IDs and their meanings
 $EventDefinitions = @{
     # System Events (System Log)
-    6005 = @{Log="System"; Description="System startup (Event Log service started)"}
-    6006 = @{Log="System"; Description="System shutdown (Event Log service stopped)"}
-    6008 = @{Log="System"; Description="Unexpected shutdown (previous shutdown was unexpected)"}
-    1074 = @{Log="System"; Description="System shutdown/restart initiated"}
-    41 = @{Log="System"; Description="System rebooted without cleanly shutting down"}
-    6013 = @{Log="System"; Description="System uptime report"}
+    6005 = @{Log = "System"; Description = "System startup (Event Log service started)" }
+    6006 = @{Log = "System"; Description = "System shutdown (Event Log service stopped)" }
+    6008 = @{Log = "System"; Description = "Unexpected shutdown (previous shutdown was unexpected)" }
+    1074 = @{Log = "System"; Description = "System shutdown/restart initiated" }
+    41   = @{Log = "System"; Description = "System rebooted without cleanly shutting down" }
+    6013 = @{Log = "System"; Description = "System uptime report" }
 
     # Security Events (Security Log) - Logon/Logoff
-    4624 = @{Log="Security"; Description="Successful logon"}
-    4625 = @{Log="Security"; Description="Failed logon attempt"}
-    4634 = @{Log="Security"; Description="Account logoff"}
-    4647 = @{Log="Security"; Description="User initiated logoff"}
-    4648 = @{Log="Security"; Description="Logon using explicit credentials"}
+    4624 = @{Log = "Security"; Description = "Successful logon" }
+    4625 = @{Log = "Security"; Description = "Failed logon attempt" }
+    4634 = @{Log = "Security"; Description = "Account logoff" }
+    4647 = @{Log = "Security"; Description = "User initiated logoff" }
+    4648 = @{Log = "Security"; Description = "Logon using explicit credentials" }
 
     # Power events
-    42 = @{Log="System"; Description="System entering sleep"}
+    42   = @{Log = "System"; Description = "System entering sleep" }
     # 1 = @{Log="System"; Description="System resumed from sleep"}  # Too many events - commented out
 
     # Additional potentially interesting events (commented out for now):
@@ -72,10 +81,10 @@ foreach ($EventId in $EventDefinitions.Keys) {
 
     try {
         $Events = Get-WinEvent -FilterHashtable @{
-            LogName = $LogName
-            Id = $EventId
+            LogName   = $LogName
+            Id        = $EventId
             StartTime = $StartDate
-            EndTime = $EndDate
+            EndTime   = $EndDate
         } -ErrorAction SilentlyContinue
 
         foreach ($Event in $Events) {
@@ -128,16 +137,16 @@ foreach ($EventId in $EventDefinitions.Keys) {
 
             # Create event object
             $EventObj = [PSCustomObject]@{
-                DateTime = $Event.TimeCreated.ToString("yyyy/MM/dd HH:mm:ss")
-                EventId = $Event.Id
-                LogName = $Event.LogName
-                EventType = $Description
-                Level = $Event.LevelDisplayName
-                Username = if ($Username) { $Username } else { "N/A" }
-                ProcessName = if ($ProcessName) { $ProcessName } else { "N/A" }
-                Message = ($Event.Message -replace "`r`n", " " -replace "`n", " ").Trim()
+                DateTime       = $Event.TimeCreated.ToString("yyyy/MM/dd HH:mm:ss")
+                EventId        = $Event.Id
+                LogName        = $Event.LogName
+                EventType      = $Description
+                Level          = $Event.LevelDisplayName
+                Username       = if ($Username) { $Username } else { "N/A" }
+                ProcessName    = if ($ProcessName) { $ProcessName } else { "N/A" }
+                Message        = ($Event.Message -replace "`r`n", " " -replace "`n", " ").Trim()
                 AdditionalInfo = $AdditionalInfo
-                RecordId = $Event.RecordId
+                RecordId       = $Event.RecordId
             }
 
             $AllEvents += $EventObj

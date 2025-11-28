@@ -5,6 +5,11 @@ WBSO Pipeline Steps
 Individual pipeline steps that can be composed into a complete pipeline.
 Each step returns a step report for tracking and extensibility.
 
+The data refresh step (step_data_refresh) includes separate subflows for system events
+and git commits extraction, each with independent error handling and bottlenecks.
+See docs/project/hours/DATA_REFRESH_GUIDE.md for manual refresh instructions and
+automation details.
+
 Author: AI Assistant
 Created: 2025-11-28
 """
@@ -12,6 +17,8 @@ Created: 2025-11-28
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Callable
+import subprocess
+import sys
 
 from zoneinfo import ZoneInfo
 
@@ -33,6 +40,7 @@ UPLOAD_OUTPUT_DIR = SCRIPT_DIR / "upload_output"
 CREDENTIALS_PATH = SCRIPT_DIR / "scripts" / "credentials.json"
 TOKEN_PATH = SCRIPT_DIR / "scripts" / "token.json"
 CONFIG_PATH = SCRIPT_DIR / "config" / "wbso_calendar_config.json"
+SCRIPTS_DIR = SCRIPT_DIR / "scripts"
 
 # Target date range
 TARGET_START_DATE = datetime(2025, 6, 1)
@@ -44,12 +52,278 @@ def create_step_report(step_name: str, success: bool, **kwargs) -> Dict[str, Any
     return {"step_name": step_name, "success": success, "timestamp": datetime.now().isoformat(), **kwargs}
 
 
+def _check_system_events_freshness() -> Optional[datetime.date]:
+    """Check latest system events file date.
+
+    Returns:
+        Latest system events file date, or None if no files found
+    """
+    system_events_files = list(DATA_DIR.glob("system_events_*.csv"))
+    if not system_events_files:
+        return None
+
+    dates = []
+    for f in system_events_files:
+        try:
+            # Format: system_events_YYYYMMDD.csv
+            date_str = f.stem.split("_")[-1]
+            file_date = datetime.strptime(date_str, "%Y%m%d").date()
+            dates.append(file_date)
+        except (ValueError, IndexError):
+            continue
+
+    return max(dates) if dates else None
+
+
+def _check_commits_freshness() -> Optional[datetime.date]:
+    """Check latest git commits file modification date.
+
+    Returns:
+        Latest commits file modification date, or None if no files found
+    """
+    commits_dir = DATA_DIR / "commits"
+    if not commits_dir.exists():
+        return None
+
+    commit_files = list(commits_dir.glob("*.csv"))
+    if not commit_files:
+        return None
+
+    # Use file modification time as proxy for latest commit
+    latest_mtime = max(f.stat().st_mtime for f in commit_files)
+    return datetime.fromtimestamp(latest_mtime).date()
+
+
+def _subflow_refresh_system_events(force: bool = False) -> Dict[str, Any]:
+    """
+    Subflow: Refresh System Events
+
+    Executes PowerShell script to extract Windows system events.
+    This subflow has its own bottleneck: requires Windows PowerShell and admin privileges.
+
+    Args:
+        force: If True, refresh even if data is up to date
+
+    Returns:
+        Subflow report with success status and details
+    """
+    logger.info("  [Subflow] System Events Refresh")
+
+    # Check if refresh needed
+    if not force:
+        yesterday = datetime.now() - timedelta(days=1)
+        latest = _check_system_events_freshness()
+        if latest and latest >= yesterday.date():
+            logger.info(f"  ✅ System events up to date (latest: {latest})")
+            return {
+                "success": True,
+                "skipped": True,
+                "latest": latest.isoformat() if latest else None,
+                "message": "System events up to date",
+            }
+
+    # Execute PowerShell script
+    script_path = SCRIPTS_DIR / "Extract-SystemEvents.ps1"
+    if not script_path.exists():
+        error_msg = f"System events script not found: {script_path}"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Script file missing",
+            "message": "System events script not found",
+        }
+
+    try:
+        logger.info(f"  Executing: {script_path.name}")
+
+        # Prepare output path in data directory
+        today = datetime.now().strftime("%Y%m%d")
+        output_file = DATA_DIR / f"system_events_{today}.csv"
+
+        # Run PowerShell script with explicit output path
+        # Use -ExecutionPolicy Bypass to avoid policy restrictions
+        result = subprocess.run(
+            [
+                "powershell.exe",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                str(script_path),
+                "-OutputPath",
+                str(output_file),
+            ],
+            cwd=str(SCRIPTS_DIR),
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5 minute timeout
+        )
+
+        if result.returncode == 0:
+            # Check if output file was created (already set above)
+            if output_file.exists():
+                latest = _check_system_events_freshness()
+                logger.info(f"  ✅ System events refreshed (latest: {latest})")
+                return {
+                    "success": True,
+                    "latest": latest.isoformat() if latest else None,
+                    "output_file": str(output_file),
+                    "message": "System events refreshed successfully",
+                }
+            else:
+                logger.warning("  ⚠️ Script completed but output file not found")
+                return {
+                    "success": False,
+                    "error": "Output file not created",
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                    "message": "Script completed but no output file",
+                }
+        else:
+            error_msg = f"PowerShell script failed with code {result.returncode}"
+            logger.error(f"  ❌ {error_msg}")
+            logger.error(f"  stderr: {result.stderr[:500]}")
+            return {
+                "success": False,
+                "error": error_msg,
+                "returncode": result.returncode,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "bottleneck": "PowerShell execution failed",
+                "message": "System events refresh failed",
+            }
+
+    except subprocess.TimeoutExpired:
+        error_msg = "System events extraction timed out (>5 minutes)"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Execution timeout",
+            "message": "System events refresh timed out",
+        }
+    except Exception as e:
+        error_msg = f"Exception during system events refresh: {str(e)}"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Unexpected error",
+            "message": "System events refresh failed",
+        }
+
+
+def _subflow_refresh_git_commits(force: bool = False) -> Dict[str, Any]:
+    """
+    Subflow: Refresh Git Commits
+
+    Executes PowerShell script to extract git commits from all repositories.
+    This subflow has its own bottleneck: requires Git installed and repositories cloned.
+
+    Args:
+        force: If True, refresh even if data is up to date
+
+    Returns:
+        Subflow report with success status and details
+    """
+    logger.info("  [Subflow] Git Commits Refresh")
+
+    # Check if refresh needed
+    if not force:
+        yesterday = datetime.now() - timedelta(days=1)
+        latest = _check_commits_freshness()
+        if latest and latest >= yesterday.date():
+            logger.info(f"  ✅ Git commits up to date (latest: {latest})")
+            return {
+                "success": True,
+                "skipped": True,
+                "latest": latest.isoformat() if latest else None,
+                "message": "Git commits up to date",
+            }
+
+    # Execute PowerShell script
+    script_path = SCRIPTS_DIR / "extract_git_commits.ps1"
+    if not script_path.exists():
+        error_msg = f"Git commits script not found: {script_path}"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Script file missing",
+            "message": "Git commits script not found",
+        }
+
+    try:
+        logger.info(f"  Executing: {script_path.name}")
+
+        # Run PowerShell script
+        result = subprocess.run(
+            [
+                "powershell.exe",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                str(script_path),
+            ],
+            cwd=str(SCRIPTS_DIR),
+            capture_output=True,
+            text=True,
+            timeout=600,  # 10 minute timeout (multiple repositories)
+        )
+
+        if result.returncode == 0:
+            latest = _check_commits_freshness()
+            commits_dir = DATA_DIR / "commits"
+            commit_files = list(commits_dir.glob("*.csv")) if commits_dir.exists() else []
+
+            logger.info(f"  ✅ Git commits refreshed (latest: {latest}, {len(commit_files)} files)")
+            return {
+                "success": True,
+                "latest": latest.isoformat() if latest else None,
+                "files_count": len(commit_files),
+                "message": "Git commits refreshed successfully",
+            }
+        else:
+            error_msg = f"PowerShell script failed with code {result.returncode}"
+            logger.error(f"  ❌ {error_msg}")
+            logger.error(f"  stderr: {result.stderr[:500]}")
+            return {
+                "success": False,
+                "error": error_msg,
+                "returncode": result.returncode,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "bottleneck": "PowerShell execution failed",
+                "message": "Git commits refresh failed",
+            }
+
+    except subprocess.TimeoutExpired:
+        error_msg = "Git commits extraction timed out (>10 minutes)"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Execution timeout",
+            "message": "Git commits refresh timed out",
+        }
+    except Exception as e:
+        error_msg = f"Exception during git commits refresh: {str(e)}"
+        logger.error(f"  ❌ {error_msg}")
+        return {
+            "success": False,
+            "error": error_msg,
+            "bottleneck": "Unexpected error",
+            "message": "Git commits refresh failed",
+        }
+
+
 def step_data_refresh(context: Dict[str, Any]) -> Dict[str, Any]:
     """
     Step: Data Refresh
 
     Refresh data sources (computer sessions, git commits).
     Determines if data is already up to date (present until yesterday).
+    Executes separate subflows for each data source with independent error handling.
     """
     logger.info("=" * 60)
     logger.info("STEP: DATA REFRESH")
@@ -57,44 +331,16 @@ def step_data_refresh(context: Dict[str, Any]) -> Dict[str, Any]:
 
     # Check if data is already up to date
     yesterday = datetime.now() - timedelta(days=1)
-    system_events_latest = None
-    commits_latest = None
+    force_refresh = context.get("force_refresh", False)
 
-    # Check system events files
-    system_events_files = list(DATA_DIR.glob("system_events_*.csv"))
-    if system_events_files:
-        # Extract dates from filenames
-        dates = []
-        for f in system_events_files:
-            try:
-                # Format: system_events_YYYYMMDD.csv
-                date_str = f.stem.split("_")[-1]
-                file_date = datetime.strptime(date_str, "%Y%m%d").date()
-                dates.append(file_date)
-            except (ValueError, IndexError):
-                continue
-        if dates:
-            system_events_latest = max(dates)
-
-    # Check commit files
-    commits_dir = DATA_DIR / "commits"
-    if commits_dir.exists():
-        commit_files = list(commits_dir.glob("*.csv"))
-        if commit_files:
-            # Use file modification time as proxy for latest commit
-            latest_mtime = max(f.stat().st_mtime for f in commit_files)
-            commits_latest = datetime.fromtimestamp(latest_mtime).date()
+    system_events_latest = _check_system_events_freshness()
+    commits_latest = _check_commits_freshness()
 
     # Determine if refresh is needed
-    refresh_needed = False
-    if not system_events_latest or system_events_latest < yesterday.date():
-        refresh_needed = True
-        logger.info("System events data needs refresh")
-    if not commits_latest or commits_latest < yesterday.date():
-        refresh_needed = True
-        logger.info("Commits data needs refresh")
+    system_events_needed = force_refresh or not system_events_latest or system_events_latest < yesterday.date()
+    commits_needed = force_refresh or not commits_latest or commits_latest < yesterday.date()
 
-    if not refresh_needed:
+    if not system_events_needed and not commits_needed:
         logger.info("✅ Data is up to date (present until yesterday)")
         return create_step_report(
             "data_refresh",
@@ -105,20 +351,59 @@ def step_data_refresh(context: Dict[str, Any]) -> Dict[str, Any]:
             message="Data is up to date",
         )
 
-    # TODO: Execute data refresh scripts
-    logger.warning("⚠️ Data refresh needed but not yet implemented")
-    logger.warning("Please run data collection scripts manually:")
-    logger.warning("  - docs/project/hours/scripts/Extract-SystemEvents.ps1")
-    logger.warning("  - docs/project/hours/scripts/extract_git_commits.ps1")
+    # Execute refresh subflows independently
+    logger.info("Executing data refresh subflows...")
 
-    return create_step_report(
+    system_events_result = None
+    commits_result = None
+
+    if system_events_needed:
+        system_events_result = _subflow_refresh_system_events(force=force_refresh)
+    else:
+        logger.info("  [Subflow] System Events Refresh - Skipped (up to date)")
+        system_events_result = {
+            "success": True,
+            "skipped": True,
+            "latest": system_events_latest.isoformat() if system_events_latest else None,
+        }
+
+    if commits_needed:
+        commits_result = _subflow_refresh_git_commits(force=force_refresh)
+    else:
+        logger.info("  [Subflow] Git Commits Refresh - Skipped (up to date)")
+        commits_result = {
+            "success": True,
+            "skipped": True,
+            "latest": commits_latest.isoformat() if commits_latest else None,
+        }
+
+    # Update latest dates after refresh
+    system_events_latest = _check_system_events_freshness()
+    commits_latest = _check_commits_freshness()
+
+    # Determine overall success
+    overall_success = (system_events_result.get("success", False) or system_events_result.get("skipped", False)) and (
+        commits_result.get("success", False) or commits_result.get("skipped", False)
+    )
+
+    # Build report
+    report = create_step_report(
         "data_refresh",
-        True,
+        overall_success,
         refresh_needed=True,
         system_events_latest=system_events_latest.isoformat() if system_events_latest else None,
         commits_latest=commits_latest.isoformat() if commits_latest else None,
-        message="Data refresh needed - manual execution required",
+        system_events_result=system_events_result,
+        commits_result=commits_result,
+        message="Data refresh completed",
     )
+
+    if overall_success:
+        logger.info("✅ Data refresh completed successfully")
+    else:
+        logger.warning("⚠️ Data refresh completed with some failures (check subflow results)")
+
+    return report
 
 
 def step_validate(context: Dict[str, Any]) -> Dict[str, Any]:

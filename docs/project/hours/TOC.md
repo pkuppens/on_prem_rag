@@ -45,15 +45,15 @@ Despite having 438.27 hours of calculated WBSO work sessions, the WBSO Google Ca
 
 **Acceptance Criteria**:
 
-- [ ] **CRITICAL**: At least 400+ hours are actually visible in WBSO Google Calendar
-- [ ] Automated, programmatic insertion works without manual intervention
-- [ ] Single command uploads all validated sessions to calendar
-- [ ] Upload process shows real-time progress and success/failure status
-- [ ] Post-upload verification confirms events exist in calendar
-- [ ] Zero silent failures - all errors are reported and logged
-- [ ] Calendar entries are visible when viewing WBSO calendar in Google Calendar
-- [ ] Upload can be triggered programmatically or by AI agents
-- [ ] System can verify hours in calendar match calculated hours
+- [ ] **CRITICAL**: At least 400+ hours are actually visible in WBSO Google Calendar (pending execution)
+- [x] Automated, programmatic insertion works without manual intervention
+- [x] Single command uploads all validated sessions to calendar (`wbso-pipeline`)
+- [x] Upload process shows real-time progress and success/failure status
+- [x] Post-upload verification confirms events exist in calendar
+- [x] Zero silent failures - all errors are reported and logged
+- [ ] Calendar entries are visible when viewing WBSO calendar in Google Calendar (pending execution)
+- [x] Upload can be triggered programmatically or by AI agents
+- [x] System can verify hours in calendar match calculated hours
 
 ---
 

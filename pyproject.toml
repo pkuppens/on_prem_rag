@@ -85,6 +85,7 @@ upload-documents = "scripts.upload_documents:main"
 wbso-validate = "wbso.validation:main"
 wbso-upload = "wbso.upload:main"
 wbso-report = "wbso.reporting:main"
+wbso-pipeline = "wbso.pipeline:main"
 # WBSO database migration and reporting scripts
 wbso-migrate = "wbso.migration:main"
 wbso-db-report = "wbso.database_reporting:main"

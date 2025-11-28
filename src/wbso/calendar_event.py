@@ -14,12 +14,13 @@ Created: 2025-10-18
 """
 
 import json
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Union
 
 from .logging_config import get_logger
+from .time_utils import round_to_quarter_hour
 
 logger = get_logger("calendar_event")
 
@@ -286,30 +287,50 @@ class CalendarEvent:
     @classmethod
     def from_wbso_session(cls, session: WBSOSession) -> "CalendarEvent":
         """Create from WBSOSession."""
-        # Generate event title
-        title = f"WBSO: {session.wbso_category.replace('_', ' ').title()} - {session.session_type.title()}"
+        # Round times to 5-minute intervals
+        rounded_start = round_to_quarter_hour(session.start_time)
+        rounded_end = round_to_quarter_hour(session.end_time)
+        
+        # Generate event title (remove WBSO: prefix as it's implicit from calendar name)
+        category_name = session.wbso_category.replace('_', ' ').title() if session.wbso_category else "General R&D"
+        session_type_name = session.session_type.replace('_', ' ').title()
+        title = f"{category_name} - {session_type_name}"
 
-        # Generate description
-        description = f"""WBSO Project: WBSO-AICM-2025-01: AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+        # Generate WBSO-worthy description
+        category_description = {
+            "AI_FRAMEWORK": "Development and implementation of AI agent frameworks, natural language processing capabilities, and intelligent communication systems for data-secure environments.",
+            "ACCESS_CONTROL": "Research and development of authentication and authorization systems, security mechanisms, and access control protocols for privacy-preserving applications.",
+            "PRIVACY_CLOUD": "Development of privacy-preserving cloud integration solutions, data protection mechanisms, and secure cloud communication protocols.",
+            "AUDIT_LOGGING": "Implementation of comprehensive audit logging systems, privacy-friendly monitoring solutions, and compliance tracking mechanisms.",
+            "DATA_INTEGRITY": "Research and development of data integrity protection systems, corruption prevention mechanisms, and validation frameworks.",
+            "GENERAL_RD": "General research and development activities supporting the WBSO-AICM-2025-01 project objectives.",
+        }.get(session.wbso_category, "Research and development activities for AI agent communication in data-secure and privacy-conscious environments.")
 
-Category: {session.wbso_category}
-Activity: {session.wbso_category.replace("_", " ").title()}
-Session Type: {session.session_type.title()}
-Duration: {session.work_hours} hours
+        description = f"""WBSO Project: WBSO-AICM-2025-01
+AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 
-Description: {session.wbso_justification}
+R&D Activity: {category_description}
 
-Technical Details:
-- Source: {"Synthetic" if session.is_synthetic else "Real"} session
-- Commits: {session.commit_count}
-- Confidence: {session.confidence_score:.2f}
+Technical Work Performed:
+{session.wbso_justification}
+
+Session Details:
+- Category: {session.wbso_category.replace('_', ' ').title()}
+- Session Type: {session_type_name}
+- Work Duration: {session.work_hours:.2f} hours
 - Date: {session.date}
 
-This work session qualifies for WBSO tax deduction under category {session.wbso_category}."""
+Source Information:
+- Data Source: {"Synthetic session generated from unassigned commits" if session.is_synthetic else "Real session from system event logs"}
+- Commit Count: {session.commit_count}
+- Confidence Score: {session.confidence_score:.2f}
 
-        # Format datetime for Google Calendar
-        start_dt = session.start_time.strftime("%Y-%m-%dT%H:%M:%S")
-        end_dt = session.end_time.strftime("%Y-%m-%dT%H:%M:%S")
+WBSO Eligibility:
+This work session qualifies for WBSO tax deduction under category {session.wbso_category} as part of the approved R&D project WBSO-AICM-2025-01."""
+
+        # Format datetime for Google Calendar (using rounded times)
+        start_dt = rounded_start.strftime("%Y-%m-%dT%H:%M:%S")
+        end_dt = rounded_end.strftime("%Y-%m-%dT%H:%M:%S")
 
         # Extended properties for WBSO tracking
         extended_properties = {

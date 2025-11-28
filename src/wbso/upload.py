@@ -216,40 +216,76 @@ class GoogleCalendarUploader:
         logger.info("Creating upload plan...")
 
         upload_plan = {"new_events": [], "skip_events": [], "duplicate_session_ids": [], "duplicate_datetime_ranges": []}
+        
+        # Track session_ids and datetime ranges within the upload batch
+        seen_session_ids = set()
+        seen_datetime_ranges = set()
 
         for event in events:
             # Get session_id from extended_properties
             session_id = event.extended_properties.get("private", {}).get("session_id", "")
 
-            # Check for duplicate session_id
+            # Check for duplicate session_id in existing calendar
             if session_id in existing_events["by_session_id"]:
                 upload_plan["skip_events"].append(
                     {
                         "event": event,
-                        "reason": "duplicate_session_id",
+                        "reason": "duplicate_session_id_existing",
                         "existing_event_id": existing_events["by_session_id"][session_id]["id"],
                     }
                 )
                 upload_plan["duplicate_session_ids"].append(session_id)
                 continue
 
-            # Check for duplicate datetime range
+            # Check for duplicate session_id within upload batch
+            if session_id in seen_session_ids:
+                upload_plan["skip_events"].append(
+                    {
+                        "event": event,
+                        "reason": "duplicate_session_id_batch",
+                        "existing_event_id": None,
+                    }
+                )
+                upload_plan["duplicate_session_ids"].append(session_id)
+                continue
+
+            # Check for duplicate datetime range in existing calendar
             dt_key = f"{event.start['dateTime']}-{event.end['dateTime']}"
             if dt_key in existing_events["by_datetime"]:
                 upload_plan["skip_events"].append(
                     {
                         "event": event,
-                        "reason": "duplicate_datetime_range",
+                        "reason": "duplicate_datetime_range_existing",
                         "existing_event_id": existing_events["by_datetime"][dt_key]["id"],
                     }
                 )
                 upload_plan["duplicate_datetime_ranges"].append(dt_key)
                 continue
 
-            # Event is new, add to upload plan
+            # Check for duplicate datetime range within upload batch
+            if dt_key in seen_datetime_ranges:
+                upload_plan["skip_events"].append(
+                    {
+                        "event": event,
+                        "reason": "duplicate_datetime_range_batch",
+                        "existing_event_id": None,
+                    }
+                )
+                upload_plan["duplicate_datetime_ranges"].append(dt_key)
+                continue
+
+            # Event is new, add to upload plan and track it
+            seen_session_ids.add(session_id)
+            seen_datetime_ranges.add(dt_key)
             upload_plan["new_events"].append(event)
 
         logger.info(f"Upload plan: {len(upload_plan['new_events'])} new events, {len(upload_plan['skip_events'])} skipped")
+        if upload_plan["skip_events"]:
+            reasons = {}
+            for skip in upload_plan["skip_events"]:
+                reason = skip["reason"]
+                reasons[reason] = reasons.get(reason, 0) + 1
+            logger.info(f"Skip reasons: {reasons}")
         return upload_plan
 
     def upload_events_batch(self, events: List[CalendarEvent]) -> List[Dict[str, Any]]:

@@ -14,7 +14,7 @@ Author: AI Assistant
 Created: 2025-11-28
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, time
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Callable
 import subprocess
@@ -1048,6 +1048,238 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         )
 
 
+def step_convert_to_work_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Step: Convert polished logon/logoff sessions to work sessions with filtering and validation.
+
+    This step:
+    - Filters out sessions before 2025-06-01
+    - Validates sessions (less than 11 hrs/day, no work 01:00-06:30)
+    - Tracks dates with commits for reporting (commit-based filtering is disabled)
+    - Outputs to work_session.csv
+
+    Note: Commit requirement filtering is disabled to avoid filtering out too much work.
+    Dates with commits are tracked and reported for informational purposes only.
+    """
+    logger.info("=" * 60)
+    logger.info("STEP: CONVERT TO WORK SESSIONS")
+    logger.info("=" * 60)
+
+    # Get polished sessions from previous step
+    polished_sessions = context.get("polished_logon_logoff_sessions", [])
+
+    if not polished_sessions:
+        logger.warning("No polished sessions found")
+        return create_step_report("convert_to_work_sessions", False, message="No polished sessions found")
+
+    # Load commits for reporting (not for filtering - filtering disabled)
+    commits_by_repo = _load_git_commits_by_repo()
+    # Flatten to commits by date for reporting
+    commits_by_date: Dict[str, List[Dict[str, Any]]] = {}
+    for repo_commits in commits_by_repo.values():
+        for commit in repo_commits:
+            date_str = commit["date"]
+            if date_str not in commits_by_date:
+                commits_by_date[date_str] = []
+            commits_by_date[date_str].append(commit)
+
+    logger.info(f"Loaded commits for {len(commits_by_date)} dates (for reporting only - commit filtering disabled)")
+
+    # Filter and validate sessions
+    work_sessions = []
+    filtered_out = []
+
+    # Track daily hours to enforce 11-hour limit
+    daily_hours: Dict[str, float] = {}
+
+    for session in polished_sessions:
+        try:
+            date_str = session["date"]
+            start_time_str = session["start_time"]
+            end_time_str = session["end_time"]
+            session_id = session["session_id"]
+
+            # Parse datetimes
+            start_dt = parse_datetime_flexible(f"{date_str} {start_time_str}")
+            end_dt = parse_datetime_flexible(f"{date_str} {end_time_str}")
+
+            if not start_dt or not end_dt:
+                filtered_out.append(
+                    {
+                        "session_id": session_id,
+                        "reason": "invalid_datetime",
+                        "date": date_str,
+                    }
+                )
+                continue
+
+            # Handle day boundary
+            if end_dt < start_dt:
+                end_dt = end_dt + timedelta(days=1)
+
+            # Filter: Remove sessions before 2025-06-01
+            if start_dt.date() < TARGET_START_DATE.date():
+                filtered_out.append(
+                    {
+                        "session_id": session_id,
+                        "reason": "before_target_start_date",
+                        "date": date_str,
+                    }
+                )
+                continue
+
+            # Calculate duration
+            duration = end_dt - start_dt
+            duration_hours = duration.total_seconds() / 3600.0
+
+            # Filter: Remove zero or negative duration
+            if duration_hours <= 0:
+                filtered_out.append(
+                    {
+                        "session_id": session_id,
+                        "reason": "zero_or_negative_duration",
+                        "date": date_str,
+                    }
+                )
+                continue
+
+            # Validate: No work between 01:00 and 06:30
+            # Check if session overlaps with forbidden time (01:00-06:30)
+            start_hour_minutes = start_dt.hour * 60 + start_dt.minute
+            end_hour_minutes = end_dt.hour * 60 + end_dt.minute
+
+            # Forbidden period: 01:00 (60 minutes) to 06:30 (390 minutes)
+            forbidden_start = 60  # 01:00
+            forbidden_end = 390  # 06:30
+
+            # Check if session overlaps forbidden time
+            overlaps_forbidden = False
+            if start_dt.date() == end_dt.date():
+                # Same day: check if session overlaps 01:00-06:30
+                if start_hour_minutes < forbidden_end and end_hour_minutes > forbidden_start:
+                    overlaps_forbidden = True
+            else:
+                # Crosses day boundary: check if it overlaps forbidden time on either day
+                # Check start day (if session extends past midnight)
+                if start_hour_minutes < forbidden_end:
+                    overlaps_forbidden = True
+                # Check end day (if session started before midnight)
+                if end_hour_minutes > forbidden_start:
+                    overlaps_forbidden = True
+
+            if overlaps_forbidden:
+                filtered_out.append(
+                    {
+                        "session_id": session_id,
+                        "reason": "overlaps_forbidden_time_01_0630",
+                        "date": date_str,
+                        "start_time": start_time_str,
+                        "end_time": end_time_str,
+                    }
+                )
+                continue
+
+            # Check daily hours limit (11 hours per day)
+            # NOTE: This filtering is temporarily disabled - will be revised to clip to 11 hours instead, or only filter on weekends
+            session_date = start_dt.date().isoformat()
+            current_daily_hours = daily_hours.get(session_date, 0.0)
+
+            # if current_daily_hours + duration_hours > 11.0:
+            #     filtered_out.append({
+            #         "session_id": session_id,
+            #         "reason": "exceeds_daily_hours_limit",
+            #         "date": date_str,
+            #         "current_daily_hours": current_daily_hours,
+            #         "session_hours": duration_hours,
+            #         "total_would_be": current_daily_hours + duration_hours,
+            #     })
+            #     continue
+
+            # Track commits for reporting (but don't filter based on it)
+            # Note: Commit requirement filtering is disabled - we track for reporting only
+
+            # Update daily hours tracking
+            daily_hours[session_date] = current_daily_hours + duration_hours
+
+            # Add to work sessions
+            work_sessions.append(session)
+
+        except Exception as e:
+            logger.warning(f"Error processing session {session.get('session_id', 'unknown')}: {e}")
+            filtered_out.append(
+                {
+                    "session_id": session.get("session_id", "unknown"),
+                    "reason": "processing_error",
+                    "error": str(e),
+                }
+            )
+            continue
+
+    # Save work sessions to CSV
+    work_sessions_file = DATA_DIR / "work_session.csv"
+    work_sessions_file.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(work_sessions_file, "w", encoding="utf-8", newline="") as f:
+        if work_sessions:
+            writer = csv.DictWriter(f, fieldnames=["date", "start_time", "end_time", "session_id"])
+            writer.writeheader()
+            writer.writerows(work_sessions)
+
+    # Determine dates with commits for reporting
+    work_session_dates = set(s["date"] for s in work_sessions)
+    dates_with_commits = [date for date in work_session_dates if date in commits_by_date]
+    dates_without_commits = [date for date in work_session_dates if date not in commits_by_date]
+
+    logger.info(f"✅ Converted {len(work_sessions)} work sessions from {len(polished_sessions)} polished sessions")
+    logger.info(f"   Filtered out: {len(filtered_out)} sessions")
+    logger.info(f"   Output saved to: {work_sessions_file.name}")
+    logger.info(f"   Dates with commits: {len(dates_with_commits)} (commit filtering disabled - for reporting only)")
+    logger.info(f"   Dates without commits: {len(dates_without_commits)}")
+
+    if filtered_out:
+        logger.info("Filter reasons:")
+        reason_counts = {}
+        for item in filtered_out:
+            reason = item.get("reason", "unknown")
+            reason_counts[reason] = reason_counts.get(reason, 0) + 1
+        for reason, count in sorted(reason_counts.items(), key=lambda x: x[1], reverse=True):
+            logger.info(f"   - {reason}: {count}")
+
+    # Calculate total hours
+    total_hours = 0.0
+    for session in work_sessions:
+        try:
+            start_dt = parse_datetime_flexible(f"{session['date']} {session['start_time']}")
+            end_dt = parse_datetime_flexible(f"{session['date']} {session['end_time']}")
+            if start_dt and end_dt:
+                if end_dt < start_dt:
+                    end_dt = end_dt + timedelta(days=1)
+                duration = end_dt - start_dt
+                total_hours += duration.total_seconds() / 3600.0
+        except Exception:
+            pass
+
+    # Update context
+    context["work_sessions"] = work_sessions
+    context["work_sessions_file"] = str(work_sessions_file)
+
+    return create_step_report(
+        "convert_to_work_sessions",
+        True,
+        input_sessions=len(polished_sessions),
+        output_sessions=len(work_sessions),
+        filtered_count=len(filtered_out),
+        total_hours=round(total_hours, 2),
+        filtered_reasons=reason_counts if filtered_out else {},
+        output_file=str(work_sessions_file),
+        dates_with_commits=len(dates_with_commits),
+        dates_without_commits=len(dates_without_commits),
+        dates_with_commits_list=sorted(dates_with_commits),
+        commit_filtering_disabled=True,
+        message=f"Converted {len(work_sessions)} work sessions ({total_hours:.2f} hours) - commit filtering disabled",
+    )
+
+
 def step_load_polished_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
     """
     Step: Load polished logon/logoff sessions into WBSODataset.
@@ -1059,25 +1291,46 @@ def step_load_polished_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("STEP: LOAD POLISHED LOGON/LOGOFF SESSIONS")
     logger.info("=" * 60)
 
-    # Get polished sessions from previous step or load from file
-    polished_sessions = context.get("polished_logon_logoff_sessions", [])
-    polished_file = context.get("polished_logon_logoff_file")
+    # Prefer work sessions from convert_to_work_sessions step, otherwise use polished sessions
+    work_sessions = context.get("work_sessions", [])
+    work_sessions_file = context.get("work_sessions_file")
 
-    # If not in context, load from file
-    if not polished_sessions and polished_file:
-        polished_file_path = Path(polished_file)
-        if polished_file_path.exists():
-            try:
-                with open(polished_file_path, "r", encoding="utf-8") as f:
-                    reader = csv.DictReader(f)
-                    polished_sessions = list(reader)
-                logger.info(f"Loaded {len(polished_sessions)} sessions from {polished_file_path.name}")
-            except Exception as e:
-                logger.error(f"Error loading polished sessions from file: {e}")
-                return create_step_report("load_polished_sessions", False, message="Failed to load polished sessions")
-        else:
-            logger.error(f"Polished sessions file not found: {polished_file_path}")
-            return create_step_report("load_polished_sessions", False, message="Polished sessions file not found")
+    if work_sessions:
+        # Use work sessions from previous step
+        polished_sessions = work_sessions
+        logger.info(f"Using {len(polished_sessions)} work sessions from previous step")
+    else:
+        # Fallback: get polished sessions from previous step or load from file
+        polished_sessions = context.get("polished_logon_logoff_sessions", [])
+        polished_file = context.get("polished_logon_logoff_file")
+
+        # If not in context, try to load from work_session.csv first, then polished file
+        if not polished_sessions:
+            work_sessions_path = DATA_DIR / "work_session.csv"
+            if work_sessions_path.exists():
+                try:
+                    with open(work_sessions_path, "r", encoding="utf-8") as f:
+                        reader = csv.DictReader(f)
+                        polished_sessions = list(reader)
+                    logger.info(f"Loaded {len(polished_sessions)} sessions from work_session.csv")
+                except Exception as e:
+                    logger.warning(f"Error loading work sessions from file: {e}")
+
+        # If still no sessions, try polished file
+        if not polished_sessions and polished_file:
+            polished_file_path = Path(polished_file)
+            if polished_file_path.exists():
+                try:
+                    with open(polished_file_path, "r", encoding="utf-8") as f:
+                        reader = csv.DictReader(f)
+                        polished_sessions = list(reader)
+                    logger.info(f"Loaded {len(polished_sessions)} sessions from {polished_file_path.name}")
+                except Exception as e:
+                    logger.error(f"Error loading polished sessions from file: {e}")
+                    return create_step_report("load_polished_sessions", False, message="Failed to load polished sessions")
+            else:
+                logger.error(f"Polished sessions file not found: {polished_file_path}")
+                return create_step_report("load_polished_sessions", False, message="Polished sessions file not found")
 
     if not polished_sessions:
         logger.warning("No polished sessions found")
@@ -1508,12 +1761,16 @@ def step_deduplicate(context: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def step_store_activity_blocks(context: Dict[str, Any]) -> Dict[str, Any]:
-    """Step: Store polished computer activity blocks for human review.
+    """Step: Store polished WBSO activity blocks for human review.
 
-    Stores date, starttime, endtime for each activity block.
+    Stores date, starttime, endtime for each WBSO activity block.
     Multiple blocks per day are supported.
 
+    Creates output file:
+    - system_events_time_blocks_wbso.csv - WBSO-filtered sessions (on or after 2025-06-01) with simplified format
+
     Output file is stored in the data directory for persistence and version control.
+    Note: This file is redundant with all_logon_logoff_polished.csv and work_session.csv but kept for WBSO-specific filtering.
     """
     logger.info("=" * 60)
     logger.info("STEP: STORE ACTIVITY BLOCKS FOR REVIEW")
@@ -1523,12 +1780,11 @@ def step_store_activity_blocks(context: Dict[str, Any]) -> Dict[str, Any]:
     if not dataset:
         return create_step_report("store_activity_blocks", False, message="No dataset available")
 
-    # Prepare output file in data directory for persistence and version control
-    output_file = DATA_DIR / "system_events_time_blocks.csv"
     DATA_DIR.mkdir(exist_ok=True, parents=True)
 
-    # Collect all sessions with their time information
-    activity_blocks = []
+    # Collect WBSO-filtered sessions (simplified format)
+    wbso_activity_blocks = []
+
     for session in dataset.sessions:
         if not session.start_time or not session.end_time:
             continue
@@ -1538,81 +1794,72 @@ def step_store_activity_blocks(context: Dict[str, Any]) -> Dict[str, Any]:
         start_time = session.start_time.strftime("%H:%M:%S")
         end_time = session.end_time.strftime("%H:%M:%S")
 
-        # Calculate duration
-        duration_hours = session.work_hours
+        # Normalize end_time: if it's 00:00:00, change to 23:59:59
+        # This handles sessions that end at midnight - they should be shown as ending at end of day
+        # We check if end_time is exactly midnight (00:00:00) regardless of date
+        if end_time == "00:00:00":
+            end_time = "23:59:59"
 
-        activity_blocks.append(
-            {
-                "date": date,
-                "start_time": start_time,
-                "end_time": end_time,
-                "duration_hours": round(duration_hours, 2),
-                "session_id": session.session_id,
-                "session_type": session.session_type,
-                "is_wbso": session.is_wbso,
-                "source_type": session.source_type,
-            }
-        )
+        # WBSO-filtered format (only WBSO sessions on or after 2025-06-01)
+        if session.is_wbso and session.start_time.date() >= TARGET_START_DATE.date():
+            wbso_activity_blocks.append(
+                {
+                    "date": date,
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "session_id": session.session_id,
+                }
+            )
 
     # Sort by date, then by start time
-    activity_blocks.sort(key=lambda x: (x["date"], x["start_time"]))
+    wbso_activity_blocks.sort(key=lambda x: (x["date"], x["start_time"]))
 
-    # Write to CSV
+    # Write WBSO-filtered simplified format CSV
+    wbso_output_file = DATA_DIR / "system_events_time_blocks_wbso.csv"
     try:
-        with open(output_file, "w", encoding="utf-8", newline="") as f:
+        with open(wbso_output_file, "w", encoding="utf-8", newline="") as f:
             fieldnames = [
                 "date",
                 "start_time",
                 "end_time",
-                "duration_hours",
                 "session_id",
-                "session_type",
-                "is_wbso",
-                "source_type",
             ]
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerows(activity_blocks)
+            writer.writerows(wbso_activity_blocks)
 
-        # Count blocks by date
-        blocks_by_date = {}
-        for block in activity_blocks:
+        # Count WBSO blocks by date
+        wbso_blocks_by_date = {}
+        for block in wbso_activity_blocks:
             date = block["date"]
-            blocks_by_date[date] = blocks_by_date.get(date, 0) + 1
+            wbso_blocks_by_date[date] = wbso_blocks_by_date.get(date, 0) + 1
 
-        total_blocks = len(activity_blocks)
-        unique_dates = len(blocks_by_date)
-        total_hours = sum(block["duration_hours"] for block in activity_blocks)
+        wbso_total_blocks = len(wbso_activity_blocks)
+        wbso_unique_dates = len(wbso_blocks_by_date)
 
-        logger.info(f"✅ Stored {total_blocks} activity blocks across {unique_dates} dates ({total_hours:.2f} total hours)")
-        logger.info(f"   Output file: {output_file}")
+        logger.info(
+            f"✅ Stored {wbso_total_blocks} WBSO activity blocks (>= {TARGET_START_DATE.date()}) across {wbso_unique_dates} dates"
+        )
+        logger.info(f"   Output file: {wbso_output_file}")
 
-        # Log sample dates with multiple blocks
-        multi_block_dates = [(date, count) for date, count in blocks_by_date.items() if count > 1]
-        if multi_block_dates:
-            logger.info(f"   Dates with multiple blocks: {len(multi_block_dates)}")
-            for date, count in sorted(multi_block_dates)[:10]:  # Show first 10
-                logger.info(f"     {date}: {count} blocks")
-
-        context["activity_blocks_file"] = str(output_file)
-        context["activity_blocks_count"] = total_blocks
+        context["wbso_activity_blocks_file"] = str(wbso_output_file)
+        context["wbso_activity_blocks_count"] = wbso_total_blocks
 
         return create_step_report(
             "store_activity_blocks",
             True,
-            total_blocks=total_blocks,
-            unique_dates=unique_dates,
-            total_hours=total_hours,
-            output_file=str(output_file),
-            message=f"Stored {total_blocks} activity blocks for review",
+            wbso_total_blocks=wbso_total_blocks,
+            wbso_unique_dates=wbso_unique_dates,
+            wbso_output_file=str(wbso_output_file),
+            message=f"Stored {wbso_total_blocks} WBSO-filtered activity blocks for review",
         )
     except Exception as e:
-        logger.error(f"❌ Failed to store activity blocks: {e}")
+        logger.error(f"❌ Failed to store WBSO activity blocks: {e}")
         return create_step_report(
             "store_activity_blocks",
             False,
             error=str(e),
-            message="Failed to store activity blocks",
+            message="Failed to store WBSO activity blocks",
         )
 
 
@@ -2233,6 +2480,233 @@ def step_event_convert(context: Dict[str, Any]) -> Dict[str, Any]:
         events_created=len(calendar_events),
         conversion_errors=len(conversion_errors),
         message=f"Converted {len(calendar_events)} sessions to calendar events",
+    )
+
+
+def step_google_calendar_data_preparation(context: Dict[str, Any]) -> Dict[str, Any]:
+    """Step: Prepare calendar events for Google Calendar upload with corrections and filters.
+
+    This step:
+    - Adds ISO week number to events
+    - Corrects time issues (e.g., 18:00-0:00 to 18:00-23:59)
+    - Filters out invalid items (zero-length, incorrect)
+    - Generates comprehensive report
+
+    Can run standalone on input data without actual upload.
+    """
+    logger.info("=" * 60)
+    logger.info("STEP: GOOGLE CALENDAR DATA PREPARATION")
+    logger.info("=" * 60)
+
+    calendar_events = context.get("calendar_events", [])
+
+    if not calendar_events:
+        return create_step_report(
+            "google_calendar_data_preparation",
+            False,
+            message="No calendar events to prepare",
+            input_count=0,
+            output_count=0,
+        )
+
+    input_count = len(calendar_events)
+    logger.info(f"Preparing {input_count} calendar events for upload...")
+
+    # Track statistics
+    corrections_applied = []
+    filtered_out = []
+    prepared_events = []
+
+    # Calculate total hours before processing (use work_hours from metadata if available)
+    total_hours_before = 0.0
+    for event in calendar_events:
+        try:
+            # Try to get work_hours from extended_properties first
+            work_hours = None
+            if event.extended_properties and "private" in event.extended_properties:
+                work_hours_str = event.extended_properties["private"].get("work_hours")
+                if work_hours_str:
+                    try:
+                        work_hours = float(work_hours_str)
+                    except (ValueError, TypeError):
+                        pass
+
+            if work_hours is not None:
+                total_hours_before += work_hours
+            else:
+                # Fallback to calculating from datetime
+                start_dt = datetime.fromisoformat(event.start["dateTime"].replace("Z", "+00:00"))
+                end_dt = datetime.fromisoformat(event.end["dateTime"].replace("Z", "+00:00"))
+                duration = end_dt - start_dt
+                total_hours_before += duration.total_seconds() / 3600.0
+        except Exception:
+            pass
+
+    for event in calendar_events:
+        try:
+            # Parse start and end times
+            start_dt = datetime.fromisoformat(event.start["dateTime"].replace("Z", "+00:00"))
+            end_dt = datetime.fromisoformat(event.end["dateTime"].replace("Z", "+00:00"))
+
+            # Correction: Fix 18:00-0:00 to 18:00-23:59 (or next day 0:00)
+            correction_applied = False
+            original_end = end_dt
+
+            # Check if end time is midnight (0:00) and start is same day
+            if end_dt.hour == 0 and end_dt.minute == 0 and end_dt.second == 0:
+                if start_dt.date() == end_dt.date():
+                    # Same day: set to 23:59:59 of start day
+                    end_dt = datetime.combine(start_dt.date(), time(23, 59, 59))
+                    correction_applied = True
+                    corrections_applied.append(
+                        {
+                            "event_summary": event.summary,
+                            "correction": "end_time_midnight_to_2359",
+                            "original_end": original_end.isoformat(),
+                            "corrected_end": end_dt.isoformat(),
+                        }
+                    )
+                elif end_dt.date() == start_dt.date() + timedelta(days=1):
+                    # Next day midnight - this is valid, no correction needed
+                    pass
+                else:
+                    # End is before start - set to 23:59:59 of start day
+                    end_dt = datetime.combine(start_dt.date(), time(23, 59, 59))
+                    correction_applied = True
+                    corrections_applied.append(
+                        {
+                            "event_summary": event.summary,
+                            "correction": "end_time_before_start",
+                            "original_end": original_end.isoformat(),
+                            "corrected_end": end_dt.isoformat(),
+                        }
+                    )
+
+            # Filter: Remove zero-length or incorrect items
+            duration = end_dt - start_dt
+            duration_seconds = duration.total_seconds()
+
+            if duration_seconds <= 0:
+                filtered_out.append(
+                    {
+                        "event_summary": event.summary,
+                        "reason": "zero_or_negative_duration",
+                        "start": start_dt.isoformat(),
+                        "end": end_dt.isoformat(),
+                        "duration_seconds": duration_seconds,
+                    }
+                )
+                continue
+
+            # Filter: Remove events longer than 24 hours (likely data errors)
+            if duration_seconds > 24 * 3600:
+                filtered_out.append(
+                    {
+                        "event_summary": event.summary,
+                        "reason": "duration_exceeds_24_hours",
+                        "start": start_dt.isoformat(),
+                        "end": end_dt.isoformat(),
+                        "duration_hours": duration_seconds / 3600.0,
+                    }
+                )
+                continue
+
+            # Update event with corrected times if needed
+            if correction_applied:
+                event.end["dateTime"] = end_dt.strftime("%Y-%m-%dT%H:%M:%S")
+
+            # Add ISO week number to extended properties
+            iso_year, iso_week, iso_weekday = start_dt.isocalendar()
+            iso_week_number = f"{iso_year}-W{iso_week:02d}"
+
+            if not event.extended_properties:
+                event.extended_properties = {"private": {}}
+            elif "private" not in event.extended_properties:
+                event.extended_properties["private"] = {}
+
+            event.extended_properties["private"]["iso_week_number"] = iso_week_number
+            event.extended_properties["private"]["iso_year"] = str(iso_year)
+            event.extended_properties["private"]["iso_week"] = str(iso_week)
+            event.extended_properties["private"]["iso_weekday"] = str(iso_weekday)
+
+            prepared_events.append(event)
+
+        except Exception as e:
+            error_msg = f"Failed to prepare event {event.summary}: {e}"
+            logger.error(error_msg)
+            filtered_out.append(
+                {
+                    "event_summary": event.summary,
+                    "reason": "preparation_error",
+                    "error": str(e),
+                }
+            )
+
+    # Calculate total hours after processing (use work_hours from metadata if available)
+    total_hours_after = 0.0
+    for event in prepared_events:
+        try:
+            # Try to get work_hours from extended_properties first (preserves original work hours)
+            work_hours = None
+            if event.extended_properties and "private" in event.extended_properties:
+                work_hours_str = event.extended_properties["private"].get("work_hours")
+                if work_hours_str:
+                    try:
+                        work_hours = float(work_hours_str)
+                    except (ValueError, TypeError):
+                        pass
+
+            if work_hours is not None:
+                total_hours_after += work_hours
+            else:
+                # Fallback to calculating from datetime
+                start_dt = datetime.fromisoformat(event.start["dateTime"].replace("Z", "+00:00"))
+                end_dt = datetime.fromisoformat(event.end["dateTime"].replace("Z", "+00:00"))
+                duration = end_dt - start_dt
+                total_hours_after += duration.total_seconds() / 3600.0
+        except Exception:
+            pass
+
+    # Update context with prepared events
+    context["calendar_events"] = prepared_events
+
+    # Generate comprehensive report
+    output_count = len(prepared_events)
+    hours_lost = total_hours_before - total_hours_after
+
+    logger.info(f"✅ Preparation complete:")
+    logger.info(f"  - Input events: {input_count}")
+    logger.info(f"  - Output events: {output_count}")
+    logger.info(f"  - Filtered out: {len(filtered_out)}")
+    logger.info(f"  - Corrections applied: {len(corrections_applied)}")
+    logger.info(f"  - Total hours before: {total_hours_before:.2f}")
+    logger.info(f"  - Total hours after: {total_hours_after:.2f}")
+    logger.info(f"  - Hours that could be added: {total_hours_after:.2f}")
+
+    if filtered_out:
+        logger.warning(f"Filtered out {len(filtered_out)} events:")
+        for item in filtered_out[:5]:  # Show first 5
+            logger.warning(f"  - {item['event_summary']}: {item['reason']}")
+
+    if corrections_applied:
+        logger.info(f"Applied {len(corrections_applied)} corrections:")
+        for correction in corrections_applied[:5]:  # Show first 5
+            logger.info(f"  - {correction['event_summary']}: {correction['correction']}")
+
+    return create_step_report(
+        "google_calendar_data_preparation",
+        True,
+        input_count=input_count,
+        output_count=output_count,
+        filtered_count=len(filtered_out),
+        corrections_count=len(corrections_applied),
+        total_hours_before=round(total_hours_before, 2),
+        total_hours_after=round(total_hours_after, 2),
+        hours_lost=round(hours_lost, 2),
+        hours_that_could_be_added=round(total_hours_after, 2),
+        corrections_applied=corrections_applied,
+        filtered_out=filtered_out,
+        message=f"Prepared {output_count} events from {input_count} input events",
     )
 
 

@@ -7,8 +7,8 @@ tests that require services to be started. It automatically manages service
 lifecycle (Docker services, MCP servers) and uses parallelism where possible.
 
 Author: AI Assistant
-Created: 2025-01-19
-Updated: 2025-01-19
+Created: 2025-11-29
+Updated: 2025-11-29
 """
 
 import argparse

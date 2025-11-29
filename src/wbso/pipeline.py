@@ -25,6 +25,7 @@ from .pipeline_steps import (
     step_polish_logon_logoff,
     step_data_summary,
     step_load_activities,
+    step_convert_to_work_sessions,
     step_load_polished_sessions,
     step_system_events_summary,
     step_validate,
@@ -37,6 +38,7 @@ from .pipeline_steps import (
     step_detect_commits_without_system_events,
     step_content_polish,
     step_event_convert,
+    step_google_calendar_data_preparation,
     step_calendar_replace,
     step_verify,
     step_report,
@@ -91,6 +93,7 @@ class WBSOCalendarPipeline:
             step_polish_logon_logoff,  # Polish logon/logoff timestamps (round to 5 minutes, add breaks)
             step_data_summary,  # Summarize data collection date ranges
             step_load_activities,  # Load/generate WBSO activities list
+            step_convert_to_work_sessions,  # Convert polished sessions to work sessions with filtering
             step_load_polished_sessions,  # Load polished logon/logoff sessions into WBSODataset
             step_system_events_summary,  # Summarize system events coverage and hours
             step_validate,  # Validate data
@@ -103,6 +106,7 @@ class WBSOCalendarPipeline:
             step_detect_commits_without_system_events,  # Detect commits on days without system events
             step_content_polish,  # Polish event content
             step_event_convert,  # Convert to calendar events
+            step_google_calendar_data_preparation,  # Prepare calendar events (corrections, filters, ISO week)
             step_calendar_replace,  # Replace calendar events (delete old, upload new)
             step_verify,  # Verify upload
             step_report,  # Generate report
@@ -185,6 +189,12 @@ class WBSOCalendarPipeline:
         verification_results = self.context.get("verification_results", {})
         polished_summary = self.context.get("polished_logon_logoff_summary", {})
 
+        # Get work sessions hours from convert_to_work_sessions step
+        work_sessions_hours = 0.0
+        convert_step_report = next((r for r in self.step_reports if r.get("step_name") == "convert_to_work_sessions"), None)
+        if convert_step_report:
+            work_sessions_hours = convert_step_report.get("total_hours", 0.0)
+
         # Calculate totals
         from .calendar_event import WBSODataset, WBSOSession
 
@@ -199,6 +209,16 @@ class WBSOCalendarPipeline:
 
         calendar_hours = verification_results.get("total_hours", 0.0) if isinstance(verification_results, dict) else 0.0
 
+        # Get commit filtering status from convert step
+        commit_filtering_disabled = False
+        dates_with_commits_count = 0
+        dates_without_commits_count = 0
+        convert_step_report = next((r for r in self.step_reports if r.get("step_name") == "convert_to_work_sessions"), None)
+        if convert_step_report:
+            commit_filtering_disabled = convert_step_report.get("commit_filtering_disabled", False)
+            dates_with_commits_count = convert_step_report.get("dates_with_commits", 0)
+            dates_without_commits_count = convert_step_report.get("dates_without_commits", 0)
+
         # Create comprehensive report
         report = {
             "pipeline_timestamp": datetime.now().isoformat(),
@@ -208,12 +228,19 @@ class WBSOCalendarPipeline:
                 "end": TARGET_END_DATE.isoformat(),
             },
             "summary": {
-                "calculated_hours": calculated_hours,
-                "calendar_hours": calendar_hours,
+                "work_sessions_hours": work_sessions_hours,  # Hours from polished work sessions (after filtering)
+                "calculated_hours": calculated_hours,  # Hours from WBSO sessions in dataset
+                "calendar_hours": calendar_hours,  # Hours in Google Calendar (if uploaded)
                 "gap": calculated_hours - calendar_hours,
                 "target_hours": 510.0,
                 "target_gap": 510.0 - calendar_hours,
                 "target_achievement_percent": (calendar_hours / 510.0 * 100) if 510.0 > 0 else 0,
+                "hours_that_could_be_assigned_to_wbso": work_sessions_hours,  # Hours available for WBSO assignment
+                "commit_filtering_note": "Commit-based filtering is disabled to avoid filtering out too much work. Dates with commits are tracked for reporting only."
+                if commit_filtering_disabled
+                else None,
+                "dates_with_commits": dates_with_commits_count,
+                "dates_without_commits": dates_without_commits_count,
             },
             "polished_logon_logoff": polished_summary,  # Add polished logon/logoff summary
             "steps": self.step_reports,  # Array of step reports
@@ -230,12 +257,17 @@ class WBSOCalendarPipeline:
         print("WBSO CALENDAR PIPELINE SUMMARY")
         print(f"{'=' * 60}")
         print(f"Date Range: {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}")
-        print(f"Calculated Hours: {calculated_hours:.2f} hours")
+        print(f"Work Sessions Hours (polished): {work_sessions_hours:.2f} hours")
+        print(f"Calculated Hours (WBSO sessions): {calculated_hours:.2f} hours")
         print(f"Calendar Hours: {calendar_hours:.2f} hours")
         print(f"Gap: {calculated_hours - calendar_hours:.2f} hours")
         print(f"Target Hours: 510.0 hours")
         print(f"Target Gap: {510.0 - calendar_hours:.2f} hours")
         print(f"Target Achievement: {(calendar_hours / 510.0 * 100):.1f}%")
+        print(f"Hours That Could Be Assigned to WBSO: {work_sessions_hours:.2f} hours")
+        if commit_filtering_disabled:
+            print(f"\nNote: Commit-based filtering is disabled to avoid filtering out too much work.")
+            print(f"      Dates with commits: {dates_with_commits_count}, Dates without commits: {dates_without_commits_count}")
 
         # Print step summary
         print(f"\nPipeline Steps ({len(self.step_reports)}):")

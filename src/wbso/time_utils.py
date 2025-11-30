@@ -23,6 +23,8 @@ __all__ = [
     "generate_dinner_break",
     "generate_work_break",
     "clip_to_max_daily_hours",
+    "generate_pseudo_random_end_time",
+    "generate_pseudo_random_start_time",
     "parse_datetime_flexible",
     "AMSTERDAM_TZ",
 ]
@@ -197,7 +199,7 @@ def generate_lunch_break(date: datetime, seed: str) -> dict:
 
 def generate_dinner_break(date: datetime, seed: str) -> dict:
     """
-    Generate dinner break time (random 5-minute timestamp between 17:30 and 18:15, 30-50 minutes duration).
+    Generate dinner break time (pseudo-random 5-minute timestamp between 18:30 and 19:30, 30 minutes duration).
 
     Args:
         date: Date for the break
@@ -208,15 +210,14 @@ def generate_dinner_break(date: datetime, seed: str) -> dict:
     """
     seed_hash = hash(seed)
 
-    # Start time: random 5-minute interval between 17:30 and 18:15
-    # 17:30, 17:35, 17:40, 17:45, 17:50, 17:55, 18:00, 18:05, 18:10, 18:15
-    start_minutes_options = [30, 35, 40, 45, 50, 55, 0, 5, 10, 15]
+    # Start time: pseudo-random 5-minute interval between 18:30 and 19:30
+    # 18:30, 18:35, 18:40, 18:45, 18:50, 18:55, 19:00, 19:05, 19:10, 19:15, 19:20, 19:25, 19:30
+    start_minutes_options = [30, 35, 40, 45, 50, 55, 0, 5, 10, 15, 20, 25, 30]
     start_minute = start_minutes_options[abs(seed_hash) % len(start_minutes_options)]
-    start_hour = 17 if start_minute >= 30 else 18
+    start_hour = 18 if start_minute >= 30 else 19
 
-    # Duration: 30-50 minutes (in 5-minute increments)
-    duration_options = [30, 35, 40, 45, 50]
-    duration_minutes = duration_options[abs(seed_hash) % len(duration_options)]
+    # Duration: fixed 30 minutes
+    duration_minutes = 30
 
     start_time = date.replace(hour=start_hour, minute=start_minute, second=0, microsecond=0)
     end_time = start_time + timedelta(minutes=duration_minutes)
@@ -307,3 +308,64 @@ def clip_to_max_daily_hours(start_time: datetime, end_time: datetime, max_hours:
     clipped_end = clipped_end.replace(minute=rounded_minute, second=0, microsecond=0)
 
     return clipped_end
+
+
+def generate_pseudo_random_end_time(date: datetime, seed: str) -> datetime:
+    """
+    Generate pseudo-random end time between 23:20 and 23:50 (5-minute intervals).
+
+    Args:
+        date: Date for the end time
+        seed: Seed for deterministic variation
+
+    Returns:
+        Datetime with pseudo-random end time
+    """
+    seed_hash = hash(seed)
+
+    # 5-minute intervals between 23:20 and 23:50
+    # 23:20, 23:25, 23:30, 23:35, 23:40, 23:45, 23:50
+    minute_options = [20, 25, 30, 35, 40, 45, 50]
+    minute = minute_options[abs(seed_hash) % len(minute_options)]
+
+    return date.replace(hour=23, minute=minute, second=0, microsecond=0)
+
+
+def generate_pseudo_random_start_time(date: datetime, seed: str) -> datetime:
+    """
+    Generate pseudo-random start time between 7:20 and 8:45 (5-minute intervals).
+
+    Args:
+        date: Date for the start time
+        seed: Seed for deterministic variation
+
+    Returns:
+        Datetime with pseudo-random start time
+    """
+    seed_hash = hash(seed)
+
+    # 5-minute intervals between 7:20 and 8:45
+    # 7:20, 7:25, 7:30, 7:35, 7:40, 7:45, 7:50, 7:55, 8:00, 8:05, 8:10, 8:15, 8:20, 8:25, 8:30, 8:35, 8:40, 8:45
+    hour_minute_pairs = [
+        (7, 20),
+        (7, 25),
+        (7, 30),
+        (7, 35),
+        (7, 40),
+        (7, 45),
+        (7, 50),
+        (7, 55),
+        (8, 0),
+        (8, 5),
+        (8, 10),
+        (8, 15),
+        (8, 20),
+        (8, 25),
+        (8, 30),
+        (8, 35),
+        (8, 40),
+        (8, 45),
+    ]
+    hour, minute = hour_minute_pairs[abs(seed_hash) % len(hour_minute_pairs)]
+
+    return date.replace(hour=hour, minute=minute, second=0, microsecond=0)

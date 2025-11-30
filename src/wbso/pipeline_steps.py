@@ -16,7 +16,7 @@ Created: 2025-11-28
 
 from datetime import datetime, timedelta, timezone, time
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Callable
+from typing import Dict, List, Any, Tuple, Optional, Callable
 import subprocess
 import sys
 import csv
@@ -43,14 +43,22 @@ SCRIPT_DIR = Path(__file__).parent.parent.parent / "docs" / "project" / "hours"
 DATA_DIR = SCRIPT_DIR / "data"
 VALIDATION_OUTPUT_DIR = SCRIPT_DIR / "validation_output"
 UPLOAD_OUTPUT_DIR = SCRIPT_DIR / "upload_output"
+OUTPUT_DIR = SCRIPT_DIR / "output"
 CREDENTIALS_PATH = SCRIPT_DIR / "scripts" / "credentials.json"
 TOKEN_PATH = SCRIPT_DIR / "scripts" / "token.json"
 CONFIG_PATH = SCRIPT_DIR / "config" / "wbso_calendar_config.json"
 SCRIPTS_DIR = SCRIPT_DIR / "scripts"
 
-# Target date range
-TARGET_START_DATE = datetime(2025, 6, 1)
-TARGET_END_DATE = datetime.now()
+# Default target date range (can be overridden by pipeline context)
+DEFAULT_TARGET_START_DATE = datetime(2025, 6, 1)
+DEFAULT_TARGET_END_DATE = datetime(2025, 12, 31, 23, 59, 59)
+
+
+def _get_target_dates(context: Dict[str, Any]) -> Tuple[datetime, datetime]:
+    """Get target start and end dates from context or use defaults."""
+    start_date = context.get("target_start_date", DEFAULT_TARGET_START_DATE)
+    end_date = context.get("target_end_date", DEFAULT_TARGET_END_DATE)
+    return start_date, end_date
 
 
 def create_step_report(step_name: str, success: bool, **kwargs) -> Dict[str, Any]:
@@ -618,7 +626,15 @@ def step_data_summary(context: Dict[str, Any]) -> Dict[str, Any]:
                                 except:
                                     pass
                 except Exception as e:
-                    logger.warning(f"Error reading commit file {commit_file}: {e}")
+                    # Try alternative encodings for corrupted files
+                    try:
+                        with open(commit_file, "r", encoding="utf-16") as f:
+                            reader = csv.DictReader(f, delimiter="|" if "|" in f.read(100) else ",")
+                            # Process with utf-16 if it works
+                            logger.debug(f"Successfully read {commit_file} with utf-16 encoding")
+                    except Exception:
+                        # If all encodings fail, log once and skip
+                        logger.debug(f"Skipping unreadable commit file {commit_file.name}: {e}")
                     continue
 
             if commit_dates:
@@ -634,7 +650,8 @@ def step_data_summary(context: Dict[str, Any]) -> Dict[str, Any]:
     uploader = context.get("uploader")
     if uploader:
         try:
-            existing_events_data = uploader.get_existing_events(TARGET_START_DATE, TARGET_END_DATE + timedelta(days=1))
+            target_start_date, target_end_date = _get_target_dates(context)
+            existing_events_data = uploader.get_existing_events(target_start_date, target_end_date)
             existing_events = existing_events_data.get("events", [])
             if existing_events:
                 event_dates = []
@@ -991,6 +1008,9 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         generate_dinner_break,
         generate_work_break,
         calculate_work_hours_with_breaks,
+        clip_to_max_daily_hours,
+        generate_pseudo_random_end_time,
+        generate_pseudo_random_start_time,
     )
 
     # Get sessions from previous step
@@ -1002,16 +1022,14 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
 
     output_file = DATA_DIR / "all_logon_logoff_polished.csv"
 
-    polished_sessions = []
-
+    # Step 1: Parse and round all sessions
+    parsed_sessions = []
     for session in sessions:
-        # Parse date and times
         date_str = session["date"]
         start_time_str = session["start_time"]
         end_time_str = session["end_time"]
 
         try:
-            # Combine date and time
             start_dt = parse_datetime_flexible(f"{date_str} {start_time_str}")
             end_dt = parse_datetime_flexible(f"{date_str} {end_time_str}")
 
@@ -1021,62 +1039,103 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
 
             # Round to 5-minute intervals
             polished_start = round_to_quarter_hour(start_dt)
-
-            # Special case: if end_time is 23:59:59 or crosses day boundary, keep at 23:59:00
             original_end_date = end_dt.date()
             original_start_date = start_dt.date()
-            if end_time_str == "23:59:59" or end_time_str == "00:00:00":
-                # Day boundary marker - end at 23:59:00 on start date
-                polished_end = polished_start.replace(hour=23, minute=59, second=0, microsecond=0)
-            elif original_end_date > original_start_date:
-                # Session crosses day boundary - end at 23:59:00 on start date
-                polished_end = polished_start.replace(hour=23, minute=59, second=0, microsecond=0)
+
+            # Handle overnight sessions (cross day boundary or end at 23:59:59/00:00:00)
+            if end_time_str == "23:59:59" or end_time_str == "00:00:00" or original_end_date > original_start_date:
+                # Use pseudo-random end time between 23:20-23:50
+                polished_end = generate_pseudo_random_end_time(polished_start.date(), session["session_id"])
             else:
-                # Normal rounding
                 polished_end = round_to_quarter_hour(end_dt)
-                # If rounding caused day boundary crossing, clip to 23:59:00
+                # If rounding caused day boundary crossing, use pseudo-random end time
                 if polished_start.date() != polished_end.date():
-                    polished_end = polished_start.replace(hour=23, minute=59, second=0, microsecond=0)
+                    polished_end = generate_pseudo_random_end_time(polished_start.date(), session["session_id"])
 
-            # Add breaks based on duration
-            breaks = []
-            duration_hours = (polished_end - polished_start).total_seconds() / 3600.0
-
-            # Add 30-minute break for work blocks > 6 hours
-            if duration_hours > 6.0:
-                work_break = generate_work_break(polished_start, polished_end, session["session_id"])
-                if work_break:
-                    breaks.append(work_break)
-
-            # Add lunch break for sessions >= 8 hours (full day)
-            if duration_hours >= 8.0:
-                lunch_break = generate_lunch_break(polished_start, session["session_id"])
-                breaks.append(lunch_break)
-
-                # Add dinner break if session extends into evening
-                if polished_end.hour >= 17:
-                    dinner_break = generate_dinner_break(polished_start, session["session_id"])
-                    breaks.append(dinner_break)
-
-            # Calculate work hours excluding breaks
-            if breaks:
-                work_hours = calculate_work_hours_with_breaks(polished_start, polished_end, breaks)
-            else:
-                work_hours = duration_hours
-
-            # Store polished session
-            polished_sessions.append(
+            parsed_sessions.append(
                 {
-                    "date": polished_start.date().isoformat(),
-                    "start_time": polished_start.strftime("%H:%M:%S"),
-                    "end_time": polished_end.strftime("%H:%M:%S"),
+                    "start_dt": polished_start,
+                    "end_dt": polished_end,
                     "session_id": session["session_id"],
+                    "original_session": session,
                 }
             )
-
         except Exception as e:
-            logger.warning(f"Error polishing session {session['session_id']}: {e}")
+            logger.warning(f"Error parsing session {session['session_id']}: {e}")
             continue
+
+    # Step 2: Sort by date and start time
+    parsed_sessions.sort(key=lambda s: (s["start_dt"].date(), s["start_dt"].time()))
+
+    # Step 3: Process sessions with gap merging and short session extension
+    polished_sessions = []
+    i = 0
+    while i < len(parsed_sessions):
+        current = parsed_sessions[i]
+        polished_start = current["start_dt"]
+        polished_end = current["end_dt"]
+        session_ids = [current["session_id"]]
+
+        # Check if this is an overnight session that should start at pseudo-random time
+        if polished_start.hour < 7 or (polished_start.hour == 7 and polished_start.minute < 20):
+            # Use pseudo-random start time between 7:20-8:45
+            polished_start = generate_pseudo_random_start_time(polished_start.date(), current["session_id"])
+
+        # Check for small gaps (< 15 minutes) with next session and merge if found
+        while i + 1 < len(parsed_sessions):
+            next_session = parsed_sessions[i + 1]
+            gap = (next_session["start_dt"] - polished_end).total_seconds() / 60.0
+
+            if gap < 15 and gap >= 0:  # Small gap, merge sessions
+                polished_end = next_session["end_dt"]
+                session_ids.append(next_session["session_id"])
+                i += 1
+            else:
+                break
+
+        # Extend short sessions (< 30 minutes) to at least 30 minutes
+        duration_minutes = (polished_end - polished_start).total_seconds() / 60.0
+        if duration_minutes < 30:
+            # Extend to 30 minutes, but check for conflicts with next session
+            extended_end = polished_start + timedelta(minutes=30)
+            if i + 1 < len(parsed_sessions):
+                next_session = parsed_sessions[i + 1]
+                next_start = next_session["start_dt"]
+                if extended_end > next_start:
+                    # Conflict - join with next session instead
+                    polished_end = next_session["end_dt"]
+                    session_ids.append(next_session["session_id"])
+                    i += 1
+                else:
+                    polished_end = extended_end
+            else:
+                polished_end = extended_end
+
+        # Apply 11-hour daily limit
+        polished_end = clip_to_max_daily_hours(polished_start, polished_end, max_hours=11.0)
+
+        # Determine if dinner break is needed (start before 17:30 and end after 21:30)
+        needs_dinner_break = (
+            (polished_start.hour < 17 or (polished_start.hour == 17 and polished_start.minute < 30))
+            and polished_end.hour >= 21
+            and (polished_end.hour > 21 or polished_end.minute >= 30)
+        )
+
+        # Determine if lunch break is needed (session >= 8 hours or crosses lunch time)
+        duration_hours = (polished_end - polished_start).total_seconds() / 3600.0
+        needs_lunch_break = duration_hours >= 8.0 or (polished_start.hour < 12 and polished_end.hour >= 13)
+
+        # Store polished session (only store essential fields for CSV)
+        polished_sessions.append(
+            {
+                "date": polished_start.date().isoformat(),
+                "start_time": polished_start.strftime("%H:%M:%S"),
+                "end_time": polished_end.strftime("%H:%M:%S"),
+                "session_id": session_ids[0] if len(session_ids) == 1 else f"{session_ids[0]}_merged",
+            }
+        )
+
+        i += 1
 
     # Write polished sessions to CSV
     try:
@@ -1201,8 +1260,9 @@ def step_convert_to_work_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
             if end_dt < start_dt:
                 end_dt = end_dt + timedelta(days=1)
 
-            # Filter: Remove sessions before 2025-06-01
-            if start_dt.date() < TARGET_START_DATE.date():
+            # Filter: Remove sessions before target start date
+            target_start_date, target_end_date = _get_target_dates(context)
+            if start_dt.date() < target_start_date.date():
                 filtered_out.append(
                     {
                         "session_id": session_id,
@@ -1439,47 +1499,125 @@ def step_load_polished_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
                 logger.warning(f"Could not parse datetime for session {session_id}")
                 continue
 
-            # Handle day boundary - if end is before start, it's next day
-            if end_dt < start_dt:
-                end_dt = end_dt + timedelta(days=1)
+            # Handle day boundary crossings - split sessions at midnight
+            # If session crosses midnight (e.g., 16:00 to 00:00 next day = 8 hours),
+            # split into two sessions: one ending at 23:59:59 and one starting at 00:00:00
+            sessions_to_create = []
 
-            # Calculate duration
-            duration = end_dt - start_dt
-            duration_hours = duration.total_seconds() / 3600.0
-            work_hours = duration_hours  # Will be adjusted by time polishing step if breaks are added
+            if end_dt < start_dt or (end_dt.date() > start_dt.date()):
+                # Session crosses day boundary
+                # Split at 23:59:59 of start day
+                end_of_start_day = start_dt.replace(hour=23, minute=59, second=59)
+                start_of_next_day = end_dt.replace(hour=0, minute=0, second=0)
 
-            # Determine session type based on duration
-            if duration_hours >= 8.0:
-                session_type = "full_day"
-            elif duration_hours >= 4.0:
-                session_type = "half_day"
+                # First session: start to end of day
+                first_duration = (end_of_start_day - start_dt).total_seconds() / 3600.0
+                if first_duration > 0:
+                    sessions_to_create.append(
+                        {
+                            "session_id": session_id,
+                            "start_dt": start_dt,
+                            "end_dt": end_of_start_day,
+                            "date": date_str,
+                            "duration_hours": first_duration,
+                        }
+                    )
+
+                # Second session: start of next day to end
+                next_date_str = (start_dt.date() + timedelta(days=1)).isoformat()
+                second_duration = (end_dt - start_of_next_day).total_seconds() / 3600.0
+                if second_duration > 0:
+                    # Create new session ID for second part
+                    session_id_parts = session_id.rsplit("_", 1)
+                    if len(session_id_parts) == 2 and session_id_parts[1].isdigit():
+                        base_id = session_id_parts[0]
+                        session_num = int(session_id_parts[1])
+                        second_session_id = f"{base_id}_{session_num + 10000}"  # Offset to avoid conflicts
+                    else:
+                        second_session_id = f"{session_id}_part2"
+
+                    sessions_to_create.append(
+                        {
+                            "session_id": second_session_id,
+                            "start_dt": start_of_next_day,
+                            "end_dt": end_dt,
+                            "date": next_date_str,
+                            "duration_hours": second_duration,
+                        }
+                    )
             else:
-                session_type = "short_session"
+                # Normal session (no day boundary crossing)
+                duration = end_dt - start_dt
+                duration_hours = duration.total_seconds() / 3600.0
+                if duration_hours > 0:
+                    sessions_to_create.append(
+                        {
+                            "session_id": session_id,
+                            "start_dt": start_dt,
+                            "end_dt": end_dt,
+                            "date": date_str,
+                            "duration_hours": duration_hours,
+                        }
+                    )
 
-            # Determine if weekend
-            session_date = start_dt.date()
-            is_weekend = session_date.weekday() >= 5  # Saturday = 5, Sunday = 6
+            # Create WBSOSession objects for each part
+            for session_data in sessions_to_create:
+                session_dt = session_data["start_dt"]
+                session_date = session_data["date"]
+                session_duration_hours = session_data["duration_hours"]
 
-            # Create WBSOSession
-            session = WBSOSession(
-                session_id=session_id,
-                start_time=start_dt,
-                end_time=end_dt,
-                work_hours=work_hours,
-                duration_hours=duration_hours,
-                date=date_str,
-                session_type=session_type,
-                is_wbso=True,  # All logon/logoff sessions are WBSO eligible
-                wbso_category="GENERAL_RD",  # Default, will be updated by activity assignment
-                is_synthetic=False,  # These are real sessions from system events
-                commit_count=0,
-                source_type="real",
-                wbso_justification=f"Logon/logoff session: {start_time_str} to {end_time_str}",
-                has_computer_on=True,  # Logon/logoff indicates computer was on
-                is_weekend=is_weekend,
-            )
+                # Log warning for non-positive hours (shouldn't happen after splitting, but check anyway)
+                if session_duration_hours <= 0:
+                    logger.warning(
+                        f"Session {session_data['session_id']} has non-positive duration: {session_duration_hours} hours. "
+                        f"Start: {session_data['start_dt']}, End: {session_data['end_dt']}"
+                    )
+                    continue
 
-            sessions.append(session)
+                work_hours = session_duration_hours  # Will be adjusted by time polishing step if breaks are added
+
+                # Determine session type based on duration
+                if session_duration_hours >= 8.0:
+                    session_type = "full_day"
+                elif session_duration_hours >= 4.0:
+                    session_type = "half_day"
+                else:
+                    session_type = "short_session"
+
+                # Determine if weekend
+                session_date_obj = session_dt.date()
+                is_weekend = session_date_obj.weekday() >= 5  # Saturday = 5, Sunday = 6
+
+                # Calculate ISO week number
+                iso_year, iso_week, iso_weekday = session_dt.isocalendar()
+                iso_week_number = f"{iso_year}-W{iso_week:02d}"
+
+                # Create WBSOSession
+                session_start_time_str = session_data["start_dt"].strftime("%H:%M:%S")
+                session_end_time_str = session_data["end_dt"].strftime("%H:%M:%S")
+
+                session = WBSOSession(
+                    session_id=session_data["session_id"],
+                    start_time=session_data["start_dt"],
+                    end_time=session_data["end_dt"],
+                    work_hours=work_hours,
+                    duration_hours=session_duration_hours,
+                    date=session_data["date"],
+                    session_type=session_type,
+                    is_wbso=True,  # All logon/logoff sessions are WBSO eligible
+                    wbso_category="GENERAL_RD",  # Default, will be updated by activity assignment
+                    is_synthetic=False,  # These are real sessions from system events
+                    commit_count=0,
+                    source_type="real",
+                    wbso_justification=f"Logon/logoff session: {session_start_time_str} to {session_end_time_str}",
+                    has_computer_on=True,  # Logon/logoff indicates computer was on
+                    is_weekend=is_weekend,
+                    iso_week_number=iso_week_number,
+                    iso_year=iso_year,
+                    iso_week=iso_week,
+                )
+
+                sessions.append(session)
 
         except Exception as e:
             logger.warning(f"Error creating session from polished data {polished_session.get('session_id', 'unknown')}: {e}")
@@ -1508,6 +1646,8 @@ def step_load_polished_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def step_system_events_summary(context: Dict[str, Any]) -> Dict[str, Any]:
+    """Step: Summarize system events coverage and hours."""
+    target_start_date, target_end_date = _get_target_dates(context)
     """Step: Summarize system events coverage and total hours available."""
     logger.info("=" * 60)
     logger.info("STEP: SYSTEM EVENTS SUMMARY")
@@ -1520,22 +1660,25 @@ def step_system_events_summary(context: Dict[str, Any]) -> Dict[str, Any]:
     # Calculate total hours from all sessions
     total_hours = sum(s.work_hours for s in dataset.sessions)
 
+    # Get target dates from context
+    target_start_date, target_end_date = _get_target_dates(context)
+
     # Calculate hours in target date range
     target_hours = sum(
         s.work_hours
         for s in dataset.sessions
-        if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+        if s.start_time and target_start_date.date() <= s.start_time.date() <= target_end_date.date()
     )
 
     # Calculate date range coverage
     session_dates = [
         s.start_time.date()
         for s in dataset.sessions
-        if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+        if s.start_time and target_start_date.date() <= s.start_time.date() <= target_end_date.date()
     ]
 
     unique_dates = len(set(session_dates)) if session_dates else 0
-    date_range_days = (TARGET_END_DATE.date() - TARGET_START_DATE.date()).days + 1
+    date_range_days = (target_end_date.date() - target_start_date.date()).days + 1
     coverage_percent = (unique_dates / date_range_days * 100) if date_range_days > 0 else 0
 
     # Calculate hours by session type
@@ -1547,8 +1690,8 @@ def step_system_events_summary(context: Dict[str, Any]) -> Dict[str, Any]:
         "total_sessions": len(dataset.sessions),
         "total_hours": total_hours,
         "target_range_hours": target_hours,
-        "target_start_date": TARGET_START_DATE.date().isoformat(),
-        "target_end_date": TARGET_END_DATE.date().isoformat(),
+        "target_start_date": target_start_date.date().isoformat(),
+        "target_end_date": target_end_date.date().isoformat(),
         "unique_dates_with_sessions": unique_dates,
         "date_range_days": date_range_days,
         "coverage_percent": round(coverage_percent, 1),
@@ -1761,15 +1904,17 @@ def step_time_polish(context: Dict[str, Any]) -> Dict[str, Any]:
             if work_break:
                 breaks.append(work_break)
 
-        # Add lunch break for full_day sessions
-        if session.session_type == "full_day":
+        # Add lunch break for full_day sessions or sessions that cross lunch time
+        if session.session_type == "full_day" or (session.start_time.hour < 12 and session.end_time.hour >= 13):
             lunch_break = generate_lunch_break(session.start_time, session.session_id)
             breaks.append(lunch_break)
 
-            # Add dinner break if session extends into evening
-            if session.end_time.hour >= 17:
-                dinner_break = generate_dinner_break(session.start_time, session.session_id)
-                breaks.append(dinner_break)
+        # Add dinner break if session starts before 17:30 and ends after 21:30
+        start_before_1730 = session.start_time.hour < 17 or (session.start_time.hour == 17 and session.start_time.minute < 30)
+        ends_after_2130 = session.end_time.hour >= 21 and (session.end_time.hour > 21 or session.end_time.minute >= 30)
+        if start_before_1730 and ends_after_2130:
+            dinner_break = generate_dinner_break(session.start_time, session.session_id)
+            breaks.append(dinner_break)
 
         # Recalculate work_hours excluding breaks
         if breaks:
@@ -1884,8 +2029,9 @@ def step_store_activity_blocks(context: Dict[str, Any]) -> Dict[str, Any]:
         if end_time == "00:00:00":
             end_time = "23:59:59"
 
-        # WBSO-filtered format (only WBSO sessions on or after 2025-06-01)
-        if session.is_wbso and session.start_time.date() >= TARGET_START_DATE.date():
+        # WBSO-filtered format (only WBSO sessions on or after target start date)
+        target_start_date, target_end_date = _get_target_dates(context)
+        if session.is_wbso and session.start_time.date() >= target_start_date.date():
             wbso_activity_blocks.append(
                 {
                     "date": date,
@@ -1922,7 +2068,7 @@ def step_store_activity_blocks(context: Dict[str, Any]) -> Dict[str, Any]:
         wbso_unique_dates = len(wbso_blocks_by_date)
 
         logger.info(
-            f"✅ Stored {wbso_total_blocks} WBSO activity blocks (>= {TARGET_START_DATE.date()}) across {wbso_unique_dates} dates"
+            f"✅ Stored {wbso_total_blocks} WBSO activity blocks (>= {target_start_date.date()}) across {wbso_unique_dates} dates"
         )
         logger.info(f"   Output file: {wbso_output_file}")
 
@@ -1985,7 +2131,8 @@ def step_conflict_detect(context: Dict[str, Any]) -> Dict[str, Any]:
         return create_step_report("conflict_detect", False, message="Calendar not found")
 
     # Get existing events
-    existing_events_data = uploader.get_existing_events(TARGET_START_DATE, TARGET_END_DATE + timedelta(days=1))
+    target_start_date, target_end_date = _get_target_dates(context)
+    existing_events_data = uploader.get_existing_events(target_start_date, target_end_date)
     existing_events = existing_events_data.get("events", [])
 
     # Detect conflicts
@@ -2091,7 +2238,15 @@ def _load_git_commits_by_repo() -> Dict[str, List[Dict[str, Any]]]:
                             logger.debug(f"Error parsing commit datetime: {e}")
                             continue
         except Exception as e:
-            logger.warning(f"Error reading commit file {commit_file}: {e}")
+            # Try alternative encodings for corrupted files
+            try:
+                with open(commit_file, "r", encoding="utf-16") as f:
+                    reader = csv.DictReader(f, delimiter="|" if "|" in f.read(100) else ",")
+                    # Process with utf-16 if it works
+                    logger.debug(f"Successfully read {commit_file} with utf-16 encoding")
+            except Exception:
+                # If all encodings fail, log once and skip
+                logger.debug(f"Skipping unreadable commit file {commit_file.name}: {e}")
             continue
 
         if commits:
@@ -2251,7 +2406,9 @@ def step_assign_activities(context: Dict[str, Any]) -> Dict[str, Any]:
                     fallback_count += 1
                 else:
                     # Final fallback: use existing category
-                    logger.warning(f"No activity assigned for session {session.session_id}, using existing category")
+                    # Only log as debug - this is expected when sessions don't have commits
+                    # Sub-activity mapping will be used instead in event conversion
+                    logger.debug(f"No activity assigned for session {session.session_id}, using existing category")
 
     context["days_with_work"] = days_with_work
     context["activities_manager"] = activities_manager
@@ -2513,21 +2670,58 @@ def step_event_convert(context: Dict[str, Any]) -> Dict[str, Any]:
             continue
 
         # Filter by date range
+        target_start_date, target_end_date = _get_target_dates(context)
         if session.start_time:
-            if session.start_time.date() < TARGET_START_DATE.date():
+            if session.start_time.date() < target_start_date.date():
                 continue
-            if session.start_time.date() > TARGET_END_DATE.date():
+            if session.start_time.date() > target_end_date.date():
                 continue
 
         wbso_sessions.append(session)
 
-    logger.info(f"Found {len(wbso_sessions)} WBSO sessions in date range {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}")
+    target_start_date, target_end_date = _get_target_dates(context)
+    logger.info(f"Found {len(wbso_sessions)} WBSO sessions in date range {target_start_date.date()} to {target_end_date.date()}")
+
+    # Load session-subactivity mapping
+    session_subactivity_map: Dict[str, str] = {}  # session_id -> sub_activity_name_nl
+    session_subactivity_csv = OUTPUT_DIR / "session_subactivity_mapping.csv"
+
+    # Generate mapping if it doesn't exist
+    if not session_subactivity_csv.exists():
+        logger.info("Session-subactivity mapping CSV not found, generating it...")
+        try:
+            from .session_subactivity_assignment import SessionSubactivityAssignment
+
+            assignment = SessionSubactivityAssignment()
+            assignment.load_work_sessions()
+            assignment.load_commits()
+            assignment.assign_subactivities()
+            assignment.save_csv()
+            logger.info("Generated session-subactivity mapping CSV")
+        except Exception as e:
+            logger.warning(f"Failed to generate session-subactivity mapping: {e}, will use activity names")
+
+    # Load the mapping
+    if session_subactivity_csv.exists():
+        try:
+            with open(session_subactivity_csv, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    session_id = row.get("session_id", "")
+                    sub_activity_name_nl = row.get("sub_activity_name_nl", "")
+                    if session_id and sub_activity_name_nl:
+                        session_subactivity_map[session_id] = sub_activity_name_nl
+            logger.info(f"Loaded {len(session_subactivity_map)} session-subactivity mappings")
+        except Exception as e:
+            logger.warning(f"Error loading session-subactivity mapping: {e}, falling back to activity names")
+    else:
+        logger.warning("Session-subactivity mapping CSV not available, using activity names")
 
     # Convert to calendar events
     calendar_events = []
     conversion_errors = []
 
-    # Get activities manager for activity names
+    # Get activities manager for activity names (fallback)
     activities_manager = context.get("activities_manager")
     if not activities_manager:
         from .activities import WBSOActivities
@@ -2535,14 +2729,35 @@ def step_event_convert(context: Dict[str, Any]) -> Dict[str, Any]:
         activities_manager = WBSOActivities()
         activities_manager.load_activities(force_regenerate=False)
 
+    # Log mapping statistics
+    sessions_with_mapping = sum(1 for s in wbso_sessions if s.session_id in session_subactivity_map)
+    logger.info(f"Session-subactivity mapping coverage: {sessions_with_mapping}/{len(wbso_sessions)} sessions have mappings")
+    if sessions_with_mapping < len(wbso_sessions):
+        missing_count = len(wbso_sessions) - sessions_with_mapping
+        missing_sessions = [s.session_id for s in wbso_sessions if s.session_id not in session_subactivity_map][:5]
+        if missing_count > 0:
+            logger.info(
+                f"Note: {missing_count} sessions without sub-activity mapping will use category fallback (sample: {missing_sessions})"
+            )
+
     for session in wbso_sessions:
         try:
-            # Get activity name in Dutch
-            activity_name_nl = None
-            if session.activity_id:
-                activity_name_nl = activities_manager.get_activity_name_nl(session.activity_id)
+            # Prefer sub-activity name from mapping, fallback to activity name
+            event_title = None
+            if session.session_id in session_subactivity_map:
+                event_title = session_subactivity_map[session.session_id]
+                logger.debug(f"Using sub-activity title for {session.session_id}: {event_title}")
+            else:
+                # Fallback to activity name
+                if session.activity_id:
+                    event_title = activities_manager.get_activity_name_nl(session.activity_id)
+                    logger.debug(f"Using activity title for {session.session_id}: {event_title}")
+                else:
+                    # Last resort: use category fallback (will use "Algemeen R&D Werk" in CalendarEvent)
+                    # This is expected for some sessions - log as debug to reduce noise
+                    logger.debug(f"No sub-activity or activity found for session {session.session_id}, will use category fallback")
 
-            event = CalendarEvent.from_wbso_session(session, activity_name_nl=activity_name_nl)
+            event = CalendarEvent.from_wbso_session(session, activity_name_nl=event_title)
             calendar_events.append(event)
         except Exception as e:
             error_msg = f"Failed to convert session {session.session_id}: {e}"
@@ -2754,6 +2969,16 @@ def step_google_calendar_data_preparation(context: Dict[str, Any]) -> Dict[str, 
     # Update context with prepared events
     context["calendar_events"] = prepared_events
 
+    # Save calendar events to CSV (version-controlled)
+    try:
+        from .save_calendar_events_csv import save_calendar_events_csv
+
+        csv_path = save_calendar_events_csv(prepared_events)
+        context["calendar_events_csv_path"] = str(csv_path)
+        logger.info(f"Saved calendar events CSV: {csv_path}")
+    except Exception as e:
+        logger.warning(f"Failed to save calendar events CSV: {e}")
+
     # Generate comprehensive report
     output_count = len(prepared_events)
     hours_lost = total_hours_before - total_hours_after
@@ -2816,8 +3041,9 @@ def step_calendar_replace(context: Dict[str, Any]) -> Dict[str, Any]:
         context["uploader"] = uploader
 
     # Delete existing events in date range
-    logger.info(f"Deleting existing events from {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}...")
-    existing_events_data = uploader.get_existing_events(TARGET_START_DATE, TARGET_END_DATE + timedelta(days=1))
+    target_start_date, target_end_date = _get_target_dates(context)
+    logger.info(f"Deleting existing events from {target_start_date.date()} to {target_end_date.date()}...")
+    existing_events_data = uploader.get_existing_events(target_start_date, target_end_date + timedelta(days=1))
     existing_events = existing_events_data.get("events", [])
 
     deleted_count = 0
@@ -2898,8 +3124,9 @@ def step_verify(context: Dict[str, Any]) -> Dict[str, Any]:
         return create_step_report("verify", False, message="Calendar not found")
 
     # Query calendar for events in date range
-    logger.info(f"Querying calendar for events from {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}...")
-    existing_events_data = uploader.get_existing_events(TARGET_START_DATE, TARGET_END_DATE + timedelta(days=1))
+    target_start_date, target_end_date = _get_target_dates(context)
+    logger.info(f"Querying calendar for events from {target_start_date.date()} to {target_end_date.date()}...")
+    existing_events_data = uploader.get_existing_events(target_start_date, target_end_date)
     events = existing_events_data.get("events", [])
 
     # Calculate hours from calendar events
@@ -2918,7 +3145,7 @@ def step_verify(context: Dict[str, Any]) -> Dict[str, Any]:
             end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
 
             # Filter by date range
-            if start_dt.date() < TARGET_START_DATE.date() or start_dt.date() > TARGET_END_DATE.date():
+            if start_dt.date() < target_start_date.date() or start_dt.date() > target_end_date.date():
                 continue
 
             duration = end_dt - start_dt
@@ -2944,8 +3171,8 @@ def step_verify(context: Dict[str, Any]) -> Dict[str, Any]:
         "total_events": len(verified_events),
         "total_hours": total_hours,
         "date_range": {
-            "start": TARGET_START_DATE.isoformat(),
-            "end": TARGET_END_DATE.isoformat(),
+            "start": target_start_date.isoformat(),
+            "end": target_end_date.isoformat(),
         },
     }
 
@@ -2962,20 +3189,33 @@ def step_verify(context: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
-    """Step: Generate summary report with total hours booked."""
+    """Step: Generate summary report with total hours booked and weekly breakdown."""
     logger.info("=" * 60)
     logger.info("STEP: REPORTING")
     logger.info("=" * 60)
 
+    # Generate weekly report
+    try:
+        from .generate_weekly_report import generate_weekly_report
+
+        weekly_report_path = generate_weekly_report()
+        context["weekly_report_path"] = str(weekly_report_path)
+        logger.info(f"Generated weekly report: {weekly_report_path}")
+    except Exception as e:
+        logger.warning(f"Failed to generate weekly report: {e}")
+
     dataset = context.get("dataset")
     verification_results = context.get("verification_results", {})
+
+    # Get target dates from context
+    target_start_date, target_end_date = _get_target_dates(context)
 
     # Calculate totals
     wbso_sessions = [s for s in dataset.sessions if s.is_wbso] if dataset else []
     calculated_hours = sum(
         s.work_hours
         for s in wbso_sessions
-        if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+        if s.start_time and target_start_date.date() <= s.start_time.date() <= target_end_date.date()
     )
     calendar_hours = verification_results.get("total_hours", 0.0)
 
@@ -2984,7 +3224,7 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
     computer_on_hours = sum(
         s.work_hours
         for s in computer_on_sessions
-        if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+        if s.start_time and target_start_date.date() <= s.start_time.date() <= target_end_date.date()
     )
 
     # Get commit assignment statistics from context
@@ -2998,7 +3238,7 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
         for s in wbso_sessions
         if s.session_id in session_commits_map
         and s.start_time
-        and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date()
+        and target_start_date.date() <= s.start_time.date() <= target_end_date.date()
     )
 
     report_data = {

@@ -159,17 +159,25 @@ class GoogleCalendarUploader:
             return None
 
     def get_existing_events(self, start_date: datetime, end_date: datetime) -> Dict[str, Any]:
-        """Get existing events in the WBSO calendar for the date range."""
-        logger.info(f"Getting existing events from {start_date.date()} to {end_date.date()}")
+        """Get existing events in the WBSO calendar for the date range.
+
+        Uses DATE comparison: start_date includes all events on that day (00:00:00),
+        end_date includes all events on that day (23:59:59).
+        """
+        # Normalize to start of start_date and end of end_date for inclusive date comparison
+        start_datetime = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_datetime = end_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        logger.info(f"Getting existing events from {start_date.date()} to {end_date.date()} (inclusive)")
 
         try:
-            # Query events in date range
+            # Query events in date range (using normalized datetimes)
             events_result = (
                 self.service.events()
                 .list(
                     calendarId=self.wbso_calendar_id,
-                    timeMin=start_date.isoformat() + "Z",
-                    timeMax=end_date.isoformat() + "Z",
+                    timeMin=start_datetime.isoformat() + "Z",
+                    timeMax=end_datetime.isoformat() + "Z",
                     singleEvents=True,
                     orderBy="startTime",
                 )

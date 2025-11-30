@@ -1,741 +1,1341 @@
-DateTime,EventId,EventType,RecordId
-2025-04-27 17:22:37,7001,User logon notification,35802
-2025-04-27 18:28:08,7002,User logoff notification,35904
-2025-04-28 19:08:15,7001,User logon notification,35959
-2025-04-28 19:43:59,7002,User logoff notification,36070
-2025-04-28 20:04:23,7001,User logon notification,36101
-2025-04-29 00:46:38,7002,User logoff notification,36187
-2025-04-29 09:07:01,7001,User logon notification,36222
-2025-04-29 09:37:15,7002,User logoff notification,36323
-2025-04-29 11:32:37,7001,User logon notification,36358
-2025-04-29 14:28:00,7002,User logoff notification,36452
-2025-04-29 16:20:00,7001,User logon notification,36484
-2025-04-29 23:03:03,7002,User logoff notification,36592
-2025-04-30 07:35:21,7001,User logon notification,36631
-2025-04-30 08:50:23,7002,User logoff notification,36730
-2025-04-30 17:06:36,7001,User logon notification,36764
-2025-04-30 22:26:44,7002,User logoff notification,36884
-2025-05-01 08:18:39,7001,User logon notification,36920
-2025-05-01 21:17:13,7002,User logoff notification,37133
-2025-05-01 21:34:52,7001,User logon notification,37168
-2025-05-01 23:23:18,7002,User logoff notification,37240
-2025-05-02 08:43:31,7001,User logon notification,37277
-2025-05-02 12:31:47,7002,User logoff notification,37386
-2025-05-03 10:43:01,7001,User logon notification,37431
-2025-05-03 11:55:42,7002,User logoff notification,37549
-2025-05-03 13:15:37,7001,User logon notification,37581
-2025-05-03 16:21:17,7002,User logoff notification,37664
-2025-05-04 15:41:09,7001,User logon notification,37710
-2025-05-04 21:47:02,7002,User logoff notification,37843
-2025-05-05 19:30:28,7001,User logon notification,37892
-2025-05-05 19:34:55,7002,User logoff notification,37969
-2025-05-05 19:57:07,7001,User logon notification,38003
-2025-05-05 23:54:51,7002,User logoff notification,38094
-2025-05-06 09:39:19,7001,User logon notification,38134
-2025-05-06 23:06:27,7002,User logoff notification,38341
-2025-05-07 08:19:39,7001,User logon notification,38376
-2025-05-07 15:05:05,7002,User logoff notification,38501
-2025-05-08 10:45:54,7001,User logon notification,38540
-2025-05-08 13:14:51,7002,User logoff notification,38702
-2025-05-08 23:15:10,7001,User logon notification,38741
-2025-05-08 23:24:36,7002,User logoff notification,38808
-2025-05-09 07:40:47,7001,User logon notification,38843
-2025-05-09 08:32:19,7002,User logoff notification,38947
-2025-05-09 19:16:55,7001,User logon notification,38979
-2025-05-09 20:08:14,7002,User logoff notification,39100
-2025-05-09 20:12:12,7001,User logon notification,39325
-2025-05-09 23:54:01,7002,User logoff notification,39484
-2025-05-10 13:52:45,7001,User logon notification,39682
-2025-05-10 14:02:36,7002,User logoff notification,39796
-2025-05-10 15:30:58,7001,User logon notification,39828
-2025-05-10 23:39:44,7002,User logoff notification,39953
-2025-05-11 08:53:34,7001,User logon notification,39988
-2025-05-11 10:17:00,7002,User logoff notification,40081
-2025-05-11 12:08:31,7001,User logon notification,40115
-2025-05-11 13:15:28,7002,User logoff notification,40197
-2025-05-11 16:08:54,7001,User logon notification,40229
-2025-05-11 20:53:23,7002,User logoff notification,40347
-2025-05-12 19:46:08,7001,User logon notification,40391
-2025-05-12 22:35:25,7002,User logoff notification,40633
-2025-05-13 10:12:00,7001,User logon notification,40672
-2025-05-13 12:30:28,7002,User logoff notification,40789
-2025-05-13 16:18:23,7001,User logon notification,40821
-2025-05-13 17:51:50,7002,User logoff notification,40912
-2025-05-13 19:39:27,7001,User logon notification,40946
-2025-05-13 23:00:27,7002,User logoff notification,41027
-2025-05-14 17:34:42,7001,User logon notification,41069
-2025-05-14 20:53:58,7002,User logoff notification,41203
-2025-05-14 20:55:25,7001,User logon notification,41420
-2025-05-15 07:44:49,7001,User logon notification,41731
-2025-05-15 10:30:26,7002,User logoff notification,41849
-2025-05-15 14:00:47,7001,User logon notification,41883
-2025-05-15 23:12:16,7002,User logoff notification,42093
-2025-05-16 08:32:26,7001,User logon notification,42142
-2025-05-16 16:16:06,7002,User logoff notification,42273
-2025-05-17 11:07:15,7001,User logon notification,42330
-2025-05-17 11:40:52,7002,User logoff notification,42423
-2025-05-17 11:41:44,7001,User logon notification,42642
-2025-05-17 23:53:01,7002,User logoff notification,42787
-2025-05-18 08:43:22,7001,User logon notification,42983
-2025-05-18 09:45:50,7002,User logoff notification,43098
-2025-05-18 19:50:59,7001,User logon notification,43133
-2025-05-18 21:30:14,7002,User logoff notification,43248
-2025-05-19 19:41:33,7001,User logon notification,43286
-2025-05-19 22:04:46,7002,User logoff notification,43396
-2025-05-20 20:56:44,7001,User logon notification,43438
-2025-05-20 21:43:37,7002,User logoff notification,43558
-2025-05-22 07:12:54,7001,User logon notification,43594
-2025-05-22 08:46:44,7002,User logoff notification,43726
-2025-05-22 10:36:59,7001,User logon notification,43760
-2025-05-22 23:02:42,7002,User logoff notification,44080
-2025-05-23 16:48:54,7001,User logon notification,44286
-2025-05-24 09:19:12,7001,User logon notification,44635
-2025-05-24 17:17:48,7002,User logoff notification,44787
-2025-05-25 17:06:09,7001,User logon notification,44834
-2025-05-25 22:49:53,7002,User logoff notification,44926
-2025-05-26 19:17:17,7001,User logon notification,44966
-2025-05-26 23:15:08,7002,User logoff notification,45146
-2025-05-27 07:24:58,7001,User logon notification,45179
-2025-05-27 09:17:39,7002,User logoff notification,45259
-2025-05-27 11:08:29,7001,User logon notification,45294
-2025-05-27 17:42:34,7002,User logoff notification,45397
-2025-05-27 20:33:01,7001,User logon notification,45431
-2025-05-27 23:00:58,7002,User logoff notification,45537
-2025-05-28 17:55:55,7001,User logon notification,45581
-2025-05-28 22:59:05,7002,User logoff notification,45781
-2025-05-29 07:58:46,7001,User logon notification,45808
-2025-05-29 10:06:55,7002,User logoff notification,45932
-2025-05-29 10:08:30,7001,User logon notification,46189
-2025-05-29 10:11:32,7002,User logoff notification,46297
-2025-05-29 11:15:28,7001,User logon notification,46498
-2025-05-29 11:24:41,7002,User logoff notification,46601
-2025-05-29 11:51:44,7001,User logon notification,46634
-2025-05-29 12:46:14,7002,User logoff notification,46723
-2025-05-29 20:14:08,7001,User logon notification,46762
-2025-05-29 22:56:53,7002,User logoff notification,46869
-2025-05-30 10:21:36,7001,User logon notification,46911
-2025-05-30 12:12:16,7002,User logoff notification,47019
-2025-05-30 18:25:55,7001,User logon notification,47047
-2025-05-31 00:41:08,7002,User logoff notification,47179
-2025-05-31 10:11:58,7001,User logon notification,47220
-2025-05-31 15:25:11,7002,User logoff notification,47357
-2025-06-01 08:19:13,7001,User logon notification,47391
-2025-06-01 10:06:45,7002,User logoff notification,47490
-2025-06-01 13:06:15,7001,User logon notification,47524
-2025-06-01 16:46:57,7002,User logoff notification,47610
-2025-06-01 18:56:24,7001,User logon notification,47637
-2025-06-01 22:44:14,7002,User logoff notification,47764
-2025-06-02 19:37:15,7001,User logon notification,47834
-2025-06-02 22:19:38,7002,User logoff notification,48047
-2025-06-03 07:54:35,7001,User logon notification,48082
-2025-06-03 09:50:33,7002,User logoff notification,48177
-2025-06-03 11:43:01,7001,User logon notification,48212
-2025-06-03 13:01:02,7002,User logoff notification,48297
-2025-06-03 14:41:51,7001,User logon notification,48329
-2025-06-03 16:28:44,7002,User logoff notification,48450
-2025-06-03 19:02:45,7001,User logon notification,48477
-2025-06-03 22:42:30,7002,User logoff notification,48572
-2025-06-04 18:10:45,7001,User logon notification,48617
-2025-06-04 23:13:59,7002,User logoff notification,48747
-2025-06-05 07:35:55,7001,User logon notification,48783
-2025-06-05 10:16:47,7002,User logoff notification,48894
-2025-06-05 20:58:46,7001,User logon notification,48928
-2025-06-05 23:13:34,7002,User logoff notification,49039
-2025-06-06 17:19:51,7001,User logon notification,49081
-2025-06-06 23:50:40,7002,User logoff notification,49261
-2025-06-07 08:18:28,7001,User logon notification,49296
-2025-06-07 11:06:48,7002,User logoff notification,49402
-2025-06-07 12:03:18,7001,User logon notification,49438
-2025-06-07 13:13:27,7002,User logoff notification,49516
-2025-06-07 17:25:25,7001,User logon notification,49549
-2025-06-07 23:33:41,7002,User logoff notification,49643
-2025-06-08 08:47:04,7001,User logon notification,49677
-2025-06-08 09:58:40,7002,User logoff notification,49776
-2025-06-08 12:29:20,7001,User logon notification,49813
-2025-06-08 23:15:21,7002,User logoff notification,49941
-2025-06-09 07:11:26,7001,User logon notification,49977
-2025-06-09 23:19:11,7002,User logoff notification,50180
-2025-06-10 21:34:22,7001,User logon notification,50219
-2025-06-10 22:43:00,7002,User logoff notification,50346
-2025-06-11 06:50:07,7001,User logon notification,50386
-2025-06-11 07:51:33,7002,User logoff notification,50475
-2025-06-11 18:27:46,7001,User logon notification,50517
-2025-06-11 23:42:55,7002,User logoff notification,50683
-2025-06-12 07:38:38,7001,User logon notification,50717
-2025-06-12 11:33:34,7002,User logoff notification,50853
-2025-06-12 13:10:16,7001,User logon notification,50900
-2025-06-12 15:50:11,7002,User logoff notification,51037
-2025-06-12 15:51:08,7001,User logon notification,51263
-2025-06-12 16:19:45,7002,User logoff notification,51382
-2025-06-12 20:59:14,7001,User logon notification,51424
-2025-06-12 22:57:29,7002,User logoff notification,51504
-2025-06-13 07:25:22,7001,User logon notification,51539
-2025-06-13 23:00:28,7002,User logoff notification,51804
-2025-06-14 10:56:30,7001,User logon notification,51842
-2025-06-14 23:33:38,7002,User logoff notification,52005
-2025-06-15 09:43:26,7001,User logon notification,52042
-2025-06-15 09:58:27,7002,User logoff notification,52129
-2025-06-15 12:44:37,7001,User logon notification,52171
-2025-06-15 13:28:02,7002,User logoff notification,52248
-2025-06-15 22:10:27,7001,User logon notification,52305
-2025-06-16 00:02:01,7002,User logoff notification,52397
-2025-06-16 19:26:11,7001,User logon notification,52434
-2025-06-16 23:08:37,7002,User logoff notification,52547
-2025-06-17 08:31:40,7001,User logon notification,52582
-2025-06-17 08:58:17,7002,User logoff notification,52708
-2025-06-17 10:58:24,7001,User logon notification,52743
-2025-06-17 13:53:38,7002,User logoff notification,52834
-2025-06-17 18:33:36,7001,User logon notification,52868
-2025-06-17 23:24:57,7002,User logoff notification,52980
-2025-06-18 08:48:46,7001,User logon notification,53021
-2025-06-18 11:45:28,7002,User logoff notification,53118
-2025-06-19 11:10:00,7001,User logon notification,53155
-2025-06-19 13:07:12,7002,User logoff notification,53292
-2025-06-19 19:47:52,7001,User logon notification,53326
-2025-06-19 22:52:15,7002,User logoff notification,53420
-2025-06-20 18:11:28,7001,User logon notification,53463
-2025-06-20 20:17:20,7002,User logoff notification,53593
-2025-06-21 07:15:13,7001,User logon notification,53631
-2025-06-21 14:25:49,7002,User logoff notification,53771
-2025-06-21 17:12:06,7001,User logon notification,53813
-2025-06-21 22:46:08,7002,User logoff notification,53993
-2025-06-22 13:03:47,7001,User logon notification,54021
-2025-06-23 19:29:37,7001,User logon notification,54328
-2025-06-24 07:31:11,7001,User logon notification,54654
-2025-06-24 09:14:15,7002,User logoff notification,54799
-2025-06-24 11:21:44,7001,User logon notification,54818
-2025-06-24 16:44:46,7002,User logoff notification,54913
-2025-06-24 21:02:58,7001,User logon notification,54935
-2025-06-24 22:45:11,7002,User logoff notification,55107
-2025-06-25 06:44:28,7001,User logon notification,55128
-2025-06-25 12:49:35,7002,User logoff notification,55249
-2025-06-25 16:06:07,7001,User logon notification,55271
-2025-06-25 22:40:38,7002,User logoff notification,55393
-2025-06-26 07:28:52,7001,User logon notification,55415
-2025-06-26 09:16:48,7002,User logoff notification,55484
-2025-06-26 11:38:12,7001,User logon notification,55503
-2025-06-26 17:39:47,7002,User logoff notification,55631
-2025-06-26 19:46:24,7001,User logon notification,55813
-2025-06-26 20:21:23,7002,User logoff notification,55883
-2025-06-26 20:44:56,7001,User logon notification,55904
-2025-06-26 22:29:33,7002,User logoff notification,56010
-2025-06-27 16:06:42,7001,User logon notification,56048
-2025-06-27 20:22:50,7002,User logoff notification,56194
-2025-06-27 21:58:24,7001,User logon notification,56222
-2025-06-28 00:05:00,7002,User logoff notification,56330
-2025-06-28 00:06:33,7001,User logon notification,56568
-2025-06-28 12:18:24,7001,User logon notification,56736
-2025-06-28 14:33:45,7002,User logoff notification,56825
-2025-06-28 18:55:28,7001,User logon notification,56845
-2025-06-28 23:29:15,7002,User logoff notification,57005
-2025-06-29 08:29:55,7001,User logon notification,57028
-2025-06-29 10:11:10,7002,User logoff notification,57122
-2025-06-29 18:11:39,7001,User logon notification,57146
-2025-06-29 21:16:21,7002,User logoff notification,57213
-2025-06-30 10:37:42,7001,User logon notification,57243
-2025-06-30 12:27:08,7002,User logoff notification,57326
-2025-06-30 12:59:15,7001,User logon notification,57348
-2025-06-30 13:02:24,7002,User logoff notification,57407
-2025-06-30 15:31:39,7001,User logon notification,57425
-2025-06-30 22:46:45,7002,User logoff notification,57578
-2025-07-01 09:10:48,7001,User logon notification,57608
-2025-07-01 10:50:01,7002,User logoff notification,57698
-2025-07-01 13:23:01,7001,User logon notification,57720
-2025-07-01 21:11:58,7002,User logoff notification,57830
-2025-07-01 22:05:38,7001,User logon notification,58012
-2025-07-01 23:27:00,7002,User logoff notification,58146
-2025-07-02 07:13:17,7001,User logon notification,58166
-2025-07-02 17:29:40,7002,User logoff notification,58325
-2025-07-03 06:30:20,7001,User logon notification,58358
-2025-07-03 09:49:10,7002,User logoff notification,58457
-2025-07-03 10:36:58,7001,User logon notification,58479
-2025-07-03 15:55:53,7002,User logoff notification,58575
-2025-07-03 17:18:49,7001,User logon notification,58597
-2025-07-03 18:14:23,7002,User logoff notification,58721
-2025-07-03 19:58:42,7001,User logon notification,58740
-2025-07-03 22:57:39,7002,User logoff notification,58832
-2025-07-04 06:31:48,7001,User logon notification,58860
-2025-07-04 15:43:38,7002,User logoff notification,58992
-2025-07-04 20:33:17,7001,User logon notification,59013
-2025-07-04 22:47:17,7002,User logoff notification,59132
-2025-07-05 07:12:27,7001,User logon notification,59152
-2025-07-05 23:36:14,7002,User logoff notification,59300
-2025-07-06 08:42:56,7001,User logon notification,59343
-2025-07-06 10:13:46,7002,User logoff notification,59439
-2025-07-06 13:38:17,7001,User logon notification,59468
-2025-07-06 15:59:17,7002,User logoff notification,59555
-2025-07-07 07:20:33,7001,User logon notification,59585
-2025-07-07 07:33:28,7002,User logoff notification,59676
-2025-07-07 07:34:10,7001,User logon notification,59884
-2025-07-07 20:51:40,7001,User logon notification,60218
-2025-07-07 23:04:13,7002,User logoff notification,60324
-2025-07-08 07:24:14,7001,User logon notification,60348
-2025-07-08 09:55:00,7002,User logoff notification,60444
-2025-07-08 09:56:50,7001,User logon notification,60465
-2025-07-08 10:17:53,7002,User logoff notification,60535
-2025-07-08 11:50:56,7001,User logon notification,60554
-2025-07-08 12:41:36,7002,User logoff notification,60619
-2025-07-08 20:05:30,7001,User logon notification,60636
-2025-07-08 23:35:59,7002,User logoff notification,60793
-2025-07-09 07:06:44,7001,User logon notification,60847
-2025-07-09 13:52:06,7002,User logoff notification,60952
-2025-07-09 13:53:18,7001,User logon notification,61181
-2025-07-09 22:01:33,7001,User logon notification,61409
-2025-07-09 22:58:48,7002,User logoff notification,61518
-2025-07-10 09:28:16,7001,User logon notification,61547
-2025-07-10 15:12:23,7002,User logoff notification,61673
-2025-07-10 16:13:43,7001,User logon notification,61692
-2025-07-10 23:21:57,7002,User logoff notification,61778
-2025-07-11 07:31:38,7001,User logon notification,61956
-2025-07-11 17:15:03,7002,User logoff notification,62141
-2025-07-11 20:27:39,7001,User logon notification,62170
-2025-07-11 23:10:49,7002,User logoff notification,62248
-2025-07-12 07:49:10,7001,User logon notification,62270
-2025-07-12 13:39:49,7002,User logoff notification,62381
-2025-07-12 16:24:58,7001,User logon notification,62401
-2025-07-12 22:56:10,7002,User logoff notification,62488
-2025-07-13 08:59:03,7001,User logon notification,62514
-2025-07-13 09:44:05,7002,User logoff notification,62596
-2025-07-16 20:33:43,7001,User logon notification,62647
-2025-07-16 22:54:33,7002,User logoff notification,62820
-2025-07-17 06:30:42,7001,User logon notification,62840
-2025-07-17 15:43:48,7002,User logoff notification,62989
-2025-07-17 16:25:38,7001,User logon notification,63009
-2025-07-17 22:45:25,7002,User logoff notification,63104
-2025-07-18 10:47:35,7001,User logon notification,63129
-2025-07-18 11:24:37,7002,User logoff notification,63212
-2025-07-18 13:10:10,7001,User logon notification,63235
-2025-07-18 13:31:28,7002,User logoff notification,63298
-2025-07-20 17:03:55,7001,User logon notification,63322
-2025-07-20 22:36:46,7002,User logoff notification,63521
-2025-07-21 19:50:34,7001,User logon notification,63551
-2025-07-21 22:31:57,7002,User logoff notification,63647
-2025-07-22 21:28:54,7001,User logon notification,64034
-2025-07-22 22:47:49,7002,User logoff notification,64197
-2025-07-23 18:49:54,7001,User logon notification,64219
-2025-07-23 18:55:08,7002,User logoff notification,64314
-2025-07-23 18:56:48,7001,User logon notification,64525
-2025-07-24 20:44:12,7001,User logon notification,64801
-2025-07-24 22:59:49,7002,User logoff notification,64950
-2025-07-25 06:26:25,7001,User logon notification,64977
-2025-07-25 14:08:38,7001,User logon notification,65360
-2025-07-26 11:23:15,7001,User logon notification,65630
-2025-07-26 11:57:04,7002,User logoff notification,65712
-2025-07-26 13:47:17,7001,User logon notification,65733
-2025-07-26 16:59:02,7002,User logoff notification,65824
-2025-07-26 22:52:52,7001,User logon notification,65849
-2025-07-27 02:10:56,7002,User logoff notification,65935
-2025-07-27 08:49:41,7001,User logon notification,65957
-2025-07-27 10:10:42,7002,User logoff notification,66024
-2025-07-27 10:30:28,7001,User logon notification,66045
-2025-07-27 10:34:39,7002,User logoff notification,66110
-2025-07-27 11:56:39,7001,User logon notification,66140
-2025-07-27 14:03:26,7002,User logoff notification,66202
-2025-07-27 22:12:31,7001,User logon notification,66225
-2025-07-27 22:31:49,7002,User logoff notification,66318
-2025-07-27 22:35:26,7001,User logon notification,66492
-2025-07-28 00:11:27,7002,User logoff notification,66584
-2025-07-28 19:06:39,7001,User logon notification,66614
-2025-07-28 22:53:28,7002,User logoff notification,66725
-2025-07-29 15:16:38,7001,User logon notification,66753
-2025-07-29 20:24:44,7001,User logon notification,66982
-2025-07-30 17:08:25,7001,User logon notification,67234
-2025-07-30 17:33:21,7002,User logoff notification,67382
-2025-07-30 20:22:34,7001,User logon notification,67421
-2025-07-30 22:05:07,7002,User logoff notification,67493
-2025-07-31 17:44:54,7001,User logon notification,67530
-2025-07-31 22:31:01,7002,User logoff notification,67687
-2025-08-01 12:47:05,7001,User logon notification,67725
-2025-08-01 14:44:42,7002,User logoff notification,67833
-2025-08-01 17:17:43,7001,User logon notification,67854
-2025-08-02 00:39:34,7002,User logoff notification,68012
-2025-08-02 09:14:36,7001,User logon notification,68041
-2025-08-02 11:58:03,7002,User logoff notification,68127
-2025-08-02 14:05:49,7001,User logon notification,68146
-2025-08-02 16:45:56,7002,User logoff notification,68321
-2025-08-02 20:07:12,7001,User logon notification,68343
-2025-08-02 21:04:49,7002,User logoff notification,68423
-2025-08-02 21:57:42,7001,User logon notification,68444
-2025-08-02 23:32:22,7002,User logoff notification,68513
-2025-08-03 08:24:12,7001,User logon notification,68540
-2025-08-03 09:37:47,7002,User logoff notification,68622
-2025-08-03 13:22:56,7001,User logon notification,68642
-2025-08-03 14:13:51,7002,User logoff notification,68717
-2025-08-03 17:26:17,7001,User logon notification,68739
-2025-08-03 17:47:14,7002,User logoff notification,68808
-2025-08-03 18:31:26,7001,User logon notification,68828
-2025-08-03 19:28:05,7002,User logoff notification,68901
-2025-08-03 20:10:08,7001,User logon notification,68920
-2025-08-03 22:44:03,7002,User logoff notification,68982
-2025-08-04 07:03:37,7001,User logon notification,69004
-2025-08-04 07:42:09,7002,User logoff notification,69115
-2025-08-04 18:48:31,7001,User logon notification,69144
-2025-08-04 22:59:56,7002,User logoff notification,69267
-2025-08-05 19:27:38,7001,User logon notification,69297
-2025-08-05 19:31:28,7002,User logoff notification,69384
-2025-08-05 20:52:00,7001,User logon notification,69412
-2025-08-05 23:50:02,7002,User logoff notification,69543
-2025-08-06 21:39:51,7001,User logon notification,69569
-2025-08-06 22:32:56,7002,User logoff notification,69690
-2025-08-07 12:10:15,7001,User logon notification,69728
-2025-08-07 12:27:52,7002,User logoff notification,69805
-2025-08-07 17:25:19,7001,User logon notification,69825
-2025-08-07 22:32:46,7002,User logoff notification,69944
-2025-08-08 07:23:36,7001,User logon notification,69966
-2025-08-08 13:41:06,7002,User logoff notification,70078
-2025-08-08 17:32:08,7001,User logon notification,70101
-2025-08-08 19:00:02,7002,User logoff notification,70182
-2025-08-08 21:41:09,7001,User logon notification,70368
-2025-08-08 23:23:51,7002,User logoff notification,70463
-2025-08-09 08:01:26,7001,User logon notification,70484
-2025-08-09 12:15:24,7002,User logoff notification,70613
-2025-08-09 20:16:32,7001,User logon notification,70637
-2025-08-09 23:00:03,7002,User logoff notification,70723
-2025-08-10 13:49:12,7001,User logon notification,70747
-2025-08-10 15:58:55,7002,User logoff notification,70838
-2025-08-11 17:47:42,7001,User logon notification,70865
-2025-08-11 19:48:32,7002,User logoff notification,70992
-2025-08-11 21:16:01,7001,User logon notification,71011
-2025-08-11 23:26:28,7002,User logoff notification,71088
-2025-08-12 16:13:40,7001,User logon notification,71116
-2025-08-12 16:52:12,7002,User logoff notification,71213
-2025-08-12 21:13:26,7001,User logon notification,71233
-2025-08-12 22:50:08,7002,User logoff notification,71318
-2025-08-13 07:00:46,7001,User logon notification,71338
-2025-08-13 15:34:03,7002,User logoff notification,71473
-2025-08-13 15:35:08,7001,User logon notification,71657
-2025-08-14 09:49:37,7001,User logon notification,72017
-2025-08-14 23:00:49,7002,User logoff notification,72234
-2025-08-15 07:18:43,7001,User logon notification,72256
-2025-08-15 19:49:02,7002,User logoff notification,72443
-2025-08-16 16:43:55,7001,User logon notification,72477
-2025-08-16 18:09:53,7002,User logoff notification,72576
-2025-08-16 22:40:32,7001,User logon notification,72608
-2025-08-16 22:48:19,7002,User logoff notification,72681
-2025-08-17 09:33:39,7001,User logon notification,72708
-2025-08-17 14:11:04,7002,User logoff notification,72789
-2025-08-18 07:47:21,7001,User logon notification,72844
-2025-08-18 19:58:09,7002,User logoff notification,72992
-2025-08-18 21:31:36,7001,User logon notification,73023
-2025-08-18 23:09:07,7002,User logoff notification,73146
-2025-08-20 20:33:06,7001,User logon notification,73201
-2025-08-20 22:40:51,7002,User logoff notification,73322
-2025-08-21 06:40:50,7001,User logon notification,73351
-2025-08-21 08:34:19,7002,User logoff notification,73445
-2025-08-21 19:55:09,7001,User logon notification,73479
-2025-08-21 23:59:51,7002,User logoff notification,73599
-2025-08-22 07:49:48,7001,User logon notification,73630
-2025-08-22 14:24:30,7001,User logon notification,73905
-2025-08-22 19:40:49,7001,User logon notification,74147
-2025-08-22 23:16:31,7002,User logoff notification,74276
-2025-08-23 07:53:52,7001,User logon notification,74297
-2025-08-23 09:33:11,7002,User logoff notification,74391
-2025-08-23 13:17:53,7001,User logon notification,74410
-2025-08-23 16:10:40,7002,User logoff notification,74487
-2025-08-23 22:44:59,7001,User logon notification,74513
-2025-08-24 01:12:25,7002,User logoff notification,74621
-2025-08-24 08:59:56,7001,User logon notification,74645
-2025-08-24 10:05:03,7002,User logoff notification,74722
-2025-08-24 12:47:24,7001,User logon notification,74744
-2025-08-24 14:02:27,7002,User logoff notification,74811
-2025-08-24 15:07:02,7001,User logon notification,74830
-2025-08-24 23:48:11,7002,User logoff notification,74955
-2025-08-25 20:55:34,7001,User logon notification,74986
-2025-08-25 23:36:49,7002,User logoff notification,75191
-2025-08-26 13:23:55,7001,User logon notification,75219
-2025-08-26 19:31:08,7002,User logoff notification,75388
-2025-08-26 21:16:40,7001,User logon notification,75409
-2025-08-26 22:37:24,7002,User logoff notification,75492
-2025-08-27 07:03:25,7001,User logon notification,75514
-2025-08-27 19:46:26,7002,User logoff notification,75719
-2025-08-27 21:25:27,7001,User logon notification,75740
-2025-08-27 23:21:54,7002,User logoff notification,75825
-2025-08-28 07:48:17,7001,User logon notification,75848
-2025-08-28 08:17:20,7002,User logoff notification,75936
-2025-08-28 20:16:24,7001,User logon notification,75961
-2025-08-28 22:27:37,7002,User logoff notification,76077
-2025-08-29 06:59:33,7001,User logon notification,76098
-2025-08-29 14:58:36,7002,User logoff notification,76257
-2025-08-29 18:15:32,7001,User logon notification,76283
-2025-08-30 00:18:56,7002,User logoff notification,76398
-2025-08-30 09:54:47,7001,User logon notification,76422
-2025-08-30 12:19:34,7002,User logoff notification,76542
-2025-08-30 12:26:32,7001,User logon notification,76892
-2025-08-30 12:26:46,7002,User logoff notification,76901
-2025-08-30 14:20:42,7001,User logon notification,76923
-2025-08-30 15:29:12,7002,User logoff notification,76996
-2025-08-30 16:11:08,7001,User logon notification,77014
-2025-08-30 22:56:44,7002,User logoff notification,77117
-2025-08-31 09:43:51,7001,User logon notification,77138
-2025-08-31 10:00:58,7002,User logoff notification,77247
-2025-09-01 20:17:51,7001,User logon notification,77275
-2025-09-01 22:56:30,7002,User logoff notification,77421
-2025-09-02 06:39:59,7001,User logon notification,77448
-2025-09-02 08:31:37,7002,User logoff notification,77537
-2025-09-02 13:46:16,7001,User logon notification,77561
-2025-09-02 23:12:45,7002,User logoff notification,77760
-2025-09-03 21:39:28,7001,User logon notification,77793
-2025-09-03 22:41:03,7002,User logoff notification,77894
-2025-09-04 11:48:03,7001,User logon notification,77921
-2025-09-05 15:02:54,7001,User logon notification,78147
-2025-09-06 07:45:07,7001,User logon notification,78502
-2025-09-06 10:25:20,7002,User logoff notification,78595
-2025-09-06 14:16:41,7001,User logon notification,78616
-2025-09-06 20:58:17,7002,User logoff notification,78706
-2025-09-07 08:18:40,7001,User logon notification,78746
-2025-09-07 09:53:41,7002,User logoff notification,78833
-2025-09-07 09:59:15,7001,User logon notification,78852
-2025-09-07 10:02:39,7002,User logoff notification,78914
-2025-09-07 12:38:51,7001,User logon notification,78933
-2025-09-07 13:53:53,7002,User logoff notification,78995
-2025-09-07 16:30:15,7001,User logon notification,79015
-2025-09-07 18:03:05,7002,User logoff notification,79104
-2025-09-08 17:45:30,7001,User logon notification,79139
-2025-09-08 19:34:29,7002,User logoff notification,79267
-2025-09-08 19:53:55,7001,User logon notification,79288
-2025-09-08 23:16:23,7002,User logoff notification,79387
-2025-09-09 07:38:05,7001,User logon notification,79407
-2025-09-09 07:52:01,7002,User logoff notification,79514
-2025-09-09 07:52:56,7001,User logon notification,79699
-2025-09-09 22:17:54,7002,User logoff notification,79863
-2025-09-09 22:18:59,7001,User logon notification,80049
-2025-09-10 21:25:37,7001,User logon notification,80235
-2025-09-10 23:10:02,7002,User logoff notification,80381
-2025-09-11 07:47:45,7001,User logon notification,80408
-2025-09-11 20:19:28,7002,User logoff notification,80606
-2025-09-11 21:37:13,7001,User logon notification,80628
-2025-09-11 23:21:09,7002,User logoff notification,80762
-2025-09-12 07:09:31,7001,User logon notification,80781
-2025-09-12 15:47:32,7001,User logon notification,81044
-2025-09-13 11:20:38,7001,User logon notification,81332
-2025-09-13 19:53:19,7002,User logoff notification,81496
-2025-09-14 09:42:45,7001,User logon notification,81524
-2025-09-14 10:02:23,7002,User logoff notification,81618
-2025-09-14 13:29:27,7001,User logon notification,81640
-2025-09-14 14:16:50,7002,User logoff notification,81725
-2025-09-14 15:41:38,7001,User logon notification,81746
-2025-09-14 22:42:14,7002,User logoff notification,81836
-2025-09-15 09:34:04,7001,User logon notification,81857
-2025-09-15 21:07:48,7001,User logon notification,82233
-2025-09-16 06:43:34,7001,User logon notification,82466
-2025-09-16 07:20:26,7002,User logoff notification,82565
-2025-09-16 22:07:43,7001,User logon notification,82591
-2025-09-16 23:16:19,7002,User logoff notification,82702
-2025-09-17 06:45:49,7001,User logon notification,82722
-2025-09-17 07:54:20,7002,User logoff notification,82851
-2025-09-17 19:44:15,7001,User logon notification,82902
-2025-09-17 23:18:19,7002,User logoff notification,83008
-2025-09-18 06:42:42,7001,User logon notification,83030
-2025-09-18 07:33:13,7002,User logoff notification,83124
-2025-09-18 21:24:35,7001,User logon notification,83147
-2025-09-18 22:46:18,7002,User logoff notification,83274
-2025-09-19 14:22:43,7001,User logon notification,83306
-2025-09-20 00:01:44,7002,User logoff notification,83557
-2025-09-20 17:53:02,7001,User logon notification,83601
-2025-09-20 22:18:20,7002,User logoff notification,83726
-2025-09-21 09:23:27,7001,User logon notification,83758
-2025-09-21 10:05:58,7002,User logoff notification,83836
-2025-09-21 16:18:23,7001,User logon notification,83866
-2025-09-21 21:06:57,7002,User logoff notification,83979
-2025-09-21 22:00:10,7001,User logon notification,84005
-2025-09-21 23:00:51,7002,User logoff notification,84085
-2025-09-22 19:41:31,7001,User logon notification,84129
-2025-09-23 18:09:53,7001,User logon notification,84425
-2025-09-23 20:51:34,7001,User logon notification,84674
-2025-09-24 19:26:33,7001,User logon notification,84901
-2025-09-25 19:28:55,7001,User logon notification,85230
-2025-09-25 23:11:51,7002,User logoff notification,85384
-2025-09-26 09:47:46,7001,User logon notification,85585
-2025-09-26 19:46:59,7001,User logon notification,85904
-2025-09-26 23:35:33,7002,User logoff notification,86007
-2025-09-27 10:30:19,7001,User logon notification,86029
-2025-09-27 13:23:51,7002,User logoff notification,86122
-2025-09-27 16:48:17,7001,User logon notification,86141
-2025-09-27 17:27:20,7002,User logoff notification,86206
-2025-09-28 14:25:10,7001,User logon notification,86234
-2025-09-28 18:39:27,7002,User logoff notification,86374
-2025-09-29 20:23:17,7001,User logon notification,86406
-2025-09-29 22:56:33,7002,User logoff notification,86516
-2025-09-30 07:41:32,7001,User logon notification,86538
-2025-10-01 03:43:43,7002,User logoff notification,86893
-2025-10-01 07:33:48,7001,User logon notification,87264
-2025-10-01 08:02:15,7002,User logoff notification,87335
-2025-10-01 18:10:49,7001,User logon notification,87371
-2025-10-01 20:58:49,7002,User logoff notification,87529
-2025-10-02 08:25:15,7001,User logon notification,87558
-2025-10-02 08:56:16,7002,User logoff notification,87736
-2025-10-02 21:25:15,7001,User logon notification,87761
-2025-10-02 23:17:37,7002,User logoff notification,87905
-2025-10-03 07:56:43,7001,User logon notification,87928
-2025-10-03 23:02:13,7002,User logoff notification,88185
-2025-10-04 08:38:09,7001,User logon notification,88222
-2025-10-04 23:42:32,7002,User logoff notification,88436
-2025-10-05 10:32:38,7001,User logon notification,88459
-2025-10-05 20:27:49,7002,User logoff notification,88597
-2025-10-06 20:18:27,7001,User logon notification,88793
-2025-10-06 23:00:03,7002,User logoff notification,89003
-2025-10-07 11:09:36,7001,User logon notification,89025
-2025-10-07 22:54:10,7002,User logoff notification,89200
-2025-10-08 19:18:17,7001,User logon notification,89248
-2025-10-08 23:33:05,7002,User logoff notification,89421
-2025-10-09 07:35:43,7001,User logon notification,89443
-2025-10-09 08:35:15,7002,User logoff notification,89602
-2025-10-09 08:35:52,7001,User logon notification,89773
-2025-10-09 08:38:14,7002,User logoff notification,89888
-2025-10-09 08:38:53,7001,User logon notification,90043
-2025-10-09 17:24:49,7001,User logon notification,90243
-2025-10-09 18:12:02,7002,User logoff notification,90418
-2025-10-10 07:53:08,7001,User logon notification,90439
-2025-10-10 17:21:56,7001,User logon notification,90773
-2025-10-11 09:25:21,7001,User logon notification,91021
-2025-10-12 01:49:18,7002,User logoff notification,91358
-2025-10-12 10:35:49,7001,User logon notification,91380
-2025-10-12 13:24:49,7002,User logoff notification,91519
-2025-10-12 17:38:58,7001,User logon notification,91540
-2025-10-13 19:41:07,7001,User logon notification,91823
-2025-10-13 21:39:04,7002,User logoff notification,91927
-2025-10-13 21:42:37,7001,User logon notification,92113
-2025-10-14 19:56:07,7001,User logon notification,92384
-2025-10-15 19:27:09,7001,User logon notification,92681
-2025-10-15 22:46:23,7002,User logoff notification,92970
-2025-10-15 22:48:17,7001,User logon notification,93299
-2025-10-17 08:30:27,7001,User logon notification,93486
-2025-10-18 00:20:45,7002,User logoff notification,93835
-2025-10-18 08:39:51,7001,User logon notification,94015
-2025-10-19 01:45:33,7002,User logoff notification,94243
-2025-10-19 09:37:55,7001,User logon notification,94263
-2025-10-19 15:19:03,7002,User logoff notification,94434
-2025-10-19 15:45:03,7001,User logon notification,94452
-2025-10-19 16:53:13,7002,User logoff notification,94523
-2025-10-19 19:04:42,7001,User logon notification,94544
-2025-10-19 20:42:06,7002,User logoff notification,94649
-2025-10-20 20:08:45,7001,User logon notification,94677
-2025-10-20 20:46:57,7002,User logoff notification,94815
-2025-10-21 06:44:45,7001,User logon notification,94836
-2025-10-22 07:42:51,7001,User logon notification,95129
-2025-10-22 08:55:32,7002,User logoff notification,95328
-2025-10-22 19:48:11,7001,User logon notification,95680
-2025-10-22 23:02:34,7002,User logoff notification,95797
-2025-10-23 20:08:33,7001,User logon notification,95827
-2025-10-23 21:23:30,7002,User logoff notification,95974
-2025-10-24 09:36:54,7001,User logon notification,96000
-2025-10-24 10:01:37,7001,User logon notification,96287
-2025-10-24 10:04:38,7002,User logoff notification,96368
-2025-10-24 11:13:26,7001,User logon notification,96393
-2025-10-24 14:18:39,7002,User logoff notification,96546
-2025-10-24 14:58:10,7001,User logon notification,96565
-2025-10-24 22:49:15,7002,User logoff notification,96728
-2025-10-25 10:26:19,7001,User logon notification,96760
-2025-10-25 19:41:43,7002,User logoff notification,96951
-2025-10-26 08:30:15,7001,User logon notification,96982
-2025-10-26 14:08:58,7002,User logoff notification,97152
-2025-10-27 19:57:36,7001,User logon notification,97327
-2025-10-27 22:53:27,7002,User logoff notification,97483
-2025-10-28 07:33:44,7001,User logon notification,97503
-2025-10-28 19:11:21,7001,User logon notification,97790
-2025-10-29 17:32:35,7001,User logon notification,98054
-2025-10-29 23:36:44,7002,User logoff notification,98268
-2025-10-29 23:39:46,7001,User logon notification,98626
-2025-10-29 23:40:25,7002,User logoff notification,98687
-2025-10-30 07:36:37,7001,User logon notification,98830
-2025-10-30 08:50:50,7002,User logoff notification,98999
-2025-10-30 10:40:15,7001,User logon notification,99018
-2025-10-31 07:35:32,7001,User logon notification,99273
-2025-10-31 08:22:52,7002,User logoff notification,99444
-2025-10-31 16:00:50,7001,User logon notification,99468
-2025-11-01 11:34:37,7001,User logon notification,99857
-2025-11-01 14:23:08,7002,User logoff notification,100004
-2025-11-01 19:36:27,7001,User logon notification,100023
-2025-11-01 23:01:28,7002,User logoff notification,100148
-2025-11-02 09:08:24,7001,User logon notification,100168
-2025-11-02 11:21:59,7002,User logoff notification,100289
-2025-11-02 12:32:51,7001,User logon notification,100311
-2025-11-02 14:52:55,7002,User logoff notification,100459
-2025-11-02 21:09:52,7001,User logon notification,100483
-2025-11-02 22:24:23,7002,User logoff notification,100598
-2025-11-03 20:26:35,7001,User logon notification,100619
-2025-11-03 22:50:43,7002,User logoff notification,100737
-2025-11-04 05:12:35,7001,User logon notification,100760
-2025-11-04 08:02:45,7002,User logoff notification,100884
-2025-11-04 17:05:10,7001,User logon notification,100912
-2025-11-04 21:29:15,7002,User logoff notification,101079
-2025-11-05 07:15:40,7001,User logon notification,101105
-2025-11-05 13:38:33,7002,User logoff notification,101326
-2025-11-05 14:35:04,7001,User logon notification,101342
-2025-11-05 15:25:57,7002,User logoff notification,101450
-2025-11-05 17:57:07,7001,User logon notification,101472
-2025-11-05 23:00:50,7002,User logoff notification,101616
-2025-11-06 07:49:41,7001,User logon notification,101638
-2025-11-06 08:24:06,7002,User logoff notification,101756
-2025-11-06 11:53:39,7001,User logon notification,101778
-2025-11-06 16:04:59,7001,User logon notification,102002
-2025-11-06 19:37:54,7001,User logon notification,102331
-2025-11-06 21:12:52,7001,User logon notification,102674
-2025-11-06 23:01:17,7002,User logoff notification,102817
-2025-11-07 06:08:19,7001,User logon notification,102839
-2025-11-07 23:14:07,7002,User logoff notification,103055
-2025-11-08 09:43:51,7001,User logon notification,103079
-2025-11-09 02:31:36,7002,User logoff notification,103261
-2025-11-09 11:22:24,7001,User logon notification,103289
-2025-11-09 16:07:47,7002,User logoff notification,103445
-2025-11-10 07:26:42,7001,User logon notification,103475
-2025-11-10 08:29:35,7002,User logoff notification,103629
-2025-11-10 09:32:27,7001,User logon notification,103650
-2025-11-11 00:23:06,7002,User logoff notification,103904
-2025-11-11 06:47:47,7001,User logon notification,103923
-2025-11-11 08:05:06,7002,User logoff notification,104044
-2025-11-11 17:37:19,7001,User logon notification,104069
-2025-11-11 22:33:46,7002,User logoff notification,104174
-2025-11-12 07:40:25,7001,User logon notification,104214
-2025-11-12 08:39:52,7002,User logoff notification,104355
-2025-11-12 08:41:42,7001,User logon notification,104695
-2025-11-12 20:00:47,7001,User logon notification,104823
-2025-11-12 22:46:51,7002,User logoff notification,105024
-2025-11-13 06:48:55,7001,User logon notification,105045
-2025-11-13 08:31:53,7002,User logoff notification,105119
-2025-11-13 20:12:18,7001,User logon notification,105156
-2025-11-13 22:36:28,7002,User logoff notification,105229
-2025-11-14 05:25:09,7001,User logon notification,105256
-2025-11-14 23:50:29,7002,User logoff notification,105539
-2025-11-15 09:12:32,7001,User logon notification,105567
-2025-11-15 11:02:43,7002,User logoff notification,105692
-2025-11-15 11:26:15,7001,User logon notification,105714
-2025-11-16 00:35:04,7002,User logoff notification,105907
-2025-11-16 12:02:43,7001,User logon notification,105938
-2025-11-16 22:49:15,7002,User logoff notification,106086
-2025-11-17 17:43:02,7001,User logon notification,106113
-2025-11-17 23:51:09,7002,User logoff notification,106276
-2025-11-18 07:48:47,7001,User logon notification,106293
-2025-11-18 08:46:44,7002,User logoff notification,106474
-2025-11-18 11:12:41,7001,User logon notification,106495
-2025-11-18 20:53:18,7002,User logoff notification,106676
-2025-11-18 21:59:12,7001,User logon notification,106697
-2025-11-18 23:28:47,7002,User logoff notification,106819
-2025-11-19 08:34:44,7001,User logon notification,106840
-2025-11-19 08:44:02,7002,User logoff notification,106940
-2025-11-19 20:00:50,7001,User logon notification,106959
-2025-11-19 22:56:26,7002,User logoff notification,107091
-2025-11-20 17:26:23,7001,User logon notification,107120
-2025-11-20 22:34:30,7002,User logoff notification,107308
-2025-11-21 07:33:25,7001,User logon notification,107327
-2025-11-21 08:30:11,7002,User logoff notification,107470
-2025-11-21 09:12:32,7001,User logon notification,107489
-2025-11-21 09:51:11,7002,User logoff notification,107604
-2025-11-21 11:20:10,7001,User logon notification,107623
-2025-11-21 16:29:54,7001,User logon notification,107915
-2025-11-22 11:50:03,7001,User logon notification,108231
-2025-11-22 15:05:06,7002,User logoff notification,108391
-2025-11-22 18:11:09,7001,User logon notification,108413
-2025-11-22 23:50:10,7002,User logoff notification,108543
-2025-11-23 09:48:46,7001,User logon notification,108563
-2025-11-23 22:46:46,7002,User logoff notification,108770
-2025-11-24 19:19:39,7001,User logon notification,108797
-2025-11-25 06:44:52,7001,User logon notification,109113
-2025-11-25 20:09:51,7001,User logon notification,109387
-2025-11-26 19:31:01,7001,User logon notification,109677
-2025-11-27 17:32:13,7001,User logon notification,109973
-2025-11-28 06:52:20,7001,User logon notification,110340
-2025-11-28 19:28:51,7002,User logoff notification,110521
-2025-11-28 20:53:25,7001,User logon notification,110541
-2025-11-28 23:54:29,7002,User logoff notification,110655
-2025-11-29 08:25:27,7001,User logon notification,110682
+DateTime,EventId,EventType,RecordId,SessionTag
+2025-04-27 17:22:37,7001,User logon notification,35802,logon
+2025-04-27 18:28:01,1074,System shutdown/restart initiated,35881,logoff
+2025-04-27 18:28:08,7002,User logoff notification,35904,logoff
+2025-04-28 19:08:15,7001,User logon notification,35959,logon
+2025-04-28 19:43:57,1074,System shutdown/restart initiated,36048,logoff
+2025-04-28 19:43:59,7002,User logoff notification,36070,logoff
+2025-04-28 20:04:23,7001,User logon notification,36101,logon
+2025-04-29 00:46:35,1074,System shutdown/restart initiated,36165,logoff
+2025-04-29 00:46:38,7002,User logoff notification,36187,logoff
+2025-04-29 09:07:01,7001,User logon notification,36222,logon
+2025-04-29 09:37:09,1074,System shutdown/restart initiated,36300,logoff
+2025-04-29 09:37:15,7002,User logoff notification,36323,logoff
+2025-04-29 11:32:37,7001,User logon notification,36358,logon
+2025-04-29 14:27:58,1074,System shutdown/restart initiated,36431,logoff
+2025-04-29 14:28:00,7002,User logoff notification,36452,logoff
+2025-04-29 16:20:00,7001,User logon notification,36484,logon
+2025-04-29 23:03:00,1074,System shutdown/restart initiated,36570,logoff
+2025-04-29 23:03:03,7002,User logoff notification,36592,logoff
+2025-04-30 07:35:21,7001,User logon notification,36631,logon
+2025-04-30 08:50:21,1074,System shutdown/restart initiated,36708,logoff
+2025-04-30 08:50:23,7002,User logoff notification,36730,logoff
+2025-04-30 17:06:36,7001,User logon notification,36764,logon
+2025-04-30 22:26:42,1074,System shutdown/restart initiated,36862,logoff
+2025-04-30 22:26:44,7002,User logoff notification,36884,logoff
+2025-05-01 08:18:39,7001,User logon notification,36920,logon
+2025-05-01 21:17:11,1074,System shutdown/restart initiated,37112,logoff
+2025-05-01 21:17:13,7002,User logoff notification,37133,logoff
+2025-05-01 21:34:52,7001,User logon notification,37168,logon
+2025-05-01 23:23:17,1074,System shutdown/restart initiated,37218,logoff
+2025-05-01 23:23:18,7002,User logoff notification,37240,logoff
+2025-05-02 08:43:31,7001,User logon notification,37277,logon
+2025-05-02 12:31:44,1074,System shutdown/restart initiated,37363,logoff
+2025-05-02 12:31:47,7002,User logoff notification,37386,logoff
+2025-05-03 10:43:01,7001,User logon notification,37431,logon
+2025-05-03 11:55:40,1074,System shutdown/restart initiated,37527,logoff
+2025-05-03 11:55:42,7002,User logoff notification,37549,logoff
+2025-05-03 13:15:37,7001,User logon notification,37581,logon
+2025-05-03 16:21:15,1074,System shutdown/restart initiated,37642,logoff
+2025-05-03 16:21:17,7002,User logoff notification,37664,logoff
+2025-05-04 15:41:09,7001,User logon notification,37710,logon
+2025-05-04 21:47:01,1074,System shutdown/restart initiated,37822,logoff
+2025-05-04 21:47:02,7002,User logoff notification,37843,logoff
+2025-05-05 19:30:28,7001,User logon notification,37892,logon
+2025-05-05 19:34:52,1074,System shutdown/restart initiated,37946,logoff
+2025-05-05 19:34:55,7002,User logoff notification,37969,logoff
+2025-05-05 19:57:07,7001,User logon notification,38003,logon
+2025-05-05 23:54:49,1074,System shutdown/restart initiated,38072,logoff
+2025-05-05 23:54:51,7002,User logoff notification,38094,logoff
+2025-05-06 09:39:19,7001,User logon notification,38134,logon
+2025-05-06 23:06:26,1074,System shutdown/restart initiated,38319,logoff
+2025-05-06 23:06:27,7002,User logoff notification,38341,logoff
+2025-05-07 08:19:39,7001,User logon notification,38376,logon
+2025-05-07 15:05:03,1074,System shutdown/restart initiated,38478,logoff
+2025-05-07 15:05:05,7002,User logoff notification,38501,logoff
+2025-05-08 10:45:54,7001,User logon notification,38540,logon
+2025-05-08 13:14:44,1074,System shutdown/restart initiated,38679,logoff
+2025-05-08 13:14:51,7002,User logoff notification,38702,logoff
+2025-05-08 23:15:10,7001,User logon notification,38741,logon
+2025-05-08 23:24:34,1074,System shutdown/restart initiated,38786,logoff
+2025-05-08 23:24:36,7002,User logoff notification,38808,logoff
+2025-05-09 07:40:47,7001,User logon notification,38843,logon
+2025-05-09 08:32:19,7002,User logoff notification,38947,logoff
+2025-05-09 19:16:55,7001,User logon notification,38979,logon
+2025-05-09 20:08:13,1074,System shutdown/restart initiated,39078,logoff
+2025-05-09 20:08:14,7002,User logoff notification,39100,logoff
+2025-05-09 20:08:44,6005,System startup (Event Log service started),39119,logon
+2025-05-09 20:12:12,7001,User logon notification,39325,logon
+2025-05-09 23:53:54,1074,System shutdown/restart initiated,39460,logoff
+2025-05-09 23:54:01,1074,System shutdown/restart initiated,39483,logoff
+2025-05-09 23:54:01,7002,User logoff notification,39484,logoff
+2025-05-10 13:52:28,41,System rebooted without cleanly shutting down,39525,logoff
+2025-05-10 13:52:39,6008,Unexpected shutdown (previous shutdown was unexpected),39490,logoff
+2025-05-10 13:52:39,6005,System startup (Event Log service started),39494,logon
+2025-05-10 13:52:45,7001,User logon notification,39682,logon
+2025-05-10 14:02:30,1074,System shutdown/restart initiated,39771,logoff
+2025-05-10 14:02:36,1074,System shutdown/restart initiated,39795,logoff
+2025-05-10 14:02:36,7002,User logoff notification,39796,logoff
+2025-05-10 15:30:58,7001,User logon notification,39828,logon
+2025-05-10 23:39:43,1074,System shutdown/restart initiated,39931,logoff
+2025-05-10 23:39:44,7002,User logoff notification,39953,logoff
+2025-05-11 08:53:34,7001,User logon notification,39988,logon
+2025-05-11 10:16:59,1074,System shutdown/restart initiated,40059,logoff
+2025-05-11 10:17:00,7002,User logoff notification,40081,logoff
+2025-05-11 12:08:31,7001,User logon notification,40115,logon
+2025-05-11 13:15:27,1074,System shutdown/restart initiated,40175,logoff
+2025-05-11 13:15:28,7002,User logoff notification,40197,logoff
+2025-05-11 16:08:54,7001,User logon notification,40229,logon
+2025-05-11 20:53:17,1074,System shutdown/restart initiated,40324,logoff
+2025-05-11 20:53:23,7002,User logoff notification,40347,logoff
+2025-05-12 19:46:08,7001,User logon notification,40391,logon
+2025-05-12 22:35:23,1074,System shutdown/restart initiated,40611,logoff
+2025-05-12 22:35:25,7002,User logoff notification,40633,logoff
+2025-05-13 10:12:00,7001,User logon notification,40672,logon
+2025-05-13 12:30:27,1074,System shutdown/restart initiated,40767,logoff
+2025-05-13 12:30:28,7002,User logoff notification,40789,logoff
+2025-05-13 16:18:23,7001,User logon notification,40821,logon
+2025-05-13 17:51:48,1074,System shutdown/restart initiated,40890,logoff
+2025-05-13 17:51:50,7002,User logoff notification,40912,logoff
+2025-05-13 19:39:27,7001,User logon notification,40946,logon
+2025-05-13 23:00:25,1074,System shutdown/restart initiated,41006,logoff
+2025-05-13 23:00:27,7002,User logoff notification,41027,logoff
+2025-05-14 17:34:42,7001,User logon notification,41069,logon
+2025-05-14 20:53:57,1074,System shutdown/restart initiated,41183,logoff
+2025-05-14 20:53:58,7002,User logoff notification,41203,logoff
+2025-05-14 20:54:38,6005,System startup (Event Log service started),41217,logon
+2025-05-14 20:55:25,7001,User logon notification,41420,logon
+2025-05-15 07:43:47,41,System rebooted without cleanly shutting down,41571,logoff
+2025-05-15 07:43:58,6008,Unexpected shutdown (previous shutdown was unexpected),41546,logoff
+2025-05-15 07:43:58,6005,System startup (Event Log service started),41548,logon
+2025-05-15 07:44:49,7001,User logon notification,41731,logon
+2025-05-15 10:30:24,1074,System shutdown/restart initiated,41827,logoff
+2025-05-15 10:30:26,1074,System shutdown/restart initiated,41848,logoff
+2025-05-15 10:30:26,7002,User logoff notification,41849,logoff
+2025-05-15 14:00:47,7001,User logon notification,41883,logon
+2025-05-15 23:12:15,1074,System shutdown/restart initiated,42071,logoff
+2025-05-15 23:12:16,7002,User logoff notification,42093,logoff
+2025-05-16 08:32:26,7001,User logon notification,42142,logon
+2025-05-16 16:15:59,1074,System shutdown/restart initiated,42251,logoff
+2025-05-16 16:16:06,7002,User logoff notification,42273,logoff
+2025-05-17 11:07:15,7001,User logon notification,42330,logon
+2025-05-17 11:40:50,1074,System shutdown/restart initiated,42401,logoff
+2025-05-17 11:40:52,7002,User logoff notification,42423,logoff
+2025-05-17 11:41:23,6005,System startup (Event Log service started),42436,logon
+2025-05-17 11:41:44,7001,User logon notification,42642,logon
+2025-05-17 23:52:59,1074,System shutdown/restart initiated,42765,logoff
+2025-05-17 23:53:01,1074,System shutdown/restart initiated,42786,logoff
+2025-05-17 23:53:01,7002,User logoff notification,42787,logoff
+2025-05-18 08:42:25,41,System rebooted without cleanly shutting down,42823,logoff
+2025-05-18 08:42:36,6008,Unexpected shutdown (previous shutdown was unexpected),42798,logoff
+2025-05-18 08:42:36,6005,System startup (Event Log service started),42800,logon
+2025-05-18 08:43:22,7001,User logon notification,42983,logon
+2025-05-18 09:45:49,1074,System shutdown/restart initiated,43076,logoff
+2025-05-18 09:45:50,1074,System shutdown/restart initiated,43097,logoff
+2025-05-18 09:45:50,7002,User logoff notification,43098,logoff
+2025-05-18 19:50:59,7001,User logon notification,43133,logon
+2025-05-18 21:30:07,1074,System shutdown/restart initiated,43226,logoff
+2025-05-18 21:30:14,7002,User logoff notification,43248,logoff
+2025-05-19 19:41:33,7001,User logon notification,43286,logon
+2025-05-19 22:04:39,1074,System shutdown/restart initiated,43373,logoff
+2025-05-19 22:04:46,7002,User logoff notification,43396,logoff
+2025-05-20 20:56:44,7001,User logon notification,43438,logon
+2025-05-20 21:43:36,1074,System shutdown/restart initiated,43537,logoff
+2025-05-20 21:43:37,7002,User logoff notification,43558,logoff
+2025-05-22 07:12:54,7001,User logon notification,43594,logon
+2025-05-22 08:46:43,1074,System shutdown/restart initiated,43705,logoff
+2025-05-22 08:46:44,7002,User logoff notification,43726,logoff
+2025-05-22 10:36:59,7001,User logon notification,43760,logon
+2025-05-22 23:02:40,1074,System shutdown/restart initiated,44058,logoff
+2025-05-22 23:02:42,7002,User logoff notification,44080,logoff
+2025-05-23 16:44:40,41,System rebooted without cleanly shutting down,44116,logoff
+2025-05-23 16:44:51,6008,Unexpected shutdown (previous shutdown was unexpected),44091,logoff
+2025-05-23 16:44:51,6005,System startup (Event Log service started),44093,logon
+2025-05-23 16:48:54,7001,User logon notification,44286,logon
+2025-05-24 00:05:30,1074,System shutdown/restart initiated,44430,logoff
+2025-05-24 09:15:03,41,System rebooted without cleanly shutting down,44472,logoff
+2025-05-24 09:15:14,6008,Unexpected shutdown (previous shutdown was unexpected),44447,logoff
+2025-05-24 09:15:14,6005,System startup (Event Log service started),44449,logon
+2025-05-24 09:19:12,7001,User logon notification,44635,logon
+2025-05-24 17:17:46,1074,System shutdown/restart initiated,44765,logoff
+2025-05-24 17:17:48,1074,System shutdown/restart initiated,44786,logoff
+2025-05-24 17:17:48,7002,User logoff notification,44787,logoff
+2025-05-25 17:06:09,7001,User logon notification,44834,logon
+2025-05-25 22:49:51,1074,System shutdown/restart initiated,44905,logoff
+2025-05-25 22:49:53,7002,User logoff notification,44926,logoff
+2025-05-26 19:17:17,7001,User logon notification,44966,logon
+2025-05-26 23:15:07,1074,System shutdown/restart initiated,45125,logoff
+2025-05-26 23:15:08,7002,User logoff notification,45146,logoff
+2025-05-27 07:24:58,7001,User logon notification,45179,logon
+2025-05-27 09:17:37,1074,System shutdown/restart initiated,45238,logoff
+2025-05-27 09:17:39,7002,User logoff notification,45259,logoff
+2025-05-27 11:08:29,7001,User logon notification,45294,logon
+2025-05-27 17:42:28,1074,System shutdown/restart initiated,45375,logoff
+2025-05-27 17:42:34,7002,User logoff notification,45397,logoff
+2025-05-27 20:33:01,7001,User logon notification,45431,logon
+2025-05-27 23:00:57,1074,System shutdown/restart initiated,45516,logoff
+2025-05-27 23:00:58,7002,User logoff notification,45537,logoff
+2025-05-28 17:55:55,7001,User logon notification,45581,logon
+2025-05-28 22:59:03,1074,System shutdown/restart initiated,45760,logoff
+2025-05-28 22:59:05,7002,User logoff notification,45781,logoff
+2025-05-29 07:58:46,7001,User logon notification,45808,logon
+2025-05-29 10:06:55,7002,User logoff notification,45932,logoff
+2025-05-29 10:07:57,6005,System startup (Event Log service started),45950,logon
+2025-05-29 10:08:30,7001,User logon notification,46189,logon
+2025-05-29 10:11:31,1074,System shutdown/restart initiated,46274,logoff
+2025-05-29 10:11:32,1074,System shutdown/restart initiated,46296,logoff
+2025-05-29 10:11:32,7002,User logoff notification,46297,logoff
+2025-05-29 11:13:52,41,System rebooted without cleanly shutting down,46338,logoff
+2025-05-29 11:14:02,6008,Unexpected shutdown (previous shutdown was unexpected),46303,logoff
+2025-05-29 11:14:02,6005,System startup (Event Log service started),46305,logon
+2025-05-29 11:15:28,7001,User logon notification,46498,logon
+2025-05-29 11:24:34,1074,System shutdown/restart initiated,46578,logoff
+2025-05-29 11:24:41,7002,User logoff notification,46601,logoff
+2025-05-29 11:51:44,7001,User logon notification,46634,logon
+2025-05-29 12:46:13,1074,System shutdown/restart initiated,46701,logoff
+2025-05-29 12:46:14,7002,User logoff notification,46723,logoff
+2025-05-29 20:14:08,7001,User logon notification,46762,logon
+2025-05-29 22:56:52,1074,System shutdown/restart initiated,46847,logoff
+2025-05-29 22:56:53,7002,User logoff notification,46869,logoff
+2025-05-30 10:21:36,7001,User logon notification,46911,logon
+2025-05-30 12:12:15,1074,System shutdown/restart initiated,46998,logoff
+2025-05-30 12:12:16,7002,User logoff notification,47019,logoff
+2025-05-30 18:25:55,7001,User logon notification,47047,logon
+2025-05-31 00:41:07,1074,System shutdown/restart initiated,47157,logoff
+2025-05-31 00:41:08,7002,User logoff notification,47179,logoff
+2025-05-31 10:11:58,7001,User logon notification,47220,logon
+2025-05-31 15:25:10,1074,System shutdown/restart initiated,47336,logoff
+2025-05-31 15:25:11,7002,User logoff notification,47357,logoff
+2025-06-01 08:19:13,7001,User logon notification,47391,logon
+2025-06-01 10:06:43,1074,System shutdown/restart initiated,47468,logoff
+2025-06-01 10:06:45,7002,User logoff notification,47490,logoff
+2025-06-01 13:06:15,7001,User logon notification,47524,logon
+2025-06-01 16:46:51,1074,System shutdown/restart initiated,47587,logoff
+2025-06-01 16:46:57,7002,User logoff notification,47610,logoff
+2025-06-01 18:56:24,7001,User logon notification,47637,logon
+2025-06-01 22:44:12,1074,System shutdown/restart initiated,47741,logoff
+2025-06-01 22:44:14,7002,User logoff notification,47764,logoff
+2025-06-02 19:37:15,7001,User logon notification,47834,logon
+2025-06-02 22:19:37,1074,System shutdown/restart initiated,48025,logoff
+2025-06-02 22:19:38,7002,User logoff notification,48047,logoff
+2025-06-03 07:54:35,7001,User logon notification,48082,logon
+2025-06-03 09:50:32,1074,System shutdown/restart initiated,48155,logoff
+2025-06-03 09:50:33,7002,User logoff notification,48177,logoff
+2025-06-03 11:43:01,7001,User logon notification,48212,logon
+2025-06-03 13:01:01,1074,System shutdown/restart initiated,48275,logoff
+2025-06-03 13:01:02,7002,User logoff notification,48297,logoff
+2025-06-03 14:41:51,7001,User logon notification,48329,logon
+2025-06-03 16:28:42,1074,System shutdown/restart initiated,48429,logoff
+2025-06-03 16:28:44,7002,User logoff notification,48450,logoff
+2025-06-03 19:02:45,7001,User logon notification,48477,logon
+2025-06-03 22:42:23,1074,System shutdown/restart initiated,48550,logoff
+2025-06-03 22:42:30,7002,User logoff notification,48572,logoff
+2025-06-04 18:10:45,7001,User logon notification,48617,logon
+2025-06-04 23:13:52,1074,System shutdown/restart initiated,48724,logoff
+2025-06-04 23:13:59,7002,User logoff notification,48747,logoff
+2025-06-05 07:35:55,7001,User logon notification,48783,logon
+2025-06-05 10:16:46,1074,System shutdown/restart initiated,48872,logoff
+2025-06-05 10:16:47,7002,User logoff notification,48894,logoff
+2025-06-05 20:58:46,7001,User logon notification,48928,logon
+2025-06-05 23:13:33,1074,System shutdown/restart initiated,49017,logoff
+2025-06-05 23:13:34,7002,User logoff notification,49039,logoff
+2025-06-06 17:19:51,7001,User logon notification,49081,logon
+2025-06-06 23:50:39,1074,System shutdown/restart initiated,49238,logoff
+2025-06-06 23:50:40,7002,User logoff notification,49261,logoff
+2025-06-07 08:18:28,7001,User logon notification,49296,logon
+2025-06-07 11:06:46,1074,System shutdown/restart initiated,49380,logoff
+2025-06-07 11:06:48,7002,User logoff notification,49402,logoff
+2025-06-07 12:03:18,7001,User logon notification,49438,logon
+2025-06-07 13:13:26,1074,System shutdown/restart initiated,49494,logoff
+2025-06-07 13:13:27,7002,User logoff notification,49516,logoff
+2025-06-07 17:25:25,7001,User logon notification,49549,logon
+2025-06-07 23:33:39,1074,System shutdown/restart initiated,49621,logoff
+2025-06-07 23:33:41,7002,User logoff notification,49643,logoff
+2025-06-08 08:47:04,7001,User logon notification,49677,logon
+2025-06-08 09:58:39,1074,System shutdown/restart initiated,49754,logoff
+2025-06-08 09:58:40,7002,User logoff notification,49776,logoff
+2025-06-08 12:29:20,7001,User logon notification,49813,logon
+2025-06-08 23:15:19,1074,System shutdown/restart initiated,49919,logoff
+2025-06-08 23:15:21,7002,User logoff notification,49941,logoff
+2025-06-09 07:11:26,7001,User logon notification,49977,logon
+2025-06-09 23:19:09,1074,System shutdown/restart initiated,50157,logoff
+2025-06-09 23:19:11,7002,User logoff notification,50180,logoff
+2025-06-10 21:34:22,7001,User logon notification,50219,logon
+2025-06-10 22:42:59,1074,System shutdown/restart initiated,50324,logoff
+2025-06-10 22:43:00,7002,User logoff notification,50346,logoff
+2025-06-11 06:50:07,7001,User logon notification,50386,logon
+2025-06-11 07:51:27,1074,System shutdown/restart initiated,50451,logoff
+2025-06-11 07:51:33,7002,User logoff notification,50475,logoff
+2025-06-11 18:27:46,7001,User logon notification,50517,logon
+2025-06-11 23:42:53,1074,System shutdown/restart initiated,50660,logoff
+2025-06-11 23:42:55,7002,User logoff notification,50683,logoff
+2025-06-12 07:38:38,7001,User logon notification,50717,logon
+2025-06-12 11:33:28,1074,System shutdown/restart initiated,50830,logoff
+2025-06-12 11:33:34,7002,User logoff notification,50853,logoff
+2025-06-12 13:10:16,7001,User logon notification,50900,logon
+2025-06-12 15:50:11,7002,User logoff notification,51037,logoff
+2025-06-12 15:50:45,6005,System startup (Event Log service started),51055,logon
+2025-06-12 15:51:08,7001,User logon notification,51263,logon
+2025-06-12 16:19:43,1074,System shutdown/restart initiated,51359,logoff
+2025-06-12 16:19:45,1074,System shutdown/restart initiated,51381,logoff
+2025-06-12 16:19:45,7002,User logoff notification,51382,logoff
+2025-06-12 20:59:14,7001,User logon notification,51424,logon
+2025-06-12 22:57:28,1074,System shutdown/restart initiated,51483,logoff
+2025-06-12 22:57:29,7002,User logoff notification,51504,logoff
+2025-06-13 07:25:22,7001,User logon notification,51539,logon
+2025-06-13 23:00:26,1074,System shutdown/restart initiated,51782,logoff
+2025-06-13 23:00:28,7002,User logoff notification,51804,logoff
+2025-06-14 10:56:30,7001,User logon notification,51842,logon
+2025-06-14 23:33:36,1074,System shutdown/restart initiated,51983,logoff
+2025-06-14 23:33:38,7002,User logoff notification,52005,logoff
+2025-06-15 09:43:26,7001,User logon notification,52042,logon
+2025-06-15 09:58:26,1074,System shutdown/restart initiated,52107,logoff
+2025-06-15 09:58:27,7002,User logoff notification,52129,logoff
+2025-06-15 12:44:37,7001,User logon notification,52171,logon
+2025-06-15 13:28:00,1074,System shutdown/restart initiated,52227,logoff
+2025-06-15 13:28:02,7002,User logoff notification,52248,logoff
+2025-06-15 22:10:27,7001,User logon notification,52305,logon
+2025-06-16 00:02:00,1074,System shutdown/restart initiated,52376,logoff
+2025-06-16 00:02:01,7002,User logoff notification,52397,logoff
+2025-06-16 19:26:11,7001,User logon notification,52434,logon
+2025-06-16 23:08:35,1074,System shutdown/restart initiated,52526,logoff
+2025-06-16 23:08:37,7002,User logoff notification,52547,logoff
+2025-06-17 08:31:40,7001,User logon notification,52582,logon
+2025-06-17 08:58:10,1074,System shutdown/restart initiated,52685,logoff
+2025-06-17 08:58:17,7002,User logoff notification,52708,logoff
+2025-06-17 10:58:24,7001,User logon notification,52743,logon
+2025-06-17 13:53:31,1074,System shutdown/restart initiated,52811,logoff
+2025-06-17 13:53:38,7002,User logoff notification,52834,logoff
+2025-06-17 18:33:36,7001,User logon notification,52868,logon
+2025-06-17 23:24:50,1074,System shutdown/restart initiated,52956,logoff
+2025-06-17 23:24:57,7002,User logoff notification,52980,logoff
+2025-06-18 08:48:46,7001,User logon notification,53021,logon
+2025-06-18 11:45:21,1074,System shutdown/restart initiated,53096,logoff
+2025-06-18 11:45:28,7002,User logoff notification,53118,logoff
+2025-06-19 11:10:00,7001,User logon notification,53155,logon
+2025-06-19 13:07:11,1074,System shutdown/restart initiated,53271,logoff
+2025-06-19 13:07:12,7002,User logoff notification,53292,logoff
+2025-06-19 19:47:52,7001,User logon notification,53326,logon
+2025-06-19 22:52:13,1074,System shutdown/restart initiated,53399,logoff
+2025-06-19 22:52:15,7002,User logoff notification,53420,logoff
+2025-06-20 18:11:28,7001,User logon notification,53463,logon
+2025-06-20 20:17:13,1074,System shutdown/restart initiated,53570,logoff
+2025-06-20 20:17:20,7002,User logoff notification,53593,logoff
+2025-06-21 07:15:13,7001,User logon notification,53631,logon
+2025-06-21 14:25:47,1074,System shutdown/restart initiated,53746,logoff
+2025-06-21 14:25:49,7002,User logoff notification,53771,logoff
+2025-06-21 17:12:06,7001,User logon notification,53813,logon
+2025-06-21 22:46:08,7002,User logoff notification,53993,logoff
+2025-06-22 13:03:47,7001,User logon notification,54021,logon
+2025-06-23 19:27:46,41,System rebooted without cleanly shutting down,54161,logoff
+2025-06-23 19:27:57,6008,Unexpected shutdown (previous shutdown was unexpected),54135,logoff
+2025-06-23 19:27:57,6005,System startup (Event Log service started),54137,logon
+2025-06-23 19:29:37,7001,User logon notification,54328,logon
+2025-06-24 07:30:43,41,System rebooted without cleanly shutting down,54495,logoff
+2025-06-24 07:30:54,6008,Unexpected shutdown (previous shutdown was unexpected),54470,logoff
+2025-06-24 07:30:54,6005,System startup (Event Log service started),54472,logon
+2025-06-24 07:31:11,7001,User logon notification,54654,logon
+2025-06-24 09:14:13,1074,System shutdown/restart initiated,54774,logoff
+2025-06-24 09:14:15,1074,System shutdown/restart initiated,54798,logoff
+2025-06-24 09:14:15,7002,User logoff notification,54799,logoff
+2025-06-24 11:21:44,7001,User logon notification,54818,logon
+2025-06-24 16:44:44,1074,System shutdown/restart initiated,54893,logoff
+2025-06-24 16:44:46,7002,User logoff notification,54913,logoff
+2025-06-24 21:02:58,7001,User logon notification,54935,logon
+2025-06-24 22:45:10,1074,System shutdown/restart initiated,55082,logoff
+2025-06-24 22:45:11,7002,User logoff notification,55107,logoff
+2025-06-25 06:44:28,7001,User logon notification,55128,logon
+2025-06-25 12:49:33,1074,System shutdown/restart initiated,55228,logoff
+2025-06-25 12:49:35,7002,User logoff notification,55249,logoff
+2025-06-25 16:06:07,7001,User logon notification,55271,logon
+2025-06-25 22:40:36,1074,System shutdown/restart initiated,55372,logoff
+2025-06-25 22:40:38,7002,User logoff notification,55393,logoff
+2025-06-26 07:28:52,7001,User logon notification,55415,logon
+2025-06-26 09:16:47,1074,System shutdown/restart initiated,55464,logoff
+2025-06-26 09:16:48,7002,User logoff notification,55484,logoff
+2025-06-26 11:38:12,7001,User logon notification,55503,logon
+2025-06-26 17:39:40,1074,System shutdown/restart initiated,55604,logoff
+2025-06-26 17:39:47,7002,User logoff notification,55631,logoff
+2025-06-26 19:23:36,6005,System startup (Event Log service started),55644,logon
+2025-06-26 19:46:24,7001,User logon notification,55813,logon
+2025-06-26 20:21:21,1074,System shutdown/restart initiated,55858,logoff
+2025-06-26 20:21:23,1074,System shutdown/restart initiated,55882,logoff
+2025-06-26 20:21:23,7002,User logoff notification,55883,logoff
+2025-06-26 20:44:56,7001,User logon notification,55904,logon
+2025-06-26 22:29:31,1074,System shutdown/restart initiated,55990,logoff
+2025-06-26 22:29:33,7002,User logoff notification,56010,logoff
+2025-06-27 16:06:42,7001,User logon notification,56048,logon
+2025-06-27 20:22:48,1074,System shutdown/restart initiated,56173,logoff
+2025-06-27 20:22:50,7002,User logoff notification,56194,logoff
+2025-06-27 21:58:24,7001,User logon notification,56222,logon
+2025-06-28 00:05:00,7002,User logoff notification,56330,logoff
+2025-06-28 00:05:58,6005,System startup (Event Log service started),56344,logon
+2025-06-28 00:06:33,7001,User logon notification,56568,logon
+2025-06-28 12:18:01,41,System rebooted without cleanly shutting down,56607,logoff
+2025-06-28 12:18:12,6008,Unexpected shutdown (previous shutdown was unexpected),56582,logoff
+2025-06-28 12:18:12,6005,System startup (Event Log service started),56584,logon
+2025-06-28 12:18:24,7001,User logon notification,56736,logon
+2025-06-28 14:33:43,1074,System shutdown/restart initiated,56803,logoff
+2025-06-28 14:33:45,1074,System shutdown/restart initiated,56824,logoff
+2025-06-28 14:33:45,7002,User logoff notification,56825,logoff
+2025-06-28 18:55:28,7001,User logon notification,56845,logon
+2025-06-28 23:29:13,1074,System shutdown/restart initiated,56984,logoff
+2025-06-28 23:29:15,7002,User logoff notification,57005,logoff
+2025-06-29 08:29:55,7001,User logon notification,57028,logon
+2025-06-29 10:11:09,1074,System shutdown/restart initiated,57098,logoff
+2025-06-29 10:11:10,7002,User logoff notification,57122,logoff
+2025-06-29 18:11:39,7001,User logon notification,57146,logon
+2025-06-29 21:16:15,1074,System shutdown/restart initiated,57190,logoff
+2025-06-29 21:16:21,7002,User logoff notification,57213,logoff
+2025-06-30 10:37:42,7001,User logon notification,57243,logon
+2025-06-30 12:27:06,1074,System shutdown/restart initiated,57302,logoff
+2025-06-30 12:27:08,7002,User logoff notification,57326,logoff
+2025-06-30 12:59:15,7001,User logon notification,57348,logon
+2025-06-30 13:02:23,1074,System shutdown/restart initiated,57387,logoff
+2025-06-30 13:02:24,7002,User logoff notification,57407,logoff
+2025-06-30 15:31:39,7001,User logon notification,57425,logon
+2025-06-30 22:46:43,1074,System shutdown/restart initiated,57557,logoff
+2025-06-30 22:46:45,7002,User logoff notification,57578,logoff
+2025-07-01 09:10:48,7001,User logon notification,57608,logon
+2025-07-01 10:49:59,1074,System shutdown/restart initiated,57678,logoff
+2025-07-01 10:50:01,7002,User logoff notification,57698,logoff
+2025-07-01 13:23:01,7001,User logon notification,57720,logon
+2025-07-01 21:11:56,1074,System shutdown/restart initiated,57805,logoff
+2025-07-01 21:11:58,7002,User logoff notification,57830,logoff
+2025-07-01 22:05:29,6005,System startup (Event Log service started),57842,logon
+2025-07-01 22:05:38,7001,User logon notification,58012,logon
+2025-07-01 23:26:58,1074,System shutdown/restart initiated,58122,logoff
+2025-07-01 23:27:00,7002,User logoff notification,58146,logoff
+2025-07-02 07:13:17,7001,User logon notification,58166,logon
+2025-07-02 17:29:33,1074,System shutdown/restart initiated,58299,logoff
+2025-07-02 17:29:40,7002,User logoff notification,58325,logoff
+2025-07-03 06:30:20,7001,User logon notification,58358,logon
+2025-07-03 09:49:08,1074,System shutdown/restart initiated,58433,logoff
+2025-07-03 09:49:10,7002,User logoff notification,58457,logoff
+2025-07-03 10:36:58,7001,User logon notification,58479,logon
+2025-07-03 15:55:52,1074,System shutdown/restart initiated,58555,logoff
+2025-07-03 15:55:53,7002,User logoff notification,58575,logoff
+2025-07-03 17:18:49,7001,User logon notification,58597,logon
+2025-07-03 18:14:21,1074,System shutdown/restart initiated,58697,logoff
+2025-07-03 18:14:23,7002,User logoff notification,58721,logoff
+2025-07-03 19:58:42,7001,User logon notification,58740,logon
+2025-07-03 22:57:38,1074,System shutdown/restart initiated,58808,logoff
+2025-07-03 22:57:39,7002,User logoff notification,58832,logoff
+2025-07-04 06:31:48,7001,User logon notification,58860,logon
+2025-07-04 15:43:36,1074,System shutdown/restart initiated,58968,logoff
+2025-07-04 15:43:38,7002,User logoff notification,58992,logoff
+2025-07-04 20:33:17,7001,User logon notification,59013,logon
+2025-07-04 22:47:15,1074,System shutdown/restart initiated,59111,logoff
+2025-07-04 22:47:17,7002,User logoff notification,59132,logoff
+2025-07-05 07:12:27,7001,User logon notification,59152,logon
+2025-07-05 23:36:12,1074,System shutdown/restart initiated,59273,logoff
+2025-07-05 23:36:14,7002,User logoff notification,59300,logoff
+2025-07-06 08:42:56,7001,User logon notification,59343,logon
+2025-07-06 10:13:44,1074,System shutdown/restart initiated,59419,logoff
+2025-07-06 10:13:46,7002,User logoff notification,59439,logoff
+2025-07-06 13:38:17,7001,User logon notification,59468,logon
+2025-07-06 15:59:15,1074,System shutdown/restart initiated,59535,logoff
+2025-07-06 15:59:17,7002,User logoff notification,59555,logoff
+2025-07-07 07:20:33,7001,User logon notification,59585,logon
+2025-07-07 07:33:27,1074,System shutdown/restart initiated,59651,logoff
+2025-07-07 07:33:28,7002,User logoff notification,59676,logoff
+2025-07-07 07:33:57,6005,System startup (Event Log service started),59691,logon
+2025-07-07 07:34:10,7001,User logon notification,59884,logon
+2025-07-07 17:29:37,1074,System shutdown/restart initiated,60017,logoff
+2025-07-07 20:50:50,41,System rebooted without cleanly shutting down,60058,logoff
+2025-07-07 20:51:00,6008,Unexpected shutdown (previous shutdown was unexpected),60025,logoff
+2025-07-07 20:51:00,6005,System startup (Event Log service started),60027,logon
+2025-07-07 20:51:40,7001,User logon notification,60218,logon
+2025-07-07 23:04:11,1074,System shutdown/restart initiated,60301,logoff
+2025-07-07 23:04:13,1074,System shutdown/restart initiated,60323,logoff
+2025-07-07 23:04:13,7002,User logoff notification,60324,logoff
+2025-07-08 07:24:14,7001,User logon notification,60348,logon
+2025-07-08 09:54:59,1074,System shutdown/restart initiated,60420,logoff
+2025-07-08 09:55:00,7002,User logoff notification,60444,logoff
+2025-07-08 09:56:50,7001,User logon notification,60465,logon
+2025-07-08 10:17:47,1074,System shutdown/restart initiated,60510,logoff
+2025-07-08 10:17:53,7002,User logoff notification,60535,logoff
+2025-07-08 11:50:56,7001,User logon notification,60554,logon
+2025-07-08 12:41:36,7002,User logoff notification,60619,logoff
+2025-07-08 20:05:30,7001,User logon notification,60636,logon
+2025-07-08 23:35:57,1074,System shutdown/restart initiated,60772,logoff
+2025-07-08 23:35:59,7002,User logoff notification,60793,logoff
+2025-07-09 07:06:44,7001,User logon notification,60847,logon
+2025-07-09 13:52:06,7002,User logoff notification,60952,logoff
+2025-07-09 13:52:51,6005,System startup (Event Log service started),60966,logon
+2025-07-09 13:53:18,7001,User logon notification,61181,logon
+2025-07-09 22:01:17,41,System rebooted without cleanly shutting down,61280,logoff
+2025-07-09 22:01:28,6008,Unexpected shutdown (previous shutdown was unexpected),61255,logoff
+2025-07-09 22:01:28,6005,System startup (Event Log service started),61257,logon
+2025-07-09 22:01:33,7001,User logon notification,61409,logon
+2025-07-09 22:58:47,1074,System shutdown/restart initiated,61493,logoff
+2025-07-09 22:58:48,1074,System shutdown/restart initiated,61517,logoff
+2025-07-09 22:58:48,7002,User logoff notification,61518,logoff
+2025-07-10 09:28:16,7001,User logon notification,61547,logon
+2025-07-10 15:12:22,1074,System shutdown/restart initiated,61648,logoff
+2025-07-10 15:12:23,7002,User logoff notification,61673,logoff
+2025-07-10 16:13:43,7001,User logon notification,61692,logon
+2025-07-10 23:21:50,1074,System shutdown/restart initiated,61751,logoff
+2025-07-10 23:21:57,7002,User logoff notification,61778,logoff
+2025-07-11 07:31:31,6005,System startup (Event Log service started),61792,logon
+2025-07-11 07:31:38,7001,User logon notification,61956,logon
+2025-07-11 17:15:02,1074,System shutdown/restart initiated,62115,logoff
+2025-07-11 17:15:03,1074,System shutdown/restart initiated,62140,logoff
+2025-07-11 17:15:03,7002,User logoff notification,62141,logoff
+2025-07-11 20:27:39,7001,User logon notification,62170,logon
+2025-07-11 23:10:47,1074,System shutdown/restart initiated,62227,logoff
+2025-07-11 23:10:49,7002,User logoff notification,62248,logoff
+2025-07-12 07:49:10,7001,User logon notification,62270,logon
+2025-07-12 13:39:47,1074,System shutdown/restart initiated,62360,logoff
+2025-07-12 13:39:49,7002,User logoff notification,62381,logoff
+2025-07-12 16:24:58,7001,User logon notification,62401,logon
+2025-07-12 22:56:08,1074,System shutdown/restart initiated,62463,logoff
+2025-07-12 22:56:10,7002,User logoff notification,62488,logoff
+2025-07-13 08:59:03,7001,User logon notification,62514,logon
+2025-07-13 09:44:04,1074,System shutdown/restart initiated,62576,logoff
+2025-07-13 09:44:05,7002,User logoff notification,62596,logoff
+2025-07-16 20:33:43,7001,User logon notification,62647,logon
+2025-07-16 22:54:31,1074,System shutdown/restart initiated,62795,logoff
+2025-07-16 22:54:33,7002,User logoff notification,62820,logoff
+2025-07-17 06:30:42,7001,User logon notification,62840,logon
+2025-07-17 15:43:46,1074,System shutdown/restart initiated,62964,logoff
+2025-07-17 15:43:48,7002,User logoff notification,62989,logoff
+2025-07-17 16:25:38,7001,User logon notification,63009,logon
+2025-07-17 22:45:23,1074,System shutdown/restart initiated,63079,logoff
+2025-07-17 22:45:25,7002,User logoff notification,63104,logoff
+2025-07-18 10:47:35,7001,User logon notification,63129,logon
+2025-07-18 11:24:35,1074,System shutdown/restart initiated,63188,logoff
+2025-07-18 11:24:37,7002,User logoff notification,63212,logoff
+2025-07-18 13:10:10,7001,User logon notification,63235,logon
+2025-07-18 13:31:26,1074,System shutdown/restart initiated,63277,logoff
+2025-07-18 13:31:28,7002,User logoff notification,63298,logoff
+2025-07-20 17:03:55,7001,User logon notification,63322,logon
+2025-07-20 22:36:44,1074,System shutdown/restart initiated,63496,logoff
+2025-07-20 22:36:46,7002,User logoff notification,63521,logoff
+2025-07-21 19:50:34,7001,User logon notification,63551,logon
+2025-07-21 22:31:55,1074,System shutdown/restart initiated,63626,logoff
+2025-07-21 22:31:57,7002,User logoff notification,63647,logoff
+2025-07-22 21:26:40,6005,System startup (Event Log service started),63685,logon
+2025-07-22 21:28:15,1074,System shutdown/restart initiated,63860,logoff
+2025-07-22 21:28:45,6005,System startup (Event Log service started),63870,logon
+2025-07-22 21:28:54,7001,User logon notification,64034,logon
+2025-07-22 22:47:47,1074,System shutdown/restart initiated,64171,logoff
+2025-07-22 22:47:49,1074,System shutdown/restart initiated,64196,logoff
+2025-07-22 22:47:49,7002,User logoff notification,64197,logoff
+2025-07-23 18:49:54,7001,User logon notification,64219,logon
+2025-07-23 18:55:06,1074,System shutdown/restart initiated,64291,logoff
+2025-07-23 18:55:08,7002,User logoff notification,64314,logoff
+2025-07-23 18:56:06,6005,System startup (Event Log service started),64327,logon
+2025-07-23 18:56:48,7001,User logon notification,64525,logon
+2025-07-24 20:42:32,41,System rebooted without cleanly shutting down,64669,logoff
+2025-07-24 20:42:44,6008,Unexpected shutdown (previous shutdown was unexpected),64644,logoff
+2025-07-24 20:42:44,6005,System startup (Event Log service started),64654,logon
+2025-07-24 20:44:12,7001,User logon notification,64801,logon
+2025-07-24 22:59:47,1074,System shutdown/restart initiated,64924,logoff
+2025-07-24 22:59:49,1074,System shutdown/restart initiated,64949,logoff
+2025-07-24 22:59:49,7002,User logoff notification,64950,logoff
+2025-07-25 06:26:25,7001,User logon notification,64977,logon
+2025-07-25 14:07:40,41,System rebooted without cleanly shutting down,65057,logoff
+2025-07-25 14:07:49,6008,Unexpected shutdown (previous shutdown was unexpected),65040,logoff
+2025-07-25 14:07:49,6005,System startup (Event Log service started),65042,logon
+2025-07-25 14:07:55,1074,System shutdown/restart initiated,65183,logoff
+2025-07-25 14:08:31,6005,System startup (Event Log service started),65197,logon
+2025-07-25 14:08:38,7001,User logon notification,65360,logon
+2025-07-26 11:22:53,41,System rebooted without cleanly shutting down,65499,logoff
+2025-07-26 11:23:04,6008,Unexpected shutdown (previous shutdown was unexpected),65474,logoff
+2025-07-26 11:23:04,6005,System startup (Event Log service started),65476,logon
+2025-07-26 11:23:15,7001,User logon notification,65630,logon
+2025-07-26 11:57:02,1074,System shutdown/restart initiated,65690,logoff
+2025-07-26 11:57:04,1074,System shutdown/restart initiated,65711,logoff
+2025-07-26 11:57:04,7002,User logoff notification,65712,logoff
+2025-07-26 13:47:17,7001,User logon notification,65733,logon
+2025-07-26 16:58:56,1074,System shutdown/restart initiated,65803,logoff
+2025-07-26 16:59:02,7002,User logoff notification,65824,logoff
+2025-07-26 22:52:52,7001,User logon notification,65849,logon
+2025-07-27 02:10:55,1074,System shutdown/restart initiated,65914,logoff
+2025-07-27 02:10:56,7002,User logoff notification,65935,logoff
+2025-07-27 08:49:41,7001,User logon notification,65957,logon
+2025-07-27 10:10:41,1074,System shutdown/restart initiated,66003,logoff
+2025-07-27 10:10:42,7002,User logoff notification,66024,logoff
+2025-07-27 10:30:28,7001,User logon notification,66045,logon
+2025-07-27 10:34:38,1074,System shutdown/restart initiated,66090,logoff
+2025-07-27 10:34:39,7002,User logoff notification,66110,logoff
+2025-07-27 11:56:39,7001,User logon notification,66140,logon
+2025-07-27 14:03:24,1074,System shutdown/restart initiated,66182,logoff
+2025-07-27 14:03:26,7002,User logoff notification,66202,logoff
+2025-07-27 22:12:31,7001,User logon notification,66225,logon
+2025-07-27 22:31:47,1074,System shutdown/restart initiated,66297,logoff
+2025-07-27 22:31:49,7002,User logoff notification,66318,logoff
+2025-07-27 22:35:18,6005,System startup (Event Log service started),66331,logon
+2025-07-27 22:35:26,7001,User logon notification,66492,logon
+2025-07-28 00:11:22,1074,System shutdown/restart initiated,66563,logoff
+2025-07-28 00:11:27,1074,System shutdown/restart initiated,66583,logoff
+2025-07-28 00:11:27,7002,User logoff notification,66584,logoff
+2025-07-28 19:06:39,7001,User logon notification,66614,logon
+2025-07-28 22:53:27,1074,System shutdown/restart initiated,66704,logoff
+2025-07-28 22:53:28,7002,User logoff notification,66725,logoff
+2025-07-29 15:16:38,7001,User logon notification,66753,logon
+2025-07-29 20:23:19,41,System rebooted without cleanly shutting down,66851,logoff
+2025-07-29 20:23:30,6008,Unexpected shutdown (previous shutdown was unexpected),66826,logoff
+2025-07-29 20:23:30,6005,System startup (Event Log service started),66828,logon
+2025-07-29 20:24:44,7001,User logon notification,66982,logon
+2025-07-30 17:06:31,41,System rebooted without cleanly shutting down,67094,logoff
+2025-07-30 17:06:42,6008,Unexpected shutdown (previous shutdown was unexpected),67069,logoff
+2025-07-30 17:06:42,6005,System startup (Event Log service started),67071,logon
+2025-07-30 17:08:25,7001,User logon notification,67234,logon
+2025-07-30 17:33:15,1074,System shutdown/restart initiated,67358,logoff
+2025-07-30 17:33:21,1074,System shutdown/restart initiated,67381,logoff
+2025-07-30 17:33:21,7002,User logoff notification,67382,logoff
+2025-07-30 20:22:34,7001,User logon notification,67421,logon
+2025-07-30 22:05:05,1074,System shutdown/restart initiated,67472,logoff
+2025-07-30 22:05:07,7002,User logoff notification,67493,logoff
+2025-07-31 17:44:54,7001,User logon notification,67530,logon
+2025-07-31 22:31:00,1074,System shutdown/restart initiated,67666,logoff
+2025-07-31 22:31:01,7002,User logoff notification,67687,logoff
+2025-08-01 12:47:05,7001,User logon notification,67725,logon
+2025-08-01 14:44:36,1074,System shutdown/restart initiated,67810,logoff
+2025-08-01 14:44:42,7002,User logoff notification,67833,logoff
+2025-08-01 17:17:43,7001,User logon notification,67854,logon
+2025-08-02 00:39:29,1074,System shutdown/restart initiated,67990,logoff
+2025-08-02 00:39:34,7002,User logoff notification,68012,logoff
+2025-08-02 09:14:36,7001,User logon notification,68041,logon
+2025-08-02 11:58:03,7002,User logoff notification,68127,logoff
+2025-08-02 14:05:49,7001,User logon notification,68146,logon
+2025-08-02 16:45:54,1074,System shutdown/restart initiated,68300,logoff
+2025-08-02 16:45:56,7002,User logoff notification,68321,logoff
+2025-08-02 20:07:12,7001,User logon notification,68343,logon
+2025-08-02 21:04:47,1074,System shutdown/restart initiated,68399,logoff
+2025-08-02 21:04:49,7002,User logoff notification,68423,logoff
+2025-08-02 21:57:42,7001,User logon notification,68444,logon
+2025-08-02 23:32:21,1074,System shutdown/restart initiated,68488,logoff
+2025-08-02 23:32:22,7002,User logoff notification,68513,logoff
+2025-08-03 08:24:12,7001,User logon notification,68540,logon
+2025-08-03 09:37:45,1074,System shutdown/restart initiated,68598,logoff
+2025-08-03 09:37:47,7002,User logoff notification,68622,logoff
+2025-08-03 13:22:56,7001,User logon notification,68642,logon
+2025-08-03 14:13:49,1074,System shutdown/restart initiated,68692,logoff
+2025-08-03 14:13:51,7002,User logoff notification,68717,logoff
+2025-08-03 17:26:17,7001,User logon notification,68739,logon
+2025-08-03 17:47:13,1074,System shutdown/restart initiated,68784,logoff
+2025-08-03 17:47:14,7002,User logoff notification,68808,logoff
+2025-08-03 18:31:26,7001,User logon notification,68828,logon
+2025-08-03 19:28:01,1074,System shutdown/restart initiated,68876,logoff
+2025-08-03 19:28:05,7002,User logoff notification,68901,logoff
+2025-08-03 20:10:08,7001,User logon notification,68920,logon
+2025-08-03 22:44:02,1074,System shutdown/restart initiated,68961,logoff
+2025-08-03 22:44:03,7002,User logoff notification,68982,logoff
+2025-08-04 07:03:37,7001,User logon notification,69004,logon
+2025-08-04 07:42:03,1074,System shutdown/restart initiated,69093,logoff
+2025-08-04 07:42:09,7002,User logoff notification,69115,logoff
+2025-08-04 18:48:31,7001,User logon notification,69144,logon
+2025-08-04 22:59:54,1074,System shutdown/restart initiated,69242,logoff
+2025-08-04 22:59:56,7002,User logoff notification,69267,logoff
+2025-08-05 19:27:38,7001,User logon notification,69297,logon
+2025-08-05 19:31:27,1074,System shutdown/restart initiated,69361,logoff
+2025-08-05 19:31:28,7002,User logoff notification,69384,logoff
+2025-08-05 20:52:00,7001,User logon notification,69412,logon
+2025-08-05 23:50:02,7002,User logoff notification,69543,logoff
+2025-08-06 21:39:51,7001,User logon notification,69569,logon
+2025-08-06 22:32:54,1074,System shutdown/restart initiated,69666,logoff
+2025-08-06 22:32:56,7002,User logoff notification,69690,logoff
+2025-08-07 12:10:15,7001,User logon notification,69728,logon
+2025-08-07 12:27:52,7002,User logoff notification,69805,logoff
+2025-08-07 17:25:19,7001,User logon notification,69825,logon
+2025-08-07 22:32:44,1074,System shutdown/restart initiated,69919,logoff
+2025-08-07 22:32:46,7002,User logoff notification,69944,logoff
+2025-08-08 07:23:36,7001,User logon notification,69966,logon
+2025-08-08 13:41:04,1074,System shutdown/restart initiated,70053,logoff
+2025-08-08 13:41:06,7002,User logoff notification,70078,logoff
+2025-08-08 17:32:08,7001,User logon notification,70101,logon
+2025-08-08 19:00:01,1074,System shutdown/restart initiated,70162,logoff
+2025-08-08 19:00:02,7002,User logoff notification,70182,logoff
+2025-08-08 21:40:58,6005,System startup (Event Log service started),70195,logon
+2025-08-08 21:41:09,7001,User logon notification,70368,logon
+2025-08-08 23:23:46,1074,System shutdown/restart initiated,70437,logoff
+2025-08-08 23:23:51,1074,System shutdown/restart initiated,70462,logoff
+2025-08-08 23:23:51,7002,User logoff notification,70463,logoff
+2025-08-09 08:01:26,7001,User logon notification,70484,logon
+2025-08-09 12:15:17,1074,System shutdown/restart initiated,70590,logoff
+2025-08-09 12:15:24,7002,User logoff notification,70613,logoff
+2025-08-09 20:16:32,7001,User logon notification,70637,logon
+2025-08-09 23:00:01,1074,System shutdown/restart initiated,70702,logoff
+2025-08-09 23:00:03,7002,User logoff notification,70723,logoff
+2025-08-10 13:49:12,7001,User logon notification,70747,logon
+2025-08-10 15:58:54,1074,System shutdown/restart initiated,70816,logoff
+2025-08-10 15:58:55,7002,User logoff notification,70838,logoff
+2025-08-11 17:47:42,7001,User logon notification,70865,logon
+2025-08-11 19:48:30,1074,System shutdown/restart initiated,70972,logoff
+2025-08-11 19:48:32,7002,User logoff notification,70992,logoff
+2025-08-11 21:16:01,7001,User logon notification,71011,logon
+2025-08-11 23:26:26,1074,System shutdown/restart initiated,71062,logoff
+2025-08-11 23:26:28,7002,User logoff notification,71088,logoff
+2025-08-12 16:13:40,7001,User logon notification,71116,logon
+2025-08-12 16:52:10,1074,System shutdown/restart initiated,71191,logoff
+2025-08-12 16:52:12,7002,User logoff notification,71213,logoff
+2025-08-12 21:13:26,7001,User logon notification,71233,logon
+2025-08-12 22:50:02,1074,System shutdown/restart initiated,71294,logoff
+2025-08-12 22:50:08,7002,User logoff notification,71318,logoff
+2025-08-13 07:00:46,7001,User logon notification,71338,logon
+2025-08-13 15:34:03,7002,User logoff notification,71473,logoff
+2025-08-13 15:34:42,6005,System startup (Event Log service started),71486,logon
+2025-08-13 15:35:08,7001,User logon notification,71657,logon
+2025-08-13 17:20:15,1074,System shutdown/restart initiated,71741,logoff
+2025-08-14 09:49:07,41,System rebooted without cleanly shutting down,71886,logoff
+2025-08-14 09:49:17,6008,Unexpected shutdown (previous shutdown was unexpected),71862,logoff
+2025-08-14 09:49:17,6005,System startup (Event Log service started),71871,logon
+2025-08-14 09:49:37,7001,User logon notification,72017,logon
+2025-08-14 23:00:15,1074,System shutdown/restart initiated,72179,logoff
+2025-08-14 23:00:49,1074,System shutdown/restart initiated,72233,logoff
+2025-08-14 23:00:49,7002,User logoff notification,72234,logoff
+2025-08-15 07:18:43,7001,User logon notification,72256,logon
+2025-08-15 15:45:45,1074,System shutdown/restart initiated,72391,logoff
+2025-08-15 19:49:01,1074,System shutdown/restart initiated,72441,logoff
+2025-08-15 19:49:02,7002,User logoff notification,72443,logoff
+2025-08-16 16:43:55,7001,User logon notification,72477,logon
+2025-08-16 18:09:46,1074,System shutdown/restart initiated,72553,logoff
+2025-08-16 18:09:53,7002,User logoff notification,72576,logoff
+2025-08-16 22:40:32,7001,User logon notification,72608,logon
+2025-08-16 22:48:18,1074,System shutdown/restart initiated,72661,logoff
+2025-08-16 22:48:19,7002,User logoff notification,72681,logoff
+2025-08-17 09:33:39,7001,User logon notification,72708,logon
+2025-08-17 14:11:02,1074,System shutdown/restart initiated,72768,logoff
+2025-08-17 14:11:04,7002,User logoff notification,72789,logoff
+2025-08-18 07:47:21,7001,User logon notification,72844,logon
+2025-08-18 19:58:07,1074,System shutdown/restart initiated,72972,logoff
+2025-08-18 19:58:09,7002,User logoff notification,72992,logoff
+2025-08-18 21:31:36,7001,User logon notification,73023,logon
+2025-08-18 23:09:01,1074,System shutdown/restart initiated,73124,logoff
+2025-08-18 23:09:07,7002,User logoff notification,73146,logoff
+2025-08-20 20:33:06,7001,User logon notification,73201,logon
+2025-08-20 22:40:50,1074,System shutdown/restart initiated,73301,logoff
+2025-08-20 22:40:51,7002,User logoff notification,73322,logoff
+2025-08-21 06:40:50,7001,User logon notification,73351,logon
+2025-08-21 08:34:17,1074,System shutdown/restart initiated,73425,logoff
+2025-08-21 08:34:19,7002,User logoff notification,73445,logoff
+2025-08-21 19:55:09,7001,User logon notification,73479,logon
+2025-08-21 23:59:45,1074,System shutdown/restart initiated,73577,logoff
+2025-08-21 23:59:51,7002,User logoff notification,73599,logoff
+2025-08-22 07:49:48,7001,User logon notification,73630,logon
+2025-08-22 14:23:06,41,System rebooted without cleanly shutting down,73736,logoff
+2025-08-22 14:23:16,6005,System startup (Event Log service started),73719,logon
+2025-08-22 14:23:16,6008,Unexpected shutdown (previous shutdown was unexpected),73717,logoff
+2025-08-22 14:24:30,7001,User logon notification,73905,logon
+2025-08-22 19:40:33,41,System rebooted without cleanly shutting down,74020,logoff
+2025-08-22 19:40:44,6005,System startup (Event Log service started),73987,logon
+2025-08-22 19:40:44,6008,Unexpected shutdown (previous shutdown was unexpected),73985,logoff
+2025-08-22 19:40:49,7001,User logon notification,74147,logon
+2025-08-22 23:16:29,1074,System shutdown/restart initiated,74254,logoff
+2025-08-22 23:16:31,1074,System shutdown/restart initiated,74275,logoff
+2025-08-22 23:16:31,7002,User logoff notification,74276,logoff
+2025-08-23 07:53:52,7001,User logon notification,74297,logon
+2025-08-23 09:33:09,1074,System shutdown/restart initiated,74371,logoff
+2025-08-23 09:33:11,7002,User logoff notification,74391,logoff
+2025-08-23 13:17:53,7001,User logon notification,74410,logon
+2025-08-23 16:10:38,1074,System shutdown/restart initiated,74466,logoff
+2025-08-23 16:10:40,7002,User logoff notification,74487,logoff
+2025-08-23 22:44:59,7001,User logon notification,74513,logon
+2025-08-24 01:12:19,1074,System shutdown/restart initiated,74599,logoff
+2025-08-24 01:12:25,7002,User logoff notification,74621,logoff
+2025-08-24 08:59:56,7001,User logon notification,74645,logon
+2025-08-24 10:05:01,1074,System shutdown/restart initiated,74702,logoff
+2025-08-24 10:05:03,7002,User logoff notification,74722,logoff
+2025-08-24 12:47:24,7001,User logon notification,74744,logon
+2025-08-24 14:02:20,1074,System shutdown/restart initiated,74789,logoff
+2025-08-24 14:02:27,7002,User logoff notification,74811,logoff
+2025-08-24 15:07:02,7001,User logon notification,74830,logon
+2025-08-24 23:48:09,1074,System shutdown/restart initiated,74934,logoff
+2025-08-24 23:48:11,7002,User logoff notification,74955,logoff
+2025-08-25 20:55:34,7001,User logon notification,74986,logon
+2025-08-25 23:36:47,1074,System shutdown/restart initiated,75170,logoff
+2025-08-25 23:36:49,7002,User logoff notification,75191,logoff
+2025-08-26 13:23:55,7001,User logon notification,75219,logon
+2025-08-26 19:29:06,1074,System shutdown/restart initiated,75364,logoff
+2025-08-26 19:31:07,1074,System shutdown/restart initiated,75387,logoff
+2025-08-26 19:31:08,7002,User logoff notification,75388,logoff
+2025-08-26 21:16:40,7001,User logon notification,75409,logon
+2025-08-26 22:37:17,1074,System shutdown/restart initiated,75468,logoff
+2025-08-26 22:37:24,7002,User logoff notification,75492,logoff
+2025-08-27 07:03:25,7001,User logon notification,75514,logon
+2025-08-27 19:46:24,1074,System shutdown/restart initiated,75699,logoff
+2025-08-27 19:46:26,7002,User logoff notification,75719,logoff
+2025-08-27 21:25:27,7001,User logon notification,75740,logon
+2025-08-27 23:21:48,1074,System shutdown/restart initiated,75804,logoff
+2025-08-27 23:21:54,7002,User logoff notification,75825,logoff
+2025-08-28 07:48:17,7001,User logon notification,75848,logon
+2025-08-28 08:17:19,1074,System shutdown/restart initiated,75916,logoff
+2025-08-28 08:17:20,7002,User logoff notification,75936,logoff
+2025-08-28 20:16:24,7001,User logon notification,75961,logon
+2025-08-28 22:27:35,1074,System shutdown/restart initiated,76057,logoff
+2025-08-28 22:27:37,7002,User logoff notification,76077,logoff
+2025-08-29 06:59:33,7001,User logon notification,76098,logon
+2025-08-29 14:58:34,1074,System shutdown/restart initiated,76236,logoff
+2025-08-29 14:58:36,7002,User logoff notification,76257,logoff
+2025-08-29 18:15:32,7001,User logon notification,76283,logon
+2025-08-30 00:18:54,1074,System shutdown/restart initiated,76377,logoff
+2025-08-30 00:18:56,7002,User logoff notification,76398,logoff
+2025-08-30 09:54:47,7001,User logon notification,76422,logon
+2025-08-30 12:19:34,7002,User logoff notification,76542,logoff
+2025-08-30 12:20:39,6005,System startup (Event Log service started),76555,logon
+2025-08-30 12:21:10,1074,System shutdown/restart initiated,76737,logoff
+2025-08-30 12:21:38,6005,System startup (Event Log service started),76746,logon
+2025-08-30 12:26:32,7001,User logon notification,76892,logon
+2025-08-30 12:26:45,1074,System shutdown/restart initiated,76899,logoff
+2025-08-30 12:26:46,1074,System shutdown/restart initiated,76900,logoff
+2025-08-30 12:26:46,7002,User logoff notification,76901,logoff
+2025-08-30 14:20:42,7001,User logon notification,76923,logon
+2025-08-30 15:29:11,1074,System shutdown/restart initiated,76976,logoff
+2025-08-30 15:29:12,7002,User logoff notification,76996,logoff
+2025-08-30 16:11:08,7001,User logon notification,77014,logon
+2025-08-30 22:56:42,1074,System shutdown/restart initiated,77096,logoff
+2025-08-30 22:56:44,7002,User logoff notification,77117,logoff
+2025-08-31 09:43:51,7001,User logon notification,77138,logon
+2025-08-31 10:00:57,1074,System shutdown/restart initiated,77227,logoff
+2025-08-31 10:00:58,7002,User logoff notification,77247,logoff
+2025-09-01 20:17:51,7001,User logon notification,77275,logon
+2025-09-01 22:56:28,1074,System shutdown/restart initiated,77400,logoff
+2025-09-01 22:56:30,7002,User logoff notification,77421,logoff
+2025-09-02 06:39:59,7001,User logon notification,77448,logon
+2025-09-02 08:31:35,1074,System shutdown/restart initiated,77517,logoff
+2025-09-02 08:31:37,7002,User logoff notification,77537,logoff
+2025-09-02 13:46:16,7001,User logon notification,77561,logon
+2025-09-02 23:12:43,1074,System shutdown/restart initiated,77739,logoff
+2025-09-02 23:12:45,7002,User logoff notification,77760,logoff
+2025-09-03 21:39:28,7001,User logon notification,77793,logon
+2025-09-03 22:41:01,1074,System shutdown/restart initiated,77873,logoff
+2025-09-03 22:41:03,7002,User logoff notification,77894,logoff
+2025-09-04 11:48:03,7001,User logon notification,77921,logon
+2025-09-05 15:02:00,41,System rebooted without cleanly shutting down,78014,logoff
+2025-09-05 15:02:11,6008,Unexpected shutdown (previous shutdown was unexpected),77989,logoff
+2025-09-05 15:02:11,6005,System startup (Event Log service started),77999,logon
+2025-09-05 15:02:54,7001,User logon notification,78147,logon
+2025-09-05 23:13:44,1074,System shutdown/restart initiated,78315,logoff
+2025-09-06 07:44:26,41,System rebooted without cleanly shutting down,78371,logoff
+2025-09-06 07:44:37,6005,System startup (Event Log service started),78348,logon
+2025-09-06 07:44:37,6008,Unexpected shutdown (previous shutdown was unexpected),78346,logoff
+2025-09-06 07:45:07,7001,User logon notification,78502,logon
+2025-09-06 10:25:19,1074,System shutdown/restart initiated,78574,logoff
+2025-09-06 10:25:20,1074,System shutdown/restart initiated,78594,logoff
+2025-09-06 10:25:20,7002,User logoff notification,78595,logoff
+2025-09-06 14:16:41,7001,User logon notification,78616,logon
+2025-09-06 20:58:09,1074,System shutdown/restart initiated,78684,logoff
+2025-09-06 20:58:17,7002,User logoff notification,78706,logoff
+2025-09-07 08:18:40,7001,User logon notification,78746,logon
+2025-09-07 09:53:39,1074,System shutdown/restart initiated,78812,logoff
+2025-09-07 09:53:41,7002,User logoff notification,78833,logoff
+2025-09-07 09:59:15,7001,User logon notification,78852,logon
+2025-09-07 10:02:37,1074,System shutdown/restart initiated,78894,logoff
+2025-09-07 10:02:39,7002,User logoff notification,78914,logoff
+2025-09-07 12:38:51,7001,User logon notification,78933,logon
+2025-09-07 13:53:51,1074,System shutdown/restart initiated,78975,logoff
+2025-09-07 13:53:53,7002,User logoff notification,78995,logoff
+2025-09-07 16:30:15,7001,User logon notification,79015,logon
+2025-09-07 18:03:04,1074,System shutdown/restart initiated,79083,logoff
+2025-09-07 18:03:05,7002,User logoff notification,79104,logoff
+2025-09-08 17:45:30,7001,User logon notification,79139,logon
+2025-09-08 19:34:27,1074,System shutdown/restart initiated,79247,logoff
+2025-09-08 19:34:29,7002,User logoff notification,79267,logoff
+2025-09-08 19:53:55,7001,User logon notification,79288,logon
+2025-09-08 23:16:21,1074,System shutdown/restart initiated,79366,logoff
+2025-09-08 23:16:23,7002,User logoff notification,79387,logoff
+2025-09-09 07:38:05,7001,User logon notification,79407,logon
+2025-09-09 07:51:59,1074,System shutdown/restart initiated,79494,logoff
+2025-09-09 07:52:01,7002,User logoff notification,79514,logoff
+2025-09-09 07:52:48,6005,System startup (Event Log service started),79526,logon
+2025-09-09 07:52:56,7001,User logon notification,79699,logon
+2025-09-09 22:17:52,1074,System shutdown/restart initiated,79842,logoff
+2025-09-09 22:17:54,7002,User logoff notification,79863,logoff
+2025-09-09 22:18:33,6005,System startup (Event Log service started),79876,logon
+2025-09-09 22:18:59,7001,User logon notification,80049,logon
+2025-09-10 21:25:12,41,System rebooted without cleanly shutting down,80104,logoff
+2025-09-10 21:25:23,6008,Unexpected shutdown (previous shutdown was unexpected),80079,logoff
+2025-09-10 21:25:23,6005,System startup (Event Log service started),80081,logon
+2025-09-10 21:25:37,7001,User logon notification,80235,logon
+2025-09-10 23:10:01,1074,System shutdown/restart initiated,80360,logoff
+2025-09-10 23:10:02,1074,System shutdown/restart initiated,80380,logoff
+2025-09-10 23:10:02,7002,User logoff notification,80381,logoff
+2025-09-11 07:47:45,7001,User logon notification,80408,logon
+2025-09-11 20:19:27,1074,System shutdown/restart initiated,80582,logoff
+2025-09-11 20:19:28,7002,User logoff notification,80606,logoff
+2025-09-11 21:37:13,7001,User logon notification,80628,logon
+2025-09-11 23:21:07,1074,System shutdown/restart initiated,80737,logoff
+2025-09-11 23:21:09,7002,User logoff notification,80762,logoff
+2025-09-12 07:09:31,7001,User logon notification,80781,logon
+2025-09-12 09:21:28,1074,System shutdown/restart initiated,80852,logoff
+2025-09-12 15:46:08,41,System rebooted without cleanly shutting down,80911,logoff
+2025-09-12 15:46:17,6008,Unexpected shutdown (previous shutdown was unexpected),80894,logoff
+2025-09-12 15:46:17,6005,System startup (Event Log service started),80896,logon
+2025-09-12 15:47:32,7001,User logon notification,81044,logon
+2025-09-13 11:19:42,41,System rebooted without cleanly shutting down,81201,logoff
+2025-09-13 11:19:51,6008,Unexpected shutdown (previous shutdown was unexpected),81184,logoff
+2025-09-13 11:19:51,6005,System startup (Event Log service started),81186,logon
+2025-09-13 11:20:38,7001,User logon notification,81332,logon
+2025-09-13 19:53:18,1074,System shutdown/restart initiated,81470,logoff
+2025-09-13 19:53:19,1074,System shutdown/restart initiated,81495,logoff
+2025-09-13 19:53:19,7002,User logoff notification,81496,logoff
+2025-09-14 09:42:45,7001,User logon notification,81524,logon
+2025-09-14 10:02:21,1074,System shutdown/restart initiated,81593,logoff
+2025-09-14 10:02:23,7002,User logoff notification,81618,logoff
+2025-09-14 13:29:27,7001,User logon notification,81640,logon
+2025-09-14 14:16:49,1074,System shutdown/restart initiated,81700,logoff
+2025-09-14 14:16:50,7002,User logoff notification,81725,logoff
+2025-09-14 15:41:38,7001,User logon notification,81746,logon
+2025-09-14 22:42:12,1074,System shutdown/restart initiated,81811,logoff
+2025-09-14 22:42:14,7002,User logoff notification,81836,logoff
+2025-09-15 09:34:04,7001,User logon notification,81857,logon
+2025-09-15 21:03:38,41,System rebooted without cleanly shutting down,82099,logoff
+2025-09-15 21:03:48,6008,Unexpected shutdown (previous shutdown was unexpected),82082,logoff
+2025-09-15 21:03:48,6005,System startup (Event Log service started),82084,logon
+2025-09-15 21:07:48,7001,User logon notification,82233,logon
+2025-09-16 06:42:39,41,System rebooted without cleanly shutting down,82335,logoff
+2025-09-16 06:42:50,6005,System startup (Event Log service started),82313,logon
+2025-09-16 06:42:50,6008,Unexpected shutdown (previous shutdown was unexpected),82310,logoff
+2025-09-16 06:43:34,7001,User logon notification,82466,logon
+2025-09-16 07:20:24,1074,System shutdown/restart initiated,82538,logoff
+2025-09-16 07:20:26,1074,System shutdown/restart initiated,82564,logoff
+2025-09-16 07:20:26,7002,User logoff notification,82565,logoff
+2025-09-16 22:07:43,7001,User logon notification,82591,logon
+2025-09-16 23:16:16,1074,System shutdown/restart initiated,82675,logoff
+2025-09-16 23:16:19,7002,User logoff notification,82702,logoff
+2025-09-17 06:45:49,7001,User logon notification,82722,logon
+2025-09-17 07:54:17,1074,System shutdown/restart initiated,82827,logoff
+2025-09-17 07:54:20,7002,User logoff notification,82851,logoff
+2025-09-17 19:44:15,7001,User logon notification,82902,logon
+2025-09-17 23:18:16,1074,System shutdown/restart initiated,82984,logoff
+2025-09-17 23:18:19,7002,User logoff notification,83008,logoff
+2025-09-18 06:42:42,7001,User logon notification,83030,logon
+2025-09-18 07:33:10,1074,System shutdown/restart initiated,83100,logoff
+2025-09-18 07:33:13,7002,User logoff notification,83124,logoff
+2025-09-18 21:24:35,7001,User logon notification,83147,logon
+2025-09-18 22:46:15,1074,System shutdown/restart initiated,83250,logoff
+2025-09-18 22:46:18,7002,User logoff notification,83274,logoff
+2025-09-19 14:22:43,7001,User logon notification,83306,logon
+2025-09-20 00:01:41,1074,System shutdown/restart initiated,83535,logoff
+2025-09-20 00:01:44,7002,User logoff notification,83557,logoff
+2025-09-20 17:53:02,7001,User logon notification,83601,logon
+2025-09-20 22:18:17,1074,System shutdown/restart initiated,83702,logoff
+2025-09-20 22:18:20,7002,User logoff notification,83726,logoff
+2025-09-21 09:23:27,7001,User logon notification,83758,logon
+2025-09-21 10:05:55,1074,System shutdown/restart initiated,83813,logoff
+2025-09-21 10:05:58,7002,User logoff notification,83836,logoff
+2025-09-21 16:18:23,7001,User logon notification,83866,logon
+2025-09-21 21:06:54,1074,System shutdown/restart initiated,83956,logoff
+2025-09-21 21:06:57,7002,User logoff notification,83979,logoff
+2025-09-21 22:00:10,7001,User logon notification,84005,logon
+2025-09-21 23:00:48,1074,System shutdown/restart initiated,84061,logoff
+2025-09-21 23:00:51,7002,User logoff notification,84085,logoff
+2025-09-22 19:41:31,7001,User logon notification,84129,logon
+2025-09-23 18:09:19,41,System rebooted without cleanly shutting down,84255,logoff
+2025-09-23 18:09:30,6008,Unexpected shutdown (previous shutdown was unexpected),84228,logoff
+2025-09-23 18:09:30,6005,System startup (Event Log service started),84230,logon
+2025-09-23 18:09:53,7001,User logon notification,84425,logon
+2025-09-23 20:51:11,41,System rebooted without cleanly shutting down,84543,logoff
+2025-09-23 20:51:22,6005,System startup (Event Log service started),84520,logon
+2025-09-23 20:51:22,6008,Unexpected shutdown (previous shutdown was unexpected),84518,logoff
+2025-09-23 20:51:34,7001,User logon notification,84674,logon
+2025-09-24 19:26:24,41,System rebooted without cleanly shutting down,84816,logoff
+2025-09-24 19:26:33,6005,System startup (Event Log service started),84801,logon
+2025-09-24 19:26:33,6008,Unexpected shutdown (previous shutdown was unexpected),84799,logoff
+2025-09-24 19:26:33,7001,User logon notification,84901,logon
+2025-09-25 19:27:25,41,System rebooted without cleanly shutting down,85099,logoff
+2025-09-25 19:27:37,6005,System startup (Event Log service started),85084,logon
+2025-09-25 19:27:37,6008,Unexpected shutdown (previous shutdown was unexpected),85074,logoff
+2025-09-25 19:28:55,7001,User logon notification,85230,logon
+2025-09-25 23:11:49,1074,System shutdown/restart initiated,85362,logoff
+2025-09-25 23:11:51,1074,System shutdown/restart initiated,85383,logoff
+2025-09-25 23:11:51,7002,User logoff notification,85384,logoff
+2025-09-26 09:39:36,41,System rebooted without cleanly shutting down,85449,logoff
+2025-09-26 09:39:45,6008,Unexpected shutdown (previous shutdown was unexpected),85432,logoff
+2025-09-26 09:39:45,6005,System startup (Event Log service started),85434,logon
+2025-09-26 09:47:46,7001,User logon notification,85585,logon
+2025-09-26 19:46:30,41,System rebooted without cleanly shutting down,85772,logoff
+2025-09-26 19:46:41,6008,Unexpected shutdown (previous shutdown was unexpected),85747,logoff
+2025-09-26 19:46:41,6005,System startup (Event Log service started),85749,logon
+2025-09-26 19:46:59,7001,User logon notification,85904,logon
+2025-09-26 23:35:30,1074,System shutdown/restart initiated,85982,logoff
+2025-09-26 23:35:33,1074,System shutdown/restart initiated,86006,logoff
+2025-09-26 23:35:33,7002,User logoff notification,86007,logoff
+2025-09-27 10:30:19,7001,User logon notification,86029,logon
+2025-09-27 13:23:48,1074,System shutdown/restart initiated,86098,logoff
+2025-09-27 13:23:51,7002,User logoff notification,86122,logoff
+2025-09-27 16:48:17,7001,User logon notification,86141,logon
+2025-09-27 17:27:18,1074,System shutdown/restart initiated,86183,logoff
+2025-09-27 17:27:20,7002,User logoff notification,86206,logoff
+2025-09-28 14:25:10,7001,User logon notification,86234,logon
+2025-09-28 18:39:24,1074,System shutdown/restart initiated,86351,logoff
+2025-09-28 18:39:27,7002,User logoff notification,86374,logoff
+2025-09-29 20:23:17,7001,User logon notification,86406,logon
+2025-09-29 22:56:30,1074,System shutdown/restart initiated,86492,logoff
+2025-09-29 22:56:33,7002,User logoff notification,86516,logoff
+2025-09-30 07:41:32,7001,User logon notification,86538,logon
+2025-10-01 03:43:43,7002,User logoff notification,86893,logoff
+2025-10-01 03:44:42,6005,System startup (Event Log service started),86907,logon
+2025-10-01 03:45:13,1074,System shutdown/restart initiated,87102,logoff
+2025-10-01 03:45:41,6005,System startup (Event Log service started),87112,logon
+2025-10-01 07:33:48,7001,User logon notification,87264,logon
+2025-10-01 08:02:14,1074,System shutdown/restart initiated,87311,logoff
+2025-10-01 08:02:15,7002,User logoff notification,87335,logoff
+2025-10-01 08:02:15,1074,System shutdown/restart initiated,87334,logoff
+2025-10-01 18:10:49,7001,User logon notification,87371,logon
+2025-10-01 20:58:48,1074,System shutdown/restart initiated,87506,logoff
+2025-10-01 20:58:49,7002,User logoff notification,87529,logoff
+2025-10-02 08:25:15,7001,User logon notification,87558,logon
+2025-10-02 08:56:15,1074,System shutdown/restart initiated,87713,logoff
+2025-10-02 08:56:16,7002,User logoff notification,87736,logoff
+2025-10-02 21:25:15,7001,User logon notification,87761,logon
+2025-10-02 23:17:35,1074,System shutdown/restart initiated,87881,logoff
+2025-10-02 23:17:37,7002,User logoff notification,87905,logoff
+2025-10-03 07:56:43,7001,User logon notification,87928,logon
+2025-10-03 23:02:10,1074,System shutdown/restart initiated,88160,logoff
+2025-10-03 23:02:13,7002,User logoff notification,88185,logoff
+2025-10-04 08:38:09,7001,User logon notification,88222,logon
+2025-10-04 23:42:30,1074,System shutdown/restart initiated,88412,logoff
+2025-10-04 23:42:32,7002,User logoff notification,88436,logoff
+2025-10-05 10:32:38,7001,User logon notification,88459,logon
+2025-10-05 20:27:48,1074,System shutdown/restart initiated,88572,logoff
+2025-10-05 20:27:49,7002,User logoff notification,88597,logoff
+2025-10-06 19:28:30,6005,System startup (Event Log service started),88609,logon
+2025-10-06 20:18:27,7001,User logon notification,88793,logon
+2025-10-06 23:00:02,1074,System shutdown/restart initiated,88979,logoff
+2025-10-06 23:00:03,1074,System shutdown/restart initiated,89002,logoff
+2025-10-06 23:00:03,7002,User logoff notification,89003,logoff
+2025-10-07 11:09:36,7001,User logon notification,89025,logon
+2025-10-07 22:54:08,1074,System shutdown/restart initiated,89177,logoff
+2025-10-07 22:54:10,7002,User logoff notification,89200,logoff
+2025-10-08 19:18:17,7001,User logon notification,89248,logon
+2025-10-08 23:33:03,1074,System shutdown/restart initiated,89398,logoff
+2025-10-08 23:33:05,7002,User logoff notification,89421,logoff
+2025-10-09 07:35:43,7001,User logon notification,89443,logon
+2025-10-09 08:35:15,7002,User logoff notification,89602,logoff
+2025-10-09 08:35:50,6005,System startup (Event Log service started),89615,logon
+2025-10-09 08:35:52,7001,User logon notification,89773,logon
+2025-10-09 08:38:12,1074,System shutdown/restart initiated,89865,logoff
+2025-10-09 08:38:14,7002,User logoff notification,89888,logoff
+2025-10-09 08:38:52,6005,System startup (Event Log service started),89900,logon
+2025-10-09 08:38:53,7001,User logon notification,90043,logon
+2025-10-09 17:24:38,41,System rebooted without cleanly shutting down,90155,logoff
+2025-10-09 17:24:49,6008,Unexpected shutdown (previous shutdown was unexpected),90130,logoff
+2025-10-09 17:24:49,6005,System startup (Event Log service started),90132,logon
+2025-10-09 17:24:49,7001,User logon notification,90243,logon
+2025-10-09 18:11:55,1074,System shutdown/restart initiated,90393,logoff
+2025-10-09 18:12:02,1074,System shutdown/restart initiated,90417,logoff
+2025-10-09 18:12:02,7002,User logoff notification,90418,logoff
+2025-10-10 07:53:08,7001,User logon notification,90439,logon
+2025-10-10 17:20:15,41,System rebooted without cleanly shutting down,90642,logoff
+2025-10-10 17:20:25,6008,Unexpected shutdown (previous shutdown was unexpected),90625,logoff
+2025-10-10 17:20:25,6005,System startup (Event Log service started),90627,logon
+2025-10-10 17:21:56,7001,User logon notification,90773,logon
+2025-10-11 09:24:48,41,System rebooted without cleanly shutting down,90889,logoff
+2025-10-11 09:25:00,6005,System startup (Event Log service started),90874,logon
+2025-10-11 09:25:00,6008,Unexpected shutdown (previous shutdown was unexpected),90864,logoff
+2025-10-11 09:25:21,7001,User logon notification,91021,logon
+2025-10-12 01:49:03,1074,System shutdown/restart initiated,91331,logoff
+2025-10-12 01:49:18,1074,System shutdown/restart initiated,91357,logoff
+2025-10-12 01:49:18,7002,User logoff notification,91358,logoff
+2025-10-12 10:35:49,7001,User logon notification,91380,logon
+2025-10-12 13:24:48,1074,System shutdown/restart initiated,91495,logoff
+2025-10-12 13:24:49,7002,User logoff notification,91519,logoff
+2025-10-12 17:38:58,7001,User logon notification,91540,logon
+2025-10-13 19:38:49,41,System rebooted without cleanly shutting down,91689,logoff
+2025-10-13 19:38:58,6005,System startup (Event Log service started),91674,logon
+2025-10-13 19:38:58,6008,Unexpected shutdown (previous shutdown was unexpected),91672,logoff
+2025-10-13 19:41:07,7001,User logon notification,91823,logon
+2025-10-13 21:38:50,1074,System shutdown/restart initiated,91899,logoff
+2025-10-13 21:39:04,1074,System shutdown/restart initiated,91926,logoff
+2025-10-13 21:39:04,7002,User logoff notification,91927,logoff
+2025-10-13 21:39:42,6005,System startup (Event Log service started),91937,logon
+2025-10-13 21:42:37,7001,User logon notification,92113,logon
+2025-10-13 23:17:06,1074,System shutdown/restart initiated,92198,logoff
+2025-10-14 19:55:21,41,System rebooted without cleanly shutting down,92253,logoff
+2025-10-14 19:55:32,6005,System startup (Event Log service started),92230,logon
+2025-10-14 19:55:32,6008,Unexpected shutdown (previous shutdown was unexpected),92228,logoff
+2025-10-14 19:56:07,7001,User logon notification,92384,logon
+2025-10-15 19:26:27,41,System rebooted without cleanly shutting down,92550,logoff
+2025-10-15 19:26:36,6008,Unexpected shutdown (previous shutdown was unexpected),92533,logoff
+2025-10-15 19:26:36,6005,System startup (Event Log service started),92535,logon
+2025-10-15 19:27:09,7001,User logon notification,92681,logon
+2025-10-15 22:46:21,1074,System shutdown/restart initiated,92946,logoff
+2025-10-15 22:46:23,7002,User logoff notification,92970,logoff
+2025-10-15 22:47:09,6005,System startup (Event Log service started),92981,logon
+2025-10-15 22:47:31,1074,System shutdown/restart initiated,93148,logoff
+2025-10-15 22:47:59,6005,System startup (Event Log service started),93157,logon
+2025-10-15 22:48:17,7001,User logon notification,93299,logon
+2025-10-17 08:28:49,41,System rebooted without cleanly shutting down,93338,logoff
+2025-10-17 08:29:01,6008,Unexpected shutdown (previous shutdown was unexpected),93312,logoff
+2025-10-17 08:29:01,6005,System startup (Event Log service started),93314,logon
+2025-10-17 08:30:27,7001,User logon notification,93486,logon
+2025-10-18 00:20:43,1074,System shutdown/restart initiated,93810,logoff
+2025-10-18 00:20:45,1074,System shutdown/restart initiated,93834,logoff
+2025-10-18 00:20:45,7002,User logoff notification,93835,logoff
+2025-10-18 08:34:53,6005,System startup (Event Log service started),93848,logon
+2025-10-18 08:39:51,7001,User logon notification,94015,logon
+2025-10-19 01:45:31,1074,System shutdown/restart initiated,94217,logoff
+2025-10-19 01:45:33,7002,User logoff notification,94243,logoff
+2025-10-19 01:45:33,1074,System shutdown/restart initiated,94242,logoff
+2025-10-19 09:37:55,7001,User logon notification,94263,logon
+2025-10-19 15:19:02,1074,System shutdown/restart initiated,94413,logoff
+2025-10-19 15:19:03,7002,User logoff notification,94434,logoff
+2025-10-19 15:45:03,7001,User logon notification,94452,logon
+2025-10-19 16:53:12,1074,System shutdown/restart initiated,94502,logoff
+2025-10-19 16:53:13,7002,User logoff notification,94523,logoff
+2025-10-19 19:04:42,7001,User logon notification,94544,logon
+2025-10-19 20:42:05,1074,System shutdown/restart initiated,94629,logoff
+2025-10-19 20:42:06,7002,User logoff notification,94649,logoff
+2025-10-20 20:08:45,7001,User logon notification,94677,logon
+2025-10-20 20:46:55,1074,System shutdown/restart initiated,94795,logoff
+2025-10-20 20:46:57,7002,User logoff notification,94815,logoff
+2025-10-21 06:44:45,7001,User logon notification,94836,logon
+2025-10-21 08:08:16,1074,System shutdown/restart initiated,94958,logoff
+2025-10-22 07:42:16,41,System rebooted without cleanly shutting down,94998,logoff
+2025-10-22 07:42:25,6005,System startup (Event Log service started),94983,logon
+2025-10-22 07:42:25,6008,Unexpected shutdown (previous shutdown was unexpected),94981,logoff
+2025-10-22 07:42:51,7001,User logon notification,95129,logon
+2025-10-22 08:55:30,1074,System shutdown/restart initiated,95308,logoff
+2025-10-22 08:55:32,7002,User logoff notification,95328,logoff
+2025-10-22 08:56:12,6005,System startup (Event Log service started),95339,logon
+2025-10-22 08:56:29,1074,System shutdown/restart initiated,95499,logoff
+2025-10-22 08:56:58,6005,System startup (Event Log service started),95508,logon
+2025-10-22 19:48:11,7001,User logon notification,95680,logon
+2025-10-22 23:02:33,1074,System shutdown/restart initiated,95775,logoff
+2025-10-22 23:02:34,7002,User logoff notification,95797,logoff
+2025-10-22 23:02:34,1074,System shutdown/restart initiated,95796,logoff
+2025-10-23 20:08:33,7001,User logon notification,95827,logon
+2025-10-23 21:23:28,1074,System shutdown/restart initiated,95954,logoff
+2025-10-23 21:23:30,7002,User logoff notification,95974,logoff
+2025-10-24 09:36:54,7001,User logon notification,96000,logon
+2025-10-24 10:01:17,41,System rebooted without cleanly shutting down,96150,logoff
+2025-10-24 10:01:28,6008,Unexpected shutdown (previous shutdown was unexpected),96118,logoff
+2025-10-24 10:01:28,6005,System startup (Event Log service started),96120,logon
+2025-10-24 10:01:37,7001,User logon notification,96287,logon
+2025-10-24 10:04:37,1074,System shutdown/restart initiated,96347,logoff
+2025-10-24 10:04:38,7002,User logoff notification,96368,logoff
+2025-10-24 10:04:38,1074,System shutdown/restart initiated,96367,logoff
+2025-10-24 11:13:26,7001,User logon notification,96393,logon
+2025-10-24 14:18:37,1074,System shutdown/restart initiated,96525,logoff
+2025-10-24 14:18:39,7002,User logoff notification,96546,logoff
+2025-10-24 14:58:10,7001,User logon notification,96565,logon
+2025-10-24 22:49:13,1074,System shutdown/restart initiated,96707,logoff
+2025-10-24 22:49:15,7002,User logoff notification,96728,logoff
+2025-10-25 10:26:19,7001,User logon notification,96760,logon
+2025-10-25 19:41:42,1074,System shutdown/restart initiated,96930,logoff
+2025-10-25 19:41:43,7002,User logoff notification,96951,logoff
+2025-10-26 08:30:15,7001,User logon notification,96982,logon
+2025-10-26 14:08:57,1074,System shutdown/restart initiated,97130,logoff
+2025-10-26 14:08:58,7002,User logoff notification,97152,logoff
+2025-10-27 19:57:27,6005,System startup (Event Log service started),97164,logon
+2025-10-27 19:57:36,7001,User logon notification,97327,logon
+2025-10-27 22:53:25,1074,System shutdown/restart initiated,97461,logoff
+2025-10-27 22:53:27,7002,User logoff notification,97483,logoff
+2025-10-27 22:53:27,1074,System shutdown/restart initiated,97482,logoff
+2025-10-28 07:33:44,7001,User logon notification,97503,logon
+2025-10-28 19:08:13,41,System rebooted without cleanly shutting down,97656,logoff
+2025-10-28 19:08:22,6005,System startup (Event Log service started),97641,logon
+2025-10-28 19:08:22,6008,Unexpected shutdown (previous shutdown was unexpected),97639,logoff
+2025-10-28 19:11:21,7001,User logon notification,97790,logon
+2025-10-29 17:32:20,41,System rebooted without cleanly shutting down,97927,logoff
+2025-10-29 17:32:30,6008,Unexpected shutdown (previous shutdown was unexpected),97910,logoff
+2025-10-29 17:32:30,6005,System startup (Event Log service started),97912,logon
+2025-10-29 17:32:35,7001,User logon notification,98054,logon
+2025-10-29 23:36:42,1074,System shutdown/restart initiated,98240,logoff
+2025-10-29 23:36:44,7002,User logoff notification,98268,logoff
+2025-10-29 23:37:59,6005,System startup (Event Log service started),98279,logon
+2025-10-29 23:38:31,1074,System shutdown/restart initiated,98475,logoff
+2025-10-29 23:39:02,6005,System startup (Event Log service started),98484,logon
+2025-10-29 23:39:46,7001,User logon notification,98626,logon
+2025-10-29 23:40:18,1074,System shutdown/restart initiated,98662,logoff
+2025-10-29 23:40:25,7002,User logoff notification,98687,logoff
+2025-10-30 07:36:27,41,System rebooted without cleanly shutting down,98724,logoff
+2025-10-30 07:36:37,6008,Unexpected shutdown (previous shutdown was unexpected),98707,logoff
+2025-10-30 07:36:37,7001,User logon notification,98830,logon
+2025-10-30 07:36:37,6005,System startup (Event Log service started),98709,logon
+2025-10-30 08:50:48,1074,System shutdown/restart initiated,98975,logoff
+2025-10-30 08:50:50,1074,System shutdown/restart initiated,98998,logoff
+2025-10-30 08:50:50,7002,User logoff notification,98999,logoff
+2025-10-30 10:40:15,7001,User logon notification,99018,logon
+2025-10-31 07:34:56,41,System rebooted without cleanly shutting down,99141,logoff
+2025-10-31 07:35:07,6008,Unexpected shutdown (previous shutdown was unexpected),99108,logoff
+2025-10-31 07:35:07,6005,System startup (Event Log service started),99110,logon
+2025-10-31 07:35:32,7001,User logon notification,99273,logon
+2025-10-31 08:22:50,1074,System shutdown/restart initiated,99420,logoff
+2025-10-31 08:22:52,7002,User logoff notification,99444,logoff
+2025-10-31 08:22:52,1074,System shutdown/restart initiated,99443,logoff
+2025-10-31 16:00:50,7001,User logon notification,99468,logon
+2025-11-01 11:34:14,41,System rebooted without cleanly shutting down,99715,logoff
+2025-11-01 11:34:26,6008,Unexpected shutdown (previous shutdown was unexpected),99690,logoff
+2025-11-01 11:34:26,6005,System startup (Event Log service started),99692,logon
+2025-11-01 11:34:37,7001,User logon notification,99857,logon
+2025-11-01 14:23:06,1074,System shutdown/restart initiated,99977,logoff
+2025-11-01 14:23:08,1074,System shutdown/restart initiated,100003,logoff
+2025-11-01 14:23:08,7002,User logoff notification,100004,logoff
+2025-11-01 19:36:27,7001,User logon notification,100023,logon
+2025-11-01 23:01:26,1074,System shutdown/restart initiated,100122,logoff
+2025-11-01 23:01:28,7002,User logoff notification,100148,logoff
+2025-11-02 09:08:24,7001,User logon notification,100168,logon
+2025-11-02 11:21:58,1074,System shutdown/restart initiated,100264,logoff
+2025-11-02 11:21:59,7002,User logoff notification,100289,logoff
+2025-11-02 12:32:51,7001,User logon notification,100311,logon
+2025-11-02 14:52:53,1074,System shutdown/restart initiated,100434,logoff
+2025-11-02 14:52:55,7002,User logoff notification,100459,logoff
+2025-11-02 21:09:52,7001,User logon notification,100483,logon
+2025-11-02 22:24:21,1074,System shutdown/restart initiated,100574,logoff
+2025-11-02 22:24:23,7002,User logoff notification,100598,logoff
+2025-11-03 20:26:35,7001,User logon notification,100619,logon
+2025-11-03 22:50:41,1074,System shutdown/restart initiated,100711,logoff
+2025-11-03 22:50:43,7002,User logoff notification,100737,logoff
+2025-11-04 05:12:35,7001,User logon notification,100760,logon
+2025-11-04 08:02:43,1074,System shutdown/restart initiated,100858,logoff
+2025-11-04 08:02:45,7002,User logoff notification,100884,logoff
+2025-11-04 17:05:10,7001,User logon notification,100912,logon
+2025-11-04 21:29:13,1074,System shutdown/restart initiated,101053,logoff
+2025-11-04 21:29:15,7002,User logoff notification,101079,logoff
+2025-11-05 07:15:40,7001,User logon notification,101105,logon
+2025-11-05 13:38:33,7002,User logoff notification,101326,logoff
+2025-11-05 14:35:04,7001,User logon notification,101342,logon
+2025-11-05 15:25:55,1074,System shutdown/restart initiated,101426,logoff
+2025-11-05 15:25:57,7002,User logoff notification,101450,logoff
+2025-11-05 17:57:07,7001,User logon notification,101472,logon
+2025-11-05 23:00:49,1074,System shutdown/restart initiated,101590,logoff
+2025-11-05 23:00:50,7002,User logoff notification,101616,logoff
+2025-11-06 07:49:41,7001,User logon notification,101638,logon
+2025-11-06 08:24:04,1074,System shutdown/restart initiated,101731,logoff
+2025-11-06 08:24:06,7002,User logoff notification,101756,logoff
+2025-11-06 11:53:39,7001,User logon notification,101778,logon
+2025-11-06 16:04:49,41,System rebooted without cleanly shutting down,101914,logoff
+2025-11-06 16:04:59,7001,User logon notification,102002,logon
+2025-11-06 16:04:59,6005,System startup (Event Log service started),101883,logon
+2025-11-06 16:04:59,6008,Unexpected shutdown (previous shutdown was unexpected),101881,logoff
+2025-11-06 19:31:26,41,System rebooted without cleanly shutting down,102195,logoff
+2025-11-06 19:31:37,6008,Unexpected shutdown (previous shutdown was unexpected),102170,logoff
+2025-11-06 19:31:37,6005,System startup (Event Log service started),102172,logon
+2025-11-06 19:37:54,7001,User logon notification,102331,logon
+2025-11-06 21:12:34,41,System rebooted without cleanly shutting down,102546,logoff
+2025-11-06 21:12:44,6008,Unexpected shutdown (previous shutdown was unexpected),102519,logoff
+2025-11-06 21:12:44,6005,System startup (Event Log service started),102529,logon
+2025-11-06 21:12:52,7001,User logon notification,102674,logon
+2025-11-06 23:01:16,1074,System shutdown/restart initiated,102793,logoff
+2025-11-06 23:01:17,7002,User logoff notification,102817,logoff
+2025-11-06 23:01:17,1074,System shutdown/restart initiated,102816,logoff
+2025-11-07 06:08:19,7001,User logon notification,102839,logon
+2025-11-07 23:14:05,1074,System shutdown/restart initiated,103029,logoff
+2025-11-07 23:14:07,7002,User logoff notification,103055,logoff
+2025-11-08 09:43:51,7001,User logon notification,103079,logon
+2025-11-09 02:31:34,1074,System shutdown/restart initiated,103235,logoff
+2025-11-09 02:31:36,7002,User logoff notification,103261,logoff
+2025-11-09 11:22:24,7001,User logon notification,103289,logon
+2025-11-09 16:07:45,1074,System shutdown/restart initiated,103419,logoff
+2025-11-09 16:07:47,7002,User logoff notification,103445,logoff
+2025-11-10 07:26:42,7001,User logon notification,103475,logon
+2025-11-10 08:29:34,1074,System shutdown/restart initiated,103603,logoff
+2025-11-10 08:29:35,7002,User logoff notification,103629,logoff
+2025-11-10 09:32:27,7001,User logon notification,103650,logon
+2025-11-11 00:22:57,1074,System shutdown/restart initiated,103876,logoff
+2025-11-11 00:23:06,7002,User logoff notification,103904,logoff
+2025-11-11 06:47:47,7001,User logon notification,103923,logon
+2025-11-11 08:05:00,1074,System shutdown/restart initiated,104018,logoff
+2025-11-11 08:05:06,7002,User logoff notification,104044,logoff
+2025-11-11 17:37:19,7001,User logon notification,104069,logon
+2025-11-11 22:33:44,1074,System shutdown/restart initiated,104153,logoff
+2025-11-11 22:33:46,7002,User logoff notification,104174,logoff
+2025-11-12 07:40:25,7001,User logon notification,104214,logon
+2025-11-12 08:39:52,7002,User logoff notification,104355,logoff
+2025-11-12 08:40:32,6005,System startup (Event Log service started),104368,logon
+2025-11-12 08:40:53,1074,System shutdown/restart initiated,104543,logoff
+2025-11-12 08:41:22,6005,System startup (Event Log service started),104552,logon
+2025-11-12 08:41:42,7001,User logon notification,104695,logon
+2025-11-12 20:00:37,41,System rebooted without cleanly shutting down,104734,logoff
+2025-11-12 20:00:47,7001,User logon notification,104823,logon
+2025-11-12 20:00:47,6005,System startup (Event Log service started),104719,logon
+2025-11-12 20:00:47,6008,Unexpected shutdown (previous shutdown was unexpected),104717,logoff
+2025-11-12 22:46:49,1074,System shutdown/restart initiated,105002,logoff
+2025-11-12 22:46:51,1074,System shutdown/restart initiated,105023,logoff
+2025-11-12 22:46:51,7002,User logoff notification,105024,logoff
+2025-11-13 06:48:55,7001,User logon notification,105045,logon
+2025-11-13 08:31:52,1074,System shutdown/restart initiated,105098,logoff
+2025-11-13 08:31:53,7002,User logoff notification,105119,logoff
+2025-11-13 20:12:18,7001,User logon notification,105156,logon
+2025-11-13 22:36:26,1074,System shutdown/restart initiated,105208,logoff
+2025-11-13 22:36:28,7002,User logoff notification,105229,logoff
+2025-11-14 05:25:09,7001,User logon notification,105256,logon
+2025-11-14 23:50:27,1074,System shutdown/restart initiated,105517,logoff
+2025-11-14 23:50:29,7002,User logoff notification,105539,logoff
+2025-11-15 09:12:32,7001,User logon notification,105567,logon
+2025-11-15 11:02:41,1074,System shutdown/restart initiated,105672,logoff
+2025-11-15 11:02:43,7002,User logoff notification,105692,logoff
+2025-11-15 11:26:15,7001,User logon notification,105714,logon
+2025-11-16 00:35:03,1074,System shutdown/restart initiated,105886,logoff
+2025-11-16 00:35:04,7002,User logoff notification,105907,logoff
+2025-11-16 12:02:43,7001,User logon notification,105938,logon
+2025-11-16 22:49:13,1074,System shutdown/restart initiated,106065,logoff
+2025-11-16 22:49:15,7002,User logoff notification,106086,logoff
+2025-11-17 17:43:02,7001,User logon notification,106113,logon
+2025-11-17 23:51:09,7002,User logoff notification,106276,logoff
+2025-11-18 07:48:47,7001,User logon notification,106293,logon
+2025-11-18 08:46:42,1074,System shutdown/restart initiated,106454,logoff
+2025-11-18 08:46:44,7002,User logoff notification,106474,logoff
+2025-11-18 11:12:41,7001,User logon notification,106495,logon
+2025-11-18 20:43:48,1074,System shutdown/restart initiated,106636,logoff
+2025-11-18 20:53:17,1074,System shutdown/restart initiated,106675,logoff
+2025-11-18 20:53:18,7002,User logoff notification,106676,logoff
+2025-11-18 21:59:12,7001,User logon notification,106697,logon
+2025-11-18 23:28:45,1074,System shutdown/restart initiated,106799,logoff
+2025-11-18 23:28:47,7002,User logoff notification,106819,logoff
+2025-11-19 08:34:44,7001,User logon notification,106840,logon
+2025-11-19 08:44:02,7002,User logoff notification,106940,logoff
+2025-11-19 20:00:50,7001,User logon notification,106959,logon
+2025-11-19 22:56:24,1074,System shutdown/restart initiated,107071,logoff
+2025-11-19 22:56:26,7002,User logoff notification,107091,logoff
+2025-11-20 17:26:23,7001,User logon notification,107120,logon
+2025-11-20 22:34:22,1074,System shutdown/restart initiated,107285,logoff
+2025-11-20 22:34:30,7002,User logoff notification,107308,logoff
+2025-11-21 07:33:25,7001,User logon notification,107327,logon
+2025-11-21 08:30:09,1074,System shutdown/restart initiated,107450,logoff
+2025-11-21 08:30:11,7002,User logoff notification,107470,logoff
+2025-11-21 09:12:32,7001,User logon notification,107489,logon
+2025-11-21 09:51:08,1074,System shutdown/restart initiated,107584,logoff
+2025-11-21 09:51:11,7002,User logoff notification,107604,logoff
+2025-11-21 11:20:10,7001,User logon notification,107623,logon
+2025-11-21 16:29:10,41,System rebooted without cleanly shutting down,107775,logoff
+2025-11-21 16:29:20,6005,System startup (Event Log service started),107758,logon
+2025-11-21 16:29:20,6008,Unexpected shutdown (previous shutdown was unexpected),107756,logoff
+2025-11-21 16:29:54,7001,User logon notification,107915,logon
+2025-11-22 11:49:37,41,System rebooted without cleanly shutting down,108093,logoff
+2025-11-22 11:49:47,6008,Unexpected shutdown (previous shutdown was unexpected),108076,logoff
+2025-11-22 11:49:47,6005,System startup (Event Log service started),108078,logon
+2025-11-22 11:50:03,7001,User logon notification,108231,logon
+2025-11-22 15:05:04,1074,System shutdown/restart initiated,108370,logoff
+2025-11-22 15:05:06,7002,User logoff notification,108391,logoff
+2025-11-22 15:05:06,1074,System shutdown/restart initiated,108390,logoff
+2025-11-22 18:11:09,7001,User logon notification,108413,logon
+2025-11-22 23:50:07,1074,System shutdown/restart initiated,108523,logoff
+2025-11-22 23:50:10,7002,User logoff notification,108543,logoff
+2025-11-23 09:48:46,7001,User logon notification,108563,logon
+2025-11-23 22:46:44,1074,System shutdown/restart initiated,108750,logoff
+2025-11-23 22:46:46,7002,User logoff notification,108770,logoff
+2025-11-24 19:19:39,7001,User logon notification,108797,logon
+2025-11-24 22:38:46,1074,System shutdown/restart initiated,108927,logoff
+2025-11-25 06:44:28,41,System rebooted without cleanly shutting down,108981,logoff
+2025-11-25 06:44:37,6008,Unexpected shutdown (previous shutdown was unexpected),108964,logoff
+2025-11-25 06:44:37,6005,System startup (Event Log service started),108966,logon
+2025-11-25 06:44:52,7001,User logon notification,109113,logon
+2025-11-25 20:09:22,41,System rebooted without cleanly shutting down,109255,logoff
+2025-11-25 20:09:31,6008,Unexpected shutdown (previous shutdown was unexpected),109238,logoff
+2025-11-25 20:09:31,6005,System startup (Event Log service started),109240,logon
+2025-11-25 20:09:51,7001,User logon notification,109387,logon
+2025-11-26 19:27:06,41,System rebooted without cleanly shutting down,109542,logoff
+2025-11-26 19:27:15,6005,System startup (Event Log service started),109527,logon
+2025-11-26 19:27:15,6008,Unexpected shutdown (previous shutdown was unexpected),109525,logoff
+2025-11-26 19:31:01,7001,User logon notification,109677,logon
+2025-11-27 17:29:16,41,System rebooted without cleanly shutting down,109837,logoff
+2025-11-27 17:29:25,6008,Unexpected shutdown (previous shutdown was unexpected),109820,logoff
+2025-11-27 17:29:25,6005,System startup (Event Log service started),109822,logon
+2025-11-27 17:32:13,7001,User logon notification,109973,logon
+2025-11-28 06:51:56,41,System rebooted without cleanly shutting down,110208,logoff
+2025-11-28 06:52:06,6008,Unexpected shutdown (previous shutdown was unexpected),110191,logoff
+2025-11-28 06:52:06,6005,System startup (Event Log service started),110193,logon
+2025-11-28 06:52:20,7001,User logon notification,110340,logon
+2025-11-28 19:28:49,1074,System shutdown/restart initiated,110500,logoff
+2025-11-28 19:28:51,7002,User logoff notification,110521,logoff
+2025-11-28 19:28:51,1074,System shutdown/restart initiated,110520,logoff
+2025-11-28 20:53:25,7001,User logon notification,110541,logon
+2025-11-28 23:54:27,1074,System shutdown/restart initiated,110635,logoff
+2025-11-28 23:54:29,7002,User logoff notification,110655,logoff
+2025-11-29 08:25:27,7001,User logon notification,110682,logon

@@ -1,0 +1,115 @@
+session_id,summary,start_datetime,end_datetime,date,hours,iso_week_number,iso_year,iso_week,location,description
+ses_0065,LLM Integratie en Model Selectie,2025-06-01T08:20:00,2025-06-01T10:05:00,2025-06-01,1.75,2025-W22,2025,22,Thuiswerk,LLM Integratie en Model Selectie
+ses_0066,LLM Integratie en Model Selectie,2025-06-01T13:05:00,2025-06-01T16:45:00,2025-06-01,3.67,2025-W22,2025,22,Thuiswerk,LLM Integratie en Model Selectie
+ses_0067,LLM Integratie en Model Selectie,2025-06-01T18:55:00,2025-06-01T22:45:00,2025-06-01,3.83,2025-W22,2025,22,Thuiswerk,LLM Integratie en Model Selectie
+ses_0068,LLM Integratie en Model Selectie,2025-06-02T19:35:00,2025-06-02T22:20:00,2025-06-02,2.75,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0069,LLM Integratie en Model Selectie,2025-06-03T07:55:00,2025-06-03T09:50:00,2025-06-03,1.92,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0070,LLM Integratie en Model Selectie,2025-06-03T11:40:00,2025-06-03T13:00:00,2025-06-03,1.33,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0071,LLM Integratie en Model Selectie,2025-06-03T14:40:00,2025-06-03T16:25:00,2025-06-03,1.75,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0072,LLM Integratie en Model Selectie,2025-06-03T19:00:00,2025-06-03T22:40:00,2025-06-03,3.67,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0073,LLM Integratie en Model Selectie,2025-06-04T18:10:00,2025-06-04T23:15:00,2025-06-04,5.08,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0074,LLM Integratie en Model Selectie,2025-06-05T07:35:00,2025-06-05T10:15:00,2025-06-05,2.67,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0075,LLM Integratie en Model Selectie,2025-06-05T21:00:00,2025-06-05T23:15:00,2025-06-05,2.25,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0076,LLM Integratie en Model Selectie,2025-06-06T17:20:00,2025-06-06T23:50:00,2025-06-06,6.50,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0077,LLM Integratie en Model Selectie,2025-06-07T08:15:00,2025-06-07T11:05:00,2025-06-07,2.83,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0078,LLM Integratie en Model Selectie,2025-06-07T12:00:00,2025-06-07T13:15:00,2025-06-07,1.25,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0079,LLM Integratie en Model Selectie,2025-06-07T17:25:00,2025-06-07T23:30:00,2025-06-07,6.08,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0080,LLM Integratie en Model Selectie,2025-06-08T08:45:00,2025-06-08T10:00:00,2025-06-08,1.25,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0081,LLM Integratie en Model Selectie,2025-06-08T12:30:00,2025-06-08T22:15:00,2025-06-08,9.75,2025-W23,2025,23,Thuiswerk,LLM Integratie en Model Selectie
+ses_0082,AI Agent Orkestratie,2025-06-09T07:10:00,2025-06-09T18:10:00,2025-06-09,11.00,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0083,AI Agent Orkestratie,2025-06-10T21:35:00,2025-06-10T22:40:00,2025-06-10,1.08,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0084,AI Agent Orkestratie,2025-06-11T06:50:00,2025-06-11T07:50:00,2025-06-11,1.00,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0085,AI Agent Orkestratie,2025-06-11T18:25:00,2025-06-11T23:40:00,2025-06-11,5.25,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0086,AI Agent Orkestratie,2025-06-12T07:35:00,2025-06-12T11:30:00,2025-06-12,3.92,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0087,AI Agent Orkestratie,2025-06-12T13:10:00,2025-06-12T16:20:00,2025-06-12,3.17,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0088,AI Agent Orkestratie,2025-06-12T21:00:00,2025-06-12T23:00:00,2025-06-12,2.00,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0089,Algemeen R&D Werk,2025-06-13T07:25:00,2025-06-13T18:25:00,2025-06-13,11.00,2025-W24,2025,24,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0090,AI Agent Orkestratie,2025-06-14T10:55:00,2025-06-14T21:55:00,2025-06-14,11.00,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0091,AI Agent Orkestratie,2025-06-15T09:40:00,2025-06-15T10:00:00,2025-06-15,0.33,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0092,AI Agent Orkestratie,2025-06-15T12:45:00,2025-06-15T13:25:00,2025-06-15,0.67,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0093,AI Agent Orkestratie,2025-06-15T22:10:00,2025-06-15T23:59:59,2025-06-15,1.83,2025-W24,2025,24,Thuiswerk,AI Agent Orkestratie
+ses_0095,AI Agent Orkestratie,2025-06-16T19:25:00,2025-06-16T23:10:00,2025-06-16,3.75,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0096,AI Agent Orkestratie,2025-06-17T08:30:00,2025-06-17T09:00:00,2025-06-17,0.50,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0097,AI Agent Orkestratie,2025-06-17T11:00:00,2025-06-17T13:50:00,2025-06-17,2.83,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0098,AI Agent Orkestratie,2025-06-17T18:30:00,2025-06-17T23:25:00,2025-06-17,4.92,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0099,AI Agent Orkestratie,2025-06-18T08:45:00,2025-06-18T11:45:00,2025-06-18,3.00,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0100,AI Agent Orkestratie,2025-06-19T11:10:00,2025-06-19T13:05:00,2025-06-19,1.92,2025-W25,2025,25,Thuiswerk,AI Agent Orkestratie
+ses_0101,Prompt Engineering en Jailbreak Detectie,2025-06-19T19:45:00,2025-06-19T22:50:00,2025-06-19,3.08,2025-W25,2025,25,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0102,Prompt Engineering en Jailbreak Detectie,2025-06-20T18:10:00,2025-06-20T20:15:00,2025-06-20,2.08,2025-W25,2025,25,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0103,Prompt Engineering en Jailbreak Detectie,2025-06-21T07:15:00,2025-06-21T14:25:00,2025-06-21,7.17,2025-W25,2025,25,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0104,Prompt Engineering en Jailbreak Detectie,2025-06-21T17:15:00,2025-06-21T21:05:00,2025-06-21,3.83,2025-W25,2025,25,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0105,Prompt Engineering en Jailbreak Detectie,2025-06-22T13:00:00,2025-06-22T23:59:59,2025-06-22,11.00,2025-W25,2025,25,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0107,Prompt Engineering en Jailbreak Detectie,2025-06-23T19:30:00,2025-06-23T23:59:59,2025-06-23,4.50,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0109,Prompt Engineering en Jailbreak Detectie,2025-06-24T07:30:00,2025-06-24T09:15:00,2025-06-24,1.75,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0110,Prompt Engineering en Jailbreak Detectie,2025-06-24T11:20:00,2025-06-24T16:45:00,2025-06-24,5.42,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0111,Algemeen R&D Werk,2025-06-24T21:00:00,2025-06-24T22:45:00,2025-06-24,1.75,2025-W26,2025,26,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0112,Prompt Engineering en Jailbreak Detectie,2025-06-25T06:45:00,2025-06-25T12:50:00,2025-06-25,6.08,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0113,Prompt Engineering en Jailbreak Detectie,2025-06-25T16:05:00,2025-06-25T21:00:00,2025-06-25,4.92,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0114,Prompt Engineering en Jailbreak Detectie,2025-06-26T07:25:00,2025-06-26T09:15:00,2025-06-26,1.83,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0115,Prompt Engineering en Jailbreak Detectie,2025-06-26T11:35:00,2025-06-26T17:40:00,2025-06-26,6.08,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0116,Algemeen R&D Werk,2025-06-26T19:20:00,2025-06-26T20:20:00,2025-06-26,1.00,2025-W26,2025,26,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0117,Prompt Engineering en Jailbreak Detectie,2025-06-26T20:45:00,2025-06-26T22:30:00,2025-06-26,1.75,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0118,Prompt Engineering en Jailbreak Detectie,2025-06-27T16:05:00,2025-06-27T20:20:00,2025-06-27,4.25,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0119,Prompt Engineering en Jailbreak Detectie,2025-06-27T22:00:00,2025-06-27T23:59:59,2025-06-27,2.00,2025-W26,2025,26,Thuiswerk,Prompt Engineering en Jailbreak Detectie
+ses_0121,Vector Database Implementatie,2025-06-28T12:15:00,2025-06-28T14:30:00,2025-06-28,2.25,2025-W26,2025,26,Thuiswerk,Vector Database Implementatie
+ses_0122,Vector Database Implementatie,2025-06-28T18:55:00,2025-06-28T23:30:00,2025-06-28,4.58,2025-W26,2025,26,Thuiswerk,Vector Database Implementatie
+ses_0123,Vector Database Implementatie,2025-06-29T08:30:00,2025-06-29T10:10:00,2025-06-29,1.67,2025-W26,2025,26,Thuiswerk,Vector Database Implementatie
+ses_0124,Vector Database Implementatie,2025-06-29T18:10:00,2025-06-29T21:15:00,2025-06-29,3.08,2025-W26,2025,26,Thuiswerk,Vector Database Implementatie
+ses_0125,Vector Database Implementatie,2025-06-30T10:35:00,2025-06-30T12:25:00,2025-06-30,1.83,2025-W27,2025,27,Thuiswerk,Vector Database Implementatie
+ses_0127,Vector Database Implementatie,2025-06-30T15:30:00,2025-06-30T22:45:00,2025-06-30,7.25,2025-W27,2025,27,Thuiswerk,Vector Database Implementatie
+ses_0128,Vector Database Implementatie,2025-07-01T09:10:00,2025-07-01T10:50:00,2025-07-01,1.67,2025-W27,2025,27,Thuiswerk,Vector Database Implementatie
+ses_0129,Vector Database Implementatie,2025-07-01T13:20:00,2025-07-01T21:10:00,2025-07-01,7.83,2025-W27,2025,27,Thuiswerk,Vector Database Implementatie
+ses_0130,Vector Database Implementatie,2025-07-01T22:05:00,2025-07-01T23:25:00,2025-07-01,1.33,2025-W27,2025,27,Thuiswerk,Vector Database Implementatie
+ses_0131,AVG Compliance en Toestemmingsverificatie,2025-07-02T07:15:00,2025-07-02T17:30:00,2025-07-02,10.25,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0132,AVG Compliance en Toestemmingsverificatie,2025-07-03T06:30:00,2025-07-03T09:50:00,2025-07-03,3.33,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0133,AVG Compliance en Toestemmingsverificatie,2025-07-03T10:35:00,2025-07-03T15:55:00,2025-07-03,5.33,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0134,AVG Compliance en Toestemmingsverificatie,2025-07-03T17:15:00,2025-07-03T18:15:00,2025-07-03,1.00,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0135,AVG Compliance en Toestemmingsverificatie,2025-07-03T20:00:00,2025-07-03T21:20:00,2025-07-03,1.33,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0136,AVG Compliance en Toestemmingsverificatie,2025-07-04T06:30:00,2025-07-04T15:40:00,2025-07-04,9.17,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0137,AVG Compliance en Toestemmingsverificatie,2025-07-04T20:30:00,2025-07-04T22:20:00,2025-07-04,1.83,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0138,AVG Compliance en Toestemmingsverificatie,2025-07-05T07:15:00,2025-07-05T18:15:00,2025-07-05,11.00,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
+ses_0139,Document Retrieval en Context Aggregatie,2025-07-06T08:40:00,2025-07-06T10:15:00,2025-07-06,1.58,2025-W27,2025,27,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0140,Document Retrieval en Context Aggregatie,2025-07-06T13:35:00,2025-07-06T16:00:00,2025-07-06,2.42,2025-W27,2025,27,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0141,Document Retrieval en Context Aggregatie,2025-07-07T07:20:00,2025-07-07T07:30:00,2025-07-07,0.17,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0142,Document Retrieval en Context Aggregatie,2025-07-07T07:35:00,2025-07-07T17:30:00,2025-07-07,9.92,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0143,Document Retrieval en Context Aggregatie,2025-07-07T20:50:00,2025-07-07T21:45:00,2025-07-07,0.92,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0144,Document Retrieval en Context Aggregatie,2025-07-08T07:25:00,2025-07-08T09:55:00,2025-07-08,2.50,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0145,Document Retrieval en Context Aggregatie,2025-07-08T09:55:00,2025-07-08T10:15:00,2025-07-08,0.33,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0146,Document Retrieval en Context Aggregatie,2025-07-08T11:50:00,2025-07-08T12:40:00,2025-07-08,0.83,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0147,Document Retrieval en Context Aggregatie,2025-07-08T20:05:00,2025-07-08T23:35:00,2025-07-08,3.50,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0148,Document Retrieval en Context Aggregatie,2025-07-09T07:05:00,2025-07-09T18:05:00,2025-07-09,11.00,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0149,Document Retrieval en Context Aggregatie,2025-07-09T22:00:00,2025-07-09T23:00:00,2025-07-09,1.00,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0150,Document Retrieval en Context Aggregatie,2025-07-10T09:25:00,2025-07-10T15:15:00,2025-07-10,5.83,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0151,Document Retrieval en Context Aggregatie,2025-07-10T16:15:00,2025-07-10T21:25:00,2025-07-10,5.17,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0152,Algemeen R&D Werk,2025-07-11T07:30:00,2025-07-11T17:15:00,2025-07-11,9.75,2025-W28,2025,28,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0153,Algemeen R&D Werk,2025-07-11T20:25:00,2025-07-11T21:40:00,2025-07-11,1.25,2025-W28,2025,28,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0154,Algemeen R&D Werk,2025-07-12T07:50:00,2025-07-12T13:40:00,2025-07-12,5.83,2025-W28,2025,28,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0155,Document Retrieval en Context Aggregatie,2025-07-12T16:25:00,2025-07-12T21:35:00,2025-07-12,5.17,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
+ses_0156,Encryptie en Beveiligingsmechanismen,2025-07-13T09:00:00,2025-07-13T09:45:00,2025-07-13,0.75,2025-W28,2025,28,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0157,Algemeen R&D Werk,2025-07-16T20:30:00,2025-07-16T22:55:00,2025-07-16,2.42,2025-W29,2025,29,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0158,Encryptie en Beveiligingsmechanismen,2025-07-17T06:30:00,2025-07-17T15:40:00,2025-07-17,9.17,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0159,Encryptie en Beveiligingsmechanismen,2025-07-17T16:25:00,2025-07-17T18:15:00,2025-07-17,1.83,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0160,Encryptie en Beveiligingsmechanismen,2025-07-18T10:45:00,2025-07-18T11:25:00,2025-07-18,0.67,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0161,Encryptie en Beveiligingsmechanismen,2025-07-18T13:10:00,2025-07-18T13:30:00,2025-07-18,0.33,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0162,Encryptie en Beveiligingsmechanismen,2025-07-20T17:00:00,2025-07-20T22:35:00,2025-07-20,5.58,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0163,Encryptie en Beveiligingsmechanismen,2025-07-21T19:50:00,2025-07-21T22:30:00,2025-07-21,2.67,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0164,Encryptie en Beveiligingsmechanismen,2025-07-22T21:25:00,2025-07-22T22:45:00,2025-07-22,1.33,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0165,Algemeen R&D Werk,2025-07-23T18:50:00,2025-07-23T18:55:00,2025-07-23,0.08,2025-W30,2025,30,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
+ses_0166,Encryptie en Beveiligingsmechanismen,2025-07-23T18:55:00,2025-07-23T23:59:59,2025-07-23,5.08,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0168,Encryptie en Beveiligingsmechanismen,2025-07-24T20:45:00,2025-07-24T23:00:00,2025-07-24,2.25,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0170,Encryptie en Beveiligingsmechanismen,2025-07-25T14:10:00,2025-07-25T23:59:59,2025-07-25,9.83,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0172,Encryptie en Beveiligingsmechanismen,2025-07-26T11:20:00,2025-07-26T12:00:00,2025-07-26,0.67,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0173,Encryptie en Beveiligingsmechanismen,2025-07-26T13:45:00,2025-07-26T17:00:00,2025-07-26,3.25,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0174,Encryptie en Beveiligingsmechanismen,2025-07-26T22:50:00,2025-07-26T23:59:59,2025-07-26,1.17,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0176,Encryptie en Beveiligingsmechanismen,2025-07-27T08:50:00,2025-07-27T10:10:00,2025-07-27,1.33,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0177,Encryptie en Beveiligingsmechanismen,2025-07-27T10:30:00,2025-07-27T10:35:00,2025-07-27,0.08,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0178,Encryptie en Beveiligingsmechanismen,2025-07-27T11:55:00,2025-07-27T14:00:00,2025-07-27,2.08,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0179,Encryptie en Beveiligingsmechanismen,2025-07-27T22:15:00,2025-07-27T22:30:00,2025-07-27,0.25,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0180,Encryptie en Beveiligingsmechanismen,2025-07-27T22:35:00,2025-07-27T23:59:59,2025-07-27,1.42,2025-W30,2025,30,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0181,Encryptie en Beveiligingsmechanismen,2025-07-28T00:00:00,2025-07-28T00:10:00,2025-07-28,0.17,2025-W31,2025,31,Thuiswerk,Encryptie en Beveiligingsmechanismen
+ses_0182,Privacyvriendelijke Audit Log Structuur,2025-07-28T19:05:00,2025-07-28T22:50:00,2025-07-28,3.75,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur
+ses_0183,Privacyvriendelijke Audit Log Structuur,2025-07-29T15:15:00,2025-07-29T20:20:00,2025-07-29,5.08,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur
+ses_0184,Privacyvriendelijke Audit Log Structuur,2025-07-29T20:25:00,2025-07-29T23:59:59,2025-07-29,3.58,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur
+ses_0186,Privacyvriendelijke Audit Log Structuur,2025-07-30T17:10:00,2025-07-30T17:30:00,2025-07-30,0.33,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur
+ses_0187,Privacyvriendelijke Audit Log Structuur,2025-07-30T20:20:00,2025-07-30T22:05:00,2025-07-30,1.75,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur
+ses_0188,Privacyvriendelijke Audit Log Structuur,2025-07-31T17:45:00,2025-07-31T22:30:00,2025-07-31,4.75,2025-W31,2025,31,Thuiswerk,Privacyvriendelijke Audit Log Structuur

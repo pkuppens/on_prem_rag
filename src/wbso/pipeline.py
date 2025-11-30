@@ -17,7 +17,7 @@ import json
 import time
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Callable
+from typing import Dict, List, Any, Callable, Optional
 
 from .pipeline_steps import (
     step_data_refresh,
@@ -51,9 +51,9 @@ logger = get_logger("pipeline")
 # Default paths
 UPLOAD_OUTPUT_DIR = Path(__file__).parent.parent.parent / "docs" / "project" / "hours" / "upload_output"
 
-# Target date range
-TARGET_START_DATE = datetime(2025, 6, 1)
-TARGET_END_DATE = datetime.now()
+# Default target date range
+DEFAULT_START_DATE = datetime(2025, 6, 1)
+DEFAULT_END_DATE = datetime(2025, 12, 31, 23, 59, 59)
 
 
 class WBSOCalendarPipeline:
@@ -66,13 +66,24 @@ class WBSOCalendarPipeline:
         force_refresh: bool = False,
         force_regenerate_activities: bool = False,
         force_regenerate_system_events: bool = False,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ):
-        """Initialize pipeline."""
+        """Initialize pipeline.
+
+        Args:
+            start_date: Start date for calendar operations (default: 2025-06-01)
+            end_date: End date for calendar operations (default: 2025-12-31)
+        """
         self.force_validation = force_validation
         self.dry_run = dry_run
         self.force_refresh = force_refresh
         self.force_regenerate_activities = force_regenerate_activities
         self.force_regenerate_system_events = force_regenerate_system_events
+
+        # Date range for calendar operations
+        self.start_date = start_date or DEFAULT_START_DATE
+        self.end_date = end_date or DEFAULT_END_DATE
 
         # Pipeline context (shared state between steps)
         self.context = {
@@ -81,6 +92,8 @@ class WBSOCalendarPipeline:
             "force_refresh": force_refresh,
             "force_regenerate_activities": force_regenerate_activities,
             "force_regenerate_system_events": force_regenerate_system_events,
+            "target_start_date": self.start_date,
+            "target_end_date": self.end_date,
         }
 
         # Step reports (array of individual step reports)
@@ -120,7 +133,7 @@ class WBSOCalendarPipeline:
         logger.info("=" * 60)
         logger.info(f"Dry Run: {'Yes' if self.dry_run else 'No'}")
         logger.info(f"Force Refresh: {'Yes' if self.force_refresh else 'No'}")
-        logger.info(f"Date Range: {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}")
+        logger.info(f"Date Range: {self.start_date.date()} to {self.end_date.date()}")
         logger.info("")
 
         try:
@@ -224,7 +237,7 @@ class WBSOCalendarPipeline:
 
         calculated_hours = 0.0
         for s in wbso_sessions:
-            if s.start_time and TARGET_START_DATE.date() <= s.start_time.date() <= TARGET_END_DATE.date():
+            if s.start_time and self.start_date.date() <= s.start_time.date() <= self.end_date.date():
                 calculated_hours += s.work_hours
 
         calendar_hours = verification_results.get("total_hours", 0.0) if isinstance(verification_results, dict) else 0.0
@@ -244,8 +257,8 @@ class WBSOCalendarPipeline:
             "pipeline_timestamp": datetime.now().isoformat(),
             "dry_run": self.dry_run,
             "date_range": {
-                "start": TARGET_START_DATE.isoformat(),
-                "end": TARGET_END_DATE.isoformat(),
+                "start": self.start_date.isoformat(),
+                "end": self.end_date.isoformat(),
             },
             "summary": {
                 "work_sessions_hours": work_sessions_hours,  # Hours from polished work sessions (after filtering)
@@ -276,7 +289,8 @@ class WBSOCalendarPipeline:
         print(f"\n{'=' * 60}")
         print("WBSO CALENDAR PIPELINE SUMMARY")
         print(f"{'=' * 60}")
-        print(f"Date Range: {TARGET_START_DATE.date()} to {TARGET_END_DATE.date()}")
+        target_start_date, target_end_date = self.start_date, self.end_date
+        print(f"Date Range: {target_start_date.date()} to {target_end_date.date()}")
         print(f"Work Sessions Hours (polished): {work_sessions_hours:.2f} hours")
         print(f"Calculated Hours (WBSO sessions): {calculated_hours:.2f} hours")
         print(f"Calendar Hours: {calendar_hours:.2f} hours")
@@ -316,7 +330,27 @@ def main():
         "--force-regenerate-system-events", action="store_true", help="Force regenerate consolidated system events file"
     )
     parser.add_argument("--dry-run", action="store_true", help="Dry run mode - don't actually upload")
+    parser.add_argument("--start-date", type=str, help="Start date for calendar operations (YYYY-MM-DD, default: 2025-06-01)")
+    parser.add_argument("--end-date", type=str, help="End date for calendar operations (YYYY-MM-DD, default: 2025-12-31)")
     args = parser.parse_args()
+
+    # Parse date arguments
+    start_date = DEFAULT_START_DATE
+    end_date = DEFAULT_END_DATE
+    if args.start_date:
+        try:
+            start_date = datetime.strptime(args.start_date, "%Y-%m-%d")
+        except ValueError:
+            logger.error(f"Invalid start date format: {args.start_date}. Use YYYY-MM-DD")
+            return 1
+    if args.end_date:
+        try:
+            end_date = datetime.strptime(args.end_date, "%Y-%m-%d")
+            # Set to end of day
+            end_date = end_date.replace(hour=23, minute=59, second=59)
+        except ValueError:
+            logger.error(f"Invalid end date format: {args.end_date}. Use YYYY-MM-DD")
+            return 1
 
     pipeline = WBSOCalendarPipeline(
         force_validation=args.force_validation,
@@ -324,6 +358,8 @@ def main():
         force_refresh=args.force_refresh,
         force_regenerate_activities=args.force_regenerate_activities,
         force_regenerate_system_events=args.force_regenerate_system_events,
+        start_date=start_date,
+        end_date=end_date,
     )
     exit_code = pipeline.run()
     sys.exit(exit_code)

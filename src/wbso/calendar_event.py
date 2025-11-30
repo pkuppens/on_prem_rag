@@ -79,6 +79,9 @@ class WBSOSession:
     commit_messages: List[str] = field(default_factory=list)  # Commit messages for activity assignment
     has_computer_on: bool = False  # Whether session has computer on event
     is_weekend: bool = False  # Whether session is on weekend
+    iso_week_number: str = ""  # ISO week number (e.g., "2025-W23")
+    iso_year: int = 0  # ISO year
+    iso_week: int = 0  # ISO week number (1-53)
 
     def validate(self) -> ValidationResult:
         """Validate session data and return result."""
@@ -320,44 +323,12 @@ class CalendarEvent:
             }
             title = category_names_nl.get(session.wbso_category, "Algemeen R&D Werk")
 
-        # Generate WBSO-worthy description in Dutch (with English jargon allowed)
-        category_descriptions_nl = {
-            "AI_FRAMEWORK": "Ontwikkeling en implementatie van AI agent frameworks, natural language processing capabilities, en intelligente communicatiesystemen voor data-veilige omgevingen.",
-            "ACCESS_CONTROL": "Onderzoek en ontwikkeling van authenticatie- en autorisatiesystemen, beveiligingsmechanismen, en toegangscontrole protocollen voor privacy-bewuste applicaties.",
-            "PRIVACY_CLOUD": "Ontwikkeling van privacy-bewuste cloud integratieoplossingen, data protection mechanismen, en veilige cloud communicatie protocollen.",
-            "AUDIT_LOGGING": "Implementatie van uitgebreide audit logging systemen, privacy-vriendelijke monitoring oplossingen, en compliance tracking mechanismen.",
-            "DATA_INTEGRITY": "Onderzoek en ontwikkeling van data integriteit beschermingssystemen, corruptie preventie mechanismen, en validatie frameworks.",
-            "GENERAL_RD": "Algemene research en development activiteiten ter ondersteuning van de WBSO-AICM-2025-01 projectdoelstellingen.",
-        }
-        category_description = category_descriptions_nl.get(
-            session.wbso_category,
-            "Research en development activiteiten voor AI agent communicatie in data-veilige en privacy-bewuste omgevingen.",
-        )
+        # Use short, single-line description - same as title (sub-activity name)
+        # This will be the calendar entry title and should be concise
+        description = title if activity_name_nl else "AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving"
 
         # Determine location: 'Thuiswerk' if computer on commit or weekend, 'Kantoor' otherwise
         location = "Thuiswerk" if (session.has_computer_on or session.is_weekend) else "Kantoor"
-
-        description = f"""WBSO Project: WBSO-AICM-2025-01
-AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
-
-R&D Activiteit: {category_description}
-
-Technisch Werk Uitgevoerd:
-{session.wbso_justification}
-
-Sessie Details:
-- Categorie: {session.wbso_category.replace("_", " ").title()}
-- Werk Duur: {session.work_hours:.2f} uur
-- Datum: {session.date}
-- Locatie: {location}
-
-Bron Informatie:
-- Data Bron: {"Synthetische sessie gegenereerd uit niet-toegewezen commits" if session.is_synthetic else "Echte sessie uit system event logs"}
-- Commit Aantal: {session.commit_count}
-- Confidence Score: {session.confidence_score:.2f}
-
-WBSO Kwalificatie:
-Deze werksessie kwalificeert voor WBSO belastingaftrek onder categorie {session.wbso_category} als onderdeel van het goedgekeurde R&D project WBSO-AICM-2025-01."""
 
         # Format datetime for Google Calendar (using rounded times)
         start_dt = rounded_start.strftime("%Y-%m-%dT%H:%M:%S")

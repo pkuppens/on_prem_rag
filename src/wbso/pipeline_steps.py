@@ -29,6 +29,9 @@ from .upload import GoogleCalendarUploader
 from .calendar_event import WBSODataset, CalendarEvent, WBSOSession
 from .logging_config import get_logger
 from .time_utils import parse_datetime_flexible
+from .activity_repo_mapping import ActivityRepoMapping
+from .generate_activity_repo_csv import generate_csv
+from .generate_activity_repo_markdown import generate_markdown
 
 # Amsterdam timezone (handles DST automatically)
 AMSTERDAM_TZ = ZoneInfo("Europe/Amsterdam")
@@ -3030,3 +3033,69 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
 
     logger.info(f"✅ Report generated: {calendar_hours:.2f} hours in calendar, {calculated_hours:.2f} calculated")
     return create_step_report("report", True, **report_data, message="Report generated successfully")
+
+
+def step_generate_activity_repo_mapping(context: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Step: Generate Activity-Repository Mapping
+
+    Generates CSV and Markdown outputs mapping WBSO activities to repositories.
+    This step can run standalone or as part of the pipeline.
+
+    Outputs:
+    - CSV: docs/project/hours/output/activity_repo_mapping.csv
+    - Markdown: docs/project/hours/output/activity_repo_mapping.md
+    """
+    logger.info("=" * 60)
+    logger.info("STEP: GENERATE ACTIVITY-REPOSITORY MAPPING")
+    logger.info("=" * 60)
+
+    try:
+        # Create mapping manager
+        mapping_manager = ActivityRepoMapping()
+
+        # Load repositories and generate mappings
+        mapping_manager.load_repositories()
+        mapping_manager.generate_mappings()
+
+        # Save mappings to config
+        mapping_manager.save_mappings()
+
+        # Generate CSV output
+        csv_path = generate_csv(mapping_manager)
+        logger.info(f"Generated CSV: {csv_path}")
+
+        # Generate Markdown output
+        markdown_path = generate_markdown(mapping_manager)
+        logger.info(f"Generated Markdown: {markdown_path}")
+
+        # Store in context for potential use by other steps
+        context["activity_repo_mapping"] = mapping_manager
+        context["activity_repo_csv_path"] = str(csv_path)
+        context["activity_repo_markdown_path"] = str(markdown_path)
+
+        total_mappings = len(mapping_manager.mappings)
+        total_activities = len(mapping_manager.activities_manager.activities)
+        total_repos = len(mapping_manager.repositories)
+
+        message = f"Generated {total_mappings} mappings for {total_activities} activities and {total_repos} repositories"
+
+        return create_step_report(
+            "generate_activity_repo_mapping",
+            True,
+            message=message,
+            csv_path=str(csv_path),
+            markdown_path=str(markdown_path),
+            total_mappings=total_mappings,
+            total_activities=total_activities,
+            total_repos=total_repos,
+        )
+
+    except Exception as e:
+        logger.error(f"Error generating activity-repository mapping: {e}", exc_info=True)
+        return create_step_report(
+            "generate_activity_repo_mapping",
+            False,
+            message=f"Failed to generate mapping: {e}",
+            error=str(e),
+        )

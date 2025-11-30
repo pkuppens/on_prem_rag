@@ -5,8 +5,11 @@ WBSO Activities List Generator
 Generates and manages a list of WBSO-acceptable activities in Dutch with time estimates.
 This is a one-off generation that can be stored and reused unless explicitly regenerated.
 
+Supports nested sub-activities for detailed tracking while maintaining grouping for reporting.
+
 Author: AI Assistant
 Created: 2025-11-28
+Updated: 2025-11-30
 """
 
 import json
@@ -38,8 +41,11 @@ class WBSOActivities:
         Activities are based on WBSO project scope: AI Agent Communicatie in een
         data-veilige en privacy-bewuste omgeving.
 
+        Activities include nested sub-activities for detailed tracking aligned with
+        WBSO project phases.
+
         Returns:
-            List of activity dictionaries with id, name_nl, keywords, estimated_hours
+            List of activity dictionaries with id, name_nl, keywords, estimated_hours, sub_activities
         """
         activities = [
             {
@@ -62,6 +68,32 @@ class WBSOActivities:
                 "estimated_hours": 85.0,
                 "category": "AI_FRAMEWORK",
                 "description_nl": "Ontwikkeling en implementatie van AI agent frameworks, natural language processing capabilities, en intelligente communicatiesystemen voor data-veilige omgevingen.",
+                "sub_activities": [
+                    {
+                        "id": "llm_integration",
+                        "name_nl": "LLM Integratie en Model Selectie",
+                        "name_en": "LLM Integration and Model Selection",
+                        "keywords": ["llm", "model", "gpt", "openai", "anthropic", "claude", "local", "cloud"],
+                        "description_nl": "Integratie van Large Language Models met configureerbare keuze tussen lokale en cloud-gebaseerde modellen.",
+                        "estimated_hours": 85.0,
+                    },
+                    {
+                        "id": "agent_orchestration",
+                        "name_nl": "AI Agent Orkestratie",
+                        "name_en": "AI Agent Orchestration",
+                        "keywords": ["agent", "orchestration", "coordination", "workflow", "langflow", "autogen"],
+                        "description_nl": "Ontwikkeling van agent orkestratie systemen voor gecoördineerde AI-agent workflows.",
+                        "estimated_hours": 75.0,
+                    },
+                    {
+                        "id": "prompt_engineering",
+                        "name_nl": "Prompt Engineering en Jailbreak Detectie",
+                        "name_en": "Prompt Engineering and Jailbreak Detection",
+                        "keywords": ["prompt", "engineering", "jailbreak", "detection", "safety", "instruction"],
+                        "description_nl": "Ontwikkeling van prompt engineering technieken en jailbreak detectie mechanismen.",
+                        "estimated_hours": 60.0,
+                    },
+                ],
             },
             {
                 "id": "nlp_implementation",
@@ -71,6 +103,24 @@ class WBSOActivities:
                 "estimated_hours": 65.0,
                 "category": "AI_FRAMEWORK",
                 "description_nl": "Implementatie van natural language processing functionaliteit voor tekstanalyse en -verwerking.",
+                "sub_activities": [
+                    {
+                        "id": "intent_recognition",
+                        "name_nl": "Intentieherkenning en Semantische Interpretatie",
+                        "name_en": "Intent Recognition and Semantic Interpretation",
+                        "keywords": ["intent", "intention", "semantic", "interpretation", "understanding", "nlp"],
+                        "description_nl": "Ontwikkeling van intentieherkenning en semantische interpretatie van natuurlijke taalvragen.",
+                        "estimated_hours": 45.0,
+                    },
+                    {
+                        "id": "text_processing",
+                        "name_nl": "Tekstverwerking en Tokenisatie",
+                        "name_en": "Text Processing and Tokenization",
+                        "keywords": ["text", "processing", "tokenization", "parsing", "chunking", "preprocessing"],
+                        "description_nl": "Implementatie van tekstverwerking, tokenisatie en preprocessing functionaliteit.",
+                        "estimated_hours": 35.0,
+                    },
+                ],
             },
             {
                 "id": "vector_store_development",
@@ -80,6 +130,16 @@ class WBSOActivities:
                 "estimated_hours": 55.0,
                 "category": "AI_FRAMEWORK",
                 "description_nl": "Ontwikkeling en optimalisatie van vector database systemen voor semantische zoekfunctionaliteit.",
+                "sub_activities": [
+                    {
+                        "id": "vector_database",
+                        "name_nl": "Vector Database Implementatie",
+                        "name_en": "Vector Database Implementation",
+                        "keywords": ["vector", "embedding", "chroma", "database", "similarity"],
+                        "description_nl": "Implementatie en optimalisatie van vector database systemen.",
+                        "estimated_hours": 55.0,
+                    },
+                ],
             },
             {
                 "id": "rag_pipeline_development",
@@ -89,6 +149,24 @@ class WBSOActivities:
                 "estimated_hours": 70.0,
                 "category": "AI_FRAMEWORK",
                 "description_nl": "Ontwikkeling van Retrieval-Augmented Generation pipelines voor context-aware AI responses.",
+                "sub_activities": [
+                    {
+                        "id": "document_retrieval",
+                        "name_nl": "Document Retrieval en Context Aggregatie",
+                        "name_en": "Document Retrieval and Context Aggregation",
+                        "keywords": ["retrieval", "document", "context", "aggregation", "search", "query"],
+                        "description_nl": "Ontwikkeling van document retrieval systemen en context aggregatie voor AI responses.",
+                        "estimated_hours": 50.0,
+                    },
+                    {
+                        "id": "semantic_search",
+                        "name_nl": "Semantische Zoekfunctionaliteit",
+                        "name_en": "Semantic Search Functionality",
+                        "keywords": ["semantic", "search", "query", "natural language", "nlp", "vector"],
+                        "description_nl": "Implementatie van semantische zoekfunctionaliteit voor natuurlijke taal queries.",
+                        "estimated_hours": 40.0,
+                    },
+                ],
             },
             {
                 "id": "authentication_system",
@@ -98,6 +176,16 @@ class WBSOActivities:
                 "estimated_hours": 45.0,
                 "category": "ACCESS_CONTROL",
                 "description_nl": "Ontwikkeling van authenticatie- en autorisatiesystemen voor veilige toegangscontrole.",
+                "sub_activities": [
+                    {
+                        "id": "user_authentication",
+                        "name_nl": "Gebruikersauthenticatie en Sessiebeheer",
+                        "name_en": "User Authentication and Session Management",
+                        "keywords": ["auth", "authentication", "login", "session", "credential", "jwt", "token"],
+                        "description_nl": "Implementatie van gebruikersauthenticatie en sessiebeheer systemen.",
+                        "estimated_hours": 45.0,
+                    },
+                ],
             },
             {
                 "id": "authorization_framework",
@@ -107,6 +195,24 @@ class WBSOActivities:
                 "estimated_hours": 40.0,
                 "category": "ACCESS_CONTROL",
                 "description_nl": "Ontwikkeling van autorisatieframeworks voor gedetailleerde toegangscontrole.",
+                "sub_activities": [
+                    {
+                        "id": "role_based_access",
+                        "name_nl": "Rolgebaseerde Toegangscontrole",
+                        "name_en": "Role-Based Access Control",
+                        "keywords": ["role", "rbac", "permission", "access control", "policy", "authorization"],
+                        "description_nl": "Ontwikkeling van rolgebaseerde toegangscontrole systemen voor bevoegdheidsbeheer.",
+                        "estimated_hours": 30.0,
+                    },
+                    {
+                        "id": "context_based_access",
+                        "name_nl": "Context-gebaseerde Toegangscontrole",
+                        "name_en": "Context-Based Access Control",
+                        "keywords": ["context", "access control", "intent", "authorization", "policy"],
+                        "description_nl": "Ontwikkeling van context-gebaseerde toegangscontrole voor natuurlijke taal queries.",
+                        "estimated_hours": 35.0,
+                    },
+                ],
             },
             {
                 "id": "security_mechanisms",
@@ -116,6 +222,16 @@ class WBSOActivities:
                 "estimated_hours": 50.0,
                 "category": "ACCESS_CONTROL",
                 "description_nl": "Ontwikkeling van beveiligingsmechanismen voor data-veilige omgevingen.",
+                "sub_activities": [
+                    {
+                        "id": "encryption_security",
+                        "name_nl": "Encryptie en Beveiligingsmechanismen",
+                        "name_en": "Encryption and Security Mechanisms",
+                        "keywords": ["encryption", "security", "ssl", "tls", "cipher", "hash"],
+                        "description_nl": "Implementatie van encryptie en beveiligingsmechanismen.",
+                        "estimated_hours": 50.0,
+                    },
+                ],
             },
             {
                 "id": "privacy_preserving_cloud",
@@ -125,6 +241,24 @@ class WBSOActivities:
                 "estimated_hours": 60.0,
                 "category": "PRIVACY_CLOUD",
                 "description_nl": "Ontwikkeling van privacy-bewuste cloud integratieoplossingen en data protection mechanismen.",
+                "sub_activities": [
+                    {
+                        "id": "data_anonymization",
+                        "name_nl": "Data Anonimisering en Pseudonimisering",
+                        "name_en": "Data Anonymization and Pseudonymization",
+                        "keywords": ["anonymization", "pseudonymization", "privacy", "pii", "sensitive", "data protection"],
+                        "description_nl": "Ontwikkeling van data anonimisering en pseudonimisering technieken voor veilige cloud verwerking.",
+                        "estimated_hours": 45.0,
+                    },
+                    {
+                        "id": "cloud_decision_rules",
+                        "name_nl": "Cloud-waardigheid Beslisregels",
+                        "name_en": "Cloud-Worthiness Decision Rules",
+                        "keywords": ["cloud", "decision", "rules", "screening", "privacy", "gdpr"],
+                        "description_nl": "Ontwikkeling van beslisregels voor bepaling of data veilig naar cloud gestuurd kan worden.",
+                        "estimated_hours": 40.0,
+                    },
+                ],
             },
             {
                 "id": "data_protection",
@@ -134,6 +268,16 @@ class WBSOActivities:
                 "estimated_hours": 55.0,
                 "category": "PRIVACY_CLOUD",
                 "description_nl": "Ontwikkeling van data protection mechanismen voor privacy-bewuste applicaties.",
+                "sub_activities": [
+                    {
+                        "id": "gdpr_compliance",
+                        "name_nl": "AVG Compliance en Toestemmingsverificatie",
+                        "name_en": "GDPR Compliance and Consent Verification",
+                        "keywords": ["gdpr", "compliance", "consent", "verification", "privacy", "legal"],
+                        "description_nl": "Implementatie van AVG compliance mechanismen en toestemmingsverificatie.",
+                        "estimated_hours": 55.0,
+                    },
+                ],
             },
             {
                 "id": "audit_logging_system",
@@ -143,6 +287,16 @@ class WBSOActivities:
                 "estimated_hours": 50.0,
                 "category": "AUDIT_LOGGING",
                 "description_nl": "Implementatie van uitgebreide audit logging systemen voor compliance tracking.",
+                "sub_activities": [
+                    {
+                        "id": "privacy_friendly_audit",
+                        "name_nl": "Privacyvriendelijke Audit Log Structuur",
+                        "name_en": "Privacy-Friendly Audit Log Structure",
+                        "keywords": ["audit", "logging", "privacy", "structure", "reference", "compliance"],
+                        "description_nl": "Ontwikkeling van privacyvriendelijke audit log structuren met veilige referenties zonder privacylekken.",
+                        "estimated_hours": 50.0,
+                    },
+                ],
             },
             {
                 "id": "monitoring_solutions",
@@ -161,6 +315,24 @@ class WBSOActivities:
                 "estimated_hours": 50.0,
                 "category": "DATA_INTEGRITY",
                 "description_nl": "Onderzoek en ontwikkeling van data integriteit beschermingssystemen en corruptie preventie.",
+                "sub_activities": [
+                    {
+                        "id": "query_classification",
+                        "name_nl": "Query Classificatie (Lezen/Bewerken)",
+                        "name_en": "Query Classification (Read/Write)",
+                        "keywords": ["query", "classification", "read", "write", "modify", "delete", "risk"],
+                        "description_nl": "Ontwikkeling van classificatiemodule voor natuurlijke taal queries als alleen-lezen of bewerkend.",
+                        "estimated_hours": 35.0,
+                    },
+                    {
+                        "id": "corruption_prevention",
+                        "name_nl": "Datacorruptie Preventie",
+                        "name_en": "Data Corruption Prevention",
+                        "keywords": ["corruption", "prevention", "integrity", "validation", "block", "risk"],
+                        "description_nl": "Implementatie van mechanismen tegen datacorruptie en onbedoelde wijzigingen.",
+                        "estimated_hours": 30.0,
+                    },
+                ],
             },
             {
                 "id": "validation_frameworks",
@@ -179,6 +351,24 @@ class WBSOActivities:
                 "estimated_hours": 50.0,
                 "category": "GENERAL_RD",
                 "description_nl": "Ontwikkeling van APIs voor integratie met externe systemen en services.",
+                "sub_activities": [
+                    {
+                        "id": "backend_api",
+                        "name_nl": "Backend API Ontwikkeling (FastAPI)",
+                        "name_en": "Backend API Development (FastAPI)",
+                        "keywords": ["api", "fastapi", "backend", "rest", "endpoint", "service"],
+                        "description_nl": "Ontwikkeling van backend APIs voor systeemintegratie.",
+                        "estimated_hours": 35.0,
+                    },
+                    {
+                        "id": "frontend_integration",
+                        "name_nl": "Frontend Integratie (React)",
+                        "name_en": "Frontend Integration (React)",
+                        "keywords": ["frontend", "react", "integration", "ui", "interface"],
+                        "description_nl": "Integratie van frontend interfaces met backend APIs.",
+                        "estimated_hours": 25.0,
+                    },
+                ],
             },
             {
                 "id": "database_development",
@@ -215,6 +405,16 @@ class WBSOActivities:
                 "estimated_hours": 50.0,
                 "category": "GENERAL_RD",
                 "description_nl": "Architectuur ontwerp en planning voor schaalbare systemen.",
+                "sub_activities": [
+                    {
+                        "id": "system_architecture",
+                        "name_nl": "Systeemarchitectuur Ontwerp",
+                        "name_en": "System Architecture Design",
+                        "keywords": ["architecture", "design", "structure", "pattern", "microservice"],
+                        "description_nl": "Ontwerp van systeemarchitectuur voor schaalbare en onderhoudbare systemen.",
+                        "estimated_hours": 50.0,
+                    },
+                ],
             },
             {
                 "id": "performance_optimization",
@@ -245,9 +445,18 @@ class WBSOActivities:
             },
         ]
 
+        # Ensure all activities have sub_activities field (backward compatibility)
+        for activity in activities:
+            if "sub_activities" not in activity:
+                activity["sub_activities"] = []
+
         # Calculate total hours
         total_hours = sum(act["estimated_hours"] for act in activities)
-        logger.info(f"Generated {len(activities)} WBSO activities with total {total_hours:.2f} estimated hours")
+        total_sub_activities = sum(len(act.get("sub_activities", [])) for act in activities)
+        logger.info(
+            f"Generated {len(activities)} WBSO activities with {total_sub_activities} sub-activities "
+            f"and total {total_hours:.2f} estimated hours"
+        )
 
         return activities
 
@@ -280,6 +489,10 @@ class WBSOActivities:
     def _build_activity_map(self) -> None:
         """Build activity map for quick lookup."""
         self.activity_map = {act["id"]: act for act in self.activities}
+        # Ensure backward compatibility: add empty sub_activities if missing
+        for activity in self.activities:
+            if "sub_activities" not in activity:
+                activity["sub_activities"] = []
 
     def _save_activities(self) -> None:
         """Save activities to storage file."""
@@ -355,3 +568,39 @@ class WBSOActivities:
     def get_total_estimated_hours(self) -> float:
         """Get total estimated hours across all activities."""
         return sum(act["estimated_hours"] for act in self.activities)
+
+    def get_sub_activity_by_id(self, activity_id: str, sub_activity_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get sub-activity by activity ID and sub-activity ID.
+
+        Args:
+            activity_id: Parent activity ID
+            sub_activity_id: Sub-activity ID
+
+        Returns:
+            Sub-activity dictionary or None if not found
+        """
+        activity = self.activity_map.get(activity_id)
+        if not activity:
+            return None
+
+        sub_activities = activity.get("sub_activities", [])
+        return next((sub for sub in sub_activities if sub.get("id") == sub_activity_id), None)
+
+    def get_all_sub_activities(self) -> List[Dict[str, Any]]:
+        """
+        Get all sub-activities from all activities.
+
+        Returns:
+            List of all sub-activities with parent activity ID included
+        """
+        all_sub_activities = []
+        for activity in self.activities:
+            activity_id = activity.get("id")
+            sub_activities = activity.get("sub_activities", [])
+            for sub_activity in sub_activities:
+                sub_activity_with_parent = sub_activity.copy()
+                sub_activity_with_parent["parent_activity_id"] = activity_id
+                sub_activity_with_parent["parent_activity_name_nl"] = activity.get("name_nl", "")
+                all_sub_activities.append(sub_activity_with_parent)
+        return all_sub_activities

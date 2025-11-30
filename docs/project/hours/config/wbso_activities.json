@@ -1,5 +1,5 @@
 {
-  "generated_timestamp": "2025-11-29T12:25:34.974779",
+  "generated_timestamp": "2025-11-30T11:28:52.064262",
   "total_activities": 21,
   "total_estimated_hours": 1065.0,
   "activities": [
@@ -22,7 +22,56 @@
       ],
       "estimated_hours": 85.0,
       "category": "AI_FRAMEWORK",
-      "description_nl": "Ontwikkeling en implementatie van AI agent frameworks, natural language processing capabilities, en intelligente communicatiesystemen voor data-veilige omgevingen."
+      "description_nl": "Ontwikkeling en implementatie van AI agent frameworks, natural language processing capabilities, en intelligente communicatiesystemen voor data-veilige omgevingen.",
+      "sub_activities": [
+        {
+          "id": "llm_integration",
+          "name_nl": "LLM Integratie en Model Selectie",
+          "name_en": "LLM Integration and Model Selection",
+          "keywords": [
+            "llm",
+            "model",
+            "gpt",
+            "openai",
+            "anthropic",
+            "claude",
+            "local",
+            "cloud"
+          ],
+          "description_nl": "Integratie van Large Language Models met configureerbare keuze tussen lokale en cloud-gebaseerde modellen.",
+          "estimated_hours": 85.0
+        },
+        {
+          "id": "agent_orchestration",
+          "name_nl": "AI Agent Orkestratie",
+          "name_en": "AI Agent Orchestration",
+          "keywords": [
+            "agent",
+            "orchestration",
+            "coordination",
+            "workflow",
+            "langflow",
+            "autogen"
+          ],
+          "description_nl": "Ontwikkeling van agent orkestratie systemen voor gecoördineerde AI-agent workflows.",
+          "estimated_hours": 75.0
+        },
+        {
+          "id": "prompt_engineering",
+          "name_nl": "Prompt Engineering en Jailbreak Detectie",
+          "name_en": "Prompt Engineering and Jailbreak Detection",
+          "keywords": [
+            "prompt",
+            "engineering",
+            "jailbreak",
+            "detection",
+            "safety",
+            "instruction"
+          ],
+          "description_nl": "Ontwikkeling van prompt engineering technieken en jailbreak detectie mechanismen.",
+          "estimated_hours": 60.0
+        }
+      ]
     },
     {
       "id": "nlp_implementation",
@@ -39,7 +88,39 @@
       ],
       "estimated_hours": 65.0,
       "category": "AI_FRAMEWORK",
-      "description_nl": "Implementatie van natural language processing functionaliteit voor tekstanalyse en -verwerking."
+      "description_nl": "Implementatie van natural language processing functionaliteit voor tekstanalyse en -verwerking.",
+      "sub_activities": [
+        {
+          "id": "intent_recognition",
+          "name_nl": "Intentieherkenning en Semantische Interpretatie",
+          "name_en": "Intent Recognition and Semantic Interpretation",
+          "keywords": [
+            "intent",
+            "intention",
+            "semantic",
+            "interpretation",
+            "understanding",
+            "nlp"
+          ],
+          "description_nl": "Ontwikkeling van intentieherkenning en semantische interpretatie van natuurlijke taalvragen.",
+          "estimated_hours": 45.0
+        },
+        {
+          "id": "text_processing",
+          "name_nl": "Tekstverwerking en Tokenisatie",
+          "name_en": "Text Processing and Tokenization",
+          "keywords": [
+            "text",
+            "processing",
+            "tokenization",
+            "parsing",
+            "chunking",
+            "preprocessing"
+          ],
+          "description_nl": "Implementatie van tekstverwerking, tokenisatie en preprocessing functionaliteit.",
+          "estimated_hours": 35.0
+        }
+      ]
     },
     {
       "id": "vector_store_development",
@@ -57,7 +138,23 @@
       ],
       "estimated_hours": 55.0,
       "category": "AI_FRAMEWORK",
-      "description_nl": "Ontwikkeling en optimalisatie van vector database systemen voor semantische zoekfunctionaliteit."
+      "description_nl": "Ontwikkeling en optimalisatie van vector database systemen voor semantische zoekfunctionaliteit.",
+      "sub_activities": [
+        {
+          "id": "vector_database",
+          "name_nl": "Vector Database Implementatie",
+          "name_en": "Vector Database Implementation",
+          "keywords": [
+            "vector",
+            "embedding",
+            "chroma",
+            "database",
+            "similarity"
+          ],
+          "description_nl": "Implementatie en optimalisatie van vector database systemen.",
+          "estimated_hours": 55.0
+        }
+      ]
     },
     {
       "id": "rag_pipeline_development",
@@ -74,7 +171,39 @@
       ],
       "estimated_hours": 70.0,
       "category": "AI_FRAMEWORK",
-      "description_nl": "Ontwikkeling van Retrieval-Augmented Generation pipelines voor context-aware AI responses."
+      "description_nl": "Ontwikkeling van Retrieval-Augmented Generation pipelines voor context-aware AI responses.",
+      "sub_activities": [
+        {
+          "id": "document_retrieval",
+          "name_nl": "Document Retrieval en Context Aggregatie",
+          "name_en": "Document Retrieval and Context Aggregation",
+          "keywords": [
+            "retrieval",
+            "document",
+            "context",
+            "aggregation",
+            "search",
+            "query"
+          ],
+          "description_nl": "Ontwikkeling van document retrieval systemen en context aggregatie voor AI responses.",
+          "estimated_hours": 50.0
+        },
+        {
+          "id": "semantic_search",
+          "name_nl": "Semantische Zoekfunctionaliteit",
+          "name_en": "Semantic Search Functionality",
+          "keywords": [
+            "semantic",
+            "search",
+            "query",
+            "natural language",
+            "nlp",
+            "vector"
+          ],
+          "description_nl": "Implementatie van semantische zoekfunctionaliteit voor natuurlijke taal queries.",
+          "estimated_hours": 40.0
+        }
+      ]
     },
     {
       "id": "authentication_system",
@@ -92,7 +221,25 @@
       ],
       "estimated_hours": 45.0,
       "category": "ACCESS_CONTROL",
-      "description_nl": "Ontwikkeling van authenticatie- en autorisatiesystemen voor veilige toegangscontrole."
+      "description_nl": "Ontwikkeling van authenticatie- en autorisatiesystemen voor veilige toegangscontrole.",
+      "sub_activities": [
+        {
+          "id": "user_authentication",
+          "name_nl": "Gebruikersauthenticatie en Sessiebeheer",
+          "name_en": "User Authentication and Session Management",
+          "keywords": [
+            "auth",
+            "authentication",
+            "login",
+            "session",
+            "credential",
+            "jwt",
+            "token"
+          ],
+          "description_nl": "Implementatie van gebruikersauthenticatie en sessiebeheer systemen.",
+          "estimated_hours": 45.0
+        }
+      ]
     },
     {
       "id": "authorization_framework",
@@ -108,7 +255,38 @@
       ],
       "estimated_hours": 40.0,
       "category": "ACCESS_CONTROL",
-      "description_nl": "Ontwikkeling van autorisatieframeworks voor gedetailleerde toegangscontrole."
+      "description_nl": "Ontwikkeling van autorisatieframeworks voor gedetailleerde toegangscontrole.",
+      "sub_activities": [
+        {
+          "id": "role_based_access",
+          "name_nl": "Rolgebaseerde Toegangscontrole",
+          "name_en": "Role-Based Access Control",
+          "keywords": [
+            "role",
+            "rbac",
+            "permission",
+            "access control",
+            "policy",
+            "authorization"
+          ],
+          "description_nl": "Ontwikkeling van rolgebaseerde toegangscontrole systemen voor bevoegdheidsbeheer.",
+          "estimated_hours": 30.0
+        },
+        {
+          "id": "context_based_access",
+          "name_nl": "Context-gebaseerde Toegangscontrole",
+          "name_en": "Context-Based Access Control",
+          "keywords": [
+            "context",
+            "access control",
+            "intent",
+            "authorization",
+            "policy"
+          ],
+          "description_nl": "Ontwikkeling van context-gebaseerde toegangscontrole voor natuurlijke taal queries.",
+          "estimated_hours": 35.0
+        }
+      ]
     },
     {
       "id": "security_mechanisms",
@@ -126,7 +304,24 @@
       ],
       "estimated_hours": 50.0,
       "category": "ACCESS_CONTROL",
-      "description_nl": "Ontwikkeling van beveiligingsmechanismen voor data-veilige omgevingen."
+      "description_nl": "Ontwikkeling van beveiligingsmechanismen voor data-veilige omgevingen.",
+      "sub_activities": [
+        {
+          "id": "encryption_security",
+          "name_nl": "Encryptie en Beveiligingsmechanismen",
+          "name_en": "Encryption and Security Mechanisms",
+          "keywords": [
+            "encryption",
+            "security",
+            "ssl",
+            "tls",
+            "cipher",
+            "hash"
+          ],
+          "description_nl": "Implementatie van encryptie en beveiligingsmechanismen.",
+          "estimated_hours": 50.0
+        }
+      ]
     },
     {
       "id": "privacy_preserving_cloud",
@@ -144,7 +339,39 @@
       ],
       "estimated_hours": 60.0,
       "category": "PRIVACY_CLOUD",
-      "description_nl": "Ontwikkeling van privacy-bewuste cloud integratieoplossingen en data protection mechanismen."
+      "description_nl": "Ontwikkeling van privacy-bewuste cloud integratieoplossingen en data protection mechanismen.",
+      "sub_activities": [
+        {
+          "id": "data_anonymization",
+          "name_nl": "Data Anonimisering en Pseudonimisering",
+          "name_en": "Data Anonymization and Pseudonymization",
+          "keywords": [
+            "anonymization",
+            "pseudonymization",
+            "privacy",
+            "pii",
+            "sensitive",
+            "data protection"
+          ],
+          "description_nl": "Ontwikkeling van data anonimisering en pseudonimisering technieken voor veilige cloud verwerking.",
+          "estimated_hours": 45.0
+        },
+        {
+          "id": "cloud_decision_rules",
+          "name_nl": "Cloud-waardigheid Beslisregels",
+          "name_en": "Cloud-Worthiness Decision Rules",
+          "keywords": [
+            "cloud",
+            "decision",
+            "rules",
+            "screening",
+            "privacy",
+            "gdpr"
+          ],
+          "description_nl": "Ontwikkeling van beslisregels voor bepaling of data veilig naar cloud gestuurd kan worden.",
+          "estimated_hours": 40.0
+        }
+      ]
     },
     {
       "id": "data_protection",
@@ -160,7 +387,24 @@
       ],
       "estimated_hours": 55.0,
       "category": "PRIVACY_CLOUD",
-      "description_nl": "Ontwikkeling van data protection mechanismen voor privacy-bewuste applicaties."
+      "description_nl": "Ontwikkeling van data protection mechanismen voor privacy-bewuste applicaties.",
+      "sub_activities": [
+        {
+          "id": "gdpr_compliance",
+          "name_nl": "AVG Compliance en Toestemmingsverificatie",
+          "name_en": "GDPR Compliance and Consent Verification",
+          "keywords": [
+            "gdpr",
+            "compliance",
+            "consent",
+            "verification",
+            "privacy",
+            "legal"
+          ],
+          "description_nl": "Implementatie van AVG compliance mechanismen en toestemmingsverificatie.",
+          "estimated_hours": 55.0
+        }
+      ]
     },
     {
       "id": "audit_logging_system",
@@ -177,7 +421,24 @@
       ],
       "estimated_hours": 50.0,
       "category": "AUDIT_LOGGING",
-      "description_nl": "Implementatie van uitgebreide audit logging systemen voor compliance tracking."
+      "description_nl": "Implementatie van uitgebreide audit logging systemen voor compliance tracking.",
+      "sub_activities": [
+        {
+          "id": "privacy_friendly_audit",
+          "name_nl": "Privacyvriendelijke Audit Log Structuur",
+          "name_en": "Privacy-Friendly Audit Log Structure",
+          "keywords": [
+            "audit",
+            "logging",
+            "privacy",
+            "structure",
+            "reference",
+            "compliance"
+          ],
+          "description_nl": "Ontwikkeling van privacyvriendelijke audit log structuren met veilige referenties zonder privacylekken.",
+          "estimated_hours": 50.0
+        }
+      ]
     },
     {
       "id": "monitoring_solutions",
@@ -193,7 +454,8 @@
       ],
       "estimated_hours": 45.0,
       "category": "AUDIT_LOGGING",
-      "description_nl": "Ontwikkeling van privacy-vriendelijke monitoring oplossingen."
+      "description_nl": "Ontwikkeling van privacy-vriendelijke monitoring oplossingen.",
+      "sub_activities": []
     },
     {
       "id": "data_integrity_protection",
@@ -209,7 +471,40 @@
       ],
       "estimated_hours": 50.0,
       "category": "DATA_INTEGRITY",
-      "description_nl": "Onderzoek en ontwikkeling van data integriteit beschermingssystemen en corruptie preventie."
+      "description_nl": "Onderzoek en ontwikkeling van data integriteit beschermingssystemen en corruptie preventie.",
+      "sub_activities": [
+        {
+          "id": "query_classification",
+          "name_nl": "Query Classificatie (Lezen/Bewerken)",
+          "name_en": "Query Classification (Read/Write)",
+          "keywords": [
+            "query",
+            "classification",
+            "read",
+            "write",
+            "modify",
+            "delete",
+            "risk"
+          ],
+          "description_nl": "Ontwikkeling van classificatiemodule voor natuurlijke taal queries als alleen-lezen of bewerkend.",
+          "estimated_hours": 35.0
+        },
+        {
+          "id": "corruption_prevention",
+          "name_nl": "Datacorruptie Preventie",
+          "name_en": "Data Corruption Prevention",
+          "keywords": [
+            "corruption",
+            "prevention",
+            "integrity",
+            "validation",
+            "block",
+            "risk"
+          ],
+          "description_nl": "Implementatie van mechanismen tegen datacorruptie en onbedoelde wijzigingen.",
+          "estimated_hours": 30.0
+        }
+      ]
     },
     {
       "id": "validation_frameworks",
@@ -225,7 +520,8 @@
       ],
       "estimated_hours": 40.0,
       "category": "DATA_INTEGRITY",
-      "description_nl": "Ontwikkeling van validatie frameworks voor data kwaliteitscontrole."
+      "description_nl": "Ontwikkeling van validatie frameworks voor data kwaliteitscontrole.",
+      "sub_activities": []
     },
     {
       "id": "api_development",
@@ -242,7 +538,38 @@
       ],
       "estimated_hours": 50.0,
       "category": "GENERAL_RD",
-      "description_nl": "Ontwikkeling van APIs voor integratie met externe systemen en services."
+      "description_nl": "Ontwikkeling van APIs voor integratie met externe systemen en services.",
+      "sub_activities": [
+        {
+          "id": "backend_api",
+          "name_nl": "Backend API Ontwikkeling (FastAPI)",
+          "name_en": "Backend API Development (FastAPI)",
+          "keywords": [
+            "api",
+            "fastapi",
+            "backend",
+            "rest",
+            "endpoint",
+            "service"
+          ],
+          "description_nl": "Ontwikkeling van backend APIs voor systeemintegratie.",
+          "estimated_hours": 35.0
+        },
+        {
+          "id": "frontend_integration",
+          "name_nl": "Frontend Integratie (React)",
+          "name_en": "Frontend Integration (React)",
+          "keywords": [
+            "frontend",
+            "react",
+            "integration",
+            "ui",
+            "interface"
+          ],
+          "description_nl": "Integratie van frontend interfaces met backend APIs.",
+          "estimated_hours": 25.0
+        }
+      ]
     },
     {
       "id": "database_development",
@@ -259,7 +586,8 @@
       ],
       "estimated_hours": 45.0,
       "category": "GENERAL_RD",
-      "description_nl": "Database ontwikkeling en optimalisatie voor performante data opslag."
+      "description_nl": "Database ontwikkeling en optimalisatie voor performante data opslag.",
+      "sub_activities": []
     },
     {
       "id": "testing_framework",
@@ -276,7 +604,8 @@
       ],
       "estimated_hours": 40.0,
       "category": "GENERAL_RD",
-      "description_nl": "Ontwikkeling van test frameworks en test infrastructuur."
+      "description_nl": "Ontwikkeling van test frameworks en test infrastructuur.",
+      "sub_activities": []
     },
     {
       "id": "documentation_development",
@@ -292,7 +621,8 @@
       ],
       "estimated_hours": 35.0,
       "category": "GENERAL_RD",
-      "description_nl": "Ontwikkeling van technische documentatie en specificaties."
+      "description_nl": "Ontwikkeling van technische documentatie en specificaties.",
+      "sub_activities": []
     },
     {
       "id": "architecture_design",
@@ -308,7 +638,23 @@
       ],
       "estimated_hours": 50.0,
       "category": "GENERAL_RD",
-      "description_nl": "Architectuur ontwerp en planning voor schaalbare systemen."
+      "description_nl": "Architectuur ontwerp en planning voor schaalbare systemen.",
+      "sub_activities": [
+        {
+          "id": "system_architecture",
+          "name_nl": "Systeemarchitectuur Ontwerp",
+          "name_en": "System Architecture Design",
+          "keywords": [
+            "architecture",
+            "design",
+            "structure",
+            "pattern",
+            "microservice"
+          ],
+          "description_nl": "Ontwerp van systeemarchitectuur voor schaalbare en onderhoudbare systemen.",
+          "estimated_hours": 50.0
+        }
+      ]
     },
     {
       "id": "performance_optimization",
@@ -324,7 +670,8 @@
       ],
       "estimated_hours": 45.0,
       "category": "GENERAL_RD",
-      "description_nl": "Performance optimalisatie en efficiency verbetering van systemen."
+      "description_nl": "Performance optimalisatie en efficiency verbetering van systemen.",
+      "sub_activities": []
     },
     {
       "id": "deployment_automation",
@@ -341,7 +688,8 @@
       ],
       "estimated_hours": 40.0,
       "category": "GENERAL_RD",
-      "description_nl": "Automatisering van deployment processen en CI/CD pipelines."
+      "description_nl": "Automatisering van deployment processen en CI/CD pipelines.",
+      "sub_activities": []
     },
     {
       "id": "research_analysis",
@@ -357,7 +705,8 @@
       ],
       "estimated_hours": 50.0,
       "category": "GENERAL_RD",
-      "description_nl": "Onderzoek en analyse van technische oplossingen en best practices."
+      "description_nl": "Onderzoek en analyse van technische oplossingen en best practices.",
+      "sub_activities": []
     }
   ]
 }

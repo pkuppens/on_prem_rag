@@ -1969,3 +1969,14 @@ DateTime,EventId,EventType,Message,RecordId
 2025-11-28 06:52:06,6005,System startup (Event Log service started),The Event log service was started.,110193
 2025-11-28 06:52:20,7001,User logon notification,User Logon Notification for Customer Experience Improvement Program,110340
 2025-11-28 12:00:00,6013,System uptime report,The system uptime is 18485 seconds.,110464
+2025-11-28 19:28:49,1074,System shutdown/restart initiated,The process Explorer.EXE has initiated the power off of computer AIGENT-4090 on behalf of user aigent-4090\piete for the following reason: Other (Unplanned)  Reason Code: 0x0  Shutdown Type: power off  Comment:,110500
+2025-11-28 19:28:51,7002,User logoff notification,User Logoff Notification for Customer Experience Improvement Program,110521
+2025-11-28 19:28:51,1074,System shutdown/restart initiated,The process C:\WINDOWS\system32\winlogon.exe (AIGENT-4090) has initiated the power off of computer AIGENT-4090 on behalf of user NT AUTHORITY\SYSTEM for the following reason: No title for this reason could be found  Reason Code: 0x500ff  Shutdown Type: power off  Comment:,110520
+2025-11-28 19:28:52,42,System entering sleep,The system is entering sleep.  Sleep Reason: Application API,110524
+2025-11-28 20:53:25,7001,User logon notification,User Logon Notification for Customer Experience Improvement Program,110541
+2025-11-28 23:54:27,1074,System shutdown/restart initiated,The process Explorer.EXE has initiated the power off of computer AIGENT-4090 on behalf of user aigent-4090\piete for the following reason: Other (Unplanned)  Reason Code: 0x0  Shutdown Type: power off  Comment:,110635
+2025-11-28 23:54:29,7002,User logoff notification,User Logoff Notification for Customer Experience Improvement Program,110655
+2025-11-28 23:54:31,42,System entering sleep,The system is entering sleep.  Sleep Reason: Application API,110658
+2025-11-29 08:25:27,7001,User logon notification,User Logon Notification for Customer Experience Improvement Program,110682
+2025-11-29 11:59:59,6013,System uptime report,The system uptime is 104890 seconds.,110785
+2025-11-29 12:00:00,6013,System uptime report,The system uptime is 104891 seconds.,110786

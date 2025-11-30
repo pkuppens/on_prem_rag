@@ -336,6 +336,7 @@ def step_consolidate_system_events(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
     logger.info("STEP: CONSOLIDATE SYSTEM EVENTS")
     logger.info("=" * 60)
+    sys.stdout.flush()  # Ensure output is visible immediately
 
     output_csv = DATA_DIR / "all_system_events.csv"
     output_json = DATA_DIR / "all_system_events.json"
@@ -365,7 +366,7 @@ def step_consolidate_system_events(context: Dict[str, Any]) -> Dict[str, Any]:
         from collect_system_events import collect_and_deduplicate_system_events
 
         logger.info(f"Consolidating system events from {DATA_DIR}...")
-        collect_and_deduplicate_system_events(DATA_DIR, output_csv, force_regenerate=True)
+        collect_and_deduplicate_system_events(DATA_DIR, output_csv, force_regenerate=True, sort=True)
 
         # Check if file was created
         if output_csv.exists():
@@ -413,6 +414,7 @@ def step_data_refresh(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
     logger.info("STEP: DATA REFRESH")
     logger.info("=" * 60)
+    sys.stdout.flush()  # Ensure output is visible immediately
 
     # Check if data is already up to date
     yesterday = datetime.now() - timedelta(days=1)
@@ -688,19 +690,69 @@ def step_data_summary(context: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
+def _tag_session_event(event_id: str, event_type: str, message: str) -> Optional[str]:
+    """Tag a system event with session boundary marker (logon/logoff).
+
+    This function analyzes events and tags them based on EventId and message content.
+    Multiple event codes can indicate logon or logoff events, so we use tags instead
+    of relying solely on EventId.
+
+    Business Rules:
+    - Prefer 7001 (user logon) over 6005 (system startup) for logon events
+    - Multiple event codes can indicate logoff: 7002, 6008, 41, 1074
+    - EventId is preserved for completeness and backward compatibility
+
+    Args:
+        event_id: Windows event ID
+        event_type: Event type description
+        message: Event message content
+
+    Returns:
+        Session tag ("logon", "logoff", or None)
+    """
+    message_lower = message.lower() if message else ""
+
+    # Logon events (prefer 7001 over system startup events)
+    if event_id == "7001":
+        # User logon notification - preferred logon event
+        return "logon"
+    elif event_id == "6005":
+        # System startup events - tag as potential logon
+        if "startup" in message_lower or "started" in message_lower:
+            return "logon"
+
+    # Logoff events (multiple event codes can indicate logoff)
+    elif event_id == "7002":
+        # User logoff notification - preferred logoff event
+        return "logoff"
+    elif event_id == "6008":
+        # Unexpected shutdown - indicates previous session ended
+        return "logoff"
+    elif event_id == "41":
+        # System rebooted without cleanly shutting down - indicates session ended
+        return "logoff"
+    elif event_id == "1074":
+        # System shutdown/restart initiated - indicates session ended
+        if "shutdown" in message_lower or "restart" in message_lower:
+            return "logoff"
+
+    return None
+
+
 def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Step: Filter logon/logoff events (7001/7002) and create sessions.
+    Step: Filter logon/logoff events using session tagging and create sessions.
 
-    Filters system events to only EventId 7001 (logon) and 7002 (logoff),
-    sorts by datetime ascending, and creates sessions from logon-logoff pairs.
+    Filters system events using session_tag field (logon/logoff) instead of hardcoded EventId.
+    Multiple event codes can indicate logon/logoff (7001, 6005 for logon; 7002, 6008, 41, 1074 for logoff).
+    Sorts by datetime ascending, and creates sessions from logon-logoff pairs.
     Handles reboots (logoff-logon within 5 minutes - combine sessions).
     Handles day boundaries (end at 23:59, start new at 00:00 next day).
 
-    Output: all_logon_logoff.csv with columns: DateTime, EventId, EventType, RecordId
+    Output: all_logon_logoff.csv with columns: DateTime, EventId, EventType, RecordId, SessionTag
     """
     logger.info("=" * 60)
-    logger.info("STEP: FILTER LOGON/LOGOFF EVENTS")
+    logger.info("STEP: FILTER LOGON/LOGOFF EVENTS (USING SESSION TAGGING)")
     logger.info("=" * 60)
 
     input_file = DATA_DIR / "all_system_events.csv"
@@ -710,14 +762,21 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         logger.error(f"Input file not found: {input_file}")
         return create_step_report("filter_logon_logoff", False, message="Input file not found")
 
-    # Load and filter events
+    # Load and filter events using session tagging
     logon_logoff_events = []
     try:
         with open(input_file, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 event_id = row.get("EventId", "").strip()
-                if event_id in ["7001", "7002"]:
+                event_type = row.get("EventType", "")
+                message = row.get("Message", "")
+
+                # Tag event with session boundary marker
+                session_tag = _tag_session_event(event_id, event_type, message)
+
+                # Filter for logon/logoff events only (using session_tag)
+                if session_tag in ["logon", "logoff"]:
                     # Get datetime value (handle BOM and column name variations)
                     datetime_value = ""
                     for key, value in row.items():
@@ -728,9 +787,10 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
                     logon_logoff_events.append(
                         {
                             "DateTime": datetime_value,
-                            "EventId": event_id,
-                            "EventType": row.get("EventType", ""),
+                            "EventId": event_id,  # Preserve EventId for backward compatibility
+                            "EventType": event_type,
                             "RecordId": row.get("RecordId", ""),
+                            "SessionTag": session_tag,  # Add session tag
                         }
                     )
 
@@ -746,7 +806,7 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         events_with_dt.sort(key=lambda x: x[0])
         logger.info(f"Sorted {len(events_with_dt)} events by datetime")
 
-        # Create sessions from logon-logoff pairs
+        # Create sessions from logon-logoff pairs using session tags
         sessions = []
         session_counter = 1
         i = 0
@@ -754,29 +814,47 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         while i < len(events_with_dt):
             start_dt, start_event = events_with_dt[i]
 
-            # Look for logon event (7001)
-            if start_event["EventId"] == "7001":
+            # Look for logon event (using session_tag, prefer 7001 over 6005)
+            if start_event.get("SessionTag") == "logon":
+                # Prefer 7001 (user logon) over 6005 (system startup) for session start
+                if start_event["EventId"] == "6005":
+                    # Look ahead for a 7001 event within 5 minutes
+                    found_7001 = False
+                    for k in range(i + 1, min(i + 10, len(events_with_dt))):
+                        check_dt, check_event = events_with_dt[k]
+                        if check_dt and start_dt:
+                            gap_minutes = (check_dt - start_dt).total_seconds() / 60
+                            if gap_minutes > 5:  # Too far ahead, stop looking
+                                break
+                            if check_event.get("EventId") == "7001" and check_event.get("SessionTag") == "logon":
+                                # Found a 7001 event nearby, skip this 6005 event
+                                found_7001 = True
+                                break
+                    if found_7001:
+                        i += 1
+                        continue
+
                 session_start = start_dt
                 session_date = session_start.date()
 
-                # Look for matching logoff event (7002)
+                # Look for matching logoff event (using session_tag, any EventId)
                 j = i + 1
                 logoff_found = False
 
                 while j < len(events_with_dt):
                     end_dt, end_event = events_with_dt[j]
 
-                    # Check for reboot: logoff-logon within 5 minutes
-                    if end_event["EventId"] == "7002":
+                    # Check for reboot: logoff-logon within 5 minutes (using session_tag)
+                    if end_event.get("SessionTag") == "logoff":
                         # Check if next event is logon within 5 minutes
                         if j + 1 < len(events_with_dt):
                             next_dt, next_event = events_with_dt[j + 1]
-                            if next_event["EventId"] == "7001":
+                            if next_event.get("SessionTag") == "logon":
                                 time_gap = (next_dt - end_dt).total_seconds() / 60.0
                                 if time_gap <= 5.0:
                                     # Reboot detected - skip this logoff and continue to next logoff after the reboot logon
                                     logger.debug(
-                                        f"Reboot detected: logoff at {end_dt}, logon at {next_dt} (gap: {time_gap:.1f} min) - combining sessions"
+                                        f"Reboot detected: logoff (EventId {end_event.get('EventId')}) at {end_dt}, logon (EventId {next_event.get('EventId')}) at {next_dt} (gap: {time_gap:.1f} min) - combining sessions"
                                     )
                                     j += 2
                                     continue
@@ -854,16 +932,19 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 i += 1
 
-        # Write filtered events to CSV
+        # Write filtered events to CSV (include SessionTag for transparency)
         with open(output_file, "w", encoding="utf-8", newline="") as f:
-            fieldnames = ["DateTime", "EventId", "EventType", "RecordId"]
+            fieldnames = ["DateTime", "EventId", "EventType", "RecordId", "SessionTag"]
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for _, event in events_with_dt:
                 writer.writerow(event)
 
-        logger.info(f"✅ Filtered {len(events_with_dt)} logon/logoff events to {output_file}")
+        logger.info(f"✅ Filtered {len(events_with_dt)} logon/logoff events (using session tagging) to {output_file}")
         logger.info(f"✅ Created {len(sessions)} sessions from logon-logoff pairs")
+        logger.info(
+            f"   Note: Uses session_tag field instead of hardcoded EventId (supports 7001, 6005 for logon; 7002, 6008, 41, 1074 for logoff)"
+        )
 
         # Store sessions in context for next step
         context["logon_logoff_sessions"] = sessions

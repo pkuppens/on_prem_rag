@@ -735,3 +735,7 @@ DateTime,EventId,EventType,RecordId
 2025-11-26 19:31:01,7001,User logon notification,109677
 2025-11-27 17:32:13,7001,User logon notification,109973
 2025-11-28 06:52:20,7001,User logon notification,110340
+2025-11-28 19:28:51,7002,User logoff notification,110521
+2025-11-28 20:53:25,7001,User logon notification,110541
+2025-11-28 23:54:29,7002,User logoff notification,110655
+2025-11-29 08:25:27,7001,User logon notification,110682

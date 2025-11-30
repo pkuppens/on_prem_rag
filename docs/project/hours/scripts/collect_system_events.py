@@ -144,6 +144,10 @@ def collect_and_deduplicate_system_events(
                 for row_num, row in enumerate(reader, start=2):
                     record_id = row.get("RecordId", "").strip()
 
+                    # Skip rows with empty RecordId
+                    if not record_id:
+                        continue
+
                     # Skip if we've already seen this RecordId
                     if record_id in seen_record_ids:
                         continue
@@ -165,6 +169,10 @@ def collect_and_deduplicate_system_events(
                     # Filter out redundant columns
                     filtered_row = filter_redundant_columns(row)
 
+                    # Skip rows without DateTime (essential field)
+                    if not filtered_row.get("DateTime") or not filtered_row.get("DateTime").strip():
+                        continue
+
                     # Add to seen set and events list
                     seen_record_ids.add(record_id)
                     all_events.append(filtered_row)
@@ -183,7 +191,20 @@ def collect_and_deduplicate_system_events(
         fieldnames = [f for f in all_fieldnames if not f.startswith("_")]
 
         if sort:
-            all_events.sort(key=lambda x: x["DateTime"])
+            # Sort by DateTime using proper datetime parsing for robust chronological ordering
+            def get_sort_key(event: Dict[str, Any]) -> datetime:
+                dt_str = event.get("DateTime", "")
+                if dt_str:
+                    try:
+                        # Parse the standardized datetime string (YYYY-MM-DD HH:mm:ss)
+                        return datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+                    except (ValueError, TypeError):
+                        # Fallback to string comparison if parsing fails
+                        logger.warning(f"Could not parse datetime for sorting: {dt_str}")
+                        return datetime.min
+                return datetime.min
+
+            all_events.sort(key=get_sort_key)
 
         try:
             with open(output_file, "w", encoding="utf-8", newline="") as f:

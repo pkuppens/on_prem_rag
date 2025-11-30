@@ -361,3 +361,8 @@
 2025-11-28 09:29:52 +0100|1764318592|Fix time rounding, duplicate detection, descriptions, and document data flow|Pieter Kuppens|faef8e42e4acf88ba813a7a4f837f0919a29b4d7
 2025-11-28 10:25:40 +0100|1764321940|Refactor pipeline to extensible step-based architecture|Pieter Kuppens|f6c1c681a0f666441a921b536c6e645465f09c95
 2025-11-28 12:29:10 +0100|1764329350|Fix time zone issue|Pieter Kuppens|88872d25f3f27c2a01e9d94b119d96e4109761df
+2025-11-28 14:11:17 +0100|1764335477|Data Refresh: Git commits & System Events|Pieter Kuppens|26882908e79db91007c03c1269e26ac648be778f
+2025-11-28 22:26:42 +0100|1764365202|Fix sessions by using polished logon-logoff event combinations|Pieter Kuppens|8b38d75c667c8d5f18338adb7f47c45fa9aa0083
+2025-11-28 22:31:17 +0100|1764365477|unit test fix for dutch event summary|Pieter Kuppens|c915b1c81844d79d78346e2b027028ad8a9bbcc8
+2025-11-28 23:54:18 +0100|1764370458|pipeline appears to assign enough hours, though some artefacts..|Pieter Kuppens|0e65f79c619f0ffd3159fb9de049c5de8df9aeed
+2025-11-29 12:20:36 +0100|1764415236|Google Calendar Data preparation|Pieter Kuppens|74faf6d9a059648cf1d3d13b23a0aec2751a3777

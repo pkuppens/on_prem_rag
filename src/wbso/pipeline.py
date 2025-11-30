@@ -14,6 +14,7 @@ Updated: 2025-11-28
 
 import sys
 import json
+import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Callable
@@ -124,18 +125,34 @@ class WBSOCalendarPipeline:
 
         try:
             # Execute each step in sequence
-            for step_func in self.pipeline_steps:
+            total_steps = len(self.pipeline_steps)
+            for step_index, step_func in enumerate(self.pipeline_steps, 1):
                 step_name = step_func.__name__
                 logger.info(f"\n{'=' * 60}")
-                logger.info(f"Executing: {step_name}")
+                logger.info(f"Executing Step {step_index}/{total_steps}: {step_name}")
                 logger.info(f"{'=' * 60}")
+                sys.stdout.flush()  # Ensure output is visible immediately
 
+                step_start_time = time.time()
                 try:
                     # Execute step
                     step_report = step_func(self.context)
 
-                    # Store step report
+                    # Calculate step duration
+                    step_duration = time.time() - step_start_time
+
+                    # Store step report with timing
+                    step_report["duration_seconds"] = step_duration
                     self.step_reports.append(step_report)
+
+                    # Log step completion with timing
+                    if step_report.get("success", False):
+                        logger.info(f"✅ Step {step_name} completed in {step_duration:.2f} seconds")
+                        logger.info(f"   Message: {step_report.get('message', 'No message')}")
+                    else:
+                        logger.error(f"❌ Step {step_name} failed after {step_duration:.2f} seconds")
+                        logger.error(f"   Error: {step_report.get('message', 'Unknown error')}")
+                    sys.stdout.flush()  # Ensure output is visible immediately
 
                     # Check if step failed
                     if not step_report.get("success", False):
@@ -144,13 +161,16 @@ class WBSOCalendarPipeline:
                         # Critical steps should return False and we can check here
 
                 except Exception as e:
-                    logger.error(f"Step {step_name} raised exception: {e}", exc_info=True)
+                    step_duration = time.time() - step_start_time
+                    logger.error(f"Step {step_name} raised exception after {step_duration:.2f} seconds: {e}", exc_info=True)
+                    sys.stdout.flush()  # Ensure output is visible immediately
                     # Create error report for this step
                     error_report = {
                         "step_name": step_name,
                         "success": False,
                         "timestamp": datetime.now().isoformat(),
                         "error": str(e),
+                        "duration_seconds": step_duration,
                         "message": f"Step failed with exception: {e}",
                     }
                     self.step_reports.append(error_report)

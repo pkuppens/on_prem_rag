@@ -289,8 +289,10 @@ class SessionSubactivityAssignment:
                     current_subactivity_hours = 0.0
                     current_subactivity_estimate = current_subactivity.get("estimated_hours", 0.0)
 
-            # Check if current subactivity estimate is reached
-            if current_subactivity_estimate > 0 and current_subactivity_hours >= current_subactivity_estimate:
+            # Check if current subactivity estimate is reached (with 50% overtime allowed)
+            # Allow 50% overtime: multiply estimate by 1.5
+            allowed_hours = current_subactivity_estimate * 1.5 if current_subactivity_estimate > 0 else 0
+            if current_subactivity_estimate > 0 and current_subactivity_hours >= allowed_hours:
                 # Find next subactivity (cycle through list)
                 current_index = next(
                     (i for i, sub in enumerate(self.all_sub_activities) if sub["id"] == current_subactivity["id"]),
@@ -300,7 +302,10 @@ class SessionSubactivityAssignment:
                     current_subactivity = self.all_sub_activities[current_index + 1]
                     current_subactivity_hours = 0.0
                     current_subactivity_estimate = current_subactivity.get("estimated_hours", 0.0)
-                    logger.debug(f"Subactivity estimate reached, switching to: {current_subactivity.get('name_nl')}")
+                    logger.debug(
+                        f"Subactivity estimate reached (with 50% overtime: {current_subactivity_hours:.1f}h >= {allowed_hours:.1f}h), "
+                        f"switching to: {current_subactivity.get('name_nl')}"
+                    )
                 else:
                     # Reached end of list, restart from beginning
                     current_subactivity = self.all_sub_activities[0]

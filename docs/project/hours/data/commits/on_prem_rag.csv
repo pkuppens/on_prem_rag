@@ -366,3 +366,8 @@
 2025-11-28 22:31:17 +0100|1764365477|unit test fix for dutch event summary|Pieter Kuppens|c915b1c81844d79d78346e2b027028ad8a9bbcc8
 2025-11-28 23:54:18 +0100|1764370458|pipeline appears to assign enough hours, though some artefacts..|Pieter Kuppens|0e65f79c619f0ffd3159fb9de049c5de8df9aeed
 2025-11-29 12:20:36 +0100|1764415236|Google Calendar Data preparation|Pieter Kuppens|74faf6d9a059648cf1d3d13b23a0aec2751a3777
+2025-11-30 10:18:18 +0100|1764494298|Logon-logoff fix for system events like unexpected reboots|Pieter Kuppens|7ec0e3bdac640123a5d05bdc01ef99dbc05ee115
+2025-11-30 11:32:41 +0100|1764498761|session - subactivity mapping|Pieter Kuppens|1399ccc326fae88b9495b12352b1fd33e01ed839
+2025-11-30 15:59:54 +0100|1764514794|consolidate work on session descriptions.|Pieter Kuppens|7ae94e80838d812348aad3fc15c7cabf1039b85f
+2025-11-30 20:46:08 +0100|1764531968|index on feature/FEAT-003-wbso-calendar-completion: 7ae94e8 consolidate work on session descriptions.|Pieter Kuppens|b025c657cff752dd746352de7e4bdbc2efff4fa2
+2025-11-30 20:46:08 +0100|1764531968|On feature/FEAT-003-wbso-calendar-completion: Luigi pipeline conversion work in progress|Pieter Kuppens|410027c37cfdac82656e2f8ac85176d436495eba

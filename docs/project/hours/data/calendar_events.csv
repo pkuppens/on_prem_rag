@@ -63,7 +63,7 @@ ses_0132,AVG Compliance en Toestemmingsverificatie,2025-07-03T06:30:00,2025-07-0
 ses_0133,AVG Compliance en Toestemmingsverificatie,2025-07-03T10:35:00,2025-07-03T15:55:00,2025-07-03,5.33,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
 ses_0134,AVG Compliance en Toestemmingsverificatie,2025-07-03T17:15:00,2025-07-03T18:15:00,2025-07-03,1.00,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
 ses_0135,AVG Compliance en Toestemmingsverificatie,2025-07-03T20:00:00,2025-07-03T20:20:00,2025-07-03,0.33,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
-ses_0136,AVG Compliance en Toestemmingsverificatie,2025-07-04T06:30:00,2025-07-04T07:55:00,2025-07-04,1.42,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie [lunch_break: 12:20-12:50]
+ses_0136,AVG Compliance en Toestemmingsverificatie,2025-07-04T06:30:00,2025-07-04T07:55:00,2025-07-04,1.42,2025-W27,2025,27,Thuiswerk,AVG Compliance en Toestemmingsverificatie
 ses_0141,Document Retrieval en Context Aggregatie,2025-07-07T07:20:00,2025-07-07T07:30:00,2025-07-07,0.17,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
 ses_0142.1,Document Retrieval en Context Aggregatie,2025-07-07T07:35:00,2025-07-07T12:30:00,2025-07-07,4.92,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
 ses_0142.2,Document Retrieval en Context Aggregatie,2025-07-07T13:00:00,2025-07-07T17:30:00,2025-07-07,4.50,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
@@ -77,7 +77,7 @@ ses_0148.2,Document Retrieval en Context Aggregatie,2025-07-09T13:00:00,2025-07-
 ses_0149,Document Retrieval en Context Aggregatie,2025-07-09T22:00:00,2025-07-09T22:30:00,2025-07-09,0.50,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
 ses_0150,Document Retrieval en Context Aggregatie,2025-07-10T09:25:00,2025-07-10T15:15:00,2025-07-10,5.83,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
 ses_0151,Document Retrieval en Context Aggregatie,2025-07-10T16:15:00,2025-07-10T20:25:00,2025-07-10,4.17,2025-W28,2025,28,Thuiswerk,Document Retrieval en Context Aggregatie
-ses_0152,Algemeen R&D Werk,2025-07-11T07:30:00,2025-07-11T10:50:00,2025-07-11,3.33,2025-W28,2025,28,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50]
+ses_0152,Algemeen R&D Werk,2025-07-11T07:30:00,2025-07-11T10:50:00,2025-07-11,3.33,2025-W28,2025,28,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0157,Algemeen R&D Werk,2025-07-16T20:30:00,2025-07-16T22:55:00,2025-07-16,2.42,2025-W29,2025,29,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0158.1,Encryptie en Beveiligingsmechanismen,2025-07-17T06:30:00,2025-07-17T12:20:00,2025-07-17,5.83,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
 ses_0158.2,Encryptie en Beveiligingsmechanismen,2025-07-17T12:50:00,2025-07-17T15:40:00,2025-07-17,2.83,2025-W29,2025,29,Thuiswerk,Encryptie en Beveiligingsmechanismen
@@ -177,7 +177,7 @@ ses_0251,Data Anonimisering en Pseudonimisering,2025-09-01T20:15:00,2025-09-01T2
 ses_0252,Data Anonimisering en Pseudonimisering,2025-09-02T06:40:00,2025-09-02T08:30:00,2025-09-02,1.83,2025-W36,2025,36,Thuiswerk,Data Anonimisering en Pseudonimisering
 ses_0253,Algemeen R&D Werk,2025-09-02T13:45:00,2025-09-02T21:55:00,2025-09-02,8.17,2025-W36,2025,36,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0254,Semantische Zoekfunctionaliteit,2025-09-03T21:40:00,2025-09-03T22:40:00,2025-09-03,1.00,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit
-ses_0255,Semantische Zoekfunctionaliteit,2025-09-04T11:45:00,2025-09-04T21:45:00,2025-09-04,10.00,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit [dinner_break: 18:10-18:55]
+ses_0255,Semantische Zoekfunctionaliteit,2025-09-04T11:45:00,2025-09-04T21:45:00,2025-09-04,10.00,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit
 ses_0257,Semantische Zoekfunctionaliteit,2025-09-05T15:00:00,2025-09-05T23:15:00,2025-09-05,8.25,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit
 ses_0258,Semantische Zoekfunctionaliteit,2025-09-06T07:45:00,2025-09-06T10:25:00,2025-09-06,2.67,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit
 ses_0259,Semantische Zoekfunctionaliteit,2025-09-06T14:15:00,2025-09-06T19:40:00,2025-09-06,5.42,2025-W36,2025,36,Thuiswerk,Semantische Zoekfunctionaliteit
@@ -269,7 +269,7 @@ ses_0346.1,LLM Integratie en Model Selectie,2025-10-28T07:30:00,2025-10-28T12:25
 ses_0346.2,LLM Integratie en Model Selectie,2025-10-28T12:55:00,2025-10-28T17:30:00,2025-10-28,4.58,2025-W44,2025,44,Thuiswerk,LLM Integratie en Model Selectie
 ses_0348,LLM Integratie en Model Selectie,2025-10-29T17:30:00,2025-10-29T23:35:00,2025-10-29,6.08,2025-W44,2025,44,Thuiswerk,LLM Integratie en Model Selectie
 ses_0350,AI Agent Orkestratie,2025-10-30T07:35:00,2025-10-30T08:50:00,2025-10-30,1.25,2025-W44,2025,44,Thuiswerk,AI Agent Orkestratie
-ses_0351,AI Agent Orkestratie,2025-10-30T10:40:00,2025-10-30T20:10:00,2025-10-30,9.50,2025-W44,2025,44,Thuiswerk,AI Agent Orkestratie [dinner_break: 18:10-18:55]
+ses_0351,AI Agent Orkestratie,2025-10-30T10:40:00,2025-10-30T20:10:00,2025-10-30,9.50,2025-W44,2025,44,Thuiswerk,AI Agent Orkestratie
 ses_0353,AI Agent Orkestratie,2025-10-31T07:35:00,2025-10-31T08:20:00,2025-10-31,0.75,2025-W44,2025,44,Thuiswerk,AI Agent Orkestratie
 ses_0354,Algemeen R&D Werk,2025-10-31T16:00:00,2025-10-31T23:59:59,2025-10-31,8.00,2025-W44,2025,44,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0356,Algemeen R&D Werk,2025-11-01T11:35:00,2025-11-01T13:40:01,2025-11-01,2.08,2025-W44,2025,44,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
@@ -296,7 +296,7 @@ ses_0380.2,Algemeen R&D Werk,2025-11-12T12:50:00,2025-11-12T17:40:00,2025-11-12,
 ses_0381,Algemeen R&D Werk,2025-11-13T06:45:00,2025-11-13T08:30:00,2025-11-13,1.75,2025-W46,2025,46,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0382,Algemeen R&D Werk,2025-11-13T20:15:00,2025-11-13T22:35:00,2025-11-13,2.33,2025-W46,2025,46,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0384,Algemeen R&D Werk,2025-11-15T09:15:00,2025-11-15T11:00:00,2025-11-15,1.75,2025-W46,2025,46,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
-ses_0385,Algemeen R&D Werk,2025-11-15T11:25:00,2025-11-15T19:30:00,2025-11-15,8.08,2025-W46,2025,46,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55]
+ses_0385,Algemeen R&D Werk,2025-11-15T11:25:00,2025-11-15T19:30:00,2025-11-15,8.08,2025-W46,2025,46,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0388,Algemeen R&D Werk,2025-11-17T17:40:00,2025-11-17T23:50:00,2025-11-17,6.17,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0389,Algemeen R&D Werk,2025-11-18T07:45:00,2025-11-18T08:45:00,2025-11-18,1.00,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0390,Algemeen R&D Werk,2025-11-18T11:15:00,2025-11-18T20:15:00,2025-11-18,9.00,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
@@ -305,7 +305,7 @@ ses_0393,Algemeen R&D Werk,2025-11-19T20:00:00,2025-11-19T22:55:00,2025-11-19,2.
 ses_0394,Algemeen R&D Werk,2025-11-20T17:25:00,2025-11-20T22:35:00,2025-11-20,5.17,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0395,Algemeen R&D Werk,2025-11-21T07:30:00,2025-11-21T08:30:00,2025-11-21,1.00,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0396,Algemeen R&D Werk,2025-11-21T09:15:00,2025-11-21T09:50:00,2025-11-21,0.58,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
-ses_0397,Algemeen R&D Werk,2025-11-21T11:20:00,2025-11-21T19:45:00,2025-11-21,8.42,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55]
+ses_0397,Algemeen R&D Werk,2025-11-21T11:20:00,2025-11-21T19:45:00,2025-11-21,8.42,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0399,Algemeen R&D Werk,2025-11-22T11:50:00,2025-11-22T15:05:00,2025-11-22,3.25,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0400,Algemeen R&D Werk,2025-11-22T18:10:00,2025-11-22T20:30:00,2025-11-22,2.33,2025-W47,2025,47,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving
 ses_0402,Algemeen R&D Werk,2025-11-24T19:20:00,2025-11-24T22:35:00,2025-11-24,3.25,2025-W48,2025,48,Thuiswerk,AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving

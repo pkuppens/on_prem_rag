@@ -1,6 +1,6 @@
 # WBSO Hours Summary by ISO Week
 
-Generated: 2025-12-02 10:47:47
+Generated: 2025-12-02 11:07:12
 
 This report summarizes hours spent on each activity (description) grouped by ISO week number.
 
@@ -8,9 +8,9 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 ## Summary Statistics
 
-- **Total Hours**: 981.70
+- **Total Hours**: 984.45
 - **Total Weeks**: 27
-- **Total Activities**: 43
+- **Total Activities**: 27
 - **Date Range**: 2025-W22 to 2025-W48
 
 ---
@@ -43,9 +43,8 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| AI Agent Orkestratie | 21.00 |
-| AI Agent Orkestratie [lunch_break: 12:20-12:50] | 9.50 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 9.50 |
+| AI Agent Orkestratie | 30.50 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 9.50 |
 
 ---
 
@@ -55,9 +54,8 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
+| Prompt Engineering en Jailbreak Detectie | 23.08 |
 | AI Agent Orkestratie | 16.92 |
-| Prompt Engineering en Jailbreak Detectie | 16.41 |
-| Prompt Engineering en Jailbreak Detectie [lunch_break: 12:20-12:50] | 6.67 |
 
 ---
 
@@ -79,32 +77,30 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
+| AVG Compliance en Toestemmingsverificatie | 19.49 |
 | Vector Database Implementatie | 19.08 |
-| AVG Compliance en Toestemmingsverificatie [lunch_break: 12:20-12:50] | 10.92 |
-| AVG Compliance en Toestemmingsverificatie | 9.99 |
+| AVG Compliance en Toestemmingsverificatie [lunch_break: 12:20-12:50] | 1.42 |
 
 ---
 
 ### 2025-W28
 
-**Total Hours**: 40.00
+**Total Hours**: 40.50
 
 | Activity | Hours |
 |----------|-------|
-| Document Retrieval en Context Aggregatie [lunch_break: 12:20-12:50] | 18.92 |
-| Document Retrieval en Context Aggregatie | 18.25 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 2.83 |
+| Document Retrieval en Context Aggregatie | 37.17 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 3.33 |
 
 ---
 
 ### 2025-W29
 
-**Total Hours**: 19.00
+**Total Hours**: 18.99
 
 | Activity | Hours |
 |----------|-------|
-| Encryptie en Beveiligingsmechanismen [lunch_break: 12:20-12:50] | 8.67 |
-| Encryptie en Beveiligingsmechanismen | 7.91 |
+| Encryptie en Beveiligingsmechanismen | 16.57 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 2.42 |
 
 ---
@@ -150,8 +146,7 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Intentieherkenning en Semantische Interpretatie [lunch_break: 12:20-12:50] | 27.00 |
-| Intentieherkenning en Semantische Interpretatie | 7.83 |
+| Intentieherkenning en Semantische Interpretatie | 34.83 |
 | Systeemarchitectuur Ontwerp | 4.75 |
 
 ---
@@ -162,9 +157,8 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Intentieherkenning en Semantische Interpretatie [lunch_break: 12:20-12:50] | 19.00 |
+| Intentieherkenning en Semantische Interpretatie | 25.75 |
 | Gebruikersauthenticatie en Sessiebeheer | 12.34 |
-| Intentieherkenning en Semantische Interpretatie | 6.75 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 1.92 |
 
 ---
@@ -175,11 +169,9 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Gebruikersauthenticatie en Sessiebeheer [lunch_break: 12:20-12:50] | 9.50 |
+| Gebruikersauthenticatie en Sessiebeheer | 16.67 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 14.84 |
 | Data Anonimisering en Pseudonimisering | 8.50 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 7.50 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 7.34 |
-| Gebruikersauthenticatie en Sessiebeheer | 7.17 |
 
 ---
 
@@ -189,8 +181,8 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Semantische Zoekfunctionaliteit | 18.09 |
-| Semantische Zoekfunctionaliteit [dinner_break: 18:10-18:55] | 9.25 |
+| Semantische Zoekfunctionaliteit | 17.34 |
+| Semantische Zoekfunctionaliteit [dinner_break: 18:10-18:55] | 10.00 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 8.17 |
 | Data Anonimisering en Pseudonimisering | 4.50 |
 
@@ -202,8 +194,7 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Cloud-waardigheid Beslisregels [lunch_break: 12:20-12:50] | 19.00 |
-| Cloud-waardigheid Beslisregels | 15.00 |
+| Cloud-waardigheid Beslisregels | 34.00 |
 | Semantische Zoekfunctionaliteit | 5.50 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 0.50 |
 
@@ -216,10 +207,9 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 | Activity | Hours |
 |----------|-------|
 | Query Classificatie (Lezen/Bewerken) | 12.33 |
+| Tekstverwerking en Tokenisatie | 10.00 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 9.67 |
-| Tekstverwerking en Tokenisatie [lunch_break: 12:20-12:50] | 9.50 |
 | Context-gebaseerde Toegangscontrole | 6.67 |
-| Tekstverwerking en Tokenisatie | 0.50 |
 
 ---
 
@@ -229,8 +219,7 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Backend API Ontwikkeling (FastAPI) | 14.08 |
-| Backend API Ontwikkeling (FastAPI) [lunch_break: 12:20-12:50] | 9.50 |
+| Backend API Ontwikkeling (FastAPI) | 23.58 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 4.33 |
 
 ---
@@ -241,38 +230,32 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| Rolgebaseerde Toegangscontrole [lunch_break: 12:20-12:50] | 9.50 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 9.50 |
-| Backend API Ontwikkeling (FastAPI) [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
-| Rolgebaseerde Toegangscontrole | 7.83 |
-| Backend API Ontwikkeling (FastAPI) | 2.58 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 1.83 |
+| Rolgebaseerde Toegangscontrole | 16.58 |
+| Backend API Ontwikkeling (FastAPI) | 12.08 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 11.33 |
 
 ---
 
 ### 2025-W41
 
-**Total Hours**: 40.00
+**Total Hours**: 40.01
 
 | Activity | Hours |
 |----------|-------|
+| Datacorruptie Preventie | 18.09 |
 | Rolgebaseerde Toegangscontrole | 13.58 |
-| Datacorruptie Preventie | 9.09 |
-| Datacorruptie Preventie [lunch_break: 12:20-12:50] | 9.00 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 8.33 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 8.34 |
 
 ---
 
 ### 2025-W42
 
-**Total Hours**: 36.48
+**Total Hours**: 37.98
 
 | Activity | Hours |
 |----------|-------|
-| Frontend Integratie (React) [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
-| LLM Integratie en Model Selectie [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
-| LLM Integratie en Model Selectie | 8.74 |
-| Frontend Integratie (React) | 8.66 |
+| LLM Integratie en Model Selectie | 18.24 |
+| Frontend Integratie (React) | 18.16 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 1.58 |
 
 ---
@@ -283,8 +266,7 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| LLM Integratie en Model Selectie | 28.76 |
-| LLM Integratie en Model Selectie [lunch_break: 12:20-12:50] | 8.75 |
+| LLM Integratie en Model Selectie | 37.51 |
 | AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 0.58 |
 
 ---
@@ -295,22 +277,20 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 11.58 |
-| LLM Integratie en Model Selectie | 8.91 |
-| LLM Integratie en Model Selectie [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
-| AI Agent Orkestratie [dinner_break: 18:10-18:55] | 8.75 |
+| LLM Integratie en Model Selectie | 18.41 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 10.08 |
+| AI Agent Orkestratie [dinner_break: 18:10-18:55] | 9.50 |
 | AI Agent Orkestratie | 2.00 |
 
 ---
 
 ### 2025-W45
 
-**Total Hours**: 38.66
+**Total Hours**: 39.41
 
 | Activity | Hours |
 |----------|-------|
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 29.91 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 39.41 |
 
 ---
 
@@ -320,10 +300,8 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 13.49 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 9.50 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55] | 8.25 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 31.91 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55] | 8.08 |
 
 ---
 
@@ -344,8 +322,7 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Hours |
 |----------|-------|
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 19.00 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 10.75 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 29.75 |
 
 ---
 
@@ -353,49 +330,33 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 
 | Activity | Total Hours | Weeks Active |
 |----------|-------------|--------------|
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 141.57 | 19 |
-| LLM Integratie en Model Selectie | 95.66 | 5 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 66.16 | 7 |
-| Prompt Engineering en Jailbreak Detectie | 53.32 | 2 |
-| Intentieherkenning en Semantische Interpretatie [lunch_break: 12:20-12:50] | 46.00 | 2 |
-| AI Agent Orkestratie | 39.92 | 3 |
-| Encryptie en Beveiligingsmechanismen | 39.49 | 3 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving | 221.83 | 21 |
+| LLM Integratie en Model Selectie | 123.41 | 5 |
+| Intentieherkenning en Semantische Interpretatie | 60.58 | 2 |
+| Prompt Engineering en Jailbreak Detectie | 59.99 | 2 |
+| AI Agent Orkestratie | 49.42 | 3 |
+| Encryptie en Beveiligingsmechanismen | 48.15 | 3 |
 | Privacyvriendelijke Audit Log Structuur | 38.67 | 1 |
+| Document Retrieval en Context Aggregatie | 37.17 | 1 |
 | Systeemarchitectuur Ontwerp | 35.66 | 3 |
-| Semantische Zoekfunctionaliteit | 23.59 | 2 |
-| Rolgebaseerde Toegangscontrole | 21.41 | 2 |
-| Gebruikersauthenticatie en Sessiebeheer | 19.51 | 2 |
+| Backend API Ontwikkeling (FastAPI) | 35.66 | 2 |
+| Cloud-waardigheid Beslisregels | 34.00 | 1 |
+| Rolgebaseerde Toegangscontrole | 30.16 | 2 |
+| Gebruikersauthenticatie en Sessiebeheer | 29.01 | 2 |
+| Semantische Zoekfunctionaliteit | 22.84 | 2 |
+| AVG Compliance en Toestemmingsverificatie | 19.49 | 1 |
 | Vector Database Implementatie | 19.41 | 2 |
-| Cloud-waardigheid Beslisregels [lunch_break: 12:20-12:50] | 19.00 | 1 |
-| Document Retrieval en Context Aggregatie [lunch_break: 12:20-12:50] | 18.92 | 1 |
-| Document Retrieval en Context Aggregatie | 18.25 | 1 |
-| LLM Integratie en Model Selectie [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 17.50 | 2 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 17.50 | 2 |
-| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55] | 16.67 | 2 |
-| Backend API Ontwikkeling (FastAPI) | 16.66 | 2 |
-| Cloud-waardigheid Beslisregels | 15.00 | 1 |
-| Intentieherkenning en Semantische Interpretatie | 14.58 | 2 |
+| Frontend Integratie (React) | 18.16 | 1 |
+| Datacorruptie Preventie | 18.09 | 1 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [dinner_break: 18:10-18:55] | 16.50 | 2 |
 | Data Anonimisering en Pseudonimisering | 13.00 | 2 |
 | Query Classificatie (Lezen/Bewerken) | 12.33 | 1 |
-| AVG Compliance en Toestemmingsverificatie [lunch_break: 12:20-12:50] | 10.92 | 1 |
-| AVG Compliance en Toestemmingsverificatie | 9.99 | 1 |
-| AI Agent Orkestratie [lunch_break: 12:20-12:50] | 9.50 | 1 |
-| Gebruikersauthenticatie en Sessiebeheer [lunch_break: 12:20-12:50] | 9.50 | 1 |
-| Tekstverwerking en Tokenisatie [lunch_break: 12:20-12:50] | 9.50 | 1 |
-| Backend API Ontwikkeling (FastAPI) [lunch_break: 12:20-12:50] | 9.50 | 1 |
-| Rolgebaseerde Toegangscontrole [lunch_break: 12:20-12:50] | 9.50 | 1 |
-| Semantische Zoekfunctionaliteit [dinner_break: 18:10-18:55] | 9.25 | 1 |
-| Datacorruptie Preventie | 9.09 | 1 |
-| Datacorruptie Preventie [lunch_break: 12:20-12:50] | 9.00 | 1 |
-| Backend API Ontwikkeling (FastAPI) [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 | 1 |
-| Frontend Integratie (React) [lunch_break: 12:20-12:50, dinner_break: 18:10-18:55] | 8.75 | 1 |
-| LLM Integratie en Model Selectie [lunch_break: 12:20-12:50] | 8.75 | 1 |
-| AI Agent Orkestratie [dinner_break: 18:10-18:55] | 8.75 | 1 |
-| Encryptie en Beveiligingsmechanismen [lunch_break: 12:20-12:50] | 8.67 | 1 |
-| Frontend Integratie (React) | 8.66 | 1 |
-| Prompt Engineering en Jailbreak Detectie [lunch_break: 12:20-12:50] | 6.67 | 1 |
+| Semantische Zoekfunctionaliteit [dinner_break: 18:10-18:55] | 10.00 | 1 |
+| Tekstverwerking en Tokenisatie | 10.00 | 1 |
+| AI Agent Orkestratie [dinner_break: 18:10-18:55] | 9.50 | 1 |
 | Context-gebaseerde Toegangscontrole | 6.67 | 1 |
-| Tekstverwerking en Tokenisatie | 0.50 | 1 |
+| AI Agent Communicatie in een data-veilige en privacy-bewuste omgeving [lunch_break: 12:20-12:50] | 3.33 | 1 |
+| AVG Compliance en Toestemmingsverificatie [lunch_break: 12:20-12:50] | 1.42 | 1 |
 
 ---
 
@@ -405,28 +366,28 @@ This report summarizes hours spent on each activity (description) grouped by ISO
 |------|-------------|-----------|
 | 2025-W22 | 9.25 | 1 |
 | 2025-W23 | 40.00 | 1 |
-| 2025-W24 | 40.00 | 3 |
-| 2025-W25 | 40.00 | 3 |
+| 2025-W24 | 40.00 | 2 |
+| 2025-W25 | 40.00 | 2 |
 | 2025-W26 | 39.99 | 3 |
 | 2025-W27 | 39.99 | 3 |
-| 2025-W28 | 40.00 | 3 |
-| 2025-W29 | 19.00 | 3 |
+| 2025-W28 | 40.50 | 2 |
+| 2025-W29 | 18.99 | 2 |
 | 2025-W30 | 31.49 | 2 |
 | 2025-W31 | 40.00 | 4 |
 | 2025-W32 | 32.83 | 2 |
-| 2025-W33 | 39.58 | 3 |
-| 2025-W34 | 40.01 | 4 |
-| 2025-W35 | 40.01 | 5 |
+| 2025-W33 | 39.58 | 2 |
+| 2025-W34 | 40.01 | 3 |
+| 2025-W35 | 40.01 | 3 |
 | 2025-W36 | 40.01 | 4 |
-| 2025-W37 | 40.00 | 4 |
-| 2025-W38 | 38.67 | 5 |
-| 2025-W39 | 27.91 | 3 |
-| 2025-W40 | 39.99 | 6 |
-| 2025-W41 | 40.00 | 4 |
-| 2025-W42 | 36.48 | 5 |
-| 2025-W43 | 38.09 | 3 |
-| 2025-W44 | 39.99 | 5 |
-| 2025-W45 | 38.66 | 2 |
-| 2025-W46 | 39.99 | 4 |
+| 2025-W37 | 40.00 | 3 |
+| 2025-W38 | 38.67 | 4 |
+| 2025-W39 | 27.91 | 2 |
+| 2025-W40 | 39.99 | 3 |
+| 2025-W41 | 40.01 | 3 |
+| 2025-W42 | 37.98 | 3 |
+| 2025-W43 | 38.09 | 2 |
+| 2025-W44 | 39.99 | 4 |
+| 2025-W45 | 39.41 | 1 |
+| 2025-W46 | 39.99 | 2 |
 | 2025-W47 | 40.01 | 2 |
-| 2025-W48 | 29.75 | 2 |
+| 2025-W48 | 29.75 | 1 |

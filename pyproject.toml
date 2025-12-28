@@ -198,7 +198,7 @@ line-ending = "auto"
 pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v"
+addopts = "-v -m 'not slow and not internet'"
 # Custom markers for test organization
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",

@@ -64,6 +64,43 @@ Before writing code that imports new packages:
    - Provide file and class docstrings describing the scope and test goals.
    - Include functional scenarios and edge‑case unit tests within each class.
 
+### Test Running Commands
+
+**Default (quick tests only):**
+```bash
+uv run pytest                           # Runs fast tests only (excludes slow and internet)
+```
+
+**Include slow tests:**
+```bash
+uv run pytest -m ""                     # Run ALL tests including slow ones
+uv run pytest -m "slow"                 # Run ONLY slow tests
+```
+
+**Include internet tests:**
+```bash
+uv run pytest --run-internet            # Include internet-dependent tests
+uv run pytest -m "internet"             # Run ONLY internet tests
+```
+
+**Run everything:**
+```bash
+uv run pytest -m "" --run-internet      # Run ALL tests including slow and internet
+```
+
+### Test Markers
+
+Tests use pytest markers for categorization:
+
+| Marker | Description | Default |
+|--------|-------------|---------|
+| `@pytest.mark.slow` | Tests that take >5 seconds | **Skipped** |
+| `@pytest.mark.internet` | Tests requiring network access | **Skipped** |
+| `@pytest.mark.fts5` | Tests requiring SQLite FTS5 | Included |
+| `@pytest.mark.ci_setup` | CI/CD configuration tests | Included |
+
+**Configuration**: See `pyproject.toml` `[tool.pytest.ini_options]` for marker definitions.
+
 ### Test Documentation Standards
 
 Based on feedback integration, all tests must include clear documentation that explains both business objectives and technical implementation:

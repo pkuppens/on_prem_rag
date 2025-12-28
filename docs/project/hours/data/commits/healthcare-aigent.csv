@@ -1,81 +1,81 @@
-datetime|timestamp|message|author|hash
-2025-04-03 12:56:07|1743677767|Initial commit|Pieter Kuppens|cc9390188a906f1bfd95e04ef0d4509782ea799c
-2025-04-03 13:29:18|1743679758|Initial commit: Healthcare multi-agent system PoC with agents, tasks, tools, and code quality setup|Pieter Kuppens|ace5b13971b46eb54a3152de096edc9f28461b21
-2025-04-03 16:51:18|1743691878|docs: update and standardize project documentation - Update README with clearer project goals and structure - Add comprehensive documentation for architecture, CrewAI, testing, and development - Ensure consistency across all documentation files - Improve configuration documentation with YAML approach|Pieter Kuppens|51dc044712527b2ff68cec05150bf6d269e0669a
-2025-04-03 19:25:38|1743701138|docs: update documentation for CrewAI v0.28.0 and async tools|Pieter Kuppens|c782c4799895e88068d9ac5cb289e3e5b74a8656
-2025-04-03 19:27:32|1743701252|test: configure pytest with async support and fixtures|Pieter Kuppens|8691ba175f8f801b67de40e59a2da0864b1ba7a7
-2025-04-03 19:37:02|1743701822|refactor: improve code quality and documentation|Pieter Kuppens|7f286ebbf6917ef22999eab9f262893758a6bd64
-2025-04-03 19:50:42|1743702642|refactor: update LLM configuration and tool implementations - Update LLM config to use correct ChatOllama class - Fix task and tool implementations for async operations - Update database and logging tools for proper async handling - Fix test integration issues|Pieter Kuppens|bc7585659b501706ec55ac7b2671f81744453d32
-2025-04-03 19:52:44|1743702764|src fixes ruff|Pieter Kuppens|3e27ae6866ffebb627426f8590c135744e57329c
-2025-04-03 19:57:29|1743703049|fix: resolve linting issues in test files - Add constants for magic numbers - Update test assertions to use constants|Pieter Kuppens|bf91e6a8836723cb1cad4d752e8ccdd46bf4cb7e
-2025-04-04 10:37:31|1743755851|fix: replace magic numbers with constants in test files|Pieter Kuppens|c8f7184b6c245406e4078d320654595e48c559e7
-2025-04-04 10:43:31|1743756211|test: add LLM connectivity and configuration tests - Add integration tests for LLM connectivity - Add unit tests for LLM configuration - Tests are failing as expected in TDD approach|Pieter Kuppens|8d8c87ec229c8438aa09bf1a98d9d3f3b1576b12
-2025-04-04 10:45:49|1743756349|ruff format|Pieter Kuppens|728a13a7213136b132aa485945fc0a50acb14da7
-2025-04-04 13:22:43|1743765763|Fix ruff issues|Pieter Kuppens|acdf526effd0179050e51b6b42cd736b213db01f
-2025-04-05 16:26:01|1743863161|create a progress.md for vibe coding.|Pieter Kuppens|d55339652f7eed90f62a036b78a322f7e9e25b4a
-2025-04-05 16:35:19|1743863719|allow self-update of progress.md|Pieter Kuppens|900bf1fcb0f04bd0b849720368779f6c0d82d8d3
-2025-04-06 17:32:30|1743953550|Update progress.md with strategy changes and LLM config/factory task refinement|Pieter Kuppens|51757f5a46a49b6d41f8a03ef6d1d7bfcfdde85c
-2025-04-06 19:57:35|1743962255|initial LLM component|Pieter Kuppens|ed417fcbac974fc584333ec2153187f66a0e25a0
-2025-04-07 09:29:40|1744010980|Initial SETUP.md doc|Pieter Kuppens|f37f571e1b9db2726e00390afe6a7bedbf86b55b
-2025-04-07 10:08:43|1744013323|Small SETUP modernization|Pieter Kuppens|c670f525e50f989144091b7206e0a8f6ddda4c2a
-2025-04-07 12:08:04|1744020484|Ollama installation and use instructions for local LLMs|Pieter Kuppens|3a62d07046955d15cd136a9a67f3f38941595a20
-2025-04-08 12:50:52|1744109452|work breakdown for langflow proof-of-concept|Pieter Kuppens|c3f3c1b649f3282d976c69ddf0220cc93c82be33
-2025-04-08 12:57:47|1744109867|Task Refinement and Breakdown template|Pieter Kuppens|25e3861e6c58fe21b80f13d6c68cbec3bab14251
-2025-04-08 22:51:25|1744145485|langflow install and ollama test|Pieter Kuppens|59a2ba6b3d9a9c55bd7c863be8f4aa2d0d60f128
-2025-04-08 23:14:13|1744146853|.gitattributes for CRLF/LF issue|Pieter Kuppens|6067ea94f18ce263521190a7d1117213049b5d07
-2025-04-09 10:45:04|1744188304|Switch to UV package manager and add development container support|Pieter Kuppens|142e09b97605dc076990c6ab9991423040144df8
-2025-04-09 10:49:41|1744188581|uv configuration file|Pieter Kuppens|75729aa50a63811395c6e9ab2f445f19b1506710
-2025-04-10 13:10:18|1744283418|pytest setup|Pieter Kuppens|7c57a34d69958096dfed56fc449cd6d6e5d0d665
-2025-04-10 14:16:09|1744287369|Fix collect tests - prevent python 3.13 at all cost!!!|Pieter Kuppens|d6479ac6d4fb0fb64dc51530367b5683086d3c17
-2025-04-10 15:24:59|1744291499|test clarifications, generated|Pieter Kuppens|d8f16d7fc550cb023cd0e355913ad770866d7466
-2025-04-10 21:28:41|1744313321|more test clarifications|Pieter Kuppens|21bb6101f12011e78d7b27f5a89f980a00194b71
-2025-04-10 22:55:45|1744318545|TDVC start|Pieter Kuppens|ded458b6cb91168b6d0b4bac812c11ce7222d503
-2025-04-11 09:42:59|1744357379|Configure UV as default project package manager|Pieter Kuppens|68243031e1f042bc2344cbd3ec0bc97482d9afbe
-2025-04-11 09:53:20|1744358000|Python 3.11 preference and uv install CI check|Pieter Kuppens|9759e38b5e7bb37fd79875db3319869e0aa7603e
-2025-04-11 09:54:54|1744358094|CI test matrix fix|Pieter Kuppens|eca8b4d3742999fdf3d1080f983dde1b76e721f1
-2025-04-11 10:08:43|1744358923|Vibe coding language|Pieter Kuppens|d470a8f08bf89eb0394cda429f2d88fc11048590
-2025-04-11 10:09:03|1744358943|CI action UV package manager fix|Pieter Kuppens|8defdeaa5a3d37f8d8cd3df6c8069751f6563b9a
-2025-04-12 16:41:38|1744468898|refactor(llm): improve circuit breaker implementation and docs|Pieter Kuppens|ae33c708b59acec9082af540c20a81252018f3dc
-2025-04-12 16:49:08|1744469348|refactor(tasks): improve task implementations and tests|Pieter Kuppens|a0fcff88fb8d6a62f9e943665c09ed90f60ae5e0
-2025-04-12 16:59:38|1744469978|refactor(circuit_breaker): replace global variables with class-based singleton pattern|Pieter Kuppens|a735ab4f3f7470c17821d15a56942b57430c1bfd
-2025-04-13 09:41:56|1744530116|move test files inside tests directory|Pieter Kuppens|87f8a4d9b477118e8a9bd49db803ca5fb54722e8
-2025-04-13 09:57:02|1744531022|Remarks on Python version, especially 3.13 NOT yet supported|Pieter Kuppens|18ece3e00b14be045e437a2f235e60fb204225b3
-2025-04-14 09:55:00|1744617300|docs: add language guidelines for project communication|Pieter Kuppens|849de3c75e771aa34f2372ceeca2befaa60829b8
-2025-04-14 10:26:16|1744619176|tests: clarify, rearrange, deduplicate|Pieter Kuppens|804d3e577a598cec8571ac4a0c78b55b72ee5b6d
-2025-04-15 08:13:37|1744697617|Replace magic numbers with named constants|Pieter Kuppens|f82f04e833f93ec8ec688663f24611d46911412a
-2025-04-16 11:50:35|1744797035|Add uv lock file for langflow|Pieter Kuppens|006e0a7a866a1d09d1932bf5a3cec7e1a7d29b6f
-2025-04-18 14:28:46|1744979326|Fix obsolete linting settings when opening Cursor|Pieter Kuppens|cc1b352dcd6f27cafec96d3ea50a51803eadb605
-2025-04-18 15:10:09|1744981809|Update Langflow proof of concept README.md to new and complete learning plan|Pieter Kuppens|4109bb15ba4cb1d156225375deba4768328e89a2
-2025-04-18 15:12:54|1744981974|Fix: Ollama LLM deprecation warning|Pieter Kuppens|c6c1de288281deb83f1f6acc7ba82723f66e81ff
-2025-04-18 16:29:59|1744986599|Small Langflow start-up instructions update|Pieter Kuppens|fe4249a5ffbcf986dbf9755c6e5b22d9160f82cf
-2025-04-22 13:29:23|1745321363|docs: CLAUDE.md announcement|Pieter Kuppens|718d6663c547500d45f9f9852e3d0fbbf11f68fb
-2025-04-22 13:48:52|1745322532|Initial draft: Ansible.md. Only partial since Windows not fully/easily supported.|Pieter Kuppens|662404dbacb36cff8e342b655c5c7b588e05dcab
-2025-04-22 13:49:28|1745322568|Ruff format|Pieter Kuppens|abdd4e81f143bb9cd7526d9beab76573d05982f0
-2025-04-23 13:28:26|1745407706|Add langflow workflows directory|Pieter Kuppens|21757e42f0b8496bad3926bfa347b122a3a55146
-2025-04-23 13:49:55|1745408995|Langflow launch configuration (via uv)|Pieter Kuppens|1ce2485db5916081d873be24a61fdec3af7bdeca
-2025-04-23 13:50:53|1745409053|Langflow install update with minimum 1.3.4 instead of fixed 1.3.2|Pieter Kuppens|0e27eb8d4768837e2e3fd2eaddd84dad80d7eb26
-2025-04-23 13:57:01|1745409421|chore: remove uv.lock from version control|Pieter Kuppens|8fb5b4ee49a86c9e8d1a138ede6358f12efb8f8d
-2025-04-23 13:58:41|1745409521|chore: add uv.lock to gitignore|Pieter Kuppens|126b9e2f585bc44794221c6f8794d5af2c5b1eb5
-2025-04-23 16:28:44|1745418524|langflow environment variable check & fix|Pieter Kuppens|4ee956618e3c246560ed07d55d90d9e2f6691266
-2025-04-23 17:06:18|1745420778|langflow environment secrets and settings in .env|Pieter Kuppens|c8004855b044995f4f270c9b1a025942d2f0507b
-2025-04-23 17:55:52|1745423752|Langflow storage description|Pieter Kuppens|dd8033d6ae0a9778bf153f736ab3f467003c908c
-2025-04-24 13:46:06|1745495166|Setup Ansible to create the local virtual environments|Pieter Kuppens|272c1982b2664e1da5cc9640d35de9859c1b5f04
-2025-04-24 13:51:23|1745495483|ansible: separate the system setup and python environments|Pieter Kuppens|fca78351b43f9f87eb4db1faa110a64934af60f5
-2025-04-24 14:17:32|1745497052|ansible: vault for sudo password|Pieter Kuppens|f9db70a88f7437771141551f553c251c5abe7a27
-2025-04-24 14:37:56|1745498276|ansible: vault password protection and verification|Pieter Kuppens|1f9b32b927dd7aca45984674a8733cfd4c24509a
-2025-05-01 21:08:15|1746126495|Add SpeakerVerse, a re-envisioned idea for healthcare-aigent speech parts.|Pieter Kuppens|398d63bcb7b2143a1200ce130fd31100b9443298
-2025-05-02 11:41:53|1746178913|Action install uv with astral-sh/setup-uv@v6|Pieter Kuppens|d04b68ff75f638ff26043ab18b2a031c8fce4398
-2025-05-26 14:19:45|1748261985|More explicitly move to uv for dependency management|Pieter Kuppens|cdad30ad9013cd4849f52f13e48798002a10cc85
-2025-05-26 14:55:33|1748264133|Clean up README.md with license changed to MIT-Commercial Use restriction|Pieter Kuppens|7a538bd1490397a7e06113472905ee7348f2e64b
-2025-05-26 15:34:45|1748266485|setup instructions unified|Pieter Kuppens|2ab37bcb5374e726b6c2081ffddb7c753661aea4
-2025-05-26 15:48:40|1748267320|Linting and related rearrangements|Pieter Kuppens|c0c712ebab775ca6b35fd91f2d2a04978f150b94
-2025-05-26 17:13:25|1748272405|Fix test_tools, including its configuration|Pieter Kuppens|1bd81dcc4270aabb5210146fd3ca521bdf131dd2
-2025-05-26 17:20:18|1748272818|llm config test rewrite|Pieter Kuppens|776541147fcd3c6df6c2da7b1f10f7fda217833e
-2025-07-04 10:04:51|1751616291|chore: refactor using GEMINI and a plan|Pieter Kuppens|aca8b2db9b115d1c5e28f52c45534ffcd1bc64f8
-2025-07-04 10:07:13|1751616433|refactor: first step in refactoring; ruff run and agents|Pieter Kuppens|f889041d570a603b49fcb6bc4fbf9a78201db1d4
-2025-07-04 10:58:25|1751619505|feat: Integrate LLMFactory and refactor tasks module|Pieter Kuppens|4e9c8d7bb92c2600cb21844ead3bd15ed23c1739
-2025-07-04 11:26:10|1751621170|feat: Implement API gateway for medical conversation processing|Pieter Kuppens|c39994e56a8f6af78b4e78b9faf7d980779cf36c
-2025-07-04 11:33:22|1751621602|docs: API examples|Pieter Kuppens|fe12b5477e417576cc53adb6829ccf369cba854b
-2025-07-04 11:39:19|1751621959|Merge pull request #3 from pkuppens/refactor/system-architecture|Pieter Kuppens|dc9ec4bad8333ae01152c9a497465c72da5503f5
-2025-07-04 12:19:18|1751624358|chore: cursor rules from GEMINI.md|Pieter Kuppens|6bfd7b4b36063dec810d8cc8fdcb5acc5f0b93e2
-2025-07-04 12:22:31|1751624551|Merge pull request #4 from pkuppens/refactor/system-architecture|Pieter Kuppens|2a63c9ef0766a2f75573448e7ef4550ca018c491
+﻿datetime|timestamp|message|author|hash
+2025-04-03 12:56:07 +0200|1743677767|Initial commit|Pieter Kuppens|cc9390188a906f1bfd95e04ef0d4509782ea799c
+2025-04-03 13:29:18 +0200|1743679758|Initial commit: Healthcare multi-agent system PoC with agents, tasks, tools, and code quality setup|Pieter Kuppens|ace5b13971b46eb54a3152de096edc9f28461b21
+2025-04-03 16:51:18 +0200|1743691878|docs: update and standardize project documentation - Update README with clearer project goals and structure - Add comprehensive documentation for architecture, CrewAI, testing, and development - Ensure consistency across all documentation files - Improve configuration documentation with YAML approach|Pieter Kuppens|51dc044712527b2ff68cec05150bf6d269e0669a
+2025-04-03 19:25:38 +0200|1743701138|docs: update documentation for CrewAI v0.28.0 and async tools|Pieter Kuppens|c782c4799895e88068d9ac5cb289e3e5b74a8656
+2025-04-03 19:27:32 +0200|1743701252|test: configure pytest with async support and fixtures|Pieter Kuppens|8691ba175f8f801b67de40e59a2da0864b1ba7a7
+2025-04-03 19:37:02 +0200|1743701822|refactor: improve code quality and documentation|Pieter Kuppens|7f286ebbf6917ef22999eab9f262893758a6bd64
+2025-04-03 19:50:42 +0200|1743702642|refactor: update LLM configuration and tool implementations - Update LLM config to use correct ChatOllama class - Fix task and tool implementations for async operations - Update database and logging tools for proper async handling - Fix test integration issues|Pieter Kuppens|bc7585659b501706ec55ac7b2671f81744453d32
+2025-04-03 19:52:44 +0200|1743702764|src fixes ruff|Pieter Kuppens|3e27ae6866ffebb627426f8590c135744e57329c
+2025-04-03 19:57:29 +0200|1743703049|fix: resolve linting issues in test files - Add constants for magic numbers - Update test assertions to use constants|Pieter Kuppens|bf91e6a8836723cb1cad4d752e8ccdd46bf4cb7e
+2025-04-04 10:37:31 +0200|1743755851|fix: replace magic numbers with constants in test files|Pieter Kuppens|c8f7184b6c245406e4078d320654595e48c559e7
+2025-04-04 10:43:31 +0200|1743756211|test: add LLM connectivity and configuration tests - Add integration tests for LLM connectivity - Add unit tests for LLM configuration - Tests are failing as expected in TDD approach|Pieter Kuppens|8d8c87ec229c8438aa09bf1a98d9d3f3b1576b12
+2025-04-04 10:45:49 +0200|1743756349|ruff format|Pieter Kuppens|728a13a7213136b132aa485945fc0a50acb14da7
+2025-04-04 13:22:43 +0200|1743765763|Fix ruff issues|Pieter Kuppens|acdf526effd0179050e51b6b42cd736b213db01f
+2025-04-05 16:26:01 +0200|1743863161|create a progress.md for vibe coding.|Pieter Kuppens|d55339652f7eed90f62a036b78a322f7e9e25b4a
+2025-04-05 16:35:19 +0200|1743863719|allow self-update of progress.md|Pieter Kuppens|900bf1fcb0f04bd0b849720368779f6c0d82d8d3
+2025-04-06 17:32:30 +0200|1743953550|Update progress.md with strategy changes and LLM config/factory task refinement|Pieter Kuppens|51757f5a46a49b6d41f8a03ef6d1d7bfcfdde85c
+2025-04-06 19:57:35 +0200|1743962255|initial LLM component|Pieter Kuppens|ed417fcbac974fc584333ec2153187f66a0e25a0
+2025-04-07 09:29:40 +0200|1744010980|Initial SETUP.md doc|Pieter Kuppens|f37f571e1b9db2726e00390afe6a7bedbf86b55b
+2025-04-07 10:08:43 +0200|1744013323|Small SETUP modernization|Pieter Kuppens|c670f525e50f989144091b7206e0a8f6ddda4c2a
+2025-04-07 12:08:04 +0200|1744020484|Ollama installation and use instructions for local LLMs|Pieter Kuppens|3a62d07046955d15cd136a9a67f3f38941595a20
+2025-04-08 12:50:52 +0200|1744109452|work breakdown for langflow proof-of-concept|Pieter Kuppens|c3f3c1b649f3282d976c69ddf0220cc93c82be33
+2025-04-08 12:57:47 +0200|1744109867|Task Refinement and Breakdown template|Pieter Kuppens|25e3861e6c58fe21b80f13d6c68cbec3bab14251
+2025-04-08 22:51:25 +0200|1744145485|langflow install and ollama test|Pieter Kuppens|59a2ba6b3d9a9c55bd7c863be8f4aa2d0d60f128
+2025-04-08 23:14:13 +0200|1744146853|.gitattributes for CRLF/LF issue|Pieter Kuppens|6067ea94f18ce263521190a7d1117213049b5d07
+2025-04-09 10:45:04 +0200|1744188304|Switch to UV package manager and add development container support|Pieter Kuppens|142e09b97605dc076990c6ab9991423040144df8
+2025-04-09 10:49:41 +0200|1744188581|uv configuration file|Pieter Kuppens|75729aa50a63811395c6e9ab2f445f19b1506710
+2025-04-10 13:10:18 +0200|1744283418|pytest setup|Pieter Kuppens|7c57a34d69958096dfed56fc449cd6d6e5d0d665
+2025-04-10 14:16:09 +0200|1744287369|Fix collect tests - prevent python 3.13 at all cost!!!|Pieter Kuppens|d6479ac6d4fb0fb64dc51530367b5683086d3c17
+2025-04-10 15:24:59 +0200|1744291499|test clarifications, generated|Pieter Kuppens|d8f16d7fc550cb023cd0e355913ad770866d7466
+2025-04-10 21:28:41 +0200|1744313321|more test clarifications|Pieter Kuppens|21bb6101f12011e78d7b27f5a89f980a00194b71
+2025-04-10 22:55:45 +0200|1744318545|TDVC start|Pieter Kuppens|ded458b6cb91168b6d0b4bac812c11ce7222d503
+2025-04-11 09:42:59 +0200|1744357379|Configure UV as default project package manager|Pieter Kuppens|68243031e1f042bc2344cbd3ec0bc97482d9afbe
+2025-04-11 09:53:20 +0200|1744358000|Python 3.11 preference and uv install CI check|Pieter Kuppens|9759e38b5e7bb37fd79875db3319869e0aa7603e
+2025-04-11 09:54:54 +0200|1744358094|CI test matrix fix|Pieter Kuppens|eca8b4d3742999fdf3d1080f983dde1b76e721f1
+2025-04-11 10:08:43 +0200|1744358923|Vibe coding language|Pieter Kuppens|d470a8f08bf89eb0394cda429f2d88fc11048590
+2025-04-11 10:09:03 +0200|1744358943|CI action UV package manager fix|Pieter Kuppens|8defdeaa5a3d37f8d8cd3df6c8069751f6563b9a
+2025-04-12 16:41:38 +0200|1744468898|refactor(llm): improve circuit breaker implementation and docs|Pieter Kuppens|ae33c708b59acec9082af540c20a81252018f3dc
+2025-04-12 16:49:08 +0200|1744469348|refactor(tasks): improve task implementations and tests|Pieter Kuppens|a0fcff88fb8d6a62f9e943665c09ed90f60ae5e0
+2025-04-12 16:59:38 +0200|1744469978|refactor(circuit_breaker): replace global variables with class-based singleton pattern|Pieter Kuppens|a735ab4f3f7470c17821d15a56942b57430c1bfd
+2025-04-13 09:41:56 +0200|1744530116|move test files inside tests directory|Pieter Kuppens|87f8a4d9b477118e8a9bd49db803ca5fb54722e8
+2025-04-13 09:57:02 +0200|1744531022|Remarks on Python version, especially 3.13 NOT yet supported|Pieter Kuppens|18ece3e00b14be045e437a2f235e60fb204225b3
+2025-04-14 09:55:00 +0200|1744617300|docs: add language guidelines for project communication|Pieter Kuppens|849de3c75e771aa34f2372ceeca2befaa60829b8
+2025-04-14 10:26:16 +0200|1744619176|tests: clarify, rearrange, deduplicate|Pieter Kuppens|804d3e577a598cec8571ac4a0c78b55b72ee5b6d
+2025-04-15 08:13:37 +0200|1744697617|Replace magic numbers with named constants|Pieter Kuppens|f82f04e833f93ec8ec688663f24611d46911412a
+2025-04-16 11:50:35 +0200|1744797035|Add uv lock file for langflow|Pieter Kuppens|006e0a7a866a1d09d1932bf5a3cec7e1a7d29b6f
+2025-04-18 14:28:46 +0200|1744979326|Fix obsolete linting settings when opening Cursor|Pieter Kuppens|cc1b352dcd6f27cafec96d3ea50a51803eadb605
+2025-04-18 15:10:09 +0200|1744981809|Update Langflow proof of concept README.md to new and complete learning plan|Pieter Kuppens|4109bb15ba4cb1d156225375deba4768328e89a2
+2025-04-18 15:12:54 +0200|1744981974|Fix: Ollama LLM deprecation warning|Pieter Kuppens|c6c1de288281deb83f1f6acc7ba82723f66e81ff
+2025-04-18 16:29:59 +0200|1744986599|Small Langflow start-up instructions update|Pieter Kuppens|fe4249a5ffbcf986dbf9755c6e5b22d9160f82cf
+2025-04-22 13:29:23 +0200|1745321363|docs: CLAUDE.md announcement|Pieter Kuppens|718d6663c547500d45f9f9852e3d0fbbf11f68fb
+2025-04-22 13:48:52 +0200|1745322532|Initial draft: Ansible.md. Only partial since Windows not fully/easily supported.|Pieter Kuppens|662404dbacb36cff8e342b655c5c7b588e05dcab
+2025-04-22 13:49:28 +0200|1745322568|Ruff format|Pieter Kuppens|abdd4e81f143bb9cd7526d9beab76573d05982f0
+2025-04-23 13:28:26 +0200|1745407706|Add langflow workflows directory|Pieter Kuppens|21757e42f0b8496bad3926bfa347b122a3a55146
+2025-04-23 13:49:55 +0200|1745408995|Langflow launch configuration (via uv)|Pieter Kuppens|1ce2485db5916081d873be24a61fdec3af7bdeca
+2025-04-23 13:50:53 +0200|1745409053|Langflow install update with minimum 1.3.4 instead of fixed 1.3.2|Pieter Kuppens|0e27eb8d4768837e2e3fd2eaddd84dad80d7eb26
+2025-04-23 13:57:01 +0200|1745409421|chore: remove uv.lock from version control|Pieter Kuppens|8fb5b4ee49a86c9e8d1a138ede6358f12efb8f8d
+2025-04-23 13:58:41 +0200|1745409521|chore: add uv.lock to gitignore|Pieter Kuppens|126b9e2f585bc44794221c6f8794d5af2c5b1eb5
+2025-04-23 16:28:44 +0200|1745418524|langflow environment variable check & fix|Pieter Kuppens|4ee956618e3c246560ed07d55d90d9e2f6691266
+2025-04-23 17:06:18 +0200|1745420778|langflow environment secrets and settings in .env|Pieter Kuppens|c8004855b044995f4f270c9b1a025942d2f0507b
+2025-04-23 17:55:52 +0200|1745423752|Langflow storage description|Pieter Kuppens|dd8033d6ae0a9778bf153f736ab3f467003c908c
+2025-04-24 13:46:06 +0200|1745495166|Setup Ansible to create the local virtual environments|Pieter Kuppens|272c1982b2664e1da5cc9640d35de9859c1b5f04
+2025-04-24 13:51:23 +0200|1745495483|ansible: separate the system setup and python environments|Pieter Kuppens|fca78351b43f9f87eb4db1faa110a64934af60f5
+2025-04-24 14:17:32 +0200|1745497052|ansible: vault for sudo password|Pieter Kuppens|f9db70a88f7437771141551f553c251c5abe7a27
+2025-04-24 14:37:56 +0200|1745498276|ansible: vault password protection and verification|Pieter Kuppens|1f9b32b927dd7aca45984674a8733cfd4c24509a
+2025-05-01 21:08:15 +0200|1746126495|Add SpeakerVerse, a re-envisioned idea for healthcare-aigent speech parts.|Pieter Kuppens|398d63bcb7b2143a1200ce130fd31100b9443298
+2025-05-02 11:41:53 +0200|1746178913|Action install uv with astral-sh/setup-uv@v6|Pieter Kuppens|d04b68ff75f638ff26043ab18b2a031c8fce4398
+2025-05-26 14:19:45 +0200|1748261985|More explicitly move to uv for dependency management|Pieter Kuppens|cdad30ad9013cd4849f52f13e48798002a10cc85
+2025-05-26 14:55:33 +0200|1748264133|Clean up README.md with license changed to MIT-Commercial Use restriction|Pieter Kuppens|7a538bd1490397a7e06113472905ee7348f2e64b
+2025-05-26 15:34:45 +0200|1748266485|setup instructions unified|Pieter Kuppens|2ab37bcb5374e726b6c2081ffddb7c753661aea4
+2025-05-26 15:48:40 +0200|1748267320|Linting and related rearrangements|Pieter Kuppens|c0c712ebab775ca6b35fd91f2d2a04978f150b94
+2025-05-26 17:13:25 +0200|1748272405|Fix test_tools, including its configuration|Pieter Kuppens|1bd81dcc4270aabb5210146fd3ca521bdf131dd2
+2025-05-26 17:20:18 +0200|1748272818|llm config test rewrite|Pieter Kuppens|776541147fcd3c6df6c2da7b1f10f7fda217833e
+2025-07-04 10:04:51 +0200|1751616291|chore: refactor using GEMINI and a plan|Pieter Kuppens|aca8b2db9b115d1c5e28f52c45534ffcd1bc64f8
+2025-07-04 10:07:13 +0200|1751616433|refactor: first step in refactoring; ruff run and agents|Pieter Kuppens|f889041d570a603b49fcb6bc4fbf9a78201db1d4
+2025-07-04 10:58:25 +0200|1751619505|feat: Integrate LLMFactory and refactor tasks module|Pieter Kuppens|4e9c8d7bb92c2600cb21844ead3bd15ed23c1739
+2025-07-04 11:26:10 +0200|1751621170|feat: Implement API gateway for medical conversation processing|Pieter Kuppens|c39994e56a8f6af78b4e78b9faf7d980779cf36c
+2025-07-04 11:33:22 +0200|1751621602|docs: API examples|Pieter Kuppens|fe12b5477e417576cc53adb6829ccf369cba854b
+2025-07-04 11:39:19 +0200|1751621959|Merge pull request #3 from pkuppens/refactor/system-architecture|Pieter Kuppens|dc9ec4bad8333ae01152c9a497465c72da5503f5
+2025-07-04 12:19:18 +0200|1751624358|chore: cursor rules from GEMINI.md|Pieter Kuppens|6bfd7b4b36063dec810d8cc8fdcb5acc5f0b93e2
+2025-07-04 12:22:31 +0200|1751624551|Merge pull request #4 from pkuppens/refactor/system-architecture|Pieter Kuppens|2a63c9ef0766a2f75573448e7ef4550ca018c491

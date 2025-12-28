@@ -2,22 +2,53 @@
 # Enforce consistent line endings for all contributors.
 # This file ensures that Git handles line endings correctly across different
 # operating systems (Windows, macOS, Linux).
+#
+# Strategy: Store LF (Unix-style) in repository, Git converts automatically:
+# - Windows: LF -> CRLF on checkout, CRLF -> LF on commit
+# - Unix/macOS: No conversion needed (LF in both working directory and repo)
+#
+# This prevents CRLF warnings and ensures cross-platform compatibility.
 
 # Auto-detect text files and perform normalization.
-# On checkout, Git will convert LF to CRLF on Windows.
-# On commit, Git will convert CRLF back to LF for storage in the repo.
-* text=auto
+# Repository stores LF, Git converts automatically based on OS.
+* text=auto eol=lf
 
 # Explicitly set line endings for specific file types to LF.
 # This is best practice for cross-platform compatibility, especially for scripts.
 *.sh text eol=lf
+*.ps1 text eol=lf
 
-# Other files will still be "auto"
-*.py text eol=auto
-*.md text eol=auto
-*.json text eol=auto
-*.yml text eol=auto
-*.yaml text eol=auto
+# Python files: Store LF in repo, auto-convert on Windows
+*.py text eol=lf
+
+# Documentation files: Store LF in repo, auto-convert on Windows
+*.md text eol=lf
+*.mdx text eol=lf
+*.mdc text eol=lf
+
+# Configuration files: Store LF in repo, auto-convert on Windows
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# Web files: Store LF in repo, auto-convert on Windows
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+
+# Other text files
+*.txt text eol=lf
+*.log text eol=lf
+*.sql text eol=lf
+*.xml text eol=lf
+*.csv text eol=lf
 
 # Mark binary files as such to prevent Git from trying to normalize them.
 # This prevents corruption of images, archives, and other non-text files.

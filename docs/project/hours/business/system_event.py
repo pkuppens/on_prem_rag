@@ -23,17 +23,19 @@ class SystemEvent:
 
     Business Rules:
     - Events must have valid timestamps
-    - Event IDs must be recognized (7001=logon, 7002=logoff)
-    - Focus on logon/logoff events for session detection
+    - Event IDs are preserved for completeness
+    - Session tags (logon/logoff) are used for session detection instead of EventId
+    - Multiple event codes can indicate logon/logoff (7001, 6005 for logon; 7002, 6008, 41, 1074 for logoff)
 
     Attributes:
         datetime: Event timestamp as string (YYYY-MM-DD HH:mm:ss format)
-        event_id: Windows event ID (7001=logon, 7002=logoff, 6013=uptime, etc.)
+        event_id: Windows event ID (7001=logon, 7002=logoff, 6008=unexpected shutdown, etc.)
         event_type: Human-readable event type
         username: User associated with the event
         message: Event message content
         record_id: Unique record identifier
         date: Extracted date field for processing (YYYY-MM-DD format)
+        session_tag: Optional tag indicating session boundary ("logon", "logoff", or None)
     """
 
     datetime: str
@@ -43,3 +45,4 @@ class SystemEvent:
     message: str
     record_id: str
     date: Optional[str] = None  # Extracted date field for processing
+    session_tag: Optional[str] = None  # "logon", "logoff", or None

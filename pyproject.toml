@@ -52,6 +52,9 @@ dependencies = [
     "nbformat>=5.10.4",
     "nbconvert>=7.16.6",
     "pandas>=2.2.3",
+    "openagents>=0.6.12",
+    "mcp>=1.0.0",
+    "tzdata>=2025.2",
 ]
 requires-python = ">=3.12,<3.14"
 
@@ -64,6 +67,10 @@ include = ["*"]
 "" = "src"
 scripts = "scripts"
 
+# Explicitly include standalone modules in src
+[tool.setuptools]
+py-modules = ["test_calendar_credentials", "test_mcp_calendar_client", "test_app", "authenticate_google_calendar"]
+
 # Entry points executed via ``uv run``. ``start-backend`` uses the fully
 # qualified package path so imports work without manually adjusting
 # ``PYTHONPATH``.
@@ -75,6 +82,21 @@ start-auth = "backend.auth_service.main:start_server"
 start-test-app = "test_app:start_server"
 # Upload local files via CLI
 upload-documents = "scripts.upload_documents:main"
+# WBSO validation, upload, and reporting scripts
+wbso-validate = "wbso.validation:main"
+wbso-upload = "wbso.upload:main"
+wbso-report = "wbso.reporting:main"
+wbso-pipeline = "wbso.pipeline:main"
+# WBSO database migration and reporting scripts
+wbso-migrate = "wbso.migration:main"
+wbso-db-report = "wbso.database_reporting:main"
+# MCP Calendar Server
+mcp-calendar-server = "mcp.calendar_server:main_sync"
+mcp-test-report = "mcp.test_report_generator:main"
+# Calendar credential and connection testing
+test-calendar-credentials = "test_calendar_credentials:main"
+test-mcp-calendar-client = "test_mcp_calendar_client:main_sync"
+authenticate-google-calendar = "authenticate_google_calendar:main"
 # start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]
@@ -113,6 +135,7 @@ select = [
 ignore = [
     "E402",    # Module level import not at top of file
     "E501",    # line too long
+    "E722",    # bare except (not important for this project)
     "PLR2004", # magic value used in comparison
     "E741",    # ambiguous variable name (we fixed this one)
     "C901",    # too complex
@@ -175,7 +198,7 @@ line-ending = "auto"
 pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v"
+addopts = "-v -m 'not slow and not internet'"
 # Custom markers for test organization
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
@@ -185,8 +208,6 @@ markers = [
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]
-# Configure test environment
-env_files = [".env.test"]
 # Configure pytest-asyncio
 asyncio_mode = "auto"
 

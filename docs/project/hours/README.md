@@ -31,6 +31,7 @@ For detailed project planning, see [PROJECT_PLAN.md](PROJECT_PLAN.md).
 - Google Calendar API integration
 - WBSO calendar manually created in Google Calendar account
 - System events extraction infrastructure
+- **MCP Calendar Server**: Model Context Protocol server for calendar management (see [MCP_CALENDAR_INTEGRATION.md](MCP_CALENDAR_INTEGRATION.md))
 
 **🔄 IN PROGRESS**:
 
@@ -75,6 +76,7 @@ docs/project/hours/
 │   ├── github_issue_analyzer.py    # ❌ GitHub issue analysis
 │   ├── hour_optimizer.py           # ❌ Hour allocation optimization
 │   └── report_generator.py         # ❌ Final report generation
+├── MCP_CALENDAR_INTEGRATION.md    # ✅ MCP Calendar Server integration guide
 ├── data/
 │   ├── repositories.csv            # ✅ Repository configuration (17 repos)
 │   ├── system_events_*.csv        # ✅ System event logs
@@ -128,9 +130,10 @@ python process_commits.py
 #### 🔄 Phase 2: Google Calendar Integration (IN PROGRESS)
 
 1. ✅ Set up Google Calendar API integration
-2. ✅ Create WBSO calendar manually
-3. 🔄 Test calendar integration and CRUD operations
-4. ❌ Implement calendar conflict detection
+2. ✅ MCP Calendar Server for standardized calendar management (see [MCP_CALENDAR_INTEGRATION.md](MCP_CALENDAR_INTEGRATION.md))
+3. ✅ Create WBSO calendar manually
+4. 🔄 Test calendar integration and CRUD operations
+5. ✅ Implement calendar conflict detection (via MCP server)
 
 #### ❌ Phase 3: Multi-Repository Analysis (PENDING)
 

@@ -1,14 +1,14 @@
-datetime|timestamp|message|author|hash
-2025-05-30 12:39:39|1748601579|Initial commit|Pieter Kuppens|7ccd28e63659ab302f20a2522be1edb8b6eb2cce
-2025-05-30 14:59:03|1748609943|initiele README en PLANNING|Pieter Kuppens|74d8bf1de94ed312634dc23e2bc4d6d395fae8a9
-2025-06-01 15:50:12|1748785812|Commercial use license addition|Pieter Kuppens|8577e2a1619ed2e8fb0ff66ffc636ebdd7b7532a
-2025-06-01 16:40:42|1748788842|merge in motivatie brief assisitent|Pieter Kuppens|079c074f62917bce8cb1f0b116ec0f1da54c4f14
-2025-07-06 10:05:56|1751789156|docs: notes on development vision and strategy|Pieter Kuppens|a668adb921030685b0872264b7993fda986b2405
-2025-07-06 10:11:08|1751789468|docs: Create GEMINI.md for project collaboration|Pieter Kuppens|01c24b394ab6697f145a3f1959ae27845fce96ed
-2025-07-06 14:50:18|1751806218|chore: coding standards|Pieter Kuppens|f648e120f0c1318a08f1b14ffe6f03d6fbe01e5a
-2025-07-06 15:27:36|1751808456|docs: Project structuring|Pieter Kuppens|79c961b7c6bc36beb7bcaa4aa7ce043afa8be752
-2025-07-06 15:58:32|1751810312|Merge pull request #3 from pkuppens/gemini/feature-expansion|Pieter Kuppens|3e27ea6a668801e0ba59c2c2d7a3304888db89c9
-2025-07-07 09:46:05|1751874365|docs: update internal autonomous operation rules|Pieter Kuppens|b9bcf73774656efc9e151cbbed744d07727d7abe
-2025-07-07 09:49:49|1751874589|docs: create git conventions and link from GEMINI.md|Pieter Kuppens|493570f3351cd9b5fcaf00fd61f85701495048f5
-2025-07-07 10:03:18|1751875398|chore: git maintenance|Pieter Kuppens|3fe55f9465dd3b892f268ef82d5d27768b166512
-2025-07-07 17:28:05|1751902085|Merge pull request #4 from pkuppens/gemini-updates|Pieter Kuppens|ad5eaccbfd3acd7a1c70d4cba77b5b43a599bb46
+﻿datetime|timestamp|message|author|hash
+2025-05-30 12:39:39 +0200|1748601579|Initial commit|Pieter Kuppens|7ccd28e63659ab302f20a2522be1edb8b6eb2cce
+2025-05-30 12:59:03 +0000|1748609943|initiele README en PLANNING|Pieter Kuppens|74d8bf1de94ed312634dc23e2bc4d6d395fae8a9
+2025-06-01 15:50:12 +0200|1748785812|Commercial use license addition|Pieter Kuppens|8577e2a1619ed2e8fb0ff66ffc636ebdd7b7532a
+2025-06-01 16:40:42 +0200|1748788842|merge in motivatie brief assisitent|Pieter Kuppens|079c074f62917bce8cb1f0b116ec0f1da54c4f14
+2025-07-06 10:05:56 +0200|1751789156|docs: notes on development vision and strategy|Pieter Kuppens|a668adb921030685b0872264b7993fda986b2405
+2025-07-06 10:11:08 +0200|1751789468|docs: Create GEMINI.md for project collaboration|Pieter Kuppens|01c24b394ab6697f145a3f1959ae27845fce96ed
+2025-07-06 14:50:18 +0200|1751806218|chore: coding standards|Pieter Kuppens|f648e120f0c1318a08f1b14ffe6f03d6fbe01e5a
+2025-07-06 15:27:36 +0200|1751808456|docs: Project structuring|Pieter Kuppens|79c961b7c6bc36beb7bcaa4aa7ce043afa8be752
+2025-07-06 15:58:32 +0200|1751810312|Merge pull request #3 from pkuppens/gemini/feature-expansion|Pieter Kuppens|3e27ea6a668801e0ba59c2c2d7a3304888db89c9
+2025-07-07 09:46:05 +0200|1751874365|docs: update internal autonomous operation rules|Pieter Kuppens|b9bcf73774656efc9e151cbbed744d07727d7abe
+2025-07-07 09:49:49 +0200|1751874589|docs: create git conventions and link from GEMINI.md|Pieter Kuppens|493570f3351cd9b5fcaf00fd61f85701495048f5
+2025-07-07 10:03:18 +0200|1751875398|chore: git maintenance|Pieter Kuppens|3fe55f9465dd3b892f268ef82d5d27768b166512
+2025-07-07 17:28:05 +0200|1751902085|Merge pull request #4 from pkuppens/gemini-updates|Pieter Kuppens|ad5eaccbfd3acd7a1c70d4cba77b5b43a599bb46

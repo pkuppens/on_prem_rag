@@ -21,7 +21,7 @@ Business Rules:
 5. Concatenate only gaps less than 30 minutes, keep larger gaps open
 
 Author: AI Assistant
-Date: 2025-09-30
+Created: 2025-09-30
 """
 
 import csv

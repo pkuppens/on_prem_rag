@@ -111,6 +111,42 @@ container. Visit the frontend at http://localhost:5173. If you already run an
 Ollama container separately, comment out the `ollama` service in
 `docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
 
+## Multi-Root Workspace Configuration
+
+This project can be configured as a multi-root workspace to integrate the related WBSO-AICM-2025-01 repository for seamless code navigation and search across both codebases.
+
+**To set up the workspace:**
+
+1. Create or open the workspace file (`on_prem_rag.code-workspace`) in the project root
+2. Adjust the path to the WBSO-AICM-2025-01 repository for your system:
+   ```json
+   {
+     "folders": [
+       {
+         "name": "On-Premises RAG",
+         "path": "."
+       },
+       {
+         "name": "WBSO-AICM-2025-01",
+         "path": "C:\\Users\\piete\\Repos\\pkuppens\\WBSO-AICM-2025-01"
+       }
+     ]
+   }
+   ```
+
+3. Open the workspace file in Cursor/VS Code:
+   ```bash
+   cursor on_prem_rag.code-workspace
+   ```
+
+**Benefits:**
+- Cross-repository code search and navigation
+- Unified context for AI assistance
+- Shared settings and configurations
+- Integrated development workflow
+
+**Note:** The workspace file uses absolute paths and is gitignored (`.gitignore` includes `*.code-workspace`) since paths are user-specific. Each developer should create their own workspace file with paths adjusted for their system.
+
 ## Local Development Setup
 
 To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.

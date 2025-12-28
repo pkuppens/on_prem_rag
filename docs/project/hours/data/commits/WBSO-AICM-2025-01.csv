@@ -1,13 +1,13 @@
-datetime|timestamp|message|author|hash
-2025-05-14 15:54:02|1747230842|Initial commit|Pieter Kuppens|7756bd1e7b8257049e955c8dbd84b69f66b8303e
-2025-05-14 16:41:24|1747233684|Initiele README en LICENSE files|Pieter Kuppens|373a448c0a204bef630edde60167b229777134fb
-2025-05-15 09:43:41|1747295021|README update semantic data query aspect|Pieter Kuppens|801afa9c293312614048e43744f7b7e4e9d2f835
-2025-05-15 09:56:33|1747295793|Project Cursor regels|Pieter Kuppens|4b3579118938e06018f9c041554a11d38c328008
-2025-05-15 10:28:37|1747297717|update van regels|Pieter Kuppens|1d887b03bc60b82f842de164705b60178d9fb48c
-2025-05-15 16:35:51|1747319751|Initiele planning|Pieter Kuppens|df059daa75c69498df7022410311bcdd2d32bc3b
-2025-05-15 16:36:09|1747319769|Taak management cursor rule|Pieter Kuppens|621fc4f3ee88e6c84fa74ee010fbdc198f5a0c9d
-2025-05-18 09:44:25|1747554265|Maak WBSO aanvraag issue met bijgewerkte regels.|Pieter Kuppens|26a3d9e3e6f3896c9720b464345877d47e14643e
-2025-05-19 16:46:20|1747665980|WBSO projectformulier en handleiding|Pieter Kuppens|5577026336fe129dc59d46efb6bd6d7ab8dacc8a
-2025-05-19 17:55:16|1747670116|projectformulier leeg/ingevuld v.0.1|Pieter Kuppens|009e5fd1fca67c52614c47bb2a57b2c722bbf18e
-2025-05-21 17:14:47|1747840487|WBSO updates knelpunten/oplossingsrichting|Pieter Kuppens|a6b0231b8d3244ff62cf84496148605669dcf257
-2025-05-22 17:29:51|1747927791|Volledig ingevuld WBSO project formulier (aanvraag)|Pieter Kuppens|4ac4e92f2bf436ede10cb3b4a6fb42f109f5a3bf
+﻿datetime|timestamp|message|author|hash
+2025-05-14 15:54:02 +0200|1747230842|Initial commit|Pieter Kuppens|7756bd1e7b8257049e955c8dbd84b69f66b8303e
+2025-05-14 16:41:24 +0200|1747233684|Initiele README en LICENSE files|Pieter Kuppens|373a448c0a204bef630edde60167b229777134fb
+2025-05-15 09:43:41 +0200|1747295021|README update semantic data query aspect|Pieter Kuppens|801afa9c293312614048e43744f7b7e4e9d2f835
+2025-05-15 09:56:33 +0200|1747295793|Project Cursor regels|Pieter Kuppens|4b3579118938e06018f9c041554a11d38c328008
+2025-05-15 10:28:37 +0200|1747297717|update van regels|Pieter Kuppens|1d887b03bc60b82f842de164705b60178d9fb48c
+2025-05-15 16:35:51 +0200|1747319751|Initiele planning|Pieter Kuppens|df059daa75c69498df7022410311bcdd2d32bc3b
+2025-05-15 16:36:09 +0200|1747319769|Taak management cursor rule|Pieter Kuppens|621fc4f3ee88e6c84fa74ee010fbdc198f5a0c9d
+2025-05-18 09:44:25 +0200|1747554265|Maak WBSO aanvraag issue met bijgewerkte regels.|Pieter Kuppens|26a3d9e3e6f3896c9720b464345877d47e14643e
+2025-05-19 16:46:20 +0200|1747665980|WBSO projectformulier en handleiding|Pieter Kuppens|5577026336fe129dc59d46efb6bd6d7ab8dacc8a
+2025-05-19 17:55:16 +0200|1747670116|projectformulier leeg/ingevuld v.0.1|Pieter Kuppens|009e5fd1fca67c52614c47bb2a57b2c722bbf18e
+2025-05-21 17:14:47 +0200|1747840487|WBSO updates knelpunten/oplossingsrichting|Pieter Kuppens|a6b0231b8d3244ff62cf84496148605669dcf257
+2025-05-22 17:29:51 +0200|1747927791|Volledig ingevuld WBSO project formulier (aanvraag)|Pieter Kuppens|4ac4e92f2bf436ede10cb3b4a6fb42f109f5a3bf

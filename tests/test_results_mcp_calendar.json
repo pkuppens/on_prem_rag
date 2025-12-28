@@ -1,0 +1,100 @@
+{
+  "list_calendars": {
+    "status": "PASS",
+    "calendar_count": 6,
+    "calendars": [
+      {
+        "id": "p#weeknum@group.v.calendar.google.com",
+        "summary": "Week Numbers"
+      },
+      {
+        "id": "nl.dutch#holiday@group.v.calendar.google.com",
+        "summary": "Feestdagen in Nederland"
+      },
+      {
+        "id": "d9a0ec0ebd02ecb707330454df6bbb60dc79b0716b90bcdb0f6facb5d1d7c77f@group.calendar.google.com",
+        "summary": "WBSO Activities 2025"
+      },
+      {
+        "id": "pieter.kuppens@gmail.com",
+        "summary": "pieter.kuppens@gmail.com"
+      },
+      {
+        "id": "eva.mooren@gmail.com",
+        "summary": "eva.mooren@gmail.com"
+      }
+    ]
+  },
+  "create_events": {
+    "status": "PASS",
+    "created_count": 3,
+    "events": [
+      {
+        "id": "kerei9f1knge0mib9oa7er94ck",
+        "summary": "MCP_TEST_Test Event 10"
+      },
+      {
+        "id": "pe76trtln6c4d91p6e67vtg5og",
+        "summary": "MCP_TEST_Test Event 15"
+      },
+      {
+        "id": "2nn8ifna64h4329k0v8784rfko",
+        "summary": "MCP_TEST_Test Event 20"
+      }
+    ]
+  },
+  "read_events": {
+    "status": "PASS",
+    "total_events": 3,
+    "test_events": 3,
+    "expected_test_events": 3,
+    "created_event_ids": [
+      "2nn8ifna64h4329k0v8784rfko",
+      "pe76trtln6c4d91p6e67vtg5og",
+      "kerei9f1knge0mib9oa7er94ck"
+    ],
+    "read_event_ids": [
+      "2nn8ifna64h4329k0v8784rfko",
+      "pe76trtln6c4d91p6e67vtg5og",
+      "kerei9f1knge0mib9oa7er94ck"
+    ],
+    "events_with_marker": 3,
+    "marker_event_ids": [
+      "2nn8ifna64h4329k0v8784rfko",
+      "pe76trtln6c4d91p6e67vtg5og",
+      "kerei9f1knge0mib9oa7er94ck"
+    ],
+    "missing_ids": [],
+    "extra_ids": []
+  },
+  "summarize_events": {
+    "status": "PASS",
+    "total_items": 3,
+    "total_days": 3,
+    "total_hours": 6.0,
+    "expected_items": 3,
+    "expected_days": 3,
+    "expected_hours": 6.0
+  },
+  "detect_duplicates": {
+    "status": "PASS",
+    "duplicates_found": 0,
+    "expected_duplicates": 0
+  },
+  "edit_event": {
+    "status": "PASS",
+    "event_id": "kerei9f1knge0mib9oa7er94ck",
+    "updated_summary": "MCP_TEST_Test Event 10 - EDITED"
+  },
+  "delete_events": {
+    "status": "PASS",
+    "deleted_count": 3,
+    "expected_count": 3
+  },
+  "full_workflow": {
+    "status": "PASS",
+    "passed_steps": 7,
+    "failed_steps": 0,
+    "total_steps": 7
+  }
+}

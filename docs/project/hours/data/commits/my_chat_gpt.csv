@@ -1,255 +1,255 @@
-datetime|timestamp|message|author|hash
-2023-05-03 11:38:52|1683106732|Initial commit|Pieter Kuppens|eaa775890bb924b668fe71316a128806bb1bf149
-2023-05-03 22:21:37|1683145297|initial commit, not tested, .py program bugged|Pieter Kuppens|21fbc2646b3938210a5c2a304a4498f9291f6a08
-2023-05-05 14:20:05|1683289205|9 and 10 generate questions, prompt engineered|Pieter Kuppens|822bc613b81ed074d1015e10b87eec77d044a35d
-2023-05-07 17:06:59|1683472019|prompt improvements for Chapter 11: Questions first, Answers later.|Pieter Kuppens|462c0ce47762ce4d27239c882cd471a06ee3cf06
-2023-05-09 11:08:40|1683623320|Rename MPC_AvL to CollegeGPT|Pieter Kuppens|97dd9f6d405b966d3da2423b2ec010deafd4c3df
-2023-05-09 11:41:02|1683625262|SuperPrompting, applied to College|Pieter Kuppens|c2646e2313a954f14dfd3759d2089384afaa3168
-2023-05-09 12:36:12|1683628572|Add Chapters 1 & 3|Pieter Kuppens|b7cee2394142327140dc654caeaed111d2e49604
-2023-06-05 17:45:21|1685979921|Prompt for Mermaid flow charts|Pieter Kuppens|012517ce44408a8594b5087fb927d33e5a7f2fe5
-2023-06-06 12:13:09|1686046389|Add Communication.prompt and Requirements.prompt, and allow to work from PyCharm|Pieter Kuppens|78b1c450234a88107b4913bd3adac09f9a811179
-2023-06-12 09:12:22|1686553942|ChatGPT download to disable history & training|Pieter Kuppens|0443b7c9010ea82a4cfe308caff04b1ab84880c6
-2023-06-12 09:12:26|1686553946|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|6335b9e6fb194d37f80ac48604939bbca594c856
-2023-07-03 17:44:38|1688399078|GitHub Issue prompt|Pieter Kuppens|328db31435f76a2fcb653049183251dcad3ab42f
-2023-07-31 10:24:30|1690791870|Pair programmer, sudolang.|Pieter Kuppens|58c8bae247fd6e179e34016a3daed293140443a2
-2024-01-02 16:39:37|1704209977|Update README.md|Pieter Kuppens|d1d551085c1132bffcd40df25cfc663b2a232f15
-2024-10-04 21:42:55|1728070975|Update README.md with Ollama - OpenWebUI - DSpy stuff|Pieter Kuppens|96355635c97a9ad2eecd89830f4469c32cc7c530
-2024-10-08 20:29:08|1728412148|Terminal Manual requirement prompt|Pieter Kuppens|85239bb040108a51c8a4eac2fd7539862ad0f510
-2024-10-08 20:29:13|1728412153|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|b891217546db267ca721c0884307c20c79aac0dc
-2024-10-08 22:23:44|1728419024|Add Llama.md|Pieter Kuppens|9f97875d077f53770c7f2c58db8174b432398c12
-2024-10-20 14:49:05|1729428545|Software Factory Plan|Pieter Kuppens|d8ef07f4cd791bf0089dd9079431af4d1e5b1b56
-2024-10-27 13:55:58|1730033758|Update README.md|Pieter Kuppens|57d1ceb5032515909899e7da6df708e0e3f3098c
-2024-11-28 09:56:09|1732784169|Add LangChain/DSpy setup against a local Ollama container instance|Pieter Kuppens|773ee85eb93cb6816932d6b7bcf9ad1d87f4dc0a
-2024-11-28 09:56:36|1732784196|Merge pull request #1 from pkuppens/add-langchain-dspy-ollama-setup|Pieter Kuppens|511258a0ebc4443fd5e0ba9258afee290accf28c
-2024-11-28 10:07:07|1732784827|Convert project to pyproject.toml with best practices|Pieter Kuppens|e5578ede30887405acf3872cf39cdf00393e646c
-2024-11-28 10:07:43|1732784863|Merge pull request #2 from pkuppens/convert-to-pyproject-toml|Pieter Kuppens|4138634741a8071c8cb70a07468dbf607b4214d9
-2024-11-28 11:48:45|1732790925|Add LangChain and DSpy integration with local Ollama model|Pieter Kuppens|d041ee270dc99f095b2baf42da11422d0a129b33
-2024-11-28 12:53:12|1732794792|Manual fixes zero shot|Pieter Kuppens|f4b03a5613835d841535db00fa77f4d63d8c8b29
-2024-11-28 13:06:06|1732795566|Merge pull request #3 from pkuppens/add-langchain-dspy-integration|Pieter Kuppens|c2fa01b28687604ff46dec1a0506906ccb91793a
-2024-11-29 17:52:33|1732899153|notebook check in office|Pieter Kuppens|22d78f7bb6755953a5f6d739a201eec59ad373b8
-2024-11-30 13:17:16|1732969036|Add React frontend for DSpy signatures|Pieter Kuppens|c3f4a7dfedb5ae155285e55cd3499f14c265bbc5
-2024-11-30 14:17:30|1732972650|Merge pull request #4 from pkuppens/add-react-frontend|Pieter Kuppens|f94b9d0421d134f2b59f492556dd7ddfac893146
-2024-11-30 14:39:15|1732973955|Manual fix/merge react bootstrap and workspace generated code.|Pieter Kuppens|18fe21f1d0d3ec5fc7573825b8f1461e7e101c2c
-2024-11-30 14:40:38|1732974038|Document javascript functions with signatures|Pieter Kuppens|aaf8a41b8787f76f2cc76890f7ec4e464251444d
-2024-11-30 14:43:54|1732974234|Merge pull request #5 from pkuppens/add-react-frontend|Pieter Kuppens|b8e325fe7e9ce831e143334672f66263a9fee7c3
-2024-11-30 14:53:32|1732974812|Refactor the signatures to a reusable component|Pieter Kuppens|f8eae6a93940fffa983229b898af9ce4cd0168cb
-2024-11-30 14:55:16|1732974916|Merge pull request #6 from pkuppens/refactor-signatures|Pieter Kuppens|a70e6eef785210720c8531c21b88c3286cb60537
-2024-12-02 12:50:06|1733140206|Add Hackathon/GenAI folder with README and DIAGRAM|Pieter Kuppens|f9e88ea22ebb7245051cf0ba25c60a054377946c
-2024-12-02 12:52:07|1733140327|Merge pull request #7 from pkuppens/add-hackathon-genai|Pieter Kuppens|76eb7fc808d0e14ec1243d8c843821b7923287c8
-2024-12-02 15:12:50|1733148770|Hackathon GenAI DIAGRAM|Pieter Kuppens|034974bff929d36358062b9854a66a65fa944eff
-2024-12-02 15:16:32|1733148992|Merge pull request #8 from pkuppens:improve-diagram-073|Pieter Kuppens|bbf38d2a593974b98daa3adda8d6533b45a24a9e
-2024-12-19 22:44:28|1734644668|Add refinement loop for software project management steps|Pieter Kuppens|f90a379dd1a9f7de9410affae947e25b05da14a5
-2024-12-19 22:44:39|1734644679|Merge pull request #9 from pkuppens/add-refinement-loop|Pieter Kuppens|c01a596fa7946452aed2acd625088129fe78550f
-2024-12-20 21:14:17|1734725657|handle Docker Ollama not running gracefully|Pieter Kuppens|07a8e1ef0512646c737a50111360bdf4fef352ff
-2024-12-20 23:45:42|1734734742|Small changes towards dspy 2.5 and ChainOfThought for idea iteration|Pieter Kuppens|2c775542444854c29b06e69c8b0270f7e11fef71
-2024-12-21 22:56:03|1734818163|Drop pyproject in favor of requirements.txt, move to py -3.11 from 3.13, small notebook changes|Pieter Kuppens|82e0142df6ba875c415091d364ca10a18bfe7fed
-2024-12-22 09:57:12|1734857832|Rearrage/split notebooks in separate DSpy and LangChain notebooks|Pieter Kuppens|9769013547cfb9525dc724c46063312de5d54289
-2024-12-27 17:19:39|1735316379|Run of project idea generator with fixes and containing output for github|Pieter Kuppens|9217b02212025159fcd17289df2e953ecfdc25d6
-2025-01-07 09:48:54|1736239734|Cleaner notebook runs with output capture.|Pieter Kuppens|513eb2d36b23458ce449b2cd10020c1b3c1d7afd
-2025-01-07 09:54:37|1736240077|dependabot recommended security updates|Pieter Kuppens|154cb76f7a8c0b05eb32ebbaed3df133714172e0
-2025-01-07 14:43:08|1736257388|New pyproject attempt with uv. License file included.|Pieter Kuppens|fde7332a0b04ce7386332d6261d0fc3ab6ae3406
-2025-01-07 14:45:49|1736257549|Merge pull request #10 from pkuppens/ghcw-session-5f01|Pieter Kuppens|43cbd2f7cde22c4afa848d2f12ef39129bd1decd
-2025-01-20 15:17:26|1737382646|Add GitHub Action to comment on duplicate issues|Pieter Kuppens|da61e0308a9cd2e0f4894cb1fdf76c8f353cc527
-2025-01-20 16:14:58|1737386098|Local changes to github action for duplicate issue detection|Pieter Kuppens|2e02df6a4390d382e84c0e4626aab22fe43628fe
-2025-01-20 16:16:29|1737386189|Merge pull request #11 from pkuppens/add-duplicate-issue-comment|Pieter Kuppens|a446957de2d346c93635debec4408ea62df02ba2
-2025-01-20 16:32:29|1737387149|fix on self-detect|Pieter Kuppens|43f2968f51b0739ba1d076f69fffb3613ddb4454
-2025-01-20 16:34:14|1737387254|Merge pull request #13 from pkuppens/add-duplicate-issue-comment|Pieter Kuppens|6abb8874e7a3da49364938e104aa113aeb0f14e3
-2025-01-20 16:43:14|1737387794|add logging for github debugging|Pieter Kuppens|f739c14281a2bd29ce3917851501bc4baf9f87d1
-2025-01-20 17:42:19|1737391339|Enhance logging in duplicate issue detection|Pieter Kuppens|3a93cb92138752da3d67884625b5d58b4c1c2590
-2025-01-20 17:42:31|1737391351|Merge pull request #15 from pkuppens/enhance-logging|Pieter Kuppens|aa7eac0b048c70cf65290af36a8ea163659b292e
-2025-01-20 17:48:14|1737391694|fix as with: statement that is unexpected/invalid|Pieter Kuppens|266560ff220a8164675b05267a4de6f50d8c110a
-2025-01-20 18:03:15|1737392595|log all similarity scores|Pieter Kuppens|71d7f92481485d36f28d7504e87a934b0ca3876c
-2025-01-20 20:43:00|1737402180|Change the similarity scores and their meaning|Pieter Kuppens|531df5efe0fb4c023f9c091d7fbf10f9d8084eee
-2025-01-20 20:48:45|1737402525|Merge pull request #17 from pkuppens/update-similarity-scores|Pieter Kuppens|05bfb03d3cd4750d3b69ee52df17490cabfbe90a
-2025-01-25 08:06:22|1737788782|Add website scraping notebook using Playwright|Pieter Kuppens|7c34f992204cdfd9f4b6d9de7da074dfe4406579
-2025-01-25 10:27:57|1737797277|starting point|Pieter Kuppens|300b8b1518104747c2026c8cbbe60228d4eea69d
-2025-01-27 17:16:05|1737994565|Selenium login. Seems to work, but extraction becomes complex. Needs testing on articles as well.|Pieter Kuppens|bd91662ac81b04d08f3ba702644a55899d476da7
-2025-01-30 14:29:26|1738243766|Merge pull request #18 from pkuppens/add-website-scraping-notebook|Pieter Kuppens|c2422adbcc98b7145e6b956db3b0094ba47f5027
-2025-01-30 14:31:48|1738243908|Add files via upload|Pieter Kuppens|94fb393053aa5b7fc0919675fa9e9b46d2e6bbab
-2025-01-30 15:07:42|1738246062|Add LangChain chat client with local Ollama model|Pieter Kuppens|3b5de31de2241f0622b432eefc02f49e20ee7db3
-2025-01-30 16:28:44|1738250924|fixes and trial run of structured output on Joke example|Pieter Kuppens|a2163860e591b49c6cbe02cbeec3ab2dc1cde11a
-2025-01-30 16:29:46|1738250986|sample joke output|Pieter Kuppens|f57c45058658690a242aa406fcc0a7cd7f3d4296
-2025-01-30 16:31:09|1738251069|Merge pull request #20 from pkuppens/add-langchain-chat-client-example-cat-jokes|Pieter Kuppens|4a00616cbb5c82ad50c24a87853b00a0f8263dfc
-2025-02-24 10:32:30|1740389550|#19: useful links from LangChain, LinkedIn, Medium articles and more|Pieter Kuppens|7b0603ae139569e0d46810f9ac91bab60ec5fa05
-2025-02-25 14:24:53|1740489893|Github Analyze New Issue workflow|Pieter Kuppens|b0e1545e67af0902f3c52fd933ed40ca38956eab
-2025-02-25 14:32:04|1740490324|Merge branch 'add-langchain-chat-client-example-cat-jokes'|Pieter Kuppens|bbe0a4a984106da52d6aea86c4e4bbc7536f26fc
-2025-02-25 14:40:07|1740490807|fix 'requests' missing|Pieter Kuppens|799251d5004e0cdce985bcbd85a6540abfc80d90
-2025-02-25 14:51:36|1740491496|Change o3-mini to gpt-4o-mini|Pieter Kuppens|a1486af10a7b82b6cbb55496ef43c238ad48b7b7
-2025-02-25 14:52:25|1740491545|Only check duplicates on create.|Pieter Kuppens|5fb927e83d90adc0aca04581aab6bf27c716a09e
-2025-02-25 17:28:02|1740500882|test OpenAI API call with credits|Pieter Kuppens|43aa8ecca69346fb6c698f7c3e9534c17248e604
-2025-02-25 17:33:54|1740501234|Show just the OpenAI API result from a cheaper model for demonstration.|Pieter Kuppens|c8224f07592b4bd42c97c556589f828b3745427d
-2025-02-26 16:20:31|1740583231|Add issue review step using OpenAI LLM|Pieter Kuppens|7612946cbc000bdc0087891f73ab262f7f793e5a
-2025-02-26 18:54:50|1740592490|openai upgrade|Pieter Kuppens|67bb4b4a47b394434b7008f920697db65ba066c4
-2025-02-26 20:43:31|1740599011|Merge pull request #23 from pkuppens/add-issue-review|Pieter Kuppens|2dd70b6bc4945bfb9f956c6de548b628043cd4ef
-2025-02-27 17:39:28|1740674368|Add local LLM code reviews|Pieter Kuppens|5b458cf56fe6be79a89ea13eae9eb3535eb14d42
-2025-02-28 16:27:09|1740756429|rewrite first part of UV.md|Pieter Kuppens|8feb7aec85507b60406d04eec9f1be389837317c
-2025-02-28 16:49:14|1740757754|Merge branch 'main' into add-local-llm-code-reviews|Pieter Kuppens|236e6c02a0582540ff240da31d4340c4f3eb0b08
-2025-02-28 22:17:00|1740777420|smolagents start of code review agent|Pieter Kuppens|11eb88387403f3cc5ff872f2070363249cdb2036
-2025-03-01 16:10:10|1740841810|clear execution count output|Pieter Kuppens|7a89fbc568e00d94bca8b885fa88d20c3f9b9ced
-2025-03-01 16:10:49|1740841849|small litellm model code agent example on fibonacci numbers|Pieter Kuppens|3193419c46f2d607c061d798e9d8c25af9e68465
-2025-03-03 10:06:36|1740992796|Add LangChain articles collection and display|Pieter Kuppens|4310e802b97a2800b1c188ee07e3528beac2f751
-2025-03-03 10:06:49|1740992809|Merge pull request #25 from pkuppens/add-langchain-articles|Pieter Kuppens|beef0e8bb919a390c5c8cf37caa43b577335cd4f
-2025-03-04 17:42:56|1741106576|standalone analyze_issue_prompt with placeholders, loader, and necessary code changes|Pieter Kuppens|3bc0b12ad711245ed9b5e4173c1775a7581fa5b0
-2025-03-04 19:31:35|1741113095|dspy-ai doesn't belong in src of project|Pieter Kuppens|a717c04d41073b389374fbfbe4a66fa8c45f6af1
-2025-03-04 19:42:22|1741113742|add project root to PYTHONPATH for workflow, such that SuperPrompt module can be found|Pieter Kuppens|0c7eac951c21fef5a7571f97aa800dd2be5aa07c
-2025-03-04 19:52:25|1741114345|Merge branch 'add-local-llm-code-reviews'|Pieter Kuppens|a0571ac9034ccba0ac5815329f642b97ede0030e
-2025-03-04 19:57:21|1741114641|merge fixes|Pieter Kuppens|98b069a6d191115eadbcd48b316f08e497f5a12d
-2025-03-04 20:44:49|1741117489|issue with github token|Pieter Kuppens|f8ef36c1b1aa58d8ec5b9d175a328f67a7f58434
-2025-03-05 11:03:16|1741168996|create v2 of identify duplicates with refactored and reusable code.|Pieter Kuppens|835c86356cc39e885cd90ae57a3f203b881aa001
-2025-03-05 15:49:04|1741186144|rewrite analyze_issue to github package|Pieter Kuppens|ba7dd3f93d440182b0be3e9193aac8714aa90439
-2025-03-05 15:56:40|1741186600|small fixes that need to be tested in CI/CD|Pieter Kuppens|494dfbeb9aa9c5a4d5886204c393880d5058d616
-2025-03-05 16:13:02|1741187582|sklearn and logging|Pieter Kuppens|a080f4c3cac72e07648b54728a6830113089dc78
-2025-03-05 16:18:18|1741187898|scikit-learn iso sklearn|Pieter Kuppens|0b1217fe8277459ffbaa582d79e8e56a80e900f7
-2025-03-05 16:19:33|1741187973|duplicate check only on creation|Pieter Kuppens|556ff5ce008f3466dc7d8dc42c301591f0521a05
-2025-03-06 09:08:15|1741248495|Create utils component for shared GitHub functionality|Pieter Kuppens|dee25a1fd0cabfcbe37045d6401f46b75bf931dd
-2025-03-06 12:27:25|1741260445|split prompt in system and user prompts|Pieter Kuppens|eef9a7a4c6dfac43220918c06799e752894edc32
-2025-03-06 12:35:27|1741260927|Merge pull request #28 from pkuppens/add-utils-component|Pieter Kuppens|90bd41c019a031e3a79407df17ac735d10b94dfb
-2025-03-06 14:19:42|1741267182|PlaceholderDict to resolve missing keys|Pieter Kuppens|18f3a3ed8744911d42b359c2600d7abd528c80da
-2025-03-06 14:20:03|1741267203|PlaceholderDict to resolve missing keys|Pieter Kuppens|569a0881fc01f36719d2c96093b54e7d86ac3db1
-2025-03-06 14:25:28|1741267528|python-dotenv in requirements.txt and actions script|Pieter Kuppens|41e6e0041a279565c117b668d242083fd3a740ed
-2025-03-06 14:34:57|1741268097|requirements.txt updates|Pieter Kuppens|012048324b7758153abb2e01f02dfcba698d8ffd
-2025-03-06 14:44:52|1741268692|remove requirements versions|Pieter Kuppens|8da951c940f53fbc58f4555cdd1fdacf03df6f5f
-2025-03-06 16:45:05|1741275905|try to get rid of browser-use that gives workflow issues|Pieter Kuppens|6d4887f42df2e22ba98ee6c80b4f0e68d5d746dd
-2025-03-06 17:25:25|1741278325|Workflow fix for OS and 1GB limit|Pieter Kuppens|6ca2237cd9275db6ce956aa098659df54ab55c55
-2025-03-07 09:37:08|1741336628|Fix some potential incompatible packages|Pieter Kuppens|4c428fd15b3a8b6236c60e7719fdabe817a533ae
-2025-03-07 10:23:29|1741339409|Fix issue analyzer to re-raise exceptions and validate API key|Pieter Kuppens|b65b17b251ab905a23f503b94810ef30f39be7f9
-2025-03-07 11:43:15|1741344195|Merge pull request #29 from pkuppens/fix-issue-analyzer|Pieter Kuppens|8eff773fbf6ead2fecec0f96a974841d28a179d9
-2025-03-08 12:07:01|1741432021|Fix OpenAI response parsing and append complete response to issue comments|Pieter Kuppens|7a598860adf33cc3b94035be0f20160aebb2f5e1
-2025-03-08 14:12:40|1741439560|Refactor code from scripts to utils|Pieter Kuppens|0e3d91c9811bf6516ee78d831e21428b49205862
-2025-03-08 14:13:16|1741439596|Merge pull request #30 from pkuppens/fix-openai-response-parsing|Pieter Kuppens|5f82828afcec6de230aa1b907f51a6e56a76194d
-2025-03-08 14:38:43|1741441123|Configure Python linting for the project|Pieter Kuppens|c65557f3aea41d18a6a49f9b9ecbb30ec9359acd
-2025-03-09 14:01:07|1741525267|Merge pull request #31 from pkuppens/configure-python-linting|Pieter Kuppens|8f8fe18f1cf036f44ba0a24548d2fd675b79e6d8
-2025-03-10 10:17:40|1741598260|python dependency minimizer|Pieter Kuppens|4d58064c59e531679ee456804bdefd9e1447657a
-2025-03-10 10:17:54|1741598274|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|90f9bec70bb506b8f9b5e014cc42cc80207386ce
-2025-03-10 11:03:58|1741601038|disable too costly workflow|Pieter Kuppens|8819a5c87d3738e121670bec5f013e275652ebae
-2025-03-11 07:07:42|1741673262|software architect ai prompt with 3 tier example|Pieter Kuppens|4c7255cd8d1e7bc4f237e17b1b4a7750e475baf7
-2025-03-11 07:08:35|1741673315|Merge branch 'fix-openai-response-parsing'|Pieter Kuppens|99914884c57050910255f508d329e605ec3b916a
-2025-03-12 13:52:51|1741783971|black automatic linting|Pieter Kuppens|ce3779dff9c297e5dc9e05579ae901907d6b1371
-2025-03-12 13:52:55|1741783975|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|a24a01a0fcae615507cd4f8874a138f80f76124c
-2025-03-12 14:48:52|1741787332|improved architect prompt in md and txt formats|Pieter Kuppens|580ac948e4eb1a28b78af7431e97e6c43843c31f
-2025-03-13 15:49:16|1741877356|Add software designer and tester prompts|Pieter Kuppens|d5b9b6ff51cd26475835deb607cb3b06a3edef49
-2025-03-13 16:36:08|1741880168|Merge pull request #32 from pkuppens/add-software-designer-tester-prompts|Pieter Kuppens|10b2315b0f7e3dbd5babf1dc5bfb0597cd3d2064
-2025-03-13 16:55:02|1741881302|Add CODEOWNERS file for solo developer|Pieter Kuppens|c185d8c8c1d3ffac9160e7f77b690be1d927f863
-2025-03-13 16:55:45|1741881345|Merge pull request #33 from pkuppens/add-codeowners|Pieter Kuppens|a2ba111c7c4c0d3bc68c4505d5de9e1e4bf72d08
-2025-03-13 21:40:31|1741898431|software project manager with delegation prompt|Pieter Kuppens|c2de255501286246289c3cd92a55d110fa27abb6
-2025-03-14 11:23:06|1741947786|Update of project manager for solo dev and game development|Pieter Kuppens|77705e0182006840257bfa9a2bf511f2bbcd6056
-2025-03-14 11:52:08|1741949528|Update with processable output|Pieter Kuppens|0c006236f847176a851f02fd058e66152056fbac
-2025-03-14 16:04:06|1741964646|Add agentic software engineer for coding tasks|Pieter Kuppens|f763dd9abe053167f9e46e4454b51f5e05a3ab51
-2025-03-14 16:05:30|1741964730|Merge pull request #34 from pkuppens/add-agentic-software-engineer|Pieter Kuppens|0706ce16182f2f582635f85cea533cdfcd63297c
-2025-03-14 16:26:58|1741966018|Update SOFTWARE_FACTOR_AI.md with software project manager prompt (simplified)|Pieter Kuppens|34b77d24a7983afa47d44356d6b3d6c1542f8489
-2025-03-14 17:55:45|1741971345|Fix: Exception has occurred: ModuleNotFoundError|Pieter Kuppens|acc5ec9c148c16b418e3866f33fb6ce0c4678658
-2025-03-14 18:01:15|1741971675|ai software doc writer utils|Pieter Kuppens|d83517a0135ded8a43b7c8b60941cb32f68946e0
-2025-03-14 21:08:13|1741982893|utils module name collision fix, software factory LLMUI defintions|Pieter Kuppens|700a84fd163c67688a1b765e602adad991233e0f
-2025-03-14 21:49:04|1741985344|start with linting|Pieter Kuppens|246e6482fd9f26eec6278c84a60825f682902c72
-2025-03-14 21:49:45|1741985385|start with linting - 2|Pieter Kuppens|32b78f75055b18c01ee68b569e51947ef3bf7c77
-2025-03-14 21:52:39|1741985559|Merge pull request #35 from pkuppens/fix-local-utils|Pieter Kuppens|ca69b39996e90dff4be03110368adba8ed76bb9a
-2025-03-14 22:19:33|1741987173|File Output Format specification for project managers.|Pieter Kuppens|b93e408ec4215c127f0b03bdc14565971827f889
-2025-03-15 10:02:37|1742029357|Fix imports that break GitHub Actions|Pieter Kuppens|a035b877f8851f46d04f9161fdd3faff32a800b2
-2025-03-15 11:22:56|1742034176|Fix GitHub issue error|Pieter Kuppens|8a81f69d9f9fe8c0996d0739f00c01007b7dd2f8
-2025-03-15 14:01:19|1742043679|small review fixes during test|Pieter Kuppens|43d25bbd959e277ac1fe4c2d0d97bd87f81c7982
-2025-03-15 14:01:54|1742043714|Merge pull request #37 from pkuppens/fix-github-issue-error|Pieter Kuppens|dd52901df8af9f1e16bd2b3d735dcdd90af0653f
-2025-03-16 17:17:33|1742141853|Python Programmer Superprompt|Pieter Kuppens|97c927b69ef9b92cd3a6b5e66aaaf155650eea18
-2025-03-16 22:08:20|1742159300|Agentic AI Framework Code prompt|Pieter Kuppens|7da803f5697af263e9bfeabf46bfa47e61d1143c
-2025-03-17 14:38:48|1742218728|analyze issue workflow fixes: KEYsm error handling, refactor, test|Pieter Kuppens|4e1d89f915cba05e53e6f0711e8bc1285db074a0
-2025-03-17 14:55:31|1742219731|Update to setuptools==76.0.0 to resolve vulnerable dependencies|Pieter Kuppens|c92da93e4d95dfc79334c019164c7c51e868f331
-2025-03-17 17:33:11|1742229191|Cursor: refactor documentation, Llama docs & Example|Pieter Kuppens|7010d334909f546404f6e94e55c2c936409fb570
-2025-03-17 19:37:10|1742236630|HealthcareGPT markdown descriptions|Pieter Kuppens|5a51bca32dfd8fa7175245157b9e762ed0bd5578
-2025-03-17 20:42:38|1742240558|AI Agent Role Defintion refactor|Pieter Kuppens|657421c31479a4ca64e4f115bb1ef4c48a70ad00
-2025-03-18 21:39:07|1742330347|Cursor: analyze_issue under test, --no-verify commit, because not all tests succeed.|Pieter Kuppens|92584dbf18030b77ad001ebdd78c051f11600312
-2025-03-18 22:16:38|1742332598|Cursor: big pre-commit run that removes trailing whitespace|Pieter Kuppens|f624c92f4d5d51c7456f2f255d506777e28c4162
-2025-03-18 22:23:31|1742333011|Cursor: isort fix|Pieter Kuppens|7f839ecf495b7a96170c99526879defd5ab69a12
-2025-03-18 23:09:51|1742335791|test: IDE pre-commit hooks|Pieter Kuppens|b5e6da9e2d88890c2533b254cd612e16693d1bb2
-2025-03-18 23:20:57|1742336457|Cursor: Initialize CURSOR.md from earlier conversation|Pieter Kuppens|ab9e18abcb75c928b54dfd3b45e8d19243841a84
-2025-03-19 08:08:48|1742368128|Cursor: bring analyze_issue.py under test with new dependency fix|Pieter Kuppens|7b7f83e0a5c66db5ce770c3a5572e24bbbdbf30f
-2025-03-19 08:34:43|1742369683|setup fixes for -r requirements inclusion|Pieter Kuppens|fe17fb5eb830b8d2e8e10bab89d1da4a5e792bf2
-2025-03-19 08:43:52|1742370232|python-multipart 0.0.9 ok?!|Pieter Kuppens|a1ab90a083ed2838ba467c4cb0457398aca45385
-2025-03-19 09:24:56|1742372696|Cursor: pre-commit fixes including test fixes|Pieter Kuppens|77f982dfc518952db59e3d6cae303ffa197b2954
-2025-03-19 10:01:33|1742374893|fix: Update setuptools to 65.5.1 to address PYSEC-2022-43012|Pieter Kuppens|719020232ea51141ef11a09955d0eeacb22645e8
-2025-03-19 10:05:00|1742375100|fix: Update python-multipart to 0.0.18 to address CVE-2024-53981|Pieter Kuppens|3449bc139cc74577cf403b0d1886533b251949cf
-2025-03-19 10:08:08|1742375288|chore: Ensure consistent python-multipart version across all requirement files|Pieter Kuppens|8a2200b14a1cbde52346a548e2ff4c094778192b
-2025-03-19 10:14:30|1742375670|Merge pull request #38 from pkuppens/fix/dependency-security-updates|Pieter Kuppens|b22409bde5dc74fcb48c7b4f959dc713dc7f9cff
-2025-03-20 14:46:15|1742478375|Apply Black formatting after isort removal|Pieter Kuppens|5e0588a750eb4d1628fcda17453b94a828a1f852
-2025-03-20 15:28:37|1742480917|refactor: replace black with ruff and fix test file location|Pieter Kuppens|aa621298fa1b5e781c6580c9f1182f58d0bf1cd8
-2025-03-20 15:35:08|1742481308|chore: configure test explorer and add setup instructions|Pieter Kuppens|6344196febc7e4b78bc7eab0c1a3bbc868cfca95
-2025-03-20 15:43:25|1742481805|chore: fix test explorer configuration and add separate test venv|Pieter Kuppens|ab054eb1330ebf7ce57e672c9c135ec6a8227588
-2025-03-20 15:59:40|1742482780|docs: update test strategy with known issues and solutions|Pieter Kuppens|de9a6a25fda79b23db22a92e5ca7078054e59ead
-2025-03-20 16:06:34|1742483194|docs: reorganize documentation structure and update README|Pieter Kuppens|9c984ec43c4f3538940e7395f35784e6717546e0
-2025-03-20 16:11:24|1742483484|docs: update pre-commit documentation with ruff and future recommendations|Pieter Kuppens|f1aa8189d6f40c1139aed35619b1e144ce68a0a9
-2025-03-20 17:32:38|1742488358|Move TESTING-STRATEGY.md to docs/testing/TEST-STRATEGY.md|Pieter Kuppens|8aabb4e9248137f28f7e86a63f7d7de89d1f75be
-2025-03-20 18:16:45|1742491005|Tests and ruff|Pieter Kuppens|208566227a65b53368c72ed75e03bd3c35b4bb24
-2025-03-20 18:21:52|1742491312|ruff-format with --fix option|Pieter Kuppens|15752bc85390c3e2225238f68c992a27807ab7c3
-2025-03-20 20:39:30|1742499570|Merge pull request #39 from pkuppens/check-ruff-switch|Pieter Kuppens|7caa04c282b3d64c740c92bd362171b60e9536b7
-2025-03-20 21:18:03|1742501883|cleanup-fix for actions|Pieter Kuppens|cbd88586f464cb4072b0ae31577e4ba91d4d09c6
-2025-03-21 09:06:38|1742544398|integration test: organize package management|Pieter Kuppens|0a2cb4d6355e9dc3ba095201ccc739d4464787d2
-2025-03-21 09:08:47|1742544527|pre-commit in dev requirements|Pieter Kuppens|f43ee6ce57bb04e41afb95a9e5cab99f5e0358c9
-2025-03-21 09:50:25|1742547025|Fix actions fail on low code coverage|Pieter Kuppens|885ca290939dcd344c64cd5cd717a5275927df11
-2025-03-21 10:57:29|1742551049|Fix errorcode 5 test collection issue|Pieter Kuppens|693461dd060c50969aa5655ff3f30ff5ac1fbfbf
-2025-03-21 11:14:02|1742552042|recover from test collection exit code 5|Pieter Kuppens|afbf93861441e2a82000fa25d6a2c7ea90e4daea
-2025-03-21 11:31:51|1742553111|recover using ' ||" true'|Pieter Kuppens|f11620ec928232ab9d60d6b05b6e846e93b67e44"
-2025-04-01 15:29:37|1743514177|remove _v2 part of script after merging|Pieter Kuppens|0d5d2b40f55d04285e501edbfee3ffae309485fc
-2025-04-01 15:47:20|1743515240|Chore: fixes for: pre-commit run --all-files|Pieter Kuppens|3f93e18509ef974b8c0f38dba3575d2317a8f96a
-2025-04-01 15:55:49|1743515749|fix: github action failed on missing 'packaging' library|Pieter Kuppens|6399d1206925b4879c2596284b18034799c38461
-2025-04-01 16:05:15|1743516315|Fix test that was too strict|Pieter Kuppens|eab7d6ef770d30e9e23e220eb494246295dcedc4
-2025-04-01 16:40:14|1743518414|fix: github action failed on 'packaging' install|Pieter Kuppens|e461eb895da8d54d9d9f3d822847df5a159ee806
-2025-04-01 16:53:57|1743519237|local package fix?!|Pieter Kuppens|32cb966adc75f6267ed62a0f99f0eab0bcd592ae
-2025-04-01 19:07:08|1743527228|test_dependencies|Pieter Kuppens|2882c37c41f61fe2fb1a1f4116aae5a5befccf19
-2025-04-01 21:38:36|1743536316|create a local analyze_issue variation for debugging github action issue|Pieter Kuppens|23969fb862d7fb5915a4e82cf79496aee9624262
-2025-04-01 21:53:33|1743537213|analyze issue should not throw ValueError on the GITHUB_REPOSITORY env variable in github actions|Pieter Kuppens|5a202c4178ebdbe905990cf79ed6e47d68201a84
-2025-04-02 10:51:16|1743583876|fix: Verbeter foutafhandeling in GitHubLabelManager.add_labels_to_issue|Pieter Kuppens|6758d405a69577e28e13b421f9b134fc86ac7bb0
-2025-04-02 10:56:17|1743584177|better exception handling, Problem Cause Solution|Pieter Kuppens|96a40ed3d399bf0fe3b803e3247b66d7c07b6f8f
-2025-04-02 12:05:13|1743588313|Unify and fix PYTHONPATH for Github actions|Pieter Kuppens|e30a050d26646492f4ddc9401095c7b0453305b4
-2025-04-02 14:38:00|1743597480|clarify github user error in github actions|Pieter Kuppens|6df778bcbf813a23bc3b274799d0ca11abc893e9
-2025-04-02 15:18:22|1743599902|pre-commit fixes|Pieter Kuppens|67b6b108ec2b71fcefc3bc07017bf93ebd86bf89
-2025-04-15 18:35:40|1744734940|ChatGPT created color blender (Verhuiscoach groen met pct wit)|Pieter Kuppens|c140d3dc6b276b8a0739bf1f1a3ec92dac1e1439
-2025-04-15 18:35:47|1744734947|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|ed4415429ede5c67922596e922a5e115f54a16ca
-2025-04-17 15:36:09|1744896969|Ruff settings|Pieter Kuppens|a101426e0bb8d87b3598fc7ff300c9245ff30744
-2025-04-17 18:37:34|1744907854|chore/format/ruff: pre-commit run --all-files|Pieter Kuppens|17ee5a6f1902492f224ecce785e26bffe66bf740
-2025-04-18 08:29:35|1744957775|pre-commit ruff format|Pieter Kuppens|1027c1e490e559a378da34ce130aad6b390a4eda
-2025-04-18 08:33:03|1744957983|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|84783abf6ca84b691920974fab89caafa3960c7f
-2025-04-18 11:26:28|1744968388|Urenregistratie prompt, om achteraf uren te kunnen bepalen|Pieter Kuppens|24e4c6725cc657a11206c3539aa2977766d0a65d
-2025-04-19 10:03:52|1745049832|Security patch|Pieter Kuppens|c9899a474ea7b2d9c09f84fa6b9d78aa386fc67b
-2025-04-25 10:06:08|1745568368|Bump h11 from 0.14.0 to 0.16.0|dependabot[bot]|d7d104e261f697c590e47e2ffcab6ff361a34403
-2025-04-25 10:07:32|1745568452|Merge pull request #41 from pkuppens/dependabot/pip/h11-0.16.0|Pieter Kuppens|05b49a3d5d6746ec34e83b0726886567269c80e2
-2025-04-25 10:16:55|1745569015|h11 security/dependency fix|Pieter Kuppens|e0c5b4c92f7b4191317d42a36f7800c53b3a3881
-2025-04-29 09:36:41|1745912201|Fix ruff and pytest configurations|Pieter Kuppens|fa50bf4048314fad286f91280ef925e0c0bb2ac7
-2025-04-29 12:21:38|1745922098|use venv in github actions as well|Pieter Kuppens|27c4ac2a1f3e4e4994e2e36b47e0195dea2d8553
-2025-04-29 13:54:44|1745927684|pre-commit fixes|Pieter Kuppens|9dadcc266bd0bc7e49b4d69ca75cea6512e666dd
-2025-04-29 16:46:02|1745937962|pre-commit fixes|Pieter Kuppens|d6ec4d4614552c90caeae09068e04a6970877b49
-2025-04-30 08:05:04|1745993104|uv/ruff fixes from github actions|Pieter Kuppens|840f8c60e4036f9a692aaaaa08a7e82f5fff5559
-2025-04-30 08:11:37|1745993497|ruff format fixes for 132 character lines|Pieter Kuppens|b1307ef42b9f28c5b574590d7ad3fb123b0c3d5f
-2025-04-30 08:41:18|1745995278|document actions|Pieter Kuppens|f3bb2e9cfef0a7931d67b823f8a99db40bcc0ace
-2025-05-01 14:50:59|1746103859|try fix pythonpath in CI/CD|Pieter Kuppens|90dd05bc5fe6d8d8aea2405d121ea6aeefec31c1
-2025-05-01 16:52:08|1746111128|use uv run instead/in front of pytest|Pieter Kuppens|a66125500d423bb3b8bc4645efb291d8b947156a
-2025-05-05 15:52:20|1746453140|Vibe Coded Keen Solver Working Solution!|Pieter Kuppens|da66a506359f4523be0325789aad9402336eb23a
-2025-05-05 16:04:13|1746453853|small ruff fix|Pieter Kuppens|641a2334b8ff68d76b84e81fd6fcdef70e2fc868
-2025-05-05 16:31:21|1746455481|yet another ruff check fix|Pieter Kuppens|d286c516dd4709f151871f580ed81caf5d8ee7d3
-2025-05-05 17:30:22|1746459022|Start of 'Talk to Ollama' vibe coding example|Pieter Kuppens|be1358af8f6ed7bc1c6ead8dab2cbed3e7d3cd96
-2025-05-05 17:45:06|1746459906|Trying to solve recording issues.|Pieter Kuppens|2e348e7b1dc9e64b9925ffd64589fdfd8e960bcd
-2025-05-05 17:52:53|1746460373|some debug instrumenting, since audio is not working properly (yet)|Pieter Kuppens|1b8f2b71e4eabb6f8529317490738eb8bfbb2537
-2025-05-05 17:53:41|1746460421|ruff check fix|Pieter Kuppens|541618ca9a1c3fe01fca8148bb0d9100b09cf80f
-2025-05-05 23:53:43|1746482023|Create an ollama_stack with ollama-plus (with vi, etc), langflow, openwebui attached to ollama volume|Pieter Kuppens|e56d9fdb94c2437580088d824b6ff3b0e64affef
-2025-05-06 10:10:13|1746519013|doc: rewrite ollama stack docs for development mode|Pieter Kuppens|d7f2b8c55292297ffcfc7ea2ec88ab045f07f334
-2025-05-06 14:55:46|1746536146|doc: describe vibe coding styles, Python, Javascript, SQL|Pieter Kuppens|c39322910558b05745a052c301da32ccb5a522d1
-2025-05-13 22:23:14|1747167794|proj: Initial project setup with readme, license file, and pyproject.|Pieter Kuppens|a1bc6c3d735439eeaecb2fcbf4e2c65a78341e83
-2025-05-13 22:23:47|1747167827|ruff format leftovers|Pieter Kuppens|e4f14a809e6a2672d9600f5c2c138ab7144b4113
-2025-05-13 22:57:52|1747169872|proj: various cursor rules (initial versions)|Pieter Kuppens|f91c03ad4a5212bfd8ac1b3902fe2d36fff414c9
-2025-05-17 13:52:42|1747482762|Package updates|Pieter Kuppens|1ea01e1aeb46959f870f00a5d5045958290ea4b5
-2025-05-17 18:29:23|1747499363|rules and architecture|Pieter Kuppens|0eaf6b13022a719a27471488a1fad4d5c9be6d8a
-2025-05-17 21:35:39|1747510539|initial version of WBSO app components|Pieter Kuppens|b32cb12a84e5b4e8f20c357023b17fb17aff8b33
-2025-05-20 21:34:03|1747769643|Bump setuptools from 65.5.1 to 78.1.1|dependabot[bot]|33244619530b630b1b4ec2dda47335369f6adc13
-2025-05-20 21:38:20|1747769900|Merge pull request #43 from pkuppens/dependabot/pip/setuptools-78.1.1|Pieter Kuppens|4410b148fb206a366da02e849b89e6a160a86ffa
-2025-05-23 15:57:29|1748008649|test settings|Pieter Kuppens|d497922b7ee97e3d53071b8c35d1731e09ce1e38
-2025-05-23 15:58:07|1748008687|vibe coded knight bishop problem solver (stockitup programming test)|Pieter Kuppens|e91ee25b5709925759345dced9e4dc6e2d1c797c
-2025-05-23 20:01:28|1748023288|GitHub actions ruff and pytest fixes vibe coded knight-bishop-solver|Pieter Kuppens|3bc2ea03b66b0e899599c2f657e171b935e6579b
-2025-05-24 16:53:04|1748098384|hugging face MCP course start|Pieter Kuppens|c94aad2c2338b5b0b37d8ae58a5ac9ad47cc5494
-2025-05-25 21:18:05|1748200685|MCP course, unit 2 progress|Pieter Kuppens|7984f2d6d9ba18ba396456e32fcadfea86121cd9
-2025-05-27 16:17:26|1748355446|Implement unit2, task 3.2|Pieter Kuppens|cebbad0b58a58027b904d2d86efbef4b4f6cc011
-2025-05-28 10:33:32|1748421212|Update Unit2 Task 1&2 with verifiable scripts|Pieter Kuppens|e6c5ed4f055d3f175b10b41bddfa86368704b624
-2025-05-29 12:24:37|1748514277|Unit 2 Task 3 clarifications|Pieter Kuppens|cd3da72b5b152782531b4e856c3bde5be74de5d0
-2025-05-29 12:24:43|1748514283|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|ca945e4b78852463eae2c52d298042f51fcaa9a2
-2025-05-29 12:43:00|1748515380|Remove some black/flake in favor of ruff|Pieter Kuppens|f759346b1c8f2f4a928c8643e6fd35453fefc59c
-2025-05-30 13:45:58|1748605558|Verification task implementationfor task 3|Pieter Kuppens|0099f35b8ca06f896dbf51966b36ade83d5b0b19
-2025-05-30 13:53:52|1748606032|ruff check|Pieter Kuppens|c916b75499a33a4f5ac0a9775be2ebebb6ebe18c
-2025-05-30 14:12:37|1748607157|Task32 verification complete with separate server/client startup|Pieter Kuppens|04a6790a985cf37581abcec9d9d4c2a4d14bd9c0
-2025-05-30 14:15:27|1748607327|ruff format fix|Pieter Kuppens|0fa4e6ea36e5ba3ec90c659b869e7cbc79ae9ef9
-2025-05-30 14:32:15|1748608335|Task32 verification with multiprocessing/background server/client tasks|Pieter Kuppens|0e2a7098857892f2cb0d4ac551fc67e09f426ad9
+﻿datetime|timestamp|message|author|hash
+2023-05-03 11:38:52 +0200|1683106732|Initial commit|Pieter Kuppens|eaa775890bb924b668fe71316a128806bb1bf149
+2023-05-03 20:21:37 +0000|1683145297|initial commit, not tested, .py program bugged|Pieter Kuppens|21fbc2646b3938210a5c2a304a4498f9291f6a08
+2023-05-05 12:20:05 +0000|1683289205|9 and 10 generate questions, prompt engineered|Pieter Kuppens|822bc613b81ed074d1015e10b87eec77d044a35d
+2023-05-07 15:06:59 +0000|1683472019|prompt improvements for Chapter 11: Questions first, Answers later.|Pieter Kuppens|462c0ce47762ce4d27239c882cd471a06ee3cf06
+2023-05-09 09:08:40 +0000|1683623320|Rename MPC_AvL to CollegeGPT|Pieter Kuppens|97dd9f6d405b966d3da2423b2ec010deafd4c3df
+2023-05-09 09:41:02 +0000|1683625262|SuperPrompting, applied to College|Pieter Kuppens|c2646e2313a954f14dfd3759d2089384afaa3168
+2023-05-09 10:36:12 +0000|1683628572|Add Chapters 1 & 3|Pieter Kuppens|b7cee2394142327140dc654caeaed111d2e49604
+2023-06-05 17:45:21 +0200|1685979921|Prompt for Mermaid flow charts|Pieter Kuppens|012517ce44408a8594b5087fb927d33e5a7f2fe5
+2023-06-06 12:13:09 +0200|1686046389|Add Communication.prompt and Requirements.prompt, and allow to work from PyCharm|Pieter Kuppens|78b1c450234a88107b4913bd3adac09f9a811179
+2023-06-12 09:12:22 +0200|1686553942|ChatGPT download to disable history & training|Pieter Kuppens|0443b7c9010ea82a4cfe308caff04b1ab84880c6
+2023-06-12 09:12:26 +0200|1686553946|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|6335b9e6fb194d37f80ac48604939bbca594c856
+2023-07-03 17:44:38 +0200|1688399078|GitHub Issue prompt|Pieter Kuppens|328db31435f76a2fcb653049183251dcad3ab42f
+2023-07-31 10:24:30 +0200|1690791870|Pair programmer, sudolang.|Pieter Kuppens|58c8bae247fd6e179e34016a3daed293140443a2
+2024-01-02 16:39:37 +0100|1704209977|Update README.md|Pieter Kuppens|d1d551085c1132bffcd40df25cfc663b2a232f15
+2024-10-04 21:42:55 +0200|1728070975|Update README.md with Ollama - OpenWebUI - DSpy stuff|Pieter Kuppens|96355635c97a9ad2eecd89830f4469c32cc7c530
+2024-10-08 20:29:08 +0200|1728412148|Terminal Manual requirement prompt|Pieter Kuppens|85239bb040108a51c8a4eac2fd7539862ad0f510
+2024-10-08 20:29:13 +0200|1728412153|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|b891217546db267ca721c0884307c20c79aac0dc
+2024-10-08 22:23:44 +0200|1728419024|Add Llama.md|Pieter Kuppens|9f97875d077f53770c7f2c58db8174b432398c12
+2024-10-20 14:49:05 +0200|1729428545|Software Factory Plan|Pieter Kuppens|d8ef07f4cd791bf0089dd9079431af4d1e5b1b56
+2024-10-27 13:55:58 +0100|1730033758|Update README.md|Pieter Kuppens|57d1ceb5032515909899e7da6df708e0e3f3098c
+2024-11-28 09:56:09 +0100|1732784169|Add LangChain/DSpy setup against a local Ollama container instance|Pieter Kuppens|773ee85eb93cb6816932d6b7bcf9ad1d87f4dc0a
+2024-11-28 09:56:36 +0100|1732784196|Merge pull request #1 from pkuppens/add-langchain-dspy-ollama-setup|Pieter Kuppens|511258a0ebc4443fd5e0ba9258afee290accf28c
+2024-11-28 10:07:07 +0100|1732784827|Convert project to pyproject.toml with best practices|Pieter Kuppens|e5578ede30887405acf3872cf39cdf00393e646c
+2024-11-28 10:07:43 +0100|1732784863|Merge pull request #2 from pkuppens/convert-to-pyproject-toml|Pieter Kuppens|4138634741a8071c8cb70a07468dbf607b4214d9
+2024-11-28 11:48:45 +0100|1732790925|Add LangChain and DSpy integration with local Ollama model|Pieter Kuppens|d041ee270dc99f095b2baf42da11422d0a129b33
+2024-11-28 12:53:12 +0100|1732794792|Manual fixes zero shot|Pieter Kuppens|f4b03a5613835d841535db00fa77f4d63d8c8b29
+2024-11-28 13:06:06 +0100|1732795566|Merge pull request #3 from pkuppens/add-langchain-dspy-integration|Pieter Kuppens|c2fa01b28687604ff46dec1a0506906ccb91793a
+2024-11-29 17:52:33 +0100|1732899153|notebook check in office|Pieter Kuppens|22d78f7bb6755953a5f6d739a201eec59ad373b8
+2024-11-30 13:17:16 +0100|1732969036|Add React frontend for DSpy signatures|Pieter Kuppens|c3f4a7dfedb5ae155285e55cd3499f14c265bbc5
+2024-11-30 14:17:30 +0100|1732972650|Merge pull request #4 from pkuppens/add-react-frontend|Pieter Kuppens|f94b9d0421d134f2b59f492556dd7ddfac893146
+2024-11-30 14:39:15 +0100|1732973955|Manual fix/merge react bootstrap and workspace generated code.|Pieter Kuppens|18fe21f1d0d3ec5fc7573825b8f1461e7e101c2c
+2024-11-30 14:40:38 +0100|1732974038|Document javascript functions with signatures|Pieter Kuppens|aaf8a41b8787f76f2cc76890f7ec4e464251444d
+2024-11-30 14:43:54 +0100|1732974234|Merge pull request #5 from pkuppens/add-react-frontend|Pieter Kuppens|b8e325fe7e9ce831e143334672f66263a9fee7c3
+2024-11-30 14:53:32 +0100|1732974812|Refactor the signatures to a reusable component|Pieter Kuppens|f8eae6a93940fffa983229b898af9ce4cd0168cb
+2024-11-30 14:55:16 +0100|1732974916|Merge pull request #6 from pkuppens/refactor-signatures|Pieter Kuppens|a70e6eef785210720c8531c21b88c3286cb60537
+2024-12-02 12:50:06 +0100|1733140206|Add Hackathon/GenAI folder with README and DIAGRAM|Pieter Kuppens|f9e88ea22ebb7245051cf0ba25c60a054377946c
+2024-12-02 12:52:07 +0100|1733140327|Merge pull request #7 from pkuppens/add-hackathon-genai|Pieter Kuppens|76eb7fc808d0e14ec1243d8c843821b7923287c8
+2024-12-02 14:12:50 +0000|1733148770|Hackathon GenAI DIAGRAM|Pieter Kuppens|034974bff929d36358062b9854a66a65fa944eff
+2024-12-02 15:16:32 +0100|1733148992|Merge pull request #8 from pkuppens:improve-diagram-073|Pieter Kuppens|bbf38d2a593974b98daa3adda8d6533b45a24a9e
+2024-12-19 22:44:28 +0100|1734644668|Add refinement loop for software project management steps|Pieter Kuppens|f90a379dd1a9f7de9410affae947e25b05da14a5
+2024-12-19 22:44:39 +0100|1734644679|Merge pull request #9 from pkuppens/add-refinement-loop|Pieter Kuppens|c01a596fa7946452aed2acd625088129fe78550f
+2024-12-20 21:14:17 +0100|1734725657|handle Docker Ollama not running gracefully|Pieter Kuppens|07a8e1ef0512646c737a50111360bdf4fef352ff
+2024-12-20 23:45:42 +0100|1734734742|Small changes towards dspy 2.5 and ChainOfThought for idea iteration|Pieter Kuppens|2c775542444854c29b06e69c8b0270f7e11fef71
+2024-12-21 22:56:03 +0100|1734818163|Drop pyproject in favor of requirements.txt, move to py -3.11 from 3.13, small notebook changes|Pieter Kuppens|82e0142df6ba875c415091d364ca10a18bfe7fed
+2024-12-22 09:57:12 +0100|1734857832|Rearrage/split notebooks in separate DSpy and LangChain notebooks|Pieter Kuppens|9769013547cfb9525dc724c46063312de5d54289
+2024-12-27 17:19:39 +0100|1735316379|Run of project idea generator with fixes and containing output for github|Pieter Kuppens|9217b02212025159fcd17289df2e953ecfdc25d6
+2025-01-07 09:48:54 +0100|1736239734|Cleaner notebook runs with output capture.|Pieter Kuppens|513eb2d36b23458ce449b2cd10020c1b3c1d7afd
+2025-01-07 09:54:37 +0100|1736240077|dependabot recommended security updates|Pieter Kuppens|154cb76f7a8c0b05eb32ebbaed3df133714172e0
+2025-01-07 14:43:08 +0100|1736257388|New pyproject attempt with uv. License file included.|Pieter Kuppens|fde7332a0b04ce7386332d6261d0fc3ab6ae3406
+2025-01-07 14:45:49 +0100|1736257549|Merge pull request #10 from pkuppens/ghcw-session-5f01|Pieter Kuppens|43cbd2f7cde22c4afa848d2f12ef39129bd1decd
+2025-01-20 15:17:26 +0100|1737382646|Add GitHub Action to comment on duplicate issues|Pieter Kuppens|da61e0308a9cd2e0f4894cb1fdf76c8f353cc527
+2025-01-20 16:14:58 +0100|1737386098|Local changes to github action for duplicate issue detection|Pieter Kuppens|2e02df6a4390d382e84c0e4626aab22fe43628fe
+2025-01-20 16:16:29 +0100|1737386189|Merge pull request #11 from pkuppens/add-duplicate-issue-comment|Pieter Kuppens|a446957de2d346c93635debec4408ea62df02ba2
+2025-01-20 16:32:29 +0100|1737387149|fix on self-detect|Pieter Kuppens|43f2968f51b0739ba1d076f69fffb3613ddb4454
+2025-01-20 16:34:14 +0100|1737387254|Merge pull request #13 from pkuppens/add-duplicate-issue-comment|Pieter Kuppens|6abb8874e7a3da49364938e104aa113aeb0f14e3
+2025-01-20 16:43:14 +0100|1737387794|add logging for github debugging|Pieter Kuppens|f739c14281a2bd29ce3917851501bc4baf9f87d1
+2025-01-20 17:42:19 +0100|1737391339|Enhance logging in duplicate issue detection|Pieter Kuppens|3a93cb92138752da3d67884625b5d58b4c1c2590
+2025-01-20 17:42:31 +0100|1737391351|Merge pull request #15 from pkuppens/enhance-logging|Pieter Kuppens|aa7eac0b048c70cf65290af36a8ea163659b292e
+2025-01-20 17:48:14 +0100|1737391694|fix as with: statement that is unexpected/invalid|Pieter Kuppens|266560ff220a8164675b05267a4de6f50d8c110a
+2025-01-20 18:03:15 +0100|1737392595|log all similarity scores|Pieter Kuppens|71d7f92481485d36f28d7504e87a934b0ca3876c
+2025-01-20 20:43:00 +0100|1737402180|Change the similarity scores and their meaning|Pieter Kuppens|531df5efe0fb4c023f9c091d7fbf10f9d8084eee
+2025-01-20 20:48:45 +0100|1737402525|Merge pull request #17 from pkuppens/update-similarity-scores|Pieter Kuppens|05bfb03d3cd4750d3b69ee52df17490cabfbe90a
+2025-01-25 08:06:22 +0100|1737788782|Add website scraping notebook using Playwright|Pieter Kuppens|7c34f992204cdfd9f4b6d9de7da074dfe4406579
+2025-01-25 10:27:57 +0100|1737797277|starting point|Pieter Kuppens|300b8b1518104747c2026c8cbbe60228d4eea69d
+2025-01-27 17:16:05 +0100|1737994565|Selenium login. Seems to work, but extraction becomes complex. Needs testing on articles as well.|Pieter Kuppens|bd91662ac81b04d08f3ba702644a55899d476da7
+2025-01-30 14:29:26 +0100|1738243766|Merge pull request #18 from pkuppens/add-website-scraping-notebook|Pieter Kuppens|c2422adbcc98b7145e6b956db3b0094ba47f5027
+2025-01-30 14:31:48 +0100|1738243908|Add files via upload|Pieter Kuppens|94fb393053aa5b7fc0919675fa9e9b46d2e6bbab
+2025-01-30 15:07:42 +0100|1738246062|Add LangChain chat client with local Ollama model|Pieter Kuppens|3b5de31de2241f0622b432eefc02f49e20ee7db3
+2025-01-30 16:28:44 +0100|1738250924|fixes and trial run of structured output on Joke example|Pieter Kuppens|a2163860e591b49c6cbe02cbeec3ab2dc1cde11a
+2025-01-30 16:29:46 +0100|1738250986|sample joke output|Pieter Kuppens|f57c45058658690a242aa406fcc0a7cd7f3d4296
+2025-01-30 16:31:09 +0100|1738251069|Merge pull request #20 from pkuppens/add-langchain-chat-client-example-cat-jokes|Pieter Kuppens|4a00616cbb5c82ad50c24a87853b00a0f8263dfc
+2025-02-24 10:32:30 +0100|1740389550|#19: useful links from LangChain, LinkedIn, Medium articles and more|Pieter Kuppens|7b0603ae139569e0d46810f9ac91bab60ec5fa05
+2025-02-25 14:24:53 +0100|1740489893|Github Analyze New Issue workflow|Pieter Kuppens|b0e1545e67af0902f3c52fd933ed40ca38956eab
+2025-02-25 14:32:04 +0100|1740490324|Merge branch 'add-langchain-chat-client-example-cat-jokes'|Pieter Kuppens|bbe0a4a984106da52d6aea86c4e4bbc7536f26fc
+2025-02-25 14:40:07 +0100|1740490807|fix 'requests' missing|Pieter Kuppens|799251d5004e0cdce985bcbd85a6540abfc80d90
+2025-02-25 14:51:36 +0100|1740491496|Change o3-mini to gpt-4o-mini|Pieter Kuppens|a1486af10a7b82b6cbb55496ef43c238ad48b7b7
+2025-02-25 14:52:25 +0100|1740491545|Only check duplicates on create.|Pieter Kuppens|5fb927e83d90adc0aca04581aab6bf27c716a09e
+2025-02-25 17:28:02 +0100|1740500882|test OpenAI API call with credits|Pieter Kuppens|43aa8ecca69346fb6c698f7c3e9534c17248e604
+2025-02-25 17:33:54 +0100|1740501234|Show just the OpenAI API result from a cheaper model for demonstration.|Pieter Kuppens|c8224f07592b4bd42c97c556589f828b3745427d
+2025-02-26 16:20:31 +0100|1740583231|Add issue review step using OpenAI LLM|Pieter Kuppens|7612946cbc000bdc0087891f73ab262f7f793e5a
+2025-02-26 18:54:50 +0100|1740592490|openai upgrade|Pieter Kuppens|67bb4b4a47b394434b7008f920697db65ba066c4
+2025-02-26 20:43:31 +0100|1740599011|Merge pull request #23 from pkuppens/add-issue-review|Pieter Kuppens|2dd70b6bc4945bfb9f956c6de548b628043cd4ef
+2025-02-27 17:39:28 +0100|1740674368|Add local LLM code reviews|Pieter Kuppens|5b458cf56fe6be79a89ea13eae9eb3535eb14d42
+2025-02-28 16:27:09 +0100|1740756429|rewrite first part of UV.md|Pieter Kuppens|8feb7aec85507b60406d04eec9f1be389837317c
+2025-02-28 16:49:14 +0100|1740757754|Merge branch 'main' into add-local-llm-code-reviews|Pieter Kuppens|236e6c02a0582540ff240da31d4340c4f3eb0b08
+2025-02-28 22:17:00 +0100|1740777420|smolagents start of code review agent|Pieter Kuppens|11eb88387403f3cc5ff872f2070363249cdb2036
+2025-03-01 16:10:10 +0100|1740841810|clear execution count output|Pieter Kuppens|7a89fbc568e00d94bca8b885fa88d20c3f9b9ced
+2025-03-01 16:10:49 +0100|1740841849|small litellm model code agent example on fibonacci numbers|Pieter Kuppens|3193419c46f2d607c061d798e9d8c25af9e68465
+2025-03-03 10:06:36 +0100|1740992796|Add LangChain articles collection and display|Pieter Kuppens|4310e802b97a2800b1c188ee07e3528beac2f751
+2025-03-03 10:06:49 +0100|1740992809|Merge pull request #25 from pkuppens/add-langchain-articles|Pieter Kuppens|beef0e8bb919a390c5c8cf37caa43b577335cd4f
+2025-03-04 17:42:56 +0100|1741106576|standalone analyze_issue_prompt with placeholders, loader, and necessary code changes|Pieter Kuppens|3bc0b12ad711245ed9b5e4173c1775a7581fa5b0
+2025-03-04 19:31:35 +0100|1741113095|dspy-ai doesn't belong in src of project|Pieter Kuppens|a717c04d41073b389374fbfbe4a66fa8c45f6af1
+2025-03-04 19:42:22 +0100|1741113742|add project root to PYTHONPATH for workflow, such that SuperPrompt module can be found|Pieter Kuppens|0c7eac951c21fef5a7571f97aa800dd2be5aa07c
+2025-03-04 19:52:25 +0100|1741114345|Merge branch 'add-local-llm-code-reviews'|Pieter Kuppens|a0571ac9034ccba0ac5815329f642b97ede0030e
+2025-03-04 19:57:21 +0100|1741114641|merge fixes|Pieter Kuppens|98b069a6d191115eadbcd48b316f08e497f5a12d
+2025-03-04 20:44:49 +0100|1741117489|issue with github token|Pieter Kuppens|f8ef36c1b1aa58d8ec5b9d175a328f67a7f58434
+2025-03-05 11:03:16 +0100|1741168996|create v2 of identify duplicates with refactored and reusable code.|Pieter Kuppens|835c86356cc39e885cd90ae57a3f203b881aa001
+2025-03-05 15:49:04 +0100|1741186144|rewrite analyze_issue to github package|Pieter Kuppens|ba7dd3f93d440182b0be3e9193aac8714aa90439
+2025-03-05 15:56:40 +0100|1741186600|small fixes that need to be tested in CI/CD|Pieter Kuppens|494dfbeb9aa9c5a4d5886204c393880d5058d616
+2025-03-05 16:13:02 +0100|1741187582|sklearn and logging|Pieter Kuppens|a080f4c3cac72e07648b54728a6830113089dc78
+2025-03-05 16:18:18 +0100|1741187898|scikit-learn iso sklearn|Pieter Kuppens|0b1217fe8277459ffbaa582d79e8e56a80e900f7
+2025-03-05 16:19:33 +0100|1741187973|duplicate check only on creation|Pieter Kuppens|556ff5ce008f3466dc7d8dc42c301591f0521a05
+2025-03-06 09:08:15 +0100|1741248495|Create utils component for shared GitHub functionality|Pieter Kuppens|dee25a1fd0cabfcbe37045d6401f46b75bf931dd
+2025-03-06 12:27:25 +0100|1741260445|split prompt in system and user prompts|Pieter Kuppens|eef9a7a4c6dfac43220918c06799e752894edc32
+2025-03-06 12:35:27 +0100|1741260927|Merge pull request #28 from pkuppens/add-utils-component|Pieter Kuppens|90bd41c019a031e3a79407df17ac735d10b94dfb
+2025-03-06 14:19:42 +0100|1741267182|PlaceholderDict to resolve missing keys|Pieter Kuppens|18f3a3ed8744911d42b359c2600d7abd528c80da
+2025-03-06 14:20:03 +0100|1741267203|PlaceholderDict to resolve missing keys|Pieter Kuppens|569a0881fc01f36719d2c96093b54e7d86ac3db1
+2025-03-06 14:25:28 +0100|1741267528|python-dotenv in requirements.txt and actions script|Pieter Kuppens|41e6e0041a279565c117b668d242083fd3a740ed
+2025-03-06 14:34:57 +0100|1741268097|requirements.txt updates|Pieter Kuppens|012048324b7758153abb2e01f02dfcba698d8ffd
+2025-03-06 14:44:52 +0100|1741268692|remove requirements versions|Pieter Kuppens|8da951c940f53fbc58f4555cdd1fdacf03df6f5f
+2025-03-06 16:45:05 +0100|1741275905|try to get rid of browser-use that gives workflow issues|Pieter Kuppens|6d4887f42df2e22ba98ee6c80b4f0e68d5d746dd
+2025-03-06 17:25:25 +0100|1741278325|Workflow fix for OS and 1GB limit|Pieter Kuppens|6ca2237cd9275db6ce956aa098659df54ab55c55
+2025-03-07 09:37:08 +0100|1741336628|Fix some potential incompatible packages|Pieter Kuppens|4c428fd15b3a8b6236c60e7719fdabe817a533ae
+2025-03-07 10:23:29 +0100|1741339409|Fix issue analyzer to re-raise exceptions and validate API key|Pieter Kuppens|b65b17b251ab905a23f503b94810ef30f39be7f9
+2025-03-07 11:43:15 +0100|1741344195|Merge pull request #29 from pkuppens/fix-issue-analyzer|Pieter Kuppens|8eff773fbf6ead2fecec0f96a974841d28a179d9
+2025-03-08 12:07:01 +0100|1741432021|Fix OpenAI response parsing and append complete response to issue comments|Pieter Kuppens|7a598860adf33cc3b94035be0f20160aebb2f5e1
+2025-03-08 14:12:40 +0100|1741439560|Refactor code from scripts to utils|Pieter Kuppens|0e3d91c9811bf6516ee78d831e21428b49205862
+2025-03-08 14:13:16 +0100|1741439596|Merge pull request #30 from pkuppens/fix-openai-response-parsing|Pieter Kuppens|5f82828afcec6de230aa1b907f51a6e56a76194d
+2025-03-08 14:38:43 +0100|1741441123|Configure Python linting for the project|Pieter Kuppens|c65557f3aea41d18a6a49f9b9ecbb30ec9359acd
+2025-03-09 14:01:07 +0100|1741525267|Merge pull request #31 from pkuppens/configure-python-linting|Pieter Kuppens|8f8fe18f1cf036f44ba0a24548d2fd675b79e6d8
+2025-03-10 10:17:40 +0100|1741598260|python dependency minimizer|Pieter Kuppens|4d58064c59e531679ee456804bdefd9e1447657a
+2025-03-10 10:17:54 +0100|1741598274|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|90f9bec70bb506b8f9b5e014cc42cc80207386ce
+2025-03-10 11:03:58 +0100|1741601038|disable too costly workflow|Pieter Kuppens|8819a5c87d3738e121670bec5f013e275652ebae
+2025-03-11 07:07:42 +0100|1741673262|software architect ai prompt with 3 tier example|Pieter Kuppens|4c7255cd8d1e7bc4f237e17b1b4a7750e475baf7
+2025-03-11 07:08:35 +0100|1741673315|Merge branch 'fix-openai-response-parsing'|Pieter Kuppens|99914884c57050910255f508d329e605ec3b916a
+2025-03-12 13:52:51 +0100|1741783971|black automatic linting|Pieter Kuppens|ce3779dff9c297e5dc9e05579ae901907d6b1371
+2025-03-12 13:52:55 +0100|1741783975|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|a24a01a0fcae615507cd4f8874a138f80f76124c
+2025-03-12 14:48:52 +0100|1741787332|improved architect prompt in md and txt formats|Pieter Kuppens|580ac948e4eb1a28b78af7431e97e6c43843c31f
+2025-03-13 15:49:16 +0100|1741877356|Add software designer and tester prompts|Pieter Kuppens|d5b9b6ff51cd26475835deb607cb3b06a3edef49
+2025-03-13 16:36:08 +0100|1741880168|Merge pull request #32 from pkuppens/add-software-designer-tester-prompts|Pieter Kuppens|10b2315b0f7e3dbd5babf1dc5bfb0597cd3d2064
+2025-03-13 16:55:02 +0100|1741881302|Add CODEOWNERS file for solo developer|Pieter Kuppens|c185d8c8c1d3ffac9160e7f77b690be1d927f863
+2025-03-13 16:55:45 +0100|1741881345|Merge pull request #33 from pkuppens/add-codeowners|Pieter Kuppens|a2ba111c7c4c0d3bc68c4505d5de9e1e4bf72d08
+2025-03-13 21:40:31 +0100|1741898431|software project manager with delegation prompt|Pieter Kuppens|c2de255501286246289c3cd92a55d110fa27abb6
+2025-03-14 11:23:06 +0100|1741947786|Update of project manager for solo dev and game development|Pieter Kuppens|77705e0182006840257bfa9a2bf511f2bbcd6056
+2025-03-14 11:52:08 +0100|1741949528|Update with processable output|Pieter Kuppens|0c006236f847176a851f02fd058e66152056fbac
+2025-03-14 16:04:06 +0100|1741964646|Add agentic software engineer for coding tasks|Pieter Kuppens|f763dd9abe053167f9e46e4454b51f5e05a3ab51
+2025-03-14 16:05:30 +0100|1741964730|Merge pull request #34 from pkuppens/add-agentic-software-engineer|Pieter Kuppens|0706ce16182f2f582635f85cea533cdfcd63297c
+2025-03-14 16:26:58 +0100|1741966018|Update SOFTWARE_FACTOR_AI.md with software project manager prompt (simplified)|Pieter Kuppens|34b77d24a7983afa47d44356d6b3d6c1542f8489
+2025-03-14 17:55:45 +0100|1741971345|Fix: Exception has occurred: ModuleNotFoundError|Pieter Kuppens|acc5ec9c148c16b418e3866f33fb6ce0c4678658
+2025-03-14 18:01:15 +0100|1741971675|ai software doc writer utils|Pieter Kuppens|d83517a0135ded8a43b7c8b60941cb32f68946e0
+2025-03-14 21:08:13 +0100|1741982893|utils module name collision fix, software factory LLMUI defintions|Pieter Kuppens|700a84fd163c67688a1b765e602adad991233e0f
+2025-03-14 21:49:04 +0100|1741985344|start with linting|Pieter Kuppens|246e6482fd9f26eec6278c84a60825f682902c72
+2025-03-14 21:49:45 +0100|1741985385|start with linting - 2|Pieter Kuppens|32b78f75055b18c01ee68b569e51947ef3bf7c77
+2025-03-14 21:52:39 +0100|1741985559|Merge pull request #35 from pkuppens/fix-local-utils|Pieter Kuppens|ca69b39996e90dff4be03110368adba8ed76bb9a
+2025-03-14 22:19:33 +0100|1741987173|File Output Format specification for project managers.|Pieter Kuppens|b93e408ec4215c127f0b03bdc14565971827f889
+2025-03-15 10:02:37 +0100|1742029357|Fix imports that break GitHub Actions|Pieter Kuppens|a035b877f8851f46d04f9161fdd3faff32a800b2
+2025-03-15 11:22:56 +0100|1742034176|Fix GitHub issue error|Pieter Kuppens|8a81f69d9f9fe8c0996d0739f00c01007b7dd2f8
+2025-03-15 14:01:19 +0100|1742043679|small review fixes during test|Pieter Kuppens|43d25bbd959e277ac1fe4c2d0d97bd87f81c7982
+2025-03-15 14:01:54 +0100|1742043714|Merge pull request #37 from pkuppens/fix-github-issue-error|Pieter Kuppens|dd52901df8af9f1e16bd2b3d735dcdd90af0653f
+2025-03-16 17:17:33 +0100|1742141853|Python Programmer Superprompt|Pieter Kuppens|97c927b69ef9b92cd3a6b5e66aaaf155650eea18
+2025-03-16 22:08:20 +0100|1742159300|Agentic AI Framework Code prompt|Pieter Kuppens|7da803f5697af263e9bfeabf46bfa47e61d1143c
+2025-03-17 14:38:48 +0100|1742218728|analyze issue workflow fixes: KEYsm error handling, refactor, test|Pieter Kuppens|4e1d89f915cba05e53e6f0711e8bc1285db074a0
+2025-03-17 14:55:31 +0100|1742219731|Update to setuptools==76.0.0 to resolve vulnerable dependencies|Pieter Kuppens|c92da93e4d95dfc79334c019164c7c51e868f331
+2025-03-17 17:33:11 +0100|1742229191|Cursor: refactor documentation, Llama docs & Example|Pieter Kuppens|7010d334909f546404f6e94e55c2c936409fb570
+2025-03-17 19:37:10 +0100|1742236630|HealthcareGPT markdown descriptions|Pieter Kuppens|5a51bca32dfd8fa7175245157b9e762ed0bd5578
+2025-03-17 20:42:38 +0100|1742240558|AI Agent Role Defintion refactor|Pieter Kuppens|657421c31479a4ca64e4f115bb1ef4c48a70ad00
+2025-03-18 21:39:07 +0100|1742330347|Cursor: analyze_issue under test, --no-verify commit, because not all tests succeed.|Pieter Kuppens|92584dbf18030b77ad001ebdd78c051f11600312
+2025-03-18 22:16:38 +0100|1742332598|Cursor: big pre-commit run that removes trailing whitespace|Pieter Kuppens|f624c92f4d5d51c7456f2f255d506777e28c4162
+2025-03-18 22:23:31 +0100|1742333011|Cursor: isort fix|Pieter Kuppens|7f839ecf495b7a96170c99526879defd5ab69a12
+2025-03-18 23:09:51 +0100|1742335791|test: IDE pre-commit hooks|Pieter Kuppens|b5e6da9e2d88890c2533b254cd612e16693d1bb2
+2025-03-18 23:20:57 +0100|1742336457|Cursor: Initialize CURSOR.md from earlier conversation|Pieter Kuppens|ab9e18abcb75c928b54dfd3b45e8d19243841a84
+2025-03-19 08:08:48 +0100|1742368128|Cursor: bring analyze_issue.py under test with new dependency fix|Pieter Kuppens|7b7f83e0a5c66db5ce770c3a5572e24bbbdbf30f
+2025-03-19 08:34:43 +0100|1742369683|setup fixes for -r requirements inclusion|Pieter Kuppens|fe17fb5eb830b8d2e8e10bab89d1da4a5e792bf2
+2025-03-19 08:43:52 +0100|1742370232|python-multipart 0.0.9 ok?!|Pieter Kuppens|a1ab90a083ed2838ba467c4cb0457398aca45385
+2025-03-19 09:24:56 +0100|1742372696|Cursor: pre-commit fixes including test fixes|Pieter Kuppens|77f982dfc518952db59e3d6cae303ffa197b2954
+2025-03-19 10:01:33 +0100|1742374893|fix: Update setuptools to 65.5.1 to address PYSEC-2022-43012|Pieter Kuppens|719020232ea51141ef11a09955d0eeacb22645e8
+2025-03-19 10:05:00 +0100|1742375100|fix: Update python-multipart to 0.0.18 to address CVE-2024-53981|Pieter Kuppens|3449bc139cc74577cf403b0d1886533b251949cf
+2025-03-19 10:08:08 +0100|1742375288|chore: Ensure consistent python-multipart version across all requirement files|Pieter Kuppens|8a2200b14a1cbde52346a548e2ff4c094778192b
+2025-03-19 10:14:30 +0100|1742375670|Merge pull request #38 from pkuppens/fix/dependency-security-updates|Pieter Kuppens|b22409bde5dc74fcb48c7b4f959dc713dc7f9cff
+2025-03-20 14:46:15 +0100|1742478375|Apply Black formatting after isort removal|Pieter Kuppens|5e0588a750eb4d1628fcda17453b94a828a1f852
+2025-03-20 15:28:37 +0100|1742480917|refactor: replace black with ruff and fix test file location|Pieter Kuppens|aa621298fa1b5e781c6580c9f1182f58d0bf1cd8
+2025-03-20 15:35:08 +0100|1742481308|chore: configure test explorer and add setup instructions|Pieter Kuppens|6344196febc7e4b78bc7eab0c1a3bbc868cfca95
+2025-03-20 15:43:25 +0100|1742481805|chore: fix test explorer configuration and add separate test venv|Pieter Kuppens|ab054eb1330ebf7ce57e672c9c135ec6a8227588
+2025-03-20 15:59:40 +0100|1742482780|docs: update test strategy with known issues and solutions|Pieter Kuppens|de9a6a25fda79b23db22a92e5ca7078054e59ead
+2025-03-20 16:06:34 +0100|1742483194|docs: reorganize documentation structure and update README|Pieter Kuppens|9c984ec43c4f3538940e7395f35784e6717546e0
+2025-03-20 16:11:24 +0100|1742483484|docs: update pre-commit documentation with ruff and future recommendations|Pieter Kuppens|f1aa8189d6f40c1139aed35619b1e144ce68a0a9
+2025-03-20 17:32:38 +0100|1742488358|Move TESTING-STRATEGY.md to docs/testing/TEST-STRATEGY.md|Pieter Kuppens|8aabb4e9248137f28f7e86a63f7d7de89d1f75be
+2025-03-20 18:16:45 +0100|1742491005|Tests and ruff|Pieter Kuppens|208566227a65b53368c72ed75e03bd3c35b4bb24
+2025-03-20 18:21:52 +0100|1742491312|ruff-format with --fix option|Pieter Kuppens|15752bc85390c3e2225238f68c992a27807ab7c3
+2025-03-20 20:39:30 +0100|1742499570|Merge pull request #39 from pkuppens/check-ruff-switch|Pieter Kuppens|7caa04c282b3d64c740c92bd362171b60e9536b7
+2025-03-20 21:18:03 +0100|1742501883|cleanup-fix for actions|Pieter Kuppens|cbd88586f464cb4072b0ae31577e4ba91d4d09c6
+2025-03-21 09:06:38 +0100|1742544398|integration test: organize package management|Pieter Kuppens|0a2cb4d6355e9dc3ba095201ccc739d4464787d2
+2025-03-21 09:08:47 +0100|1742544527|pre-commit in dev requirements|Pieter Kuppens|f43ee6ce57bb04e41afb95a9e5cab99f5e0358c9
+2025-03-21 09:50:25 +0100|1742547025|Fix actions fail on low code coverage|Pieter Kuppens|885ca290939dcd344c64cd5cd717a5275927df11
+2025-03-21 10:57:29 +0100|1742551049|Fix errorcode 5 test collection issue|Pieter Kuppens|693461dd060c50969aa5655ff3f30ff5ac1fbfbf
+2025-03-21 11:14:02 +0100|1742552042|recover from test collection exit code 5|Pieter Kuppens|afbf93861441e2a82000fa25d6a2c7ea90e4daea
+2025-03-21 11:31:51 +0100|1742553111|recover using ' || true'|Pieter Kuppens|f11620ec928232ab9d60d6b05b6e846e93b67e44
+2025-04-01 15:29:37 +0200|1743514177|remove _v2 part of script after merging|Pieter Kuppens|0d5d2b40f55d04285e501edbfee3ffae309485fc
+2025-04-01 15:47:20 +0200|1743515240|Chore: fixes for: pre-commit run --all-files|Pieter Kuppens|3f93e18509ef974b8c0f38dba3575d2317a8f96a
+2025-04-01 15:55:49 +0200|1743515749|fix: github action failed on missing 'packaging' library|Pieter Kuppens|6399d1206925b4879c2596284b18034799c38461
+2025-04-01 16:05:15 +0200|1743516315|Fix test that was too strict|Pieter Kuppens|eab7d6ef770d30e9e23e220eb494246295dcedc4
+2025-04-01 16:40:14 +0200|1743518414|fix: github action failed on 'packaging' install|Pieter Kuppens|e461eb895da8d54d9d9f3d822847df5a159ee806
+2025-04-01 16:53:57 +0200|1743519237|local package fix?!|Pieter Kuppens|32cb966adc75f6267ed62a0f99f0eab0bcd592ae
+2025-04-01 19:07:08 +0200|1743527228|test_dependencies|Pieter Kuppens|2882c37c41f61fe2fb1a1f4116aae5a5befccf19
+2025-04-01 21:38:36 +0200|1743536316|create a local analyze_issue variation for debugging github action issue|Pieter Kuppens|23969fb862d7fb5915a4e82cf79496aee9624262
+2025-04-01 21:53:33 +0200|1743537213|analyze issue should not throw ValueError on the GITHUB_REPOSITORY env variable in github actions|Pieter Kuppens|5a202c4178ebdbe905990cf79ed6e47d68201a84
+2025-04-02 10:51:16 +0200|1743583876|fix: Verbeter foutafhandeling in GitHubLabelManager.add_labels_to_issue|Pieter Kuppens|6758d405a69577e28e13b421f9b134fc86ac7bb0
+2025-04-02 10:56:17 +0200|1743584177|better exception handling, Problem Cause Solution|Pieter Kuppens|96a40ed3d399bf0fe3b803e3247b66d7c07b6f8f
+2025-04-02 12:05:13 +0200|1743588313|Unify and fix PYTHONPATH for Github actions|Pieter Kuppens|e30a050d26646492f4ddc9401095c7b0453305b4
+2025-04-02 14:38:00 +0200|1743597480|clarify github user error in github actions|Pieter Kuppens|6df778bcbf813a23bc3b274799d0ca11abc893e9
+2025-04-02 15:18:22 +0200|1743599902|pre-commit fixes|Pieter Kuppens|67b6b108ec2b71fcefc3bc07017bf93ebd86bf89
+2025-04-15 18:35:40 +0200|1744734940|ChatGPT created color blender (Verhuiscoach groen met pct wit)|Pieter Kuppens|c140d3dc6b276b8a0739bf1f1a3ec92dac1e1439
+2025-04-15 18:35:47 +0200|1744734947|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|ed4415429ede5c67922596e922a5e115f54a16ca
+2025-04-17 15:36:09 +0200|1744896969|Ruff settings|Pieter Kuppens|a101426e0bb8d87b3598fc7ff300c9245ff30744
+2025-04-17 18:37:34 +0200|1744907854|chore/format/ruff: pre-commit run --all-files|Pieter Kuppens|17ee5a6f1902492f224ecce785e26bffe66bf740
+2025-04-18 08:29:35 +0200|1744957775|pre-commit ruff format|Pieter Kuppens|1027c1e490e559a378da34ce130aad6b390a4eda
+2025-04-18 08:33:03 +0200|1744957983|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|84783abf6ca84b691920974fab89caafa3960c7f
+2025-04-18 11:26:28 +0200|1744968388|Urenregistratie prompt, om achteraf uren te kunnen bepalen|Pieter Kuppens|24e4c6725cc657a11206c3539aa2977766d0a65d
+2025-04-19 10:03:52 +0200|1745049832|Security patch|Pieter Kuppens|c9899a474ea7b2d9c09f84fa6b9d78aa386fc67b
+2025-04-25 08:06:08 +0000|1745568368|Bump h11 from 0.14.0 to 0.16.0|dependabot[bot]|d7d104e261f697c590e47e2ffcab6ff361a34403
+2025-04-25 10:07:32 +0200|1745568452|Merge pull request #41 from pkuppens/dependabot/pip/h11-0.16.0|Pieter Kuppens|05b49a3d5d6746ec34e83b0726886567269c80e2
+2025-04-25 10:16:55 +0200|1745569015|h11 security/dependency fix|Pieter Kuppens|e0c5b4c92f7b4191317d42a36f7800c53b3a3881
+2025-04-29 09:36:41 +0200|1745912201|Fix ruff and pytest configurations|Pieter Kuppens|fa50bf4048314fad286f91280ef925e0c0bb2ac7
+2025-04-29 12:21:38 +0200|1745922098|use venv in github actions as well|Pieter Kuppens|27c4ac2a1f3e4e4994e2e36b47e0195dea2d8553
+2025-04-29 13:54:44 +0200|1745927684|pre-commit fixes|Pieter Kuppens|9dadcc266bd0bc7e49b4d69ca75cea6512e666dd
+2025-04-29 16:46:02 +0200|1745937962|pre-commit fixes|Pieter Kuppens|d6ec4d4614552c90caeae09068e04a6970877b49
+2025-04-30 08:05:04 +0200|1745993104|uv/ruff fixes from github actions|Pieter Kuppens|840f8c60e4036f9a692aaaaa08a7e82f5fff5559
+2025-04-30 08:11:37 +0200|1745993497|ruff format fixes for 132 character lines|Pieter Kuppens|b1307ef42b9f28c5b574590d7ad3fb123b0c3d5f
+2025-04-30 08:41:18 +0200|1745995278|document actions|Pieter Kuppens|f3bb2e9cfef0a7931d67b823f8a99db40bcc0ace
+2025-05-01 14:50:59 +0200|1746103859|try fix pythonpath in CI/CD|Pieter Kuppens|90dd05bc5fe6d8d8aea2405d121ea6aeefec31c1
+2025-05-01 16:52:08 +0200|1746111128|use uv run instead/in front of pytest|Pieter Kuppens|a66125500d423bb3b8bc4645efb291d8b947156a
+2025-05-05 15:52:20 +0200|1746453140|Vibe Coded Keen Solver Working Solution!|Pieter Kuppens|da66a506359f4523be0325789aad9402336eb23a
+2025-05-05 16:04:13 +0200|1746453853|small ruff fix|Pieter Kuppens|641a2334b8ff68d76b84e81fd6fcdef70e2fc868
+2025-05-05 16:31:21 +0200|1746455481|yet another ruff check fix|Pieter Kuppens|d286c516dd4709f151871f580ed81caf5d8ee7d3
+2025-05-05 17:30:22 +0200|1746459022|Start of 'Talk to Ollama' vibe coding example|Pieter Kuppens|be1358af8f6ed7bc1c6ead8dab2cbed3e7d3cd96
+2025-05-05 17:45:06 +0200|1746459906|Trying to solve recording issues.|Pieter Kuppens|2e348e7b1dc9e64b9925ffd64589fdfd8e960bcd
+2025-05-05 17:52:53 +0200|1746460373|some debug instrumenting, since audio is not working properly (yet)|Pieter Kuppens|1b8f2b71e4eabb6f8529317490738eb8bfbb2537
+2025-05-05 17:53:41 +0200|1746460421|ruff check fix|Pieter Kuppens|541618ca9a1c3fe01fca8148bb0d9100b09cf80f
+2025-05-05 23:53:43 +0200|1746482023|Create an ollama_stack with ollama-plus (with vi, etc), langflow, openwebui attached to ollama volume|Pieter Kuppens|e56d9fdb94c2437580088d824b6ff3b0e64affef
+2025-05-06 10:10:13 +0200|1746519013|doc: rewrite ollama stack docs for development mode|Pieter Kuppens|d7f2b8c55292297ffcfc7ea2ec88ab045f07f334
+2025-05-06 14:55:46 +0200|1746536146|doc: describe vibe coding styles, Python, Javascript, SQL|Pieter Kuppens|c39322910558b05745a052c301da32ccb5a522d1
+2025-05-13 22:23:14 +0200|1747167794|proj: Initial project setup with readme, license file, and pyproject.|Pieter Kuppens|a1bc6c3d735439eeaecb2fcbf4e2c65a78341e83
+2025-05-13 22:23:47 +0200|1747167827|ruff format leftovers|Pieter Kuppens|e4f14a809e6a2672d9600f5c2c138ab7144b4113
+2025-05-13 22:57:52 +0200|1747169872|proj: various cursor rules (initial versions)|Pieter Kuppens|f91c03ad4a5212bfd8ac1b3902fe2d36fff414c9
+2025-05-17 13:52:42 +0200|1747482762|Package updates|Pieter Kuppens|1ea01e1aeb46959f870f00a5d5045958290ea4b5
+2025-05-17 18:29:23 +0200|1747499363|rules and architecture|Pieter Kuppens|0eaf6b13022a719a27471488a1fad4d5c9be6d8a
+2025-05-17 21:35:39 +0200|1747510539|initial version of WBSO app components|Pieter Kuppens|b32cb12a84e5b4e8f20c357023b17fb17aff8b33
+2025-05-20 19:34:03 +0000|1747769643|Bump setuptools from 65.5.1 to 78.1.1|dependabot[bot]|33244619530b630b1b4ec2dda47335369f6adc13
+2025-05-20 21:38:20 +0200|1747769900|Merge pull request #43 from pkuppens/dependabot/pip/setuptools-78.1.1|Pieter Kuppens|4410b148fb206a366da02e849b89e6a160a86ffa
+2025-05-23 15:57:29 +0200|1748008649|test settings|Pieter Kuppens|d497922b7ee97e3d53071b8c35d1731e09ce1e38
+2025-05-23 15:58:07 +0200|1748008687|vibe coded knight bishop problem solver (stockitup programming test)|Pieter Kuppens|e91ee25b5709925759345dced9e4dc6e2d1c797c
+2025-05-23 20:01:28 +0200|1748023288|GitHub actions ruff and pytest fixes vibe coded knight-bishop-solver|Pieter Kuppens|3bc2ea03b66b0e899599c2f657e171b935e6579b
+2025-05-24 16:53:04 +0200|1748098384|hugging face MCP course start|Pieter Kuppens|c94aad2c2338b5b0b37d8ae58a5ac9ad47cc5494
+2025-05-25 21:18:05 +0200|1748200685|MCP course, unit 2 progress|Pieter Kuppens|7984f2d6d9ba18ba396456e32fcadfea86121cd9
+2025-05-27 16:17:26 +0200|1748355446|Implement unit2, task 3.2|Pieter Kuppens|cebbad0b58a58027b904d2d86efbef4b4f6cc011
+2025-05-28 10:33:32 +0200|1748421212|Update Unit2 Task 1&2 with verifiable scripts|Pieter Kuppens|e6c5ed4f055d3f175b10b41bddfa86368704b624
+2025-05-29 12:24:37 +0200|1748514277|Unit 2 Task 3 clarifications|Pieter Kuppens|cd3da72b5b152782531b4e856c3bde5be74de5d0
+2025-05-29 12:24:43 +0200|1748514283|Merge branch 'main' of https://github.com/pkuppens/my_chat_gpt|Pieter Kuppens|ca945e4b78852463eae2c52d298042f51fcaa9a2
+2025-05-29 12:43:00 +0200|1748515380|Remove some black/flake in favor of ruff|Pieter Kuppens|f759346b1c8f2f4a928c8643e6fd35453fefc59c
+2025-05-30 13:45:58 +0200|1748605558|Verification task implementationfor task 3|Pieter Kuppens|0099f35b8ca06f896dbf51966b36ade83d5b0b19
+2025-05-30 13:53:52 +0200|1748606032|ruff check|Pieter Kuppens|c916b75499a33a4f5ac0a9775be2ebebb6ebe18c
+2025-05-30 14:12:37 +0200|1748607157|Task32 verification complete with separate server/client startup|Pieter Kuppens|04a6790a985cf37581abcec9d9d4c2a4d14bd9c0
+2025-05-30 14:15:27 +0200|1748607327|ruff format fix|Pieter Kuppens|0fa4e6ea36e5ba3ec90c659b869e7cbc79ae9ef9
+2025-05-30 14:32:15 +0200|1748608335|Task32 verification with multiprocessing/background server/client tasks|Pieter Kuppens|0e2a7098857892f2cb0d4ac551fc67e09f426ad9

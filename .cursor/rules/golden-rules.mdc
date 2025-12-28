@@ -247,5 +247,6 @@ This guide outlines the key principles and practices for AI-assisted development
    - **When adding new imports, always use `uv add package-name` first**
    - **Never suggest `pip install` - always suggest `uv add`**
    - **Verify imported packages exist in `pyproject.toml` before using them**
+   - **Always use current date in YYYY-MM-DD format - never hardcode dates** (see [date-formatting.mdc](mdc:.cursor/rules/date-formatting.mdc))
 
 Remember to update these rules as project standards evolve.

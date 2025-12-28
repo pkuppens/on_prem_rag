@@ -9,6 +9,12 @@
 
 Integrate system events work blocks with the existing Git commit analysis to create a comprehensive WBSO hours registration system. This task combines both data sources to provide a complete picture of work activity and improve the accuracy of hour calculations.
 
+## MoSCoW Classification
+
+**Priority**: Should Have
+
+**Rationale**: This task would improve data quality by integrating system events with Git commits, providing better accuracy for work session detection. However, the WBSO hours project has already achieved 438.27 hours through synthetic session generation (TASK-034), making this integration valuable but not critical for reaching the 510-hour target. The existing workaround provides sufficient data quality for WBSO compliance, and this task can be deferred to improve the system for future projects.
+
 ## Acceptance Criteria
 
 ### 1. Data Source Integration

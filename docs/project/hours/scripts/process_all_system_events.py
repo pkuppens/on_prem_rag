@@ -16,8 +16,8 @@ import argparse
 import logging
 import sys
 import random
-from datetime import datetime, timedelta
-from typing import List, Dict, Optional
+from datetime import datetime
+from typing import List
 from pathlib import Path
 
 # Add business layer to path for imports
@@ -40,6 +40,72 @@ logger = logging.getLogger(__name__)
 # parse_datetime_flexible function is now imported from datetime_utils module
 
 
+def tag_session_events(events: List[SystemEvent]) -> List[SystemEvent]:
+    """Tag system events with session boundary markers (logon/logoff).
+
+    This function analyzes events and tags them based on EventId and message content.
+    Multiple event codes can indicate logon or logoff events, so we use tags instead
+    of relying solely on EventId.
+
+    Business Rules:
+    - Prefer 7001 (user logon) over 6005 (system startup) for logon events
+    - Multiple event codes can indicate logoff: 7002, 6008, 41, 1074
+    - EventId is preserved for completeness and backward compatibility
+
+    Args:
+        events: List of SystemEvent objects to tag
+
+    Returns:
+        List of SystemEvent objects with session_tag field populated
+    """
+    tagged_events = []
+
+    for event in events:
+        # Determine session tag based on EventId and message content
+        session_tag = None
+
+        # Logon events (prefer 7001 over system startup events)
+        if event.event_id == "7001":
+            # User logon notification - preferred logon event
+            session_tag = "logon"
+        elif event.event_id == "6005":
+            # System startup events - only tag as logon if no 7001 event nearby
+            # We'll handle this preference in session detection logic
+            # For now, tag 6005 as potential logon (will be overridden by 7001 if present)
+            if "startup" in event.message.lower() or "started" in event.message.lower():
+                session_tag = "logon"
+
+        # Logoff events (multiple event codes can indicate logoff)
+        elif event.event_id == "7002":
+            # User logoff notification - preferred logoff event
+            session_tag = "logoff"
+        elif event.event_id == "6008":
+            # Unexpected shutdown - indicates previous session ended
+            session_tag = "logoff"
+        elif event.event_id == "41":
+            # System rebooted without cleanly shutting down - indicates session ended
+            session_tag = "logoff"
+        elif event.event_id == "1074":
+            # System shutdown/restart initiated - indicates session ended
+            if "shutdown" in event.message.lower() or "restart" in event.message.lower():
+                session_tag = "logoff"
+
+        # Create new event with tag
+        tagged_event = SystemEvent(
+            datetime=event.datetime,
+            event_id=event.event_id,
+            event_type=event.event_type,
+            username=event.username,
+            message=event.message,
+            record_id=event.record_id,
+            date=event.date,
+            session_tag=session_tag,
+        )
+        tagged_events.append(tagged_event)
+
+    return tagged_events
+
+
 def extract_date_from_datetime(dt_str: str) -> str:
     """Extract date (YYYY-MM-DD) from datetime string.
 
@@ -55,7 +121,7 @@ def extract_date_from_datetime(dt_str: str) -> str:
     return ""
 
 
-def generate_break_timestamp(break_type: str, session_date: str) -> str:
+def generate_break_timestamp(break_type: str, session_date: str) -> str | None:
     """Generate a random break timestamp within the specified period.
 
     Args:
@@ -63,7 +129,7 @@ def generate_break_timestamp(break_type: str, session_date: str) -> str:
         session_date: Date string in YYYY-MM-DD format
 
     Returns:
-        Break timestamp string in format "HH:MM-HH:MM"
+        Break timestamp string in format "HH:MM-HH:MM" or None if break_type is invalid
     """
     if break_type == "lunch":
         # Lunch break: 12:00-12:40 (30 min duration)
@@ -150,9 +216,11 @@ def load_system_events(input_file: Path) -> List[SystemEvent]:
                     datetime=datetime_value,
                     event_id=row.get("EventId", ""),
                     event_type=row.get("EventType", ""),
+                    username=row.get("Username", ""),
                     message=row.get("Message", ""),
                     record_id=row.get("RecordId", ""),
                     date=extract_date_from_datetime(datetime_value),
+                    session_tag=None,  # Will be tagged later
                 )
                 events.append(event)
 
@@ -167,18 +235,21 @@ def load_system_events(input_file: Path) -> List[SystemEvent]:
 def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSession]:
     """Identify work sessions from logon/logoff events with gap merging.
 
-    This function focuses on EventId 7001 (logon) and 7002 (logoff) events
-    and merges sessions when the gap between logoff and next logon is less
+    This function uses session_tag field to identify logon/logoff events,
+    preferring user logon events (7001) over system startup events (6005).
+    It merges sessions when the gap between logoff and next logon is less
     than 30 minutes to hide reboots and microbreaks.
 
     Business Rules:
-    - Focus on logon (7001) and logoff (7002) events
+    - Use session_tag field instead of EventId for session detection
+    - Prefer logon events with EventId 7001 over system startup events (6005)
     - Merge sessions when logoff-logon gap < 30 minutes
     - No date crossing (sessions must start and end on the same date)
     - Break calculations for different session types
+    - EventId is preserved in data for completeness and backward compatibility
 
     Args:
-        events: List of system events sorted by datetime
+        events: List of system events (should be tagged with session_tag)
 
     Returns:
         List of WorkSession objects
@@ -186,8 +257,11 @@ def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSessio
     sessions = []
     session_counter = 1
 
-    # Filter for logon/logoff events only
-    logon_logoff_events = [event for event in events if event.event_id in ["7001", "7002"]]
+    # Tag events with session boundaries
+    tagged_events = tag_session_events(events)
+
+    # Filter for logon/logoff events only (using session_tag)
+    logon_logoff_events = [event for event in tagged_events if event.session_tag in ["logon", "logoff"]]
 
     if not logon_logoff_events:
         logger.info("No logon/logoff events found")
@@ -196,17 +270,39 @@ def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSessio
     # Sort events by datetime
     logon_logoff_events.sort(key=lambda x: parse_datetime_flexible(x.datetime) or datetime.min)
 
-    logger.info(f"Processing {len(logon_logoff_events)} logon/logoff events")
+    logger.info(f"Processing {len(logon_logoff_events)} logon/logoff events (tagged)")
 
     i = 0
     while i < len(logon_logoff_events):
         event = logon_logoff_events[i]
 
-        # Look for logon events (EventId 7001)
-        if event.event_id == "7001":
+        # Look for logon events (prefer 7001 over system startup events)
+        if event.session_tag == "logon":
+            # Prefer 7001 (user logon) over 6005 (system startup) for session start
+            # If this is a system startup (6005), check if there's a 7001 event nearby
+            if event.event_id == "6005":
+                # Look ahead for a 7001 event within 5 minutes
+                found_7001 = False
+                for k in range(i + 1, min(i + 10, len(logon_logoff_events))):
+                    check_event = logon_logoff_events[k]
+                    check_dt = parse_datetime_flexible(check_event.datetime)
+                    event_dt = parse_datetime_flexible(event.datetime)
+                    if check_dt and event_dt:
+                        gap_minutes = (check_dt - event_dt).total_seconds() / 60
+                        if gap_minutes > 5:  # Too far ahead, stop looking
+                            break
+                        if check_event.event_id == "7001" and check_event.session_tag == "logon":
+                            # Found a 7001 event nearby, skip this 6005 event
+                            found_7001 = True
+                            break
+                if found_7001:
+                    i += 1
+                    continue
+
             session_start = event.datetime
             session_date = event.date
             session_start_dt = parse_datetime_flexible(session_start)
+            start_event_id = event.event_id  # Keep EventId for evidence
 
             if not session_start_dt:
                 i += 1
@@ -216,34 +312,41 @@ def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSessio
             j = i + 1
             session_end = None
             session_end_dt = None
+            end_event_id = None
+            end_event = None
 
             while j < len(logon_logoff_events):
                 next_event = logon_logoff_events[j]
 
-                if next_event.event_id == "7002":  # Logoff event
+                if next_event.session_tag == "logoff":  # Logoff event (any EventId)
                     session_end = next_event.datetime
                     session_end_dt = parse_datetime_flexible(session_end)
+                    end_event_id = next_event.event_id  # Keep EventId for evidence
+                    end_event = next_event  # Store the end event for date checking
                     break
-                elif next_event.event_id == "7001":  # Another logon
+                elif next_event.session_tag == "logon":  # Another logon
                     # Check if gap is less than 30 minutes
                     next_logon_dt = parse_datetime_flexible(next_event.datetime)
                     if next_logon_dt and session_start_dt:
                         gap_minutes = (next_logon_dt - session_start_dt).total_seconds() / 60
                         if gap_minutes < 30:
-                            # Merge sessions - extend current session start
-                            session_start = next_event.datetime
-                            session_start_dt = next_logon_dt
-                            session_date = next_event.date
-                            logger.debug(f"Merging sessions with {gap_minutes:.1f} minute gap")
+                            # Merge sessions - prefer 7001 over 6005 for session start
+                            if next_event.event_id == "7001" or event.event_id != "7001":
+                                # Use the new logon event (prefer 7001)
+                                session_start = next_event.datetime
+                                session_start_dt = next_logon_dt
+                                session_date = next_event.date
+                                start_event_id = next_event.event_id
+                                logger.debug(f"Merging sessions with {gap_minutes:.1f} minute gap")
                         else:
                             # Gap too large, end current session
                             break
                 j += 1
 
             # If we found a logoff event, create the session
-            if session_end and session_end_dt and session_start_dt:
+            if session_end and session_end_dt and session_start_dt and end_event:
                 # Ensure no date crossing
-                if session_date == next_event.date:
+                if session_date == end_event.date:
                     # Calculate session duration
                     duration_seconds = (session_end_dt - session_start_dt).total_seconds()
                     duration_minutes = int(duration_seconds / 60)
@@ -278,6 +381,7 @@ def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSessio
                         work_duration_minutes = int((work_hours * 60))
 
                         # Create session using WorkSession business model
+                        # Include EventId in evidence for backward compatibility
                         session = WorkSession(
                             session_id=f"session_{session_counter:03d}",
                             start_time=session_start,
@@ -289,7 +393,10 @@ def identify_logon_logoff_sessions(events: List[SystemEvent]) -> List[WorkSessio
                             block_id=f"logon_{session_counter:03d}",
                             duration_hours=duration_hours,
                             confidence_score=1.0,
-                            evidence=[f"logon_event_{event.record_id}", f"logoff_event_{next_event.record_id}"],
+                            evidence=[
+                                f"logon_event_{event.record_id}_EventId_{start_event_id}",
+                                f"logoff_event_{end_event.record_id}_EventId_{end_event_id}",
+                            ],
                             session_type=session_type,
                             work_hours=work_hours,
                             lunch_break=lunch_break,
@@ -471,11 +578,14 @@ def create_processed_system_events_file(input_file: Path, output_file: Path) -> 
             "total_sessions": len(sessions),
             "session_type_summary": session_type_counts,
             "criteria_applied": [
-                "Focus on logon (7001) and logoff (7002) events",
+                "Use session_tag field for session detection (not EventId)",
+                "Prefer user logon events (7001) over system startup events (6005)",
+                "Multiple event codes indicate logoff: 7002, 6008, 41, 1074",
                 "Merge sessions when logoff-logon gap < 30 minutes",
                 "No date crossing - sessions must start and end on same date",
                 "Break calculations based on start time: morning=lunch, evening=dinner",
                 "Random break timestamps: lunch 12:00-12:40, dinner 17:50-18:30",
+                "EventId preserved in data for completeness and backward compatibility",
             ],
         },
     }

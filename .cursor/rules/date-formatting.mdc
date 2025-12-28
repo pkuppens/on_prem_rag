@@ -1,0 +1,261 @@
+---
+description: Date Formatting Standards for AI Coding Assistance
+globs:
+alwaysApply: true
+---
+
+# Date Formatting Standards
+
+This rule ensures consistent date formatting across all code, documentation, and AI-generated content.
+
+## CRITICAL: Always Use Accurate Dates
+
+**NEVER guess or randomly generate dates.** All dates must be 100% accurate and reflect the actual system date.
+
+### Date Evaluation Process
+
+1. **Always evaluate today's date in YYYY-MM-DD format based on the system clock** before creating or updating files
+2. **Use system clock** (preferred for most cases) - query the actual system date using `datetime.now().strftime("%Y-%m-%d")`
+3. **MCP services** (when available and appropriate)
+4. **Environment variables** (for testing or specific scenarios only)
+
+### File Date Tag Management
+
+**When Creating New Files** (documentation and code files that require date tags):
+
+- Add `Created: YYYY-MM-DD` tag with the current system date
+- Format: `Created: 2025-11-22` (use actual system date)
+
+**When Updating Existing Files**:
+
+- **DO NOT modify** the existing `Created:` tag (preserve for audit history)
+- **DO update** the `Updated:` tag with the current system date
+- Format: `Updated: 2025-11-22` (use actual system date)
+
+**Key Principles**:
+
+- **Created dates**: Should reflect the actual system date when the file was created (for audit history) - NEVER update this
+- **Updated dates**: Should reflect the actual current system date when the file was last modified - ALWAYS update this when modifying files
+- **Never guess dates**: Always use the actual system date, never random or outdated values
+- **Always check system clock**: Before adding or updating date tags, query the system clock for the current date
+
+## Required Date Format
+
+**All dates MUST be in ISO 8601 format: `YYYY-MM-DD`**
+
+Examples:
+
+- ✅ `2025-01-19` (correct)
+- ❌ `2025-1-19` (missing leading zero)
+- ❌ `19-01-2025` (wrong order)
+- ❌ `January 19, 2025` (not ISO format)
+- ❌ `2025/01/19` (wrong separator)
+
+## Implementation Guidelines
+
+### Python Code
+
+```python
+from datetime import datetime
+
+# Get current date in YYYY-MM-DD format
+current_date = datetime.now().strftime("%Y-%m-%d")
+
+# For file headers, docstrings, etc.
+def get_current_date() -> str:
+    """Get current date in YYYY-MM-DD format."""
+    return datetime.now().strftime("%Y-%m-%d")
+```
+
+### Documentation
+
+```markdown
+<!-- In markdown files -->
+
+Date: 2025-01-19
+
+<!-- Or use dynamic generation when possible -->
+
+Last Updated: {{ current_date }}
+```
+
+### File Headers
+
+```python
+"""
+Module description here.
+
+Author: AI Assistant
+Date: 2025-01-19  # Must be current date, not hardcoded
+"""
+```
+
+## Common Use Cases
+
+### 1. File Headers and Docstrings
+
+```python
+"""
+Work Sessions Merger for WBSO Hours Registration
+
+Author: AI Assistant
+Created: 2025-01-19  # Actual system date when file was created
+Updated: 2025-01-19  # Current system date when last modified
+"""
+```
+
+### 2. Logging and Timestamps
+
+```python
+import logging
+from datetime import datetime
+
+# Use ISO format for log timestamps
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+```
+
+### 3. Data Processing
+
+```python
+# When processing date-sensitive data
+def process_data_with_date():
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    # Use current_date in processing logic
+```
+
+### 4. Configuration Files
+
+```python
+# In configuration or metadata
+config = {
+    "created_date": datetime.now().strftime("%Y-%m-%d"),  # When config was created
+    "updated_date": datetime.now().strftime("%Y-%m-%d"),  # When config was last updated
+    "version": "1.0.0"
+}
+```
+
+### 5. Project Documentation (TASK-_.md, STORY-_.md)
+
+```markdown
+# TASK-034: Synthetic Work Session Generation
+
+Created: 2025-01-19 # Actual system date when task was created
+Updated: 2025-01-19 # Current system date when task was last modified
+
+## Acceptance Criteria
+
+- [ ] Implementation complete
+- [ ] Tests written
+```
+
+## AI Assistant Behavior
+
+When AI assistants generate code or documentation:
+
+1. **Evaluate today's date** - Always query the system clock using `datetime.now().strftime("%Y-%m-%d")` to get the current date in YYYY-MM-DD format
+2. **When creating new files** (documentation and code files):
+   - Add `Created: YYYY-MM-DD` tag with the current system date
+   - Example: `Created: 2025-11-22`
+3. **When updating existing files**:
+   - **Preserve** the existing `Created:` tag (do not modify)
+   - **Update** the `Updated:` tag with the current system date
+   - Example: `Updated: 2025-11-22`
+4. **Format as YYYY-MM-DD** consistently (ISO 8601 format)
+5. **Never guess dates** - always use the actual system date from the system clock
+6. **Include date generation logic** in code when appropriate
+
+## Error Prevention
+
+### Common Mistakes to Avoid
+
+1. **Guessing dates**: `Created: 2025-01-15` when it's actually 2025-10-19 ❌
+2. **Wrong format**: `Date: 1/15/2025` ❌
+3. **Missing leading zeros**: `Date: 2025-1-5` ❌
+4. **Inconsistent separators**: `Date: 2025.01.15` ❌
+5. **Updating existing Created dates**: `Created: 2025-10-19` when there was a previous value of 2025-06-01 ❌
+6. **Not using actual system date for new files**: `Created: 2025-01-15` for a new file when system date is 2025-10-19 ❌
+7. **Outdated Updated dates**: `Updated: 2025-01-15` when file was actually modified on 2025-10-19 ❌
+
+### Validation
+
+Before writing code and documentation:
+
+1. **Evaluate today's date**: Query the system clock using `datetime.now().strftime("%Y-%m-%d")` to get current date in YYYY-MM-DD format
+2. **For new files**: Add `Created: YYYY-MM-DD` tag with the evaluated date
+3. **For existing files**:
+   - Preserve existing `Created:` tag (do not modify)
+   - Update `Updated:` tag with the evaluated date
+4. **Maintain date in memory**: Keep the evaluated date available throughout the editing session
+
+Before committing code:
+
+- Check for hardcoded dates
+- Verify date format is YYYY-MM-DD
+- Ensure dates are current (not future or past dates unless intentional)
+
+## Integration with Other Rules
+
+This rule works with:
+
+- [golden-rules.mdc](mdc:.cursor/rules/golden-rules.mdc) - Core development principles
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Code formatting standards
+- [documentation-code-sync.mdc](mdc:.cursor/rules/documentation-code-sync.mdc) - Documentation standards
+
+## Examples
+
+### Good Examples
+
+```python
+# Dynamic date generation
+current_date = datetime.now().strftime("%Y-%m-%d")
+
+# File header with accurate dates
+"""
+Script: data_processor.py
+Author: AI Assistant
+Created: 2025-01-19  # Actual system date when created
+Updated: 2025-10-19  # Current system date when last modified
+"""
+
+# Configuration with accurate dates
+config = {
+    "created": datetime.now().strftime("%Y-%m-%d"),  # When config was created
+    "updated": datetime.now().strftime("%Y-%m-%d"),  # When config was last updated
+    "version": "1.0.0"
+}
+```
+
+### Bad Examples
+
+```python
+# Guessed date (WRONG)
+"""
+Script: data_processor.py
+Author: AI Assistant
+Created: 2025-01-15  # Random guess instead of actual system date
+"""
+
+# Wrong format (WRONG)
+current_date = "1/15/2025"  # Should be "2025-01-15"
+
+# Missing leading zero (WRONG)
+current_date = "2025-1-5"  # Should be "2025-01-05"
+
+# Updating existing Created date (WRONG)
+# Original: Created: 2025-06-01
+# Modified: Created: 2025-10-19  # Should preserve original Created date
+```
+
+## Enforcement
+
+This rule is enforced by:
+
+- AI assistant behavior (always apply)
+- Code review processes
+- Pre-commit hooks (when applicable)
+- Documentation standards
+
+Remember: **Accurate dates, accurate dates, accurate dates!** Never guess or randomly generate dates. All dates must be 100% accurate and reflect the actual system date. Preserve Created dates for audit history, update Updated dates with current system date.

@@ -33,7 +33,8 @@ dependencies = [
     "pytest>=7.4.0,<8.0.0",
     "python-multipart>=0.0.6",
     "ruff>=0.11.12",
-    "crewai>=0.28.8",
+    "crewai>=1.7.0",
+    "crewai-tools>=0.17.0",
     # OAuth2 and authentication dependencies
     "authlib>=1.3.0",
     "itsdangerous>=2.1.0",
@@ -52,7 +53,6 @@ dependencies = [
     "nbformat>=5.10.4",
     "nbconvert>=7.16.6",
     "pandas>=2.2.3",
-    "openagents>=0.6.12",
     "mcp>=1.0.0",
     "tzdata>=2025.2",
 ]

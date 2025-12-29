@@ -3,23 +3,41 @@
 Agent for assessing the language in medical text.
 """
 
-from crewai import Agent
+from crewai import LLM
+
+from backend.rag_pipeline.agents.base_agent import AgentConfig, BaseRAGAgent
+from backend.rag_pipeline.agents.llm_selector import get_llm_for_agent
 
 
-class LanguageAssessorAgent(Agent):
+class LanguageAssessorAgent(BaseRAGAgent):
     """
     An agent expert in assessing the language of medical text for clarity,
     sentiment, and complexity.
+
+    This agent handles:
+    - Readability assessment for different audiences
+    - Sentiment and emotional tone analysis
+    - Terminology complexity evaluation
     """
 
-    def __init__(self, llm):
+    AGENT_NAME = "LanguageAssessorAgent"
+
+    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
         """
-        Initializes the LanguageAssessorAgent.
+        Initialize the LanguageAssessorAgent.
 
         Args:
-            llm: The language model to be used by the agent.
+            config: Optional agent configuration. Uses defaults if not provided.
+            llm: Optional pre-configured LLM. If not provided, uses LLM selector.
         """
-        super().__init__(
+        if llm is None:
+            llm = get_llm_for_agent(self.AGENT_NAME)
+
+        super().__init__(config=config, llm=llm)
+
+    def _get_default_config(self) -> AgentConfig:
+        """Return the default configuration for LanguageAssessorAgent."""
+        return AgentConfig(
             role="Medical Language Assessor",
             goal="Assess the clarity, sentiment, and complexity of medical text.",
             backstory=(
@@ -30,8 +48,14 @@ class LanguageAssessorAgent(Agent):
                 "insights help ensure that communications are clear, empathetic, and "
                 "appropriate for the intended audience."
             ),
-            tools=[],
-            llm=llm,
+            llm_provider="ollama",
+            llm_model="mistral:latest",  # 4.1GB - excellent for language analysis
+            llm_temperature=0.3,
             allow_delegation=False,
             verbose=True,
         )
+
+
+def create_language_assessor_agent(llm: LLM | None = None) -> LanguageAssessorAgent:
+    """Factory function to create a LanguageAssessorAgent."""
+    return LanguageAssessorAgent(llm=llm)

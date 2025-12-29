@@ -3,23 +3,42 @@
 Agent for extracting clinical information from medical text.
 """
 
-from crewai import Agent
+from crewai import LLM
+
+from backend.rag_pipeline.agents.base_agent import AgentConfig, BaseRAGAgent
+from backend.rag_pipeline.agents.llm_selector import get_llm_for_agent
 
 
-class ClinicalExtractorAgent(Agent):
+class ClinicalExtractorAgent(BaseRAGAgent):
     """
     An agent expert in extracting structured clinical information from
     unstructured medical text.
+
+    This agent handles:
+    - Diagnosis identification and categorization
+    - Medication extraction
+    - Procedure identification
+    - Clinical data point extraction
     """
 
-    def __init__(self, llm):
+    AGENT_NAME = "ClinicalExtractorAgent"
+
+    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
         """
-        Initializes the ClinicalExtractorAgent.
+        Initialize the ClinicalExtractorAgent.
 
         Args:
-            llm: The language model to be used by the agent.
+            config: Optional agent configuration. Uses defaults if not provided.
+            llm: Optional pre-configured LLM. If not provided, uses LLM selector.
         """
-        super().__init__(
+        if llm is None:
+            llm = get_llm_for_agent(self.AGENT_NAME)
+
+        super().__init__(config=config, llm=llm)
+
+    def _get_default_config(self) -> AgentConfig:
+        """Return the default configuration for ClinicalExtractorAgent."""
+        return AgentConfig(
             role="Clinical Information Extractor",
             goal="Extract key clinical entities from medical text.",
             backstory=(
@@ -30,8 +49,14 @@ class ClinicalExtractorAgent(Agent):
                 "Your work is essential for building structured patient records and "
                 "enabling data-driven clinical insights."
             ),
-            tools=[],
-            llm=llm,
+            llm_provider="ollama",
+            llm_model="deepseek-r1:latest",  # 4.7GB - reasoning model for extraction
+            llm_temperature=0.2,  # Low temperature for accuracy
             allow_delegation=False,
             verbose=True,
         )
+
+
+def create_clinical_extractor_agent(llm: LLM | None = None) -> ClinicalExtractorAgent:
+    """Factory function to create a ClinicalExtractorAgent."""
+    return ClinicalExtractorAgent(llm=llm)

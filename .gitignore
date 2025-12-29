@@ -5,6 +5,9 @@ docs/archive/
 # Claude Code local settings
 .claude/
 
+# Serena MCP server memories
+.serena/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

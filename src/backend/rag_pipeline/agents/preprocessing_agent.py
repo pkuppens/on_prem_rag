@@ -3,22 +3,41 @@
 Agent for preprocessing medical text.
 """
 
-from crewai import Agent
+from crewai import LLM
+
+from backend.rag_pipeline.agents.base_agent import AgentConfig, BaseRAGAgent
+from backend.rag_pipeline.agents.llm_selector import get_llm_for_agent
 
 
-class PreprocessingAgent(Agent):
+class PreprocessingAgent(BaseRAGAgent):
     """
     An agent expert in cleaning and structuring raw medical text for analysis.
+
+    This agent handles:
+    - OCR error correction
+    - Terminology standardization
+    - Text formatting and structure normalization
     """
 
-    def __init__(self, llm):
+    AGENT_NAME = "PreprocessingAgent"
+
+    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
         """
-        Initializes the PreprocessingAgent.
+        Initialize the PreprocessingAgent.
 
         Args:
-            llm: The language model to be used by the agent.
+            config: Optional agent configuration. Uses defaults if not provided.
+            llm: Optional pre-configured LLM. If not provided, uses LLM selector.
         """
-        super().__init__(
+        # If no LLM provided, get one from the selector
+        if llm is None:
+            llm = get_llm_for_agent(self.AGENT_NAME)
+
+        super().__init__(config=config, llm=llm)
+
+    def _get_default_config(self) -> AgentConfig:
+        """Return the default configuration for PreprocessingAgent."""
+        return AgentConfig(
             role="Medical Text Preprocessor",
             goal="Clean and structure raw medical text for analysis.",
             backstory=(
@@ -28,8 +47,23 @@ class PreprocessingAgent(Agent):
                 "This includes correcting OCR errors, standardizing terminology, and "
                 "formatting the text into a clean, readable format."
             ),
-            tools=[],
-            llm=llm,
+            llm_provider="ollama",
+            llm_model="llama3.2:latest",  # 2GB - fast, good for text cleanup
+            llm_temperature=0.3,  # Lower temperature for consistent preprocessing
             allow_delegation=False,
             verbose=True,
         )
+
+
+# Backwards compatibility: allow creating with just an llm parameter
+def create_preprocessing_agent(llm: LLM | None = None) -> PreprocessingAgent:
+    """
+    Factory function to create a PreprocessingAgent.
+
+    Args:
+        llm: Optional LLM instance. If not provided, uses agent-specific LLM.
+
+    Returns:
+        Configured PreprocessingAgent instance.
+    """
+    return PreprocessingAgent(llm=llm)

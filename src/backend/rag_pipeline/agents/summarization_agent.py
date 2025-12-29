@@ -3,22 +3,40 @@
 Agent for summarizing medical text.
 """
 
-from crewai import Agent
+from crewai import LLM
+
+from backend.rag_pipeline.agents.base_agent import AgentConfig, BaseRAGAgent
+from backend.rag_pipeline.agents.llm_selector import get_llm_for_agent
 
 
-class SummarizationAgent(Agent):
+class SummarizationAgent(BaseRAGAgent):
     """
     An agent expert in creating concise and accurate summaries of medical text.
+
+    This agent handles:
+    - Document summarization for different audiences
+    - Key information extraction
+    - Adaptive summary length and detail level
     """
 
-    def __init__(self, llm):
+    AGENT_NAME = "SummarizationAgent"
+
+    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
         """
-        Initializes the SummarizationAgent.
+        Initialize the SummarizationAgent.
 
         Args:
-            llm: The language model to be used by the agent.
+            config: Optional agent configuration. Uses defaults if not provided.
+            llm: Optional pre-configured LLM. If not provided, uses LLM selector.
         """
-        super().__init__(
+        if llm is None:
+            llm = get_llm_for_agent(self.AGENT_NAME)
+
+        super().__init__(config=config, llm=llm)
+
+    def _get_default_config(self) -> AgentConfig:
+        """Return the default configuration for SummarizationAgent."""
+        return AgentConfig(
             role="Medical Summarization Specialist",
             goal="Create concise, accurate, and readable summaries of medical text.",
             backstory=(
@@ -28,8 +46,14 @@ class SummarizationAgent(Agent):
                 "to patients. Your summaries are designed to be accurate, easy to "
                 "understand, and to highlight the most critical information."
             ),
-            tools=[],
-            llm=llm,
+            llm_provider="ollama",
+            llm_model="llama3.1:latest",  # 4.7GB - good balance for summarization
+            llm_temperature=0.5,
             allow_delegation=False,
             verbose=True,
         )
+
+
+def create_summarization_agent(llm: LLM | None = None) -> SummarizationAgent:
+    """Factory function to create a SummarizationAgent."""
+    return SummarizationAgent(llm=llm)

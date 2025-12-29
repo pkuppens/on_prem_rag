@@ -3,22 +3,41 @@
 Agent for quality control of medical text analysis.
 """
 
-from crewai import Agent
+from crewai import LLM
+
+from backend.rag_pipeline.agents.base_agent import AgentConfig, BaseRAGAgent
+from backend.rag_pipeline.agents.llm_selector import get_llm_for_agent
 
 
-class QualityControlAgent(Agent):
+class QualityControlAgent(BaseRAGAgent):
     """
     An agent expert in ensuring the quality and accuracy of medical text analysis.
+
+    This agent handles:
+    - Output verification and validation
+    - Accuracy checking of extracted information
+    - Quality assessment of summaries
+    - Final review before delivery
     """
 
-    def __init__(self, llm):
+    AGENT_NAME = "QualityControlAgent"
+
+    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
         """
-        Initializes the QualityControlAgent.
+        Initialize the QualityControlAgent.
 
         Args:
-            llm: The language model to be used by the agent.
+            config: Optional agent configuration. Uses defaults if not provided.
+            llm: Optional pre-configured LLM. If not provided, uses LLM selector.
         """
-        super().__init__(
+        if llm is None:
+            llm = get_llm_for_agent(self.AGENT_NAME)
+
+        super().__init__(config=config, llm=llm)
+
+    def _get_default_config(self) -> AgentConfig:
+        """Return the default configuration for QualityControlAgent."""
+        return AgentConfig(
             role="Medical Quality Control Inspector",
             goal="Ensure the accuracy and quality of the medical text analysis.",
             backstory=(
@@ -29,8 +48,14 @@ class QualityControlAgent(Agent):
                 "before the results are delivered, ensuring that the highest standards "
                 "of quality and accuracy are met."
             ),
-            tools=[],
-            llm=llm,
+            llm_provider="ollama",
+            llm_model="mistral:latest",  # 4.1GB - reliable for QC tasks
+            llm_temperature=0.1,  # Very low temperature for consistent QC
             allow_delegation=False,
             verbose=True,
         )
+
+
+def create_quality_control_agent(llm: LLM | None = None) -> QualityControlAgent:
+    """Factory function to create a QualityControlAgent."""
+    return QualityControlAgent(llm=llm)

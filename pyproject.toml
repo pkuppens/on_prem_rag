@@ -55,6 +55,7 @@ dependencies = [
     "pandas>=2.2.3",
     "mcp>=1.0.0",
     "tzdata>=2025.2",
+    "nemoguardrails>=0.17.0",
 ]
 requires-python = ">=3.12,<3.14"
 

@@ -12,39 +12,39 @@ Created: 2025-11-28
 Updated: 2025-11-28
 """
 
-import sys
 import json
+import sys
 import time
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Callable, Optional
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
+from .logging_config import get_logger
 from .pipeline_steps import (
-    step_data_refresh,
-    step_consolidate_system_events,
-    step_filter_logon_logoff,
-    step_polish_logon_logoff,
-    step_data_summary,
-    step_load_activities,
-    step_convert_to_work_sessions,
-    step_load_polished_sessions,
-    step_system_events_summary,
-    step_validate,
-    step_time_polish,
-    step_deduplicate,
-    step_store_activity_blocks,
-    step_conflict_detect,
     step_assign_activities,
     step_assign_commits_to_sessions,
-    step_detect_commits_without_system_events,
-    step_content_polish,
-    step_event_convert,
-    step_google_calendar_data_preparation,
     step_calendar_replace,
-    step_verify,
+    step_conflict_detect,
+    step_consolidate_system_events,
+    step_content_polish,
+    step_convert_to_work_sessions,
+    step_data_refresh,
+    step_data_summary,
+    step_deduplicate,
+    step_detect_commits_without_system_events,
+    step_event_convert,
+    step_filter_logon_logoff,
+    step_google_calendar_data_preparation,
+    step_load_activities,
+    step_load_polished_sessions,
+    step_polish_logon_logoff,
     step_report,
+    step_store_activity_blocks,
+    step_system_events_summary,
+    step_time_polish,
+    step_validate,
+    step_verify,
 )
-from .logging_config import get_logger
 
 logger = get_logger("pipeline")
 

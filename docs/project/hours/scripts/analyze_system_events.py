@@ -24,13 +24,13 @@ Author: AI Assistant
 Created: 2025-09-30
 """
 
+import argparse
 import csv
 import json
-import argparse
 import random
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional
-from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional
 
 
 @dataclass

@@ -9,6 +9,6 @@ Story: STORY-008 (WBSO Hours Registration System)
 Epic: EPIC-002 (WBSO Compliance and Documentation)
 """
 
-from .calendar_event import WBSOSession, CalendarEvent, ValidationResult, WBSODataset
+from .calendar_event import CalendarEvent, ValidationResult, WBSODataset, WBSOSession
 
 __all__ = ["WBSOSession", "CalendarEvent", "ValidationResult", "WBSODataset"]

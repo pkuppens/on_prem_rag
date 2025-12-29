@@ -13,8 +13,8 @@ Future Enhancement: This business layer will be extended to support
 additional work tracking entities and business rules.
 """
 
-from .work_session import WorkSession
 from .system_event import SystemEvent
 from .work_item import WorkItem
+from .work_session import WorkSession
 
 __all__ = ["WorkSession", "SystemEvent", "WorkItem"]

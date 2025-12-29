@@ -16,8 +16,8 @@ with WorkSessions, ensuring proper association of Git commits and other work
 items with detected work sessions.
 """
 
-from datetime import datetime
 import sys
+from datetime import datetime
 from pathlib import Path
 
 # Add src to path for imports
@@ -26,8 +26,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "docs" / "project" / "hours"))
 
-from backend.session_detection import SessionDetector, parse_datetime_flexible, calculate_break_duration
-from business import WorkSession, SystemEvent
+from business import SystemEvent, WorkSession
+
+from backend.session_detection import SessionDetector, calculate_break_duration, parse_datetime_flexible
 
 
 class TestSessionDetection:

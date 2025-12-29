@@ -10,10 +10,10 @@ Created: 2025-12-02
 """
 
 import csv
-from pathlib import Path
 from collections import defaultdict
-from typing import Dict, List, Tuple
 from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 # Paths
 SCRIPT_DIR = Path(__file__).parent.parent / "docs" / "project" / "hours"

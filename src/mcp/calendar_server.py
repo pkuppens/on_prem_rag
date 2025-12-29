@@ -26,7 +26,7 @@ except ImportError:
 # MCP imports
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import TextContent, Tool
 
 # Google Calendar API imports
 try:
@@ -41,7 +41,7 @@ except ImportError as e:
 # WBSO imports
 from wbso.calendar_event import CalendarEvent
 from wbso.logging_config import get_logger
-from wbso.upload import GoogleCalendarUploader, SCOPES, WBSO_CALENDAR_NAME
+from wbso.upload import SCOPES, WBSO_CALENDAR_NAME, GoogleCalendarUploader
 
 logger = get_logger("mcp.calendar_server")
 

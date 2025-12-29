@@ -5,9 +5,10 @@ and commit data for visualization in Jupyter notebooks.
 """
 
 import json
-import pandas as pd
-from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+
+import pandas as pd
 
 
 def safe_to_datetime_amsterdam(data: Union[pd.Series, str, List[str]], column_name: str = "timestamp") -> pd.Series:

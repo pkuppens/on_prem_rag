@@ -11,22 +11,22 @@ Updated: 2025-12-02
 """
 
 import csv
-import sys
 import json
-import traceback
 import signal
-from pathlib import Path
+import sys
+import traceback
 from datetime import datetime
-from typing import List, Dict, Any, Optional, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.wbso.calendar_event import CalendarEvent
-from src.wbso.upload import GoogleCalendarUploader
-from src.wbso.pipeline_steps import step_calendar_replace
 from src.wbso.logging_config import get_logger
+from src.wbso.pipeline_steps import step_calendar_replace
+from src.wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("csv_calendar_upload")
 

@@ -13,16 +13,15 @@ Author: AI Assistant
 Created: 2025-10-18
 """
 
+import csv
 import json
 import logging
-import csv
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 
 # Import from the proper module structure
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add src directory to path for imports
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
@@ -362,7 +361,7 @@ class WBSOReporter:
         """Export WBSO data to Excel format (if openpyxl available)."""
         try:
             import openpyxl
-            from openpyxl.styles import Font, PatternFill, Alignment
+            from openpyxl.styles import Alignment, Font, PatternFill
         except ImportError:
             logger.warning("openpyxl not available, skipping Excel export")
             return

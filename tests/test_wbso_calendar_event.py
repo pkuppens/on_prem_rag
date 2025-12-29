@@ -13,17 +13,18 @@ Author: AI Assistant
 Created: 2025-10-19
 """
 
-import pytest
+import json
+import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
-import tempfile
-import json
+
+import pytest
 
 from src.wbso.calendar_event import (
-    WBSOSession,
     CalendarEvent,
     ValidationResult,
     WBSODataset,
+    WBSOSession,
 )
 
 

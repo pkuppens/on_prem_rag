@@ -14,22 +14,21 @@ Author: AI Assistant
 Created: 2025-10-18
 """
 
+import csv
 import json
 import logging
-import csv
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 
 # Import from the proper module structure
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add src directory to path for imports
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from wbso.calendar_event import WBSODataset, WBSOSession, ValidationResult
+from wbso.calendar_event import ValidationResult, WBSODataset, WBSOSession
 from wbso.logging_config import get_logger
 
 logger = get_logger("validation")

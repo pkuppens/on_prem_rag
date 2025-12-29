@@ -7,8 +7,8 @@ See project/team/tasks/TASK-030.md for detailed requirements and implementation 
 """
 
 from .data_loader import (
-    load_system_events_data,
     load_commits_data,
+    load_system_events_data,
     prepare_time_series_data,
 )
 from .time_series_analyzer import TimeSeriesAnalyzer

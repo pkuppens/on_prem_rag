@@ -15,19 +15,19 @@ Author: AI Assistant
 Created: 2025-11-29
 """
 
-import sys
 import json
-from pathlib import Path
+import sys
 from datetime import datetime
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any, Dict, List
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.wbso.pipeline_steps import step_google_calendar_data_preparation
 from src.wbso.calendar_event import CalendarEvent, WBSODataset
 from src.wbso.logging_config import get_logger
+from src.wbso.pipeline_steps import step_google_calendar_data_preparation
 
 logger = get_logger("prepare_calendar_data_standalone")
 

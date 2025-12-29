@@ -5,6 +5,7 @@ of both timezone-naive and timezone-aware datetime data.
 """
 
 import pandas as pd
+
 from notebooks.utils.data_loading_helpers import safe_to_datetime_amsterdam as data_safe_to_datetime_amsterdam
 from notebooks.utils.visualization_helpers import safe_to_datetime_amsterdam as viz_safe_to_datetime_amsterdam
 

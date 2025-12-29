@@ -6,10 +6,11 @@ confidence scoring, and source-specific parsing.
 See project/team/tasks/TASK-032.md for detailed requirements and implementation decisions.
 """
 
-import pytest
 from datetime import datetime
 
-from backend.datetime_utils import UnifiedDateTime, DataSourceParser
+import pytest
+
+from backend.datetime_utils import DataSourceParser, UnifiedDateTime
 
 
 class TestSmartDatetimeParser:
@@ -322,7 +323,7 @@ class TestIntegrationWithExistingSystems:
         assert parsed_dt.is_valid()
 
         # Test existing functions still work
-        from backend.datetime_utils import parse_datetime_flexible, convert_to_standard_format
+        from backend.datetime_utils import convert_to_standard_format, parse_datetime_flexible
 
         parsed = parse_datetime_flexible("2025-01-15 08:00:00")
         assert parsed is not None

@@ -21,7 +21,7 @@ import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 # File patterns to process
 MARKDOWN_PATTERNS = ["*.md", "*.markdown"]

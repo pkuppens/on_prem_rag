@@ -9,20 +9,20 @@ Usage:
     python analyze_system_events_updated.py [--input-file INPUT_FILE] [--output-file OUTPUT_FILE]
 """
 
+import argparse
 import csv
 import json
-import argparse
 import logging
 import sys
 from datetime import datetime
-from typing import List, Optional
 from pathlib import Path
+from typing import List, Optional
 
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "business"))
 
-from work_session import WorkSession
 from system_event import SystemEvent
+from work_session import WorkSession
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

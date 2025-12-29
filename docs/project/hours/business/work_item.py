@@ -10,8 +10,8 @@ Purpose: Represent individual work items that occur during work sessions
 """
 
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 @dataclass

@@ -13,11 +13,12 @@ Author: AI Assistant
 Created: 2025-11-28
 """
 
-import pytest
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from src.wbso.pipeline_steps import _normalize_datetime, AMSTERDAM_TZ
+import pytest
+
+from src.wbso.pipeline_steps import AMSTERDAM_TZ, _normalize_datetime
 
 
 class TestTimezoneNormalization:

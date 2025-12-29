@@ -9,7 +9,7 @@ Created: 2025-11-30
 """
 
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 from .activity_repo_mapping import ActivityRepoMapping
 from .logging_config import get_logger

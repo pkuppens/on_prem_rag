@@ -11,19 +11,19 @@ Author: AI Assistant
 Created: 2025-12-02
 """
 
-import sys
 import json
-from pathlib import Path
-from datetime import datetime, timedelta
-from typing import List, Dict, Any, Tuple
+import sys
 from collections import defaultdict
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.wbso.upload import GoogleCalendarUploader
 from src.wbso.logging_config import get_logger
+from src.wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("calendar_extract")
 

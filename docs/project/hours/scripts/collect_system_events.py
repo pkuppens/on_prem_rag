@@ -21,13 +21,13 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Set, Dict, Any, Optional
+from typing import Any, Dict, Optional, Set
 
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
 
 # Import shared datetime parsing with timezone support
-from backend.datetime_utils import parse_datetime_with_timezone, AMSTERDAM_TZ
+from backend.datetime_utils import AMSTERDAM_TZ, parse_datetime_with_timezone
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

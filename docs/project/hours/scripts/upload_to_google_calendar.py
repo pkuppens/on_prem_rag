@@ -18,7 +18,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 # Google Calendar API imports
 try:
@@ -40,7 +40,7 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from wbso.calendar_event import WBSODataset, WBSOSession, CalendarEvent
+from wbso.calendar_event import CalendarEvent, WBSODataset, WBSOSession
 from wbso.logging_config import get_logger
 
 logger = get_logger("upload")

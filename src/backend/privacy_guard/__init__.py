@@ -12,12 +12,12 @@ Reference: WBSO-AICM-2025-01 WP2 (07-2025)
 """
 
 from backend.privacy_guard.domain.value_objects import (
+    PII_TYPES,
     AnonymizedText,
     CloudSafety,
     PIICategory,
     PIIDetection,
     PIIType,
-    PII_TYPES,
 )
 
 __all__ = [

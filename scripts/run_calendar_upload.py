@@ -13,19 +13,19 @@ Author: AI Assistant
 Created: 2025-12-02
 """
 
-import sys
 import argparse
-from pathlib import Path
+import sys
 from datetime import datetime
-from typing import Dict, Any
+from pathlib import Path
+from typing import Any, Dict
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.wbso.pipeline_steps import step_calendar_replace, _get_target_dates
 from src.wbso.calendar_event import CalendarEvent
-from src.wbso.upload import GoogleCalendarUploader
 from src.wbso.logging_config import get_logger
+from src.wbso.pipeline_steps import _get_target_dates, step_calendar_replace
+from src.wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("calendar_upload_script")
 
@@ -88,21 +88,21 @@ def load_calendar_events_from_prepared_data() -> list[CalendarEvent]:
     # We need to run the pipeline steps up to step_google_calendar_data_preparation
     # to get the prepared calendar events
     from src.wbso.pipeline_steps import (
-        step_data_refresh,
-        step_consolidate_system_events,
-        step_filter_logon_logoff,
-        step_polish_logon_logoff,
-        step_load_activities,
-        step_convert_to_work_sessions,
-        step_load_polished_sessions,
-        step_validate,
-        step_time_polish,
-        step_deduplicate,
         step_assign_activities,
         step_assign_commits_to_sessions,
+        step_consolidate_system_events,
         step_content_polish,
+        step_convert_to_work_sessions,
+        step_data_refresh,
+        step_deduplicate,
         step_event_convert,
+        step_filter_logon_logoff,
         step_google_calendar_data_preparation,
+        step_load_activities,
+        step_load_polished_sessions,
+        step_polish_logon_logoff,
+        step_time_polish,
+        step_validate,
     )
 
     # Set up minimal context

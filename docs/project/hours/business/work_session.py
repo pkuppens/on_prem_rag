@@ -9,11 +9,11 @@ Entity: WorkSession
 Purpose: Unified model for work session tracking, hours calculation, and work item association
 """
 
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Any
-from datetime import datetime, time, timedelta
 import sys
+from dataclasses import dataclass
+from datetime import datetime, time, timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent.parent.parent.parent

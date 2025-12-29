@@ -7,17 +7,17 @@ for WBSO hours registration and work block analysis.
 """
 
 import json
-import tempfile
-import unittest
-from pathlib import Path
-from unittest.mock import patch, mock_open
 
 # Import the processing functions
 import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import mock_open, patch
 
 sys.path.append(str(Path(__file__).parent.parent / "docs" / "project" / "hours" / "scripts"))
 
-from process_commit_csvs import parse_datetime_to_iso, extract_repo_name, is_wbso_author, is_wbso_commit, generate_metadata
+from process_commit_csvs import extract_repo_name, generate_metadata, is_wbso_author, is_wbso_commit, parse_datetime_to_iso
 
 
 class TestCommitCSVProcessing(unittest.TestCase):

@@ -13,11 +13,11 @@ Reference: WBSO-AICM-2025-01 WP1 (06-2025)
 """
 
 from backend.access_control.domain.value_objects import (
+    ROLE_DEFINITIONS,
     DataScope,
     Permission,
     Role,
     RolePermissions,
-    ROLE_DEFINITIONS,
 )
 
 __all__ = [

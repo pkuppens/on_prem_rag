@@ -17,7 +17,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Union, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .logging_config import get_logger
 from .time_utils import round_to_quarter_hour

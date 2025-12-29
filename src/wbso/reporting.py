@@ -13,11 +13,11 @@ Author: AI Assistant
 Created: 2025-10-18
 """
 
-import json
 import csv
+import json
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .calendar_event import WBSODataset, WBSOSession
 from .logging_config import get_logger
@@ -475,7 +475,7 @@ class WBSOReporter:
         """Export WBSO data to Excel format (if openpyxl available)."""
         try:
             import openpyxl
-            from openpyxl.styles import Font, PatternFill, Alignment
+            from openpyxl.styles import Alignment, Font, PatternFill
         except ImportError:
             logger.warning("openpyxl not available, skipping Excel export")
             return

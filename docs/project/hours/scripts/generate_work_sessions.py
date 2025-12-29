@@ -9,20 +9,20 @@ Usage:
     python generate_work_sessions.py [--input-file INPUT_FILE] [--output-file OUTPUT_FILE]
 """
 
+import argparse
 import csv
 import json
-import argparse
 import logging
 import sys
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Any
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "business"))
 
-from work_session import WorkSession
 from system_event import SystemEvent
+from work_session import WorkSession
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

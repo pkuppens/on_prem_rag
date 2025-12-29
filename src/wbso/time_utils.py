@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 # Import shared datetime parsing with timezone support
-from backend.datetime_utils import parse_datetime_with_timezone, AMSTERDAM_TZ
+from backend.datetime_utils import AMSTERDAM_TZ, parse_datetime_with_timezone
 
 # Re-export for convenience
 __all__ = [

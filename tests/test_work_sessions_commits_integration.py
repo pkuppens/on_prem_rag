@@ -8,23 +8,24 @@ See docs/technical/WBSO_COMPLIANCE.md for business context and requirements.
 """
 
 import json
-import pytest
+
+# Import the functions to test
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import mock_open, patch
 
-# Import the functions to test
-import sys
+import pytest
 
 sys.path.append(str(Path(__file__).parent.parent / "docs" / "project" / "hours" / "scripts"))
 
 from integrate_work_sessions_commits import (
+    assign_commits_to_sessions,
+    calculate_summary_statistics,
+    filter_commits_by_date,
+    group_unassigned_commits_by_date,
     parse_commit_timestamp,
     parse_work_session_timestamp,
-    filter_commits_by_date,
-    assign_commits_to_sessions,
-    group_unassigned_commits_by_date,
-    calculate_summary_statistics,
 )
 
 

@@ -12,7 +12,7 @@ Created: 2025-11-15
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 class TestReportGenerator:

@@ -14,24 +14,23 @@ Author: AI Assistant
 Created: 2025-11-28
 """
 
-from datetime import datetime, timedelta, timezone, time
-from pathlib import Path
-from typing import Dict, List, Any, Tuple, Optional, Callable
-import subprocess
-import sys
 import csv
 import json
-
+import subprocess
+import sys
+from datetime import datetime, time, timedelta, timezone
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
-from .validation import WBSODataValidator
-from .upload import GoogleCalendarUploader
-from .calendar_event import WBSODataset, CalendarEvent, WBSOSession
-from .logging_config import get_logger
-from .time_utils import parse_datetime_flexible
 from .activity_repo_mapping import ActivityRepoMapping
+from .calendar_event import CalendarEvent, WBSODataset, WBSOSession
 from .generate_activity_repo_csv import generate_csv
 from .generate_activity_repo_markdown import generate_markdown
+from .logging_config import get_logger
+from .time_utils import parse_datetime_flexible
+from .upload import GoogleCalendarUploader
+from .validation import WBSODataValidator
 
 # Amsterdam timezone (handles DST automatically)
 AMSTERDAM_TZ = ZoneInfo("Europe/Amsterdam")
@@ -1003,14 +1002,14 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
 
     from .time_utils import (
-        round_to_quarter_hour,
-        generate_lunch_break,
-        generate_dinner_break,
-        generate_work_break,
         calculate_work_hours_with_breaks,
         clip_to_max_daily_hours,
+        generate_dinner_break,
+        generate_lunch_break,
         generate_pseudo_random_end_time,
         generate_pseudo_random_start_time,
+        generate_work_break,
+        round_to_quarter_hour,
     )
 
     # Get sessions from previous step
@@ -1841,12 +1840,12 @@ def step_time_polish(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
 
     from .time_utils import (
-        round_to_quarter_hour,
-        generate_lunch_break,
-        generate_dinner_break,
-        generate_work_break,
         calculate_work_hours_with_breaks,
         clip_to_max_daily_hours,
+        generate_dinner_break,
+        generate_lunch_break,
+        generate_work_break,
+        round_to_quarter_hour,
     )
 
     dataset = context.get("dataset")

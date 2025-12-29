@@ -16,7 +16,7 @@ Created: 2025-10-18
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Google Calendar API imports
 try:
@@ -30,7 +30,7 @@ except ImportError as e:
     print("Install with: uv add google-api-python-client google-auth-httplib2 google-auth-oauthlib")
     raise
 
-from .calendar_event import WBSODataset, CalendarEvent
+from .calendar_event import CalendarEvent, WBSODataset
 from .logging_config import get_logger
 
 logger = get_logger("upload")

@@ -71,7 +71,10 @@ __all__ = [
 ]
 
 
-def create_medical_crew(llm: LLM | None = None) -> list[BaseRAGAgent]:
+def create_medical_crew(
+    llm: LLM | None = None,
+    session_id: str | None = None,
+) -> list[BaseRAGAgent]:
     """
     Create the medical crew with all specialized agents.
 
@@ -81,14 +84,16 @@ def create_medical_crew(llm: LLM | None = None) -> list[BaseRAGAgent]:
     Args:
         llm: Optional shared LLM for all agents. If None, each agent uses
              its agent-specific LLM configuration.
+        session_id: Optional session ID for memory management. If provided,
+            enables persistent memory across all agents in the crew.
 
     Returns:
         A list of all agents in the medical crew.
     """
     return [
-        PreprocessingAgent(llm=llm),
-        LanguageAssessorAgent(llm=llm),
-        ClinicalExtractorAgent(llm=llm),
-        SummarizationAgent(llm=llm),
-        QualityControlAgent(llm=llm),
+        PreprocessingAgent(llm=llm, session_id=session_id),
+        LanguageAssessorAgent(llm=llm, session_id=session_id),
+        ClinicalExtractorAgent(llm=llm, session_id=session_id),
+        SummarizationAgent(llm=llm, session_id=session_id),
+        QualityControlAgent(llm=llm, session_id=session_id),
     ]

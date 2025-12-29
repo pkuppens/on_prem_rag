@@ -169,35 +169,135 @@ class MemoryHooks:
 
     Provides hooks for storing and retrieving information from
     short-term, long-term, and entity memory systems.
+
+    Integrates with the backend.memory module when a session_id is provided,
+    falling back to in-memory storage for backward compatibility.
     """
 
-    def __init__(self, agent_name: str):
+    def __init__(self, agent_name: str, session_id: str | None = None):
         self.agent_name = agent_name
+        self.session_id = session_id
         self._short_term_cache: dict[str, Any] = {}
+        self._memory_manager = None
+
+        # Try to get the memory manager if available
+        if session_id:
+            try:
+                from backend.memory import get_memory_manager
+
+                self._memory_manager = get_memory_manager()
+                logger.debug(f"[{self.agent_name}] Connected to MemoryManager")
+            except ImportError:
+                logger.debug(f"[{self.agent_name}] MemoryManager not available, using local cache")
 
     def store_short_term(self, key: str, value: Any) -> None:
         """Store information in short-term memory (session-scoped)."""
-        self._short_term_cache[key] = value
+        if self._memory_manager and self.session_id:
+            self._memory_manager.store_short_term(
+                session_id=self.session_id,
+                key=key,
+                value=value,
+                agent_role=self.agent_name,
+            )
+        else:
+            self._short_term_cache[key] = value
         logger.debug(f"[{self.agent_name}] Stored in short-term memory: {key}")
 
     def retrieve_short_term(self, key: str) -> Any | None:
         """Retrieve information from short-term memory."""
-        value = self._short_term_cache.get(key)
+        if self._memory_manager and self.session_id:
+            value = self._memory_manager.get_short_term(
+                session_id=self.session_id,
+                key=key,
+                agent_role=self.agent_name,
+            )
+        else:
+            value = self._short_term_cache.get(key)
         logger.debug(f"[{self.agent_name}] Retrieved from short-term memory: {key} = {value is not None}")
         return value
 
     def clear_short_term(self) -> None:
         """Clear short-term memory."""
-        self._short_term_cache.clear()
+        if self._memory_manager and self.session_id:
+            self._memory_manager.clear_short_term(self.session_id, self.agent_name)
+        else:
+            self._short_term_cache.clear()
         logger.debug(f"[{self.agent_name}] Cleared short-term memory")
+
+    def store_long_term(
+        self,
+        content: str,
+        memory_type: str = "observation",
+        importance: float = 0.5,
+        metadata: dict[str, Any] | None = None,
+    ) -> str | None:
+        """Store information in long-term memory (persistent).
+
+        Args:
+            content: The content to store
+            memory_type: Type of memory ("fact", "observation", "result")
+            importance: Importance score (0.0 to 1.0)
+            metadata: Optional additional metadata
+
+        Returns:
+            Document ID if stored, None otherwise
+        """
+        if not self._memory_manager or not self.session_id:
+            logger.debug(f"[{self.agent_name}] Long-term storage not available (no session)")
+            return None
+
+        return self._memory_manager.store_long_term(
+            agent_role=self.agent_name,
+            session_id=self.session_id,
+            content=content,
+            memory_type=memory_type,
+            importance=importance,
+            metadata=metadata,
+        )
+
+    def search_memory(
+        self,
+        query: str,
+        top_k: int = 5,
+        include_shared: bool = True,
+    ) -> list[Any]:
+        """Search for relevant memories.
+
+        Args:
+            query: The search query
+            top_k: Number of results to return
+            include_shared: Whether to include shared memory
+
+        Returns:
+            List of search results
+        """
+        if not self._memory_manager or not self.session_id:
+            return []
+
+        return self._memory_manager.search(
+            query=query,
+            agent_role=self.agent_name,
+            top_k=top_k,
+            include_shared=include_shared,
+        )
 
     def on_task_start(self, task_description: str) -> None:
         """Hook called when a task starts."""
         logger.info(f"[{self.agent_name}] Starting task: {task_description[:50]}...")
+        # Store task start in short-term memory
+        self.store_short_term("current_task", task_description)
 
     def on_task_complete(self, task_description: str, result: Any) -> None:
         """Hook called when a task completes."""
         logger.info(f"[{self.agent_name}] Completed task: {task_description[:50]}...")
+        # Optionally store result summary in long-term memory
+        if self._memory_manager and self.session_id and result:
+            result_str = str(result)[:500]  # Limit result size
+            self.store_long_term(
+                content=f"Task: {task_description[:100]}... Result: {result_str}",
+                memory_type="result",
+                importance=0.6,
+            )
 
     def on_error(self, error: Exception, context: str) -> None:
         """Hook called when an error occurs."""
@@ -229,6 +329,7 @@ class BaseRAGAgent(ABC):
         config: AgentConfig | None = None,
         llm: LLM | None = None,
         guardrails_config: GuardrailsConfig | None = None,
+        session_id: str | None = None,
     ):
         """
         Initialize the base agent.
@@ -237,10 +338,14 @@ class BaseRAGAgent(ABC):
             config: Agent configuration. If None, uses _get_default_config().
             llm: Pre-configured LLM instance. If None, creates from config.
             guardrails_config: Guardrails configuration. If None, uses defaults.
+            session_id: Optional session ID for memory management. If provided,
+                enables integration with the MemoryManager for persistent
+                short-term and long-term memory.
         """
         self.config = config or self._get_default_config()
         self.metrics = AgentMetrics()
-        self.memory_hooks = MemoryHooks(self.config.role)
+        self.session_id = session_id
+        self.memory_hooks = MemoryHooks(self.config.role, session_id=session_id)
 
         # Initialize guardrails
         self.guardrails_config = guardrails_config or GuardrailsConfig()

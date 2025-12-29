@@ -21,18 +21,24 @@ class SummarizationAgent(BaseRAGAgent):
 
     AGENT_NAME = "SummarizationAgent"
 
-    def __init__(self, config: AgentConfig | None = None, llm: LLM | None = None):
+    def __init__(
+        self,
+        config: AgentConfig | None = None,
+        llm: LLM | None = None,
+        session_id: str | None = None,
+    ):
         """
         Initialize the SummarizationAgent.
 
         Args:
             config: Optional agent configuration. Uses defaults if not provided.
             llm: Optional pre-configured LLM. If not provided, uses LLM selector.
+            session_id: Optional session ID for memory management.
         """
         if llm is None:
             llm = get_llm_for_agent(self.AGENT_NAME)
 
-        super().__init__(config=config, llm=llm)
+        super().__init__(config=config, llm=llm, session_id=session_id)
 
     def _get_default_config(self) -> AgentConfig:
         """Return the default configuration for SummarizationAgent."""

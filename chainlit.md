@@ -7,6 +7,7 @@ This is a secure, on-premises Medical Document Assistant powered by local LLMs.
 1. **Login**: Use your credentials to authenticate.
 
    For local development/testing, the app supports demo users:
+
    - `gp` / `gp123`
    - `patient` / `patient123`
    - `admin` / `admin123`

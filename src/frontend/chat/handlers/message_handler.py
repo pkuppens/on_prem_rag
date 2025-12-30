@@ -1,9 +1,11 @@
 """Message handling for Chainlit UI."""
 
-import logging
-from typing import Any
+from __future__ import annotations
 
-import chainlit as cl
+import logging
+from typing import Any, Sequence
+
+import chainlit as cl  # pyright: ignore[reportMissingImports]
 
 from frontend.chat.utils.session import SessionManager, UserRole
 
@@ -47,7 +49,7 @@ class MessageHandler:
         # Route to appropriate agent
         await self._route_to_agent(message.content, session.role)
 
-    async def _handle_file_uploads(self, elements: list[cl.Element], message_content: str) -> None:
+    async def _handle_file_uploads(self, elements: Sequence[Any], message_content: str) -> None:
         """Handle file uploads attached to a message."""
         if self._document_handler:
             await self._document_handler.handle_uploads(elements, message_content)

@@ -2,23 +2,16 @@
 
 This is a secure, on-premises Medical Document Assistant powered by local LLMs.
 
-## Features
-
-- **Document Analysis**: Upload and analyze medical documents (PDF, DOCX, TXT)
-- **Intelligent Q&A**: Ask questions about your documents using RAG
-- **Multi-Agent Processing**: Specialized agents for clinical extraction, summarization, and quality control
-- **Role-Based Access**: GP and Patient roles with appropriate access levels
-
 ## Getting Started
 
 1. **Login**: Use your credentials to authenticate.
 
    For local development/testing, the app supports demo users:
+
    - `gp` / `gp123`
    - `patient` / `patient123`
    - `admin` / `admin123`
 
-   Note: OAuth can be enabled via the auth service (default `AUTH_SERVICE_URL=http://localhost:8001`).
 2. **Upload Documents**: Click the attachment icon to upload files
 3. **Ask Questions**: Type your questions in the chat input
 

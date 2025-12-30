@@ -78,7 +78,7 @@ class TestAgentCallbackHandler:
         Technical: Test agent selection for patient role.
         """
         agent = agent_handler._get_agent_for_role(UserRole.PATIENT)
-        assert agent == "summarization_agent"
+        assert agent == "summarizer"
 
     def test_get_agent_for_role_admin(self, agent_handler):
         """As a developer I want admin users to get orchestrator access,
@@ -86,7 +86,7 @@ class TestAgentCallbackHandler:
         Technical: Test agent selection for admin role.
         """
         agent = agent_handler._get_agent_for_role(UserRole.ADMIN)
-        assert agent == "orchestrator"
+        assert agent == "quality_controller"
 
     @pytest.mark.asyncio
     async def test_apply_input_guardrails_no_guardrails(self, agent_handler):

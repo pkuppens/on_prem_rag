@@ -118,7 +118,10 @@ class AgentCallbackHandler:
 
             try:
                 # Get the appropriate agent
-                agent = self._orchestrator.get_agent(agent_name)
+                agent_wrapper = self._orchestrator.get_agent(agent_name)
+                # Our backend orchestrator returns `BaseRAGAgent` wrappers which expose a `.agent`
+                # (the actual `crewai.Agent` instance expected by `crewai.Task`).
+                agent = getattr(agent_wrapper, "agent", agent_wrapper)
 
                 # Create and run the task
                 from crewai import Task
@@ -139,10 +142,12 @@ class AgentCallbackHandler:
         """Get the appropriate agent name for the user role."""
         role_agent_map = {
             UserRole.GP: "clinical_extractor",  # GP gets clinical analysis
-            UserRole.PATIENT: "summarization_agent",  # Patient gets summaries
-            UserRole.ADMIN: "orchestrator",  # Admin gets full orchestrator
+            # Backend `MedicalCrewOrchestrator` agent keys: preprocessor, language_assessor,
+            # clinical_extractor, summarizer, quality_controller.
+            UserRole.PATIENT: "summarizer",  # Patient gets summaries
+            UserRole.ADMIN: "quality_controller",  # Admin gets the most complete oversight view
         }
-        return role_agent_map.get(role, "summarization_agent")
+        return role_agent_map.get(role, "summarizer")
 
     async def _run_crew_with_callbacks(self, task: Any, agent_step: cl.Step, thinking_msg: cl.Message) -> str:
         """Run a CrewAI task with UI callbacks for visibility."""

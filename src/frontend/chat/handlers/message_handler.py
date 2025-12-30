@@ -7,6 +7,7 @@ from typing import Any, Sequence
 
 import chainlit as cl  # pyright: ignore[reportMissingImports]
 
+from frontend.chat.handlers.audio_handler import get_audio_handler, is_audio_file
 from frontend.chat.utils.session import SessionManager, UserRole
 
 logger = logging.getLogger(__name__)
@@ -50,15 +51,48 @@ class MessageHandler:
         await self._route_to_agent(message.content, session.role)
 
     async def _handle_file_uploads(self, elements: Sequence[Any], message_content: str) -> None:
-        """Handle file uploads attached to a message."""
-        if self._document_handler:
-            await self._document_handler.handle_uploads(elements, message_content)
-        else:
-            # Fallback handling
-            file_names = [el.name for el in elements if hasattr(el, "name")]
-            await cl.Message(
-                content=f"Received {len(elements)} file(s): {', '.join(file_names)}. Document processing is being set up."
-            ).send()
+        """Handle file uploads attached to a message.
+
+        Routes audio files to the audio handler for transcription,
+        and document files to the document handler.
+        """
+        # Separate audio and document files
+        audio_files = [el for el in elements if is_audio_file(el)]
+        document_files = [el for el in elements if not is_audio_file(el)]
+
+        # Process audio files first (they become text input)
+        transcribed_texts = []
+        if audio_files:
+            audio_handler = get_audio_handler()
+            for audio_el in audio_files:
+                text = await audio_handler.handle_audio_upload(audio_el)
+                if text:
+                    transcribed_texts.append(text)
+
+        # If we have transcribed text, add it to the message content
+        if transcribed_texts:
+            combined_text = " ".join(transcribed_texts)
+            if message_content:
+                full_content = f"{message_content} {combined_text}"
+            else:
+                full_content = combined_text
+
+            # Route the transcribed text to the agent
+            session = SessionManager.get_session()
+            if session:
+                await self._route_to_agent(full_content, session.role)
+            return
+
+        # Process document files
+        if document_files:
+            if self._document_handler:
+                await self._document_handler.handle_uploads(document_files, message_content)
+            else:
+                # Fallback handling
+                file_names = [el.name for el in document_files if hasattr(el, "name")]
+                await cl.Message(
+                    content=f"Received {len(document_files)} file(s): {', '.join(file_names)}. Document processing is being set up."
+                ).send()
 
     async def _route_to_agent(self, content: str, role: UserRole) -> None:
         """Route the message to the appropriate agent based on role."""

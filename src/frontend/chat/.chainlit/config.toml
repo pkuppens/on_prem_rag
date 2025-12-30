@@ -6,10 +6,18 @@ name = "On-Prem RAG Assistant"
 enable_telemetry = false
 
 [features]
+# Enable file uploads including audio files
 multi_modal = true
+# Use custom on-prem STT instead of browser/cloud STT
+# The microphone.js script provides custom STT integration
 speech_to_text = false
-unsafe_allow_html = false
+# Allow HTML for STT indicators and role badges
+unsafe_allow_html = true
 latex = false
+# Enable audio recording via custom JavaScript
+audio.enabled = true
+audio.sample_rate = 16000
+audio.min_decibels = -60
 
 [UI]
 name = "Medical Document Assistant"
@@ -17,12 +25,18 @@ show_readme_as_default = true
 default_collapse_content = true
 hide_cot = false
 default_expand_messages = false
+# Custom HTML header to load microphone script
+custom_js = "/public/microphone.js"
+custom_css = "/public/custom.css"
 
 [UI.theme]
 # Override the default theme colors
-# primary = "#1976d2"
+primary = "#1976d2"
 # background = "#ffffff"
 # paper = "#f5f5f5"
 
 [meta]
 generated_by = "on-prem-rag"
+version = "1.1.0"
+stt_enabled = true
+stt_provider = "faster-whisper"

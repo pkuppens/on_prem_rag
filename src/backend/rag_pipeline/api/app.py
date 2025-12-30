@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from ..utils.logging import StructuredLogger
-from . import ask, documents, documents_enhanced, health, parameters, query, test, websocket
+from . import ask, documents, documents_enhanced, health, parameters, query, stt, test, websocket
 
 # Set root logger to DEBUG level
 logging.getLogger().setLevel(logging.DEBUG)
@@ -39,6 +39,7 @@ app.include_router(query.router)
 app.include_router(ask.router)
 app.include_router(websocket.router)
 app.include_router(test.router)
+app.include_router(stt.router)  # Speech-to-text with LLM correction
 
 
 def start_server():

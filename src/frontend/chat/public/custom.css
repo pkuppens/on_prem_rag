@@ -1,0 +1,165 @@
+/* Custom CSS for On-Prem RAG Assistant Chainlit UI */
+
+/* Role Badge Styling */
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.role-badge-gp {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.role-badge-patient {
+    background-color: #388e3c;
+    color: #ffffff;
+}
+
+.role-badge-admin {
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+/* Header Customization */
+.cl-header {
+    border-bottom: 2px solid #1976d2;
+}
+
+/* Step Display Customization */
+.cl-step {
+    border-left: 3px solid #1976d2;
+    padding-left: 12px;
+    margin: 8px 0;
+}
+
+.cl-step[data-type="llm"] {
+    border-left-color: #7c4dff;
+}
+
+.cl-step[data-type="tool"] {
+    border-left-color: #00c853;
+}
+
+.cl-step[data-type="run"] {
+    border-left-color: #ff6d00;
+}
+
+/* Message Styling */
+.cl-message-content {
+    line-height: 1.6;
+}
+
+/* File Upload Zone */
+.cl-upload-zone {
+    border: 2px dashed #90caf9;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+.cl-upload-zone:hover {
+    border-color: #1976d2;
+}
+
+/* Thinking Indicator */
+.thinking-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-style: italic;
+}
+
+.thinking-indicator::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #1976d2;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Agent Step Headers */
+.agent-step-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.agent-step-header .agent-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Error Messages */
+.error-message {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Success Messages */
+.success-message {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Warning Messages */
+.warning-message {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .role-badge {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+    }
+
+    .cl-step {
+        padding-left: 8px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .error-message {
+        background-color: #4a1c1c;
+    }
+
+    .success-message {
+        background-color: #1a3a1a;
+    }
+
+    .warning-message {
+        background-color: #3d2a0a;
+    }
+}

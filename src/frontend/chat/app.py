@@ -11,13 +11,17 @@ Usage:
 
 import logging
 import os
+import secrets
 import subprocess
 import sys
 from pathlib import Path
 
 import chainlit as cl
+import engineio.payload
 
 from frontend.chat.auth.oauth_integration import get_role_badge_html, setup_user_session
+from frontend.chat.auth.oauth_integration import oauth_callback as _oauth_callback
+from frontend.chat.auth.oauth_integration import password_auth_callback as _password_auth_callback
 from frontend.chat.handlers.agent_callbacks import get_agent_handler
 from frontend.chat.handlers.document_upload import get_document_handler
 from frontend.chat.handlers.message_handler import get_message_handler
@@ -29,6 +33,45 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 SHOW_ROLE_ON_START = os.getenv("SHOW_ROLE_ON_START", "true").lower() == "true"
+
+# Engine.IO sometimes raises "Too many packets in payload" on startup when the browser
+# sends a burst of polling packets. Keep the secure upstream default (16) unless we're
+# in local-dev, where we can safely allow more to avoid noisy console errors.
+#
+# Security note: raising this limit can make the server more susceptible to DoS if exposed.
+_configured_engineio_max_decode_packets = os.getenv("ENGINEIO_MAX_DECODE_PACKETS")
+if _configured_engineio_max_decode_packets:
+    engineio.payload.Payload.max_decode_packets = int(_configured_engineio_max_decode_packets)
+else:
+    # Local development heuristic: when binding to localhost only, allow more packets.
+    if os.getenv("CHAINLIT_HOST") in (None, "", "127.0.0.1", "localhost"):
+        engineio.payload.Payload.max_decode_packets = 128
+
+
+@cl.password_auth_callback
+def password_auth_callback(username: str, password: str):
+    """Authenticate a user with username/password for local development.
+
+    This enables a visible login form in the Chainlit UI during development.
+    Demo credentials are defined in `frontend.chat.auth.oauth_integration.DEMO_USERS`.
+    """
+    return _password_auth_callback(username, password)
+
+
+def oauth_callback(provider_id: str, token: str, raw_user_data: dict[str, str], default_user):
+    """Authenticate a user via OAuth callback.
+
+    Note: OAuth provider configuration is handled by the auth service.
+    """
+    return _oauth_callback(provider_id, token, raw_user_data, default_user)
+
+
+# Register OAuth callback only when Chainlit OAuth providers are configured.
+# Otherwise Chainlit raises at import time, preventing the app from starting.
+try:
+    cl.oauth_callback(oauth_callback)
+except ValueError:
+    logger.info("OAuth providers not configured; skipping Chainlit OAuth callback registration.")
 
 
 def _initialize_handlers() -> None:
@@ -208,7 +251,23 @@ def main():
     app_dir = Path(__file__).parent
 
     # Set up environment
-    os.environ.setdefault("CHAINLIT_ROOT_PATH", str(app_dir))
+    #
+    # IMPORTANT:
+    # `CHAINLIT_ROOT_PATH` is a URL path prefix (e.g. "/rag"), not a filesystem path.
+    # Setting it to something like "C:\\Users\\..." breaks Starlette routing because mounted
+    # paths must start with "/" (or be empty).
+    root_path = os.getenv("CHAINLIT_ROOT_PATH")
+    if root_path and not root_path.startswith("/"):
+        os.environ["CHAINLIT_ROOT_PATH"] = f"/{root_path.lstrip('/')}"
+
+    # Chainlit requires `CHAINLIT_AUTH_SECRET` when any login mechanism is enabled
+    # (password auth, header auth, custom auth, or OAuth).
+    #
+    # For local development only, we auto-generate a secret if missing. In production,
+    # set `CHAINLIT_AUTH_SECRET` explicitly (or disable auth callbacks).
+    host = os.getenv("CHAINLIT_HOST", "localhost")
+    if not os.getenv("CHAINLIT_AUTH_SECRET") and host in ("localhost", "127.0.0.1"):
+        os.environ["CHAINLIT_AUTH_SECRET"] = secrets.token_urlsafe(32)
 
     # Run chainlit
     # Note: chainlit.run() is the proper way to start programmatically
@@ -220,7 +279,7 @@ def main():
         "run",
         str(app_dir / "app.py"),
         "--host",
-        os.getenv("CHAINLIT_HOST", "0.0.0.0"),
+        host,
         "--port",
         os.getenv("CHAINLIT_PORT", "8002"),
     ]

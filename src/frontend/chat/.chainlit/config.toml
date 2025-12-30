@@ -1,0 +1,28 @@
+# Chainlit Configuration for On-Prem RAG Assistant
+# Documentation: https://docs.chainlit.io/config
+
+[project]
+name = "On-Prem RAG Assistant"
+enable_telemetry = false
+
+[features]
+multi_modal = true
+speech_to_text = false
+unsafe_allow_html = false
+latex = false
+
+[UI]
+name = "Medical Document Assistant"
+show_readme_as_default = true
+default_collapse_content = true
+hide_cot = false
+default_expand_messages = false
+
+[UI.theme]
+# Override the default theme colors
+# primary = "#1976d2"
+# background = "#ffffff"
+# paper = "#f5f5f5"
+
+[meta]
+generated_by = "on-prem-rag"

@@ -56,6 +56,8 @@ dependencies = [
     "mcp>=1.0.0",
     "tzdata>=2025.2",
     "nemoguardrails>=0.17.0",
+    # Chainlit UI for agent interaction
+    "chainlit>=1.3.0",
 ]
 requires-python = ">=3.12,<3.14"
 
@@ -92,12 +94,14 @@ wbso-pipeline = "wbso.pipeline:main"
 wbso-migrate = "wbso.migration:main"
 wbso-db-report = "wbso.database_reporting:main"
 # MCP Calendar Server
-mcp-calendar-server = "mcp.calendar_server:main_sync"
-mcp-test-report = "mcp.test_report_generator:main"
+mcp-calendar-server = "mcp_calendar.calendar_server:main_sync"
+mcp-test-report = "mcp_calendar.test_report_generator:main"
 # Calendar credential and connection testing
 test-calendar-credentials = "test_calendar_credentials:main"
 test-mcp-calendar-client = "test_mcp_calendar_client:main_sync"
 authenticate-google-calendar = "authenticate_google_calendar:main"
+# Chainlit UI
+start-chat = "frontend.chat.app:main"
 # start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]

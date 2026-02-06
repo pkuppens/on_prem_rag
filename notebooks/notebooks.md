@@ -144,6 +144,33 @@ The notebooks in this directory are designed to:
 
 **Usage**: Use this notebook to understand how top-k retrieval works and validate that results are consistent.
 
+### 6. `embedding_score_stability.ipynb`
+
+**Purpose**: Verify that adding documents to a ChromaDB collection does not affect the absolute similarity scores of already-indexed documents
+
+**What it does**:
+
+- Embeds Document A into a fresh ChromaDB collection and records similarity scores for multiple queries
+- Adds Document B to the same collection and re-runs the same queries
+- Compares absolute scores for Document A chunks before and after adding Document B
+- Asserts that scores are identical (within floating-point tolerance)
+- Shows how rankings can change even though absolute scores remain stable
+- Visualizes score stability with scatter plots and difference histograms
+
+**Key functionality tested**:
+
+- Score stability across collection changes
+- Cosine similarity independence (scores depend only on query-document pair, not collection contents)
+- Ranking vs absolute score distinction
+
+**Configuration used**: "fast" parameter set
+
+- Max pages per document: 5 (for speed)
+- Uses temporary directory for isolation
+- Multiple test queries across different topics
+
+**Usage**: Use this notebook to validate that your RAG system's similarity scores are stable and trustworthy as the document collection grows.
+
 ## Setup and Dependencies
 
 ### Required Dependencies

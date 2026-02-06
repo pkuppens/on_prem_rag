@@ -1,6 +1,7 @@
 # Temporary files
 tmp/
 docs/archive/
+tmpclaude-*-cwd
 
 # Claude Code local settings
 .claude/

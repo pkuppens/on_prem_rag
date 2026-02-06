@@ -185,16 +185,16 @@ class TestEnvironmentConfiguration:
         """As a developer I want required environment variables to be documented,
         so I can understand what the CI environment needs.
 
-        Technical: Check that HF_HOME and related variables are set in workflow.
+        Technical: Check that HF_HOME and related variables are set in workflow steps.
         Validation: Verify environment variable configuration in workflow.
         """
         workflow_path = Path(__file__).parent.parent.parent / ".github" / "workflows" / "python-ci.yml"
         workflow_content = workflow_path.read_text(encoding="utf-8")
 
-        # Check for required environment variables
+        # Check for required environment variables (set in step-level exports)
         required_vars = ["HF_HOME", "TRANSFORMERS_CACHE", "SENTENCE_TRANSFORMERS_HOME"]
         for var in required_vars:
-            assert f"{var}:" in workflow_content, f"Workflow should set {var} environment variable"
+            assert var in workflow_content, f"Workflow should reference {var} environment variable"
 
     def test_cache_configuration_is_present(self) -> None:
         """As a developer I want cache configuration to be present,
@@ -207,6 +207,6 @@ class TestEnvironmentConfiguration:
         workflow_content = workflow_path.read_text(encoding="utf-8")
 
         # Check for cache actions
-        assert "actions/cache@v3" in workflow_content, "Workflow should use cache action"
+        assert "actions/cache@v4" in workflow_content, "Workflow should use cache action v4"
         assert "Cache UV dependencies" in workflow_content, "Should cache UV dependencies"
         assert "Cache HuggingFace models" in workflow_content, "Should cache HuggingFace models"

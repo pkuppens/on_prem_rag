@@ -6,10 +6,10 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  HF_HOME: ${{ github.workspace }}/.cache/huggingface
-  TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface/hub
-  SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/huggingface/sentence_transformers
+# HuggingFace cache lives under ~/.cache/huggingface on the runner.
+# Each step that uses models sets these env vars explicitly to ensure consistency.
+# Do NOT set HF_HOME at the workflow level - it previously pointed at github.workspace
+# which conflicts with the ~/.cache path used by actions/cache.
 
 # Python versions to test - update all three jobs when changing versions
 # Current: ["3.12"]
@@ -17,7 +17,7 @@ env:
 # Or when you are satisfied that e.g. linting is only on one version, you can accept the differences.
 
 jobs:
-  # Setup job that other jobs depend on
+  # Setup job validates that dependencies install correctly and warms the UV cache.
   # Python 3.12 is pinned to avoid pypika build failures with Python 3.14
   # See tests/ci/test_github_actions_setup.py for validation tests
   # See docs/technical/CI_SETUP.md for detailed documentation
@@ -27,9 +27,9 @@ jobs:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -38,7 +38,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -50,20 +50,13 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync --dev
-      - name: Cache HuggingFace models
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
-          restore-keys: |
-            ${{ runner.os }}-huggingface-
-      - name: Pre-download embedding models
+      - name: Log disk usage
+        if: always()
         run: |
-          # Set cache directory to ensure consistent location
-          export HF_HOME=$HOME/.cache/huggingface
-          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
-          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          uv run python scripts/setup_embedding_models.py
+          echo "=== Disk usage after setup ==="
+          df -h /
+          echo "=== Large directories ==="
+          du -sh ~/.cache/uv ~/.local/share/uv 2>/dev/null || true
 
   # Linting job - runs independently
   lint:
@@ -73,9 +66,9 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -84,7 +77,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -111,7 +104,7 @@ jobs:
           uv run ruff check .
           uv run ruff format --check .
 
-  # Model download job - runs in parallel with lint
+  # Model download job - downloads lightweight CI models and warms the HF cache
   model-download:
     runs-on: ubuntu-latest
     strategy:
@@ -119,9 +112,18 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Free up disk space
+        run: |
+          # Remove large pre-installed tools we don't need (~6GB savings)
+          echo "=== Disk before cleanup ==="
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+          sudo apt-get clean
+          echo "=== Disk after cleanup ==="
+          df -h /
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -130,7 +132,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -143,19 +145,27 @@ jobs:
         run: |
           uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
-            ${{ runner.os }}-huggingface-
-      - name: Pre-download embedding models
+            ${{ runner.os }}-huggingface-ci-
+      - name: Pre-download embedding models (CI mode)
         run: |
-          # Set cache directory to ensure consistent location
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          uv run python scripts/setup_embedding_models.py
+          uv run python scripts/setup_embedding_models.py --ci
+      - name: Log disk usage
+        if: always()
+        run: |
+          echo "=== Disk usage after model download ==="
+          df -h /
+          echo "=== HuggingFace cache size ==="
+          du -sh ~/.cache/huggingface 2>/dev/null || echo "No HF cache"
+          echo "=== UV cache size ==="
+          du -sh ~/.cache/uv ~/.local/share/uv 2>/dev/null || true
 
   # Unit test job - fast, always run
   test-unit:
@@ -165,9 +175,13 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+          sudo apt-get clean
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -176,7 +190,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -189,14 +203,14 @@ jobs:
         run: |
           uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
-            ${{ runner.os }}-huggingface-
+            ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}
@@ -205,7 +219,6 @@ jobs:
             ${{ runner.os }}-pytest-
       - name: Run unit tests with coverage
         run: |
-          # Set cache directories for offline mode
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
@@ -230,9 +243,13 @@ jobs:
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+          sudo apt-get clean
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -241,7 +258,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -254,14 +271,14 @@ jobs:
         run: |
           uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
-            ${{ runner.os }}-huggingface-
+            ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}
@@ -270,7 +287,6 @@ jobs:
             ${{ runner.os }}-pytest-
       - name: Run performance tests
         run: |
-          # Set cache directories for offline mode
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
@@ -293,9 +309,13 @@ jobs:
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+          sudo apt-get clean
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -304,7 +324,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -317,14 +337,14 @@ jobs:
         run: |
           uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
-            ${{ runner.os }}-huggingface-
+            ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}
@@ -333,7 +353,6 @@ jobs:
             ${{ runner.os }}-pytest-
       - name: Run integration tests
         run: |
-          # Set cache directories for offline mode
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
@@ -354,9 +373,9 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: false
@@ -365,7 +384,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Cache UV dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/uv
@@ -403,38 +422,38 @@ jobs:
     steps:
       - name: Generate CI Summary
         run: |
-          echo "# 🚀 CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📊 Job Status" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Status" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Lint | ${{ needs.lint.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Unit Tests | ${{ needs.test-unit.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Performance Tests | ${{ needs.test-performance.result == 'success' && '✅ Passed' || needs.test-performance.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Integration Tests | ${{ needs.test-integration.result == 'success' && '✅ Passed' || needs.test-integration.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Security Scan | ${{ needs.security.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ needs.lint.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit Tests | ${{ needs.test-unit.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance Tests | ${{ needs.test-performance.result == 'success' && 'Passed' || needs.test-performance.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Integration Tests | ${{ needs.test-integration.result == 'success' && 'Passed' || needs.test-integration.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Scan | ${{ needs.security.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📁 Artifacts Available" >> $GITHUB_STEP_SUMMARY
+          echo "## Artifacts Available" >> $GITHUB_STEP_SUMMARY
           echo "- **Coverage Reports**: Download from unit test job" >> $GITHUB_STEP_SUMMARY
           echo "- **Test Results**: JUnit XML files for all test types" >> $GITHUB_STEP_SUMMARY
           echo "- **Security Reports**: Bandit and Safety vulnerability scans" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 🔍 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.lint.result }}" != "success" ]; then
-            echo "- ❌ Fix linting issues before merging" >> $GITHUB_STEP_SUMMARY
+            echo "- Fix linting issues before merging" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ needs.test-unit.result }}" != "success" ]; then
-            echo "- ❌ Fix unit test failures" >> $GITHUB_STEP_SUMMARY
+            echo "- Fix unit test failures" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ needs.test-performance.result }}" == "failure" ]; then
-            echo "- ⚠️ Review performance test results" >> $GITHUB_STEP_SUMMARY
+            echo "- Review performance test results" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ needs.test-integration.result }}" == "failure" ]; then
-            echo "- ⚠️ Review integration test results" >> $GITHUB_STEP_SUMMARY
+            echo "- Review integration test results" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ needs.security.result }}" == "failure" ]; then
-            echo "- 🔒 Review security scan results" >> $GITHUB_STEP_SUMMARY
+            echo "- Review security scan results" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ needs.lint.result }}" == "success" ] && [ "${{ needs.test-unit.result }}" == "success" ]; then
-            echo "- ✅ All critical checks passed - ready for review!" >> $GITHUB_STEP_SUMMARY
+            echo "- All critical checks passed - ready for review!" >> $GITHUB_STEP_SUMMARY
           fi

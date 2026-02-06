@@ -164,6 +164,11 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Setup embedding models for local development")
     parser.add_argument("--dry-run", action="store_true", help="Setup directories but skip model downloads")
+    parser.add_argument(
+        "--ci",
+        action="store_true",
+        help="CI mode: only download lightweight models needed for tests (excludes bge-large-en-v1.5)",
+    )
     args = parser.parse_args()
 
     print("🚀 Setting up embedding models for local development...")
@@ -190,15 +195,25 @@ def main():
         return True
 
     # Models used in the project (from parameter_sets.py and test files)
-    models_to_download = [
-        # Core models from parameter_sets.py
-        ("sentence_transformer", "sentence-transformers/all-MiniLM-L6-v2"),
-        ("transformers", "BAAI/bge-small-en-v1.5"),
-        ("transformers", "BAAI/bge-large-en-v1.5"),
-        # Test via LlamaIndex (this is how the app actually uses them)
-        ("llamaindex", "sentence-transformers/all-MiniLM-L6-v2"),
-        ("llamaindex", "BAAI/bge-small-en-v1.5"),
-    ]
+    # In CI mode, skip large models not needed for tests to save disk space
+    # (~14GB limit on GitHub Actions ubuntu-latest runners)
+    if args.ci:
+        print("🏗️  CI mode: downloading only lightweight test models (skipping bge-large-en-v1.5)")
+        models_to_download = [
+            ("sentence_transformer", "sentence-transformers/all-MiniLM-L6-v2"),
+            ("transformers", "BAAI/bge-small-en-v1.5"),
+            ("llamaindex", "BAAI/bge-small-en-v1.5"),
+        ]
+    else:
+        models_to_download = [
+            # Core models from parameter_sets.py
+            ("sentence_transformer", "sentence-transformers/all-MiniLM-L6-v2"),
+            ("transformers", "BAAI/bge-small-en-v1.5"),
+            ("transformers", "BAAI/bge-large-en-v1.5"),
+            # Test via LlamaIndex (this is how the app actually uses them)
+            ("llamaindex", "sentence-transformers/all-MiniLM-L6-v2"),
+            ("llamaindex", "BAAI/bge-small-en-v1.5"),
+        ]
 
     success_count = 0
     total_count = len(models_to_download)

@@ -269,8 +269,9 @@ class TestSTTAPIModels:
 
 
 @pytest.mark.slow
+@pytest.mark.internet
 class TestTranscriberIntegration:
-    """Integration tests for transcriber (requires model download)."""
+    """Integration tests for transcriber (requires model download from HuggingFace)."""
 
     def test_transcriber_model_loading(self):
         """Test that the whisper model can be loaded."""

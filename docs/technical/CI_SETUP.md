@@ -164,6 +164,20 @@ If caching causes problems:
 2. **Force cache refresh**: Update cache keys in workflow
 3. **Disable caching temporarily**: Comment out cache steps for debugging
 
+## Repository Cleanup
+
+A separate **Repository Cleanup** workflow reduces GitHub Actions storage usage:
+
+- **Triggers**: After Python CI completes on main, or manually via `workflow_dispatch`
+- **Branch cleanup**: Deletes merged remote/local branches (feature/*, task/*)
+- **Workflow run cleanup**:
+  1. Runs from deleted branches
+  2. PR ref runs (refs/pull/*)
+  3. Obsolete queued/waiting runs (older than 7 days)
+  4. Superseded runs (keeps most recent successful per workflow+branch; keeps failed runs for debugging)
+
+**Manual run**: Actions → Repository Cleanup → Run workflow
+
 ## Monitoring and Maintenance
 
 ### Regular Checks
@@ -198,6 +212,9 @@ When Python 3.14 compatibility is available:
 ## Code Files
 
 - [.github/workflows/python-ci.yml](../../.github/workflows/python-ci.yml) - Main GitHub Actions workflow configuration
+- [.github/workflows/cleanup.yml](../../.github/workflows/cleanup.yml) - Repository and workflow run cleanup
+- [scripts/cleanup-github-actions.sh](../../scripts/cleanup-github-actions.sh) - Workflow run cleanup script
+- [scripts/cleanup-merged-branches.sh](../../scripts/cleanup-merged-branches.sh) - Merged branch cleanup script
 - [tests/ci/test_github_actions_setup.py](../../tests/ci/test_github_actions_setup.py) - CI setup validation tests
 - [pyproject.toml](../../pyproject.toml) - Project configuration with Python version constraints
 - [scripts/setup_embedding_models.py](../../scripts/setup_embedding_models.py) - Embedding model setup script

@@ -144,6 +144,32 @@ When modifying these scripts:
 3. **Update Documentation**: Update CODEX.md and this README when adding features
 4. **Test in Clean Environment**: Verify scripts work in fresh Codex workspaces
 
+## Repository Cleanup Scripts
+
+### cleanup-github-actions.sh
+
+Removes obsolete GitHub Actions workflow runs to reduce storage usage.
+
+**Usage** (requires gh CLI with workflow scope):
+
+```bash
+./scripts/cleanup-github-actions.sh          # Dry-run
+./scripts/cleanup-github-actions.sh --execute  # Execute cleanup
+```
+
+### cleanup-merged-branches.sh
+
+Deletes merged local and remote branches (protects main, develop, hotfix/*, release/*).
+
+**Usage**:
+
+```bash
+./scripts/cleanup-merged-branches.sh          # Dry-run
+./scripts/cleanup-merged-branches.sh --execute  # Execute cleanup
+```
+
+These scripts are invoked automatically by the Repository Cleanup workflow after Python CI completes on main. See [docs/technical/CI_SETUP.md](../docs/technical/CI_SETUP.md).
+
 ## Dependencies
 
 These scripts require:

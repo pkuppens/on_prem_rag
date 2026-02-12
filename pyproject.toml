@@ -104,6 +104,8 @@ test-mcp-calendar-client = "test_mcp_calendar_client:main_sync"
 authenticate-google-calendar = "authenticate_google_calendar:main"
 # Chainlit UI
 start-chat = "frontend.chat.app:main"
+# CUDA availability check (local GPU troubleshooting)
+is-cuda-available = "backend.rag_pipeline.utils.cuda_check:main"
 # start-frontend: cd src/frontend && npm install && npm run dev
 
 [project.optional-dependencies]

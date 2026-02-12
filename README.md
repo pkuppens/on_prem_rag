@@ -152,17 +152,26 @@ This project can be configured as a multi-root workspace to integrate the relate
 To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.
 
 ```bash
-uv venv --python 3.13.2
-source .venv/bin/activate
-# Install package in editable mode with development dependencies
-uv pip install -e .[dev]
+# Create venv and install all dependencies (including dev tools)
+uv sync --group dev
+
+# Install git hooks for pre-commit (lint, format, etc.)
 pre-commit install
 
 # Set up git hooks for unit test enforcement (run once after cloning)
 uv run python scripts/setup_git_hooks.py
 ```
 
-**Note**: The project uses editable installation (`-e`) to ensure proper Python module resolution. This allows the test suite to correctly import modules from `src/`, `scripts/`, and `project/` directories using absolute imports.
+**Verify setup** by running:
+
+```bash
+uv run pytest                              # Run tests (excludes slow and internet by default)
+pre-commit run --all-files                 # Run all pre-commit hooks (first run may auto-fix some files)
+```
+
+No manual venv activation is needed—`uv run` uses the project environment automatically on all platforms.
+
+**Note**: The project uses a src-layout structure. `uv sync` installs the package in editable mode so the test suite can import modules from `src/`, `scripts/`, and `project/` directories.
 
 ### Git Push Enforcement
 
@@ -239,22 +248,16 @@ See [docs/SETUP.md](docs/SETUP.md) and [docs/pre-commit-hooks.md](docs/pre-commi
 **Solution:**
 
 ```bash
-# Install the current project in editable mode (CRITICAL for src-layout projects)
-uv pip install -e .[dev]
-
-# Verify installation
+uv sync --group dev
 uv run pytest tests/test_imports.py -v
 ```
 
-**Explanation:** The project uses a src-layout structure where all modules are inside the `src/` directory. For entry point scripts to work properly, the package must be installed in development mode.
-
-**Important:** This uses `uv pip install -e .[dev]` to install the current project itself, not external dependencies. For adding new external packages, always use `uv add package-name`.
+**Explanation:** The project uses a src-layout structure where all modules are inside the `src/` directory. `uv sync --group dev` creates the venv and installs the project in editable mode.
 
 **uv Command Usage:**
 
-- `uv add package-name` - Add external dependencies to pyproject.toml (use this for new packages)
-- `uv pip install -e .[dev]` - Install current project in editable mode (use this for project setup)
-- `uv sync` - Install all dependencies from pyproject.toml (use this in fresh environments)
+- `uv sync --group dev` - Install project and all dependencies (use for setup and fresh environments)
+- `uv add package-name` - Add external dependencies to pyproject.toml (use for new packages)
 
 #### 2. uv Command Not Found
 
@@ -296,11 +299,11 @@ uv python list
 # Install specific version
 uv python install 3.13.2
 
-# Create venv with specific version
-uv venv --python 3.13.2
+# uv sync uses pyproject.toml's requires-python; to force a version:
+uv sync --group dev --python 3.13.2
 
 # Verify version
-python --version
+uv run python --version
 ```
 
 #### 4. Dependency Installation Failures
@@ -440,7 +443,7 @@ npm run dev
 
 1. **Check logs**: Look at service logs for detailed error messages
 2. **Verify environment**: Run `uv run pytest tests/test_imports.py -v`
-3. **Clean rebuild**: Remove `.venv` and `uv.lock`, then run `uv sync`
+3. **Clean rebuild**: Remove `.venv` and `uv.lock` (if present), then run `uv sync --group dev`
 4. **Check documentation**: See [docs/SETUP.md](docs/SETUP.md) for detailed setup instructions
 5. **Network issues**: Ensure access to required domains (pypi.org, huggingface.co, github.com)
 
@@ -450,7 +453,7 @@ npm run dev
 # Complete environment reset
 rm -rf .venv uv.lock
 uv cache clean --all
-uv sync
+uv sync --group dev
 
 # Verify everything works
 uv run pytest

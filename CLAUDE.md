@@ -9,12 +9,14 @@ On-premises RAG (Retrieval-Augmented Generation) system enabling document analys
 ## Build and Development Commands
 
 ```bash
-# Environment setup
-uv venv --python 3.13.2
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-uv pip install -e .[dev]
+# Environment setup (run once after clone)
+uv sync --group dev
 pre-commit install
 uv run python scripts/setup_git_hooks.py  # Set up pre-push test enforcement
+
+# Verify setup
+uv run pytest
+pre-commit run --all-files
 
 # Run tests (default: excludes slow and internet tests)
 uv run pytest                              # Quick tests only
@@ -61,7 +63,7 @@ uv run mcp-calendar-server                 # MCP Calendar Server
 ### Key Patterns
 
 - **Absolute imports**: Use `from backend.rag_pipeline.core import chunking` not relative imports
-- **src-layout**: Package installed in editable mode via `uv pip install -e .[dev]`
+- **src-layout**: Package installed in editable mode via `uv sync --group dev`
 - **Entry points**: Defined in `pyproject.toml` `[project.scripts]`
 
 ## Critical Rules

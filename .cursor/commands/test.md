@@ -399,4 +399,3 @@ This provides:
 - [tests/conftest.py](tests/conftest.py) - Test configuration and fixtures
 - [pyproject.toml](pyproject.toml) - Pytest configuration and dependencies
 - [docker-compose.yml](docker-compose.yml) - Docker service definitions
-

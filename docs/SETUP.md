@@ -62,7 +62,18 @@ This guide provides instructions for setting up the development environment for 
     pre-commit run --all-files   # First run may auto-fix some files; run again to confirm pass
     ```
 
-5.  **Locking Dependencies (Optional but Recommended for Production):**
+5.  **Local CUDA/GPU setup (optional):**
+
+    The default install uses PyTorch CPU (required for CI). For local development with an NVIDIA GPU (e.g. RTX 4090):
+
+    ```bash
+    uv run is-cuda-available
+    # Or if uv run fails (e.g. file lock): .venv\Scripts\python.exe scripts\is_cuda_available.py
+    ```
+
+    See [docs/technical/CUDA_SETUP.md](technical/CUDA_SETUP.md) for CUDA install steps.
+
+6.  **Locking Dependencies (Optional but Recommended for Production):**
 
     The `uv.lock` file is gitignored by default for library/proof-of-concept development to allow flexibility. For production releases or to ensure exact reproducible environments, you can generate and commit `uv.lock`:
 

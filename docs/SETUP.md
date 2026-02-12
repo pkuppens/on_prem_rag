@@ -20,34 +20,15 @@ This guide provides instructions for setting up the development environment for 
     cd on_prem_rag
     ```
 
-2.  **Set up Python environment using `uv`:**
+2.  **Install dependencies using `uv`:**
 
-    If you have a `.python-version` file (which should be `3.13.2`), `uv` can automatically create a virtual environment with that Python version.
-
-    ```bash
-    uv venv --python 3.13.2
-    ```
-
-    This will create a `.venv` directory. Activate it using:
-
-    - On macOS and Linux:
-      ```bash
-      source .venv/bin/activate
-      ```
-    - On Windows:
-      ```bash
-      .venv\Scripts\activate
-      ```
-
-3.  **Install dependencies:**
-
-    Install both production and development dependencies using `uv`:
+    `uv sync` creates a virtual environment (`.venv`) and installs all dependencies in one step. No manual activation is needed—use `uv run` for all commands.
 
     ```bash
-    uv pip install -e .[dev]
+    uv sync --group dev
     ```
 
-    The `-e .` installs the current project in editable mode. `[dev]` installs the optional development dependencies specified in `pyproject.toml`.
+    This installs the project in editable mode with all development dependencies (pytest, ruff, pre-commit, etc.). `uv` automatically uses Python 3.13.2 if available, or falls back to the project's `requires-python` range (3.12–3.14).
 
     **CRITICAL DEPENDENCY MANAGEMENT RULE**:
 
@@ -67,7 +48,21 @@ This guide provides instructions for setting up the development environment for 
 
     If you encounter any import errors related to llama-index modules, make sure all these packages are installed.
 
-4.  **Locking Dependencies (Optional but Recommended for Production):**
+3.  **Install pre-commit hooks:**
+
+    ```bash
+    pre-commit install
+    uv run python scripts/setup_git_hooks.py   # Pre-push test enforcement
+    ```
+
+4.  **Verify setup:**
+
+    ```bash
+    uv run pytest
+    pre-commit run --all-files   # First run may auto-fix some files; run again to confirm pass
+    ```
+
+5.  **Locking Dependencies (Optional but Recommended for Production):**
 
     The `uv.lock` file is gitignored by default for library/proof-of-concept development to allow flexibility. For production releases or to ensure exact reproducible environments, you can generate and commit `uv.lock`:
 
@@ -87,15 +82,7 @@ This guide provides instructions for setting up the development environment for 
 
 This project uses pre-commit hooks to ensure code quality and consistency before committing changes.
 
-1.  **Install pre-commit:**
-
-    If you haven't already, install pre-commit (it's also in the dev dependencies):
-
-    ```bash
-    pip install pre-commit
-    # or, if you installed dev dependencies with uv:
-    # uv pip install pre-commit
-    ```
+1.  **Pre-commit is included** when you run `uv sync --group dev`. No separate install is needed.
 
 2.  **Install the git hooks:**
 
@@ -118,11 +105,11 @@ This project uses pre-commit hooks to ensure code quality and consistency before
 ## Code Quality and Formatting
 
 - **Ruff**: Used for linting and formatting. Configuration is in `pyproject.toml`.
-  - To format code: `ruff format .`
-  - To check for linting issues: `ruff check .`
+  - To format code: `uv run ruff format .`
+  - To check for linting issues: `uv run ruff check .`
   - These are also run by the pre-commit hooks.
 - **Pytest**: Used for running tests. Tests are located in the `tests/` directory.
-  - To run tests: `pytest`
+  - To run tests: `uv run pytest`
   - This is also run by the pre-commit hooks.
 
 ## Package Structure

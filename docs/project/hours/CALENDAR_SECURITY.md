@@ -154,4 +154,3 @@ logger.error(f"SECURITY: Write operation blocked: {error_msg}")
 ## Security Contact
 
 If you discover a security vulnerability or have concerns about the security implementation, please review the code and report any issues.
-

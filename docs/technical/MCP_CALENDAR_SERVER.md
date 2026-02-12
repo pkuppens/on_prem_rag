@@ -279,5 +279,3 @@ python src/mcp/test_report_generator.py tests/test_results_mcp_calendar.json tes
 - [Google Calendar API Documentation](https://developers.google.com/calendar/api)
 - [WBSO Upload Module](../src/wbso/upload.py)
 - [WBSO Calendar Event Models](../src/wbso/calendar_event.py)
-
-

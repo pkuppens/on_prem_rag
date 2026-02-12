@@ -588,4 +588,3 @@ Each stage validates its outputs:
 - [TOC.md](TOC.md) - Theory of Constraints analysis
 - [WBSO_PROCESS_RUNBOOK.md](WBSO_PROCESS_RUNBOOK.md) - Process runbook
 - [PROJECT_PLAN.md](PROJECT_PLAN.md) - Project planning
-

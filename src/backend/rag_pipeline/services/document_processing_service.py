@@ -169,6 +169,8 @@ class DocumentProcessingService:
             ".pdf": "application/pdf",
             ".txt": "text/plain",
             ".md": "text/markdown",
+            ".html": "text/html",
+            ".htm": "text/html",
             ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             ".doc": "application/msword",
             ".csv": "text/csv",

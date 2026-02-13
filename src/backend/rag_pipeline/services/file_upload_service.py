@@ -39,13 +39,14 @@ class FileUploadService:
         "application/pdf",
         "text/plain",
         "text/markdown",
+        "text/html",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
         "application/msword",  # .doc
         "text/csv",
         "application/json",
     }
 
-    SUPPORTED_EXTENSIONS = {".pdf", ".txt", ".md", ".docx", ".doc", ".csv", ".json"}
+    SUPPORTED_EXTENSIONS = {".pdf", ".txt", ".md", ".html", ".htm", ".docx", ".doc", ".csv", ".json"}
 
     def __init__(self, upload_dir: Optional[Path] = None):
         """Initialize the file upload service.

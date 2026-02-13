@@ -1,0 +1,18 @@
+# CODEOWNERS file - defines individuals or teams responsible for code review
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo
+# This ensures @pkuppens is automatically requested for review on all PRs
+* @pkuppens
+
+# Specific ownership for CI/CD and workflows
+/.github/ @pkuppens
+
+# Documentation ownership
+/docs/ @pkuppens
+
+# Core source code
+/src/ @pkuppens
+
+# Tests
+/tests/ @pkuppens

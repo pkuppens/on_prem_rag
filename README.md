@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/License-MIT%20w%2F%20Restriction-yellow.svg)](LICENSE)
 [![CI](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-check%20CI-blue.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
 
 _Talk with your documents and data using LLMs without Cloud privacy and confidentiality concerns_
 

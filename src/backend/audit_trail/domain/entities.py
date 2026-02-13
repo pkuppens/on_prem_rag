@@ -26,7 +26,6 @@ from typing import List
 from uuid import UUID, uuid4
 
 
-
 class GuardrailType(Enum):
     """Types of guardrails that can trigger audit events."""
 

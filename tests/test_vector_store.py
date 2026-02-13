@@ -1,6 +1,5 @@
 """Tests for vector store manager."""
 
-
 import pytest
 
 pytest.importorskip("chromadb")

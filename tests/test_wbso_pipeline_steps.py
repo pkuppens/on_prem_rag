@@ -15,7 +15,6 @@ Created: 2025-11-28
 
 from datetime import datetime
 
-
 from src.wbso.pipeline_steps import AMSTERDAM_TZ, _normalize_datetime
 
 

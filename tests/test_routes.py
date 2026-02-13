@@ -3,7 +3,6 @@
 This module tests the various API endpoints and their functionality.
 """
 
-
 from fastapi.testclient import TestClient
 
 from src.backend.rag_pipeline.api.app import app

@@ -7,7 +7,6 @@ to create comprehensive work logs for WBSO compliance.
 See docs/technical/WBSO_COMPLIANCE.md for business context and requirements.
 """
 
-
 # Import the functions to test
 import sys
 from datetime import datetime

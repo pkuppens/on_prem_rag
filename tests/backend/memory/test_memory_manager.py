@@ -8,7 +8,6 @@ Tests cover:
 - Module exports
 """
 
-
 import pytest
 
 from backend.memory import (

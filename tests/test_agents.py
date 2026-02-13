@@ -12,7 +12,6 @@ Tests cover:
 import os
 from unittest.mock import MagicMock, patch
 
-
 from backend.rag_pipeline.agents.base_agent import (
     AgentConfig,
     AgentMetrics,

@@ -17,7 +17,6 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-
 from src.wbso.calendar_event import WBSODataset, WBSOSession
 from src.wbso.validation import WBSODataValidator
 

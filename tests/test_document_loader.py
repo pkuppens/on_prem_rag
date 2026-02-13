@@ -1,6 +1,5 @@
 """Tests for the document loader module."""
 
-
 import pytest
 
 pytest.importorskip("pypdf")

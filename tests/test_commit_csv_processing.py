@@ -6,7 +6,6 @@ This module tests the process_commit_csvs.py script functionality
 for WBSO hours registration and work block analysis.
 """
 
-
 # Import the processing functions
 import sys
 import unittest

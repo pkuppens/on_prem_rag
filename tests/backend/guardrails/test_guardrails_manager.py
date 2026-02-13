@@ -89,8 +89,13 @@ class TestGuardrailsResult:
         assert "pii:phone" in result.all_issues
 
 
+@pytest.mark.guardrails_ci_skip
 class TestGuardrailsManager:
-    """Tests for GuardrailsManager."""
+    """Tests for GuardrailsManager.
+
+    Skipped on CI: GuardrailsManager loads PyTorch/nemoguardrails; some GitHub runner
+    CPUs trigger "Illegal instruction". Run locally with: pytest -m guardrails_ci_skip
+    """
 
     @pytest.fixture
     def manager(self) -> GuardrailsManager:
@@ -151,8 +156,9 @@ class TestGuardrailsManager:
         assert output_result.is_allowed
 
 
+@pytest.mark.guardrails_ci_skip
 class TestGuardrailsManagerWithContext:
-    """Tests for context-aware validation."""
+    """Tests for context-aware validation. Skipped on CI (see TestGuardrailsManager)."""
 
     @pytest.fixture
     def manager(self) -> GuardrailsManager:
@@ -190,8 +196,9 @@ class TestGuardrailsManagerWithContext:
         assert result.is_allowed
 
 
+@pytest.mark.guardrails_ci_skip
 class TestGuardrailsManagerPerformance:
-    """Tests for performance characteristics."""
+    """Tests for performance characteristics. Skipped on CI (see TestGuardrailsManager)."""
 
     @pytest.fixture
     def manager(self) -> GuardrailsManager:

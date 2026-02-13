@@ -218,7 +218,8 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')",
     "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')",
-    "ci_setup: marks tests that validate CI/CD setup and configuration (deselect with '-m \"not ci_setup\"')"
+    "ci_setup: marks tests that validate CI/CD setup and configuration (deselect with '-m \"not ci_setup\"')",
+    "guardrails_ci_skip: marks tests skipped on CI due to PyTorch CPU compatibility (run with '-m \"guardrails_ci_skip\"' locally)"
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]

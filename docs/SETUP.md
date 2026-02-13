@@ -10,7 +10,33 @@ This guide provides instructions for setting up the development environment for 
   - `pip install uv`
   - or `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Git
-- (Optional) `just` — task runner for `just lint`, `just test`, `just docker`. Install: `scoop install just` or `choco install just`
+- (Recommended) `just` — task runner for `just lint`, `just test`, `just check`, `just docker`. See [Installing just](#installing-just) below.
+
+## Installing just
+
+`just` is a command runner that executes recipes from the project `justfile`. Use it for common tasks such as `just lint`, `just test`, and `just check` (lint + test).
+
+**Install on Windows (choose one):**
+
+| Method   | Command                              |
+| -------- | ------------------------------------ |
+| winget   | `winget install --id Casey.Just --exact` |
+| Scoop    | `scoop install just`                 |
+| Chocolatey | `choco install just`              |
+| Cargo    | `cargo install just`                 |
+
+**Verify installation:**
+
+```bash
+just --version
+just   # Lists available recipes
+just lint   # Runs ruff check and format checks
+```
+
+**If `just` is not recognized after install:**
+
+- Terminals opened from Cursor/VS Code inherit the IDE's environment from when it was started. Fully **quit and restart Cursor** (or your IDE) so new terminals get the updated `PATH`.
+- Or open a new cmd/PowerShell from the Start Menu—those get a fresh environment and should find `just`.
 
 ## Initial Setup
 
@@ -63,7 +89,7 @@ This guide provides instructions for setting up the development environment for 
     pre-commit run --all-files   # First run may auto-fix some files; run again to confirm pass
     ```
 
-    Or with `just` (if installed): `just check` runs lint + test.
+    Or with `just` (if installed): `just check` runs lint + test in one command.
 
 5.  **Local CUDA/GPU setup (optional):**
 

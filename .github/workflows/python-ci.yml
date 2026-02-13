@@ -29,6 +29,8 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -39,28 +41,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Log disk usage
         if: always()
         run: |
@@ -78,6 +69,8 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -88,28 +81,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Lint with ruff (auto-fix and verify)
         run: |
           # Run ruff check with --fix to automatically fix issues
@@ -135,38 +117,29 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
-          tool-cache: false  # Keep Python/Node for setup-python
+          tool-cache: false
           android: true
           dotnet: true
           haskell: true
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Cache HuggingFace models
         uses: actions/cache@v4
         with:
@@ -199,6 +172,8 @@ jobs:
     needs: [setup, model-download]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -209,28 +184,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Cache HuggingFace models
         uses: actions/cache@v4
         with:
@@ -273,6 +237,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -283,28 +249,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Cache HuggingFace models
         uses: actions/cache@v4
         with:
@@ -345,6 +300,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -355,28 +312,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Cache HuggingFace models
         uses: actions/cache@v4
         with:
@@ -415,6 +361,8 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -425,28 +373,17 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: false
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Cache UV dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/uv
-            ~/.local/share/uv
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}-
-            uv-${{ runner.os }}-
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
       - name: Install dependencies
-        run: |
-          uv sync --dev
+        run: uv sync --dev
       - name: Run security scan with bandit
         run: |
           # Run bandit security linter (non-blocking)

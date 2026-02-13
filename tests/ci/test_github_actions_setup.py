@@ -200,13 +200,15 @@ class TestEnvironmentConfiguration:
         """As a developer I want cache configuration to be present,
         so I can ensure efficient CI runs with proper caching.
 
-        Technical: Workflow should have cache steps for uv and HuggingFace models.
-        Validation: Check for cache action usage in workflow.
+        Technical: Workflow should use setup-uv with caching and cache HuggingFace models.
+        Validation: Check for setup-uv cache config and HF cache action usage.
         """
         workflow_path = Path(__file__).parent.parent.parent / ".github" / "workflows" / "python-ci.yml"
         workflow_content = workflow_path.read_text(encoding="utf-8")
 
-        # Check for cache actions
-        assert "actions/cache@v4" in workflow_content, "Workflow should use cache action v4"
-        assert "Cache UV dependencies" in workflow_content, "Should cache UV dependencies"
+        # Check for setup-uv with caching (replaces manual UV cache step)
+        assert "astral-sh/setup-uv" in workflow_content, "Workflow should use setup-uv action"
+        assert "enable-cache: true" in workflow_content, "Workflow should enable uv cache"
+        # HuggingFace models cached separately (not affected by application code changes)
         assert "Cache HuggingFace models" in workflow_content, "Should cache HuggingFace models"
+        assert "actions/cache@v4" in workflow_content, "Workflow should use cache action for HF/models"

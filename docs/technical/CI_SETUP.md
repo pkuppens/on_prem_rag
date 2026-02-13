@@ -58,9 +58,9 @@ env:
 
 The workflow uses multiple cache layers:
 
-1. **UV Dependencies**: Cached based on `uv.lock` and `pyproject.toml` hash
-2. **HuggingFace Models**: Cached based on setup script hash
-3. **Pytest Cache**: Cached based on test files and dependencies
+1. **Python and uv** (via `astral-sh/setup-uv`): Python installs and UV dependency cache. Invalidates when `uv.lock` or `pyproject.toml` changes. First runs are slower; cached runs skip Python/UV install.
+2. **HuggingFace Models**: Cached based on `scripts/setup_embedding_models.py` hash only—application code changes do not invalidate. Restore-keys allow reuse when the setup script is refactored but models are unchanged.
+3. **Pytest Cache**: Cached based on test files and pyproject.toml. Speeds up test collection on subsequent runs.
 
 ## Local Validation
 
@@ -117,13 +117,13 @@ uv sync --python 3.12 --dev
 
 #### 2. UV Installation Failures
 
-**Symptoms**: `curl` command fails or times out
+**Symptoms**: `astral-sh/setup-uv` fails or times out
 
 **Cause**: Network issues or GitHub Actions runner problems
 
 **Solution**: 
 - Check network connectivity
-- Verify the uv install script URL is accessible
+- Verify the setup-uv action version (v7) is available
 - Consider using a different runner or retry mechanism
 
 #### 3. Dependency Resolution Failures
@@ -201,10 +201,14 @@ When Python 3.14 compatibility is available:
 
 ### Performance Optimization
 
-- Monitor cache hit rates
-- Optimize dependency installation order
-- Consider parallel job execution
-- Review timeout settings
+The workflow is optimized for cached runs:
+
+- **astral-sh/setup-uv**: Replaces manual curl install and separate cache step. Caches both Python and UV dependencies.
+- **Shallow checkout** (`fetch-depth: 1`): Faster Git clone.
+- **Parallelism**: lint, model-download, and security run in parallel after setup; test jobs run in parallel after model-download.
+- **Smart cache invalidation**: UV cache invalidates on lock file changes; HF cache invalidates only on model setup script changes, not on application code changes.
+
+Monitor cache hit rates and job durations in the Actions UI.
 
 ## References
 

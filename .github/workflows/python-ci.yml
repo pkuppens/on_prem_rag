@@ -141,7 +141,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
@@ -196,14 +196,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}
@@ -263,14 +263,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}
@@ -326,14 +326,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
       - name: Cache HuggingFace models
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .pytest_cache
           key: ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-${{ hashFiles('pyproject.toml') }}

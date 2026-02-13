@@ -106,6 +106,19 @@ class TestDocumentLoader:
         assert "Test Document" in documents[0].text
         assert metadata.file_type == ".md"
 
+        # Test HTML file
+        html_file = test_case_dir / "test.html"
+        html_file.write_text(
+            "<html><head><title>Page</title></head><body>"
+            "<h1>HTML Title</h1><p>Extracted text content here.</p></body></html>"
+        )
+
+        documents, metadata = loader.load_document(html_file)
+        assert len(documents) > 0
+        assert "HTML Title" in documents[0].text
+        assert "Extracted text content here" in documents[0].text
+        assert metadata.file_type == ".html"
+
     def test_file_size_limits(self, test_case_dir):
         """Test file size validation."""
         loader = DocumentLoader()

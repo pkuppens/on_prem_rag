@@ -7,7 +7,7 @@ Project References:
   - [✓] Idempotent document loading with duplicate detection
   - [✓] File validation and preprocessing pipeline
   - [✓] LlamaIndex document loaders with error handling
-  - [✓] Support PDF, DOCX, MD, and TXT file types
+  - [✓] Support PDF, DOCX, MD, TXT, and HTML file types
   - [ ] Advanced chunking and embedding system (TASK-007)
   - [ ] Document obsoletion/invalidation (TASK-007)
 
@@ -31,7 +31,7 @@ addressing the following business needs:
 
 Features:
 [✓] Core Document Processing
-    - Support for PDF, DOCX, MD, and TXT files
+    - Support for PDF, DOCX, MD, TXT, and HTML files
     - File validation and size limits
     - Duplicate detection using SHA-256 hashing
     - Error handling and logging
@@ -59,6 +59,7 @@ from __future__ import annotations
 import hashlib
 import logging
 from abc import ABC, abstractmethod
+from html.parser import HTMLParser
 from pathlib import Path
 
 # Import from LlamaIndex lazily to allow tests to run without optional deps
@@ -124,6 +125,36 @@ class TextProcessor(BaseProcessor):
         return reader.load_data(file_path)
 
 
+class _HTMLTextExtractor(HTMLParser):
+    """Extract text content from HTML, stripping tags."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.text_parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        self.text_parts.append(data)
+
+    def get_text(self) -> str:
+        return "".join(self.text_parts)
+
+
+class HtmlProcessor(BaseProcessor):
+    """Load HTML files and extract text content for RAG ingestion."""
+
+    def load(self, file_path: Path) -> list[Document]:
+        global Document
+        from llama_index.core import Document
+
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        extractor = _HTMLTextExtractor()
+        extractor.feed(content)
+        text = extractor.get_text().strip()
+        if not text:
+            text = "(No text content extracted from HTML)"
+        return [Document(text=text, metadata={"file_path": str(file_path)})]
+
+
 class DocumentMetadata(BaseModel):
     """Metadata for a processed document.
 
@@ -146,7 +177,7 @@ class DocumentMetadata(BaseModel):
 class DocumentLoader:
     """Handles loading and preprocessing of various document formats."""
 
-    SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".md", ".txt"}
+    SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".md", ".txt", ".html", ".htm"}
     MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 
     def __init__(self) -> None:
@@ -164,6 +195,8 @@ class DocumentLoader:
             ".docx": DocxProcessor(),
             ".md": MarkdownProcessor(),
             ".txt": TextProcessor(),
+            ".html": HtmlProcessor(),
+            ".htm": HtmlProcessor(),
         }
 
     def _compute_file_hash(self, file_path: Path) -> str:

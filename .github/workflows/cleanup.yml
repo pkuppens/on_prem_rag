@@ -50,7 +50,7 @@ jobs:
 
       - name: Checkout repository
         if: github.event_name == 'workflow_dispatch' || steps.check-complete.outputs.skip == 'false'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0  # Fetch all history for branch analysis
 

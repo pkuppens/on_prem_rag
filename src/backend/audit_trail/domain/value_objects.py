@@ -15,11 +15,9 @@ Reference: WBSO-AICM-2025-01 Knelpunt 3 (Privacyvriendelijke auditlogs)
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 from hashlib import sha256
 from typing import List
-from uuid import UUID, uuid4
 
 
 def hash_identifier(identifier: str, salt: str = "") -> str:

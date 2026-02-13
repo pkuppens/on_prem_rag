@@ -14,7 +14,6 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -134,7 +133,7 @@ def create_work_summary(work_log_file: Path, output_file: Path) -> None:
         print(f"\nDetailed summary saved to: {output_file}")
         print("=" * 60)
 
-        logger.info(f"Work summary created successfully")
+        logger.info("Work summary created successfully")
         logger.info(f"Summary saved to: {output_file}")
 
     except Exception as e:

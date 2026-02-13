@@ -15,10 +15,7 @@ Created: 2025-11-15
 
 import asyncio
 import json
-import subprocess
 import sys
-from pathlib import Path
-from typing import Any, Dict, Optional
 
 try:
     from mcp import ClientSession, StdioServerParameters, stdio_client
@@ -127,7 +124,7 @@ async def test_mcp_connection():
                     return False, f"Error calling list_calendars tool: {e}", {}
 
     except FileNotFoundError:
-        return False, f"MCP server command not found. Make sure 'uv run mcp-calendar-server' works.", {}
+        return False, "MCP server command not found. Make sure 'uv run mcp-calendar-server' works.", {}
     except Exception as e:
         return False, f"Error connecting to MCP server: {e}", {}
 

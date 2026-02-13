@@ -32,14 +32,11 @@ testing the backing code directly for better reliability and faster execution.
 import pytest
 
 pytest.importorskip("llama_index")
-from pathlib import Path
 
 from llama_index.core import Document
 
 from backend.rag_pipeline.config.parameter_sets import TEST_PARAMS
 from backend.rag_pipeline.core.embeddings import (
-    EmbeddingResult,
-    QueryResult,
     embed_text_nodes,
     process_pdf,
     query_embeddings,

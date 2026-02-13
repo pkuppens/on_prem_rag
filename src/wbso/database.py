@@ -9,12 +9,10 @@ See docs/technical/WBSO_DATABASE_SCHEMA.md for detailed schema design and relati
 from __future__ import annotations
 
 from datetime import datetime
-from pathlib import Path
 from typing import List, Optional
 
 from sqlalchemy import (
     Boolean,
-    Column,
     DateTime,
     ForeignKey,
     Integer,

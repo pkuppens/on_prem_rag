@@ -7,7 +7,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    import chainlit as cl
+    pass
 
 logger = logging.getLogger(__name__)
 

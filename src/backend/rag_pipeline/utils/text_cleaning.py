@@ -6,7 +6,6 @@ from documents before chunking and embedding.
 
 import re
 import unicodedata
-from typing import Optional
 
 
 def clean_text(text: str, aggressive: bool = False) -> str:

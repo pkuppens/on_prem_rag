@@ -19,10 +19,9 @@ Reference: WBSO-AICM-2025-01 Knelpunt 2 (AVG-veilig)
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from hashlib import sha256
-from typing import Callable
 
 
 class PIICategory(Enum):

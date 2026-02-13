@@ -5,8 +5,6 @@ transcription with context-aware LLM correction.
 """
 
 import logging
-import os
-import tempfile
 from pathlib import Path
 from typing import Any
 

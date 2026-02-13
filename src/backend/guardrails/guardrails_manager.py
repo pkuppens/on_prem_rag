@@ -11,7 +11,6 @@ import logging
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
-from pathlib import Path
 from typing import Any
 
 from backend.guardrails.config_loader import GuardrailsConfig, get_guardrails_config

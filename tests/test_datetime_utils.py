@@ -6,13 +6,10 @@ consistent datetime operations across the project.
 See src/backend/datetime_utils.py for the implementation being tested.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime
 
-import pytest
 
 from src.backend.datetime_utils import (
-    STANDARD_DATETIME_FORMAT,
-    SUPPORTED_FORMATS,
     UnifiedDateTime,
     convert_to_standard_format,
     parse_datetime_flexible,

@@ -25,7 +25,6 @@ from enum import Enum
 from typing import List
 from uuid import UUID, uuid4
 
-from backend.audit_trail.domain.value_objects import hash_identifier
 
 
 class GuardrailType(Enum):

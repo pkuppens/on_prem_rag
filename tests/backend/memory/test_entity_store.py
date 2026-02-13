@@ -8,7 +8,6 @@ Tests cover:
 - Access logging
 """
 
-import tempfile
 from datetime import UTC, datetime, timedelta
 
 import pytest

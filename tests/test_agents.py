@@ -12,12 +12,10 @@ Tests cover:
 import os
 from unittest.mock import MagicMock, patch
 
-import pytest
 
 from backend.rag_pipeline.agents.base_agent import (
     AgentConfig,
     AgentMetrics,
-    BaseRAGAgent,
     MemoryHooks,
 )
 from backend.rag_pipeline.agents.llm_selector import (

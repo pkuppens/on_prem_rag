@@ -16,7 +16,6 @@ Usage:
 
 import argparse
 import csv
-import json
 import logging
 import sys
 from datetime import datetime

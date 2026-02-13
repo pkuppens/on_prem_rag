@@ -18,9 +18,9 @@ import csv
 import json
 import subprocess
 import sys
-from datetime import datetime, time, timedelta, timezone
+from datetime import datetime, time, timedelta
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
 from .activity_repo_mapping import ActivityRepoMapping
@@ -388,7 +388,7 @@ def step_consolidate_system_events(context: Dict[str, Any]) -> Dict[str, Any]:
                 message="System events consolidated successfully",
             )
         else:
-            logger.error(f"❌ Consolidation failed - output file not created")
+            logger.error("❌ Consolidation failed - output file not created")
             return create_step_report(
                 "consolidate_system_events",
                 False,
@@ -962,7 +962,7 @@ def step_filter_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
         logger.info(f"✅ Filtered {len(events_with_dt)} logon/logoff events (using session tagging) to {output_file}")
         logger.info(f"✅ Created {len(sessions)} sessions from logon-logoff pairs")
         logger.info(
-            f"   Note: Uses session_tag field instead of hardcoded EventId (supports 7001, 6005 for logon; 7002, 6008, 41, 1074 for logoff)"
+            "   Note: Uses session_tag field instead of hardcoded EventId (supports 7001, 6005 for logon; 7002, 6008, 41, 1074 for logoff)"
         )
 
         # Store sessions in context for next step
@@ -1002,13 +1002,9 @@ def step_polish_logon_logoff(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info("=" * 60)
 
     from .time_utils import (
-        calculate_work_hours_with_breaks,
         clip_to_max_daily_hours,
-        generate_dinner_break,
-        generate_lunch_break,
         generate_pseudo_random_end_time,
         generate_pseudo_random_start_time,
-        generate_work_break,
         round_to_quarter_hour,
     )
 
@@ -1841,7 +1837,6 @@ def step_time_polish(context: Dict[str, Any]) -> Dict[str, Any]:
 
     from .time_utils import (
         calculate_work_hours_with_breaks,
-        clip_to_max_daily_hours,
         generate_dinner_break,
         generate_lunch_break,
         generate_work_break,
@@ -2529,7 +2524,7 @@ def step_assign_commits_to_sessions(context: Dict[str, Any]) -> Dict[str, Any]:
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(session_commits_map, f, indent=2, ensure_ascii=False)
 
-    logger.info(f"✅ Commit assignment complete:")
+    logger.info("✅ Commit assignment complete:")
     logger.info(f"   - {len(commits_assigned_to_sessions)} commits assigned to sessions")
     logger.info(f"   - {sessions_with_commits} sessions have commits assigned")
     logger.info(f"   - {total_hours_with_commits:.2f} hours in sessions with commits")
@@ -2982,7 +2977,7 @@ def step_google_calendar_data_preparation(context: Dict[str, Any]) -> Dict[str, 
     output_count = len(prepared_events)
     hours_lost = total_hours_before - total_hours_after
 
-    logger.info(f"✅ Preparation complete:")
+    logger.info("✅ Preparation complete:")
     logger.info(f"  - Input events: {input_count}")
     logger.info(f"  - Output events: {output_count}")
     logger.info(f"  - Filtered out: {len(filtered_out)}")
@@ -3266,7 +3261,7 @@ def step_report(context: Dict[str, Any]) -> Dict[str, Any]:
     logger.info(f"Computer-On Hours: {computer_on_hours:.2f} hours")
     logger.info(f"Hours in Sessions with Commits: {hours_with_commits_in_range:.2f} hours")
     logger.info(f"Calendar Hours (Booked): {calendar_hours:.2f} hours")
-    logger.info(f"Target Hours: 510.0 hours")
+    logger.info("Target Hours: 510.0 hours")
     logger.info(f"Target Achievement: {(calendar_hours / 510.0 * 100):.1f}%")
     logger.info("=" * 60)
 

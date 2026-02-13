@@ -6,14 +6,11 @@ This module tests the process_commit_csvs.py script functionality
 for WBSO hours registration and work block analysis.
 """
 
-import json
 
 # Import the processing functions
 import sys
-import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import mock_open, patch
 
 sys.path.append(str(Path(__file__).parent.parent / "docs" / "project" / "hours" / "scripts"))
 

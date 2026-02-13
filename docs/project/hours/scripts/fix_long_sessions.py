@@ -15,8 +15,6 @@ Updated: 2025-12-02
 
 import csv
 import hashlib
-import json
-import sys
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 from pathlib import Path
@@ -464,10 +462,10 @@ def main():
     print("✅ Processing complete!")
     print("=" * 60)
     print()
-    print(f"Next steps:")
+    print("Next steps:")
     print(f"1. Review fixed events in: {CALENDAR_EVENTS_FIXED}")
-    print(f"2. If total hours > 750, replace original file and regenerate summaries")
-    print(f"3. Run: python scripts/generate_weekly_summary.py")
+    print("2. If total hours > 750, replace original file and regenerate summaries")
+    print("3. Run: python scripts/generate_weekly_summary.py")
     print()
 
     if new_total > 750.0:

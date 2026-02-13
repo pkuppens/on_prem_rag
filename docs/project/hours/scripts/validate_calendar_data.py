@@ -16,19 +16,18 @@ Created: 2025-10-18
 
 import csv
 import json
-import logging
 
 # Import from the proper module structure
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 # Add src directory to path for imports
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from wbso.calendar_event import ValidationResult, WBSODataset, WBSOSession
+from wbso.calendar_event import WBSODataset
 from wbso.logging_config import get_logger
 
 logger = get_logger("validation")

@@ -51,7 +51,7 @@ powershell.exe -ExecutionPolicy Bypass -File "%~dp0pre-push.ps1" %*
         # Make it executable
         os.chmod(hook_target, stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
 
-    print(f"[OK] Pre-push hook installed successfully!")
+    print("[OK] Pre-push hook installed successfully!")
     print(f"   Hook location: {hook_target}")
     print(f"   System: {system}")
 

@@ -8,7 +8,6 @@ Technical: Test UserSession, SessionManager, and UserRole classes.
 from datetime import datetime
 from unittest.mock import MagicMock
 
-import pytest
 
 from tests.frontend.chat.conftest import get_mock_chainlit
 

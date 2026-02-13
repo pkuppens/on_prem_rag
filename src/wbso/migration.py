@@ -7,16 +7,14 @@ See docs/technical/WBSO_DATABASE_SCHEMA.md for schema details.
 """
 
 import json
-import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict
 
 from .database import (
     CalendarEvent,
     Commit,
     Repository,
-    ValidationResult,
     WBSOCategory,
     WorkSession,
     get_wbso_session,

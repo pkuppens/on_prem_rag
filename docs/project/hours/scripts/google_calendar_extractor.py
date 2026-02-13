@@ -536,7 +536,7 @@ class GoogleCalendarExtractor:
             for conflict_type, count in sorted(conflict_counts.items()):
                 report += f"- {conflict_type}: {count:,} events\n"
 
-            report += f"""
+            report += """
 ## Event Type Breakdown
 """
 

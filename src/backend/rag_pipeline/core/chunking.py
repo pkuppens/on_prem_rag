@@ -18,19 +18,17 @@ Key features:
 
 from __future__ import annotations
 
-import asyncio
 import hashlib
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from llama_index.core import Document
 from llama_index.core.node_parser import SimpleNodeParser
 
 from ..utils.logging import StructuredLogger
-from ..utils.text_cleaning import clean_chunk_text, get_text_statistics, validate_chunk_quality
+from ..utils.text_cleaning import clean_chunk_text, get_text_statistics
 
 logger = StructuredLogger(__name__)
 

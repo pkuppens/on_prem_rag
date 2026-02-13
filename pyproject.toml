@@ -163,7 +163,7 @@ ignore = [
     "B007",    # unused loop variable (prefer lenient style)
     "B008",    # depends in function definition
     "B904",    # raise exception from exception
-    "F",       # all F* errors (Pyflakes)
+    "F",       # all F* errors (Pyflakes) — disable to catch F401 unused imports (~344 issues, ~313 auto-fixable)
     "UP035",   # X | Y for type sets
 ]
 

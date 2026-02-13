@@ -9,7 +9,7 @@ See project/team/tasks/TASK-030.md for detailed requirements and implementation 
 import json
 import logging
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 import pandas as pd
 

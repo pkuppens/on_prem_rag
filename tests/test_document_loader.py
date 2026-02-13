@@ -1,5 +1,7 @@
 """Tests for the document loader module."""
 
+import re
+
 import pytest
 
 pytest.importorskip("pypdf")
@@ -109,8 +111,7 @@ class TestDocumentLoader:
         # Test HTML file
         html_file = test_case_dir / "test.html"
         html_file.write_text(
-            "<html><head><title>Page</title></head><body>"
-            "<h1>HTML Title</h1><p>Extracted text content here.</p></body></html>"
+            "<html><head><title>Page</title></head><body><h1>HTML Title</h1><p>Extracted text content here.</p></body></html>"
         )
 
         documents, metadata = loader.load_document(html_file)
@@ -118,6 +119,29 @@ class TestDocumentLoader:
         assert "HTML Title" in documents[0].text
         assert "Extracted text content here" in documents[0].text
         assert metadata.file_type == ".html"
+
+    def test_metadata_extraction_section_headings_and_creation_date(self, test_case_dir):
+        """Test that section headings and creation date are extracted."""
+        loader = DocumentLoader()
+
+        # Markdown with headings
+        md_file = test_case_dir / "headings.md"
+        md_file.write_text("# Introduction\n\nContent.\n\n## Section One\n\nMore.\n\n## Section Two\n\nDone.")
+
+        documents, metadata = loader.load_document(md_file)
+        assert "Introduction" in metadata.section_headings
+        assert "Section One" in metadata.section_headings
+        assert "Section Two" in metadata.section_headings
+        assert metadata.creation_date is not None
+        assert re.match(r"\d{4}-\d{2}-\d{2}", metadata.creation_date)
+
+        # HTML with headings
+        html_file = test_case_dir / "headings.html"
+        html_file.write_text("<html><body><h1>Main</h1><p>x</p><h2>Sub</h2></body></html>")
+
+        documents, metadata = loader.load_document(html_file)
+        assert "Main" in metadata.section_headings
+        assert "Sub" in metadata.section_headings
 
     def test_file_size_limits(self, test_case_dir):
         """Test file size validation."""

@@ -58,7 +58,9 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 from abc import ABC, abstractmethod
+from datetime import datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -139,6 +141,31 @@ class _HTMLTextExtractor(HTMLParser):
         return "".join(self.text_parts)
 
 
+class _HTMLHeadingExtractor(HTMLParser):
+    """Extract section headings (h1-h6) from HTML."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.headings: list[str] = []
+        self._in_heading = False
+        self._current_heading: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() in ("h1", "h2", "h3", "h4", "h5", "h6"):
+            self._in_heading = True
+            self._current_heading = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() in ("h1", "h2", "h3", "h4", "h5", "h6"):
+            if self._current_heading:
+                self.headings.append(" ".join(self._current_heading).strip())
+            self._in_heading = False
+
+    def handle_data(self, data: str) -> None:
+        if self._in_heading:
+            self._current_heading.append(data)
+
+
 class HtmlProcessor(BaseProcessor):
     """Load HTML files and extract text content for RAG ingestion."""
 
@@ -160,7 +187,6 @@ class DocumentMetadata(BaseModel):
 
     This class can be extended with additional fields for future features such as:
     - Validity periods (valid_at, invalid_at)
-    - Creation and modification timestamps
     - Access control information
     - Document versioning
     """
@@ -172,6 +198,8 @@ class DocumentMetadata(BaseModel):
     num_pages: int | None = None
     processing_status: str = "success"
     error_message: str | None = None
+    section_headings: list[str] = []
+    creation_date: str | None = None  # ISO 8601 format (YYYY-MM-DD or full datetime)
 
 
 class DocumentLoader:
@@ -229,6 +257,51 @@ class DocumentLoader:
             file_size=file_path.stat().st_size,
         )
 
+    def _extract_creation_date(self, file_path: Path) -> str | None:
+        """Extract creation or modification date from file. Returns ISO 8601 date string."""
+        try:
+            # Try PDF internal metadata first
+            if file_path.suffix.lower() == ".pdf":
+                try:
+                    from pypdf import PdfReader
+
+                    reader = PdfReader(file_path)
+                    if reader.metadata and reader.metadata.get("/CreationDate"):
+                        # PDF dates: D:YYYYMMDDHHmmSS
+                        raw = str(reader.metadata.get("/CreationDate", ""))
+                        if raw.startswith("D:"):
+                            raw = raw[2:]
+                        if len(raw) >= 8:
+                            return f"{raw[:4]}-{raw[4:6]}-{raw[6:8]}"
+                except Exception:  # noqa: S110
+                    pass
+            # Fallback: file system modification time
+            mtime = file_path.stat().st_mtime
+            return datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+        except Exception:  # noqa: S110
+            return None
+
+    def _extract_section_headings(self, documents: list, file_path: Path, file_type: str) -> list[str]:
+        """Extract section headings from document content.
+
+        For Markdown/HTML we read the raw file to preserve structure;
+        loaders may normalize content and strip heading markers.
+        """
+        headings: list[str] = []
+        try:
+            if file_type in (".md", ".markdown"):
+                content = file_path.read_text(encoding="utf-8", errors="replace")
+                for match in re.finditer(r"^#{1,6}\s+(.+)$", content, re.MULTILINE):
+                    headings.append(match.group(1).strip())
+            elif file_type in (".html", ".htm"):
+                content = file_path.read_text(encoding="utf-8", errors="replace")
+                extractor = _HTMLHeadingExtractor()
+                extractor.feed(content)
+                headings = extractor.headings
+        except Exception:  # noqa: S110
+            pass
+        return headings
+
     def load_document(self, file_path: str | Path, *, params_key: str = "default") -> tuple[list[Document], DocumentMetadata]:
         """Load a document and return its content and metadata.
 
@@ -268,6 +341,10 @@ class DocumentLoader:
             elif file_path.suffix.lower() == ".docx":
                 # For DOCX, we use paragraphs as the basic unit
                 metadata.num_pages = len(documents)
+
+            # Extract creation date and section headings
+            metadata.creation_date = self._extract_creation_date(file_path)
+            metadata.section_headings = self._extract_section_headings(documents, file_path, file_path.suffix.lower())
 
             # Mark as processed
             self.processed_files.add(dedup_key)

@@ -1,0 +1,111 @@
+name: Coverage Report
+
+on:
+  workflow_run:
+    workflows: ["Python CI"]
+    types:
+      - completed
+
+permissions:
+  pull-requests: write
+  contents: read
+  actions: read
+
+jobs:
+  coverage-comment:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-reports
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          # Extract coverage percentage from coverage.xml
+          if [ -f coverage.xml ]; then
+            COVERAGE=$(python3 -c "
+import xml.etree.ElementTree as ET
+tree = ET.parse('coverage.xml')
+root = tree.getroot()
+line_rate = float(root.attrib['line-rate'])
+print(f'{line_rate * 100:.1f}')
+")
+            echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
+            echo "Coverage: $COVERAGE%"
+            
+            # Generate coverage summary
+            echo "## 📊 Code Coverage Report" > coverage_comment.md
+            echo "" >> coverage_comment.md
+            echo "**Total Coverage:** ${COVERAGE}%" >> coverage_comment.md
+            echo "" >> coverage_comment.md
+            
+            # Color code based on coverage
+            if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+              echo "✅ Excellent coverage! (≥80%)" >> coverage_comment.md
+            elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+              echo "⚠️ Moderate coverage (60-80%)" >> coverage_comment.md
+            else
+              echo "❌ Low coverage (<60%)" >> coverage_comment.md
+            fi
+            
+            echo "" >> coverage_comment.md
+            echo "_Coverage report generated from unit tests_" >> coverage_comment.md
+          else
+            echo "⚠️ Coverage file not found" > coverage_comment.md
+          fi
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const coverage_comment = fs.readFileSync('coverage_comment.md', 'utf8');
+            
+            // Get the PR number from the workflow run
+            const { data: pr } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.payload.workflow_run.head_sha
+            });
+            
+            if (pr.length > 0) {
+              const pr_number = pr[0].number;
+              
+              // Check if we already commented
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr_number
+              });
+              
+              const botComment = comments.find(comment => 
+                comment.user.type === 'Bot' && 
+                comment.body.includes('📊 Code Coverage Report')
+              );
+              
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: coverage_comment
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr_number,
+                  body: coverage_comment
+                });
+              }
+            }
+
+

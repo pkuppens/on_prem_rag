@@ -1,15 +1,20 @@
 # justfile — project task runner (cross-platform)
 # Run `just` to list recipes, `just <recipe>` to run.
-# Install: scoop install just | choco install just | cargo install just
+# Install: winget install Casey.Just | scoop install just | choco install just
 # See: https://github.com/casey/just
+
+# Use PowerShell on Windows (default sh is often unavailable)
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
 # Lint and format checks (must pass before commit)
 lint:
-    uv run ruff check . && uv run ruff format --check .
+    uv run ruff check .
+    uv run ruff format --check .
 
 # Auto-fix lint and format
 lint-fix:
-    uv run ruff check . --fix && uv run ruff format .
+    uv run ruff check . --fix
+    uv run ruff format .
 
 # Run tests (excludes slow and internet by default)
 test:

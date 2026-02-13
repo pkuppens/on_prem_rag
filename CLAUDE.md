@@ -29,6 +29,7 @@ uv run pytest -k test_specific_function    # Specific test
 uv run ruff check --fix .                  # Fix lint issues
 uv run ruff format .                       # Format code
 uv run ruff check . && uv run ruff format --check .  # Verify clean
+# Or: just lint / just lint-fix (requires just: scoop install just)
 
 # Run services
 uv run start-backend                       # FastAPI RAG backend

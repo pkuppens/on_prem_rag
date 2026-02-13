@@ -68,6 +68,13 @@ requires-python = ">=3.12,<3.14"
 where = ["src", "scripts"]
 include = ["*"]
 
+[tool.setuptools.package-data]
+"backend.rag_pipeline" = ["py.typed"]
+"backend.auth_service" = ["py.typed"]
+"frontend" = ["py.typed"]
+"wbso" = ["py.typed"]
+"mcp_calendar" = ["py.typed"]
+
 [tool.setuptools.package-dir]
 "" = "src"
 scripts = "scripts"

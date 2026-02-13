@@ -13,6 +13,7 @@ The system is designed to run completely locally, using:
 - Mistral LLM (via Ollama or HuggingFace) for generation
 """
 
+import os
 from pathlib import Path
 from typing import Any
 
@@ -169,7 +170,7 @@ class LocalRAGSystem:
             Requires sufficient GPU memory for inference.
 
         """
-        model_name = "mistralai/Mistral-7B-Instruct-v0.2"
+        model_name = os.getenv("HUGGINGFACE_LLM_MODEL", "mistralai/Mistral-7B-Instruct-v0.2")
 
         # System prompt for RAG with source attribution
         system_message = (

@@ -5,10 +5,7 @@ so I can integrate with the RAG pipeline.
 Technical: Test DocumentUploadHandler class and file validation.
 """
 
-import os
-import tempfile
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 

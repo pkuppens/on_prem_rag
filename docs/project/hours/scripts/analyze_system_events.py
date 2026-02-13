@@ -702,7 +702,7 @@ def main():
     # Print summary if verbose
     if args.verbose and "summary" in result:
         summary = result["summary"]
-        print(f"\nSummary:")
+        print("\nSummary:")
         print(f"  Total computer-on sessions: {summary['total_computer_on_sessions']}")
         print(f"  Total hours: {summary['total_hours']}")
         print(f"  Total work hours: {summary['total_work_hours']}")

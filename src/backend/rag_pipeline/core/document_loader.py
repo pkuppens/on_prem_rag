@@ -60,7 +60,6 @@ import hashlib
 import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
 
 # Import from LlamaIndex lazily to allow tests to run without optional deps
 # Removing this could be the cause for failing test_embedding_shapes.py tests

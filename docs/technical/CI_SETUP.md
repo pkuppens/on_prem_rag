@@ -91,6 +91,10 @@ uv sync --dev
 uv run python scripts/setup_embedding_models.py
 ```
 
+## Disk Space (Private Repositories)
+
+Private repository runners have ~14GB free disk. The workflow uses `jlumbroso/free-disk-space` to remove pre-installed tools (Android, .NET, Haskell, etc.), freeing ~30GB before `uv sync` and HuggingFace model downloads. Without this, "No space left on device" errors can occur.
+
 ## Troubleshooting
 
 ### Common Issues

@@ -6,13 +6,10 @@ user authentication. Unauthenticated users are redirected to a login page
 with a return URL parameter.
 """
 
-import os
-from typing import Optional
 from urllib.parse import quote
 
-import httpx
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
@@ -480,7 +477,6 @@ async def api_login_test(current_user: User = Depends(get_current_user)):
 
 def start_server() -> None:
     """Start the test application server."""
-    import logging
 
     import uvicorn
 

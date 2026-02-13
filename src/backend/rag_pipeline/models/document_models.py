@@ -9,7 +9,7 @@ architecture specifications and data model requirements.
 
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 

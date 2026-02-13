@@ -295,12 +295,12 @@ class WBSOCalendarPipeline:
         print(f"Calculated Hours (WBSO sessions): {calculated_hours:.2f} hours")
         print(f"Calendar Hours: {calendar_hours:.2f} hours")
         print(f"Gap: {calculated_hours - calendar_hours:.2f} hours")
-        print(f"Target Hours: 510.0 hours")
+        print("Target Hours: 510.0 hours")
         print(f"Target Gap: {510.0 - calendar_hours:.2f} hours")
         print(f"Target Achievement: {(calendar_hours / 510.0 * 100):.1f}%")
         print(f"Hours That Could Be Assigned to WBSO: {work_sessions_hours:.2f} hours")
         if commit_filtering_disabled:
-            print(f"\nNote: Commit-based filtering is disabled to avoid filtering out too much work.")
+            print("\nNote: Commit-based filtering is disabled to avoid filtering out too much work.")
             print(f"      Dates with commits: {dates_with_commits_count}, Dates without commits: {dates_without_commits_count}")
 
         # Print step summary

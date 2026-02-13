@@ -5,6 +5,7 @@ combining all API routes and middleware.
 """
 
 import logging
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,10 +22,11 @@ logger = StructuredLogger(__name__)
 # Create FastAPI app
 app = FastAPI(title="RAG Pipeline API", description="API for document processing and semantic search", version="1.0.0")
 
-# Add CORS middleware
+# Add CORS middleware (origins from ALLOW_ORIGINS env, comma-separated)
+_cors_origins = os.getenv("ALLOW_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend development server
+    allow_origins=[o.strip() for o in _cors_origins if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers

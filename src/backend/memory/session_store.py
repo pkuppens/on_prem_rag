@@ -21,7 +21,6 @@ import threading
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
 from typing import Any
 
 from backend.memory.config import SessionMemoryConfig, get_memory_config

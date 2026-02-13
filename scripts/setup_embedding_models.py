@@ -27,7 +27,7 @@ except ImportError as e:
     print("Please install dependencies with: uv pip install -e .[dev]")
     sys.exit(1)
 
-from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_cache_dir
+from backend.rag_pipeline.utils.directory_utils import get_cache_dir
 
 
 def setup_cache_directories():
@@ -102,7 +102,7 @@ def download_transformers_model(model_name: str):
         try:
             tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
             model = AutoModel.from_pretrained(model_name, local_files_only=True)
-            print(f"✅ Model found in cache")
+            print("✅ Model found in cache")
 
             # Test the model works
             inputs = tokenizer("Test sentence", return_tensors="pt")
@@ -117,7 +117,7 @@ def download_transformers_model(model_name: str):
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name)
-        print(f"✅ Tokenizer and model downloaded successfully")
+        print("✅ Tokenizer and model downloaded successfully")
 
         # Test the model works
         inputs = tokenizer("Test sentence", return_tensors="pt")

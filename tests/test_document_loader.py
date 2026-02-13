@@ -1,12 +1,10 @@
 """Tests for the document loader module."""
 
-from pathlib import Path
 
 import pytest
 
 pytest.importorskip("pypdf")
 pytest.importorskip("llama_index")
-from pathlib import Path
 
 from rag_pipeline.core.document_loader import DocumentLoader, DocumentMetadata
 

@@ -282,7 +282,7 @@ def main():
         for activity, count in sorted(activity_counts.items(), key=lambda x: x[1], reverse=True):
             f.write(f"- {activity}: {count} sessions\n")
 
-    print(f"Analysis complete. Files created:")
+    print("Analysis complete. Files created:")
     print(f"  - {analysis_file}")
     print(f"  - {summary_file}")
     print(f"  - {wbso_file}")

@@ -92,7 +92,6 @@ def main() -> None:
     print("=== PyTorch CUDA Availability Check ===\n")
     _check_torch()
 
-    import torch
     print(f"Python: {sys.version.split()[0]}")
 
     cuda_ok = _check_cuda_available()

@@ -21,7 +21,6 @@ from typing import Any, Dict, List
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "business"))
 
-from work_session import WorkSession
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

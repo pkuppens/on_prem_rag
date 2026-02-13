@@ -17,9 +17,9 @@ Created: 2025-10-18
 import csv
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -261,7 +261,7 @@ class WBSOCalendarPopulator:
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Saved processed events:")
+        logger.info("Saved processed events:")
         logger.info(f"  - Total events: {total_events}")
         logger.info(f"  - Events with conflicts: {events_with_conflicts}")
         logger.info(f"  - Events without conflicts: {events_without_conflicts}")
@@ -285,7 +285,7 @@ class WBSOCalendarPopulator:
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Saved conflict reports:")
+        logger.info("Saved conflict reports:")
         logger.info(f"  - WBSO events with conflicts: {len(conflict_reports)}")
         logger.info(f"  - Total conflict events: {output_data['summary']['total_conflict_events']}")
 

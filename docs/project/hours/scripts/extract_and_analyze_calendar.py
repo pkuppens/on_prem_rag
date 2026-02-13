@@ -14,7 +14,7 @@ Created: 2025-12-02
 import json
 import sys
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -266,14 +266,14 @@ def generate_markdown_report(
             e2 = overlap["event2"]
             lines.append(f"#### Overlap {i}")
             lines.append("")
-            lines.append(f"**Event 1:**")
+            lines.append("**Event 1:**")
             lines.append(f"- Summary: {e1['summary']}")
             lines.append(f"- Session ID: {e1['session_id']}")
             lines.append(f"- Start: {e1['start']}")
             lines.append(f"- End: {e1['end']}")
             lines.append(f"- Calendar ID: {e1['id']}")
             lines.append("")
-            lines.append(f"**Event 2:**")
+            lines.append("**Event 2:**")
             lines.append(f"- Summary: {e2['summary']}")
             lines.append(f"- Session ID: {e2['session_id']}")
             lines.append(f"- Start: {e2['start']}")

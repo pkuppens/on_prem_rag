@@ -186,7 +186,7 @@ def main():
 
     # Print summary statistics
     total_hours = sum(sum(desc_hours.values()) for desc_hours in summary.values())
-    print(f"\nSummary:")
+    print("\nSummary:")
     print(f"  - Total hours: {total_hours:.2f}")
     print(f"  - Total weeks: {len(summary)}")
     print(f"  - Total activities: {len(set(desc for week_data in summary.values() for desc in week_data.keys()))}")

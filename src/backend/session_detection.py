@@ -18,10 +18,9 @@ edits, code reviews) that occurred during the session period.
 
 import logging
 import sys
-from dataclasses import dataclass
 from datetime import datetime, time
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "docs" / "project" / "hours"))

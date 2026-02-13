@@ -5,7 +5,7 @@ so I can provide visibility into agent operations.
 Technical: Test AgentCallbackHandler class and callback methods.
 """
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 

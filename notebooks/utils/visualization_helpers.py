@@ -4,12 +4,10 @@ This module provides reusable visualization functions for creating
 interactive time-based plots with computer activity and commit overlays.
 """
 
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sns
 

@@ -8,7 +8,6 @@ See project/team/tasks/TASK-032.md for detailed requirements and implementation 
 
 from datetime import datetime
 
-import pytest
 
 from backend.datetime_utils import DataSourceParser, UnifiedDateTime
 

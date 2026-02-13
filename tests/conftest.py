@@ -3,7 +3,6 @@
 This module provides shared fixtures and configuration for all tests.
 """
 
-import os
 import shutil
 import socket
 import uuid

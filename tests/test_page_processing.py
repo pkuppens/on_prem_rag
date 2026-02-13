@@ -6,14 +6,12 @@ page boundaries, and text cleaning functionality.
 """
 
 from pathlib import Path
-from typing import Dict, List
 
 import pytest
 from llama_index.core import Document
 
-from src.backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents
+from src.backend.rag_pipeline.core.chunking import chunk_documents
 from src.backend.rag_pipeline.core.document_loader import DocumentLoader
-from src.backend.rag_pipeline.core.embeddings import process_document
 
 
 class TestPageByPageProcessing:

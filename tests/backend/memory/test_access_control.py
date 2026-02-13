@@ -11,7 +11,6 @@ Tests cover:
 import pytest
 
 from backend.memory.access_control import (
-    AccessDecision,
     AccessLevel,
     AccessRequest,
     MemoryAccessControl,

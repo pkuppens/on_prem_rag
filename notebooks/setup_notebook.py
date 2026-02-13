@@ -8,7 +8,6 @@ Example usage:
     setup_notebook()
 """
 
-import subprocess
 import sys
 from pathlib import Path
 

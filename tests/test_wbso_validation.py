@@ -13,12 +13,10 @@ Author: AI Assistant
 Created: 2025-10-19
 """
 
-import json
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
-import pytest
 
 from src.wbso.calendar_event import WBSODataset, WBSOSession
 from src.wbso.validation import WBSODataValidator

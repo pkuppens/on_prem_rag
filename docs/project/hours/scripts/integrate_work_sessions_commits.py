@@ -314,7 +314,7 @@ def main():
         logger.info("Integration completed successfully")
 
         # Print summary
-        print(f"\n=== WORK SESSIONS AND COMMITS INTEGRATION SUMMARY ===")
+        print("\n=== WORK SESSIONS AND COMMITS INTEGRATION SUMMARY ===")
         print(f"Total work sessions: {summary['total_work_sessions']}")
         print(f"WBSO-eligible sessions: {summary['wbso_eligible_sessions']}")
         print(f"Total work hours: {summary['total_work_hours']}")

@@ -12,7 +12,7 @@ Created: 2025-11-15
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 
 class TestReportGenerator:
@@ -118,7 +118,7 @@ class TestReportGenerator:
                 calendar_count = result.get("calendar_count", 0)
                 report_lines.append(f"- **Calendars Found**: {calendar_count}")
                 if calendar_count > 0:
-                    report_lines.append(f"- **Expected**: At least 1 calendar")
+                    report_lines.append("- **Expected**: At least 1 calendar")
                     report_lines.append(f"- **Result**: {'✅ PASS' if calendar_count >= 1 else '❌ FAIL'}")
 
             elif test_name == "create_events":

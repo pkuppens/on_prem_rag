@@ -1,7 +1,7 @@
 """Tests for embedding model retrieval utilities."""
 
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
 

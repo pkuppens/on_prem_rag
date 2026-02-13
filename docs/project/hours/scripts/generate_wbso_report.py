@@ -15,19 +15,18 @@ Created: 2025-10-18
 
 import csv
 import json
-import logging
 
 # Import from the proper module structure
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict
 
 # Add src directory to path for imports
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from wbso.calendar_event import WBSODataset, WBSOSession
+from wbso.calendar_event import WBSODataset
 from wbso.logging_config import get_logger
 
 logger = get_logger("reporting")
@@ -361,7 +360,6 @@ class WBSOReporter:
         """Export WBSO data to Excel format (if openpyxl available)."""
         try:
             import openpyxl
-            from openpyxl.styles import Alignment, Font, PatternFill
         except ImportError:
             logger.warning("openpyxl not available, skipping Excel export")
             return
@@ -576,11 +574,11 @@ def main():
     print(f"Achievement Status: {achievement_status}")
     print(f"Target Percentage: {(total_hours / target_hours * 100):.1f}%")
 
-    print(f"\nSource Breakdown:")
+    print("\nSource Breakdown:")
     print(f"  Real Sessions: {hours_data.get('real_sessions', 0)} ({hours_data.get('real_hours', 0):.2f} hours)")
     print(f"  Synthetic Sessions: {hours_data.get('synthetic_sessions', 0)} ({hours_data.get('synthetic_hours', 0):.2f} hours)")
 
-    print(f"\nCategory Breakdown:")
+    print("\nCategory Breakdown:")
     category_breakdown = hours_data.get("category_breakdown", {})
     for category, data in category_breakdown.items():
         print(f"  {category}: {data['count']} sessions, {data['hours']:.2f} hours")

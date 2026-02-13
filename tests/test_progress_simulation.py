@@ -35,7 +35,7 @@ async def simulate_file_processing(filename: str = "test.pdf", duration_seconds:
     total_updates = 100
     delay_between_updates = duration_seconds / total_updates
 
-    logger.info(f"Progress simulation parameters", total_updates=total_updates, delay_seconds=delay_between_updates)
+    logger.info("Progress simulation parameters", total_updates=total_updates, delay_seconds=delay_between_updates)
 
     # Start with 0% progress
     await progress_notifier.notify(ProgressEvent(filename, 0, "Starting file processing"))
@@ -59,7 +59,7 @@ async def simulate_file_processing(filename: str = "test.pdf", duration_seconds:
         await progress_notifier.notify(ProgressEvent(filename, progress, message))
 
         # Log the progress update
-        logger.debug(f"Progress update sent", filename=filename, progress=progress, status_message=message)
+        logger.debug("Progress update sent", filename=filename, progress=progress, status_message=message)
 
         # Wait before next update
         await asyncio.sleep(delay_between_updates)

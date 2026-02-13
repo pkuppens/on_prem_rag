@@ -7,13 +7,11 @@ to create comprehensive work logs for WBSO compliance.
 See docs/technical/WBSO_COMPLIANCE.md for business context and requirements.
 """
 
-import json
 
 # Import the functions to test
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
-from unittest.mock import mock_open, patch
 
 import pytest
 

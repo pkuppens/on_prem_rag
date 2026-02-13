@@ -18,7 +18,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -155,7 +155,7 @@ class WorkSessionsMerger:
             json.dump(merged_work_log, f, indent=2, ensure_ascii=False)
 
         summary = merged_work_log["summary"]
-        logger.info(f"Saved complete work log:")
+        logger.info("Saved complete work log:")
         logger.info(f"  - Total sessions: {summary['total_work_sessions']}")
         logger.info(f"  - Real sessions: {summary['real_sessions']}")
         logger.info(f"  - Synthetic sessions: {summary['synthetic_sessions']}")

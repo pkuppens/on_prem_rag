@@ -25,23 +25,37 @@ Text chunking is essential for:
 
 ## Chunking Strategies
 
-### Current Implementation
+The pipeline supports multiple strategies via the `strategy` parameter in `chunk_documents()`:
+
+| Strategy   | Implementation        | Use case                                |
+|------------|-----------------------|-----------------------------------------|
+| `character`| SimpleNodeParser      | Default; fixed character-based chunks   |
+| `semantic` | SentenceSplitter     | Sentence boundaries; fewer mid-sentence splits |
+| `recursive`| Custom separator-based | Paragraph, line, word boundaries first |
+
+### Character (default)
 
 - **Method**: LlamaIndex SimpleNodeParser
 - **Chunk Size**: 512 characters (optimized for embedding model)
 - **Chunk Overlap**: 50 characters
 - **Metadata**: Preserved and enhanced
-- **Relationships**: Tracks chunk relationships
+
+### Semantic
+
+- **Method**: LlamaIndex SentenceSplitter
+- Respects sentence and paragraph boundaries
+- Reduces mid-sentence splits
+
+### Recursive
+
+- **Method**: Custom `RecursiveChunkingStrategy`
+- Tries separators in order: `\n\n` (paragraph), `\n` (line), `. ` (sentence), ` ` (word)
+- Falls back to character split when no separator fits
+- Minimizes splits at unnatural boundaries
 
 ### Alternative Approaches Considered
 
-1. **Sentence Splitting**
-
-   - Pros: Natural language boundaries
-   - Cons: Inconsistent chunk sizes
-   - Decision: Not selected due to size variability
-
-2. **Fixed Token Count**
+1. **Fixed Token Count**
    - Pros: Predictable embedding costs
    - Cons: May split mid-sentence
    - Decision: Not selected due to context loss

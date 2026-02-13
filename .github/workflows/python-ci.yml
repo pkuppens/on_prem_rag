@@ -221,7 +221,7 @@ jobs:
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "not internet and not slow and not guardrails_ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-reports
           path: |
@@ -286,7 +286,7 @@ jobs:
           # Use parallel execution for faster test runs
           TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "slow and not internet" --junitxml=test-results-performance.xml
       - name: Upload performance test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: performance-test-results
           path: test-results-performance.xml
@@ -349,7 +349,7 @@ jobs:
           # Use parallel execution for faster test runs
           uv run pytest -n auto -m "internet" --junitxml=test-results-integration.xml
       - name: Upload integration test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: integration-test-results
           path: test-results-integration.xml
@@ -397,7 +397,7 @@ jobs:
           uv run safety check --json --output safety-report.json || true
           uv run safety check || true
       - name: Upload security reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: security-reports
           path: |

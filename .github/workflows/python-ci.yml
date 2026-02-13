@@ -21,6 +21,7 @@ jobs:
   # Python 3.12 is pinned to avoid pypika build failures with Python 3.14
   # See tests/ci/test_github_actions_setup.py for validation tests
   # See docs/technical/CI_SETUP.md for detailed documentation
+  # Private repo runners have ~14GB disk; free-disk-space avoids "No space left" errors
   setup:
     runs-on: ubuntu-latest
     strategy:
@@ -28,6 +29,16 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     steps:
       - uses: actions/checkout@v4
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -67,6 +78,16 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -105,6 +126,7 @@ jobs:
           uv run ruff format --check .
 
   # Model download job - downloads lightweight CI models and warms the HF cache
+  # Private repos have ~14GB disk; use free-disk-space to avoid "No space left" errors
   model-download:
     runs-on: ubuntu-latest
     strategy:
@@ -113,15 +135,16 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
-      - name: Free up disk space
-        run: |
-          # Remove large pre-installed tools we don't need (~6GB savings)
-          echo "=== Disk before cleanup ==="
-          df -h /
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
-          sudo apt-get clean
-          echo "=== Disk after cleanup ==="
-          df -h /
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false  # Keep Python/Node for setup-python
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -176,10 +199,16 @@ jobs:
     needs: [setup, model-download]
     steps:
       - uses: actions/checkout@v4
-      - name: Free up disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
-          sudo apt-get clean
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -244,10 +273,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Free up disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
-          sudo apt-get clean
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -310,10 +345,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Free up disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
-          sudo apt-get clean
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -374,6 +415,16 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:

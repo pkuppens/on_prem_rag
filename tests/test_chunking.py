@@ -118,6 +118,31 @@ class TestChunking:
                 assert len(chunk1_end.strip()) > 0
                 assert len(chunk2_start.strip()) > 0
 
+    def test_chunking_strategies(self):
+        """Test character, semantic, and recursive chunking strategies."""
+        text = "Paragraph one. First sentence. Second sentence.\n\nParagraph two. More text here."
+        documents = [Document(text=text)]
+
+        char_result = chunk_documents(documents, chunk_size=40, chunk_overlap=5, strategy="character")
+        sem_result = chunk_documents(documents, chunk_size=40, chunk_overlap=5, strategy="semantic")
+        rec_result = chunk_documents(documents, chunk_size=40, chunk_overlap=5, strategy="recursive")
+
+        assert char_result.chunk_count > 0
+        assert sem_result.chunk_count > 0
+        assert rec_result.chunk_count > 0
+
+        # Recursive should respect paragraph boundaries (split on \n\n)
+        assert rec_result.chunk_count >= 2, "Recursive should split on paragraph boundaries"
+        assert "Paragraph one" in rec_result.chunks[0].text
+        assert "Paragraph two" in rec_result.chunks[-1].text or any(
+            "Paragraph two" in c.text for c in rec_result.chunks
+        )
+
+        # All strategies should include strategy in params
+        assert char_result.chunking_params["strategy"] == "character"
+        assert sem_result.chunking_params["strategy"] == "semantic"
+        assert rec_result.chunking_params["strategy"] == "recursive"
+
     def test_generate_content_hash(self):
         """Test content hash generation."""
         text1 = "This is test content"

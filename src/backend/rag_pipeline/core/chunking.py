@@ -11,7 +11,7 @@ Key features:
 - Page-based chunking with token size considerations
 - Chunk overlap management
 - Metadata preservation including both page labels and sequential page numbers
-- Support for different chunking strategies
+- Support for different chunking strategies (character, semantic, recursive)
 - Text cleaning and quality validation
 - Progress reporting for page-by-page processing
 """
@@ -22,15 +22,120 @@ import hashlib
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 from llama_index.core import Document
-from llama_index.core.node_parser import SimpleNodeParser
+from llama_index.core.node_parser import SentenceSplitter, SimpleNodeParser
+from llama_index.core.schema import BaseNode, TextNode
 
 from ..utils.logging import StructuredLogger
 from ..utils.text_cleaning import clean_chunk_text, get_text_statistics
 
 logger = StructuredLogger(__name__)
+
+# Separators for recursive chunking: try paragraph, line, then word boundaries.
+RECURSIVE_SEPARATORS = ["\n\n", "\n", ". ", " "]
+
+
+class ChunkingStrategy(Protocol):
+    """Protocol for chunking strategies (Strategy pattern)."""
+
+    def get_nodes_from_documents(self, documents: list[Document]) -> list[BaseNode]:
+        """Split documents into nodes/chunks."""
+        ...
+
+
+def _create_character_strategy(chunk_size: int, chunk_overlap: int) -> ChunkingStrategy:
+    """Create character-based strategy using SimpleNodeParser (default behavior)."""
+    return SimpleNodeParser.from_defaults(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+
+def _create_semantic_strategy(chunk_size: int, chunk_overlap: int) -> ChunkingStrategy:
+    """Create semantic strategy using SentenceSplitter (respects sentence boundaries)."""
+    return SentenceSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+
+def _recursive_split(
+    text: str,
+    chunk_size: int,
+    chunk_overlap: int,
+    separators: list[str],
+    sep_idx: int = 0,
+) -> list[str]:
+    """Recursively split text using separators, preferring natural boundaries.
+
+    Tries separators in order: paragraph (\\n\\n), line (\\n), sentence (. ),
+    word ( ). Falls back to character split if no separator works.
+    """
+    text = text.strip()
+    if not text:
+        return []
+    if len(text) <= chunk_size:
+        return [text]
+
+    sep = separators[sep_idx] if sep_idx < len(separators) else ""
+    if sep:
+        parts = text.split(sep)
+        chunks = []
+        current: list[str] = []
+
+        def merge_len() -> int:
+            return sum(len(p) for p in current) + (len(current) - 1) * len(sep) if current else 0
+
+        for i, part in enumerate(parts):
+            suffix = sep if i < len(parts) - 1 else ""
+            candidate = part + suffix
+
+            if len(candidate) > chunk_size:
+                if current:
+                    chunks.append(sep.join(current))
+                    current = []
+                sub_chunks = _recursive_split(candidate.strip(), chunk_size, chunk_overlap, separators, sep_idx + 1)
+                chunks.extend(sub_chunks)
+            elif merge_len() + len(candidate) <= chunk_size:
+                current.append(part + (suffix if i < len(parts) - 1 else ""))
+            else:
+                if current:
+                    chunks.append(sep.join(current))
+                current = [part + suffix]
+
+        if current:
+            chunks.append(sep.join(current).rstrip(sep))
+        return [c for c in chunks if c.strip()]
+    else:
+        return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size - chunk_overlap)]
+
+
+class RecursiveChunkingStrategy:
+    """Recursive chunking: tries separators in order (paragraph, line, sentence, word)."""
+
+    def __init__(self, chunk_size: int, chunk_overlap: int) -> None:
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+
+    def get_nodes_from_documents(self, documents: list[Document]) -> list[BaseNode]:
+        """Split documents using recursive separator-based chunking."""
+        nodes = []
+        for doc in documents:
+            text = doc.text if hasattr(doc, "text") else str(doc.get_content())
+            chunks = _recursive_split(text, self.chunk_size, self.chunk_overlap, RECURSIVE_SEPARATORS)
+            for chunk_text in chunks:
+                if chunk_text.strip():
+                    nodes.append(TextNode(text=chunk_text, metadata=dict(doc.metadata) if doc.metadata else {}))
+        return nodes
+
+
+def _get_chunking_parser(strategy: str, chunk_size: int, chunk_overlap: int) -> ChunkingStrategy:
+    """Factory for chunking strategies."""
+    strategies = {
+        "character": _create_character_strategy,
+        "semantic": _create_semantic_strategy,
+    }
+    if strategy in strategies:
+        return strategies[strategy](chunk_size, chunk_overlap)
+    if strategy == "recursive":
+        return RecursiveChunkingStrategy(chunk_size, chunk_overlap)
+    raise ValueError(f"Unknown chunking strategy: {strategy}. Use: character, semantic, recursive")
 
 
 @dataclass
@@ -88,11 +193,12 @@ def chunk_documents(
     enable_text_cleaning: bool = True,
     min_chunk_length: int = 10,
     progress_callback: Callable[[int, int], None] | None = None,
+    strategy: str = "character",
 ) -> ChunkingResult:
     """Chunk a list of documents into smaller pieces with page-by-page processing.
 
-    Uses SimpleNodeParser with character-based chunking strategy and optional text cleaning.
-    See docs/technical/CHUNKING.md#implementation-details for configuration rationale.
+    Supports multiple chunking strategies: character (default), semantic (sentence
+    boundaries), recursive (paragraph/line/word boundaries). See CHUNKING.md.
 
     Args:
         documents: List of Document objects to chunk (typically one per page)
@@ -102,6 +208,7 @@ def chunk_documents(
         enable_text_cleaning: Whether to apply text cleaning to chunks
         min_chunk_length: Minimum acceptable chunk length after cleaning
         progress_callback: Optional callback for page processing progress (page_num, total_pages)
+        strategy: Chunking strategy: "character", "semantic", or "recursive"
 
     Returns:
         ChunkingResult with chunked documents and enhanced metadata
@@ -119,7 +226,11 @@ def chunk_documents(
             file_size=0,
             num_pages=None,
             chunk_count=0,
-            chunking_params={"chunk_size": chunk_size, "chunk_overlap": chunk_overlap},
+            chunking_params={
+                "chunk_size": chunk_size,
+                "chunk_overlap": chunk_overlap,
+                "strategy": strategy,
+            },
             file_hash="",
             pages_processed=0,
             chunks_filtered=0,
@@ -131,14 +242,11 @@ def chunk_documents(
         total_pages=len(documents),
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
+        strategy=strategy,
         enable_text_cleaning=enable_text_cleaning,
     )
 
-    # Set up the node parser for chunking
-    parser = SimpleNodeParser.from_defaults(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-    )
+    parser = _get_chunking_parser(strategy, chunk_size, chunk_overlap)
 
     # Calculate file information
     source_path = Path(source_path) if source_path else Path("unknown")
@@ -248,7 +356,11 @@ def chunk_documents(
         file_size=file_size,
         num_pages=num_pages,
         chunk_count=len(all_chunks),
-        chunking_params={"chunk_size": chunk_size, "chunk_overlap": chunk_overlap},
+        chunking_params={
+            "chunk_size": chunk_size,
+            "chunk_overlap": chunk_overlap,
+            "strategy": strategy,
+        },
         file_hash=file_hash,
         pages_processed=len(documents),
         chunks_filtered=chunks_filtered,
@@ -294,7 +406,9 @@ def get_page_chunks(pdf_path: str | Path) -> dict[int, list[Document]]:
 __all__ = [
     "ChunkingResult",
     "ChunkMetadata",
+    "ChunkingStrategy",
     "chunk_documents",
     "get_page_chunks",
     "generate_content_hash",
+    "RecursiveChunkingStrategy",
 ]

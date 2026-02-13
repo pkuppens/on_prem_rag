@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document outlines the workflow for AI coding agents (Claude, Cursor, etc.) when working on this repository. It aligns with the portfolio-wide [Issue Implementation Workflow](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md).
+This document outlines the workflow for AI coding agents (Claude, Cursor, etc.) when working on this repository. It aligns with the portfolio-wide [Issue Implementation Workflow](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md), which defines issue review, planning, feature branching strategies, test-driven development, and architecture principles.
 
 ## Prerequisites
 

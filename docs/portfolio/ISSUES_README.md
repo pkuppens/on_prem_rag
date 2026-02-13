@@ -6,9 +6,11 @@ Issues for the on-premises RAG MVP are tracked on GitHub.
 
 Before working on an issue, follow the **[Issue Implementation Workflow](./ISSUE_IMPLEMENTATION_WORKFLOW.md)**:
 
-1. **Validate** — `gh issue view NNN`, check if already done, research tooling
-2. **Plan** — Branch from main, review architecture, decide test strategy
+1. **Validate** — Issue review before coding: `gh issue view NNN`, check if already done, research tooling
+2. **Plan** — Architecture review, feature branching strategy, test-driven approach, design principles
 3. **Implement** — Small increments, quality gate, commit with `#NNN: type: desc`
+
+**AI agents**: Read `ISSUE_IMPLEMENTATION_WORKFLOW.md` before implementing any issue. It defines issue review, planning, feature branching, test-driven development, and architecture principles.
 
 ## Epic and Linked Issues
 

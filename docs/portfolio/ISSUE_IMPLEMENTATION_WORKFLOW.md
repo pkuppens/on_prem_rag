@@ -1,6 +1,16 @@
 # Issue Implementation Workflow
 
-This workflow ensures issues are validated, planned, and implemented in a consistent way across the portfolio.
+This workflow ensures issues are validated, planned, and implemented in a consistent way across the portfolio. **AI agents**: read this document before implementing any issue — it defines the required process.
+
+## Principles
+
+| Principle | Practice |
+|-----------|----------|
+| **Issue review** | Validate before coding — check relevance, existing work, research tooling |
+| **Planning** | Architecture review, test strategy, and design before implementation |
+| **Feature branching** | All code changes via branches; never commit directly to main for features |
+| **Test-driven** | Write tests first where contract is clear; tests drive design |
+| **Architecture & design** | Follow SOLID, module boundaries, dependency inversion |
 
 ## Prerequisites
 
@@ -56,7 +66,18 @@ Use web search or documentation (Context7, docs) to avoid reinventing or picking
 
 Create an implementation plan before coding.
 
-### 2.1 Ensure a clean branch from main
+### 2.1 Feature branching strategy
+
+**Branch naming** (from [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc)):
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Feature | `feature/NNN-short-description` | `feature/79-hybrid-retrieval` |
+| Task | `task/NNN-short-description` | `task/80-api-endpoints` |
+| Bug | `bug/NNN-short-description` | `bug/42-chunking-edge-case` |
+| Hotfix | `hotfix/NNN-short-description` | `hotfix/43-security-patch` |
+
+**Branch workflow**:
 
 ```bash
 git checkout main
@@ -65,23 +86,37 @@ git checkout -b feature/NNN-short-description
 # Or: task/NNN-short-description for smaller tasks
 ```
 
-### 2.2 Review architecture
+**Rule**: Feature/task implementation **must** use branches. Direct-to-main is allowed only for docs, config, and agent rules.
+
+### 2.2 Review architecture and design
 
 - Read `CLAUDE.md` (repo and workspace root) for module boundaries
 - Check ADRs or `docs/technical/` for relevant decisions
 - Identify the correct files and modules to change
+- Apply **Architecture principles** (see below)
 
-### 2.3 Decide test strategy
+### 2.3 Architecture and design principles
+
+When implementing, follow:
+
+- **Single responsibility** — each component does one thing; swappable via Strategy/Factory
+- **Open/closed** — extend via configuration or new implementation, not by modifying existing code
+- **Dependency inversion** — depend on abstractions (Protocol/ABC), inject concretions
+- **Interface segregation** — thin API layers: Routes → Services → Repositories → Storage
+
+See [golden-rules.mdc](../../.cursor/rules/golden-rules.mdc) and [AGENTS.md](../technical/AGENTS.md) for details.
+
+### 2.4 Decide test strategy (test-driven)
 
 | Scenario | Approach |
 |---------|----------|
-| Pure logic, clear contract | Test-first (TDD): write failing test, then implement |
-| API/service integration | Integration test after implementation |
+| Pure logic, clear contract | **Test-first (TDD)**: write failing test, then implement until it passes |
+| API/service integration | Integration test after implementation; mock external services |
 | UI / manual flow | Manual check plus existing E2E if any |
 
-Document the test approach in the issue or a brief plan.
+Document the test approach in the issue or a brief plan. Run tests after each incremental change.
 
-### 2.4 Assign and optionally comment
+### 2.5 Assign and optionally comment
 
 ```bash
 gh issue edit NNN --add-assignee @me
@@ -136,8 +171,23 @@ gh pr merge --squash --delete-branch
 
 ---
 
+## Workflow reference (for issue bodies)
+
+When creating or updating issues, include this block so implementers and AI agents know which workflow to follow:
+
+```markdown
+## Implementation workflow
+
+Follow [ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md): Validate → Plan → Implement.
+- Issue review before coding
+- Feature branch from main
+- Test-driven where applicable
+- Architecture principles (SOLID, dependency injection)
+```
+
 ## References
 
 - [ISSUES_README.md](./ISSUES_README.md) — Epic structure, verification strategy
 - [CLAUDE.md](../../CLAUDE.md) — Repo conventions
 - [AGENTS.md](../technical/AGENTS.md) — Agent workflow and testing
+- [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc) — When to use branches vs direct-to-main

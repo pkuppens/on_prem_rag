@@ -1,0 +1,7 @@
+# Issue template chooser configuration
+# See: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+
+blank_issues_enabled: true
+
+# Template order is alphanumeric by filename. Prefix with numbers to control order:
+# 01-epic.yml, 02-feature.yml, 03-story.yml, 04-task.yml, 05-verification.yml, ...

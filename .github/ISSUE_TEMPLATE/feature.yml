@@ -28,10 +28,20 @@ body:
     id: user_stories
     attributes:
       label: Related User Stories
+  - type: input
+    id: effort
+    attributes:
+      label: Effort Estimate
+      description: T-shirt size (S/M/L) or hours, e.g. 3 hrs
   - type: textarea
     id: acceptance
     attributes:
       label: Acceptance Criteria
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of Scope
+      description: Explicitly state what is NOT in scope (tracked elsewhere)
   - type: textarea
     id: done
     attributes:

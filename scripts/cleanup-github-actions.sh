@@ -7,6 +7,7 @@
 # 2. Runs on PR refs (refs/pull/*) - ephemeral, no value after merge/close
 # 3. Runs for branches that no longer exist
 # 4. Superseded runs (keeps only most recent completed per workflow+branch)
+# 5. Orphaned workflow runs (workflow file deleted, runs still exist)
 #
 # Usage:
 # ./cleanup-github-actions.sh # Dry-run (show what would be cleaned)
@@ -41,6 +42,7 @@ Cleans up:
 2. PR ref runs - all runs on refs/pull/* (ephemeral, no value after merge/close)
 3. Runs for branches that no longer exist
 4. Superseded runs - keeps only most recent completed per workflow+branch
+5. Orphaned workflow runs - runs for workflow files that have been deleted
 
 Usage:
   $0 # Dry-run
@@ -85,7 +87,7 @@ echo ""
 print_info "Fetching latest refs..."
 git fetch origin --prune 2>/dev/null || true
 
-TEMP_RUNS="cleanup_actions_runs_$$.json"
+TEMP_RUNS="$($PYTHON -c "import tempfile, os; fd, p = tempfile.mkstemp(suffix='.json', prefix='cleanup_actions_runs_'); os.close(fd); print(p.replace(os.sep, '/'))")"
 gh run list --limit 1000 --json databaseId,status,conclusion,workflowName,headBranch,createdAt > "$TEMP_RUNS"
 
 # Existing branches (local + remote, normalized)
@@ -296,6 +298,76 @@ done
 [ $SUPERSEDED_COUNT -eq 0 ] && print_success "No superseded runs" || print_warning "Found $SUPERSEDED_COUNT superseded run(s)"
 echo ""
 
+# ============================================================================
+# STEP 5: Orphaned workflow runs (workflow file deleted, runs still exist)
+# ============================================================================
+print_info "STEP 5: Checking for runs from deleted/orphaned workflows..."
+
+# Get unique workflow names from the runs we fetched
+WORKFLOW_NAMES=$($PYTHON -c "
+import json
+with open('$TEMP_RUNS') as f:
+  data = json.load(f)
+seen = set()
+for r in data:
+  name = r.get('workflowName', '')
+  if name and name not in seen:
+    seen.add(name)
+    print(name)
+")
+
+# Get workflow names that currently have .yml files
+ACTIVE_WORKFLOWS=""
+for yml_file in .github/workflows/*.yml; do
+  [ -f "$yml_file" ] || continue
+  # Extract the 'name:' field from each workflow file
+  WF_NAME=$($PYTHON -c "
+import re, sys
+with open('$yml_file', encoding='utf-8') as f:
+  for line in f:
+    m = re.match(r'^name:\s*(.+)', line)
+    if m:
+      print(m.group(1).strip().strip('\"').strip(\"'\"))
+      break
+")
+  [ -n "$WF_NAME" ] && ACTIVE_WORKFLOWS="$ACTIVE_WORKFLOWS
+$WF_NAME"
+done
+
+ORPHANED_COUNT=0
+ORPHANED_DELETED=0
+
+while IFS= read -r wf_name; do
+  wf_name="${wf_name%$'\r'}"
+  [ -z "$wf_name" ] && continue
+  # Check if this workflow name exists in active workflow files
+  if ! echo "$ACTIVE_WORKFLOWS" | grep -qxF "$wf_name"; then
+    # This workflow has runs but no corresponding .yml file — orphaned
+    ORPHAN_IDS=$($PYTHON -c "
+import json
+with open('$TEMP_RUNS') as f:
+  data = json.load(f)
+for r in data:
+  if r.get('workflowName') == '$wf_name':
+    print(r['databaseId'])
+")
+    for run_id in $ORPHAN_IDS; do
+      run_id="${run_id%$'\r'}"
+      [ -z "$run_id" ] && continue
+      ORPHANED_COUNT=$((ORPHANED_COUNT + 1))
+      if [ "$DRY_RUN" = false ]; then
+        print_info "Deleting orphaned run $run_id (workflow '$wf_name' no longer exists)"
+        echo "y" | gh run delete "$run_id" 2>/dev/null && ORPHANED_DELETED=$((ORPHANED_DELETED + 1)) || true
+      else
+        print_warning "Would delete orphaned run $run_id (workflow '$wf_name' no longer exists)"
+      fi
+    done
+  fi
+done <<< "$WORKFLOW_NAMES"
+
+[ $ORPHANED_COUNT -eq 0 ] && print_success "No orphaned workflow runs" || print_warning "Found $ORPHANED_COUNT orphaned run(s)"
+echo ""
+
 rm -f "$TEMP_RUNS"
 
 # ============================================================================
@@ -304,13 +376,13 @@ rm -f "$TEMP_RUNS"
 echo "========================================"
 print_success "CLEANUP SUMMARY"
 echo "========================================"
-TOTAL=$((OBSOLETE_COUNT + PR_REF_RUNS + DELETED_BRANCH_RUNS + SUPERSEDED_COUNT))
+TOTAL=$((OBSOLETE_COUNT + PR_REF_RUNS + DELETED_BRANCH_RUNS + SUPERSEDED_COUNT + ORPHANED_COUNT))
 if [ "$DRY_RUN" = true ]; then
-  echo "Would clean: $TOTAL runs (obsolete: $OBSOLETE_COUNT, pr-refs: $PR_REF_RUNS, deleted-branch: $DELETED_BRANCH_RUNS, superseded: $SUPERSEDED_COUNT)"
+  echo "Would clean: $TOTAL runs (obsolete: $OBSOLETE_COUNT, pr-refs: $PR_REF_RUNS, deleted-branch: $DELETED_BRANCH_RUNS, superseded: $SUPERSEDED_COUNT, orphaned: $ORPHANED_COUNT)"
   echo ""
   print_info "Run with --execute to perform: $0 --execute"
 else
-  DELETED=$((OBSOLETE_DELETED + PR_REF_DELETED + DELETED_BRANCH_SUCCESS + SUPERSEDED_DELETED))
+  DELETED=$((OBSOLETE_DELETED + PR_REF_DELETED + DELETED_BRANCH_SUCCESS + SUPERSEDED_DELETED + ORPHANED_DELETED))
   echo "Deleted: $DELETED of $TOTAL runs"
 fi
 echo ""

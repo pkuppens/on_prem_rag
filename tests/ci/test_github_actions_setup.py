@@ -211,4 +211,4 @@ class TestEnvironmentConfiguration:
         assert "enable-cache: true" in workflow_content, "Workflow should enable uv cache"
         # HuggingFace models cached separately (not affected by application code changes)
         assert "Cache HuggingFace models" in workflow_content, "Should cache HuggingFace models"
-        assert "actions/cache@v4" in workflow_content, "Workflow should use cache action for HF/models"
+        assert "actions/cache@" in workflow_content, "Workflow should use cache action for HF/models"

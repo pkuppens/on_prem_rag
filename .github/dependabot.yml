@@ -44,3 +44,8 @@ updates:
     commit-message:
       prefix: "ci"
       include: "scope"
+    # Group all GitHub Actions updates into a single PR
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"

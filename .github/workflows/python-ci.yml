@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel superseded runs on the same branch (e.g., rapid dependabot merges)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # HuggingFace cache lives under ~/.cache/huggingface on the runner.
 # Each step that uses models sets these env vars explicitly to ensure consistency.
 # Do NOT set HF_HOME at the workflow level - it previously pointed at github.workspace
@@ -404,10 +409,95 @@ jobs:
             bandit-report.json
             safety-report.json
 
+  # Coverage comment job - posts coverage report on PRs
+  # Replaces the standalone coverage-report.yml workflow
+  coverage-comment:
+    runs-on: ubuntu-latest
+    needs: [test-unit]
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: coverage-reports
+
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          # Extract coverage percentage from coverage.xml
+          if [ -f coverage.xml ]; then
+            # Parse coverage percentage
+            COVERAGE=$(python3 -c 'import xml.etree.ElementTree as ET; tree = ET.parse("coverage.xml"); root = tree.getroot(); print(f"{float(root.attrib[\"line-rate\"]) * 100:.1f}")')
+            echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
+            echo "Coverage: $COVERAGE%"
+
+            # Generate coverage summary
+            echo "## Code Coverage Report" > coverage_comment.md
+            echo "" >> coverage_comment.md
+            echo "**Total Coverage:** ${COVERAGE}%" >> coverage_comment.md
+            echo "" >> coverage_comment.md
+
+            # Color code based on coverage
+            if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+              echo "Excellent coverage! (>=80%)" >> coverage_comment.md
+            elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+              echo "Moderate coverage (60-80%)" >> coverage_comment.md
+            else
+              echo "Low coverage (<60%)" >> coverage_comment.md
+            fi
+
+            echo "" >> coverage_comment.md
+            echo "_Coverage report generated from unit tests_" >> coverage_comment.md
+          else
+            echo "Coverage file not found" > coverage_comment.md
+          fi
+
+      - name: Comment on PR
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const coverage_comment = fs.readFileSync('coverage_comment.md', 'utf8');
+
+            const pr_number = context.payload.pull_request.number;
+
+            // Check if we already commented
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr_number
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('Code Coverage Report')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: coverage_comment
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr_number,
+                body: coverage_comment
+              });
+            }
+
   # CI Summary job - aggregates all results
   ci-summary:
     runs-on: ubuntu-latest
-    needs: [lint, test-unit, test-performance, test-integration, security]
+    needs: [lint, test-unit, test-performance, test-integration, security, coverage-comment]
     if: always() # Run even if some jobs fail
     steps:
       - name: Generate CI Summary

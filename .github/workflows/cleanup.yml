@@ -3,6 +3,14 @@ name: Repository Cleanup
 
 # Trigger after Python CI completes on main.
 # This ensures cleanup can accurately detect superseded runs.
+#
+# Self-cleaning: This workflow's own old runs are cleaned up by Step 4
+# (superseded runs) in cleanup-github-actions.sh — it keeps only the most
+# recent completed run per workflow+branch, so at most 2 Repository Cleanup
+# runs coexist at any time (the currently running one + the previous completed).
+#
+# Orphaned workflows: Step 5 cleans up runs for deleted workflow files
+# (e.g., the old standalone coverage-report.yml that was folded into python-ci.yml).
 on:
   workflow_run:
     workflows: ["Python CI"]

@@ -28,7 +28,7 @@ jobs:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -68,7 +68,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -116,7 +116,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -171,7 +171,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -238,7 +238,7 @@ jobs:
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -301,7 +301,7 @@ jobs:
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)
@@ -362,7 +362,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: setup
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Free up disk space (private repo runner limit ~14GB)

@@ -15,12 +15,10 @@ Tables:
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Optional
 
 from sqlalchemy import (
     Boolean,
-    Column,
     DateTime,
     Float,
     ForeignKey,
@@ -29,7 +27,6 @@ from sqlalchemy import (
     String,
     Text,
     create_engine,
-    func,
 )
 from sqlalchemy.orm import (
     Mapped,

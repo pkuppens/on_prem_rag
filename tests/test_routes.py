@@ -3,12 +3,10 @@
 This module tests the various API endpoints and their functionality.
 """
 
-from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from src.backend.rag_pipeline.api.app import app
-from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
 client = TestClient(app)
 

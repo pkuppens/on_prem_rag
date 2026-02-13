@@ -17,10 +17,10 @@ import json
 
 # Import from the proper module structure
 import sys
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 # Add src directory to path for imports
 src_path = Path(__file__).parent.parent.parent.parent.parent / "src"

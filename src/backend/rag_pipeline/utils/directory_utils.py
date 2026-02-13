@@ -7,7 +7,6 @@ under the main /data/ directory which is gitignored for privacy protection.
 
 import os
 from pathlib import Path
-from typing import Optional
 
 
 class DirectoryError(Exception):

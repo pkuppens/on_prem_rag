@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 try:
     from zoneinfo import ZoneInfo
@@ -41,7 +41,7 @@ except ImportError as e:
 # WBSO imports
 from wbso.calendar_event import CalendarEvent
 from wbso.logging_config import get_logger
-from wbso.upload import SCOPES, WBSO_CALENDAR_NAME, GoogleCalendarUploader
+from wbso.upload import SCOPES, GoogleCalendarUploader
 
 logger = get_logger("mcp.calendar_server")
 

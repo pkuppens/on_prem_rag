@@ -18,7 +18,6 @@ import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import pytest
 
 from src.wbso.calendar_event import (
     CalendarEvent,

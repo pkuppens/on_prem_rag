@@ -12,10 +12,8 @@ Updated: 2025-11-29
 """
 
 import argparse
-import json
-import os
+import importlib.util
 import re
-import shutil
 import socket
 import subprocess
 import sys
@@ -448,14 +446,12 @@ class TestRunner:
         # Add parallel execution
         if parallel:
             # Check if pytest-xdist is available
-            try:
-                import xdist
-
+            if importlib.util.find_spec("xdist") is not None:
                 if workers:
                     pytest_args.extend(["-n", str(workers)])
                 else:
                     pytest_args.extend(["-n", "auto"])
-            except ImportError:
+            else:
                 if self.verbose:
                     print("   [WARN] pytest-xdist not available, running sequentially")
                 parallel = False
@@ -549,7 +545,7 @@ class TestRunner:
         except subprocess.TimeoutExpired:
             print("   [FAIL] Test execution timed out")
             exit_code = 1
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print(f"   [FAIL] Command not found: {pytest_cmd[0]}")
             if use_uv:
                 print("   [INFO] Try running: uv sync --dev")
@@ -580,13 +576,10 @@ def check_dependencies() -> bool:
     Returns:
         True if dependencies are available, False otherwise
     """
-    try:
-        import pytest
-
-        return True
-    except ImportError:
+    if importlib.util.find_spec("pytest") is None:
         print("[FAIL] pytest not installed. Run: uv sync --dev")
         return False
+    return True
 
 
 def main() -> int:
@@ -686,7 +679,7 @@ def main() -> int:
     unit_tests = [t for t in test_files if not detector.is_integration_test(t)]
     integration_tests = [t for t in test_files if detector.is_integration_test(t)]
 
-    print(f"Test Discovery:")
+    print("Test Discovery:")
     print(f"   - Found {len(test_files)} test file(s)")
     print(f"   - {len(unit_tests)} unit test(s)")
     print(f"   - {len(integration_tests)} integration test(s)")
@@ -738,7 +731,7 @@ def main() -> int:
     service_manager.cleanup()
 
     # Print summary
-    print(f"\nTest Summary:")
+    print("\nTest Summary:")
     if exit_code == 0:
         print("   [PASS] All tests passed!")
     else:

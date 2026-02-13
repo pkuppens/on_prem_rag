@@ -5,10 +5,8 @@ This module tests the WebSocket endpoints and progress notification system.
 
 import asyncio
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
 from starlette.testclient import WebSocketTestSession
 

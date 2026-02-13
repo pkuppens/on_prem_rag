@@ -8,11 +8,9 @@ See docs/technical/STORY-002-document-processing-architecture.md for detailed
 architecture specifications and implementation requirements.
 """
 
-import asyncio
-from typing import List, Optional
+from typing import List
 
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME
 from ..models.document_models import (

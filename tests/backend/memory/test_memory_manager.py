@@ -8,8 +8,6 @@ Tests cover:
 - Module exports
 """
 
-import tempfile
-from pathlib import Path
 
 import pytest
 

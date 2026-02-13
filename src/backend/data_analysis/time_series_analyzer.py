@@ -7,8 +7,7 @@ See project/team/tasks/TASK-030.md for detailed requirements and implementation 
 """
 
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Tuple
 
 import pandas as pd
 

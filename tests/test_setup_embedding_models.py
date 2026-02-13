@@ -1,14 +1,12 @@
 """Tests for the setup_embedding_models.py script."""
 
 import os
-import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 pytest.importorskip("llama_index", reason="missing deps")
-from backend.rag_pipeline.utils.directory_utils import get_cache_dir, get_project_root
 from scripts import setup_embedding_models
 
 

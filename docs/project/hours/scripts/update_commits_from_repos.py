@@ -13,9 +13,8 @@ import argparse
 import csv
 import logging
 import subprocess
-import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

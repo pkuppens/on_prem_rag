@@ -9,7 +9,6 @@ See docs/technical/LLM.md for design details.
 
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from backend.rag_pipeline.config.parameter_sets import get_param_set

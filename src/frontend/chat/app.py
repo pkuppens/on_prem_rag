@@ -25,7 +25,7 @@ from frontend.chat.auth.oauth_integration import password_auth_callback as _pass
 from frontend.chat.handlers.agent_callbacks import get_agent_handler
 from frontend.chat.handlers.document_upload import get_document_handler
 from frontend.chat.handlers.message_handler import get_message_handler
-from frontend.chat.utils.session import SessionManager, UserRole
+from frontend.chat.utils.session import SessionManager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")

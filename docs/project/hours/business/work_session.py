@@ -11,7 +11,7 @@ Purpose: Unified model for work session tracking, hours calculation, and work it
 
 import sys
 from dataclasses import dataclass
-from datetime import datetime, time, timedelta
+from datetime import datetime, time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 

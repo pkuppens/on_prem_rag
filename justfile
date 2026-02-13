@@ -11,10 +11,20 @@ lint:
     uv run ruff check .
     uv run ruff format --check .
 
+# Strict lint: also check F401 (unused imports) — pyproject ignores F* by default
+lint-strict:
+    uv run ruff check . --select F401
+
 # Auto-fix lint and format
 lint-fix:
     uv run ruff check . --fix
     uv run ruff format .
+
+# Ruff only (when you need just one)
+ruff-check:
+    uv run ruff check .
+ruff-format:
+    uv run ruff format --check
 
 # Run tests (excludes slow and internet by default)
 test:
@@ -23,6 +33,14 @@ test:
 # Run all tests including slow
 test-all:
     uv run pytest -m ""
+
+# Run slow tests only
+test-slow:
+    uv run pytest -m slow
+
+# Run tests with coverage report
+test-cov:
+    uv run pytest --cov=src/backend --cov-report=term
 
 # Run backend API
 run:
@@ -42,3 +60,6 @@ pre-commit:
 
 # Full quality gate (lint + test)
 check: lint test
+
+# Strict quality gate (includes F401 unused-import check)
+check-strict: lint lint-strict test

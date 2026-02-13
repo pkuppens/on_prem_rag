@@ -7,22 +7,17 @@ See docs/technical/STORY-002-document-processing-architecture.md for detailed
 architecture specifications and implementation requirements.
 """
 
-import asyncio
-import hashlib
-import mimetypes
 import shutil
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from uuid import uuid4
 
 from fastapi import UploadFile
 from fastapi.exceptions import HTTPException
 
 from ..models.document_models import (
-    DocumentMetadata,
-    FileValidationError,
     ProcessingStatus,
     UploadResponse,
 )

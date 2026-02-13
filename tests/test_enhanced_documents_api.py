@@ -11,14 +11,11 @@ architecture specifications and test requirements.
 import asyncio
 import tempfile
 from pathlib import Path
-from typing import List
 
 import pytest
-from fastapi import UploadFile
 from fastapi.testclient import TestClient
 
 from src.backend.rag_pipeline.api.app import app
-from src.backend.rag_pipeline.models.document_models import ProcessingStatus, UploadResponse
 from src.backend.rag_pipeline.services.file_upload_service import FileUploadService
 
 

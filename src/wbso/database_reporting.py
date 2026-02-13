@@ -8,11 +8,11 @@ See docs/technical/WBSO_DATABASE_SCHEMA.md for database schema details.
 
 import csv
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-from sqlalchemy import and_, case, func, or_
+from sqlalchemy import and_, case, func
 from sqlalchemy.orm import Session
 
 from .database import (
@@ -576,7 +576,7 @@ class WBSODatabaseReporter:
             for benefit, description in norm_summary["normalization_benefits"].items():
                 f.write(f"- **{benefit.replace('_', ' ').title()}**: {description}\n")
 
-            f.write(f"\n### Data Quality Metrics\n\n")
+            f.write("\n### Data Quality Metrics\n\n")
             metrics = norm_summary["data_quality_metrics"]
             f.write(f"- **Categorization Rate**: {metrics['categorization_rate']:.1f}%\n")
             f.write(f"- **Repository Assignment Rate**: {metrics['repository_assignment_rate']:.1f}%\n")

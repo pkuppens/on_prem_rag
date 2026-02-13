@@ -205,28 +205,28 @@ def main():
     print(f"\n{'=' * 60}")
     print("WBSO CALENDAR HOURS CHECK")
     print(f"{'=' * 60}")
-    print(f"Calendar: WBSO Activities 2025")
+    print("Calendar: WBSO Activities 2025")
     print(f"Date Range: {start_date.date()} to {end_date.date()}")
     print(f"Total Events: {len(filtered_events)}")
     print(f"Total Hours: {total_hours:.2f} hours")
-    print(f"\nDuplicate Detection:")
+    print("\nDuplicate Detection:")
     print(f"  Duplicate Session IDs: {len(duplicate_session_ids)}")
     print(f"  Duplicate DateTime Ranges: {len(duplicate_datetime_ranges)}")
-    print(f"\nConflict Detection:")
+    print("\nConflict Detection:")
     print(f"  Total Conflicts: {len(conflicts)}")
     print(f"  Short Conflicts (<2h): {len(short_conflicts)}")
     print(f"  Long Conflicts (≥2h): {len(long_conflicts)}")
 
     # Show duplicate details
     if duplicate_session_ids:
-        print(f"\nDuplicate Session IDs (showing first 5):")
+        print("\nDuplicate Session IDs (showing first 5):")
         for session_id, event_list in list(duplicate_session_ids.items())[:5]:
             print(f"  {session_id}: {len(event_list)} events")
             for event_info in event_list[:2]:
                 print(f"    - {event_info['summary']} ({event_info['event_id']})")
 
     if duplicate_datetime_ranges:
-        print(f"\nDuplicate DateTime Ranges (showing first 5):")
+        print("\nDuplicate DateTime Ranges (showing first 5):")
         for dt_key, event_list in list(duplicate_datetime_ranges.items())[:5]:
             print(f"  {dt_key}: {len(event_list)} events")
             for event_info in event_list[:2]:
@@ -234,7 +234,7 @@ def main():
 
     # Show conflict details
     if conflicts:
-        print(f"\nConflicts (showing first 5):")
+        print("\nConflicts (showing first 5):")
         for conflict in conflicts[:5]:
             print(f"  {conflict['conflict_type'].upper()}: {conflict['overlap_hours']:.2f}h overlap")
             print(f"    Event 1: {conflict['event1_summary']}")

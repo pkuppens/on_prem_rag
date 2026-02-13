@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.wbso.calendar_event import CalendarEvent
 from src.wbso.logging_config import get_logger
-from src.wbso.pipeline_steps import _get_target_dates, step_calendar_replace
+from src.wbso.pipeline_steps import step_calendar_replace
 from src.wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("calendar_upload_script")
@@ -41,7 +41,6 @@ CALENDAR_EVENTS_CSV = DATA_DIR / "calendar_events.csv"
 def load_calendar_events_from_csv(csv_path: Path) -> list[CalendarEvent]:
     """Load calendar events from CSV file."""
     import csv
-    import json
 
     if not csv_path.exists():
         raise FileNotFoundError(f"Calendar events CSV not found: {csv_path}")

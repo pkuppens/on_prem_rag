@@ -174,7 +174,7 @@ class TestPDFEmbeddingIntegration:
         # The exact page will depend on the specific chunk that matches best
         assert 1 <= page_num <= self.EXPECTED_PAGES, f"Page number {page_num} should be within valid range"
 
-        print(f"Healthcare query top result:")
+        print("Healthcare query top result:")
         print(f"  Similarity: {top_result['similarity_score']:.4f}")
         print(f"  Page number: {page_number}")
         print(f"  Chunk index: {top_result['chunk_index']}")
@@ -250,7 +250,7 @@ class TestPDFEmbeddingIntegration:
         similarity_diff = abs(results[0]["similarity"] - results[1]["similarity"])
         assert similarity_diff <= 0.001, f"Similarity scores differ by {similarity_diff:.6f}, expected ≤0.001"
 
-        print(f"Reproducibility test passed!")
+        print("Reproducibility test passed!")
         print(f"Pages processed: {results[0]['pages']}")
         print(f"Chunks created: {results[0]['chunks']}")
         print(f"Run 1 similarity: {results[0]['similarity']:.6f}")

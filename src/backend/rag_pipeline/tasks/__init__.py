@@ -8,3 +8,11 @@ from .extract_clinical_task import ExtractClinicalInfoTask
 from .preprocess_task import PreprocessMedicalTextTask
 from .quality_control_task import QualityControlTask
 from .summarize_task import GenerateSummaryTask
+
+__all__ = [
+    "AssessPatientLanguageTask",
+    "ExtractClinicalInfoTask",
+    "PreprocessMedicalTextTask",
+    "QualityControlTask",
+    "GenerateSummaryTask",
+]

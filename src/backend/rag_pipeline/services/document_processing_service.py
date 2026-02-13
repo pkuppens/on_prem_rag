@@ -8,14 +8,13 @@ architecture specifications and implementation requirements.
 """
 
 import asyncio
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from ..config.parameter_sets import RAGParams, get_param_set
 from ..core.embeddings import process_document
 from ..core.vector_store import ChromaVectorStoreManager, get_vector_store_manager_from_env
-from ..models.document_models import DocumentMetadata, ProcessingStatus
+from ..models.document_models import DocumentMetadata
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)

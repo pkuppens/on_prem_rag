@@ -15,7 +15,7 @@ import csv
 from collections import defaultdict
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from .activities import WBSOActivities
 from .activity_repo_mapping import ActivityRepoMapping

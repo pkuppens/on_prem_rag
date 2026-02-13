@@ -24,11 +24,10 @@ from typing import TypedDict, Union
 from llama_index.core.schema import BaseNode, TextNode
 
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig
-from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents, generate_content_hash
+from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents
 from backend.rag_pipeline.core.document_loader import DocumentLoader
 from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
 from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
-from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
 
 from ..utils.logging import StructuredLogger
 

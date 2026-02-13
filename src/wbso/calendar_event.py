@@ -302,7 +302,6 @@ class CalendarEvent:
     @classmethod
     def from_wbso_session(cls, session: WBSOSession, activity_name_nl: Optional[str] = None) -> "CalendarEvent":
         """Create from WBSOSession with Dutch text and activity-based title."""
-        from .activities import WBSOActivities
 
         # Round times to 5-minute intervals
         rounded_start = round_to_quarter_hour(session.start_time)

@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 # Add business layer to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "docs" / "project" / "hours"))
 
-from business import SystemEvent, WorkSession
+from business import SystemEvent
 
 from backend.session_detection import SessionDetector, calculate_break_duration, parse_datetime_flexible
 

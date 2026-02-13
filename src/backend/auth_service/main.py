@@ -1,14 +1,10 @@
 import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
-from typing import Optional
-from uuid import uuid4
 
-import httpx
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
@@ -16,7 +12,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from .database import SessionLocal, init_db
 from .models import Session as DBSession
 from .models import User
-from .schemas import OAuthRedirect, TokenOut, UserCreate, UserOut
+from .schemas import TokenOut, UserCreate, UserOut
 
 ACCESS_TIMEOUT = timedelta(minutes=30)
 SERVER_DEBUG = os.getenv("SERVER_DEBUG", "False").lower() == "true"
@@ -77,7 +73,6 @@ app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY",
 
 
 def start_server() -> None:
-    import logging
 
     import uvicorn
 

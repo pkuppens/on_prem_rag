@@ -18,7 +18,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -281,7 +281,7 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"""
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Saved calendar events:")
+        logger.info("Saved calendar events:")
         logger.info(f"  - Total events: {len(events)}")
         logger.info(f"  - Real events: {real_count}")
         logger.info(f"  - Synthetic events: {synthetic_count}")

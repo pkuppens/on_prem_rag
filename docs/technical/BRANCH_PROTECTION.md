@@ -14,8 +14,11 @@ Branch name pattern: `main`
 
 #### ✅ Require a pull request before merging
 - [x] **Require approvals**: At least 1 approval
+  - Note: For solo developer projects, this can be a maintainer's self-approval before merging
 - [x] **Dismiss stale pull request approvals when new commits are pushed**
+  - This ensures reviews are current and reflect the latest code changes
 - [x] **Require review from Code Owners** (if CODEOWNERS file exists)
+  - See below for CODEOWNERS setup
 
 #### ✅ Require status checks to pass before merging
 - [x] **Require branches to be up to date before merging**
@@ -36,6 +39,16 @@ Branch name pattern: `main`
 
 #### Linear history
 - [x] **Require linear history**: Enforce clean git history with rebase or squash merges
+  - Recommended: Use squash merges for feature branches
+  - Before merging, ensure your branch is rebased on the latest main:
+    ```bash
+    git checkout main
+    git pull
+    git checkout feature/your-branch
+    git rebase main
+    # Resolve any conflicts
+    git push --force-with-lease
+    ```
 
 #### Force push restrictions
 - [x] **Restrict who can push to matching branches**: Prevent force pushes and branch deletion
@@ -51,7 +64,27 @@ Branch name pattern: `main`
 
 ## Applying Branch Protection Rules
 
-### Via GitHub Web Interface
+### Step 1: Create CODEOWNERS File
+
+Create a `.github/CODEOWNERS` file to specify code ownership:
+
+```
+# CODEOWNERS file - defines individuals or teams responsible for code review
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo
+* @pkuppens
+
+# Specific ownership for CI/CD and workflows
+/.github/ @pkuppens
+
+# Documentation ownership
+/docs/ @pkuppens
+```
+
+This ensures that @pkuppens is automatically requested for review on all PRs.
+
+### Step 2: Configure Branch Protection via GitHub Web Interface
 
 1. Go to **Settings** → **Branches**
 2. Click **Add branch protection rule**
@@ -59,7 +92,7 @@ Branch name pattern: `main`
 4. Configure the settings as outlined above
 5. Click **Create** or **Save changes**
 
-### Via GitHub CLI
+### Step 3: Configure Branch Protection via GitHub CLI (Alternative)
 
 ```bash
 # Requires gh CLI and repository admin permissions

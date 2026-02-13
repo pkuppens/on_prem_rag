@@ -4,6 +4,7 @@ This module provides endpoints for uploading, listing, and serving documents.
 """
 
 import asyncio
+import os
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
 from fastapi.responses import FileResponse
@@ -405,7 +406,7 @@ async def _serve_file(filename: str):
             filename=filename,
             media_type=media_type,
             headers={
-                "Access-Control-Allow-Origin": "http://localhost:5173",  # TODO: make this configurable
+                "Access-Control-Allow-Origin": os.getenv("ALLOW_ORIGINS", "http://localhost:5173").split(",")[0].strip(),
                 "Access-Control-Allow-Methods": "GET, OPTIONS",
                 "Access-Control-Allow-Headers": "*",
                 "Content-Disposition": f'inline; filename="{filename}"',

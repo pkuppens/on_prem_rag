@@ -10,6 +10,7 @@ This guide provides instructions for setting up the development environment for 
   - `pip install uv`
   - or `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Git
+- (Optional) `just` — task runner for `just lint`, `just test`, `just docker`. Install: `scoop install just` or `choco install just`
 
 ## Initial Setup
 
@@ -61,6 +62,8 @@ This guide provides instructions for setting up the development environment for 
     uv run pytest
     pre-commit run --all-files   # First run may auto-fix some files; run again to confirm pass
     ```
+
+    Or with `just` (if installed): `just check` runs lint + test.
 
 5.  **Local CUDA/GPU setup (optional):**
 

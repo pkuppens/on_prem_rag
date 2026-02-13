@@ -87,8 +87,9 @@ uv sync                    # Install from pyproject.toml
 
 ### Git Workflow
 
-- Feature branches: `feature/FEAT-XXX-description`
+- Feature branches: `feature/FEAT-XXX-description` or `feature/NNN-short-description`
 - Task branches: `task/TASK-XXX-description`
+- Use `gh issue view NNN` to fetch issues; follow [Issue Implementation Workflow](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 - Documentation/config changes can go directly to main
 - All pytest tests must pass before PR creation
 

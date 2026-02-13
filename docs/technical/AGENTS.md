@@ -2,82 +2,109 @@
 
 ## Introduction
 
-This document outlines the integration and use of OpenAI Codex within our project to enhance productivity and streamline coding tasks.
+This document outlines the workflow for AI coding agents (Claude, Cursor, etc.) when working on this repository. It aligns with the portfolio-wide [Issue Implementation Workflow](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md).
 
-## Codex Overview
+## Prerequisites
 
-OpenAI Codex is an AI system that translates natural language into code. It is designed to assist developers by providing code suggestions, automating repetitive tasks, and improving overall coding efficiency.
+- **GitHub CLI (`gh`)**: Use for issue access. Authenticate with `gh auth login` if needed.
+- **Quality gate**: `uv sync --group dev` and `uv run pytest` pass before starting any issue.
+
+## Issue Implementation Workflow
+
+### Phase 1 — Validate (before coding)
+
+1. **Fetch and review the issue**
+   ```bash
+   gh issue view <NNN>
+   ```
+   Check: Is the goal still valid? Are acceptance criteria clear?
+
+2. **Check if already implemented**
+   - Search codebase: `rg <keyword> --type py` or `grep -r <keyword> src/`
+   - Recent changes: `git log -p --follow -- <path>`
+   - Merged PRs: `gh pr list --search "issue" --state merged`
+
+3. **Research tooling and best practices**
+   - Web search for libraries, patterns, and similar solutions
+   - Avoid reinventing or choosing deprecated approaches
+   - Record findings in the issue or `_scratch/` notes
+
+If the issue is obsolete or done, close it with a comment and stop.
+
+### Phase 2 — Plan
+
+1. **Branch from main**: `git checkout main && git pull && git checkout -b feature/NNN-short-description`
+2. **Review architecture**: CLAUDE.md, ADRs, `docs/technical/` for correct module boundaries
+3. **Decide test strategy**: Test-first for pure logic; integration for API; manual for UI
+4. **Assign yourself**: `gh issue edit NNN --add-assignee @me`
+
+### Phase 3 — Implement
+
+1. Implement in small increments; run `uv run pytest` after each step
+2. Quality gate before commit:
+   ```bash
+   uv run pytest
+   uv run ruff check . && uv run ruff format --check .
+   ```
+3. Commit with issue reference: `#NNN: feat: description`
+4. PR when done: `gh pr create --title "#NNN: ..." --body "Closes #NNN"`
+
+**Full workflow:** [ISSUE_IMPLEMENTATION_WORKFLOW.md](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 
 ## Implementation Details
 
-- **Branch Management**: Codex is used on the main branch to ensure consistency and avoid conflicts.
-- **Commit Strategy**: Multiple commits are allowed for separate smaller tasks to maintain a clear history.
-- **GitHub Actions**: Ensure all actions pass, including ruff linting and fixing. Some rules can be fixed automatically, while others may need adjustments in `pyproject.toml`.
-- **Documentation**: Regular updates to project progress reports in markdown files like STORY-xxx, TASK-xxx, FEAT-xxx.
-- **Package Management**: Use 'uv add -U {package}' for package installation and updates. Ensure 'uv' is installed and used.
-- **Testing**: All pytests must pass, with a preference for code coverage measurements.
+- **Branch Management**: Never commit directly to main. Use feature/task branches and PRs.
+- **Commit Strategy**: Multiple commits allowed for separate smaller tasks; reference issue in each.
+- **GitHub Actions**: All actions must pass (ruff, pytest). Fix lint issues before pushing.
+- **Package Management**: Use `uv add <package>` — never `pip install`.
+- **Testing**: All pytest tests must pass. Prefer code coverage for new code.
 
 ## Testing Best Practices
 
 ### Pytest Guidelines
 
-1. **Assertion Messages**
+1. **Assertion Messages** — Include descriptive error messages:
+   ```python
+   assert pages, "Expected non-empty list of pages"
+   ```
 
-   - Always include descriptive error messages in assertions
-   - Example: `assert pages, "Expected non-empty list of pages"`
+2. **Test Documentation** — Each test should have a docstring:
+   ```python
+   """Test PDF text extraction.
+   Verifies that:
+   1. The function returns a non-empty list
+   2. Each page is a string
+   3. The list contains the expected number of pages
+   """
+   ```
 
-2. **Test Documentation**
+3. **Pytest Features** — Use `pytest.fixture`, `pytest.mark.parametrize`, `pytest.raises()`, `pytest.approx()`.
 
-   - Each test should have a docstring explaining what it verifies
-   - List specific test cases and expected outcomes
-   - Example:
-
-     ```python
-     """Test PDF text extraction.
-
-     Verifies that:
-     1. The function returns a non-empty list
-     2. Each page is a string
-     3. The list contains the expected number of pages
-     """
-     ```
-
-3. **Pytest Features**
-
-   - Use `pytest.fixture` for common test setup
-   - Use `pytest.mark.parametrize` for testing multiple cases
-   - Use `pytest.raises()` for testing exceptions
-   - Use `pytest.approx()` for floating-point comparisons
-   - Use `pytest.mark` for categorizing tests
-
-4. **Type Checking**
-   - Use `isinstance()` checks with descriptive error messages
-   - Example: `assert all(isinstance(p, str) for p in pages), "All pages should be strings"`
+4. **Type Checking** — Use `isinstance()` checks with descriptive error messages.
 
 ### Pre-commit Workflow
 
-1. **After Code Changes**
+After code changes:
 
-   - Run pre-commit hooks to fix formatting issues
-   - Commands:
-     ```bash
-     pre-commit run ruff
-     pre-commit run ruff-format
-     ```
-   - This ensures consistent code style across the project
+```bash
+pre-commit run ruff
+pre-commit run ruff-format
+```
 
-2. **Common Fixes**
-   - Code formatting (ruff-format)
-   - Linting and auto-fixing (ruff)
-   - Import sorting (ruff)
-   - Type checking (ruff)
+Or: `pre-commit run --all-files`
 
-## Usage Guidelines
+## gh CLI Quick Reference
 
-- **Environment**: Codex does not require a local virtual environment but should be kept up to date.
-- **Linting**: Allow a line length of 132 and fix whitespace issues in Python files.
-- **Security**: Follow best practices and document all required environment variables.
+```bash
+gh issue view 75              # View issue
+gh issue edit 75 --add-assignee @me
+gh issue comment 75 --body "..."
+gh pr create --title "#75: ..." --body "Closes #75"
+gh pr merge --squash --delete-branch
+```
 
-## Conclusion
+## References
 
-The integration of Codex aims to optimize development workflows, reduce manual coding efforts, and maintain high code quality standards. Regular updates and adherence to the outlined guidelines will ensure effective use of Codex in the project.
+- [CLAUDE.md](../../CLAUDE.md) — Repo conventions
+- [ISSUE_IMPLEMENTATION_WORKFLOW.md](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md) — Full 3-phase workflow
+- [TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md) — Vector store and embedding test strategy

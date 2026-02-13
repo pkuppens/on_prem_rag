@@ -2,6 +2,14 @@
 
 Issues for the on-premises RAG MVP are tracked on GitHub.
 
+## Issue Implementation Workflow
+
+Before working on an issue, follow the **[Issue Implementation Workflow](./ISSUE_IMPLEMENTATION_WORKFLOW.md)**:
+
+1. **Validate** — `gh issue view NNN`, check if already done, research tooling
+2. **Plan** — Branch from main, review architecture, decide test strategy
+3. **Implement** — Small increments, quality gate, commit with `#NNN: type: desc`
+
 ## Epic and Linked Issues
 
 **[Epic #91](https://github.com/pkuppens/on_prem_rag/issues/91): On-Premises RAG MVP — Job-Ready Portfolio**
@@ -44,5 +52,6 @@ Templates in `.github/ISSUE_TEMPLATE/`:
 
 ## References
 
+- [ISSUE_IMPLEMENTATION_WORKFLOW.md](./ISSUE_IMPLEMENTATION_WORKFLOW.md) — Validate → Plan → Implement
 - [CLAUDE.md](../../CLAUDE.md) — repo conventions
-- [AGENTS.md](../technical/AGENTS.md) — agent workflow
+- [AGENTS.md](../technical/AGENTS.md) — agent workflow and gh CLI

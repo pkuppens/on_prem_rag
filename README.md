@@ -2,7 +2,7 @@
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-MIT%20w%2F%20Restriction-yellow.svg)](LICENSE)
-[![CI](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
+[![CI](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
 
 _Talk with your documents and data using LLMs without Cloud privacy and confidentiality concerns_
@@ -19,15 +19,16 @@ The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardi
 
 Key architectural trade-offs that shape the system:
 
-| Decision | Choice | Rationale |
-| -------- | ------ | --------- |
-| **Architecture** | Local-first, on-premises | Data sovereignty and compliance; no cloud dependency for core flows |
-| **Stack** | Open source (MIT, Apache 2.0) | Auditability, no vendor lock-in, community support |
-| **Structure** | Modular, swappable components | Chunking, retrieval, and LLM backends can be swapped without touching callers |
-| **Embeddings** | Multilingual-E5-large-instruct | On-prem, 100+ languages, MIT license; see [EMBEDDING.md](docs/technical/EMBEDDING.md) |
-| **Chunking** | 512 chars, 50 overlap (LlamaIndex) | Balance of context and retrieval; see [CHUNKING.md](docs/technical/CHUNKING.md) |
-| **LLM backends** | Ollama, HuggingFace, LiteLLM | Configurable via env vars; supports local and optional cloud providers |
-| **Vector store** | ChromaDB | Local, embeddable, no external service required |
+| Decision                 | Choice                                        | Rationale                                                                                                                           |
+| ------------------------ | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Architecture**         | Local-first, on-premises                      | Data sovereignty and compliance; no cloud dependency for core flows                                                                 |
+| **Stack**                | Open source (MIT, Apache 2.0)                 | Auditability, no vendor lock-in, community support                                                                                  |
+| **Structure**            | Modular, swappable components                 | Chunking, retrieval, embeddings, and LLM backends can be swapped or configured for different purposes and experimentation           |
+| **Embeddings**           | Multilingual-E5-large-instruct (default)      | Swappable; default chosen from literature for on-prem, 100+ languages, MIT license; see [EMBEDDING.md](docs/technical/EMBEDDING.md) |
+| **Chunking**             | 512 chars, 50 overlap (default, configurable) | Swappable strategies; defaults follow LlamaIndex best practices; see [CHUNKING.md](docs/technical/CHUNKING.md)                      |
+| **LLM backends**         | Ollama, HuggingFace, LiteLLM                  | Configurable via env vars; supports local and optional cloud providers                                                              |
+| **Vector store**         | ChromaDB                                      | Local, embeddable, no external service required                                                                                     |
+| **Retrieval (explored)** | Knowledge-graph augmentation                  | Emerging technique for better RAG; candidate for future implementation (track in dedicated issue)                                   |
 
 For legal, commercial, and pending decisions, see [Key Business Concerns & Decisions](#key-business-concerns--decisions).
 
@@ -36,19 +37,19 @@ For legal, commercial, and pending decisions, see [Key Business Concerns & Decis
 ![image](https://github.com/user-attachments/assets/2ed5872e-9ab2-49e4-90bf-ca0f774a46e1)
 
 ```mermaid
-flowchart TB
-    subgraph Frontend [Frontend]
+graph TB
+    subgraph Frontend
         React[React + MUI]
         Chainlit[Chainlit UI]
     end
-    subgraph Backend [Backend]
+    subgraph Backend
         FastAPI[FastAPI API]
         RAG[RAG Pipeline]
     end
-    subgraph Storage [Storage]
+    subgraph Storage
         ChromaDB[(ChromaDB)]
     end
-    subgraph LLM [LLM]
+    subgraph LLM
         Ollama[Ollama]
     end
     React --> FastAPI
@@ -167,6 +168,7 @@ This project can be configured as a multi-root workspace to integrate the relate
 
 1. Create or open the workspace file (`on_prem_rag.code-workspace`) in the project root
 2. Adjust the path to the WBSO-AICM-2025-01 repository for your system:
+
    ```json
    {
      "folders": [
@@ -188,6 +190,7 @@ This project can be configured as a multi-root workspace to integrate the relate
    ```
 
 **Benefits:**
+
 - Cross-repository code search and navigation
 - Unified context for AI assistance
 - Shared settings and configurations

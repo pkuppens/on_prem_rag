@@ -35,8 +35,22 @@ just lint   # Runs ruff check and format checks
 
 **If `just` is not recognized after install:**
 
-- Terminals opened from Cursor/VS Code inherit the IDE's environment from when it was started. Fully **quit and restart Cursor** (or your IDE) so new terminals get the updated `PATH`.
-- Or open a new cmd/PowerShell from the Start Menu—those get a fresh environment and should find `just`.
+This usually happens because `just` was installed while Cursor (or another app) was running. Terminals inherit the PATH from when the parent process started.
+
+1. **Quick fix in current terminal** — refresh the PATH in this session:
+
+   ```powershell
+   $justDir = (Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter "Casey.Just*" -Directory -ErrorAction SilentlyContinue)[0].FullName
+   $env:PATH = "$justDir;$env:PATH"
+   ```
+
+   Or manually add the `Casey.Just_*` folder from your User PATH.
+
+2. **Restart Cursor fully** — Exit via File → Exit (or close all windows), then open Cursor again. New terminals will get the updated PATH.
+
+3. **Test outside Cursor** — Open a new PowerShell or cmd from the Start Menu. If `just` works there, the fix is restarting Cursor.
+
+4. **Last resort** — Windows logout/login (or restart) refreshes the environment for all apps.
 
 ## Initial Setup
 

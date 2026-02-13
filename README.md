@@ -1,14 +1,62 @@
 # On-Premises RAG Solution
 
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-MIT%20w%2F%20Restriction-yellow.svg)](LICENSE)
+[![CI](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml/badge.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/pkuppens/on_prem_rag/actions/workflows/python-ci.yml)
+
 _Talk with your documents and data using LLMs without Cloud privacy and confidentiality concerns_
 
 ## Executive Summary
 
-This project delivers an **on-premises Retrieval-Augmented Generation (RAG) system** that enables organizations to leverage Large Language Models (LLMs) for document analysis and database querying while maintaining complete data sovereignty and regulatory compliance. The architecture now embraces the **Model‑Context‑Protocol (MCP)** for standardized context exchange between components.
+A production-ready RAG system designed for **regulated environments where data cannot leave the premises**. Built with healthcare compliance in mind, this on-premises Retrieval-Augmented Generation solution lets clinicians and staff query documents and databases using Large Language Models (LLMs) without exposing patient data to the cloud.
+
+Data stays on your infrastructure. The system supports GDPR, NEN 7510 (Dutch healthcare information security), and HIPAA-aware deployments. Every answer includes source attribution so clinicians can verify where information comes from—supporting clinical decision-making and audit requirements.
+
+The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardized context exchange between components. Organizations can run document analysis, natural-language querying, and database lookups entirely on-premises.
+
+## Design Decisions
+
+Key architectural trade-offs that shape the system:
+
+| Decision | Choice | Rationale |
+| -------- | ------ | --------- |
+| **Architecture** | Local-first, on-premises | Data sovereignty and compliance; no cloud dependency for core flows |
+| **Stack** | Open source (MIT, Apache 2.0) | Auditability, no vendor lock-in, community support |
+| **Structure** | Modular, swappable components | Chunking, retrieval, and LLM backends can be swapped without touching callers |
+| **Embeddings** | Multilingual-E5-large-instruct | On-prem, 100+ languages, MIT license; see [EMBEDDING.md](docs/technical/EMBEDDING.md) |
+| **Chunking** | 512 chars, 50 overlap (LlamaIndex) | Balance of context and retrieval; see [CHUNKING.md](docs/technical/CHUNKING.md) |
+| **LLM backends** | Ollama, HuggingFace, LiteLLM | Configurable via env vars; supports local and optional cloud providers |
+| **Vector store** | ChromaDB | Local, embeddable, no external service required |
+
+For legal, commercial, and pending decisions, see [Key Business Concerns & Decisions](#key-business-concerns--decisions).
 
 ## What We'll Build
 
 ![image](https://github.com/user-attachments/assets/2ed5872e-9ab2-49e4-90bf-ca0f774a46e1)
+
+```mermaid
+flowchart TB
+    subgraph Frontend [Frontend]
+        React[React + MUI]
+        Chainlit[Chainlit UI]
+    end
+    subgraph Backend [Backend]
+        FastAPI[FastAPI API]
+        RAG[RAG Pipeline]
+    end
+    subgraph Storage [Storage]
+        ChromaDB[(ChromaDB)]
+    end
+    subgraph LLM [LLM]
+        Ollama[Ollama]
+    end
+    React --> FastAPI
+    Chainlit --> FastAPI
+    FastAPI --> RAG
+    RAG --> ChromaDB
+    RAG --> Ollama
+```
 
 ### Business Value Proposition
 
@@ -473,4 +521,4 @@ docker-compose up --build
 **Project Documentation**: Detailed SAFe project structure available in [`project/`](project/)
 **Strategic Overview**: Complete business case in [`project/SAFe Project Plan.md`](project/SAFe%20Project%20Plan.md)
 **Project Status**: Development Phase - MVP in progress
-**Last Updated**: 2025-05-31
+**Last Updated**: 2026-02-13

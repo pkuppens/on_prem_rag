@@ -134,9 +134,7 @@ class TestChunking:
         # Recursive should respect paragraph boundaries (split on \n\n)
         assert rec_result.chunk_count >= 2, "Recursive should split on paragraph boundaries"
         assert "Paragraph one" in rec_result.chunks[0].text
-        assert "Paragraph two" in rec_result.chunks[-1].text or any(
-            "Paragraph two" in c.text for c in rec_result.chunks
-        )
+        assert "Paragraph two" in rec_result.chunks[-1].text or any("Paragraph two" in c.text for c in rec_result.chunks)
 
         # All strategies should include strategy in params
         assert char_result.chunking_params["strategy"] == "character"

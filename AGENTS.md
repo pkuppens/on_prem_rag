@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## Getting Started
+
+For new agent chats working on GitHub issues: run `/get-started fix issue #N` to load the Issue Implementation Workflow into context and start with Phase 1 (Validate). See [docs/technical/AGENTS.md](docs/technical/AGENTS.md) for the full workflow summary.
+
 ## Shared Guidance
 
 For consolidated rules see [agents/README.md](agents/README.md).

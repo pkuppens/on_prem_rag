@@ -1,5 +1,14 @@
 # AGENTS.md
 
+## Getting Started
+
+For new agent chats working on GitHub issues: run `/get-started fix issue #N` to load the Issue Implementation Workflow into context and start with Phase 1 (Validate). The command ensures the workflow steps are in context before planning or implementation.
+
+Examples:
+
+- `/get-started fix issue #123` — load workflow and start work on issue 123
+- `/get-started` — show workflow summary and ask which issue to work on
+
 ## Introduction
 
 This document outlines the workflow for AI coding agents (Claude, Cursor, etc.) when working on this repository. It aligns with the portfolio-wide [Issue Implementation Workflow](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md), which defines issue review, planning, feature branching strategies, test-driven development, and architecture principles.

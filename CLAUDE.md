@@ -109,11 +109,46 @@ uv sync                    # Install from pyproject.toml
 - `tests/` - All test files (mirroring src structure in `tests/core/`)
 - `.cursor/rules/` - AI assistant rules and guidelines
 - `agents/` - AI agent configurations
+- `tmp/` - **Scratch directory** (gitignored) — see below
+
+## Scratch Directory (`tmp/`)
+
+Use `tmp/` for all development scratch files that should NOT be committed. This directory is gitignored.
+
+**When to use `tmp/`:**
+
+- Drafting PR descriptions, issue comments, or issue bodies before posting via `gh`
+- Storing workflow progress, like checklists that need marking completed items
+- Storing intermediate analysis, exploration notes, or debug output
+- Caching fetched issue descriptions for offline reference
+- Any file you'd otherwise create at the repo root or in a random location
+
+**Structure:**
+
+```
+tmp/
+├── CLAUDE.md              # Instructions for this directory
+├── github/                # GitHub-related drafts
+│   ├── CLAUDE.md
+│   ├── issue-descriptions/  # Cached issue bodies (issue-NNN.md)
+│   ├── issue-comments/      # Draft comments before posting
+│   └── pr-bodies/           # Draft PR descriptions
+├── analysis/              # Exploration notes, coverage reports, profiling
+├── debug/                 # Debug output, logs, test artifacts
+└── progress/              # Any other work-in-progress text
+```
+
+**Rules:**
+
+- Never commit files from `tmp/` — it is in `.gitignore`
+- Prefer `tmp/` over creating files at the repo root or in `docs/`
+- Clean up stale files periodically; nothing here is permanent
+- If content in `tmp/` should persist across sessions, move it to Claude memory instead
 
 ## Test Markers
 
-| Marker | Description | Default |
-|--------|-------------|---------|
-| `@pytest.mark.slow` | Tests >5 seconds | Skipped |
-| `@pytest.mark.internet` | Network required | Skipped |
-| `@pytest.mark.fts5` | SQLite FTS5 required | Included |
+| Marker                  | Description          | Default  |
+| ----------------------- | -------------------- | -------- |
+| `@pytest.mark.slow`     | Tests >5 seconds     | Skipped  |
+| `@pytest.mark.internet` | Network required     | Skipped  |
+| `@pytest.mark.fts5`     | SQLite FTS5 required | Included |

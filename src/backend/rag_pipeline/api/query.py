@@ -12,6 +12,7 @@ from ..core.embeddings import query_embeddings
 from ..core.vector_store import get_vector_store_manager_from_env
 from ..main import process_medical_conversation
 from ..utils.logging import StructuredLogger
+from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
 router = APIRouter(prefix="/api/query", tags=["query"])
@@ -66,6 +67,7 @@ async def query_documents(payload: QueryRequest) -> dict:
     top_k = payload.top_k if payload.top_k is not None else params.retrieval.top_k
 
     try:
+        get_metrics().record_query()
         results = query_embeddings(
             payload.query,
             params.embedding.model_name,

@@ -20,6 +20,7 @@ from ..utils.directory_utils import (
 )
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
+from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
 logger.debug("Starting document management API endpoints")
@@ -149,6 +150,7 @@ async def process_document_background(file_path, filename: str, params_name: str
                 chunks_processed=chunks_processed,
                 records_stored=records_stored,
             )
+            get_metrics().record_ingestion()
         finally:
             # Cancel the progress task
             progress_task.cancel()
@@ -220,6 +222,44 @@ async def list_documents() -> dict[str, list[str]]:
     logger.info("GET /api/documents/list")
     files = [f.name for f in uploaded_files_dir.iterdir() if f.is_file()]
     return {"files": files}
+
+
+@router.delete("/{filename}", status_code=204)
+async def delete_document(filename: str) -> None:
+    """Delete a document and its vector store chunks.
+
+    Removes the file from disk and all associated chunks from the vector store.
+
+    Args:
+        filename: Name of the document file (e.g. 'report.pdf').
+            Must not contain path separators (security: path traversal prevention).
+
+    Raises:
+        HTTPException: 400 if filename contains path separators.
+        HTTPException: 404 if document does not exist.
+    """
+    if "/" in filename or "\\" in filename or ".." in filename:
+        logger.warning("Delete rejected: invalid filename", filename=filename)
+        raise HTTPException(status_code=400, detail="Filename must not contain path separators")
+
+    file_path = uploaded_files_dir / filename
+    if not file_path.exists() or not file_path.is_file():
+        logger.info("Delete: document not found", filename=filename)
+        raise HTTPException(status_code=404, detail=f"Document not found: {filename}")
+
+    try:
+        chunks_deleted = vector_store_manager.delete_by_document_name(filename)
+        logger.info("Deleted chunks from vector store", filename=filename, chunks_deleted=chunks_deleted)
+    except Exception as e:
+        logger.error("Failed to delete chunks from vector store", filename=filename, error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to delete document from vector store") from e
+
+    try:
+        file_path.unlink()
+        logger.info("Deleted document file", filename=filename)
+    except OSError as e:
+        logger.error("Failed to delete file", filename=filename, error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to delete document file") from e
 
 
 @router.post("/upload")

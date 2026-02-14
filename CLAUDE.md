@@ -49,12 +49,20 @@ uv run mcp-calendar-server                 # MCP Calendar Server
 
 - **backend/rag_pipeline/** - Core RAG functionality
   - `api/` - FastAPI endpoints and routes
-  - `core/` - Document chunking, embedding, vector operations
+  - `core/` - Document chunking, embedding, vector operations, QA system
   - `services/` - Business logic (document processing, QA)
   - `models/` - Pydantic models and data structures
   - `config/` - Configuration and parameter sets
+  - `agents/` - LLM agent configurations and routing
 - **backend/auth_service/** - Authentication microservice (OAuth2, JWT)
 - **backend/security/** - Security utilities and validation
+- **backend/access_control/** - Role-based access control
+- **backend/audit_trail/** - Audit logging
+- **backend/data_analysis/** - Data analysis utilities
+- **backend/guardrails/** - NeMo Guardrails integration for LLM safety
+- **backend/memory/** - Agent memory (long-term, shared) with ChromaDB
+- **backend/privacy_guard/** - PII detection and data privacy
+- **backend/stt/** - Speech-to-text (Whisper) integration
 - **wbso/** - WBSO (Dutch R&D tax credit) pipeline for work session tracking
   - Calendar integration, session detection, activity assignment
   - SQLAlchemy ORM models for persistent storage

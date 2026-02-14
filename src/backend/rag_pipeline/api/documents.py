@@ -226,7 +226,7 @@ async def list_documents() -> dict[str, list[str]]:
 
 
 @router.post("/upload")
-async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, params_name: str = DEFAULT_PARAM_SET_NAME):
+async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, params_name: str = DEFAULT_PARAM_SET_NAME) -> dict:
     """Handle file upload and start background processing.
 
     Args:
@@ -434,7 +434,7 @@ async def _serve_file(filename: str):
 
 
 @router.get("/files/{filename}")
-async def serve_document_file(filename: str):
+async def serve_document_file(filename: str) -> FileResponse:
     """Serve uploaded files with proper error handling and logging.
 
     Args:

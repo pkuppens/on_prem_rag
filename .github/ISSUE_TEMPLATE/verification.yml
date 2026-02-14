@@ -51,7 +51,7 @@ body:
         **For automated:**
         - Command to run (e.g. `uv run pytest tests/test_foo.py`)
         - Expected outcome (e.g. all tests pass)
-        
+
         **For human:**
         - Prerequisites (Docker up, .env configured)
         - Step 1: Do X, expect Y

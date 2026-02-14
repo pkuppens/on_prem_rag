@@ -1,59 +1,449 @@
 """Tests for the embeddings module.
 
-This test suite verifies the core functionality of the RAG pipeline's embedding system.
-The tests are organized into several categories:
-
-1. Unit Tests (Basic Functionality)
-   - Text node embedding
-   - Vector storage
-   - Query functionality
-   - Deterministic behavior
-
-2. Integration Tests
-   - PDF document processing
-   - End-to-end embedding and querying
-   - Persistence across sessions
-
-3. Edge Cases
-   - Empty collections
-   - Invalid inputs
-   - Duplicate handling
-   - Error conditions
-
-Each test category focuses on specific aspects of the system:
-- Good weather behavior: Normal operation with valid inputs
-- Edge cases: Boundary conditions and error handling
-- Integration: End-to-end functionality across components
-
-The tests are designed to verify the core functionality without relying on API layers,
-testing the backing code directly for better reliability and faster execution.
+As a developer I want fast unit tests and integration tests for embeddings,
+so I can verify storage, dedup, metadata, and pipeline logic without real models.
+Technical: unit tests mock the embedding model; integration tests (slow) use real models.
 """
+
+from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 pytest.importorskip("llama_index")
 
 from llama_index.core import Document
+from llama_index.core.schema import TextNode
 
 from backend.rag_pipeline.config.parameter_sets import TEST_PARAMS
 from backend.rag_pipeline.core.embeddings import (
+    create_clean_metadata,
+    embed_chunks,
     embed_text_nodes,
+    process_document,
     process_pdf,
     query_embeddings,
     store_embeddings,
 )
 
+# --- Fast unit tests (no real embedding model required) ---
+
+
+class TestCreateCleanMetadata:
+    """Unit tests for create_clean_metadata — pure function, no mocking needed."""
+
+    def test_basic_metadata(self):
+        """Test clean metadata creation from a TextNode."""
+        node = TextNode(text="Hello world", metadata={"page_number": 1, "page_label": "1"})
+        result = create_clean_metadata(node, Path("test.pdf"), chunk_index=0)
+
+        assert result["text"] == "Hello world"
+        assert result["document_name"] == "test.pdf"
+        assert result["document_id"] == "test_0"
+        assert result["chunk_index"] == 0
+        assert result["source"] == "test.pdf"
+        assert result["page_number"] == 1
+
+    def test_metadata_defaults(self):
+        """Test that defaults are applied when metadata fields are missing."""
+        node = TextNode(text="content")
+        result = create_clean_metadata(node, Path("doc.txt"), chunk_index=5)
+
+        assert result["page_number"] == "unknown"
+        assert result["page_label"] == "unknown"
+        assert result["content_hash"] == ""
+
+    def test_non_serializable_metadata_excluded(self):
+        """Test that non-serializable metadata values are excluded."""
+        node = TextNode(text="text", metadata={"good_key": "value", "_private": "skip"})
+        result = create_clean_metadata(node, Path("f.pdf"), chunk_index=0)
+
+        assert result["good_key"] == "value"
+        assert "_private" not in result
+
+    def test_list_metadata_preserved(self):
+        """Test that list metadata with basic types is preserved."""
+        node = TextNode(text="text", metadata={"tags": ["a", "b"]})
+        result = create_clean_metadata(node, Path("f.pdf"), chunk_index=0)
+        assert result["tags"] == ["a", "b"]
+
+    def test_dict_metadata_preserved(self):
+        """Test that dict metadata with basic type values is preserved."""
+        node = TextNode(text="text", metadata={"info": {"key": "val"}})
+        result = create_clean_metadata(node, Path("f.pdf"), chunk_index=0)
+        assert result["info"] == {"key": "val"}
+
+
+class TestEmbedTextNodesMocked:
+    """Unit tests for embed_text_nodes with mocked embedding model."""
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_basic_embedding(self, mock_get_model):
+        """Test embedding generation with mocked model."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1, 0.2, 0.3]
+        mock_get_model.return_value = mock_model
+
+        nodes = [TextNode(text="Hello"), TextNode(text="World")]
+        result = embed_text_nodes(nodes, "test-model")
+
+        assert len(result) == 2
+        assert result[0] == [0.1, 0.2, 0.3]
+        assert mock_model.get_text_embedding.call_count == 2
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_empty_nodes_skipped(self, mock_get_model):
+        """Test that nodes with empty text are skipped."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        nodes = [TextNode(text=""), TextNode(text="valid")]
+        result = embed_text_nodes(nodes, "test-model")
+
+        assert len(result) == 1
+        assert mock_model.get_text_embedding.call_count == 1
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_embedding_error_continues(self, mock_get_model):
+        """Test that embedding errors for one node don't stop processing."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.side_effect = [RuntimeError("fail"), [0.5]]
+        mock_get_model.return_value = mock_model
+
+        nodes = [TextNode(text="bad"), TextNode(text="good")]
+        result = embed_text_nodes(nodes, "test-model")
+
+        assert len(result) == 1
+        assert result[0] == [0.5]
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_empty_input(self, mock_get_model):
+        """Test embedding empty list returns empty list."""
+        result = embed_text_nodes([], "test-model")
+        assert result == []
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_whitespace_only_text_skipped(self, mock_get_model):
+        """Test that nodes with whitespace-only text are skipped."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        nodes = [TextNode(text="   \n\t  "), TextNode(text="valid")]
+        result = embed_text_nodes(nodes, "test-model")
+
+        assert len(result) == 1
+
+
+class TestQueryEmbeddingsMocked:
+    """Unit tests for query_embeddings with mocked vector store and embedding model."""
+
+    @patch("backend.rag_pipeline.core.embeddings.ChromaVectorStoreManager")
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_query_returns_results(self, mock_get_model, mock_manager_cls, test_case_dir):
+        """Test query_embeddings returns properly formatted results."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1, 0.2]
+        mock_get_model.return_value = mock_model
+
+        mock_manager = MagicMock()
+        mock_manager.query.return_value = (["id1", "id2"], [0.1, 0.3])
+        mock_manager._collection.get.return_value = {
+            "metadatas": [
+                {"document_id": "doc1", "document_name": "f.pdf", "chunk_index": 0, "page_number": 1, "page_label": "1"},
+                {"document_id": "doc2", "document_name": "f.pdf", "chunk_index": 1, "page_number": 2, "page_label": "2"},
+            ],
+            "documents": ["First chunk text", "Second chunk text"],
+        }
+        mock_manager_cls.return_value = mock_manager
+
+        result = query_embeddings("test query", "model", persist_dir=test_case_dir, collection_name="col", top_k=2)
+
+        assert result["primary_result"] == "First chunk text"
+        assert len(result["all_results"]) == 2
+        assert result["all_results"][0]["similarity_score"] == pytest.approx(0.9)
+        assert result["all_results"][0]["document_name"] == "f.pdf"
+
+    @patch("backend.rag_pipeline.core.embeddings.ChromaVectorStoreManager")
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_query_empty_results(self, mock_get_model, mock_manager_cls, test_case_dir):
+        """Test query_embeddings with no results."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        mock_manager = MagicMock()
+        mock_manager.query.return_value = ([], [])
+        mock_manager_cls.return_value = mock_manager
+
+        result = query_embeddings("test query", "model", persist_dir=test_case_dir, collection_name="col", top_k=2)
+
+        assert result["primary_result"] == ""
+        assert result["all_results"] == []
+
+
+class TestChunkPdfMocked:
+    """Unit tests for chunk_pdf with mocked document loader."""
+
+    @patch("backend.rag_pipeline.core.embeddings.DocumentLoader")
+    def test_chunk_pdf_basic(self, mock_loader_cls, tmp_path):
+        """Test chunk_pdf returns a ChunkingResult."""
+        test_file = tmp_path / "test.pdf"
+        test_file.write_bytes(b"dummy")
+
+        mock_loader = MagicMock()
+        mock_metadata = MagicMock()
+        mock_metadata.file_size = 100
+        mock_metadata.file_type = ".pdf"
+        mock_loader.load_document.return_value = (
+            [Document(text="Page one content for chunking test.")],
+            mock_metadata,
+        )
+        mock_loader_cls.return_value = mock_loader
+
+        from backend.rag_pipeline.core.embeddings import chunk_pdf
+
+        result = chunk_pdf(test_file, chunk_size=512, chunk_overlap=50)
+
+        assert result.chunk_count > 0
+        assert result.file_name == "test.pdf"
+
+
+class TestProcessPdfWrapper:
+    """Test that process_pdf delegates to process_document."""
+
+    @patch("backend.rag_pipeline.core.embeddings.process_document")
+    def test_process_pdf_delegates(self, mock_process_doc, tmp_path, test_case_dir):
+        """Test process_pdf is a thin wrapper around process_document."""
+        mock_process_doc.return_value = (10, 8)
+
+        test_file = tmp_path / "test.pdf"
+        test_file.write_bytes(b"dummy")
+
+        chunks, records = process_pdf(test_file, "test-model", persist_dir=test_case_dir, collection_name="col", chunk_size=128)
+
+        assert chunks == 10
+        assert records == 8
+        mock_process_doc.assert_called_once()
+
+
+class TestStoreEmbeddingsUnit:
+    """Additional unit tests for store_embeddings deduplication logic."""
+
+    def test_dedup_by_content_hash(self, test_case_dir):
+        """Test deduplication uses content_hash field when available."""
+        ids = ["a", "b", "c"]
+        embeddings = [[0.1], [0.2], [0.3]]
+        metadatas = [
+            {"text": "different text 1", "content_hash": "hash_x"},
+            {"text": "different text 2", "content_hash": "hash_y"},
+            {"text": "different text 3", "content_hash": "hash_x"},  # same hash as first
+        ]
+
+        manager = store_embeddings(ids, embeddings, metadatas, test_case_dir, "test_hash_dedup", deduplicate=True)
+        assert manager._collection.count() == 2
+
+    def test_dedup_disabled(self, test_case_dir):
+        """Test that deduplicate=False stores all entries including duplicates."""
+        ids = ["a", "b"]
+        embeddings = [[0.1], [0.2]]
+        metadatas = [{"text": "same"}, {"text": "same"}]
+
+        manager = store_embeddings(ids, embeddings, metadatas, test_case_dir, "test_no_dedup", deduplicate=False)
+        assert manager._collection.count() == 2
+
+    def test_no_metadatas(self, test_case_dir):
+        """Test storing embeddings without metadata."""
+        ids = ["a", "b"]
+        embeddings = [[0.1], [0.2]]
+
+        manager = store_embeddings(ids, embeddings, None, test_case_dir, "test_no_meta", deduplicate=False)
+        assert manager._collection.count() == 2
+
+    def test_empty_embeddings(self, test_case_dir):
+        """Test storing empty embeddings list."""
+        manager = store_embeddings([], [], None, test_case_dir, "test_empty", deduplicate=False)
+        assert manager._collection.count() == 0
+
+
+class TestEmbedChunksMocked:
+    """Unit tests for embed_chunks with mocked embedding model."""
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_embed_chunks_basic(self, mock_get_model, test_case_dir):
+        """Test the full embed_chunks pipeline with mocked model."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1, 0.2, 0.3]
+        mock_get_model.return_value = mock_model
+
+        chunks = [TextNode(text="chunk one", metadata={"page_number": 1}), TextNode(text="chunk two", metadata={"page_number": 1})]
+        chunking_result = MagicMock(spec=["chunks", "file_path", "file_name"])
+        chunking_result.chunks = chunks
+        chunking_result.file_path = str(Path(test_case_dir) / "test.pdf")
+        chunking_result.file_name = "test.pdf"
+
+        total_chunks, records_stored = embed_chunks(
+            chunking_result, "test-model", persist_dir=test_case_dir, collection_name="test_embed", deduplicate=False
+        )
+
+        assert total_chunks == 2
+        assert records_stored == 2
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_embed_chunks_skips_empty_pages(self, mock_get_model, test_case_dir):
+        """Test that empty page markers are skipped during embedding."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        chunks = [
+            TextNode(text="real content", metadata={"page_number": 1}),
+            TextNode(text="", metadata={"page_number": 2, "is_empty_page": True}),
+        ]
+        chunking_result = MagicMock(spec=["chunks", "file_path", "file_name"])
+        chunking_result.chunks = chunks
+        chunking_result.file_path = str(Path(test_case_dir) / "test.pdf")
+
+        total_chunks, records_stored = embed_chunks(
+            chunking_result, "test-model", persist_dir=test_case_dir, collection_name="test_skip", deduplicate=False
+        )
+
+        assert total_chunks == 2  # total includes empty page
+        assert records_stored == 1  # but only 1 stored
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    def test_embed_chunks_with_progress(self, mock_get_model, test_case_dir):
+        """Test that progress callback is invoked during embed_chunks."""
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        progress_values = []
+
+        def track_progress(value):
+            progress_values.append(value)
+
+        chunks = [TextNode(text=f"chunk {i}", metadata={"page_number": 1}) for i in range(3)]
+        chunking_result = MagicMock(spec=["chunks", "file_path", "file_name"])
+        chunking_result.chunks = chunks
+        chunking_result.file_path = str(Path(test_case_dir) / "test.pdf")
+
+        embed_chunks(
+            chunking_result,
+            "test-model",
+            persist_dir=test_case_dir,
+            collection_name="test_progress",
+            deduplicate=False,
+            progress_callback=track_progress,
+        )
+
+        assert len(progress_values) > 0
+        assert progress_values[-1] == 1.0
+
+
+class TestProcessDocumentMocked:
+    """Unit tests for process_document with mocked dependencies."""
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    @patch("backend.rag_pipeline.core.embeddings.DocumentLoader")
+    def test_process_text_document(self, mock_loader_cls, mock_get_model, test_case_dir, tmp_path):
+        """Test process_document pipeline with a mocked text file."""
+        # Create a real temp file so Path operations work
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("This is test content for processing.")
+
+        # Mock document loader
+        mock_loader = MagicMock()
+        mock_metadata = MagicMock()
+        mock_metadata.file_size = 100
+        mock_metadata.file_type = ".txt"
+        mock_loader.load_document.return_value = ([Document(text="This is test content for processing.")], mock_metadata)
+        mock_loader_cls.return_value = mock_loader
+
+        # Mock embedding model
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1, 0.2, 0.3]
+        mock_get_model.return_value = mock_model
+
+        chunks, records = process_document(
+            test_file,
+            "test-model",
+            persist_dir=test_case_dir,
+            collection_name="test_process",
+            chunk_size=512,
+            chunk_overlap=50,
+            deduplicate=True,
+        )
+
+        assert chunks > 0
+        assert records > 0
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    @patch("backend.rag_pipeline.core.embeddings.DocumentLoader")
+    def test_process_document_with_progress(self, mock_loader_cls, mock_get_model, test_case_dir, tmp_path):
+        """Test that progress callback is invoked throughout process_document."""
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("Content for progress testing.")
+
+        mock_loader = MagicMock()
+        mock_metadata = MagicMock()
+        mock_metadata.file_size = 50
+        mock_metadata.file_type = ".txt"
+        mock_loader.load_document.return_value = ([Document(text="Content for progress testing.")], mock_metadata)
+        mock_loader_cls.return_value = mock_loader
+
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        progress_values = []
+
+        def track_progress(filename, value):
+            progress_values.append(value)
+
+        chunks, records = process_document(
+            test_file,
+            "test-model",
+            persist_dir=test_case_dir,
+            collection_name="test_progress_doc",
+            deduplicate=False,
+            progress_callback=track_progress,
+        )
+
+        assert progress_values[0] == 0.0
+        assert progress_values[-1] == 1.0
+        assert chunks > 0
+
+    @patch("backend.rag_pipeline.core.embeddings.get_embedding_model")
+    @patch("backend.rag_pipeline.core.embeddings.DocumentLoader")
+    def test_process_document_max_pages(self, mock_loader_cls, mock_get_model, test_case_dir, tmp_path):
+        """Test that max_pages limits processing."""
+        test_file = tmp_path / "test.pdf"
+        test_file.write_bytes(b"dummy")
+
+        mock_loader = MagicMock()
+        mock_metadata = MagicMock()
+        mock_metadata.file_size = 100
+        mock_metadata.file_type = ".pdf"
+        pages = [Document(text=f"Page {i} content for testing.") for i in range(5)]
+        mock_loader.load_document.return_value = (pages, mock_metadata)
+        mock_loader_cls.return_value = mock_loader
+
+        mock_model = MagicMock()
+        mock_model.get_text_embedding.return_value = [0.1]
+        mock_get_model.return_value = mock_model
+
+        chunks, records = process_document(
+            test_file, "test-model", persist_dir=test_case_dir, collection_name="test_maxpages", max_pages=2, deduplicate=False
+        )
+
+        assert chunks > 0
+        assert records > 0
+
 
 class TestEmbeddings:
-    """Test suite for the embedding functionality.
-
-    This class contains tests for all aspects of the embedding system:
-    1. Text embedding generation
-    2. Vector storage and retrieval
-    3. Query functionality
-    4. Document processing
-    5. Persistence and determinism
-    """
+    """Integration test suite for the embedding functionality (slow, requires real models)."""
 
     # Unit Tests - Basic Functionality
 

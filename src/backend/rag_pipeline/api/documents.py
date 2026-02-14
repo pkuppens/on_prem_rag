@@ -262,6 +262,7 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         "application/pdf",
         "text/plain",
         "text/markdown",
+        "text/html",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
         "application/msword",  # .doc
         "text/csv",

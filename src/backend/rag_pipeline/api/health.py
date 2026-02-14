@@ -1,4 +1,6 @@
 # src/backend/rag_pipeline/api/health.py
+import os
+
 from fastapi import APIRouter, HTTPException
 from starlette.responses import JSONResponse
 
@@ -38,9 +40,10 @@ async def health_database():
 async def health_llm():
     """Check the health of the LLM provider."""
     try:
-        # Create a simple Ollama provider for health check
-        # This assumes Ollama is the default provider
-        config = {"host": "http://localhost:11434"}
+        # Create a simple Ollama provider for health check.
+        # Use OLLAMA_BASE_URL so it works in Docker (ollama:11434) and local (localhost:11434).
+        ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        config = {"host": ollama_host}
         llm_provider = LLMProviderFactory.create_provider("ollama", "llama2", config)
         is_healthy = await llm_provider.health_check()
         if is_healthy:

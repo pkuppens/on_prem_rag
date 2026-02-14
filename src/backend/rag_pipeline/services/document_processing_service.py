@@ -122,7 +122,7 @@ class DocumentProcessingService:
                 chunk_size=params.chunking.chunk_size,
                 chunk_overlap=params.chunking.chunk_overlap,
                 max_pages=None,
-                deduplicate=False,
+                deduplicate=True,
                 progress_callback=None,  # Progress handled by upload service
             ),
         )

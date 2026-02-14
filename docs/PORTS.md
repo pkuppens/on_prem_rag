@@ -4,13 +4,15 @@ This document describes the port configuration for both local development and Do
 
 ## Port Assignments
 
-| Service  | Port  | Description             | Environment Variable |
-| -------- | ----- | ----------------------- | -------------------- |
-| Backend  | 9000  | FastAPI application     | PORT                 |
-| Auth     | 9100  | Authentication service  | PORT                 |
-| ChromaDB | 9100  | Vector database API     | CHROMA_PORT          |
-| Frontend | 5173  | Vite development server | VITE_PORT            |
-| Ollama   | 11434 | Local LLM service       | OLLAMA_BASE_URL      |
+| Service  | Default | Description             | Override Variable     |
+| -------- | ------- | ----------------------- | -------------------- |
+| Backend  | 9000    | FastAPI application     | `BACKEND_PORT`        |
+| Auth     | 9100    | Authentication service  | `AUTH_PORT`           |
+| ChromaDB | 9200    | Vector database (host)  | `CHROMA_HOST_PORT`    |
+| Frontend | 5173    | Vite development server | `FRONTEND_PORT`       |
+| Ollama   | 11434   | LLM service (host)      | `OLLAMA_HOST_PORT`    |
+
+Ports are configurable via `.env` to avoid conflicts. See `env.example` and [TEST_DOCKER.md](TEST_DOCKER.md#port-conflicts).
 
 ## Configuration
 
@@ -29,8 +31,8 @@ This document describes the port configuration for both local development and Do
 ### ChromaDB
 
 - Internal port: 8000 (fixed by ChromaDB)
-- External port: 9100
-- Environment variable: `CHROMA_PORT=8000` (internal)
+- External port: 9200 (default; was 9100, changed to avoid conflict with Auth)
+- Override: `CHROMA_HOST_PORT` in `.env`
 
 ### Frontend
 
@@ -48,24 +50,12 @@ This document describes the port configuration for both local development and Do
 
 ## Docker Configuration
 
-In `docker-compose.yml`:
+Ports in `docker-compose.yml` use env vars (e.g. `${BACKEND_PORT:-9000}`). Override in `.env`:
 
 ```yaml
-services:
-  backend:
-    ports:
-      - "9000:9000" # Backend API
-    extra_hosts:
-      - "host.docker.internal:host-gateway" # For Ollama access
-  auth:
-    ports:
-      - "9100:9100" # Auth service
-  chroma:
-    ports:
-      - "9100:8000" # ChromaDB API
-  frontend:
-    ports:
-      - "5173:5173" # Frontend dev server
+# docker-compose.yml uses:
+# BACKEND_PORT:-9000, AUTH_PORT:-9100, CHROMA_HOST_PORT:-9200,
+# OLLAMA_HOST_PORT:-11434, FRONTEND_PORT:-5173
 ```
 
 ## Local Development
@@ -95,23 +85,9 @@ This scheme:
 
 ## Ollama Integration
 
-The application is configured to use the host's Ollama instance:
+**Full Docker stack**: Ollama runs as a service in docker-compose. Backend uses `http://ollama:11434`.
 
-- Uses `host.docker.internal` to access the host machine
-- Requires `extra_hosts` configuration in Docker
-- Assumes Ollama is running on the default port (11434)
-
-Benefits:
-
-- Reuses existing Ollama instance
-- Saves resources
-- Maintains model consistency
-
-Considerations:
-
-- Requires Ollama to be running on the host
-- Less isolated environment
-- May need version compatibility checks
+**Host Ollama** (optional): If Ollama runs on the host, set `OLLAMA_BASE_URL=http://host.docker.internal:11434` and ensure `extra_hosts` is configured. Override port with `OLLAMA_HOST_PORT` if host Ollama uses a different port.
 
 ## Troubleshooting
 

@@ -150,6 +150,8 @@ critical for validating the overall architecture.
 
 ## Quick Start with Docker Compose
 
+**Prerequisite:** Ensure Docker Desktop (or Docker Engine) is running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.
+
 Clone the repository and run:
 
 ```bash
@@ -434,11 +436,14 @@ uv run pytest
 
 **Symptoms:**
 
+- "Error during connect" or "cannot find the file specified" when running `docker-compose`
 - Services fail to start
 - Port conflicts
 - Volume mounting errors
 
 **Solution:**
+
+If you see "error during connect" or "cannot find the file specified": start **Docker Desktop** (Windows/macOS) or `sudo systemctl start docker` (Linux), and wait until Docker reports it is ready.
 
 ```bash
 # Check for port conflicts

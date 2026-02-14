@@ -1,19 +1,38 @@
-version: "3.9"
+# Docker Compose for on_prem_rag development.
+# Ports are configurable via env vars (see env.example). Use .env to override.
+# See docs/PORTS.md and docs/TEST_DOCKER.md for port config and conflict resolution.
+
 services:
   chroma:
     image: chromadb/chroma:latest
+    restart: unless-stopped
+    healthcheck:
+      # Chroma image has no curl/python; use bash TCP connect
+      test: ["CMD-SHELL", "bash -c 'echo >/dev/tcp/localhost/8000' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     volumes:
       - chroma-data:/chroma
     ports:
-      - "9100:8000"
+      - "${CHROMA_HOST_PORT:-9200}:8000"
     environment:
       - IS_PERSISTENT=TRUE
     networks:
       - app-network
+
   backend:
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT:-9000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     volumes:
       - ./src:/app/src
       - ./tests:/app/tests
@@ -21,59 +40,80 @@ services:
     environment:
       - CHROMA_HOST=chroma
       - CHROMA_PORT=8000
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - ALLOW_ORIGINS=http://localhost:5173
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - ALLOW_ORIGINS=http://localhost:${FRONTEND_PORT:-5173}
       - ENVIRONMENT=development
-      - PORT=9000
+      - PORT=${BACKEND_PORT:-9000}
     ports:
-      - "9000:9000"
+      - "${BACKEND_PORT:-9000}:${BACKEND_PORT:-9000}"
     depends_on:
-      - chroma
+      chroma:
+        condition: service_healthy
     networks:
       - app-network
-    command: uvicorn src.backend.rag_pipeline.file_ingestion:app --host 0.0.0.0 --port 9000 --reload
+    command: uvicorn backend.rag_pipeline.api.app:app --host 0.0.0.0 --port ${BACKEND_PORT:-9000} --reload
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
   auth:
     build:
       context: .
-      dockerfile: src/auth/Dockerfile
+      dockerfile: docker/backend/Dockerfile
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${AUTH_PORT:-9100}/oauth/providers"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     volumes:
-      - ./src/auth:/app/src/auth
+      - ./src:/app/src
     environment:
-      - PORT=9100
+      - PORT=${AUTH_PORT:-9100}
       - ENVIRONMENT=development
     ports:
-      - "9100:9100"
+      - "${AUTH_PORT:-9100}:${AUTH_PORT:-9100}"
     networks:
       - app-network
-    command: uvicorn auth.main:app --host 0.0.0.0 --port 9100 --reload
+    command: uvicorn src.backend.auth_service.main:app --host 0.0.0.0 --port ${AUTH_PORT:-9100} --reload
+
   frontend:
     build:
       context: .
-      dockerfile: src/frontend/Dockerfile
+      dockerfile: docker/frontend/Dockerfile
+    restart: unless-stopped
     volumes:
       - ./src/frontend:/app/frontend
       - /app/frontend/node_modules
     environment:
-      - VITE_BACKEND_URL=http://localhost:9000
-      - VITE_AUTH_URL=http://localhost:9100
+      - VITE_BACKEND_URL=http://localhost:${BACKEND_PORT:-9000}
+      - VITE_AUTH_URL=http://localhost:${AUTH_PORT:-9100}
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT:-5173}:5173"
     depends_on:
-      - backend
-      - auth
+      backend:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
     networks:
       - app-network
+
   ollama:
     image: ollama/ollama:latest
+    restart: unless-stopped
+    # Note: official ollama image lacks curl/wget; healthcheck not included.
+    # Services depending on Ollama should handle connection failures gracefully.
     ports:
-      - "11434:11434"
+      - "${OLLAMA_HOST_PORT:-11434}:11434"
     volumes:
       - ollama-data:/root/.ollama
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
+
 volumes:
   chroma-data:
   ollama-data:

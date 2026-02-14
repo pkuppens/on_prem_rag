@@ -15,6 +15,8 @@ Temporary files are used to:
 - Manage complex content that doesn't work well with command-line arguments
 - Provide audit trails for completed work
 
+**CRITICAL — Validation plans, test plans, next-steps docs for issues**: Create these in `tmp/github/issue-comments/` (e.g. `issue-77-airgap-test-plan.md`). Do **not** create them in `docs/portfolio/` or elsewhere in the repo; they are scratch content and belong in the gitignored `tmp/` directory. Remove any such files from the repo if they were committed by mistake.
+
 ## File Location and Naming
 
 ### Directory Structure
@@ -24,7 +26,7 @@ All temporary files should be stored in the `tmp/` directory at the project root
 ```
 tmp/
 ├── github/
-│   ├── issue-comments/
+│   ├── issue-comments/      # Draft comments, validation plans, test plans
 │   ├── issue-descriptions/
 │   └── pr-descriptions/
 ├── evidence/
@@ -38,7 +40,8 @@ tmp/
 ### Naming Conventions
 
 #### GitHub Operations
-- **Issue Comments**: `tmp/github/issue-comments/issue-{NUMBER}-{TIMESTAMP}.md`
+- **Issue Comments**: `tmp/github/issue-comments/issue-{NUMBER}-{TOPIC}.md` (e.g. `issue-77-airgap-test-plan.md`)
+- **Validation Plans / Test Plans**: `tmp/github/issue-comments/issue-{NUMBER}-{topic}.md` — **never** in `docs/` (gitignored)
 - **Issue Descriptions**: `tmp/github/issue-descriptions/issue-{NUMBER}-{TIMESTAMP}.md`
 - **PR Descriptions**: `tmp/github/pr-descriptions/pr-{NUMBER}-{TIMESTAMP}.md`
 

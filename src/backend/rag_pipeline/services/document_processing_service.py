@@ -13,7 +13,7 @@ from typing import Dict, List
 
 from ..config.parameter_sets import RAGParams, get_param_set
 from ..core.embeddings import process_document
-from ..core.vector_store import ChromaVectorStoreManager, get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager_from_env
 from ..models.document_models import DocumentMetadata
 from ..utils.logging import StructuredLogger
 
@@ -29,7 +29,6 @@ class DocumentProcessingService:
     def __init__(self):
         """Initialize the document processing service."""
         self.vector_store_manager = get_vector_store_manager_from_env()
-        self.chroma_manager = self.vector_store_manager if isinstance(self.vector_store_manager, ChromaVectorStoreManager) else None
 
         logger.info("DocumentProcessingService initialized")
 
@@ -106,9 +105,9 @@ class DocumentProcessingService:
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
 
-        # Get vector store configuration
-        persist_dir = self.chroma_manager.config.persist_directory if self.chroma_manager else str(file_path.parent)
-        collection_name = self.chroma_manager.config.collection_name if self.chroma_manager else "documents"
+        # Get vector store configuration from the abstract manager
+        persist_dir = self.vector_store_manager.config.persist_directory
+        collection_name = self.vector_store_manager.config.collection_name
 
         # Process document in thread pool to avoid blocking
         loop = asyncio.get_event_loop()

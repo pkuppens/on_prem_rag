@@ -12,7 +12,7 @@ from fastapi.responses import FileResponse
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from ..core.document_loader import DocumentLoader
 from ..core.embeddings import process_document
-from ..core.vector_store import ChromaVectorStoreManager, get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager_from_env
 from ..utils.directory_utils import (
     _format_path_for_error,
     ensure_directory_exists,
@@ -31,9 +31,6 @@ uploaded_files_dir = get_uploaded_files_dir()
 ensure_directory_exists(uploaded_files_dir)
 document_loader = DocumentLoader()
 vector_store_manager = get_vector_store_manager_from_env()
-
-# Type cast to ChromaVectorStoreManager to access config
-chroma_manager = vector_store_manager if isinstance(vector_store_manager, ChromaVectorStoreManager) else None
 
 
 # Global variable to store progress events for the current processing task
@@ -136,8 +133,8 @@ async def process_document_background(file_path, filename: str, params_name: str
                 lambda: process_document(
                     file_path,
                     params.embedding.model_name,
-                    persist_dir=chroma_manager.config.persist_directory if chroma_manager else uploaded_files_dir,
-                    collection_name=chroma_manager.config.collection_name if chroma_manager else "documents",
+                    persist_dir=vector_store_manager.config.persist_directory,
+                    collection_name=vector_store_manager.config.collection_name,
                     chunk_size=params.chunking.chunk_size,
                     chunk_overlap=params.chunking.chunk_overlap,
                     max_pages=None,

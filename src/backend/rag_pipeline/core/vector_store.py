@@ -15,6 +15,8 @@ from backend.rag_pipeline.config.vector_store import VectorStoreConfig
 class VectorStoreManager(ABC):
     """Abstract vector store manager."""
 
+    config: VectorStoreConfig
+
     @abstractmethod
     def get_storage_context(self) -> StorageContext:
         """Return a LlamaIndex storage context bound to the vector store."""

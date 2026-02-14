@@ -426,33 +426,46 @@ jobs:
       - name: Extract coverage percentage
         id: coverage
         run: |
-          # Extract coverage percentage from coverage.xml
-          if [ -f coverage.xml ]; then
-            # Parse coverage percentage
-            COVERAGE=$(python3 -c 'import xml.etree.ElementTree as ET; tree = ET.parse("coverage.xml"); root = tree.getroot(); print(f"{float(root.attrib[\"line-rate\"]) * 100:.1f}")')
-            echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
-            echo "Coverage: $COVERAGE%"
+          # Use Python for robust extraction and comment generation (avoids bc/shell quirks)
+          python3 << 'PYEOF'
+          import os
+          import xml.etree.ElementTree as ET
 
-            # Generate coverage summary
-            echo "## Code Coverage Report" > coverage_comment.md
-            echo "" >> coverage_comment.md
-            echo "**Total Coverage:** ${COVERAGE}%" >> coverage_comment.md
-            echo "" >> coverage_comment.md
+          coverage_file = "coverage.xml"
+          if not os.path.isfile(coverage_file):
+              with open("coverage_comment.md", "w") as f:
+                  f.write("## Code Coverage Report\n\n")
+                  f.write("Coverage file not found in artifact.\n")
+              raise SystemExit(0)
 
-            # Color code based on coverage
-            if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
-              echo "Excellent coverage! (>=80%)" >> coverage_comment.md
-            elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
-              echo "Moderate coverage (60-80%)" >> coverage_comment.md
-            else
-              echo "Low coverage (<60%)" >> coverage_comment.md
-            fi
+          try:
+              tree = ET.parse(coverage_file)
+              root = tree.getroot()
+              rate = float(root.attrib.get("line-rate", 0))
+              pct = rate * 100
 
-            echo "" >> coverage_comment.md
-            echo "_Coverage report generated from unit tests_" >> coverage_comment.md
-          else
-            echo "Coverage file not found" > coverage_comment.md
-          fi
+              with open("coverage_comment.md", "w") as f:
+                  f.write("## Code Coverage Report\n\n")
+                  f.write(f"**Total Coverage:** {pct:.1f}%\n\n")
+                  if pct >= 80:
+                      f.write("Excellent coverage! (>=80%)\n\n")
+                  elif pct >= 60:
+                      f.write("Moderate coverage (60-80%)\n\n")
+                  else:
+                      f.write("Low coverage (<60%)\n\n")
+                  f.write("_Coverage report generated from unit tests_\n")
+
+              out_path = os.environ.get("GITHUB_OUTPUT")
+              if out_path:
+                  with open(out_path, "a") as f:
+                      f.write(f"percentage={pct:.1f}\n")
+              print(f"Coverage: {pct:.1f}%")
+          except Exception as e:
+              with open("coverage_comment.md", "w") as f:
+                  f.write("## Code Coverage Report\n\n")
+                  f.write(f"Error extracting coverage: {e}\n")
+              exit(0)  # Don't fail step - still allow PR comment
+          PYEOF
 
       - name: Comment on PR
         uses: actions/github-script@v8

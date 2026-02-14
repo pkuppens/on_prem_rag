@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from ..core.qa_system import QASystem
 from ..utils.logging import StructuredLogger
+from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
 router = APIRouter(prefix="/api/ask", tags=["question-answering"])
@@ -72,6 +73,7 @@ async def ask_question(payload: AskRequest) -> AskResponse:
         raise HTTPException(status_code=400, detail="Question must not be empty")
 
     try:
+        get_metrics().record_query()
         logger.info("Processing question", question=payload.question)
 
         # Use QA system to answer the question

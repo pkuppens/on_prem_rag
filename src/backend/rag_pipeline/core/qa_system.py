@@ -94,12 +94,18 @@ class QASystem:
             logger.error("Error during chunk retrieval", question=question, error=str(e))
             raise RuntimeError(f"Failed to retrieve relevant chunks: {str(e)}") from e
 
-    def generate_answer(self, question: str, context_chunks: list[dict[str, Any]]) -> str:
+    def generate_answer(
+        self,
+        question: str,
+        context_chunks: list[dict[str, Any]],
+        conversation_history: list[dict[str, str]] | None = None,
+    ) -> str:
         """Generate an answer using LLM based on question and context.
 
         Args:
             question: The question to answer
             context_chunks: Relevant document chunks as context
+            conversation_history: Optional prior messages [{role, content}] for multi-turn context
 
         Returns:
             Generated answer text
@@ -120,9 +126,13 @@ class QASystem:
                 [f"Document: {chunk['document_name']}\nContent: {chunk['text']}" for chunk in context_chunks]
             )
 
-            prompt = f"""Based on the following context from uploaded documents, please answer the question.
+            history_section = ""
+            if conversation_history:
+                history_lines = [f"{m.get('role', 'user')}: {m.get('content', '')}" for m in conversation_history[-6:]]
+                history_section = f"\n\nPrior conversation:\n" + "\n".join(history_lines) + "\n\n"
 
-Context:
+            prompt = f"""Based on the following context from uploaded documents, please answer the question.
+{history_section}Context:
 {context_text}
 
 Question: {question}

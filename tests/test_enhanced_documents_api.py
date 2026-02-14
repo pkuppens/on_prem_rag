@@ -197,8 +197,12 @@ class TestEnhancedDocumentsAPI:
         assert response.status_code == 422  # FastAPI returns 422 for validation errors
         data = response.json()
         assert "detail" in data
-        # Check that the error is about missing files
-        assert any("files" in str(error).lower() for error in data["detail"])
+        # RFC 7807: errors list holds validation details; detail is first error message
+        errors = data.get("errors", data.get("detail", []))
+        if isinstance(errors, list):
+            assert any("files" in str(error).lower() for error in errors)
+        else:
+            assert "files" in str(errors).lower()
 
     def test_upload_too_many_files(self, client):
         """Test uploading too many files.

@@ -34,6 +34,17 @@ class VectorStoreManager(ABC):
     def query(self, embedding: list[float], top_k: int) -> tuple[list[str], list[float]]:
         """Query the store and return matching IDs and distances."""
 
+    @abstractmethod
+    def delete_by_document_name(self, document_name: str) -> int:
+        """Delete all chunks for a document by its filename.
+
+        Args:
+            document_name: Filename of the document (e.g. 'report.pdf')
+
+        Returns:
+            Number of chunks deleted (0 if none matched)
+        """
+
 
 @dataclass
 class ChromaVectorStoreManager(VectorStoreManager):
@@ -65,6 +76,18 @@ class ChromaVectorStoreManager(VectorStoreManager):
     def query(self, embedding: list[float], top_k: int) -> tuple[list[str], list[float]]:
         result = self._collection.query(query_embeddings=[embedding], n_results=top_k, include=["distances"])
         return (result["ids"][0] if result["ids"] else [], result["distances"][0] if result["distances"] else [])
+
+    def delete_by_document_name(self, document_name: str) -> int:
+        """Delete all chunks for a document by its filename.
+
+        ChromaDB stores document_name in metadata. Uses where filter to delete
+        all records matching the document.
+        """
+        result = self._collection.get(where={"document_name": document_name}, include=[])
+        ids_to_delete = result["ids"] if result["ids"] else []
+        if ids_to_delete:
+            self._collection.delete(ids=ids_to_delete)
+        return len(ids_to_delete)
 
 
 def get_vector_store_manager_from_env() -> VectorStoreManager:

@@ -23,4 +23,6 @@ def test_process_conversation_endpoint_empty_text():
     """Test the /api/query/process_conversation endpoint with empty text."""
     response = client.post("/api/query/process_conversation", json={"text": ""})
     assert response.status_code == 400
-    assert response.json() == {"detail": "Text must not be empty"}
+    data = response.json()
+    assert data.get("detail") == "Text must not be empty"
+    assert data.get("status") == 400

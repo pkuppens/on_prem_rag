@@ -2,6 +2,34 @@
 
 This document explains how to run tests and use the application in the Docker development environment.
 
+## Verification Checklist
+
+**Prerequisite:** Docker Desktop (or Docker Engine) must be running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.
+
+Run these steps to verify containers build and provide services correctly:
+
+```bash
+# 1. Build all images
+docker-compose build
+
+# 2. Start services (detached)
+docker-compose up -d
+
+# 3. Wait for health checks (chroma, backend, auth)
+# Then check status — chroma, backend, auth should show "healthy"
+docker-compose ps
+
+# 4. Verify endpoints
+curl -s http://localhost:9000/health
+curl -s http://localhost:9100/oauth/providers
+curl -s http://localhost:9200/api/v2/heartbeat
+
+# 5. Stop
+docker-compose down
+```
+
+If Chroma is on a different port (see `CHROMA_HOST_PORT` in `env.example`), adjust the heartbeat URL accordingly.
+
 ## Docker Management Commands
 
 ### Building Images
@@ -156,7 +184,7 @@ The following data is persisted between container restarts:
 The application supports hot reloading:
 
 - Backend: Changes to Python files in `src/` will trigger automatic reload
-- Frontend: Changes to files in `frontend/` will trigger automatic reload
+- Frontend: Changes to files in `src/frontend/` will trigger automatic reload
 
 ## Important Directories
 
@@ -166,55 +194,88 @@ The following directories are mounted into the containers:
 - `./tests`: Test files
 - `./test_data`: Test data files
 - `./uploaded_files`: User uploaded files
-- `./frontend`: Frontend source code
+- `./src/frontend`: Frontend source code
 
 ## Environment Variables
 
-Key environment variables used in development:
+Key environment variables (set in `.env` or `env.example`):
 
-- `CHROMA_HOST`: ChromaDB service hostname
-- `CHROMA_PORT`: ChromaDB service port
+**Port overrides** (Docker Compose):
+
+- `BACKEND_PORT`, `AUTH_PORT`, `CHROMA_HOST_PORT`, `OLLAMA_HOST_PORT`, `FRONTEND_PORT`
+
+**Service config**:
+
+- `CHROMA_HOST`: ChromaDB service hostname (default: chroma)
+- `CHROMA_PORT`: ChromaDB internal port (8000)
 - `ALLOW_ORIGINS`: CORS allowed origins
 - `ENVIRONMENT`: Set to 'development' for local development
-- `VITE_BACKEND_URL`: Frontend backend API URL
-- `OLLAMA_BASE_URL`: URL for local Ollama instance
+- `VITE_BACKEND_URL`: Frontend backend API URL (must match `BACKEND_PORT`)
+- `OLLAMA_BASE_URL`: Ollama URL (http://ollama:11434 when Ollama runs in Docker)
+
+## Port Conflicts
+
+When `docker-compose up` fails with "port is already allocated" or "address already in use":
+
+1. **Identify the conflicting port** from the error message (e.g. 9100, 11434).
+2. **Override in `.env`** — copy `env.example` to `.env` if needed, then set:
+   - `BACKEND_PORT=9010` (if 9000 is in use)
+   - `AUTH_PORT=9110` (if 9100 is in use)
+   - `CHROMA_HOST_PORT=9200` (default; was 9100, moved to avoid Auth conflict)
+   - `OLLAMA_HOST_PORT=11435` (if host Ollama uses 11434)
+   - `FRONTEND_PORT=5180` (if 5173 is in use)
+3. **Restart**: `docker-compose down` then `docker-compose up`.
+
+**Common conflicts:**
+
+- Chroma and Auth both used 9100 — Chroma now defaults to 9200.
+- **Ollama on host** (port 11434) — Create `.env` with `OLLAMA_HOST_PORT=11435` so the Docker Ollama uses a different port.
+- **Frontend port 5173 in use** — Create `.env` with `FRONTEND_PORT=5180` (or another free port).
+- Multiple dev stacks — assign unique ports per project in `.env`.
 
 ## Troubleshooting
 
 If you encounter issues:
 
-1. Check container logs:
+1. **Docker daemon not running** — If `docker-compose build` or `docker-compose up` fails with "error during connect", "cannot find the file specified", or "Cannot connect to the Docker daemon":
+
+   - **Windows/macOS**: Start **Docker Desktop** and wait until it reports "Docker Engine running".
+   - **Linux**: Run `sudo systemctl start docker` (or your distro's equivalent).
+
+2. Check container logs:
 
    ```bash
    docker-compose logs backend
    ```
 
-2. Rebuild containers:
+3. Rebuild containers:
 
    ```bash
    docker-compose build
    ```
 
-3. Reset volumes (warning: this will delete all data):
+4. Reset volumes (warning: this will delete all data):
 
    ```bash
    docker-compose down -v
    docker-compose up
    ```
 
-4. Check container status:
+5. Check container status and health:
 
    ```bash
    docker-compose ps
    ```
 
-5. Inspect container:
+   Unhealthy services show `unhealthy` in the status — check logs for that service.
+
+6. Inspect container:
 
    ```bash
    docker-compose exec backend sh
    ```
 
-6. Check network connectivity:
+7. Check network connectivity:
    ```bash
    docker network inspect on_prem_rag_app-network
    ```

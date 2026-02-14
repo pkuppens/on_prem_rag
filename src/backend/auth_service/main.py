@@ -73,7 +73,6 @@ app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY",
 
 
 def start_server() -> None:
-
     import uvicorn
 
     # Configure uvicorn logging to include timestamps

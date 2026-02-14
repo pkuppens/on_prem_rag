@@ -65,7 +65,7 @@ jobs:
             echo "Generating changelog from $PREVIOUS_TAG to ${{ steps.version.outputs.tag }}"
             COMMITS=$(git log --pretty=format:"- %s (%h)" $PREVIOUS_TAG..HEAD)
           fi
-          
+
           # Create changelog content
           {
             echo "## What's Changed"
@@ -88,7 +88,7 @@ jobs:
               echo "Initial release"
             fi
           } > RELEASE_NOTES.md
-          
+
           cat RELEASE_NOTES.md
 
       - name: Create GitHub Release

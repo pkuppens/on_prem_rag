@@ -9,6 +9,7 @@ See docs/technical/LLM.md for design details.
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from backend.rag_pipeline.config.parameter_sets import get_param_set
@@ -39,7 +40,9 @@ class QASystem:
         Returns:
             Configured Ollama provider instance.
         """
-        return OllamaProvider(model_name="mistral:7b", config={"host": "http://localhost:11434"})
+        model_name = os.getenv("OLLAMA_MODEL", "mistral:7b")
+        ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        return OllamaProvider(model_name=model_name, config={"host": ollama_host})
 
     def retrieve_relevant_chunks(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> list[dict[str, Any]]:
         """Retrieve relevant document chunks for a question.

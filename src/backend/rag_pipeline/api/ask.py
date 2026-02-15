@@ -10,6 +10,7 @@ See STORY-003 for business context and acceptance criteria.
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from ..core.llm_providers import ModelNotFoundError
 from ..core.qa_system import QASystem
 from ..utils.logging import StructuredLogger
 from .metrics import get_metrics
@@ -102,6 +103,27 @@ async def ask_question(payload: AskRequest) -> AskResponse:
     except ValueError as e:
         logger.warning("Invalid request", question=payload.question, error=str(e))
         raise HTTPException(status_code=400, detail=str(e)) from e
+
+    except ModelNotFoundError as e:
+        logger.warning(
+            "LLM model not available",
+            model=e.model_name,
+            host=e.host,
+            error=str(e),
+        )
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": "LLM model not available",
+                "model": e.model_name,
+                "remediation": [
+                    f"Pull the model: ollama pull {e.model_name}",
+                    "Or set OLLAMA_MODEL to an available model (e.g. llama3.2:1b)",
+                    "List available models: ollama list",
+                ],
+                "raw_error": e.raw_error[:200] if e.raw_error else None,
+            },
+        ) from e
 
     except Exception as e:
         logger.error("Error during question answering", question=payload.question, error=str(e))

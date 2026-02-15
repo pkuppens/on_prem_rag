@@ -13,7 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.rag_pipeline.api.app import app
-from backend.rag_pipeline.core.llm_providers import OllamaProvider
+from backend.rag_pipeline.core.llm_providers import ModelNotFoundError, OllamaProvider
 from backend.rag_pipeline.core.qa_system import QASystem
 
 
@@ -262,6 +262,33 @@ class TestAskAPI:
             assert data["status"] == "healthy"
             assert data["llm_provider"] == "available"
 
+    @patch("backend.rag_pipeline.api.ask.qa_system")
+    def test_ask_endpoint_model_not_found_returns_503_with_remediation(self, mock_qa_system):
+        """As a user I want clear guidance when the LLM model is unavailable, so I can fix it.
+        Technical: ModelNotFoundError from QA system returns 503 with remediation steps.
+        Validation: No running Ollama required; mock raises ModelNotFoundError.
+        """
+        mock_qa_system.ask_question.side_effect = ModelNotFoundError(
+            model_name="mistral:7b",
+            host="http://localhost:11434",
+            raw_error="model 'mistral:7b' not found",
+        )
+
+        client = TestClient(app)
+        response = client.post("/api/ask", json={"question": "What is AI?"})
+
+        assert response.status_code == 503
+        data = response.json()
+        assert "detail" in data
+        detail = data["detail"]
+        if isinstance(detail, dict):
+            assert detail.get("error") == "LLM model not available"
+            assert detail.get("model") == "mistral:7b"
+            assert "remediation" in detail
+            assert any("ollama pull" in step for step in detail["remediation"])
+        else:
+            assert "not available" in str(detail).lower() or "mistral" in str(detail).lower()
+
 
 class TestOllamaProvider:
     """Test cases for the OllamaProvider class."""
@@ -307,6 +334,35 @@ class TestOllamaProvider:
 
         with pytest.raises(RuntimeError, match="Unexpected error during answer generation"):
             provider.generate_answer("What is AI?")
+
+    @patch("httpx.Client")
+    def test_ollama_generate_answer_model_not_found_raises_model_not_found_error(self, mock_client_class):
+        """As a user I want a specific error when my model is not pulled, so I know to run ollama pull.
+        Technical: 404 with 'not found' in response raises ModelNotFoundError with remediation.
+        Validation: No running Ollama; mock httpx HTTPStatusError.
+        """
+        import httpx as httpx_mod
+
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.text = "model 'mistral:7b' not found"
+
+        mock_client = Mock()
+        mock_client.post.return_value = mock_response
+        mock_client.post.return_value.raise_for_status.side_effect = httpx_mod.HTTPStatusError(
+            "model not found",
+            request=Mock(),
+            response=mock_response,
+        )
+        mock_client_class.return_value.__enter__.return_value = mock_client
+
+        provider = OllamaProvider("mistral:7b", {"host": "http://localhost:11434"})
+
+        with pytest.raises(ModelNotFoundError) as exc_info:
+            provider.generate_answer("What is AI?")
+
+        assert exc_info.value.model_name == "mistral:7b"
+        assert "ollama pull" in str(exc_info.value)
 
     @pytest.mark.asyncio
     @patch("httpx.AsyncClient")

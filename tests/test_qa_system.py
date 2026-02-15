@@ -61,30 +61,15 @@ class TestQASystem:
         with pytest.raises(ValueError, match="Question cannot be empty"):
             qa_system.retrieve_relevant_chunks("   ")
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_retrieve_relevant_chunks_success(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_retrieve_relevant_chunks_success(self, mock_create_service):
         """Test successful chunk retrieval."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "Sample document content",
-                    "similarity_score": 0.8,
-                    "document_name": "test.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                },
-                {
-                    "text": "Another document content",
-                    "similarity_score": 0.6,
-                    "document_name": "test2.pdf",
-                    "chunk_index": 1,
-                    "record_id": "124",
-                    "page_number": 2,
-                },
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {"text": "Sample document content", "similarity_score": 0.8, "document_name": "test.pdf", "chunk_index": 0},
+            {"text": "Another document content", "similarity_score": 0.6, "document_name": "test2.pdf", "chunk_index": 1},
+        ]
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         chunks = qa_system.retrieve_relevant_chunks("test question", top_k=5, similarity_threshold=0.5)
@@ -92,38 +77,23 @@ class TestQASystem:
         assert len(chunks) == 2
         assert chunks[0]["similarity_score"] == 0.8
         assert chunks[1]["similarity_score"] == 0.6
+        mock_service.retrieve.assert_called_once_with(query="test question", top_k=5, similarity_threshold=0.5)
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_retrieve_relevant_chunks_with_threshold_filtering(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_retrieve_relevant_chunks_with_threshold_filtering(self, mock_create_service):
         """Test that similarity threshold filtering works correctly."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "High similarity content",
-                    "similarity_score": 0.9,
-                    "document_name": "test.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                },
-                {
-                    "text": "Low similarity content",
-                    "similarity_score": 0.5,
-                    "document_name": "test2.pdf",
-                    "chunk_index": 1,
-                    "record_id": "124",
-                    "page_number": 2,
-                },
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {"text": "High similarity content", "similarity_score": 0.9, "document_name": "test.pdf", "chunk_index": 0},
+        ]
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         chunks = qa_system.retrieve_relevant_chunks("test question", similarity_threshold=0.7)
 
-        # Only the high similarity chunk should be returned
         assert len(chunks) == 1
         assert chunks[0]["similarity_score"] == 0.9
+        mock_service.retrieve.assert_called_once()
 
     def test_generate_answer_empty_question(self):
         """Test that empty question raises ValueError."""
@@ -165,10 +135,12 @@ class TestQASystem:
         with pytest.raises(ValueError, match="Question cannot be empty"):
             qa_system.ask_question("")
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_ask_question_no_relevant_chunks(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_ask_question_no_relevant_chunks(self, mock_create_service):
         """Test handling when no relevant chunks are found."""
-        mock_query_embeddings.return_value = {"all_results": []}
+        mock_service = Mock()
+        mock_service.retrieve.return_value = []
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         result = qa_system.ask_question("test question")
@@ -178,22 +150,21 @@ class TestQASystem:
         assert result["confidence"] == "low"
         assert result["chunks_retrieved"] == 0
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_ask_question_success(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_ask_question_success(self, mock_create_service):
         """Test successful question answering."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "Sample document content about AI and machine learning",
-                    "similarity_score": 0.9,
-                    "document_name": "ai_guide.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                }
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {
+                "text": "Sample document content about AI and machine learning",
+                "similarity_score": 0.9,
+                "document_name": "ai_guide.pdf",
+                "chunk_index": 0,
+                "record_id": "123",
+                "page_number": 1,
+            },
+        ]
+        mock_create_service.return_value = mock_service
 
         mock_llm = Mock()
         mock_llm.generate_answer.return_value = "AI is a field of computer science."

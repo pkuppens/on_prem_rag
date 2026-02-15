@@ -1,0 +1,151 @@
+"""BM25 sparse retrieval for the RAG pipeline.
+
+Provides keyword/lexical retrieval complementary to dense semantic search.
+Strong for exact medical terminology (ICD-10, drug names, procedure codes).
+
+See tmp/github/issue-plans/issue-79-hybrid-retrieval.md for design.
+"""
+
+from __future__ import annotations
+
+import re
+from typing import Any
+
+from rank_bm25 import BM25Okapi
+
+from backend.rag_pipeline.config.vector_store import VectorStoreConfig
+from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
+
+from ..utils.logging import StructuredLogger
+
+logger = StructuredLogger(__name__)
+
+
+def _tokenize(text: str) -> list[str]:
+    """Tokenize text for BM25: lowercase, split on non-alphanumeric, filter empty."""
+    text_lower = text.lower().strip()
+    tokens = re.split(r"[^a-z0-9]+", text_lower)
+    return [t for t in tokens if len(t) > 0]
+
+
+class BM25Store:
+    """BM25 sparse index over chunk corpus from ChromaDB.
+
+    Builds index from ChromaDB documents on-demand. Suitable for small-to-medium
+    collections; for large corpora consider persistent index.
+    """
+
+    def __init__(self, config: VectorStoreConfig) -> None:
+        """Initialize BM25 store with vector store config.
+
+        Args:
+            config: VectorStoreConfig with persist_directory and collection_name.
+        """
+        self.config = config
+        self._vector_manager: ChromaVectorStoreManager | None = None
+        self._bm25: BM25Okapi | None = None
+        self._corpus_ids: list[str] = []
+        self._corpus_documents: list[str] = []
+        self._corpus_metadatas: list[dict[str, Any]] = []
+
+    def _get_vector_manager(self) -> ChromaVectorStoreManager:
+        """Lazy-init ChromaDB manager."""
+        if self._vector_manager is None:
+            self._vector_manager = ChromaVectorStoreManager(self.config)
+        return self._vector_manager
+
+    def _build_index(self) -> None:
+        """Build BM25 index from ChromaDB documents."""
+        manager = self._get_vector_manager()
+        collection = manager._collection
+
+        # Fetch all documents and metadatas from ChromaDB.
+        # ChromaDB get() requires where/ids/where_document; chunk_index is int.
+        try:
+            result = collection.get(
+                where={"chunk_index": {"$gte": 0}},
+                include=["documents", "metadatas"],
+                limit=100_000,
+            )
+        except Exception as e:
+            logger.debug("BM25 build: where filter failed, using limit fallback", error=str(e))
+            # Fallback: get with limit only (ChromaDB >= 0.4 may support this).
+            result = collection.get(
+                include=["documents", "metadatas"],
+                limit=100_000,
+            )
+
+        ids = result.get("ids") or []
+        documents = result.get("documents") or []
+        metadatas = result.get("metadatas") or []
+
+        if not ids or not documents:
+            self._bm25 = None
+            self._corpus_ids = []
+            self._corpus_documents = []
+            self._corpus_metadatas = []
+            logger.debug("BM25 index empty - no documents in ChromaDB")
+            return
+
+        tokenized = [_tokenize(doc or "") for doc in documents]
+        self._bm25 = BM25Okapi(tokenized)
+        self._corpus_ids = ids
+        self._corpus_documents = [doc or "" for doc in documents]
+        self._corpus_metadatas = metadatas
+        logger.debug(
+            "BM25 index built",
+            chunk_count=len(ids),
+        )
+
+    def query(self, query: str, top_k: int = 10) -> list[dict[str, Any]]:
+        """Query BM25 index and return chunks in EmbeddingResult-like format.
+
+        Args:
+            query: Search query text.
+            top_k: Maximum number of results to return.
+
+        Returns:
+            List of dicts with keys: text, similarity_score, document_id, document_name,
+            chunk_index, record_id, page_number. similarity_score is BM25 score
+            normalized to [0, 1] via min-max over results.
+        """
+        if self._bm25 is None:
+            self._build_index()
+
+        if self._bm25 is None or not self._corpus_ids:
+            return []
+
+        tokens = _tokenize(query)
+        if not tokens:
+            return []
+
+        scores = self._bm25.get_scores(tokens)
+        indices = scores.argsort()[::-1][:top_k]
+
+        selected_scores = scores[indices]
+        min_s, max_s = float(selected_scores.min()), float(selected_scores.max())
+        norm = (max_s - min_s) or 1.0
+
+        results: list[dict[str, Any]] = []
+        for j, i in enumerate(indices):
+            i = int(i)
+            meta = self._corpus_metadatas[i] if i < len(self._corpus_metadatas) else {}
+            doc_text = self._corpus_documents[i] if i < len(self._corpus_documents) else meta.get("text", "")
+
+            raw = float(scores[i])
+            norm_score = (raw - min_s) / norm if norm else 0.0
+
+            results.append(
+                {
+                    "text": doc_text,
+                    "similarity_score": min(1.0, max(0.0, norm_score)),
+                    "document_id": meta.get("document_id", "unknown"),
+                    "document_name": meta.get("document_name", "unknown"),
+                    "chunk_index": meta.get("chunk_index", 0),
+                    "record_id": self._corpus_ids[i],
+                    "page_number": meta.get("page_number", "unknown"),
+                    "page_label": meta.get("page_label", "unknown"),
+                }
+            )
+
+        return results

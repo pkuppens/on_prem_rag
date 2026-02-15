@@ -12,9 +12,9 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from backend.rag_pipeline.config.parameter_sets import get_param_set
-from backend.rag_pipeline.core.embeddings import query_embeddings
+from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from backend.rag_pipeline.core.llm_providers import LLMProvider, OllamaProvider
+from backend.rag_pipeline.core.retrieval import create_retrieval_service
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
 from ..utils.logging import StructuredLogger
@@ -47,6 +47,9 @@ class QASystem:
     def retrieve_relevant_chunks(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> list[dict[str, Any]]:
         """Retrieve relevant document chunks for a question.
 
+        Uses configured retrieval strategy (dense, sparse, hybrid) with optional
+        re-ranking and MMR. Strategy is controlled by parameter set and env vars.
+
         Args:
             question: The question to search for
             top_k: Maximum number of chunks to retrieve
@@ -63,28 +66,34 @@ class QASystem:
             raise ValueError("Question cannot be empty")
 
         try:
-            # Get default parameter set for embedding model
-            from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME
-
             params = get_param_set(DEFAULT_PARAM_SET_NAME)
+            ret = params.retrieval
+            strategy = os.getenv("RETRIEVAL_STRATEGY", ret.strategy)
 
-            # Query embeddings using existing function
-            results = query_embeddings(
-                query=question,
+            service = create_retrieval_service(
+                strategy=strategy,
                 model_name=params.embedding.model_name,
-                persist_dir=self.vector_store_manager.config.persist_directory,
+                persist_dir=str(self.vector_store_manager.config.persist_directory),
                 collection_name=self.vector_store_manager.config.collection_name,
-                top_k=top_k,
+                hybrid_alpha=ret.hybrid_alpha,
+                use_reranker=ret.use_reranker,
+                reranker_model=ret.reranker_model,
+                use_mmr=ret.use_mmr,
+                mmr_lambda=ret.mmr_lambda,
+                rerank_candidates=ret.rerank_candidates,
             )
 
-            # Filter results by similarity threshold
-            filtered_results = [result for result in results["all_results"] if result["similarity_score"] >= similarity_threshold]
+            filtered_results = service.retrieve(
+                query=question,
+                top_k=top_k,
+                similarity_threshold=similarity_threshold,
+            )
 
             logger.info(
                 "Retrieved chunks for question",
                 question=question,
-                total_results=len(results["all_results"]),
-                filtered_results=len(filtered_results),
+                total_results=len(filtered_results),
+                strategy=strategy,
                 threshold=similarity_threshold,
             )
 

@@ -20,9 +20,9 @@ docker-compose up -d
 docker-compose ps
 
 # 4. Verify endpoints
-curl -s http://localhost:9000/health
-curl -s http://localhost:9100/oauth/providers
-curl -s http://localhost:9200/api/v2/heartbeat
+curl -s http://localhost:9180/health
+curl -s http://localhost:9181/oauth/providers
+curl -s http://localhost:9182/api/v2/heartbeat
 
 # 5. Stop
 docker-compose down
@@ -219,16 +219,16 @@ When `docker-compose up` fails with "port is already allocated" or "address alre
 
 1. **Identify the conflicting port** from the error message (e.g. 9100, 11434).
 2. **Override in `.env`** — copy `env.example` to `.env` if needed, then set:
-   - `BACKEND_PORT=9010` (if 9000 is in use)
-   - `AUTH_PORT=9110` (if 9100 is in use)
-   - `CHROMA_HOST_PORT=9200` (default; was 9100, moved to avoid Auth conflict)
+   - `BACKEND_PORT=9190` (if 9180 is in use)
+   - `AUTH_PORT=9191` (if 9181 is in use)
+   - `CHROMA_HOST_PORT=9192` (if 9182 is in use)
    - `OLLAMA_HOST_PORT=11435` (if host Ollama uses 11434)
    - `FRONTEND_PORT=5180` (if 5173 is in use)
 3. **Restart**: `docker-compose down` then `docker-compose up`.
 
 **Common conflicts:**
 
-- Chroma and Auth both used 9100 — Chroma now defaults to 9200.
+- Defaults use dedicated range 9180-9182 (see docs/PORTS.md).
 - **Ollama on host** (port 11434) — Create `.env` with `OLLAMA_HOST_PORT=11435` so the Docker Ollama uses a different port.
 - **Frontend port 5173 in use** — Create `.env` with `FRONTEND_PORT=5180` (or another free port).
 - Multiple dev stacks — assign unique ports per project in `.env`.

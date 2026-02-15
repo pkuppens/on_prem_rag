@@ -224,6 +224,39 @@ class TestAskAPI:
         response = client.post("/api/ask", json={"question": "test", "similarity_threshold": 1.1})
         assert response.status_code == 422
 
+    def test_ask_endpoint_invalid_strategy(self):
+        """As a user I want invalid strategy values to be rejected, so I get clear feedback.
+        Technical: strategy must be dense, sparse, hybrid, or bm25; others return 422.
+        Validation: POST with strategy=invalid returns 422.
+        """
+        client = TestClient(app)
+
+        response = client.post("/api/ask", json={"question": "test", "strategy": "invalid"})
+        assert response.status_code == 422
+        assert "detail" in response.json()
+
+    @patch("backend.rag_pipeline.api.ask.qa_system")
+    def test_ask_endpoint_strategy_passed_to_qa(self, mock_qa_system):
+        """As a user I want to compare retrieval strategies per request, so I can choose the best.
+        Technical: strategy param is passed to qa_system.ask_question.
+        Validation: Mock receives strategy=hybrid when requested.
+        """
+        mock_qa_system.ask_question.return_value = {
+            "answer": "Test answer.",
+            "sources": [],
+            "confidence": "low",
+            "chunks_retrieved": 0,
+            "average_similarity": 0.0,
+        }
+
+        client = TestClient(app)
+        response = client.post("/api/ask", json={"question": "ICD-10 code?", "strategy": "hybrid"})
+
+        assert response.status_code == 200
+        mock_qa_system.ask_question.assert_called_once()
+        call_kwargs = mock_qa_system.ask_question.call_args[1]
+        assert call_kwargs.get("strategy") == "hybrid"
+
     @patch("backend.rag_pipeline.api.ask.qa_system")
     def test_ask_endpoint_success(self, mock_qa_system):
         """Test successful question answering via API."""

@@ -28,9 +28,24 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
     )
 
 
+def _sanitize_validation_errors(errors: list[dict]) -> list[dict]:
+    """Make validation errors JSON-serializable by replacing non-serializable ctx values."""
+    sanitized = []
+    for err in errors:
+        err_copy = err.copy()
+        if "ctx" in err_copy and err_copy["ctx"]:
+            ctx = {}
+            for k, v in err_copy["ctx"].items():
+                ctx[k] = str(v) if v is not None and not isinstance(v, (str, int, float, bool)) else v
+            err_copy["ctx"] = ctx
+        sanitized.append(err_copy)
+    return sanitized
+
+
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     """Convert RequestValidationError to RFC 7807 Problem Details format."""
     errors = exc.errors()
+    sanitized_errors = _sanitize_validation_errors(errors)
     detail = errors[0].get("msg", "Validation error") if errors else "Validation error"
     content = {
         "type": "about:blank",
@@ -38,7 +53,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
         "detail": detail,
         "instance": str(request.url.path),
-        "errors": errors,
+        "errors": sanitized_errors,
     }
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

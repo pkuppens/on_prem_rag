@@ -170,11 +170,11 @@ The test agent provides:
    - 15 integration tests
 
 🔧 Service Management:
-   ✅ ChromaDB: Running (port 9100)
+   ✅ ChromaDB: Running (port 9182)
    ✅ Ollama: Running (port 11434)
    ⚠️  MCP Calendar Server: Not running (will start if needed)
-   ✅ Backend: Running (port 9000)
-   ✅ Auth: Running (port 9100)
+   ✅ Backend: Running (port 9180)
+   ✅ Auth: Running (port 9181)
 
 🚀 Test Execution:
    Running tests in parallel (4 workers)...
@@ -246,10 +246,10 @@ docker compose restart
 
 The following Docker services may be required for integration tests:
 
-- **ChromaDB**: Vector database (port 9100)
+- **ChromaDB**: Vector database (port 9182)
 - **Ollama**: LLM service (port 11434)
-- **Backend**: RAG pipeline API (port 9000)
-- **Auth**: Authentication service (port 9100)
+- **Backend**: RAG pipeline API (port 9180)
+- **Auth**: Authentication service (port 9181)
 - **Frontend**: Frontend application (port 5173)
 
 ### MCP Calendar Server

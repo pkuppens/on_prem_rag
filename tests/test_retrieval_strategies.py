@@ -104,8 +104,10 @@ class TestMMRRerank:
             {"text": "chunk C", "similarity_score": 0.8},
         ]
         query_emb = [1.0, 0.0, 0.0]
+
         def emb_fn(t: str) -> list[float]:
             return [1.0, 0.0, 0.0] if "A" in t else [0.9, 0.1, 0.0]
+
         result = mmr_rerank(candidates, query_emb, emb_fn, lambda_param=0.7, top_k=2)
         assert len(result) == 2
 

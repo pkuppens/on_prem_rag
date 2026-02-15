@@ -34,7 +34,12 @@ uv run ruff check . && uv run ruff format --check .  # Verify clean
 # Run services
 uv run start-backend                       # FastAPI RAG backend
 uv run start-auth                          # Auth microservice
-docker-compose up --build                  # Full stack with Docker
+docker-compose up --build                  # Full stack with Docker (ports 9180-9182, see docs/PORTS.md)
+
+# Documentation
+# docs/DEPLOYMENT.md — Production deployment
+# docs/USAGE.md — API usage, upload, ask, query
+# docs/TEST_DOCKER.md — Docker development
 
 # WBSO pipeline commands
 uv run wbso-pipeline                       # Full WBSO processing pipeline

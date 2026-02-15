@@ -16,7 +16,7 @@ services:
     volumes:
       - chroma-data:/chroma
     ports:
-      - "${CHROMA_HOST_PORT:-9200}:8000"
+      - "${CHROMA_HOST_PORT:-9182}:8000"
     environment:
       - IS_PERSISTENT=TRUE
     networks:
@@ -28,7 +28,7 @@ services:
       dockerfile: docker/backend/Dockerfile
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT:-9000}/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT:-9180}/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -43,15 +43,15 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
       - ALLOW_ORIGINS=http://localhost:${FRONTEND_PORT:-5173}
       - ENVIRONMENT=development
-      - PORT=${BACKEND_PORT:-9000}
+      - PORT=${BACKEND_PORT:-9180}
     ports:
-      - "${BACKEND_PORT:-9000}:${BACKEND_PORT:-9000}"
+      - "${BACKEND_PORT:-9180}:${BACKEND_PORT:-9180}"
     depends_on:
       chroma:
         condition: service_healthy
     networks:
       - app-network
-    command: uvicorn backend.rag_pipeline.api.app:app --host 0.0.0.0 --port ${BACKEND_PORT:-9000} --reload
+    command: uvicorn backend.rag_pipeline.api.app:app --host 0.0.0.0 --port ${BACKEND_PORT:-9180} --reload
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -61,7 +61,7 @@ services:
       dockerfile: docker/backend/Dockerfile
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${AUTH_PORT:-9100}/oauth/providers"]
+      test: ["CMD", "curl", "-f", "http://localhost:${AUTH_PORT:-9181}/oauth/providers"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -69,13 +69,13 @@ services:
     volumes:
       - ./src:/app/src
     environment:
-      - PORT=${AUTH_PORT:-9100}
+      - PORT=${AUTH_PORT:-9181}
       - ENVIRONMENT=development
     ports:
-      - "${AUTH_PORT:-9100}:${AUTH_PORT:-9100}"
+      - "${AUTH_PORT:-9181}:${AUTH_PORT:-9181}"
     networks:
       - app-network
-    command: uvicorn src.backend.auth_service.main:app --host 0.0.0.0 --port ${AUTH_PORT:-9100} --reload
+    command: uvicorn src.backend.auth_service.main:app --host 0.0.0.0 --port ${AUTH_PORT:-9181} --reload
 
   frontend:
     build:
@@ -86,8 +86,8 @@ services:
       - ./src/frontend:/app/frontend
       - /app/frontend/node_modules
     environment:
-      - VITE_BACKEND_URL=http://localhost:${BACKEND_PORT:-9000}
-      - VITE_AUTH_URL=http://localhost:${AUTH_PORT:-9100}
+      - VITE_BACKEND_URL=http://localhost:${BACKEND_PORT:-9180}
+      - VITE_AUTH_URL=http://localhost:${AUTH_PORT:-9181}
     ports:
       - "${FRONTEND_PORT:-5173}:5173"
     depends_on:

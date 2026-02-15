@@ -44,16 +44,24 @@ class QASystem:
         ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         return OllamaProvider(model_name=model_name, config={"host": ollama_host})
 
-    def retrieve_relevant_chunks(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> list[dict[str, Any]]:
+    def retrieve_relevant_chunks(
+        self,
+        question: str,
+        top_k: int = 5,
+        similarity_threshold: float = 0.7,
+        strategy: str | None = None,
+    ) -> list[dict[str, Any]]:
         """Retrieve relevant document chunks for a question.
 
         Uses configured retrieval strategy (dense, sparse, hybrid) with optional
-        re-ranking and MMR. Strategy is controlled by parameter set and env vars.
+        re-ranking and MMR. Strategy precedence: request param > env var > parameter set.
 
         Args:
             question: The question to search for
             top_k: Maximum number of chunks to retrieve
             similarity_threshold: Minimum similarity score for results
+            strategy: Optional override for retrieval strategy (dense, sparse, hybrid, bm25).
+                When None, uses RETRIEVAL_STRATEGY env var, then parameter set default.
 
         Returns:
             List of relevant chunks with metadata and similarity scores
@@ -68,7 +76,7 @@ class QASystem:
         try:
             params = get_param_set(DEFAULT_PARAM_SET_NAME)
             ret = params.retrieval
-            strategy = os.getenv("RETRIEVAL_STRATEGY", ret.strategy)
+            strategy = strategy or os.getenv("RETRIEVAL_STRATEGY", ret.strategy)
 
             service = create_retrieval_service(
                 strategy=strategy,
@@ -159,13 +167,21 @@ Answer:"""
             logger.error("Error during answer generation", question=question, error=str(e))
             raise RuntimeError(f"Failed to generate answer: {str(e)}") from e
 
-    def ask_question(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> dict[str, Any]:
+    def ask_question(
+        self,
+        question: str,
+        top_k: int = 5,
+        similarity_threshold: float = 0.7,
+        strategy: str | None = None,
+    ) -> dict[str, Any]:
         """Ask a question and get an answer with sources.
 
         Args:
             question: The question to ask
             top_k: Maximum number of chunks to retrieve
             similarity_threshold: Minimum similarity score for results
+            strategy: Optional retrieval strategy override (dense, sparse, hybrid, bm25).
+                When None, uses RETRIEVAL_STRATEGY env var or parameter set default.
 
         Returns:
             Dictionary containing answer, sources, and metadata
@@ -179,7 +195,7 @@ Answer:"""
 
         try:
             # Retrieve relevant chunks
-            chunks = self.retrieve_relevant_chunks(question, top_k, similarity_threshold)
+            chunks = self.retrieve_relevant_chunks(question, top_k, similarity_threshold, strategy=strategy)
 
             if not chunks:
                 return {
@@ -187,6 +203,7 @@ Answer:"""
                     "sources": [],
                     "confidence": "low",
                     "chunks_retrieved": 0,
+                    "average_similarity": 0.0,
                 }
 
             # Generate answer

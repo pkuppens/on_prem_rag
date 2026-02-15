@@ -13,7 +13,7 @@ RUN npm install
 COPY src/frontend/ .
 
 ENV NODE_ENV=development
-ENV VITE_BACKEND_URL=http://localhost:9000
-ENV VITE_AUTH_URL=http://localhost:9100
+ENV VITE_BACKEND_URL=http://localhost:9180
+ENV VITE_AUTH_URL=http://localhost:9181
 
 CMD ["npm", "run", "dev", "--", "--host"]

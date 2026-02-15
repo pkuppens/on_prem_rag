@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
+const authBaseUrl = import.meta.env.VITE_AUTH_URL || 'http://localhost:9181';
+
 interface User {
   id: number;
   username: string;
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (token) {
       try {
         await axios.post(
-          'http://localhost:8001/logout',
+          `${authBaseUrl}/logout`,
           {},
           { headers: { Authorization: `Bearer ${token}` } },
         );
@@ -46,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const login = async (username: string, password: string) => {
-    const res = await axios.post('http://localhost:8001/login', {
+    const res = await axios.post(`${authBaseUrl}/login`, {
       username,
       password,
     });
@@ -54,7 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(newToken);
     localStorage.setItem('auth_token', newToken);
     localStorage.setItem('auth_expires', String(Date.now() + 30 * 60 * 1000));
-    const me = await axios.get<User>('http://localhost:8001/me', {
+    const me = await axios.get<User>(`${authBaseUrl}/me`, {
       headers: { Authorization: `Bearer ${newToken}` },
     });
     setUser(me.data);
@@ -66,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (stored && exp && Date.now() < Number(exp)) {
       setToken(stored);
       axios
-        .get<User>('http://localhost:8001/me', {
+        .get<User>(`${authBaseUrl}/me`, {
           headers: { Authorization: `Bearer ${stored}` },
         })
         .then((res) => setUser(res.data))

@@ -16,9 +16,17 @@ interface EmbeddingResult {
   page_label?: string;
 }
 
-interface QueryResponse {
-  primary_result: string;
-  all_results: EmbeddingResult[];
+interface AskResponse {
+  answer: string;
+  sources: Array<{
+    document_name: string;
+    page_number: number | string;
+    similarity_score: number;
+    text_preview: string;
+  }>;
+  confidence: string;
+  chunks_retrieved: number;
+  average_similarity: number;
 }
 
 interface Props {
@@ -28,6 +36,7 @@ interface Props {
 
 export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   const [query, setQuery] = useState('');
+  const [answer, setAnswer] = useState<string | null>(null);
   const [results, setResults] = useState<EmbeddingResult[]>([]);
   const [selected, setSelected] = useState(0);
   const [numResults, setNumResults] = useState(5); // Default to 5 results
@@ -42,18 +51,28 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
     setIsLoading(true);
     setError(null);
     setHasSearched(true);
+    setAnswer(null);
 
     try {
-      const res = await axios.post<QueryResponse>(apiUrls.query(), {
-        query,
-        params_name: paramSet,
-        top_k: numResults, // Override the parameter set's top_k with user selection
+      const res = await axios.post<AskResponse>(apiUrls.ask(), {
+        question: query,
+        strategy: 'hybrid',
+        top_k: numResults,
       });
-      setResults(res.data.all_results);
-      if (res.data.all_results.length > 0) {
-        const first = res.data.all_results[0];
+      setAnswer(res.data.answer);
+      const mapped: EmbeddingResult[] = res.data.sources.map((s, idx) => ({
+        text: s.text_preview,
+        similarity_score: s.similarity_score,
+        document_id: s.document_name,
+        document_name: s.document_name,
+        chunk_index: idx,
+        record_id: '',
+        page_number: s.page_number,
+      }));
+      setResults(mapped);
+      if (mapped.length > 0) {
         setSelected(0);
-        onResultSelect(first);
+        onResultSelect(mapped[0]);
       }
     } catch (error) {
       console.error('Error querying:', error);
@@ -87,7 +106,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
     <Box>
       <TextField
         fullWidth
-        label="Keyword Query"
+        label="Ask a question"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         sx={{ mb: 2 }}
@@ -126,8 +145,17 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
         sx={{ mb: 2 }}
         disabled={!query.trim() || isLoading}
       >
-        {isLoading ? 'Searching...' : 'Search'}
+        {isLoading ? 'Answering...' : 'Ask'}
       </Button>
+
+      {answer && (
+        <Paper sx={{ p: 2, mb: 2, bgcolor: 'background.default' }}>
+          <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.secondary' }}>
+            Answer
+          </Typography>
+          <Typography variant="body1">{answer}</Typography>
+        </Paper>
+      )}
 
       {isLoading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
@@ -165,14 +193,14 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
 
       {!isLoading && hasSearched && results.length === 0 && !error && (
         <Alert severity="info" sx={{ mb: 2 }}>
-          No documents found matching your query. Try different keywords or check if documents have been uploaded.
+          No relevant chunks found. Try different keywords or check if documents have been uploaded.
         </Alert>
       )}
 
       {!isLoading && results.length > 0 && (
         <Box>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            Search Results ({results.length})
+            Sources ({results.length})
           </Typography>
           {results.map((r, idx) => (
             <Paper

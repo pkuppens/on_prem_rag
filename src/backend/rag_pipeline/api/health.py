@@ -44,7 +44,7 @@ async def health_llm():
         # Use OLLAMA_BASE_URL so it works in Docker (ollama:11434) and local (localhost:11434).
         ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         config = {"host": ollama_host}
-        health_model = os.getenv("OLLAMA_MODEL", "llama2")
+        health_model = os.getenv("OLLAMA_MODEL", "mistral:7b")
         llm_provider = LLMProviderFactory.create_provider("ollama", health_model, config)
         is_healthy = await llm_provider.health_check()
         if is_healthy:

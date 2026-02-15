@@ -29,15 +29,16 @@ The pipeline supports multiple strategies via the `strategy` parameter in `chunk
 
 | Strategy   | Implementation        | Use case                                |
 |------------|-----------------------|-----------------------------------------|
-| `character`| SimpleNodeParser      | Default; fixed character-based chunks   |
+| `character`| RecursiveChunkingStrategy | Default; fixed character-based chunks   |
 | `semantic` | SentenceSplitter     | Sentence boundaries; fewer mid-sentence splits |
-| `recursive`| Custom separator-based | Paragraph, line, word boundaries first |
+| `recursive`| RecursiveChunkingStrategy | Same as character; alias for compatibility |
 
 ### Character (default)
 
-- **Method**: LlamaIndex SimpleNodeParser
+- **Method**: RecursiveChunkingStrategy (paragraph, line, sentence, word boundaries)
 - **Chunk Size**: 512 characters (optimized for embedding model)
 - **Chunk Overlap**: 50 characters
+- **Note**: Previously used SimpleNodeParser, which interprets chunk_size as tokens rather than characters and produced too few chunks for typical documents. RecursiveChunkingStrategy correctly uses character-based limits.
 - **Metadata**: Preserved and enhanced
 
 ### Semantic
@@ -62,24 +63,21 @@ The pipeline supports multiple strategies via the `strategy` parameter in `chunk
 
 ## Implementation Details
 
-### Integration with LlamaIndex
+### Integration with Chunking Strategies
 
 ```python
-from llama_index.core.node_parser import SimpleNodeParser
+from backend.rag_pipeline.core.chunking import chunk_documents
 from llama_index.core import Document
 
 def process_documents(documents: list[Document], chunk_size: int = 512, chunk_overlap: int = 50):
     """Process documents into chunks with metadata and relationships."""
-    node_parser = SimpleNodeParser.from_defaults(
+    result = chunk_documents(
+        documents,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
-        include_metadata=True,  # Preserve document metadata
-        include_prev_next_rel=True,  # Track chunk relationships
+        strategy="character",  # Uses RecursiveChunkingStrategy (character-based)
     )
-
-    # Create nodes with enhanced metadata
-    nodes = node_parser.get_nodes_from_documents(documents)
-    return nodes
+    return result.chunks
 ```
 
 ### Configuration
@@ -166,7 +164,7 @@ def process_documents(documents: list[Document], chunk_size: int = 512, chunk_ov
 
 ## Code Files
 
-- [src/rag_pipeline/core/chunking.py](../../src/rag_pipeline/core/chunking.py) - Main chunking implementation with SimpleNodeParser and metadata handling
+- [src/backend/rag_pipeline/core/chunking.py](../../src/backend/rag_pipeline/core/chunking.py) - Main chunking implementation with RecursiveChunkingStrategy and metadata handling
 - [tests/test_chunking.py](../../tests/test_chunking.py) - Comprehensive test suite covering chunking strategies, overlap, and edge cases
 - [src/rag_pipeline/config/parameter_sets.py](../../src/rag_pipeline/config/parameter_sets.py) - ChunkingParams configuration and validation
 - [src/rag_pipeline/core/embeddings.py](../../src/rag_pipeline/core/embeddings.py) - Integration between chunking and embedding generation

@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from llama_index.core import Document
-from llama_index.core.node_parser import SentenceSplitter, SimpleNodeParser
+from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.schema import BaseNode, TextNode
 
 from ..utils.logging import StructuredLogger
@@ -46,8 +46,15 @@ class ChunkingStrategy(Protocol):
 
 
 def _create_character_strategy(chunk_size: int, chunk_overlap: int) -> ChunkingStrategy:
-    """Create character-based strategy using SimpleNodeParser (default behavior)."""
-    return SimpleNodeParser.from_defaults(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+    """Create character-based strategy using RecursiveChunkingStrategy.
+
+    Uses RecursiveChunkingStrategy (not SimpleNodeParser) because SimpleNodeParser
+    interprets chunk_size as tokens, which produces too few chunks for typical
+    character limits (e.g. 512 chars → ~150 tokens → one oversized chunk).
+    RecursiveChunkingStrategy uses chunk_size in characters and respects
+    paragraph, line, and sentence boundaries.
+    """
+    return RecursiveChunkingStrategy(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
 
 def _create_semantic_strategy(chunk_size: int, chunk_overlap: int) -> ChunkingStrategy:
@@ -273,6 +280,20 @@ def chunk_documents(
 
         # Chunk this page
         page_chunks = parser.get_nodes_from_documents([page_doc])
+
+        # Preserve empty pages: some parsers (e.g. RecursiveChunkingStrategy) return
+        # no chunks for empty text; inject one placeholder to maintain page numbering
+        page_text = getattr(page_doc, "text", None) or (
+            getattr(page_doc, "get_content", lambda: "")() if callable(getattr(page_doc, "get_content", None)) else ""
+        )
+        page_text = str(page_text or "")
+
+        if not page_chunks and not (page_text or "").strip():
+            empty_node = TextNode(
+                text="", metadata=dict(page_doc.metadata) if hasattr(page_doc, "metadata") and page_doc.metadata else {}
+            )
+            empty_node.metadata["is_empty_page"] = True
+            page_chunks = [empty_node]
 
         # Clean and filter chunks if enabled
         if enable_text_cleaning:

@@ -211,7 +211,7 @@ Key environment variables (set in `.env` or `env.example`):
 - `ALLOW_ORIGINS`: CORS allowed origins
 - `ENVIRONMENT`: Set to 'development' for local development
 - `VITE_BACKEND_URL`: Frontend backend API URL (must match `BACKEND_PORT`)
-- `OLLAMA_BASE_URL`: Ollama URL (http://ollama:11434 when Ollama runs in Docker)
+- `OLLAMA_BASE_URL`: Ollama URL; default http://ollama:11434 (Docker). Set to `http://host.docker.internal:11434` for host Ollama reuse; then start without ollama service.
 
 ## Port Conflicts
 
@@ -229,7 +229,8 @@ When `docker-compose up` fails with "port is already allocated" or "address alre
 **Common conflicts:**
 
 - Defaults use dedicated range 9180-9182 (see docs/PORTS.md).
-- **Ollama on host** (port 11434) — Create `.env` with `OLLAMA_HOST_PORT=11435` so the Docker Ollama uses a different port.
+- **Reuse host Ollama** — Set `OLLAMA_BASE_URL=http://host.docker.internal:11434` in `.env` and start with `docker-compose up -d chroma backend auth frontend` (omit ollama service).
+- **Ollama on host** (port 11434) — If also running Docker ollama, set `OLLAMA_HOST_PORT=11435` so Docker ollama uses a different port.
 - **Frontend port 5173 in use** — Create `.env` with `FRONTEND_PORT=5180` (or another free port).
 - Multiple dev stacks — assign unique ports per project in `.env`.
 

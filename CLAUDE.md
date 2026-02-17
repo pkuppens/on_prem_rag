@@ -22,6 +22,7 @@ pre-commit run --all-files
 uv run pytest                              # Quick tests only
 uv run pytest -m ""                        # All tests including slow
 uv run pytest --run-internet               # Include internet tests
+git uv run pytest -n 8 -m "" --run-internet   # Full PR simulation (parallel)
 uv run pytest tests/test_chunking.py       # Single file
 uv run pytest -k test_specific_function    # Specific test
 

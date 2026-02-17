@@ -5,7 +5,7 @@ Implements token handling for [FEAT-006](../../../project/program/features/FEAT-
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from jose import jwt
@@ -23,7 +23,7 @@ class SecurityManager:
     def create_access_token(self, data: dict[str, Any], expires_delta: timedelta | None = None) -> str:
         """Return a signed JWT access token."""
         to_encode = data.copy()
-        expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+        expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=15))
         to_encode.update({"exp": expire})
         return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
 

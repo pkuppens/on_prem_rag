@@ -1,6 +1,6 @@
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -115,12 +115,14 @@ def create_session(db: Session, user: User) -> DBSession:
 
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
     session = db.query(DBSession).filter(DBSession.token == token).first()
-    if not session or datetime.utcnow() - session.last_active > ACCESS_TIMEOUT:
+    # DB stores naive UTC; use naive UTC for comparison
+    _now = datetime.now(timezone.utc).replace(tzinfo=None)
+    if not session or _now - session.last_active > ACCESS_TIMEOUT:
         if session:
             db.delete(session)
             db.commit()
         raise HTTPException(status_code=401, detail="Invalid or expired token")
-    session.last_active = datetime.utcnow()
+    session.last_active = _now
     db.commit()
     return session.user
 

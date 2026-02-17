@@ -95,6 +95,8 @@ start-auth = "backend.auth_service.main:start_server"
 start-test-app = "test_app:start_server"
 # Upload local files via CLI
 upload-documents = "scripts.upload_documents:main"
+# RAG evaluation on benchmark dataset
+evaluate-rag = "backend.rag_pipeline.evaluation.cli:main"
 # WBSO validation, upload, and reporting scripts
 wbso-validate = "wbso.validation:main"
 wbso-upload = "wbso.upload:main"

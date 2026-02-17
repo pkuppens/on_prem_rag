@@ -96,6 +96,24 @@ Start it with:
 uv run start-auth
 ```
 
+### RAG Performance
+
+Batch evaluation of retrieval strategies (dense, sparse, hybrid) via a benchmark dataset.
+Run with:
+
+```bash
+uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark.json --output results/eval
+```
+
+| Strategy | MRR | Recall@5 | Hit@5 | Precision@5 |
+|----------|-----|----------|-------|-------------|
+| dense    | -   | -        | -     | -           |
+| sparse   | -   | -        | -     | -           |
+| hybrid   | -   | -        | -     | -           |
+
+_Table populated after running `uv run evaluate-rag`. Requires ChromaDB with ingested documents._
+See [docs/technical/RAG_EVALUATION.md](docs/technical/RAG_EVALUATION.md) for schema and usage.
+
 ## Key Business Concerns & Decisions
 
 ### Legal & Licensing Considerations

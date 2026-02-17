@@ -232,6 +232,17 @@ jobs:
           path: |
             coverage.xml
             test-results-unit.xml
+      - name: Add coverage to job summary
+        if: always() && (success() || failure())
+        run: |
+          if [ -f coverage.xml ]; then
+            pct=$(python3 -c "import xml.etree.ElementTree as ET; r=ET.parse('coverage.xml').getroot(); print(f\"{100*float(r.attrib.get('line-rate',0)):.1f}\")")
+            {
+              echo "## Unit Test Coverage"
+              echo ""
+              echo "**Coverage:** ${pct}%"
+            } >> $GITHUB_STEP_SUMMARY
+          fi
 
   # Performance test job - conditional execution
   test-performance:

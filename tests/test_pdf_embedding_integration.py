@@ -20,9 +20,9 @@ from rag_pipeline.core.embeddings import chunk_pdf, embed_chunks, query_embeddin
 class TestPDFEmbeddingIntegration:
     """Integration tests for the complete PDF embedding pipeline."""
 
-    # Expected values for the test PDF (2303.18223v16.pdf)
+    # Expected values for the test PDF (2303.18223v16.pdf) with 'fast' params
     EXPECTED_PAGES = 144
-    EXPECTED_CHUNKS = 603  # Based on actual test results with 'fast' parameters
+    EXPECTED_CHUNKS = 1895  # Character-based chunking (512 chars, 25 overlap). Token-based was ~603.
     TEST_PDF_NAME = "2303.18223v16.pdf"
     QUERY_TEXT = "LLM for Healthcare"
 
@@ -89,11 +89,9 @@ class TestPDFEmbeddingIntegration:
         )
         assert chunking_result.file_size > 0
 
-    @pytest.mark.ci_skip
     def test_chunking_count(self, chunking_result):
         """Test that chunking produces the expected number of chunks.
-        Skipped on CI: EXPECTED_CHUNKS was calibrated for token-based chunking;
-        character-based chunking (issue #79) produces different counts. Run locally.
+        Expectation reflects character-based chunking (512 chars, 25 overlap).
         """
         assert chunking_result.chunk_count == self.EXPECTED_CHUNKS, (
             f"Expected exactly {self.EXPECTED_CHUNKS} chunks, got {chunking_result.chunk_count}"
@@ -124,11 +122,8 @@ class TestPDFEmbeddingIntegration:
         assert 1 in page_labels, "Should have chunks from page 1"
         assert self.EXPECTED_PAGES in page_labels, f"Should have chunks from page {self.EXPECTED_PAGES}"
 
-    @pytest.mark.ci_skip
     def test_embedding_storage(self, embedding_data):
-        """Test that embeddings are stored correctly.
-        Skipped on CI: depends on EXPECTED_CHUNKS from token-based chunking; run locally.
-        """
+        """Test that embeddings are stored correctly."""
         assert embedding_data["chunks"] == self.EXPECTED_CHUNKS
         assert embedding_data["records"] > 0
         assert embedding_data["records"] <= embedding_data["chunks"], "Records should not exceed chunks (due to deduplication)"
@@ -156,7 +151,9 @@ class TestPDFEmbeddingIntegration:
         # Validate document information
         assert top_result["document_name"] == self.TEST_PDF_NAME
         assert isinstance(top_result["chunk_index"], int)
-        assert 0 <= top_result["chunk_index"] < self.EXPECTED_CHUNKS
+        assert 0 <= top_result["chunk_index"] < embedding_data["chunks"], (
+            f"chunk_index must be < {embedding_data['chunks']}, got {top_result['chunk_index']}"
+        )
 
         # Validate similarity score
         assert isinstance(top_result["similarity_score"], float)
@@ -202,11 +199,8 @@ class TestPDFEmbeddingIntegration:
 
         # Test passed - all assertions completed successfully
 
-    @pytest.mark.ci_skip
     def test_pipeline_reproducibility(self, test_data_dir, test_case_dir):
-        """Test that the pipeline produces consistent results across runs.
-        Skipped on CI: asserts EXPECTED_CHUNKS from token-based chunking; run locally.
-        """
+        """Test that the pipeline produces consistent results across runs."""
         pdf_path = test_data_dir / self.TEST_PDF_NAME
         params = get_param_set("fast")
 

@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class TestReportItem:
+class ReportItem:
     """Test report item with Requirements/Verification/Arrange-Act-Assert structure.
 
     This dataclass represents a single test case result with all the information
@@ -61,14 +61,14 @@ class TestReportItem:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TestReportItem":
-        """Create TestReportItem from dictionary.
+    def from_dict(cls, data: Dict[str, Any]    ) -> "ReportItem":
+        """Create ReportItem from dictionary.
 
         Args:
             data: Dictionary with test report item data
 
         Returns:
-            TestReportItem instance
+            ReportItem instance
         """
         return cls(
             test_name=data.get("test_name", ""),
@@ -82,10 +82,10 @@ class TestReportItem:
         )
 
 
-def create_test_report_item(
+def create_report_item(
     test_name: str, requirements: Optional[List[str]] = None, verification: Optional[List[str]] = None
-) -> TestReportItem:
-    """Helper function to create a TestReportItem with common fields.
+) -> ReportItem:
+    """Helper function to create a ReportItem with common fields.
 
     Args:
         test_name: Name of the test
@@ -93,6 +93,6 @@ def create_test_report_item(
         verification: List of verification steps (optional)
 
     Returns:
-        TestReportItem instance
+        ReportItem instance
     """
-    return TestReportItem(test_name=test_name, requirements=requirements or [], verification=verification or [])
+    return ReportItem(test_name=test_name, requirements=requirements or [], verification=verification or [])

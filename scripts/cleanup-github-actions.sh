@@ -7,6 +7,7 @@
 # 2. Runs on PR refs (refs/pull/*) - ephemeral, no value after merge/close
 # 3. Runs for branches that no longer exist
 # 4. Superseded runs (keeps only most recent completed per workflow+branch)
+# 5a. Repository Cleanup self-cleanup (special case: keeps only most recent)
 # 5. Orphaned workflow runs (workflow file deleted, runs still exist)
 #
 # Usage:
@@ -42,6 +43,7 @@ Cleans up:
 2. PR ref runs - all runs on refs/pull/* (ephemeral, no value after merge/close)
 3. Runs for branches that no longer exist
 4. Superseded runs - keeps only most recent completed per workflow+branch
+5a. Repository Cleanup self-cleanup - keeps only most recent run
 5. Orphaned workflow runs - runs for workflow files that have been deleted
 
 Usage:
@@ -299,6 +301,51 @@ done
 echo ""
 
 # ============================================================================
+# STEP 5a: Repository Cleanup self-cleanup (special case)
+# ============================================================================
+# workflow_run-triggered runs may have headBranch that groups differently;
+# explicitly clean old Repository Cleanup runs to avoid clutter.
+print_info "STEP 5a: Cleaning old Repository Cleanup workflow runs (self-cleanup)..."
+
+CLEANUP_WORKFLOW="Repository Cleanup"
+CLEANUP_TEMP="$($PYTHON -c "import tempfile, os; fd, p = tempfile.mkstemp(suffix='.json', prefix='cleanup_self_'); os.close(fd); print(p.replace(os.sep, '/'))")"
+gh run list --workflow "$CLEANUP_WORKFLOW" --limit 100 --json databaseId,status,conclusion,createdAt > "$CLEANUP_TEMP"
+
+CLEANUP_KEEP=$($PYTHON << PYEOF
+import json
+with open("$CLEANUP_TEMP") as f:
+    data = json.load(f)
+completed = [r for r in data if r['status'] == 'completed']
+if not completed:
+    print("")
+else:
+    completed.sort(key=lambda x: x['createdAt'], reverse=True)
+    print(str(completed[0]['databaseId']))
+PYEOF
+)
+
+CLEANUP_COUNT=0
+CLEANUP_DELETED=0
+for run_id in $($PYTHON -c "import json; f=open('$CLEANUP_TEMP'); d=json.load(f); print('\n'.join(str(r['databaseId']) for r in d))"); do
+  run_id="${run_id%$'\r'}"
+  [ -z "$run_id" ] && continue
+  echo "$CLEANUP_KEEP" | grep -qxF "$run_id" && continue
+  CLEANUP_COUNT=$((CLEANUP_COUNT + 1))
+  if [ "$DRY_RUN" = false ]; then
+    print_info "Deleting old Repository Cleanup run $run_id"
+    if echo "y" | gh run delete "$run_id" 2>/dev/null; then
+      CLEANUP_DELETED=$((CLEANUP_DELETED + 1))
+    fi
+  else
+    print_warning "Would delete Repository Cleanup run $run_id"
+  fi
+done
+
+[ $CLEANUP_COUNT -eq 0 ] && print_success "No extra Repository Cleanup runs to remove" || print_warning "Removed $CLEANUP_DELETED of $CLEANUP_COUNT old Repository Cleanup run(s)"
+rm -f "$CLEANUP_TEMP"
+echo ""
+
+# ============================================================================
 # STEP 5: Orphaned workflow runs (workflow file deleted, runs still exist)
 # ============================================================================
 print_info "STEP 5: Checking for runs from deleted/orphaned workflows..."
@@ -376,13 +423,13 @@ rm -f "$TEMP_RUNS"
 echo "========================================"
 print_success "CLEANUP SUMMARY"
 echo "========================================"
-TOTAL=$((OBSOLETE_COUNT + PR_REF_RUNS + DELETED_BRANCH_RUNS + SUPERSEDED_COUNT + ORPHANED_COUNT))
+TOTAL=$((OBSOLETE_COUNT + PR_REF_RUNS + DELETED_BRANCH_RUNS + SUPERSEDED_COUNT + CLEANUP_COUNT + ORPHANED_COUNT))
 if [ "$DRY_RUN" = true ]; then
-  echo "Would clean: $TOTAL runs (obsolete: $OBSOLETE_COUNT, pr-refs: $PR_REF_RUNS, deleted-branch: $DELETED_BRANCH_RUNS, superseded: $SUPERSEDED_COUNT, orphaned: $ORPHANED_COUNT)"
+  echo "Would clean: $TOTAL runs (obsolete: $OBSOLETE_COUNT, pr-refs: $PR_REF_RUNS, deleted-branch: $DELETED_BRANCH_RUNS, superseded: $SUPERSEDED_COUNT, cleanup-self: $CLEANUP_COUNT, orphaned: $ORPHANED_COUNT)"
   echo ""
   print_info "Run with --execute to perform: $0 --execute"
 else
-  DELETED=$((OBSOLETE_DELETED + PR_REF_DELETED + DELETED_BRANCH_SUCCESS + SUPERSEDED_DELETED + ORPHANED_DELETED))
+  DELETED=$((OBSOLETE_DELETED + PR_REF_DELETED + DELETED_BRANCH_SUCCESS + SUPERSEDED_DELETED + CLEANUP_DELETED + ORPHANED_DELETED))
   echo "Deleted: $DELETED of $TOTAL runs"
 fi
 echo ""

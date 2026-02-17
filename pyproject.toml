@@ -214,6 +214,11 @@ pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v -m 'not slow and not internet'"
+# Silence deprecation warnings from third-party packages (nemoguardrails, pydantic, langchain, etc.)
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
 # Custom markers for test organization
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",

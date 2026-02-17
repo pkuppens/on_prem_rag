@@ -61,3 +61,11 @@ The unit test step also sets `OMP_NUM_THREADS=1` and `OPENBLAS_NUM_THREADS=1` as
 ```bash
 uv run pytest tests/test_retrieval_strategies.py -m "slow" -v
 ```
+
+## PDF Chunk Count Change (Character vs Token Chunking)
+
+**Symptom:** `test_pdf_embedding_integration.py` fails with `assert 1895 == 603` on chunk count.
+
+**Root cause:** Issue #79 switched to character-based chunking (512 chars, 25 overlap). Token-based chunking produced ~603 chunks for the test PDF; character-based produces ~1895. Tests that hardcode the old count fail.
+
+**Fix:** Update `EXPECTED_CHUNKS` in the test to match the current chunking strategy (1895 for character-based), or make assertions use the actual chunk count from the result (e.g. `embedding_data["chunks"]` instead of a constant).

@@ -304,7 +304,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
         with:

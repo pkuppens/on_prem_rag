@@ -87,6 +87,13 @@ class RetrievalParams:
     """Parameters for document retrieval."""
 
     top_k: int
+    strategy: str = "dense"  # dense | sparse | hybrid
+    hybrid_alpha: float = 0.5
+    use_reranker: bool = False
+    reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    use_mmr: bool = False
+    mmr_lambda: float = 0.7
+    rerank_candidates: int = 100
 
     def validate(self) -> list[str]:
         """
@@ -99,6 +106,12 @@ class RetrievalParams:
         errors = []
         if self.top_k <= 0:
             errors.append("top_k must be positive")
+        if self.strategy not in ("dense", "sparse", "hybrid", "bm25"):
+            errors.append("strategy must be dense, sparse, hybrid, or bm25")
+        if not 0 <= self.hybrid_alpha <= 1:
+            errors.append("hybrid_alpha must be between 0 and 1")
+        if not 0 <= self.mmr_lambda <= 1:
+            errors.append("mmr_lambda must be between 0 and 1")
         return errors
 
 
@@ -151,6 +164,13 @@ class RAGParams:
             },
             "retrieval": {
                 "top_k": self.retrieval.top_k,
+                "strategy": self.retrieval.strategy,
+                "hybrid_alpha": self.retrieval.hybrid_alpha,
+                "use_reranker": self.retrieval.use_reranker,
+                "reranker_model": self.retrieval.reranker_model,
+                "use_mmr": self.retrieval.use_mmr,
+                "mmr_lambda": self.retrieval.mmr_lambda,
+                "rerank_candidates": self.retrieval.rerank_candidates,
             },
         }
 

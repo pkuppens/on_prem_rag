@@ -12,9 +12,9 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from backend.rag_pipeline.config.parameter_sets import get_param_set
-from backend.rag_pipeline.core.embeddings import query_embeddings
+from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from backend.rag_pipeline.core.llm_providers import LLMProvider, OllamaProvider
+from backend.rag_pipeline.core.retrieval import create_retrieval_service
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
 from ..utils.logging import StructuredLogger
@@ -44,13 +44,24 @@ class QASystem:
         ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         return OllamaProvider(model_name=model_name, config={"host": ollama_host})
 
-    def retrieve_relevant_chunks(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> list[dict[str, Any]]:
+    def retrieve_relevant_chunks(
+        self,
+        question: str,
+        top_k: int = 5,
+        similarity_threshold: float = 0.7,
+        strategy: str | None = None,
+    ) -> list[dict[str, Any]]:
         """Retrieve relevant document chunks for a question.
+
+        Uses configured retrieval strategy (dense, sparse, hybrid) with optional
+        re-ranking and MMR. Strategy precedence: request param > env var > parameter set.
 
         Args:
             question: The question to search for
             top_k: Maximum number of chunks to retrieve
             similarity_threshold: Minimum similarity score for results
+            strategy: Optional override for retrieval strategy (dense, sparse, hybrid, bm25).
+                When None, uses RETRIEVAL_STRATEGY env var, then parameter set default.
 
         Returns:
             List of relevant chunks with metadata and similarity scores
@@ -63,28 +74,34 @@ class QASystem:
             raise ValueError("Question cannot be empty")
 
         try:
-            # Get default parameter set for embedding model
-            from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME
-
             params = get_param_set(DEFAULT_PARAM_SET_NAME)
+            ret = params.retrieval
+            strategy = strategy or os.getenv("RETRIEVAL_STRATEGY", ret.strategy)
 
-            # Query embeddings using existing function
-            results = query_embeddings(
-                query=question,
+            service = create_retrieval_service(
+                strategy=strategy,
                 model_name=params.embedding.model_name,
-                persist_dir=self.vector_store_manager.config.persist_directory,
+                persist_dir=str(self.vector_store_manager.config.persist_directory),
                 collection_name=self.vector_store_manager.config.collection_name,
-                top_k=top_k,
+                hybrid_alpha=ret.hybrid_alpha,
+                use_reranker=ret.use_reranker,
+                reranker_model=ret.reranker_model,
+                use_mmr=ret.use_mmr,
+                mmr_lambda=ret.mmr_lambda,
+                rerank_candidates=ret.rerank_candidates,
             )
 
-            # Filter results by similarity threshold
-            filtered_results = [result for result in results["all_results"] if result["similarity_score"] >= similarity_threshold]
+            filtered_results = service.retrieve(
+                query=question,
+                top_k=top_k,
+                similarity_threshold=similarity_threshold,
+            )
 
             logger.info(
                 "Retrieved chunks for question",
                 question=question,
-                total_results=len(results["all_results"]),
-                filtered_results=len(filtered_results),
+                total_results=len(filtered_results),
+                strategy=strategy,
                 threshold=similarity_threshold,
             )
 
@@ -150,13 +167,21 @@ Answer:"""
             logger.error("Error during answer generation", question=question, error=str(e))
             raise RuntimeError(f"Failed to generate answer: {str(e)}") from e
 
-    def ask_question(self, question: str, top_k: int = 5, similarity_threshold: float = 0.7) -> dict[str, Any]:
+    def ask_question(
+        self,
+        question: str,
+        top_k: int = 5,
+        similarity_threshold: float = 0.7,
+        strategy: str | None = None,
+    ) -> dict[str, Any]:
         """Ask a question and get an answer with sources.
 
         Args:
             question: The question to ask
             top_k: Maximum number of chunks to retrieve
             similarity_threshold: Minimum similarity score for results
+            strategy: Optional retrieval strategy override (dense, sparse, hybrid, bm25).
+                When None, uses RETRIEVAL_STRATEGY env var or parameter set default.
 
         Returns:
             Dictionary containing answer, sources, and metadata
@@ -170,7 +195,7 @@ Answer:"""
 
         try:
             # Retrieve relevant chunks
-            chunks = self.retrieve_relevant_chunks(question, top_k, similarity_threshold)
+            chunks = self.retrieve_relevant_chunks(question, top_k, similarity_threshold, strategy=strategy)
 
             if not chunks:
                 return {
@@ -178,6 +203,7 @@ Answer:"""
                     "sources": [],
                     "confidence": "low",
                     "chunks_retrieved": 0,
+                    "average_similarity": 0.0,
                 }
 
             # Generate answer

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography, CircularProgress, Tooltip } from '@mui/material';
 import axios from 'axios';
+import { apiUrls } from '../../config/api';
 import { useBackendStatus } from '../../hooks/useBackendStatus';
 import { enhanceErrorMessage } from '../../utils/errorUtils';
 
@@ -28,7 +29,7 @@ export const RAGParamsSelector = ({ value, onChange }: Props) => {
   const fetchSets = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get<SetsResponse>('http://localhost:8000/api/parameters/sets');
+      const res = await axios.get<SetsResponse>(apiUrls.parameterSets());
       setSets(res.data.sets);
 
       // If no value is set yet, use the default from the backend

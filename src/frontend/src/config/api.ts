@@ -22,6 +22,7 @@ export interface ApiConfig {
 }
 
 // Default configuration for development
+// VITE_BACKEND_URL is set by docker-compose (e.g. http://localhost:9180)
 const defaultConfig: ApiConfig = {
   baseUrl: 'http://localhost:8000',
   websocketUrl: 'ws://localhost:8000',
@@ -44,9 +45,15 @@ export const getApiConfig = (): ApiConfig => {
   }
 
   // Development environment - allow override via environment variables
+  // VITE_BACKEND_URL is set by docker-compose; VITE_API_BASE_URL takes precedence
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_BACKEND_URL ||
+    defaultConfig.baseUrl;
+  const wsBase = baseUrl.replace(/^http/, 'ws');
   return {
-    baseUrl: import.meta.env.VITE_API_BASE_URL || defaultConfig.baseUrl,
-    websocketUrl: import.meta.env.VITE_WEBSOCKET_URL || defaultConfig.websocketUrl,
+    baseUrl,
+    websocketUrl: import.meta.env.VITE_WEBSOCKET_URL || wsBase,
     timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || defaultConfig.timeout.toString()),
     debug: import.meta.env.VITE_API_DEBUG !== 'false', // Default to true in dev
   };
@@ -64,6 +71,8 @@ export const API_ENDPOINTS = {
   QUERY: {
     SEARCH: '/api/query',
   },
+  // Question answering (hybrid retrieval)
+  ASK: '/api/ask',
   // Parameters
   PARAMETERS: {
     LIST: '/api/parameters',
@@ -147,11 +156,27 @@ export class ApiUrlBuilder {
   }
 
   /**
+   * Get the ask (QA with hybrid retrieval) URL
+   * @returns Ask endpoint URL
+   */
+  getAskUrl(): string {
+    return this.buildUrl(API_ENDPOINTS.ASK);
+  }
+
+  /**
    * Get the parameters list URL
    * @returns Parameters list URL
    */
   getParametersUrl(): string {
     return this.buildUrl(API_ENDPOINTS.PARAMETERS.LIST);
+  }
+
+  /**
+   * Get the parameter sets URL
+   * @returns Parameter sets URL
+   */
+  getParameterSetsUrl(): string {
+    return this.buildUrl(`${API_ENDPOINTS.PARAMETERS.LIST}/sets`);
   }
 
   /**
@@ -184,15 +209,24 @@ export const apiUrls = {
   query: () => apiUrlBuilder.getQueryUrl(),
 
   /**
+   * Get ask (QA with hybrid retrieval) URL
+   */
+  ask: () => apiUrlBuilder.getAskUrl(),
+
+  /**
    * Get parameters list URL
    */
   parameters: () => apiUrlBuilder.getParametersUrl(),
 
   /**
-   * Health check endpoint is a static string, no builder needed
-   * This keeps usage simple and avoids unnecessary indirection
+   * Get parameter sets URL
    */
-  health: '/api/health',
+  parameterSets: () => apiUrlBuilder.getParameterSetsUrl(),
+
+  /**
+   * Get health check URL (full URL including backend base)
+   */
+  health: () => apiUrlBuilder.buildUrl('/health'),
 
   /**
    * Get upload progress WebSocket URL

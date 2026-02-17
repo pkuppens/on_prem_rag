@@ -5,9 +5,14 @@ This module provides endpoints for uploading, listing, and serving documents.
 
 import asyncio
 import os
+import re
+from pathlib import Path
+from urllib.parse import urlparse
 
+import httpx
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, Field, HttpUrl
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from ..core.document_loader import DocumentLoader
@@ -260,6 +265,96 @@ async def delete_document(filename: str) -> None:
     except OSError as e:
         logger.error("Failed to delete file", filename=filename, error=str(e))
         raise HTTPException(status_code=500, detail="Failed to delete document file") from e
+
+
+class DocumentFromUrlRequest(BaseModel):
+    """Request to ingest a document from a URL."""
+
+    url: HttpUrl = Field(..., description="URL of the document to download (http/https only)")
+    params_name: str = Field(default=DEFAULT_PARAM_SET_NAME, description="Parameter set for processing")
+
+
+@router.post("/from-url")
+async def upload_document_from_url(payload: DocumentFromUrlRequest, background_tasks: BackgroundTasks) -> dict:
+    """Download a document from a URL and process it for RAG.
+
+    Supports PDF, TXT, MD, DOCX. The document is downloaded, saved to the upload
+    directory, and processed in the background (chunking, embedding, storage).
+
+    Args:
+        payload: URL and optional params_name
+        background_tasks: FastAPI background tasks manager
+
+    Returns:
+        Dict with status and filename
+
+    Raises:
+        HTTPException: 400 if URL invalid or download fails
+        HTTPException: 415 if content type not supported
+    """
+    url_str = str(payload.url)
+    logger.info("POST /api/documents/from-url", url=url_str, params_name=payload.params_name)
+
+    parsed = urlparse(url_str)
+    if parsed.scheme not in ("http", "https"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"URL scheme must be http or https, got: {parsed.scheme}",
+        )
+
+    params = get_param_set(payload.params_name)
+    if not isinstance(params, RAGParams):
+        raise HTTPException(status_code=400, detail=f"Invalid parameter set: {payload.params_name}")
+
+    supported_extensions = {".pdf", ".txt", ".md", ".docx", ".doc", ".csv", ".json"}
+    path_from_url = Path(parsed.path)
+    ext = path_from_url.suffix.lower() if path_from_url.suffix else ""
+    if ext not in supported_extensions:
+        ext = ".pdf"  # Default for unknown; loader will validate
+
+    try:
+        async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+            response = await client.get(url_str)
+            response.raise_for_status()
+
+            content = response.content
+            if len(content) > 50 * 1024 * 1024:  # 50MB limit
+                raise HTTPException(status_code=400, detail="Document size exceeds 50MB limit")
+
+            # Get filename from Content-Disposition or URL
+            cd = response.headers.get("content-disposition")
+            if cd and "filename=" in cd:
+                match = re.search(r'filename[*]?=(?:"([^"]+)"|\'([^\']+)\'|([^;\s]+))', cd, re.I)
+                if match:
+                    filename = (match.group(1) or match.group(2) or match.group(3) or "").strip()
+            else:
+                filename = path_from_url.name or f"document{ext}"
+
+            # Sanitize filename
+            filename = re.sub(r'[<>:"/\\|?*]', "_", filename)
+            if not filename:
+                filename = f"document{ext}"
+
+            file_path = uploaded_files_dir / filename
+            file_path.write_bytes(content)
+
+        await progress_notifier.notify(ProgressEvent(filename, 10, "Download completed"))
+        background_tasks.add_task(process_document_background, file_path, filename, payload.params_name)
+
+        return {
+            "message": "Document downloaded and processing started",
+            "file_id": filename,
+            "status": "downloaded",
+            "processing": "started",
+        }
+
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to download: {e.response.status_code} - {str(e)}",
+        ) from e
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=502, detail=f"Download request failed: {str(e)}") from e
 
 
 @router.post("/upload")

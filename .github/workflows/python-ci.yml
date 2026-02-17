@@ -2,7 +2,7 @@ name: Python CI
 
 on:
   push:
-    branches: [main, feature/*, task/*, bug/*, hotfix/*]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -224,7 +224,7 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "not internet and not slow and not guardrails_ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "not internet and not slow and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
       - name: Upload coverage reports
         uses: actions/upload-artifact@v6
         with:
@@ -289,7 +289,7 @@ jobs:
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run slow tests only (performance-related)
           # Use parallel execution for faster test runs
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "slow and not internet" --junitxml=test-results-performance.xml
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "slow and not internet and not ci_skip" --junitxml=test-results-performance.xml
       - name: Upload performance test results
         uses: actions/upload-artifact@v6
         with:
@@ -304,7 +304,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
         with:
@@ -352,7 +352,7 @@ jobs:
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run integration tests (internet dependent)
           # Use parallel execution for faster test runs
-          uv run pytest -n auto -m "internet" --junitxml=test-results-integration.xml
+          uv run pytest -n auto -m "internet and not ci_skip" --junitxml=test-results-integration.xml
       - name: Upload integration test results
         uses: actions/upload-artifact@v6
         with:

@@ -48,3 +48,16 @@ uv run pytest -m "not internet and not slow" -v
 ```
 
 The unit test step also sets `OMP_NUM_THREADS=1` and `OPENBLAS_NUM_THREADS=1` as a secondary mitigation.
+
+## ci_skip: Tests Requiring CI-Unavailable Resources
+
+**Symptom:** Tests pass locally but fail on GitHub Actions because required models (e.g. cross-encoder) are not pre-downloaded, or runners lack sufficient resources.
+
+**Affected tests:** `tests/test_retrieval_strategies.py::TestCrossEncoderReranker::test_reranker_returns_top_k` — requires `cross-encoder/ms-marco-MiniLM-L-6-v2`, which is not in the CI HuggingFace cache (setup_embedding_models.py --ci only downloads embedding models).
+
+**Workaround:** Tests are marked `@pytest.mark.ci_skip`. CI excludes them via `-m "not ci_skip"`.
+
+**To run ci_skip tests locally:**
+```bash
+uv run pytest tests/test_retrieval_strategies.py -m "slow" -v
+```

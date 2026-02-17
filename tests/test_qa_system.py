@@ -13,7 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.rag_pipeline.api.app import app
-from backend.rag_pipeline.core.llm_providers import OllamaProvider
+from backend.rag_pipeline.core.llm_providers import ModelNotFoundError, OllamaProvider
 from backend.rag_pipeline.core.qa_system import QASystem
 
 
@@ -61,30 +61,15 @@ class TestQASystem:
         with pytest.raises(ValueError, match="Question cannot be empty"):
             qa_system.retrieve_relevant_chunks("   ")
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_retrieve_relevant_chunks_success(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_retrieve_relevant_chunks_success(self, mock_create_service):
         """Test successful chunk retrieval."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "Sample document content",
-                    "similarity_score": 0.8,
-                    "document_name": "test.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                },
-                {
-                    "text": "Another document content",
-                    "similarity_score": 0.6,
-                    "document_name": "test2.pdf",
-                    "chunk_index": 1,
-                    "record_id": "124",
-                    "page_number": 2,
-                },
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {"text": "Sample document content", "similarity_score": 0.8, "document_name": "test.pdf", "chunk_index": 0},
+            {"text": "Another document content", "similarity_score": 0.6, "document_name": "test2.pdf", "chunk_index": 1},
+        ]
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         chunks = qa_system.retrieve_relevant_chunks("test question", top_k=5, similarity_threshold=0.5)
@@ -92,38 +77,23 @@ class TestQASystem:
         assert len(chunks) == 2
         assert chunks[0]["similarity_score"] == 0.8
         assert chunks[1]["similarity_score"] == 0.6
+        mock_service.retrieve.assert_called_once_with(query="test question", top_k=5, similarity_threshold=0.5)
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_retrieve_relevant_chunks_with_threshold_filtering(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_retrieve_relevant_chunks_with_threshold_filtering(self, mock_create_service):
         """Test that similarity threshold filtering works correctly."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "High similarity content",
-                    "similarity_score": 0.9,
-                    "document_name": "test.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                },
-                {
-                    "text": "Low similarity content",
-                    "similarity_score": 0.5,
-                    "document_name": "test2.pdf",
-                    "chunk_index": 1,
-                    "record_id": "124",
-                    "page_number": 2,
-                },
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {"text": "High similarity content", "similarity_score": 0.9, "document_name": "test.pdf", "chunk_index": 0},
+        ]
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         chunks = qa_system.retrieve_relevant_chunks("test question", similarity_threshold=0.7)
 
-        # Only the high similarity chunk should be returned
         assert len(chunks) == 1
         assert chunks[0]["similarity_score"] == 0.9
+        mock_service.retrieve.assert_called_once()
 
     def test_generate_answer_empty_question(self):
         """Test that empty question raises ValueError."""
@@ -165,10 +135,12 @@ class TestQASystem:
         with pytest.raises(ValueError, match="Question cannot be empty"):
             qa_system.ask_question("")
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_ask_question_no_relevant_chunks(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_ask_question_no_relevant_chunks(self, mock_create_service):
         """Test handling when no relevant chunks are found."""
-        mock_query_embeddings.return_value = {"all_results": []}
+        mock_service = Mock()
+        mock_service.retrieve.return_value = []
+        mock_create_service.return_value = mock_service
 
         qa_system = QASystem()
         result = qa_system.ask_question("test question")
@@ -178,22 +150,21 @@ class TestQASystem:
         assert result["confidence"] == "low"
         assert result["chunks_retrieved"] == 0
 
-    @patch("backend.rag_pipeline.core.qa_system.query_embeddings")
-    def test_ask_question_success(self, mock_query_embeddings):
+    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
+    def test_ask_question_success(self, mock_create_service):
         """Test successful question answering."""
-        # Mock the query_embeddings function
-        mock_query_embeddings.return_value = {
-            "all_results": [
-                {
-                    "text": "Sample document content about AI and machine learning",
-                    "similarity_score": 0.9,
-                    "document_name": "ai_guide.pdf",
-                    "chunk_index": 0,
-                    "record_id": "123",
-                    "page_number": 1,
-                }
-            ]
-        }
+        mock_service = Mock()
+        mock_service.retrieve.return_value = [
+            {
+                "text": "Sample document content about AI and machine learning",
+                "similarity_score": 0.9,
+                "document_name": "ai_guide.pdf",
+                "chunk_index": 0,
+                "record_id": "123",
+                "page_number": 1,
+            },
+        ]
+        mock_create_service.return_value = mock_service
 
         mock_llm = Mock()
         mock_llm.generate_answer.return_value = "AI is a field of computer science."
@@ -253,6 +224,39 @@ class TestAskAPI:
         response = client.post("/api/ask", json={"question": "test", "similarity_threshold": 1.1})
         assert response.status_code == 422
 
+    def test_ask_endpoint_invalid_strategy(self):
+        """As a user I want invalid strategy values to be rejected, so I get clear feedback.
+        Technical: strategy must be dense, sparse, hybrid, or bm25; others return 422.
+        Validation: POST with strategy=invalid returns 422.
+        """
+        client = TestClient(app)
+
+        response = client.post("/api/ask", json={"question": "test", "strategy": "invalid"})
+        assert response.status_code == 422
+        assert "detail" in response.json()
+
+    @patch("backend.rag_pipeline.api.ask.qa_system")
+    def test_ask_endpoint_strategy_passed_to_qa(self, mock_qa_system):
+        """As a user I want to compare retrieval strategies per request, so I can choose the best.
+        Technical: strategy param is passed to qa_system.ask_question.
+        Validation: Mock receives strategy=hybrid when requested.
+        """
+        mock_qa_system.ask_question.return_value = {
+            "answer": "Test answer.",
+            "sources": [],
+            "confidence": "low",
+            "chunks_retrieved": 0,
+            "average_similarity": 0.0,
+        }
+
+        client = TestClient(app)
+        response = client.post("/api/ask", json={"question": "ICD-10 code?", "strategy": "hybrid"})
+
+        assert response.status_code == 200
+        mock_qa_system.ask_question.assert_called_once()
+        call_kwargs = mock_qa_system.ask_question.call_args[1]
+        assert call_kwargs.get("strategy") == "hybrid"
+
     @patch("backend.rag_pipeline.api.ask.qa_system")
     def test_ask_endpoint_success(self, mock_qa_system):
         """Test successful question answering via API."""
@@ -290,6 +294,33 @@ class TestAskAPI:
             data = response.json()
             assert data["status"] == "healthy"
             assert data["llm_provider"] == "available"
+
+    @patch("backend.rag_pipeline.api.ask.qa_system")
+    def test_ask_endpoint_model_not_found_returns_503_with_remediation(self, mock_qa_system):
+        """As a user I want clear guidance when the LLM model is unavailable, so I can fix it.
+        Technical: ModelNotFoundError from QA system returns 503 with remediation steps.
+        Validation: No running Ollama required; mock raises ModelNotFoundError.
+        """
+        mock_qa_system.ask_question.side_effect = ModelNotFoundError(
+            model_name="mistral:7b",
+            host="http://localhost:11434",
+            raw_error="model 'mistral:7b' not found",
+        )
+
+        client = TestClient(app)
+        response = client.post("/api/ask", json={"question": "What is AI?"})
+
+        assert response.status_code == 503
+        data = response.json()
+        assert "detail" in data
+        detail = data["detail"]
+        if isinstance(detail, dict):
+            assert detail.get("error") == "LLM model not available"
+            assert detail.get("model") == "mistral:7b"
+            assert "remediation" in detail
+            assert any("ollama pull" in step for step in detail["remediation"])
+        else:
+            assert "not available" in str(detail).lower() or "mistral" in str(detail).lower()
 
 
 class TestOllamaProvider:
@@ -336,6 +367,35 @@ class TestOllamaProvider:
 
         with pytest.raises(RuntimeError, match="Unexpected error during answer generation"):
             provider.generate_answer("What is AI?")
+
+    @patch("httpx.Client")
+    def test_ollama_generate_answer_model_not_found_raises_model_not_found_error(self, mock_client_class):
+        """As a user I want a specific error when my model is not pulled, so I know to run ollama pull.
+        Technical: 404 with 'not found' in response raises ModelNotFoundError with remediation.
+        Validation: No running Ollama; mock httpx HTTPStatusError.
+        """
+        import httpx as httpx_mod
+
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.text = "model 'mistral:7b' not found"
+
+        mock_client = Mock()
+        mock_client.post.return_value = mock_response
+        mock_client.post.return_value.raise_for_status.side_effect = httpx_mod.HTTPStatusError(
+            "model not found",
+            request=Mock(),
+            response=mock_response,
+        )
+        mock_client_class.return_value.__enter__.return_value = mock_client
+
+        provider = OllamaProvider("mistral:7b", {"host": "http://localhost:11434"})
+
+        with pytest.raises(ModelNotFoundError) as exc_info:
+            provider.generate_answer("What is AI?")
+
+        assert exc_info.value.model_name == "mistral:7b"
+        assert "ollama pull" in str(exc_info.value)
 
     @pytest.mark.asyncio
     @patch("httpx.AsyncClient")

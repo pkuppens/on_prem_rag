@@ -16,7 +16,7 @@ export const BackendStatus = () => {
     try {
       setIsChecking(true);
       // Try to reach the health endpoint (static string)
-      const response = await fetch(apiUrls.health, {
+      const response = await fetch(apiUrls.health(), {
         method: 'GET',
         signal: AbortSignal.timeout(3000), // 3 second timeout
       });
@@ -63,8 +63,8 @@ export const BackendStatus = () => {
     );
   }
 
-  return (
-    <Tooltip title="Backend is offline. Please start the backend server at http://localhost:8000" arrow>
+    return (
+      <Tooltip title="Backend is offline. Check that the backend is running." arrow>
       <Chip
         icon={<WifiOffIcon />}
         label="Backend Offline"

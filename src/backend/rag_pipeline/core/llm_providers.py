@@ -10,6 +10,20 @@ See docs/technical/LLM.md for design details.
 from abc import ABC, abstractmethod
 
 
+class ModelNotFoundError(RuntimeError):
+    """Raised when the configured Ollama model is not available."""
+
+    def __init__(self, model_name: str, host: str, raw_error: str = "") -> None:
+        self.model_name = model_name
+        self.host = host
+        self.raw_error = raw_error
+        super().__init__(
+            f"Ollama model '{model_name}' not found. "
+            f"Pull it with: ollama pull {model_name} "
+            f"(or set OLLAMA_MODEL to an available model, e.g. llama3.2:1b)"
+        )
+
+
 class LLMProvider(ABC):
     """Abstract base class for LLM providers."""
 
@@ -71,6 +85,12 @@ class OllamaProvider(LLMProvider):
         except httpx.RequestError as e:
             raise RuntimeError(f"Failed to connect to Ollama service: {str(e)}") from e
         except httpx.HTTPStatusError as e:
+            if e.response.status_code == 404 and "not found" in (e.response.text or "").lower():
+                raise ModelNotFoundError(
+                    model_name=self.model_name,
+                    host=self.host,
+                    raw_error=e.response.text,
+                ) from e
             raise RuntimeError(f"Ollama API error: {e.response.status_code} - {e.response.text}") from e
         except json.JSONDecodeError as e:
             raise RuntimeError(f"Failed to parse Ollama response: {str(e)}") from e

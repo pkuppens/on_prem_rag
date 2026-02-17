@@ -2,45 +2,47 @@
 
 This document describes the port configuration for both local development and Docker environments.
 
-## Port Assignments
+## Dedicated Port Range (Conflict Avoidance)
+
+To avoid conflicts with common development ports (8000, 8080, 9000, etc.), this application uses a dedicated range **9180-9199**:
 
 | Service  | Default | Description             | Override Variable     |
 | -------- | ------- | ----------------------- | -------------------- |
-| Backend  | 9000    | FastAPI application     | `BACKEND_PORT`        |
-| Auth     | 9100    | Authentication service  | `AUTH_PORT`           |
-| ChromaDB | 9200    | Vector database (host)  | `CHROMA_HOST_PORT`    |
+| Backend  | 9180    | FastAPI application     | `BACKEND_PORT`        |
+| Auth     | 9181    | Authentication service  | `AUTH_PORT`           |
+| ChromaDB | 9182    | Vector database (host)  | `CHROMA_HOST_PORT`    |
 | Frontend | 5173    | Vite development server | `FRONTEND_PORT`       |
 | Ollama   | 11434   | LLM service (host)      | `OLLAMA_HOST_PORT`    |
 
-Ports are configurable via `.env` to avoid conflicts. See `env.example` and [TEST_DOCKER.md](TEST_DOCKER.md#port-conflicts).
+Ports are configurable via `.env`. Override any value if it conflicts with other services on your machine. See `env.example` and [TEST_DOCKER.md](TEST_DOCKER.md#port-conflicts).
 
 ## Configuration
 
 ### Backend
 
-- Internal port: 9000
-- External port: 9000
-- Environment variable: `PORT=9000`
+- Internal/external port: 9180 (default)
+- Environment variable: `PORT=9180` or `BACKEND_PORT=9180`
+- Override: `BACKEND_PORT` in `.env`
 
 ### Auth Service
 
-- Internal port: 9100
-- External port: 9100
-- Environment variable: `PORT=9100`
+- Internal/external port: 9181 (default)
+- Environment variable: `PORT=9181` or `AUTH_PORT=9181`
+- Override: `AUTH_PORT` in `.env`
 
 ### ChromaDB
 
 - Internal port: 8000 (fixed by ChromaDB)
-- External port: 9200 (default; was 9100, changed to avoid conflict with Auth)
+- External port: 9182 (default)
 - Override: `CHROMA_HOST_PORT` in `.env`
 
 ### Frontend
 
 - Internal port: 5173
 - External port: 5173
-- Environment variables:
-  - `VITE_BACKEND_URL=http://localhost:9000`
-  - `VITE_AUTH_URL=http://localhost:9100`
+- Environment variables (set by docker-compose from BACKEND_PORT, AUTH_PORT):
+  - `VITE_BACKEND_URL=http://localhost:9180`
+  - `VITE_AUTH_URL=http://localhost:9181`
 
 ### Ollama
 
@@ -50,11 +52,11 @@ Ports are configurable via `.env` to avoid conflicts. See `env.example` and [TES
 
 ## Docker Configuration
 
-Ports in `docker-compose.yml` use env vars (e.g. `${BACKEND_PORT:-9000}`). Override in `.env`:
+Ports in `docker-compose.yml` use env vars with defaults in the 9180-9199 range. Override in `.env`:
 
 ```yaml
-# docker-compose.yml uses:
-# BACKEND_PORT:-9000, AUTH_PORT:-9100, CHROMA_HOST_PORT:-9200,
+# docker-compose.yml defaults:
+# BACKEND_PORT:-9180, AUTH_PORT:-9181, CHROMA_HOST_PORT:-9182,
 # OLLAMA_HOST_PORT:-11434, FRONTEND_PORT:-5173
 ```
 
@@ -62,26 +64,28 @@ Ports in `docker-compose.yml` use env vars (e.g. `${BACKEND_PORT:-9000}`). Overr
 
 For local development without Docker:
 
-1. Backend runs on port 9000
-2. Auth service runs on port 9100
-3. ChromaDB runs on port 9100
+1. Backend runs on port 9180 (or BACKEND_PORT)
+2. Auth service runs on port 9181 (or AUTH_PORT)
+3. ChromaDB runs on port 9182 (or CHROMA_HOST_PORT)
 4. Frontend runs on port 5173
 5. Ollama runs on port 11434
 
 ## Port Range Selection
 
-We use the following port ranges:
+We use a dedicated range **9180-9199** to avoid conflicts with common ports:
 
-- 9000-9099: Core application services
-- 9100-9199: Supporting services
-- 5173: Frontend (Vite default)
+- **9180**: Backend (avoids 8000, 8080, 9000)
+- **9181**: Auth service
+- **9182**: ChromaDB host mapping
+- **5173**: Frontend (Vite default)
+- **11434**: Ollama (upstream default)
 
 This scheme:
 
-1. Avoids conflicts with common development ports (3000-8000)
-2. Groups related services together
-3. Allows for future service additions
-4. Makes it clear these are our application ports
+1. Avoids conflicts with common development ports (3000-9000)
+2. Groups application services in one contiguous range
+3. Allows override via `.env` for any port
+4. Makes it clear these are on_prem_rag ports
 
 ## Ollama Integration
 

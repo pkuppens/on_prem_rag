@@ -60,6 +60,7 @@ dependencies = [
     "chainlit>=1.3.0",
     "litellm>=1.75.3",
     "faster-whisper>=1.2.1",
+    "rank-bm25>=0.2.2",
 ]
 requires-python = ">=3.12,<3.14"
 
@@ -219,7 +220,8 @@ markers = [
     "internet: marks tests that require internet connectivity (deselect with '-m \"not internet\"')",
     "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')",
     "ci_setup: marks tests that validate CI/CD setup and configuration (deselect with '-m \"not ci_setup\"')",
-    "guardrails_ci_skip: marks tests skipped on CI due to PyTorch CPU compatibility (run with '-m \"guardrails_ci_skip\"' locally)"
+    "guardrails_ci_skip: marks tests skipped on CI due to PyTorch CPU compatibility (run with '-m \"guardrails_ci_skip\"' locally)",
+    "ci_skip: marks tests skipped on CI due to missing models or runner resource limits (run locally with full marker set)"
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]

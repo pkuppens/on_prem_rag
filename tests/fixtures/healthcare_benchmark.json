@@ -1,0 +1,219 @@
+[
+  {
+    "question": "What is the ICD-10 code for type 2 diabetes mellitus?",
+    "ground_truth_contexts": [
+      "ICD-10 code for type 2 diabetes mellitus is E11. This code is used for non-insulin-dependent diabetes mellitus."
+    ],
+    "expected_answer": "E11"
+  },
+  {
+    "question": "When is metformin contraindicated?",
+    "ground_truth_contexts": [
+      "Metformin is contraindicated in patients with severe renal impairment (GFR < 30 mL/min)."
+    ],
+    "expected_answer": "Severe renal impairment (GFR < 30 mL/min)"
+  },
+  {
+    "question": "Can metformin be used in pregnancy?",
+    "ground_truth_contexts": [
+      "Metformin should not be used in pregnancy unless clearly necessary. Animal studies do not indicate harmful effects."
+    ],
+    "expected_answer": "Not unless clearly necessary"
+  },
+  {
+    "question": "What drug is indicated for type 2 diabetes?",
+    "ground_truth_contexts": [
+      "Metformin hydrochloride is indicated for the treatment of type 2 diabetes mellitus."
+    ],
+    "expected_answer": "Metformin"
+  },
+  {
+    "question": "What are treatment options for hypertension?",
+    "ground_truth_contexts": [
+      "Management of hypertension includes: Lifestyle modifications: weight loss, reduced sodium intake, regular exercise. Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics."
+    ],
+    "expected_answer": "Lifestyle modifications and ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+  },
+  {
+    "question": "What is the ICD-10 code E11.2?",
+    "ground_truth_contexts": [
+      "E11.2 - Type 2 diabetes mellitus with kidney complications"
+    ],
+    "expected_answer": "Type 2 diabetes mellitus with kidney complications"
+  },
+  {
+    "question": "Is Drug X safe in pregnancy?",
+    "ground_truth_contexts": [
+      "Drug X is contraindicated in pregnancy due to teratogenic effects observed in animal studies."
+    ],
+    "expected_answer": "No, contraindicated"
+  },
+  {
+    "question": "What is Drug Y's safety in pregnancy?",
+    "ground_truth_contexts": [
+      "Drug Y is considered safe in pregnancy based on extensive clinical experience."
+    ],
+    "expected_answer": "Considered safe"
+  },
+  {
+    "question": "What is the ICD-10 code for essential hypertension?",
+    "ground_truth_contexts": [
+      "I10 - Essential (primary) hypertension"
+    ],
+    "expected_answer": "I10"
+  },
+  {
+    "question": "What combination therapy is used for resistant hypertension?",
+    "ground_truth_contexts": [
+      "Management of hypertension includes: Combination therapy for resistant hypertension"
+    ],
+    "expected_answer": "Combination therapy"
+  },
+  {
+    "question": "What is E11.0?",
+    "ground_truth_contexts": [
+      "E11.0 - Type 2 diabetes mellitus with hyperosmolarity"
+    ],
+    "expected_answer": "Type 2 diabetes mellitus with hyperosmolarity"
+  },
+  {
+    "question": "What is hypertensive heart disease in ICD-10?",
+    "ground_truth_contexts": [
+      "I11 - Hypertensive heart disease"
+    ],
+    "expected_answer": "I11"
+  },
+  {
+    "question": "What lifestyle modifications help hypertension?",
+    "ground_truth_contexts": [
+      "Lifestyle modifications: weight loss, reduced sodium intake, regular exercise"
+    ],
+    "expected_answer": "Weight loss, reduced sodium, regular exercise"
+  },
+  {
+    "question": "Which drug classes treat hypertension?",
+    "ground_truth_contexts": [
+      "Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+    ],
+    "expected_answer": "ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+  },
+  {
+    "question": "How often should blood pressure be monitored?",
+    "ground_truth_contexts": [
+      "Regular blood pressure monitoring"
+    ],
+    "expected_answer": "Regular monitoring"
+  },
+  {
+    "question": "What is non-insulin-dependent diabetes?",
+    "ground_truth_contexts": [
+      "ICD-10 code for type 2 diabetes mellitus is E11. This code is used for non-insulin-dependent diabetes mellitus."
+    ],
+    "expected_answer": "Type 2 diabetes, E11"
+  },
+  {
+    "question": "What GFR level contraindicates metformin?",
+    "ground_truth_contexts": [
+      "Metformin is contraindicated in patients with severe renal impairment (GFR < 30 mL/min)."
+    ],
+    "expected_answer": "GFR < 30 mL/min"
+  },
+  {
+    "question": "What does animal data say about metformin in pregnancy?",
+    "ground_truth_contexts": [
+      "Animal studies do not indicate harmful effects."
+    ],
+    "expected_answer": "No harmful effects in animal studies"
+  },
+  {
+    "question": "Is Drug Z safe in pregnancy?",
+    "ground_truth_contexts": [
+      "Drug Z should be used with caution; benefits must outweigh risks."
+    ],
+    "expected_answer": "Use with caution"
+  },
+  {
+    "question": "Why is Drug X contraindicated in pregnancy?",
+    "ground_truth_contexts": [
+      "Drug X is contraindicated in pregnancy due to teratogenic effects observed in animal studies."
+    ],
+    "expected_answer": "Teratogenic effects"
+  },
+  {
+    "question": "What is metformin hydrochloride used for?",
+    "ground_truth_contexts": [
+      "Metformin hydrochloride is indicated for the treatment of type 2 diabetes mellitus."
+    ],
+    "expected_answer": "Type 2 diabetes treatment"
+  },
+  {
+    "question": "What ICD-10 code indicates kidney complications in type 2 diabetes?",
+    "ground_truth_contexts": [
+      "E11.2 - Type 2 diabetes mellitus with kidney complications"
+    ],
+    "expected_answer": "E11.2"
+  },
+  {
+    "question": "List ACE inhibitors as hypertension treatment",
+    "ground_truth_contexts": [
+      "Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+    ],
+    "expected_answer": "ACE inhibitors"
+  },
+  {
+    "question": "What are thiazide diuretics used for?",
+    "ground_truth_contexts": [
+      "Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+    ],
+    "expected_answer": "Hypertension treatment"
+  },
+  {
+    "question": "What is type 2 diabetes with hyperosmolarity?",
+    "ground_truth_contexts": [
+      "E11.0 - Type 2 diabetes mellitus with hyperosmolarity"
+    ],
+    "expected_answer": "E11.0"
+  },
+  {
+    "question": "What is primary hypertension?",
+    "ground_truth_contexts": [
+      "I10 - Essential (primary) hypertension"
+    ],
+    "expected_answer": "I10, essential hypertension"
+  },
+  {
+    "question": "Does Drug Y have pregnancy data?",
+    "ground_truth_contexts": [
+      "Drug Y is considered safe in pregnancy based on extensive clinical experience."
+    ],
+    "expected_answer": "Yes, extensive clinical experience"
+  },
+  {
+    "question": "How to manage hypertension?",
+    "ground_truth_contexts": [
+      "Management of hypertension includes: Lifestyle modifications: weight loss, reduced sodium intake, regular exercise. Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics. Combination therapy for resistant hypertension. Regular blood pressure monitoring"
+    ],
+    "expected_answer": "Lifestyle and pharmacological treatment"
+  },
+  {
+    "question": "What is severe renal impairment threshold for metformin?",
+    "ground_truth_contexts": [
+      "Metformin is contraindicated in patients with severe renal impairment (GFR < 30 mL/min)."
+    ],
+    "expected_answer": "GFR less than 30 mL/min"
+  },
+  {
+    "question": "What are calcium channel blockers used for?",
+    "ground_truth_contexts": [
+      "Pharmacological treatment: ACE inhibitors, ARBs, calcium channel blockers, thiazide diuretics"
+    ],
+    "expected_answer": "Hypertension"
+  },
+  {
+    "question": "Which drugs need benefit-risk assessment in pregnancy?",
+    "ground_truth_contexts": [
+      "Drug Z should be used with caution; benefits must outweigh risks."
+    ],
+    "expected_answer": "Drug Z"
+  }
+]

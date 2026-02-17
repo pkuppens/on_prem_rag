@@ -35,6 +35,7 @@ uv run ruff check . && uv run ruff format --check .  # Verify clean
 # Run services
 uv run start-backend                       # FastAPI RAG backend
 uv run start-auth                          # Auth microservice
+uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark.json  # RAG evaluation (retrieval metrics)
 docker-compose up --build                  # Full stack with Docker (ports 9180-9182, see docs/PORTS.md)
 
 # Documentation
@@ -60,6 +61,7 @@ uv run mcp-calendar-server                 # MCP Calendar Server
   - `models/` - Pydantic models and data structures
   - `config/` - Configuration and parameter sets
   - `agents/` - LLM agent configurations and routing
+  - `evaluation/` - RAG evaluation framework (metrics, runner, CLI)
 - **backend/auth_service/** - Authentication microservice (OAuth2, JWT)
 - **backend/security/** - Security utilities and validation
 - **backend/access_control/** - Role-based access control

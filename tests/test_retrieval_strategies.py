@@ -120,9 +120,11 @@ class TestCrossEncoderReranker:
     """Tests for cross-encoder re-ranking."""
 
     @pytest.mark.slow
+    @pytest.mark.ci_skip
     def test_reranker_returns_top_k(self):
         """As a user I want re-ranking to improve relevance order, so safety-critical chunks rank higher.
         Technical: CrossEncoderReranker returns top_k from candidates.
+        Skipped on CI: cross-encoder model not pre-downloaded in CI; run locally with -m slow.
         """
         reranker = CrossEncoderReranker()
         candidates = [

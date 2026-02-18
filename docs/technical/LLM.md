@@ -128,6 +128,31 @@ def process_query(
 - **Context Window**: 8192 tokens
 - **Request Timeout**: 120 seconds
 
+### Response Streaming
+
+**Chat streaming** means the LLM provider sends partial results as they are generated, reducing perceived wait time. We pass through whatever the provider delivers (typically token- or sub-word chunks). We never simulate streaming—if the provider does not support streaming, callers use non-streaming `generate_answer()` instead. Streaming is independent of document retrieval.
+
+### Environment Variables (LLM Backend Selection)
+
+Switching backends is done via environment variables. The RAG pipeline uses LiteLLM for unified access.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `LLM_BACKEND` | Backend: `ollama`, `openai`, `anthropic`, `azure`, `huggingface` | `ollama` |
+| `LLM_MODEL` | Model name (e.g. `mistral`, `gpt-4`, `claude-2`) | `mistral` |
+| `OLLAMA_BASE_URL` | Ollama API base URL | `http://localhost:11434` |
+| `OLLAMA_MODEL` | Legacy; used when `LLM_MODEL` not set and backend is ollama | `mistral` |
+
+Provider-specific API keys (LiteLLM reads these):
+
+| Backend | Required env vars |
+|---------|-------------------|
+| `openai` | `OPENAI_API_KEY` |
+| `anthropic` | `ANTHROPIC_API_KEY` |
+| `azure` | `AZURE_API_KEY`, `AZURE_API_BASE`, `AZURE_API_VERSION` |
+| `huggingface` | `HUGGINGFACE_API_KEY` (optional for inference endpoints) |
+| `ollama` | None (local) |
+
 ## Performance Considerations
 
 ### Optimization Strategies
@@ -184,6 +209,7 @@ def process_query(
 
 ## Code Files
 
-- [src/rag_pipeline/core/llm_providers.py](../../src/rag_pipeline/core/llm_providers.py) - Simple provider abstraction and factory implementation
+- [src/backend/rag_pipeline/config/llm_config.py](../../src/backend/rag_pipeline/config/llm_config.py) - LLM_BACKEND/LLM_MODEL config resolution
+- [src/backend/rag_pipeline/core/llm_providers.py](../../src/backend/rag_pipeline/core/llm_providers.py) - Provider abstraction, LiteLLM integration, factory
 - [src/rag_pipeline/core/db_query.py](../../src/rag_pipeline/core/db_query.py) - Placeholder NL2SQL pipeline used for database queries
 - [src/backend/security/security_manager.py](../../src/backend/security/security_manager.py) - JWT token utilities used in authentication

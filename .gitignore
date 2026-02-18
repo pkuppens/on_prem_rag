@@ -1,10 +1,13 @@
 # Temporary files
 tmp/
+results/
 docs/archive/
 tmpclaude-*-cwd
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings (ignore contents, not skills)
+.claude/*
+# Project skills (shared, committed)
+!.claude/skills/
 
 # Serena MCP server memories
 .serena/

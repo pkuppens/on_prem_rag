@@ -106,6 +106,8 @@ Tests use pytest markers for categorization:
 |--------|-------------|---------|
 | `@pytest.mark.slow` | Tests that take >5 seconds | **Skipped** |
 | `@pytest.mark.internet` | Tests requiring network access | **Skipped** |
+| `@pytest.mark.ollama` | Tests requiring Ollama (local LLM); skips if not on port 11434 | **Skipped** |
+| `@pytest.mark.docker` | Tests requiring full Docker stack deployment | **Skipped** |
 | `@pytest.mark.fts5` | Tests requiring SQLite FTS5 | Included |
 | `@pytest.mark.ci_setup` | CI/CD configuration tests | Included |
 
@@ -376,7 +378,7 @@ The project enforces quality standards through GitHub Actions:
 
 1. **Dependency Installation**: Uses `uv sync --dev` for proper dependency management
 2. **Linting**: Runs `ruff check` and `ruff format --check`
-3. **Testing**: Runs pytest with markers `-m "not internet and not slow"`
+3. **Testing**: Runs pytest with markers `-m "not internet and not slow and not ollama"`
 4. **Failure Behavior**: PRs with failing tests are automatically blocked
 
 ### Integration with SAFe Methodology

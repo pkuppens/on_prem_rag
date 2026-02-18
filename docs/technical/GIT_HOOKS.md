@@ -79,7 +79,7 @@ When bypassing the hook, you'll see a warning message:
 The hook runs tests with the marker `"not internet and not slow"`, which:
 
 - **Includes**: Fast unit tests that don't require network access
-- **Excludes**: Tests marked with `@pytest.mark.slow` or `@pytest.mark.internet`
+- **Excludes**: Tests marked with `@pytest.mark.slow`, `@pytest.mark.internet`, or `@pytest.mark.ollama`
 - **Rationale**: Provides fast feedback while excluding tests that might be flaky or slow
 
 ### Test Configuration

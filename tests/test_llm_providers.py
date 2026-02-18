@@ -4,9 +4,11 @@ import httpx
 import pytest
 
 from backend.rag_pipeline.core.llm_providers import (
+    LiteLLMProvider,
     LLMProviderFactory,
     ModelNotFoundError,
     OllamaProvider,
+    get_llm_provider_from_env,
 )
 
 
@@ -57,3 +59,37 @@ def test_ollama_model_not_found_raises_model_not_found_error(mock_client_class) 
 
     assert exc_info.value.model_name == "mistral:7b"
     assert "ollama pull" in str(exc_info.value).lower()
+
+
+@patch("litellm.completion")
+def test_litellm_provider_generate_answer(mock_completion) -> None:
+    """LiteLLMProvider uses litellm.completion and returns message content."""
+    mock_response = MagicMock()
+    mock_choice = MagicMock()
+    mock_choice.message.content = "Generated answer from LiteLLM"
+    mock_response.choices = [mock_choice]
+    mock_completion.return_value = mock_response
+
+    provider = LiteLLMProvider(model="ollama/mistral", api_base="http://localhost:11434")
+    result = provider.generate_answer("test prompt")
+
+    assert result == "Generated answer from LiteLLM"
+    mock_completion.assert_called_once()
+    call_kwargs = mock_completion.call_args[1]
+    assert call_kwargs["model"] == "ollama/mistral"
+    assert call_kwargs["api_base"] == "http://localhost:11434"
+    assert call_kwargs["stream"] is False
+
+
+@patch("backend.rag_pipeline.config.llm_config.get_llm_config")
+def test_get_llm_provider_from_env(mock_get_config) -> None:
+    """get_llm_provider_from_env creates LiteLLMProvider from config."""
+    from backend.rag_pipeline.config.llm_config import LLMConfig
+
+    mock_get_config.return_value = LLMConfig(
+        backend="ollama", model="mistral", litellm_model="ollama/mistral", api_base="http://x:11434"
+    )
+    provider = get_llm_provider_from_env()
+    assert isinstance(provider, LiteLLMProvider)
+    assert provider.model == "ollama/mistral"
+    assert provider.api_base == "http://x:11434"

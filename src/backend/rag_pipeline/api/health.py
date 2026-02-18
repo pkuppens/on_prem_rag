@@ -1,10 +1,9 @@
 # src/backend/rag_pipeline/api/health.py
-import os
-
 from fastapi import APIRouter, HTTPException
 from starlette.responses import JSONResponse
 
-from ..core.llm_providers import LLMProviderFactory
+from ..config.llm_config import get_llm_config
+from ..core.llm_providers import get_llm_provider_from_env
 from ..core.vector_store import get_vector_store_manager_from_env
 
 router = APIRouter()
@@ -38,21 +37,21 @@ async def health_database():
 
 @router.get("/api/health/llm")
 async def health_llm():
-    """Check the health of the LLM provider."""
+    """Check the health of the LLM provider.
+
+    Uses LLM_BACKEND and LLM_MODEL env vars. See docs/technical/LLM.md.
+    """
     try:
-        # Create a simple Ollama provider for health check.
-        # Use OLLAMA_BASE_URL so it works in Docker (ollama:11434) and local (localhost:11434).
-        ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        config = {"host": ollama_host}
-        health_model = os.getenv("OLLAMA_MODEL", "mistral:7b")
-        llm_provider = LLMProviderFactory.create_provider("ollama", health_model, config)
+        llm_config = get_llm_config()
+        llm_provider = get_llm_provider_from_env()
         is_healthy = await llm_provider.health_check()
         if is_healthy:
-            return JSONResponse(content={"status": "ok"})
-        else:
-            raise HTTPException(status_code=503, detail="LLM provider is not healthy.")
+            return JSONResponse(content={"status": "ok", "backend": llm_config.backend_model_pair})
+        raise HTTPException(status_code=503, detail="LLM provider is not healthy.")
+    except ValueError as e:
+        raise HTTPException(status_code=503, detail=f"LLM config error: {e}") from e
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"LLM provider health check failed: {e}")
+        raise HTTPException(status_code=503, detail=f"LLM provider health check failed: {e}") from e
 
 
 @router.get("/api/health/vector")

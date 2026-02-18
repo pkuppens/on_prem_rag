@@ -13,7 +13,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.rag_pipeline.api.app import app
-from backend.rag_pipeline.core.llm_providers import ModelNotFoundError, OllamaProvider
+from backend.rag_pipeline.core.llm_providers import (
+    LiteLLMProvider,
+    LLMProvider,
+    ModelNotFoundError,
+    OllamaProvider,
+)
 from backend.rag_pipeline.core.qa_system import QASystem
 
 
@@ -37,7 +42,9 @@ class TestQASystem:
         qa_system = QASystem()
 
         assert qa_system.llm_provider is not None
-        assert isinstance(qa_system.llm_provider, OllamaProvider)
+        assert isinstance(qa_system.llm_provider, LLMProvider)
+        # Default from env is LiteLLM-based (LLM_BACKEND/LLM_MODEL)
+        assert isinstance(qa_system.llm_provider, LiteLLMProvider)
         assert qa_system.vector_store_manager is not None
 
     def test_qa_system_with_custom_llm_provider(self):

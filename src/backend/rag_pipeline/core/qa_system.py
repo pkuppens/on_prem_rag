@@ -13,7 +13,7 @@ import os
 from typing import Any
 
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
-from backend.rag_pipeline.core.llm_providers import LLMProvider, OllamaProvider
+from backend.rag_pipeline.core.llm_providers import LLMProvider, get_llm_provider_from_env
 from backend.rag_pipeline.core.retrieval import create_retrieval_service
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
 
@@ -35,14 +35,12 @@ class QASystem:
         self.vector_store_manager = get_vector_store_manager_from_env()
 
     def _create_default_llm_provider(self) -> LLMProvider:
-        """Create default Ollama LLM provider.
+        """Create LLM provider from LLM_BACKEND and LLM_MODEL env vars.
 
         Returns:
-            Configured Ollama provider instance.
+            Configured LLM provider (LiteLLM-based for supported backends).
         """
-        model_name = os.getenv("OLLAMA_MODEL", "mistral:7b")
-        ollama_host = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        return OllamaProvider(model_name=model_name, config={"host": ollama_host})
+        return get_llm_provider_from_env()
 
     def retrieve_relevant_chunks(
         self,
@@ -166,6 +164,40 @@ Answer:"""
         except Exception as e:
             logger.error("Error during answer generation", question=question, error=str(e))
             raise RuntimeError(f"Failed to generate answer: {str(e)}") from e
+
+    def generate_answer_stream(
+        self,
+        question: str,
+        context_chunks: list[dict[str, Any]],
+        conversation_history: list[dict[str, str]] | None = None,
+    ):
+        """Stream answer tokens from LLM. Yields str chunks.
+
+        Requires provider to implement generate_answer_stream (e.g. LiteLLMProvider).
+        Raises NotImplementedError if provider does not support streaming.
+        """
+        if not question.strip():
+            raise ValueError("Question cannot be empty")
+        if not context_chunks:
+            raise ValueError("Context chunks are required for answer generation")
+
+        context_text = "\n\n".join([f"Document: {c['document_name']}\nContent: {c['text']}" for c in context_chunks])
+        history_section = ""
+        if conversation_history:
+            history_lines = [f"{m.get('role', 'user')}: {m.get('content', '')}" for m in conversation_history[-6:]]
+            history_section = "\n\nPrior conversation:\n" + "\n".join(history_lines) + "\n\n"
+        prompt = f"""Based on the following context from uploaded documents, please answer the question.
+{history_section}Context:
+{context_text}
+
+Question: {question}
+
+Answer:"""
+
+        stream_method = getattr(self.llm_provider, "generate_answer_stream", None)
+        if not callable(stream_method):
+            raise NotImplementedError("LLM provider does not support streaming")
+        yield from stream_method(prompt)
 
     def ask_question(
         self,

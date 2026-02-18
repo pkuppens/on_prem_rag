@@ -7,6 +7,8 @@ alwaysApply: true
 
 This rule defines when branches are required versus when direct commits to main are allowed.
 
+**Note on branch protection**: Branch protection on `main` may not be enabled in this repo, so direct push to main is possible. This policy does not forbid it entirely — use judgment for small, low-risk changes.
+
 ## Branch Requirements
 
 ### MUST Use Branches
@@ -49,6 +51,8 @@ This rule defines when branches are required versus when direct commits to main 
 - WBSO hours processing scripts
 - Project status reports
 
+**Quick CI fixes** (especially but not limited to): Small changes to prevent duplicate CI runs, fix workflow triggers, or correct CI config — can go directly to main or to the feature branch, depending on where the fix is needed. Use branches for significant development; direct commit is acceptable for these narrow fixes.
+
 ## Enforcement
 
 ### AI Agent Behavior
@@ -56,9 +60,11 @@ This rule defines when branches are required versus when direct commits to main 
 AI agents must:
 
 1. **Check change type** before suggesting commits
-2. **Create branches** for any feature/task implementation
-3. **Commit directly to main** only for documentation/config changes
+2. **Create branches** for any feature/task implementation (including bug fixes)
+3. **Commit directly to main** only for documentation/config changes or quick CI fixes
 4. **Follow branch naming conventions** from github-integration.mdc
+
+**Issues**: Never work on main when implementing a GitHub issue. Always use branches (see [ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)).
 
 ### Pre-commit Hooks
 

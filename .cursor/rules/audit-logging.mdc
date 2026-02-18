@@ -1,0 +1,38 @@
+---
+description: Audit logging standards - do not abbreviate inputs for audit evidence
+globs:
+alwaysApply: false
+---
+
+# Audit Logging Standards
+
+## Do Not Abbreviate Inputs for Audit
+
+**For auditing, do NOT abbreviate inputs for the convenience of logging.**
+
+Audit logs serve as evidence of what happened. Truncating or abbreviating user inputs (questions, prompts, queries) makes it impossible to verify the actual request in case of disputes, compliance checks, or incident investigation.
+
+### Exception: Database Audit Trail
+
+If the full input is stored in a **database audit trail** (persistent, structured storage that auditors can query), then abbreviating in application logs is acceptable. The database holds the complete record; logs serve only for operational visibility.
+
+### Implementation
+
+- **Use full values** when logging user inputs for audit (questions, prompts, request bodies).
+- **Avoid** `text[:80]`, `question[:50]`, or similar truncation for audit-related log entries.
+- **Exception**: When the same data is written in full to a database audit table, log truncation is allowed.
+
+### Examples
+
+```python
+# ✅ Correct: Full question for audit
+logger.info("Chat query", question=question, llm_backend=llm_config.backend_model_pair)
+
+# ❌ Incorrect: Abbreviated for convenience
+logger.info("Chat query", question=question[:80], llm_backend=llm_config.backend_model_pair)
+```
+
+### Related
+
+- [src/backend/audit_trail/](mdc:src/backend/audit_trail/) - Database audit entities (CloudQueryAuditEntry, etc.) store full data.
+- [security-best-practices.mdc](mdc:.cursor/rules/security-best-practices.mdc) - PII handling; apply anonymization before logging when required.

@@ -34,9 +34,8 @@ def test_auth_service_imports():
 def test_rag_pipeline_imports():
     """Test that rag_pipeline imports work."""
     try:
-        from src.backend.rag_pipeline.file_ingestion import app, start_server
-
         from src.backend.rag_pipeline.core.document_loader import DocumentLoader
+        from src.backend.rag_pipeline.file_ingestion import app, start_server
         from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
         # Verify uploaded_files directory exists

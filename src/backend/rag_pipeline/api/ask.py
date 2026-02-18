@@ -10,6 +10,7 @@ See STORY-003 for business context and acceptance criteria.
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
+from ..config.llm_config import get_llm_config
 from ..core.llm_providers import ModelNotFoundError
 from ..core.qa_system import QASystem
 from ..utils.logging import StructuredLogger
@@ -95,7 +96,13 @@ async def ask_question(payload: AskRequest) -> AskResponse:
 
     try:
         get_metrics().record_query()
-        logger.info("Processing question", question=payload.question, strategy=payload.strategy)
+        llm_config = get_llm_config()
+        logger.info(
+            "Ask query",
+            question=payload.question,
+            strategy=payload.strategy,
+            llm_backend=llm_config.backend_model_pair,
+        )
 
         # Use QA system to answer the question
         result = qa_system.ask_question(

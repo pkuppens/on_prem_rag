@@ -199,3 +199,4 @@ docs/project/hours/reporting_output/
 docs/project/hours/validation_output/
 docs/project/hours/upload_output/
 test-results-unit.xml
+results/*

@@ -600,19 +600,19 @@ git checkout -b feature/FEAT-XXX-short-description
 git push -u origin feature/FEAT-XXX-short-description
 ```
 
-**Branch off non-main** (when the issue requires tooling from an unmerged branch, e.g. commands or rules):
+**Branch off non-main** (when the branching strategy determines an existing branch is the right base — see [branch-policy.mdc](.cursor/rules/branch-policy.mdc)):
 
 ```bash
-# Create feature branch from workflow-improvements (or other base)
-git checkout feature/workflow-improvements
-git pull origin feature/workflow-improvements
-git checkout -b feature/85-short-description
+# Create feature branch from applicable base (e.g. branch with tooling for workflow testing)
+git checkout <base-branch>
+git pull origin <base-branch>
+git checkout -b feature/NNN-short-description
 
 # Push and set upstream
-git push -u origin feature/85-short-description
+git push -u origin feature/NNN-short-description
 ```
 
-When using a non-main base, the PR targets that base branch (e.g. `feature/workflow-improvements`) until it is merged; then follow-up PRs can target main.
+When using a non-main base, the PR targets that base branch until it is merged; then follow-up PRs can target main.
 
 #### Task Branches
 

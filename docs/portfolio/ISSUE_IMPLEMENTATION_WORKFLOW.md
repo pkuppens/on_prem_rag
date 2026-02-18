@@ -79,10 +79,12 @@ Create an implementation plan before coding.
 
 **Base branch** (from [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc)):
 
-- **Default**: Branch from `main`.
-- **Exception**: Branch off a non-main branch when the issue requires tooling (commands, rules, workflows) that exist only on that branch. Example: testing new workflow commands — branch off `feature/workflow-improvements`.
+Apply the **branching strategy** to choose the right base:
 
-**Branch workflow** (default from main):
+- **When on main**: Check for applicable existing branches (local/remote); if one provides needed functionality, use it; else branch from `main`.
+- **When on non-main**: If suitable for the new work, sub-branch; else consider integrate-to-main first, sub-branch, or parallel branch from `main`.
+
+**Branch workflow** (from main):
 
 ```bash
 git checkout main
@@ -91,10 +93,10 @@ git checkout -b feature/NNN-short-description
 # Or: task/NNN-short-description for smaller tasks
 ```
 
-**Branch workflow** (when base is non-main):
+**Branch workflow** (from non-main base):
 
 ```bash
-git checkout <base-branch>   # e.g. feature/workflow-improvements
+git checkout <base-branch>
 git pull
 git checkout -b feature/NNN-short-description
 ```

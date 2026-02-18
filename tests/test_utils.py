@@ -61,7 +61,7 @@ class ReportItem:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]    ) -> "ReportItem":
+    def from_dict(cls, data: Dict[str, Any]) -> "ReportItem":
         """Create ReportItem from dictionary.
 
         Args:

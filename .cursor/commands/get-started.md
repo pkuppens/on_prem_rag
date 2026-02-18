@@ -53,17 +53,19 @@ Significant updates must also be written to the GitHub issue so stakeholders see
 
 ## Command Input
 
-The user may append text after `/get-started`. Parse the issue number from these patterns:
+The user may append text after `/get-started`. Parse the issue number and optional base branch from these patterns:
 
-| User Input | Extracted Issue | Example |
-|------------|-----------------|---------|
-| `fix issue #123` | 123 | `/get-started fix issue #123` |
-| `issue #45` | 45 | `/get-started issue #45` |
-| `issue 45` | 45 | `/get-started issue 45` |
-| `#123` | 123 | `/get-started #123` |
-| *(empty)* | None | `/get-started` |
+| User Input | Extracted Issue | Base Branch | Example |
+|------------|-----------------|-------------|---------|
+| `fix issue #123` | 123 | main (default) | `/get-started fix issue #123` |
+| `issue #45 branch off feature/X` | 45 | feature/X | `/get-started issue #45 branch off feature/workflow-improvements` |
+| `#85 base feature/workflow-improvements` | 85 | feature/workflow-improvements | `/get-started #85 base feature/workflow-improvements` |
+| *(empty)* | None | main | `/get-started` |
 
-**Parsing rule**: Match `#(\d+)` or `issue\s*#?\s*(\d+)` — use the first captured number.
+**Parsing rules**:
+
+- Issue: Match `#(\d+)` or `issue\s*#?\s*(\d+)` — use the first captured number.
+- Base branch: Match `branch off\s+(\S+)` or `base\s+(\S+)` — use for branch creation in Step 5. Default: `main`.
 
 If no issue number is found, list open issues (number with title) so the user can select one, or create a new issue.
 
@@ -132,12 +134,13 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 
 ### Step 5: Phase 2 — Plan and (Optionally) Implement
 
-- Create branch: `git checkout main; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/` per workflow)
+- **Base branch**: Use `BASE_BRANCH` if user specified `branch off <branch>` or `base <branch>`; otherwise `main`.
+- Create branch: `git checkout BASE_BRANCH; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/` per workflow)
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`
 - **Write**: Save implementation plan to `tmp/github/progress/issue-NNN-plan.md`
-- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with: phase (Phase 2/3), branch name, plan summary, next steps
+- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with: phase (Phase 2/3), branch name, plan summary, next steps; if BASE_BRANCH ≠ main, add `base_branch: BASE_BRANCH` so `/pr` can target the correct base
 - **GitHub**: Draft plan (with checklists) to `tmp/github/issue-comments/issue-NNN-plan.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md`
 - If user requested "implement" or "fix": proceed to Phase 3 (implement in small steps, test after each, quality gate before commit)
 - If user requested "plan" only: present implementation plan and stop

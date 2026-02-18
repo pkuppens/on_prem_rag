@@ -77,13 +77,26 @@ Create an implementation plan before coding.
 | Bug | `bug/NNN-short-description` | `bug/42-chunking-edge-case` |
 | Hotfix | `hotfix/NNN-short-description` | `hotfix/43-security-patch` |
 
-**Branch workflow**:
+**Base branch** (from [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc)):
+
+- **Default**: Branch from `main`.
+- **Exception**: Branch off a non-main branch when the issue requires tooling (commands, rules, workflows) that exist only on that branch. Example: testing new workflow commands — branch off `feature/workflow-improvements`.
+
+**Branch workflow** (default from main):
 
 ```bash
 git checkout main
 git pull
 git checkout -b feature/NNN-short-description
 # Or: task/NNN-short-description for smaller tasks
+```
+
+**Branch workflow** (when base is non-main):
+
+```bash
+git checkout <base-branch>   # e.g. feature/workflow-improvements
+git pull
+git checkout -b feature/NNN-short-description
 ```
 
 **Rule**: Feature/task implementation **must** use branches. Direct-to-main is allowed only for docs, config, and agent rules.

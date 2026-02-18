@@ -76,6 +76,21 @@ During code reviews:
 - Confirm direct-to-main commits are documentation/config only
 - Check branch naming follows conventions
 
+## Base Branch: When to Branch off Non-Main
+
+**Default**: Feature/task branches are created from `main`.
+
+**Exception — Branch off non-main when required**:
+
+Use a non-main base branch when the issue requires **tooling that exists only on an unmerged branch** (e.g. new commands, rules, or workflows). Example: testing an updated workflow on an issue — branch off `feature/workflow-improvements` so the new commands are available.
+
+| When | Base branch |
+|------|-------------|
+| Normal issue work | `main` |
+| Issue needs tooling from unmerged branch (commands, rules) | That branch (e.g. `feature/workflow-improvements`) |
+
+**How to specify**: The user or context can indicate the base branch (e.g. `/get-started fix issue #85 branch off feature/workflow-improvements`). PRs from such branches target the base branch until it is merged to main.
+
 ## Branch Naming Conventions
 
 Follow the conventions defined in [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc):

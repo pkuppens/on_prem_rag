@@ -2,7 +2,11 @@
 
 ## Purpose
 
-This command detects and executes all tests in the project, including integration tests that require services to be started. It automatically manages service lifecycle (Docker services, MCP servers) and uses parallelism where possible to optimize test execution time.
+This command detects and executes all tests in the project, including integration tests that require services to be started.
+
+## Redirect To / Used By
+
+- **Used by**: `/commit` (with "require tests" hint), `/pr` (pre-flight validation). Run directly for ad-hoc testing. It automatically manages service lifecycle (Docker services, MCP servers) and uses parallelism where possible to optimize test execution time.
 
 ## When to Use
 

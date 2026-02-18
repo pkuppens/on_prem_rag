@@ -4,6 +4,13 @@
 
 This command provides a comprehensive, step-by-step process for creating pull requests that are **first-time-right** and will pass GitHub Actions. It validates code quality, checks acceptance criteria, generates AI-enhanced descriptions, and creates PRs following all project standards.
 
+## Redirect To (do not duplicate)
+
+- **Issue workflow**: Use `/get-started` when starting from an issue (Validate → Plan → Implement).
+- **Commits**: Use `/commit` before this command; all changes must be committed first.
+- **Pre-flight checks**: Same quality gates as `/commit` (ruff, format, pytest). Do not re-implement; reference [commit.md](.cursor/commands/commit.md) Quality Checks section.
+- **tmp/ for PR body**: Use `tmp/github/pr-descriptions/` per [temp-files.mdc](.cursor/rules/temp-files.mdc).
+
 ## When to Use
 
 - After completing a task or story implementation

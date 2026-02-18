@@ -4,6 +4,13 @@
 
 Start work on a GitHub issue using the project's Issue Implementation Workflow. Ensures workflow steps are loaded into context before implementation or planning. Use this command in new agent chats to align on the Validate → Plan → Implement process.
 
+## Redirect To (do not duplicate)
+
+- **Commits**: Use `/commit` when ready to commit (Phase 3 or after refinement). Do not re-implement commit logic.
+- **PR creation**: Use `/pr` when implementation is complete and ready for review.
+- **Tests**: Use `/test` or `uv run pytest` for test runs; `/commit` and `/pr` run quality gates when invoked.
+- **tmp/ structure**: See [temp-files.mdc](.cursor/rules/temp-files.mdc) for full directory layout and naming. This command uses `tmp/github/` subdirs only.
+
 ## When to Use
 
 - New agent chat when working on GitHub issues

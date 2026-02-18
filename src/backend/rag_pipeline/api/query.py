@@ -8,9 +8,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
-from ..core.embeddings import query_embeddings
-from ..core.vector_store import get_vector_store_manager_from_env
 from ..main import process_medical_conversation
+from ..services.query_service import QueryService
 from ..utils.logging import StructuredLogger
 from .metrics import get_metrics
 
@@ -18,7 +17,7 @@ logger = StructuredLogger(__name__)
 router = APIRouter(prefix="/api/query", tags=["query"])
 
 # Initialize services
-vector_store_manager = get_vector_store_manager_from_env()
+query_service = QueryService()
 
 
 class QueryRequest(BaseModel):
@@ -68,13 +67,7 @@ async def query_documents(payload: QueryRequest) -> dict:
 
     try:
         get_metrics().record_query()
-        results = query_embeddings(
-            payload.query,
-            params.embedding.model_name,
-            persist_dir=vector_store_manager.config.persist_directory,
-            collection_name=vector_store_manager.config.collection_name,
-            top_k=top_k,
-        )
+        results = query_service.query(payload.query, params.embedding.model_name, top_k)
         return results
     except Exception as e:
         logger.error("Error during query", query=payload.query, error=str(e))

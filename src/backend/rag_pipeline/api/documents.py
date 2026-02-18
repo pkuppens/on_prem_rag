@@ -16,8 +16,8 @@ from pydantic import BaseModel, Field, HttpUrl
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from ..core.document_loader import DocumentLoader
-from ..core.embeddings import process_document
 from ..core.vector_store import get_vector_store_manager_from_env
+from ..services.document_processing_service import DocumentProcessingService
 from ..utils.directory_utils import (
     _format_path_for_error,
     ensure_directory_exists,
@@ -37,184 +37,19 @@ uploaded_files_dir = get_uploaded_files_dir()
 ensure_directory_exists(uploaded_files_dir)
 document_loader = DocumentLoader()
 vector_store_manager = get_vector_store_manager_from_env()
+document_processing_service = DocumentProcessingService()
 
 
-# Global variable to store progress events for the current processing task
-_current_progress_events = []
-
-
-def progress_callback(filename: str, progress: float) -> None:
-    """Store progress events for document processing.
-
-    This function is called from the sync process_document function.
-    It stores progress events that will be processed by the async background task.
-
-    Args:
-        filename: The name of the file being processed
-        progress: The current progress of the processing (0.0-1.0)
-    """
-    global _current_progress_events
-
-    # Map processing progress (0.0-1.0) to upload progress (15-100%)
-    # This ensures we start at 15% (after upload) and go to 100%
-    upload_progress = int(15 + (progress * 85))  # 15% to 100%
-
-    # Create appropriate progress messages based on the phase
-    if progress <= 0.1:
-        message = "Loading document..."
-    elif progress <= 0.5:
-        message = f"Chunking document ({int(progress * 100)}%)"
-    elif progress <= 0.8:
-        message = f"Generating embeddings ({int(progress * 100)}%)"
-    elif progress < 1.0:
-        message = "Storing in vector database..."
-    else:
-        message = "Processing completed"
-
-    logger.debug(
-        "Document processing progress callback called",
-        filename=filename,
-        processing_progress=progress,
-        upload_progress=upload_progress,
-        progress_message=message,
-    )
-
-    # Store the progress event for the async task to process
-    _current_progress_events.append({"filename": filename, "progress": upload_progress, "message": message})
-
-
-async def process_document_background(file_path, filename: str, params_name: str):
-    """Process document in the background with progress updates.
-
-    This function follows the same pattern as the working test.py example.
-    It runs the sync process_document function and then processes any progress events.
+async def process_document_background(file_path, filename: str, params_name: str) -> None:
+    """Delegate background document processing to DocumentProcessingService.
 
     Args:
         file_path: Path to the uploaded file
         filename: Name of the file being processed
         params_name: Name of the parameter set to use
     """
-    global _current_progress_events
-
-    try:
-        logger.info(f"Starting background processing for {filename}")
-
-        # Clear any previous progress events
-        _current_progress_events.clear()
-
-        # Verify file exists before processing
-        if not file_path.exists():
-            logger.error("File not found for processing", filename=filename, file_path=str(file_path))
-            await progress_notifier.notify(ProgressEvent(filename, -1, f"File not found: {filename}"))
-            return
-
-        logger.debug(
-            "File verified for processing", filename=filename, file_path=str(file_path), file_size=file_path.stat().st_size
-        )
-
-        # Get parameter set
-        params = get_param_set(params_name)
-        if not isinstance(params, RAGParams):
-            await progress_notifier.notify(ProgressEvent(filename, -1, f"Invalid parameter set: {params_name}"))
-            return
-
-        # Notify processing started
-        await progress_notifier.notify(ProgressEvent(filename, 15, "Processing started"))
-
-        # Small yield to allow other tasks to run
-        await asyncio.sleep(0.01)
-
-        logger.debug("Starting process_document call", filename=filename)
-
-        # Run the sync process_document function in a thread pool
-        # This will call progress_callback which stores events in _current_progress_events
-        loop = asyncio.get_event_loop()
-
-        # Start a task to monitor and send progress events in real-time
-        progress_task = asyncio.create_task(_send_progress_events(filename))
-
-        try:
-            chunks_processed, records_stored = await loop.run_in_executor(
-                None,  # Use default executor
-                lambda: process_document(
-                    file_path,
-                    params.embedding.model_name,
-                    persist_dir=vector_store_manager.config.persist_directory,
-                    collection_name=vector_store_manager.config.collection_name,
-                    chunk_size=params.chunking.chunk_size,
-                    chunk_overlap=params.chunking.chunk_overlap,
-                    max_pages=None,
-                    deduplicate=True,
-                    progress_callback=progress_callback,
-                ),
-            )
-
-            logger.debug(
-                "Document processing completed",
-                filename=filename,
-                chunks_processed=chunks_processed,
-                records_stored=records_stored,
-            )
-            get_metrics().record_ingestion()
-        finally:
-            # Cancel the progress task
-            progress_task.cancel()
-            try:
-                await progress_task
-            except asyncio.CancelledError:
-                pass
-
-        # Process any remaining progress events
-        for event_data in _current_progress_events:
-            event = ProgressEvent(file_id=event_data["filename"], progress=event_data["progress"], message=event_data["message"])
-            await progress_notifier.notify(event)
-            logger.debug(f"Sent progress event: {event_data['progress']}% - {event_data['message']}")
-
-        # Clear the events
-        _current_progress_events.clear()
-
-    except Exception as e:
-        logger.error("Error during document processing", filename=filename, error=str(e), error_type=type(e).__name__)
-        await progress_notifier.notify(ProgressEvent(filename, -1, f"Processing failed: {str(e)}"))
-
-
-async def _send_progress_events(filename: str):
-    """Monitor and send progress events in real-time.
-
-    This function runs concurrently with document processing and sends
-    progress events as they are created by the progress_callback.
-
-    Args:
-        filename: The filename to monitor progress events for
-    """
-    global _current_progress_events
-
-    try:
-        while True:
-            # Check for new progress events
-            if _current_progress_events:
-                # Get events for this file
-                file_events = [e for e in _current_progress_events if e["filename"] == filename]
-
-                # Remove processed events
-                for event_data in file_events:
-                    _current_progress_events.remove(event_data)
-
-                    # Send the event
-                    event = ProgressEvent(
-                        file_id=event_data["filename"], progress=event_data["progress"], message=event_data["message"]
-                    )
-                    await progress_notifier.notify(event)
-                    logger.debug(f"Sent real-time progress event: {event_data['progress']}% - {event_data['message']}")
-
-            # Wait a bit before checking again
-            await asyncio.sleep(0.1)
-
-    except asyncio.CancelledError:
-        logger.debug(f"Progress sender cancelled for {filename}")
-        raise
-    except Exception as e:
-        logger.error(f"Error in progress sender for {filename}: {e}")
+    await document_processing_service.process_document_background(file_path, filename, params_name)
+    get_metrics().record_ingestion()
 
 
 @router.get("/list")

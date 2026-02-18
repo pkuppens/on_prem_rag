@@ -4,31 +4,7 @@
 
 This command creates well-structured commit messages following project standards, with automatic linting and formatting fixes, support for quality checks, partial commits, and automatic tag inference from branch names and changes.
 
-**Key Features:**
-
-- **Automatic linting**: Always runs `ruff check --fix` and `ruff format` before committing to prevent CI/CD failures
-- **Auto-fix integration**: Automatically fixes linting issues and re-stages modified files
-- **Quality checks**: Optional test execution with "require tests" hint
-- **Smart commit messages**: Infers tags from branch names and change types
-- **Partial commits**: Support for creating focused, smaller commits
-
-## When to Use
-
-- After making code changes and ready to commit
-- When you want to ensure commit quality before pushing
-- When you need to create partial commits for smaller pieces of work
-- When you want automatic tag inference from branch names
-- When you need to run tests before committing
-
-## Prerequisites
-
-Before running this command, ensure:
-
-- [ ] Git is installed and accessible
-- [ ] You are in a git repository
-- [ ] You have changes staged or ready to stage
-- [ ] Python environment is set up (if running tests)
-- [ ] You understand what changes you want to commit
+**Standards**: [commit-message-standards.mdc](.cursor/rules/commit-message-standards.mdc). **Next**: `/pr` when ready for review.
 
 ## Command Execution Workflow
 
@@ -594,118 +570,7 @@ Write-Host ""
 git log -1 --stat
 ```
 
-## Usage Examples
-
-### Example 1: Standard Commit with Auto-Detection
-
-**Command:**
-
-```bash
-# User says: "Create a commit"
-# Or: "Commit these changes"
-```
-
-**Expected Behavior:**
-
-- Analyzes current branch for tags
-- Analyzes staged changes for type and scope
-- **Runs automatic linting and formatting** (`ruff check --fix` and `ruff format`)
-- Re-stages any auto-fixed files
-- Generates commit message following project standards
-- Creates `tmp/commit_msg.txt` with commit message
-- Commits using the generated message
-
-### Example 2: Commit with Tests Required
-
-**Command:**
-
-```bash
-# User says: "Create a commit, require tests"
-# Or: "Commit with tests"
-```
-
-**Expected Behavior:**
-
-- Runs automatic linting and formatting (always runs)
-- Runs tests (fast unit tests only)
-- Only proceeds if all checks pass
-- Generates and commits with message
-
-**Note**: Linting and formatting run automatically even without this hint. This hint only adds test execution.
-
-### Example 3: Partial Commit
-
-**Command:**
-
-```bash
-# User says: "Create a partial commit"
-# Or: "Commit only the test files"
-```
-
-**Expected Behavior:**
-
-- Shows unstaged changes
-- Prompts for file selection
-- Stages only selected files
-- Generates commit message for selected files
-- Commits smaller, focused changeset
-
-### Example 4: Commit with Custom Description
-
-**Command:**
-
-```bash
-# User says: "Create a commit, description: Fix memory leak in PDF processing"
-```
-
-**Expected Behavior:**
-
-- Uses custom description instead of auto-generated one
-- Still infers tags from branch name
-- Still analyzes changes for type and scope
-- Includes custom description in commit message
-
-### Example 5: Commit with Type Override
-
-**Command:**
-
-```bash
-# User says: "Create a commit, type: fix"
-```
-
-**Expected Behavior:**
-
-- Overrides auto-detected commit type
-- Uses "fix" instead of detected type
-- Still infers tags and scope from context
-
-## Command Invocation
-
-When user requests to create a commit:
-
-1. **Read this command file**: `.cursor/commands/commit.md`
-2. **Analyze context**: Extract branch name, tags, and staged changes
-3. **Run automatic linting**: Always run `ruff check --fix` and `ruff format` to fix issues automatically
-4. **Re-stage auto-fixed files**: Stage any files modified by ruff auto-fix
-5. **Parse hints**: Check for "require tests", "partial commit", custom description, etc.
-6. **Run quality checks**: If "require tests" hint, run tests
-7. **Generate commit message**: Create well-structured message following project standards
-8. **Handle partial commits**: If requested, allow interactive file selection
-9. **Review message**: Display generated message for user review
-10. **Execute commit**: Commit using the generated message file
-11. **Report success**: Show commit summary
-
-## Success Criteria
-
-A successful commit should result in:
-
-- ✅ Commit message follows conventional commit format
-- ✅ Tags (TASK-XXX, STORY-XXX, FEAT-XXX) inferred from branch name
-- ✅ Commit type and scope determined from changes
-- ✅ Commit message saved to `tmp/commit_msg.txt`
-- ✅ Commit message only references committed files
-- ✅ Quality checks pass (if "require tests" hint)
-- ✅ Commit created successfully with proper message
+**Hints**: "require tests", "partial commit", "description: ...", "type: ...", "skip linting" (emergency only).
 
 ## Commit Message Format
 
@@ -740,47 +605,7 @@ Refs:
   - STORY-002
 ```
 
-## Quality Checks
-
-### Automatic Linting and Formatting (Always Runs)
-
-**CRITICAL**: These checks run automatically before every commit to prevent GitHub Actions failures.
-
-- **Linting**: Runs `uv run ruff check --fix .`
-  - Automatically fixes all fixable linting issues
-  - Fails if non-fixable issues remain (must be fixed manually)
-  - Prevents linting errors in CI/CD pipelines
-- **Formatting**: Runs `uv run ruff format .`
-
-  - Automatically formats all code files
-  - Ensures consistent code style
-  - Prevents formatting errors in CI/CD pipelines
-
-- **Auto-fixed files**: After running ruff, modified files are automatically re-staged with `git add -u`
-
-### Test Execution (Optional - Requires "require tests" hint)
-
-- Runs `uv run pytest -m "not internet and not slow" -v`
-- Only runs fast unit tests (excludes slow and internet-dependent tests)
-- Fails if any tests fail
-- Must be fixed before committing
-- Can be skipped with "skip tests" hint (not recommended)
-
-## Partial Commits
-
-Partial commits allow you to:
-
-- **Split large changesets**: Commit related changes separately
-- **Focus on specific files**: Commit only files that belong together
-- **Maintain clean history**: Keep commits small and focused
-- **Follow single responsibility**: Each commit addresses one concern
-
-**When to use:**
-
-- Large refactoring split into logical pieces
-- Multiple features implemented together
-- Documentation updates separate from code changes
-- Test updates separate from implementation
+**Quality checks**: Always `ruff check --fix` and `ruff format`; re-stage auto-fixed files. Optional `pytest` with "require tests".
 
 ## Tag Inference
 
@@ -789,26 +614,7 @@ Tags are automatically inferred from:
 1. **Branch name**: Extracts TASK-XXX, STORY-XXX, FEAT-XXX, BUG-XXX, HOTFIX-XXX
 2. **Branch type**: Determines if feature, task, bugfix, or hotfix
 3. **Change analysis**: Determines commit type (feat, fix, docs, test, chore)
-4. **File paths**: Determines scope (code, test, docs, config, other)
-
-**Branch naming patterns:**
-
-- `feature/FEAT-003-wbso-calendar-completion` → FEAT-003
-- `task/TASK-030-pandas-integration` → TASK-030
-- `bug/BUG-012-memory-leak` → BUG-012
-- `hotfix/HOTFIX-001-security-patch` → HOTFIX-001
-
-## Notes
-
-- **Automatic linting and formatting always runs** before committing to prevent CI/CD failures
-- Commit messages are saved to `tmp/commit_msg.txt` for review and reuse
-- The command follows [commit-message-standards.mdc](mdc:.cursor/rules/commit-message-standards.mdc)
-- Commit messages only reference committed files (not tmp/ directory)
-- Auto-fixed files are automatically re-staged after ruff runs
-- Test execution is optional (requires "require tests" hint)
-- Partial commits help maintain clean git history
-- Tag inference works best with proper branch naming conventions
-- Use "skip linting" hint only in emergency situations (may cause CI failures)
+4. **File paths**: Determines scope (code, test, docs, config, other). See [github-integration.mdc](.cursor/rules/github-integration.mdc) for branch naming.
 
 ## Related Files
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This command updates all commit CSV files for the hours project by extracting the latest commits from all repositories listed in `repositories.csv`. It refreshes the commit data used for WBSO hours registration tracking.
+This command updates all commit CSV files for the hours project by extracting the latest commits from all repositories listed in `repositories.csv`. **Standalone**: No delegation to/from other commands. It refreshes the commit data used for WBSO hours registration tracking.
 
 ## When to Use
 

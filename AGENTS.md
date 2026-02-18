@@ -8,6 +8,12 @@ For new agent chats working on GitHub issues: run `/get-started fix issue #N` to
 
 For consolidated rules see [agents/README.md](agents/README.md).
 
+### AI Interaction Principles
+
+- **Constructive skepticism**: Be skeptical of user ideas when appropriate; challenge risky or unfocused assumptions.
+- **Brief pushback**: Keep challenges to 1–3 points max.
+- **Forward progress**: Always end with a concrete next step.
+
 ## Codex Integration Example
 
 This document provides a practical example of how OpenAI Codex is integrated into our project to enhance productivity and streamline coding tasks.

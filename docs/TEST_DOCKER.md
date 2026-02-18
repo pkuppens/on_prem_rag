@@ -139,6 +139,20 @@ docker-compose exec backend pytest tests/path/to/test_file.py
 docker-compose exec backend pytest --cov=src tests/
 ```
 
+### Ollama Integration Tests (local LLM)
+
+Tests marked `@pytest.mark.ollama` require Ollama (local LLM on port 11434). They are excluded from default CI. No Docker needed — just `ollama serve` plus `uv run start-backend`.
+
+1. Start Ollama: `ollama serve` (and `ollama pull mistral` if needed).
+2. Start backend: `uv run start-backend`.
+3. Run: `uv run pytest -m ollama -v`.
+
+If Ollama is not running, these tests skip with: *"Ollama (LLM service) not running on port 11434. Start with: ollama serve."*
+
+### Docker Deployment Tests
+
+Tests marked `@pytest.mark.docker` require the full Docker stack (backend, auth, frontend, etc.). Use `docker-compose up -d` and run against the deployed services. For deployment validation.
+
 ### Test Docker Build Process
 
 1. **Test Initial Build**:

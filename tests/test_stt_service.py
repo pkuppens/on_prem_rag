@@ -285,6 +285,7 @@ class TestTranscriberIntegration:
         assert info["is_loaded"] is True
 
 
+@pytest.mark.ollama
 @pytest.mark.slow
 @pytest.mark.internet
 class TestCorrectorIntegration:

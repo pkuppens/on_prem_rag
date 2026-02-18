@@ -98,7 +98,7 @@ uv sync                    # Install from pyproject.toml
 ### Testing
 
 - Pre-push hooks enforce test passing on every push
-- Tests marked `@pytest.mark.slow` or `@pytest.mark.internet` are skipped by default
+- Tests marked `@pytest.mark.slow`, `@pytest.mark.internet`, or `@pytest.mark.ollama` are skipped by default
 - Use `git push --no-verify` only in emergencies
 - Test docstrings should follow: "As a user I want [objective], so I can [benefit]. Technical: [requirement]."
 
@@ -163,8 +163,10 @@ tmp/
 
 ## Test Markers
 
-| Marker                  | Description          | Default  |
-| ----------------------- | -------------------- | -------- |
-| `@pytest.mark.slow`     | Tests >5 seconds     | Skipped  |
-| `@pytest.mark.internet` | Network required     | Skipped  |
-| `@pytest.mark.fts5`     | SQLite FTS5 required | Included |
+| Marker                  | Description                        | Default  |
+| ----------------------- | ---------------------------------- | -------- |
+| `@pytest.mark.slow`     | Tests >5 seconds                   | Skipped  |
+| `@pytest.mark.internet` | Network required                   | Skipped  |
+| `@pytest.mark.ollama`   | Requires Ollama (local LLM on 11434) | Skipped  |
+| `@pytest.mark.docker`   | Requires full Docker stack deployment | Skipped  |
+| `@pytest.mark.fts5`     | SQLite FTS5 required                | Included |

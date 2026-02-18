@@ -215,7 +215,7 @@ line-ending = "auto"
 pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v -m 'not slow and not internet'"
+addopts = "-v -m 'not slow and not internet and not ollama and not docker'"
 # Silence deprecation warnings from third-party packages (nemoguardrails, pydantic, langchain, etc.)
 filterwarnings = [
     "ignore::DeprecationWarning",
@@ -228,7 +228,9 @@ markers = [
     "fts5: marks tests that require SQLite FTS5 extension (deselect with '-m \"not fts5\"')",
     "ci_setup: marks tests that validate CI/CD setup and configuration (deselect with '-m \"not ci_setup\"')",
     "guardrails_ci_skip: marks tests skipped on CI due to PyTorch CPU compatibility (run with '-m \"guardrails_ci_skip\"' locally)",
-    "ci_skip: marks tests skipped on CI due to missing models or runner resource limits (run locally with full marker set)"
+    "ci_skip: marks tests skipped on CI due to missing models or runner resource limits (run locally with full marker set)",
+    "ollama: marks tests that require Ollama (local LLM on port 11434); skipped with clear message if not running",
+    "docker: marks tests that require full Docker stack deployment (backend, auth, etc.); for deployment validation",
 ]
 # Configure test discovery
 norecursedirs = [".git", "build", "dist", ".venv", "node_modules"]

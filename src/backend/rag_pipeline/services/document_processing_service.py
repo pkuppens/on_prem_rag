@@ -8,14 +8,16 @@ architecture specifications and implementation requirements.
 """
 
 import asyncio
+from collections.abc import Callable
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from ..config.parameter_sets import RAGParams, get_param_set
 from ..core.embeddings import process_document
 from ..core.vector_store import get_vector_store_manager_from_env
 from ..models.document_models import DocumentMetadata
 from ..utils.logging import StructuredLogger
+from ..utils.progress import ProgressEvent, progress_notifier
 
 logger = StructuredLogger(__name__)
 
@@ -90,13 +92,20 @@ class DocumentProcessingService:
             logger.error("Document processing failed", task_id=task_id, error=str(e))
             raise
 
-    async def _process_single_document(self, file_path: Path, params: RAGParams, task_id: str) -> tuple[int, int]:
+    async def _process_single_document(
+        self,
+        file_path: Path,
+        params: RAGParams,
+        task_id: str,
+        progress_callback: Optional[Callable[[str, float], None]] = None,
+    ) -> tuple[int, int]:
         """Process a single document using LlamaIndex.
 
         Args:
             file_path: Path to the document file
             params: Processing parameters
             task_id: Task identifier for tracking
+            progress_callback: Optional callback(filename, progress 0.0-1.0) for progress events
 
         Returns:
             Tuple of (chunks_processed, records_stored)
@@ -122,11 +131,102 @@ class DocumentProcessingService:
                 chunk_overlap=params.chunking.chunk_overlap,
                 max_pages=None,
                 deduplicate=True,
-                progress_callback=None,  # Progress handled by upload service
+                progress_callback=progress_callback,
             ),
         )
 
         return chunks_processed, records_stored
+
+    async def process_document_background(self, file_path: Path, filename: str, params_name: str) -> None:
+        """Process a single document in the background, emitting real-time progress events.
+
+        This is the async entry point used by upload/from-url routes. It runs the
+        synchronous process_document function in a thread-pool executor while
+        concurrently streaming progress notifications via progress_notifier.
+
+        Args:
+            file_path: Absolute path to the saved upload file.
+            filename: Original filename (used as the progress event file_id).
+            params_name: Name of the RAG parameter set to use.
+        """
+        progress_events: list[dict] = []
+
+        def _progress_callback(cb_filename: str, progress: float) -> None:
+            upload_progress = int(15 + (progress * 85))
+            if progress <= 0.1:
+                message = "Loading document..."
+            elif progress <= 0.5:
+                message = f"Chunking document ({int(progress * 100)}%)"
+            elif progress <= 0.8:
+                message = f"Generating embeddings ({int(progress * 100)}%)"
+            elif progress < 1.0:
+                message = "Storing in vector database..."
+            else:
+                message = "Processing completed"
+            progress_events.append({"filename": cb_filename, "progress": upload_progress, "message": message})
+
+        async def _stream_progress() -> None:
+            try:
+                while True:
+                    for event_data in list(progress_events):
+                        progress_events.remove(event_data)
+                        await progress_notifier.notify(
+                            ProgressEvent(
+                                file_id=event_data["filename"],
+                                progress=event_data["progress"],
+                                message=event_data["message"],
+                            )
+                        )
+                    await asyncio.sleep(0.1)
+            except asyncio.CancelledError:
+                raise
+
+        try:
+            logger.info("Starting background processing", filename=filename)
+
+            if not file_path.exists():
+                await progress_notifier.notify(ProgressEvent(filename, -1, f"File not found: {filename}"))
+                return
+
+            params = get_param_set(params_name)
+            if not isinstance(params, RAGParams):
+                await progress_notifier.notify(ProgressEvent(filename, -1, f"Invalid parameter set: {params_name}"))
+                return
+
+            await progress_notifier.notify(ProgressEvent(filename, 15, "Processing started"))
+            await asyncio.sleep(0.01)
+
+            progress_task = asyncio.create_task(_stream_progress())
+            try:
+                chunks_processed, records_stored = await self._process_single_document(
+                    file_path, params, filename, progress_callback=_progress_callback
+                )
+                logger.info(
+                    "Background processing completed",
+                    filename=filename,
+                    chunks_processed=chunks_processed,
+                    records_stored=records_stored,
+                )
+            finally:
+                progress_task.cancel()
+                try:
+                    await progress_task
+                except asyncio.CancelledError:
+                    pass
+
+            # Flush any remaining buffered events
+            for event_data in progress_events:
+                await progress_notifier.notify(
+                    ProgressEvent(
+                        file_id=event_data["filename"],
+                        progress=event_data["progress"],
+                        message=event_data["message"],
+                    )
+                )
+
+        except Exception as e:
+            logger.error("Error during background processing", filename=filename, error=str(e))
+            await progress_notifier.notify(ProgressEvent(filename, -1, f"Processing failed: {str(e)}"))
 
     def create_document_metadata(self, filename: str, file_path: Path, processing_status: str = "pending") -> DocumentMetadata:
         """Create document metadata for a processed file.

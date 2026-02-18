@@ -58,8 +58,8 @@ The user may append text after `/get-started`. Parse the issue number and option
 | User Input | Extracted Issue | Base Branch | Example |
 |------------|-----------------|-------------|---------|
 | `fix issue #123` | 123 | main (default) | `/get-started fix issue #123` |
-| `issue #45 branch off feature/X` | 45 | feature/X | `/get-started issue #45 branch off feature/workflow-improvements` |
-| `#85 base feature/workflow-improvements` | 85 | feature/workflow-improvements | `/get-started #85 base feature/workflow-improvements` |
+| `issue #45 branch off feature/X` | 45 | feature/X | `/get-started issue #45 branch off feature/X` |
+| `#85 base feature/X` | 85 | feature/X | `/get-started #85 base feature/X` (e.g. workflow tooling branch) |
 | *(empty)* | None | main | `/get-started` |
 
 **Parsing rules**:
@@ -134,7 +134,7 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 
 ### Step 5: Phase 2 — Plan and (Optionally) Implement
 
-- **Base branch**: Use `BASE_BRANCH` if user specified `branch off <branch>` or `base <branch>`; otherwise `main`.
+- **Base branch**: Apply the branching strategy ([branch-policy.mdc](.cursor/rules/branch-policy.mdc)). Use user-specified `branch off <branch>` or `base <branch>` when given; otherwise determine from strategy (check existing branches, current branch suitability).
 - Create branch: `git checkout BASE_BRANCH; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/` per workflow)
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy

@@ -76,20 +76,35 @@ During code reviews:
 - Confirm direct-to-main commits are documentation/config only
 - Check branch naming follows conventions
 
-## Base Branch: When to Branch off Non-Main
+## Branching Strategy: Choosing the Right Base
 
-**Default**: Feature/task branches are created from `main`.
+The branching strategy determines on which branch development should be done. Choose the base branch before creating a feature/task branch.
 
-**Exception — Branch off non-main when required**:
+### When on main
 
-Use a non-main base branch when the issue requires **tooling that exists only on an unmerged branch** (e.g. new commands, rules, or workflows). Example: testing an updated workflow on an issue — branch off `feature/workflow-improvements` so the new commands are available.
+1. **Check for applicable existing branches** (local or remote): Does any branch already contain functionality the issue needs (commands, rules, code)?
+2. **If yes** → Use that branch as base: sub-branch from it, or work on it directly if appropriate.
+3. **If no** → Create a new branch from `main`.
 
-| When | Base branch |
-|------|-------------|
-| Normal issue work | `main` |
-| Issue needs tooling from unmerged branch (commands, rules) | That branch (e.g. `feature/workflow-improvements`) |
+### When on a non-main branch
 
-**How to specify**: The user or context can indicate the base branch (e.g. `/get-started fix issue #85 branch off feature/workflow-improvements`). PRs from such branches target the base branch until it is merged to main.
+1. **Is this branch suitable for the new development?** (Does it provide the functionality the issue needs?)
+2. **If suitable** → Sub-branch from it, or work on it directly if appropriate.
+3. **If not suitable** → Consider:
+   - **Integrate to main first**: If linear history is preferred and the current branch is ready, merge to main, then branch from main.
+   - **Sub-branch**: If the issue depends on in-progress work, create a sub-branch from the current branch.
+   - **Parallel branch**: If the work is independent, branch from `main` in parallel (switch to main, pull, create new branch).
+
+### Examples
+
+| Scenario | Action |
+|----------|--------|
+| Normal issue work | Branch from `main` |
+| Issue needs functionality from unmerged branch | Branch from that branch (or work on it directly) |
+| Testing new workflow commands on feature development | Branch from the workflow branch (e.g. `feature/workflow-improvements`) |
+| Current branch nearly done, new work independent | Merge current branch to main first, then branch from `main` |
+
+**How to specify base branch**: The user can indicate the base (e.g. `/get-started fix issue #85 branch off feature/X`). PRs from non-main bases target that branch until it is merged to main.
 
 ## Branch Naming Conventions
 

@@ -11,6 +11,33 @@ Start work on a GitHub issue using the project's Issue Implementation Workflow. 
 - When switching to a new issue and you want workflow context loaded
 - When you need a quick reminder of the three-phase workflow
 
+## Scratch Files and Continuation
+
+Use the project's `tmp/` directory and its subdirectories for all scratch files during the workflow. This enables continuation between sessions: a new agent can read the workflow state and resume from where the previous session left off.
+
+| File Path | Purpose |
+|-----------|---------|
+| `tmp/github/issue-descriptions/issue-NNN.md` | Cached issue body from `gh issue view NNN` |
+| `tmp/github/progress/issue-NNN-workflow.md` | Workflow state: phase, decisions, validation results, next steps |
+| `tmp/github/progress/issue-NNN-plan.md` | Implementation plan (Phase 2 output) |
+| `tmp/github/issue-comments/issue-NNN-close.md` | Draft close comment when closing obsolete issues |
+
+**Continuation flow**: At start, check if `tmp/github/progress/issue-NNN-workflow.md` exists. If it does, read it to load phase, decisions, and next steps before continuing. Update this file after each step.
+
+## Writing to GitHub
+
+Significant updates must also be written to the GitHub issue so stakeholders see progress and checklists persist. Do not keep them only in tmp/.
+
+| When | What to post | How |
+|------|--------------|-----|
+| Phase 1: Issue refinement | Refined acceptance criteria, out-of-scope, validation findings | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md` |
+| Phase 2: Plan complete | Implementation plan with checklists (tasks, test strategy) | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md` |
+| Phase 3: Milestones | Completed subtasks, test results | `gh issue comment NNN --body-file ...` when logical milestones are reached |
+
+- **Draft first** in `tmp/github/issue-comments/` (e.g. `issue-NNN-refinement.md`, `issue-NNN-plan.md`)
+- **Post** after user approval or when the content is ready (e.g. completion of refinement or planning)
+- **Checklists** in comments stay visible and can be updated by editing the comment (or posting a follow-up)
+
 ## Prerequisites
 
 - **GitHub CLI (`gh`)**: Authenticate with `gh auth login` so you can fetch and update issues
@@ -49,18 +76,23 @@ If no issue number is found, list open issues (number with title) so the user ca
 - Extract issue number from user text (see Command Input above)
 - If found → proceed to Step 2
 - If not found → go to Step 6 (show workflow, ask for issue)
+- **Continuation**: If `tmp/github/progress/issue-NNN-workflow.md` exists, read it first to resume from last phase
 
 ### Step 2: Load Workflow Context
 
 - Read [docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 - Read [CLAUDE.md](CLAUDE.md)
 - Confirm workflow and project conventions are in context
+- **Continuation**: If `tmp/github/progress/issue-NNN-workflow.md` exists, read it to load prior phase, decisions, and next steps
 
 ### Step 3: Fetch Issue
 
 ```bash
 gh issue view <NNN>
 ```
+
+- **Write**: Save output to `tmp/github/issue-descriptions/issue-NNN.md` (cached issue body for reuse)
+- **Write**: Create or update `tmp/github/progress/issue-NNN-workflow.md` with: issue number, fetched date, phase (e.g. "Phase 1 Validate"), status
 
 **If `gh` fails** (not authenticated, repo not set):
 
@@ -80,8 +112,12 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 2. **1.2** Search codebase for relevant symbols; check recent commits and merged PRs
 3. **1.3** Research existing tooling and best practices (libraries, patterns, similar solutions)
 
+- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with validation results (obsolete/valid, findings, decisions)
+- **If refinement done** (e.g. clarified acceptance criteria, added out-of-scope): draft to `tmp/github/issue-comments/issue-NNN-refinement.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md`
+
 **If issue is obsolete or already done**:
 
+- **Write**: Draft close comment to `tmp/github/issue-comments/issue-NNN-close.md`
 - Suggest closing: `gh issue close NNN --comment "Duplicate of #X"` or similar
 - Stop
 
@@ -93,6 +129,9 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`
+- **Write**: Save implementation plan to `tmp/github/progress/issue-NNN-plan.md`
+- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with: phase (Phase 2/3), branch name, plan summary, next steps
+- **GitHub**: Draft plan (with checklists) to `tmp/github/issue-comments/issue-NNN-plan.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md`
 - If user requested "implement" or "fix": proceed to Phase 3 (implement in small steps, test after each, quality gate before commit)
 - If user requested "plan" only: present implementation plan and stop
 
@@ -110,7 +149,8 @@ When user runs `/get-started` without an issue number:
    The default output shows number and title. Present the list so the user can select an issue.
 
 3. Summarize the three-phase workflow briefly (Phase 1 Validate, Phase 2 Plan, Phase 3 Implement)
-4. Ask the user to either:
+4. **Write** (optional): Save list to `tmp/github/progress/open-issues.md` if helpful for session continuity
+5. Ask the user to either:
    - **Select an issue**: `/get-started fix issue #N`
    - **Create a new issue**: `gh issue create` (then `/get-started fix issue #N` with the new number)
 
@@ -132,9 +172,19 @@ A successful `/get-started fix issue #123` execution results in:
 - Phase 1 Validate completed (or user directed to close if obsolete)
 - Phase 2 Plan started (branch created, architecture reviewed)
 - Optionally Phase 3 Implement begun (if user requested fix/implement)
+- Scratch files updated in `tmp/github/` so a new session can continue from the current state
+
+## Phase 3 Continuation
+
+During Phase 3 (Implement), keep `tmp/github/progress/issue-NNN-workflow.md` updated:
+
+- After each logical step: what was done, tests run, next concrete action
+- If session ends mid-implementation, the next agent reads this file and resumes
 
 ## References
 
 - [docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 - [CLAUDE.md](CLAUDE.md)
 - [docs/technical/AGENTS.md](docs/technical/AGENTS.md)
+- [tmp/CLAUDE.md](tmp/CLAUDE.md) — scratch directory structure
+- [.claude/skills/get-started/SKILL.md](.claude/skills/get-started/SKILL.md) — Claude Code project skill (same workflow, invoke with `/get-started` or `/get-started fix issue #N`)

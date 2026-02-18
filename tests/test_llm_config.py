@@ -13,8 +13,8 @@ import pytest
 from backend.rag_pipeline.config.llm_config import (
     DEFAULT_BACKEND,
     DEFAULT_MODEL,
-    get_llm_config,
     LLMConfig,
+    get_llm_config,
 )
 
 

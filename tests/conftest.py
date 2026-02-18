@@ -3,15 +3,23 @@
 This module provides shared fixtures and configuration for all tests.
 """
 
+import os
 import shutil
 import socket
 import uuid
 from collections.abc import Generator
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 
 from src.backend.rag_pipeline.utils.progress import progress_notifier
+
+OLLAMA_SKIP_REASON = (
+    "Ollama (LLM service) not running on port 11434. "
+    "Start with: ollama serve. "
+    "These tests require a local LLM for integration validation."
+)
 
 # Configure pytest-asyncio
 pytest_plugins = ["pytest_asyncio"]
@@ -113,16 +121,44 @@ def _internet_available() -> bool:
     return True
 
 
+def _ollama_available() -> bool:
+    """Return True if Ollama is reachable (quick socket check).
+
+    Uses OLLAMA_BASE_URL or defaults to localhost:11434.
+    """
+    url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    try:
+        parsed = urlparse(url)
+        host = parsed.hostname or "localhost"
+        port = parsed.port or 11434
+    except Exception:
+        host, port = "localhost", 11434
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex((host, port))
+        sock.close()
+        return result == 0
+    except Exception:
+        return False
+
+
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    """Skip internet tests when no connectivity or flag is set."""
+    """Skip internet and ollama tests when connectivity/stack not available."""
 
     run_internet = config.getoption("--run-internet")
     no_internet = config.getoption("--no-internet")
     if run_internet and not no_internet and _internet_available():
-        return
-
-    if no_internet or not _internet_available():
+        pass
+    elif no_internet or not _internet_available():
         skip_marker = pytest.mark.skip(reason="requires internet access")
         for item in items:
             if "internet" in item.keywords:
                 item.add_marker(skip_marker)
+
+    # When ollama tests would run, skip with clear message if Ollama not available.
+    ollama_items = [i for i in items if "ollama" in i.keywords]
+    if ollama_items and not _ollama_available():
+        skip_marker = pytest.mark.skip(reason=OLLAMA_SKIP_REASON)
+        for item in ollama_items:
+            item.add_marker(skip_marker)

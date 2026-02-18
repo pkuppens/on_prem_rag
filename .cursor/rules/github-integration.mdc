@@ -670,7 +670,7 @@ The project uses GitHub Actions to enforce quality standards before PRs can be m
 1. **Dependency Installation**: Uses `uv sync --dev` for proper dependency management
 2. **Model Caching**: Pre-downloads embedding models for consistent testing
 3. **Linting**: Runs `ruff check` and `ruff format --check`
-4. **Testing**: Runs pytest with markers `-m "not internet and not slow"`
+4. **Testing**: Runs pytest with markers `-m "not internet and not slow and not ollama"`
 5. **Security Scanning**: Bandit and Safety vulnerability checks
 6. **Parallel Execution**: Lint, model-download, and test jobs run in parallel
 7. **Advanced Caching**: UV dependencies, HuggingFace models, and pytest cache

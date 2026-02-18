@@ -11,6 +11,8 @@ alwaysApply: false
 
 # Commit Message Standards and Handover Notes Separation
 
+**For commit execution workflow**: See [.cursor/commands/commit.md](.cursor/commands/commit.md). This rule defines standards only; the command handles linting, message generation, and execution.
+
 ## Core Principle: Separate Technical Content from Handover Context
 
 **CRITICAL**: Commit messages should only reference files that are actually committed to the repository. Handover notes in `tmp/` directory are for context and process information only, not technical documentation.

@@ -6,7 +6,9 @@ argument-hint: [issue-number or fix issue #N]
 
 # Get Started: Issue Workflow
 
-Execute the project's Issue Implementation Workflow for GitHub issue $ARGUMENTS. Parse the issue number from patterns like `fix issue #123`, `issue #45`, `#123`, or `123`. If no number is found, list open issues and ask the user to select one.
+Execute the project's Issue Implementation Workflow for GitHub issue $ARGUMENTS.
+
+**Delegate to** (do not duplicate): `/commit` when ready to commit; `/pr` when ready for PR; [temp-files.mdc](.cursor/rules/temp-files.mdc) for tmp/ structure. Parse the issue number from patterns like `fix issue #123`, `issue #45`, `#123`, or `123`. If no number is found, list open issues and ask the user to select one.
 
 ## Purpose
 

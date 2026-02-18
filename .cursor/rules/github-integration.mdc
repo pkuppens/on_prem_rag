@@ -7,6 +7,8 @@ alwaysApply: false
 
 This rule provides comprehensive GitHub integration capabilities for the On-Premises RAG project, enabling seamless workflow between GitHub issues, pull requests, and the existing SAFe project structure.
 
+**Workflow commands** (delegate to these instead of re-implementing): [/get-started](.cursor/commands/get-started.md) (issues), [/commit](.cursor/commands/commit.md) (commits), [/pr](.cursor/commands/pr.md) (PRs).
+
 ## Overview
 
 The GitHub integration extends the existing project management system by:

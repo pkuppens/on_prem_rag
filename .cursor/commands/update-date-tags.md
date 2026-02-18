@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This command checks and updates date tags (`Created:` and `Updated:`) in markdown and code files according to the date-formatting rule. It ensures all files comply with the date formatting standards.
+This command checks and updates date tags (`Created:` and `Updated:`) in markdown and code files according to the date-formatting rule. **Standalone**. Standards: [date-formatting.mdc](.cursor/rules/date-formatting.mdc). It ensures all files comply with the date formatting standards.
 
 ## When to Use
 

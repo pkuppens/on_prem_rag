@@ -1,11 +1,11 @@
 ---
-description: Temporary files management for GitHub operations and multiline content
+description: Scratch and temporary files — tmp/ structure, SCRATCH.md agent rules
 alwaysApply: false
 ---
 
-# Temporary Files Management
+# Scratch and Temporary Files
 
-This rule defines standards for managing temporary files used in GitHub operations, multiline content handling, and evidence collection for task completion verification.
+This rule defines standards for scratch content (gitignored): the `tmp/` directory for GitHub operations, evidence, and workflow state; and SCRATCH.md at project root for agent collaboration.
 
 ## Overview
 
@@ -17,7 +17,27 @@ Temporary files are used to:
 
 **CRITICAL — Validation plans, test plans, next-steps docs for issues**: Create these in `tmp/github/issue-comments/` (e.g. `issue-77-airgap-test-plan.md`). Do **not** create them in `docs/portfolio/` or elsewhere in the repo; they are scratch content and belong in the gitignored `tmp/` directory. Remove any such files from the repo if they were committed by mistake.
 
-## File Location and Naming
+**Workflow commands** using tmp/: [get-started](.cursor/commands/get-started.md), [commit](.cursor/commands/commit.md), [pr](.cursor/commands/pr.md). Each defines its own tmp/ usage; this rule is the canonical structure.
+
+## SCRATCH.md (Project Root)
+
+When using the root-level [SCRATCH.md](mdc:SCRATCH.md) for temporary notes, issue investigation, or agent collaboration:
+
+### Agent Interaction Format
+
+Agents add content using:
+```
+{agent_name} >>> {content}
+```
+Example: `Claude >>> The issue appears to be related to model caching...`
+
+### Content Preservation
+
+- **DO NOT** modify existing content in SCRATCH.md
+- **DO NOT** remove or alter previous agent responses
+- **ONLY** add new content using the format above
+
+## File Location and Naming (tmp/)
 
 ### Directory Structure
 
@@ -28,6 +48,7 @@ tmp/
 ├── github/
 │   ├── issue-comments/      # Draft comments, validation plans, test plans
 │   ├── issue-descriptions/
+│   ├── progress/           # Workflow state (get-started): issue-NNN-workflow.md, issue-NNN-plan.md
 │   └── pr-descriptions/
 ├── evidence/
 │   ├── test-results/

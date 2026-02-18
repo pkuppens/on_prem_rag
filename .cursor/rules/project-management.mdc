@@ -277,7 +277,7 @@ Follow [sprint-demo.mdc](mdc:.cursor/rules/sprint-demo.mdc) for sprint demo docu
 - [markdown.mdc](mdc:.cursor/rules/markdown.mdc): Documentation formatting
 - [test-plan.mdc](mdc:.cursor/rules/test-plan.mdc): Testing strategy
 - [hours-registration.mdc](mdc:.cursor/rules/hours-registration.mdc): Time tracking
-- [scratch-file.mdc](mdc:.cursor/rules/scratch-file.mdc): Temporary documentation management
+- [temp-files.mdc](mdc:.cursor/rules/temp-files.mdc): Scratch and temporary files (tmp/, SCRATCH.md)
 
 ## Task Completion Verification
 

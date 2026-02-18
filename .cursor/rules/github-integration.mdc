@@ -588,6 +588,8 @@ gh pr merge PR_NUMBER --merge --delete-branch
 
 #### Feature Branches
 
+**Default — from main**:
+
 ```bash
 # Create feature branch from main
 git checkout main
@@ -597,6 +599,20 @@ git checkout -b feature/FEAT-XXX-short-description
 # Push and set upstream
 git push -u origin feature/FEAT-XXX-short-description
 ```
+
+**Branch off non-main** (when the issue requires tooling from an unmerged branch, e.g. commands or rules):
+
+```bash
+# Create feature branch from workflow-improvements (or other base)
+git checkout feature/workflow-improvements
+git pull origin feature/workflow-improvements
+git checkout -b feature/85-short-description
+
+# Push and set upstream
+git push -u origin feature/85-short-description
+```
+
+When using a non-main base, the PR targets that base branch (e.g. `feature/workflow-improvements`) until it is merged; then follow-up PRs can target main.
 
 #### Task Branches
 

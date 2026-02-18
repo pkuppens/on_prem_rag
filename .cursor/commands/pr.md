@@ -50,6 +50,12 @@ Before running this command, ensure:
 
 Story files follow the same pattern at `project/team/stories/STORY-XXX.md`.
 
+### Base Branch for PR (branch-off-non-main)
+
+**Default**: PR targets `main`; use `origin/main` for diff and log.
+
+**When branch was created from non-main** (see [branch-policy.mdc](.cursor/rules/branch-policy.mdc)): Check `tmp/github/progress/issue-NNN-workflow.md` for `base_branch: <branch>`. If present, use that branch for `git diff origin/<branch>...HEAD`, `git log origin/<branch>...HEAD`, and `gh pr create --base <branch>`.
+
 ## Command Execution Workflow
 
 ### Step 1: Pre-Flight Validation
@@ -224,16 +230,18 @@ if [ -f "$STORY_FILE" ]; then
 fi
 ```
 
-#### 3.2 Analyze Changes
+#### 3.2 Determine Base Branch and Analyze Changes
+
+**Base branch**: If `tmp/github/progress/issue-NNN-workflow.md` exists and contains `base_branch: <branch>`, set `BASE_BRANCH=<branch>`. Otherwise `BASE_BRANCH=main`.
 
 **Cross-platform:**
 
 ```bash
-# Get changed files
-git diff --name-status origin/main...HEAD
+# Get changed files (use BASE_BRANCH when branch was created from non-main)
+git diff --name-status origin/${BASE_BRANCH}...HEAD
 
 # Get commit messages
-git log --oneline origin/main...HEAD
+git log --oneline origin/${BASE_BRANCH}...HEAD
 
 # Get test results (from Step 1.3)
 # Store the test output for inclusion in PR description
@@ -334,11 +342,14 @@ PR_FILE="tmp/github/pr-descriptions/${TASK_ID}-${TIMESTAMP}.md"
 **Cross-platform:**
 
 ```bash
-# Create the PR
+# Create the PR (add --base only when BASE_BRANCH is not main)
+BASE_FLAG=""
+[ "$BASE_BRANCH" != "main" ] && BASE_FLAG="--base $BASE_BRANCH"
 gh pr create \
   --title "$TASK_TITLE" \
   --body-file "$PR_FILE" \
-  --assignee @me
+  --assignee @me \
+  $BASE_FLAG
 
 # Report success
 echo "✅ Pull request created successfully!"

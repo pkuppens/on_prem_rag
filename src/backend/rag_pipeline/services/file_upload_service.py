@@ -17,11 +17,12 @@ from uuid import uuid4
 from fastapi import UploadFile
 from fastapi.exceptions import HTTPException
 
+from backend.shared.utils.directory_utils import ensure_directory_exists, get_uploaded_files_dir
+
 from ..models.document_models import (
     ProcessingStatus,
     UploadResponse,
 )
-from ..utils.directory_utils import ensure_directory_exists, get_uploaded_files_dir
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)

@@ -36,8 +36,8 @@ def test_rag_pipeline_imports():
     try:
         from src.backend.rag_pipeline.file_ingestion import app, start_server
 
+        from backend.shared.utils.directory_utils import get_uploaded_files_dir
         from src.backend.rag_pipeline.core.document_loader import DocumentLoader
-        from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
 
         # Verify uploaded_files directory exists
         uploaded_files_dir = get_uploaded_files_dir()
@@ -82,7 +82,7 @@ def test_scripts_can_be_called():
     """Test that entry point scripts can be imported without errors."""
     import importlib.util
 
-    from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+    from backend.shared.utils.directory_utils import get_uploaded_files_dir
 
     # Verify uploaded_files directory exists
     uploaded_files_dir = get_uploaded_files_dir()

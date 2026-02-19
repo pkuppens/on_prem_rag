@@ -38,7 +38,7 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_data_dir
+from backend.shared.utils.directory_utils import ensure_directory_exists, get_data_dir
 
 # Ensure memory database directory exists
 memory_dir = get_data_dir() / "memory"

@@ -53,7 +53,7 @@ class TestSetupEmbeddingModels:
         """
         # Mock the project root to use tmp_path
         mock_project_root = tmp_path
-        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
 
         # Clear environment variables to test defaults
         with patch.dict(os.environ, {}, clear=True):
@@ -215,7 +215,7 @@ class TestSetupEmbeddingModels:
         """Test script execution in dry run mode."""
         # Mock the project root to use tmp_path
         mock_project_root = tmp_path
-        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
 
         # Mock sys.argv to include dry-run
         test_argv = ["setup_embedding_models.py", "--dry-run"]
@@ -260,7 +260,7 @@ class TestSetupEmbeddingModels:
 
         # Mock the project root to use tmp_path
         mock_project_root = tmp_path
-        monkeypatch.setattr("backend.rag_pipeline.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
 
         # Set up cache directories in tmp_path
         cache_dir = tmp_path / "cache" / "huggingface"

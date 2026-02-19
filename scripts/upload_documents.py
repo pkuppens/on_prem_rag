@@ -24,7 +24,7 @@ from backend.rag_pipeline.core.embeddings import process_document
 from backend.rag_pipeline.core.vector_store import (
     get_vector_store_manager_from_env,
 )
-from backend.rag_pipeline.utils.directory_utils import (
+from backend.shared.utils.directory_utils import (
     ensure_directory_exists,
     get_chunks_dir,
     get_database_dir,

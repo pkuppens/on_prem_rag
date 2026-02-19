@@ -14,7 +14,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from backend.rag_pipeline.utils.directory_utils import get_data_dir
+from backend.shared.utils.directory_utils import get_data_dir
 
 
 @dataclass

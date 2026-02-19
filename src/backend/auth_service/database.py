@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_database_dir
+from backend.shared.utils.directory_utils import ensure_directory_exists, get_database_dir
 
 # Ensure database directory exists
 database_dir = get_database_dir()

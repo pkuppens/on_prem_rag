@@ -27,7 +27,7 @@ except ImportError as e:
     print("Please install dependencies with: uv pip install -e .[dev]")
     sys.exit(1)
 
-from backend.rag_pipeline.utils.directory_utils import get_cache_dir
+from backend.shared.utils.directory_utils import get_cache_dir
 
 
 def setup_cache_directories():

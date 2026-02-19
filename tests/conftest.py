@@ -48,7 +48,7 @@ def cleanup_upload_progress():
 @pytest.fixture(autouse=True)
 def cleanup_uploaded_files():
     """Clean up uploaded files before and after each test."""
-    from src.backend.rag_pipeline.utils.directory_utils import get_uploaded_files_dir
+    from backend.shared.utils.directory_utils import get_uploaded_files_dir
 
     uploaded_dir = get_uploaded_files_dir()
 

@@ -14,15 +14,16 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, HttpUrl
 
-from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
-from ..core.document_loader import DocumentLoader
-from ..core.vector_store import get_vector_store_manager_from_env
-from ..services.document_processing_service import DocumentProcessingService
-from ..utils.directory_utils import (
+from backend.shared.utils.directory_utils import (
     _format_path_for_error,
     ensure_directory_exists,
     get_uploaded_files_dir,
 )
+
+from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
+from ..core.document_loader import DocumentLoader
+from ..core.vector_store import get_vector_store_manager_from_env
+from ..services.document_processing_service import DocumentProcessingService
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
 from .metrics import get_metrics

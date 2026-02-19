@@ -24,7 +24,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship, sessionmaker
 
-from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists, get_database_dir
+from backend.shared.utils.directory_utils import ensure_directory_exists, get_database_dir
 
 # Ensure database directory exists
 database_dir = get_database_dir()

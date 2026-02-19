@@ -46,9 +46,7 @@ async def test_upload_triggers_service_background_task(tmp_path):
     so architecture boundaries are maintained.
     Technical: upload endpoint delegates background work to DocumentProcessingService.
     """
-    with patch(
-        "src.backend.rag_pipeline.api.documents.document_processing_service"
-    ) as mock_service:
+    with patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service:
         mock_service.process_document_background = AsyncMock()
 
         response = client.post(
@@ -66,9 +64,7 @@ def test_list_documents_returns_files(tmp_path):
     """As a user I want to list uploaded documents, so I can see what's available.
     Technical: GET /api/documents/list returns a list of filenames.
     """
-    with patch(
-        "src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path
-    ):
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
         (tmp_path / "report.pdf").write_bytes(b"%PDF test")
         response = client.get("/api/documents/list")
 

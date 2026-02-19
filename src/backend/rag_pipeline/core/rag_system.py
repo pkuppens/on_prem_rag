@@ -39,7 +39,7 @@ from llama_index.readers.file import DocxReader, PDFReader
 # Local imports
 from backend.rag_pipeline.config.parameter_sets import RAGParams
 from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager_from_env
-from backend.rag_pipeline.utils.directory_utils import (
+from backend.shared.utils.directory_utils import (
     DirectoryEmptyError,
     ensure_directory,
     validate_directory,

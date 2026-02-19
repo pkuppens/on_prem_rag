@@ -18,11 +18,11 @@ def configure_pythonpath() -> None:
     This function is primarily used when executing tools directly via ``python
     scripts/<name>.py``.  It prepends the ``scripts``, ``src`` and
     ``src/backend`` directories to ``sys.path`` based on the detected project
-    root using :func:`backend.rag_pipeline.utils.directory_utils.get_project_root`.
+    root using :func:`backend.shared.utils.directory_utils.get_project_root`.
     """
 
     try:
-        from backend.rag_pipeline.utils.directory_utils import get_project_root
+        from backend.shared.utils.directory_utils import get_project_root
     except Exception:  # pragma: no cover - fallback for early imports
         root = Path(__file__).resolve().parent.parent
     else:

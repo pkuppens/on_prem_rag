@@ -27,7 +27,7 @@ import chromadb
 from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 
 from backend.memory.config import VectorMemoryConfig, get_memory_config
-from backend.rag_pipeline.utils.directory_utils import ensure_directory_exists
+from backend.shared.utils.directory_utils import ensure_directory_exists
 
 logger = logging.getLogger(__name__)
 

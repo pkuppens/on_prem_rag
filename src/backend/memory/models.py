@@ -28,6 +28,7 @@ from sqlalchemy import (
     Text,
     create_engine,
 )
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import (
     Mapped,
     Session,
@@ -158,8 +159,17 @@ class MemoryAccessLog(Base):
 
 
 def init_memory_database() -> None:
-    """Initialize the memory database with all tables."""
-    Base.metadata.create_all(bind=engine)
+    """Initialize the memory database with all tables.
+
+    Ignores sqlite3.OperationalError for 'table already exists' to avoid
+    races when multiple processes (e.g. pytest-xdist workers) import and
+    create tables concurrently against the same SQLite file.
+    """
+    try:
+        Base.metadata.create_all(bind=engine)
+    except OperationalError as e:
+        if "already exists" not in str(e).lower():
+            raise
 
 
 def get_memory_session() -> Session:

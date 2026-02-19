@@ -87,3 +87,58 @@ def test_delete_document_rejects_path_traversal():
     response = client.delete("/api/documents/../secret.txt")
     # FastAPI will either return 400 (our validation) or 404 (path not found)
     assert response.status_code in (400, 404)
+
+
+def test_serve_document_as_text_txt(tmp_path):
+    """As a user I want TXT files rendered as text in the preview, so I can read full content.
+    Technical: GET /api/documents/files/{filename}/as-text returns UTF-8 text for .txt files.
+    """
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
+        (tmp_path / "sample.txt").write_text("Hello, world.\nLine two.", encoding="utf-8")
+        response = client.get("/api/documents/files/sample.txt/as-text")
+    assert response.status_code == 200
+    assert response.text == "Hello, world.\nLine two."
+
+
+def test_serve_document_as_text_md(tmp_path):
+    """As a user I want MD files rendered as text in the preview, so I can read full content.
+    Technical: GET /api/documents/files/{filename}/as-text returns UTF-8 text for .md files.
+    """
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
+        (tmp_path / "readme.md").write_text("# Title\n\nBody **bold**", encoding="utf-8")
+        response = client.get("/api/documents/files/readme.md/as-text")
+    assert response.status_code == 200
+    assert "# Title" in response.text and "**bold**" in response.text
+
+
+def test_serve_document_as_text_docx(tmp_path, test_data_dir):
+    """As a user I want DOCX files extracted as text in the preview, so I can read full content.
+    Technical: GET /api/documents/files/{filename}/as-text extracts text via python-docx for .docx.
+    """
+    docx_path = test_data_dir / "toolsfairy-com-sample-docx-files-sample4.docx"
+    if not docx_path.exists():
+        pytest.skip("DOCX test fixture not found")
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
+        import shutil
+
+        shutil.copy(docx_path, tmp_path / "sample.docx")
+        response = client.get("/api/documents/files/sample.docx/as-text")
+    assert response.status_code == 200
+    assert len(response.text.strip()) > 0
+
+
+def test_serve_document_as_text_unsupported_returns_400(tmp_path):
+    """As a user I want clear feedback when text extraction is not supported.
+    Technical: GET /api/documents/files/{filename}/as-text returns 400 for unsupported formats.
+    """
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
+        (tmp_path / "file.pdf").write_bytes(b"%PDF-1.4")
+        response = client.get("/api/documents/files/file.pdf/as-text")
+    assert response.status_code == 400
+
+
+def test_serve_document_as_text_not_found_returns_404(tmp_path):
+    """As a user I want 404 when requesting as-text for a non-existent file."""
+    with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
+        response = client.get("/api/documents/files/nonexistent.txt/as-text")
+    assert response.status_code == 404

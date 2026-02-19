@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 import httpx
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from pydantic import BaseModel, Field, HttpUrl
 
 from backend.shared.utils.directory_utils import (
@@ -24,6 +24,7 @@ from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param
 from ..core.document_loader import DocumentLoader
 from ..core.vector_store import get_vector_store_manager_from_env
 from ..services.document_processing_service import DocumentProcessingService
+from ..utils.docx_utils import extract_and_clean_docx
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
 from .metrics import get_metrics
@@ -430,6 +431,50 @@ async def _serve_file(filename: str):
             status_code=500,
             detail=f"Internal server error while serving file: {str(e)}. Error type: {type(e).__name__}. File: {filename}. Path: {str(file_path)}",
         ) from e
+
+
+@router.get("/files/{filename}/as-text")
+async def serve_document_as_text(filename: str) -> PlainTextResponse:
+    """Return document content as plain text for preview.
+
+    Supports .txt, .md (read as UTF-8) and .docx (extract text via python-docx).
+    Extendable: future formats (e.g. markdown-to-HTML, docx-to-PDF) can be added.
+
+    Args:
+        filename: Name of the file
+
+    Returns:
+        PlainTextResponse: UTF-8 text content
+
+    Raises:
+        HTTPException: 400 if unsupported format or invalid filename
+        HTTPException: 404 if file not found
+        HTTPException: 500 if extraction fails
+    """
+    logger.info("GET /api/documents/files/{filename}/as-text", filename=filename)
+    if not filename or ".." in filename or "/" in filename:
+        raise HTTPException(status_code=400, detail="Invalid filename")
+    ext = Path(filename).suffix.lower()
+    file_path = uploaded_files_dir / filename
+    if not file_path.exists() or not file_path.is_file():
+        raise HTTPException(status_code=404, detail=f"File not found: {filename}")
+    try:
+        if ext in (".txt", ".md"):
+            text = file_path.read_text(encoding="utf-8")
+        elif ext in (".docx", ".doc"):
+            paragraphs = extract_and_clean_docx(file_path)
+            text = "\n\n".join(p for p in paragraphs if p.strip())
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Text extraction not supported for {ext}; use /files/{{filename}} for binary download.",
+            )
+        return PlainTextResponse(content=text)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("Error extracting text", filename=filename, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Failed to extract text: {e}") from e
 
 
 @router.get("/files/{filename}")

@@ -8,7 +8,7 @@ import { RAGParamsSelector } from './components/config/RAGParamsSelector';
 import { FileDropzone } from './components/upload/FileDropzone';
 import { UploadProgress } from './components/upload/UploadProgress';
 import { QuerySection } from './components/query/QuerySection';
-import { PDFViewer } from './components/pdf/PDFViewer';
+import { DocumentPreview } from './components/preview/DocumentPreview';
 import axios from 'axios';
 import Logger from './utils/logger';
 import { useBackendStatus } from './hooks/useBackendStatus';
@@ -18,6 +18,7 @@ import './utils/pdfSetup';
 import { PDFTestPage } from './pages/PDFTestPage';
 import DocxTestPage from './pages/DocxTestPage';
 import TextTestPage from './pages/TextTestPage';
+import DocumentPreviewTestPage from './pages/DocumentPreviewTestPage';
 import { WebSocketTestPage } from './pages/WebSocketTestPage';
 import StatusPage from './pages/StatusPage'; // Import the new StatusPage
 import { apiUrls, apiConfig } from './config/api';
@@ -94,6 +95,7 @@ function App() {
   const isPDFTestPage = window.location.search.includes('test=pdf');
   const isDocxTestPage = window.location.search.includes('test=docx');
   const isTextTestPage = window.location.search.includes('test=text');
+  const isPreviewTestPage = window.location.search.includes('test=preview');
   const isWebSocketTestPage = window.location.search.includes('test=websocket');
   const isStatusPage = window.location.search.includes('test=status');
 
@@ -113,6 +115,9 @@ function App() {
   }
   if (isTextTestPage) {
     return <TextTestPage />;
+  }
+  if (isPreviewTestPage) {
+    return <DocumentPreviewTestPage />;
   }
 
   if (isWebSocketTestPage) {
@@ -243,7 +248,7 @@ function App() {
 
             {/* Right Area - 9 columns for ultrawide */}
             <Grid item xs={12} lg={9} xl={10}>
-              <PDFViewer selectedResult={selectedResult} />
+              <DocumentPreview selectedResult={selectedResult} />
             </Grid>
           </Grid>
         </Box>

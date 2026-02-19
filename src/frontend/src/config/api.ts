@@ -218,6 +218,12 @@ export const apiUrls = {
   file: (filename: string) => apiUrlBuilder.buildFileUrl(filename),
 
   /**
+   * Get URL for document content as plain text (txt, md, docx)
+   */
+  fileAsText: (filename: string) =>
+    apiUrlBuilder.buildUrl(`${API_ENDPOINTS.DOCUMENTS.FILES}/${encodeURIComponent(filename)}/as-text`),
+
+  /**
    * Get upload URL with optional parameter set
    */
   upload: (paramsName?: string) => apiUrlBuilder.getUploadUrl(paramsName),

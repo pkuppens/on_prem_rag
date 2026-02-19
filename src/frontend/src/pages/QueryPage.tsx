@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Button,
@@ -9,10 +9,7 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
-import { PDFViewer } from '../components/pdf/PDFViewer';
-import { DOCXViewer } from '../components/docx/DOCXViewer';
-import { TextViewer } from '../components/text/TextViewer';
-import { pdfjs } from '../utils/pdfSetup';
+import { DocumentPreview } from '../components/preview/DocumentPreview';
 import axios from 'axios';
 import { RAGParamsSelector } from '../components/config/RAGParamsSelector';
 import { apiUrls } from '../config/api';
@@ -62,34 +59,6 @@ export const QueryPage = () => {
 
   const handleResultSelect = (result: EmbeddingResult) => {
     setSelectedResult(result);
-  };
-
-  const getFileType = (filename: string) => {
-    const extension = filename.split('.').pop()?.toLowerCase();
-    return extension;
-  };
-
-  const renderViewer = () => {
-    if (!selectedResult) return null;
-
-    const fileType = getFileType(selectedResult.document_name);
-    switch (fileType) {
-      case 'pdf':
-        return <PDFViewer selectedResult={selectedResult} />;
-      case 'docx':
-        return <DOCXViewer selectedResult={selectedResult} />;
-      case 'txt':
-      case 'md':
-        return <TextViewer selectedResult={selectedResult} />;
-      default:
-        return (
-          <Paper sx={{ p: 4, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="body1" color="text.secondary">
-              Preview not available for this file type
-            </Typography>
-          </Paper>
-        );
-    }
   };
 
   return (
@@ -175,7 +144,7 @@ export const QueryPage = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          {renderViewer()}
+          <DocumentPreview selectedResult={selectedResult} />
         </Grid>
       </Grid>
     </Box>

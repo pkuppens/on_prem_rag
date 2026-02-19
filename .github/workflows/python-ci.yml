@@ -225,7 +225,8 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
+          # Sequential (no -n) for reliable coverage and to avoid parallel race conditions; use -n auto locally for speed
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
       - name: Upload coverage reports
         uses: actions/upload-artifact@v6
         with:
@@ -299,9 +300,8 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Run slow tests only (performance-related)
-          # Use parallel execution for faster test runs
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n auto -m "slow and not internet and not ollama and not docker and not ci_skip" --junitxml=test-results-performance.xml
+          # Run slow tests only (performance-related); sequential for CI reliability
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "slow and not internet and not ollama and not docker and not ci_skip" --junitxml=test-results-performance.xml
       - name: Upload performance test results
         uses: actions/upload-artifact@v6
         with:
@@ -362,9 +362,8 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Run integration tests (internet dependent)
-          # Use parallel execution for faster test runs
-          uv run pytest -n auto -m "internet and not ollama and not docker and not ci_skip" --junitxml=test-results-integration.xml
+          # Run integration tests (internet dependent); sequential for CI reliability
+          uv run pytest -m "internet and not ollama and not docker and not ci_skip" --junitxml=test-results-integration.xml
       - name: Upload integration test results
         uses: actions/upload-artifact@v6
         with:

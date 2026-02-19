@@ -1,7 +1,7 @@
 # Local CUDA Setup for PyTorch and Whisper
 
-Created: 2025-02-12
-Updated: 2025-02-12
+Created: 2026-02-12
+Updated: 2026-02-19
 
 This guide describes how to enable CUDA/GPU support for PyTorch on local development machines (e.g. RTX 4090). CI and GitHub Actions run CPU-only by design.
 
@@ -37,13 +37,13 @@ For **RTX 4090** (Ada Lovelace), use CUDA 12.4 or 12.6:
 **Windows (PowerShell):**
 
 ```powershell
-uv pip install torch --index-url https://download.pytorch.org/whl/cu126
+uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall
 ```
 
 **Linux/macOS:**
 
 ```bash
-uv pip install torch --index-url https://download.pytorch.org/whl/cu126
+uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall
 ```
 
 Alternative indexes: `cu124` (CUDA 12.4), `cu128` (CUDA 12.8). Choose based on your driver and PyTorch compatibility.
@@ -93,6 +93,25 @@ The `faster-whisper` package uses CTranslate2 for inference. For GPU-accelerated
 - CTranslate2 can use CUDA when available.
 - Ensure the PyTorch CUDA build is installed (faster-whisper may use it for model loading).
 - See [faster-whisper](https://github.com/SYSTRAN/faster-whisper) docs for GPU setup.
+
+## Speech-to-Text (STT) with CUDA
+
+The STT transcriber (`backend.stt.transcriber`) uses faster-whisper. After installing the PyTorch CUDA build and setting `UV_NO_SYNC=1` (see above):
+
+1. **Auto-detect**: If `STT_DEVICE` is unset, the transcriber auto-detects CUDA via `torch.cuda.is_available()` and uses `cuda` when available.
+2. **Explicit device**: Set `STT_DEVICE=cuda` in `.env` to force GPU (or `STT_DEVICE=cpu` for CPU-only).
+3. **Model**: Set `STT_MODEL_SIZE=turbo` for the large-v3-turbo model (good speed/accuracy for multilingual).
+4. **Compute type**: When using `cuda`, the default is `float16`. Override with `STT_COMPUTE_TYPE=float16` or `int8` if needed.
+
+Environment variables (see `env.example`):
+
+| Variable          | Default (when unset) | Notes                                  |
+|-------------------|----------------------|----------------------------------------|
+| `STT_DEVICE`      | Auto-detect (cuda if available, else cpu) | `cpu` or `cuda`                  |
+| `STT_MODEL_SIZE`  | `small`              | `tiny`, `base`, `small`, `medium`, `turbo`, etc. |
+| `STT_COMPUTE_TYPE`| `float16` (cuda) / `int8` (cpu) | `int8`, `float16`, `float32`  |
+
+Verify: `GET /api/stt/info` returns `transcriber.device` (`cpu` or `cuda`), `model_size`, and `compute_type`.
 
 ## Reinstalling After Adding CUDA
 

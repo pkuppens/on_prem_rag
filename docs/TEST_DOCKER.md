@@ -24,7 +24,10 @@ curl -s http://localhost:9180/health
 curl -s http://localhost:9181/oauth/providers
 curl -s http://localhost:9182/api/v2/heartbeat
 
-# 5. Stop
+# 5. Verify STT (voice pipeline) — device should be "cpu" in Docker
+curl -s http://localhost:9180/api/stt/info | python -m json.tool
+
+# 6. Stop
 docker-compose down
 ```
 
@@ -81,11 +84,23 @@ If Chroma is on a different port (see `CHROMA_HOST_PORT` in `env.example`), adju
    docker-compose logs backend  # Specific service
    ```
 
+   **Ingestion timing**: To trace document processing bottlenecks (load, chunk, embed model load, embed gen, store):
+
+   ```bash
+   docker logs on_prem_rag-backend-1 2>&1 | grep INGEST
+   ```
+
+   Logs include `upload_processing_started`, `load_done`, `chunk_done`, `embed_model_load_done`, `embed_gen_done`, `store_done`, `total_done`, each with `elapsed_ms`.
+
 4. **Clean Up**:
    ```bash
-   docker-compose down -v  # Remove containers and volumes
-   docker system prune     # Remove unused images, networks
+   docker-compose down     # Stop and remove containers (keeps named volumes)
+   docker-compose down -v  # Also remove named volumes (chroma-data, ollama-data, frontend-node-modules)
+   docker volume prune    # Remove orphaned volumes from previous anonymous mounts
+   docker system prune    # Remove unused images, networks
    ```
+
+   **Named volumes** (`chroma-data`, `ollama-data`, `frontend-node-modules`) persist between sessions and are reused on `docker-compose up`. Orphaned anonymous volumes can be removed with `docker volume prune`.
 
 ### Development Workflow
 
@@ -190,7 +205,7 @@ Tests marked `@pytest.mark.docker` require the full Docker stack (backend, auth,
 The following data is persisted between container restarts:
 
 - ChromaDB data: Stored in the `chroma-data` Docker volume
-- Uploaded files: Stored in the `./uploaded_files` directory
+- Uploaded files: Stored in the `uploaded-files-data` named volume (mounted at `/app/uploaded_files` in backend)
 - Test data: Stored in the `./test_data` directory
 
 ## Hot Reloading
@@ -207,10 +222,12 @@ The following directories are mounted into the containers:
 - `./src`: Backend source code
 - `./tests`: Test files
 - `./test_data`: Test data files
-- `./uploaded_files`: User uploaded files
+- `uploaded-files-data` (named volume): User uploaded files at `/app/uploaded_files`
 - `./src/frontend`: Frontend source code
 
 ## Environment Variables
+
+The backend service uses `env_file: .env`, so variables like `STT_MODEL_SIZE=turbo` from `.env` are passed to the container. Ensure `.env` exists and contains your desired STT model.
 
 Key environment variables (set in `.env` or `env.example`):
 

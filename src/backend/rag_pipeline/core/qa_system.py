@@ -230,6 +230,10 @@ Answer:"""
             chunks = self.retrieve_relevant_chunks(question, top_k, similarity_threshold, strategy=strategy)
 
             if not chunks:
+                logger.info(
+                    "RAG flow: retrieve->fallback (0 chunks matched, similarity threshold not met)",
+                    question=question[:60],
+                )
                 return {
                     "answer": "I couldn't find relevant information to answer your question.",
                     "sources": [],

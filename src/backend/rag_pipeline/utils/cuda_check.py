@@ -40,7 +40,7 @@ def _print_cpu_build_troubleshooting() -> None:
     print("\n1. Ensure NVIDIA driver supports your GPU and CUDA.")
     print("   Check: nvidia-smi")
     print("\n2. Replace the CPU torch with the CUDA build:")
-    print("   uv pip install torch --index-url https://download.pytorch.org/whl/cu126")
+    print("   uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall")
     print("   (Use cu124 if CUDA 12.4 is preferred; cu126 recommended for RTX 4090)")
     print("\n3. Re-run to verify (use --no-sync so uv does not overwrite with CPU):")
     print("   uv run --no-sync is-cuda-available")
@@ -82,7 +82,7 @@ def _print_generic_troubleshooting() -> None:
     """Print generic CUDA troubleshooting steps."""
     print("\n--- Troubleshooting ---")
     print("• Run 'nvidia-smi' to verify the driver sees your GPU.")
-    print("• Ensure you installed the CUDA build: uv pip install torch --index-url https://download.pytorch.org/whl/cu126")
+    print("• Ensure you installed the CUDA build: uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall")
     print("• Python 3.12/3.13 is supported by PyTorch 2.6+ with CUDA.")
     print("• See docs/technical/CUDA_SETUP.md for details.")
 

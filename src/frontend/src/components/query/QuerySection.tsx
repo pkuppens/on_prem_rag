@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress, InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { apiUrls } from '../../config/api';
 import { useBackendStatus } from '../../hooks/useBackendStatus';
 import { enhanceErrorMessage } from '../../utils/errorUtils';
+import { VoiceInputButton } from './VoiceInputButton';
 
 interface EmbeddingResult {
   text: string;
@@ -116,6 +117,17 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
           if (e.key === 'Enter') {
             runQuery();
           }
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <VoiceInputButton
+                onTranscription={(text) => setQuery(text)}
+                onError={(msg) => setError(msg)}
+                disabled={!isBackendRunning || isChecking}
+              />
+            </InputAdornment>
+          ),
         }}
       />
 

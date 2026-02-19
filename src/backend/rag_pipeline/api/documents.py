@@ -293,10 +293,41 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
             "processing": "started",
         }
 
+    except PermissionError as e:
+        logger.error(
+            "Upload directory not writable. Ensure backend process has write access.",
+            error=str(e),
+        )
+        await progress_notifier.notify(ProgressEvent(filename, -1, f"Upload failed: {str(e)}"))
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": str(e),
+                "remediation": (
+                    "Docker: use uploaded-files-data volume and entrypoint that chowns the directory. "
+                    "Local: ensure UPLOADED_FILES_DIR exists and is writable (e.g. chmod 755)."
+                ),
+            },
+        ) from e
+    except OSError as e:
+        logger.error("File system error during upload", filename=filename, error=str(e))
+        await progress_notifier.notify(ProgressEvent(filename, -1, f"Upload failed: {str(e)}"))
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": str(e),
+                "remediation": "Check backend logs. Ensure upload directory exists and is writable.",
+            },
+        ) from e
     except Exception as e:
         logger.error("Error during file upload", filename=filename, error=str(e), error_type=type(e).__name__)
         await progress_notifier.notify(ProgressEvent(filename, -1, f"Upload failed: {str(e)}"))
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        detail = str(e)
+        if os.getenv("ENVIRONMENT") == "development":
+            import traceback
+
+            detail = {"error": str(e), "traceback": traceback.format_exc()}
+        raise HTTPException(status_code=500, detail=detail) from e
 
 
 async def _serve_file(filename: str):

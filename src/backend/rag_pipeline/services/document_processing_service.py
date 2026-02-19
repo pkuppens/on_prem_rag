@@ -8,6 +8,7 @@ architecture specifications and implementation requirements.
 """
 
 import asyncio
+import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -182,7 +183,8 @@ class DocumentProcessingService:
                 raise
 
         try:
-            logger.info("Starting background processing", filename=filename)
+            t_ingest_start = time.perf_counter()
+            logger.info("INGEST timing: upload_processing_started", filename=filename)
 
             if not file_path.exists():
                 await progress_notifier.notify(ProgressEvent(filename, -1, f"File not found: {filename}"))
@@ -196,14 +198,25 @@ class DocumentProcessingService:
             await progress_notifier.notify(ProgressEvent(filename, 15, "Processing started"))
             await asyncio.sleep(0.01)
 
+            # Idempotency: remove existing chunks for this document before re-ingesting
+            t_del_start = time.perf_counter()
+            deleted = self.vector_store_manager.delete_by_document_name(filename)
+            logger.info(
+                "INGEST timing: delete_existing_done",
+                filename=filename,
+                elapsed_ms=int((time.perf_counter() - t_del_start) * 1000),
+                deleted=deleted,
+            )
+
             progress_task = asyncio.create_task(_stream_progress())
             try:
                 chunks_processed, records_stored = await self._process_single_document(
                     file_path, params, filename, progress_callback=_progress_callback
                 )
                 logger.info(
-                    "Background processing completed",
+                    "INGEST timing: upload_processing_completed",
                     filename=filename,
+                    elapsed_ms=int((time.perf_counter() - t_ingest_start) * 1000),
                     chunks_processed=chunks_processed,
                     records_stored=records_stored,
                 )

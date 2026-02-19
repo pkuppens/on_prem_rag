@@ -53,6 +53,9 @@ def get_uploaded_files_dir() -> Path:
     Returns:
         Path to the uploaded files directory
     """
+    override = os.getenv("UPLOADED_FILES_DIR")
+    if override:
+        return Path(override)
     return get_data_dir() / "uploads"
 
 

@@ -5,10 +5,17 @@ It implements a FastAPI endpoint that accepts questions and returns
 answers with source context.
 
 See STORY-003 for business context and acceptance criteria.
+Issue #86: Voice query pipeline - transcribe audio then query.
 """
 
-from fastapi import APIRouter, HTTPException
+import time
+from pathlib import Path
+
+from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field, field_validator
+
+from backend.stt.service import get_stt_service
+from backend.stt.transcriber import SUPPORTED_AUDIO_FORMATS
 
 from ..config.llm_config import get_llm_config
 from ..core.llm_providers import ModelNotFoundError
@@ -73,6 +80,18 @@ class AskResponse(BaseModel):
     confidence: str
     chunks_retrieved: int
     average_similarity: float
+
+
+class VoiceAskResponse(AskResponse):
+    """Response for voice→query: RAG answer plus transcription metadata.
+
+    Extends AskResponse with transcription_language, transcription_text,
+    and transcription_latency_ms for downstream use and latency tracking.
+    """
+
+    transcription_text: str = Field(..., description="Transcribed question text")
+    transcription_language: str = Field(..., description="Detected language code (e.g. nl, en)")
+    transcription_latency_ms: int = Field(..., description="Transcription duration in milliseconds")
 
 
 @router.post("", response_model=AskResponse)
@@ -157,6 +176,110 @@ async def ask_question(payload: AskRequest) -> AskResponse:
 
     except Exception as e:
         logger.error("Error during question answering", question=payload.question, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}") from e
+
+
+# Maximum audio file size for voice query (50 MB)
+MAX_VOICE_AUDIO_SIZE = 50 * 1024 * 1024
+
+
+@router.post("/voice", response_model=VoiceAskResponse)
+async def ask_voice(audio: UploadFile = File(..., description="Audio file (e.g. WAV, MP3, WebM)")) -> VoiceAskResponse:
+    """Voice query: transcribe audio, then run RAG question-answering.
+
+    Accepts audio, transcribes with faster-whisper (no LLM correction for speed),
+    then sends the transcribed text to the QA system. Returns RAG answer with
+    transcription metadata (language, latency). Target: transcription < 3 s for
+    typical 5–10 s clips (Issue #86).
+    """
+    if not audio.filename:
+        raise HTTPException(status_code=400, detail="No filename provided")
+
+    extension = Path(audio.filename).suffix.lower()
+    if extension not in SUPPORTED_AUDIO_FORMATS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported audio format: {extension}. Supported: {', '.join(SUPPORTED_AUDIO_FORMATS)}",
+        )
+
+    audio_data = await audio.read()
+    if len(audio_data) > MAX_VOICE_AUDIO_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Audio file too large. Maximum: {MAX_VOICE_AUDIO_SIZE / 1024 / 1024:.0f} MB",
+        )
+
+    # Step 1: Transcribe (draft mode, no correction, auto-detect language)
+    t0 = time.perf_counter()
+    try:
+        stt_service = get_stt_service()
+        transcription = stt_service.transcribe_only(
+            audio_data=audio_data,
+            file_extension=extension,
+            language=None,  # Auto-detect for multilingual support
+        )
+    except Exception as e:
+        logger.exception("Voice query transcription failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}") from e
+
+    transcription_latency_ms = int((time.perf_counter() - t0) * 1000)
+    question = (transcription.text or "").strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="No speech detected in audio. Please try again with clearer audio.",
+        )
+
+    # Step 2: Run RAG question-answering (voice->text->retrieve chunks->generate answer)
+    try:
+        get_metrics().record_query()
+        llm_config = get_llm_config()
+        logger.info(
+            "Voice RAG flow: voice->text [transcribe]",
+            question=question[:80],
+            language=transcription.language,
+            transcribe_ms=transcription_latency_ms,
+        )
+
+        result = qa_system.ask_question(
+            question=question,
+            top_k=5,
+            similarity_threshold=0.5,  # Lower than text ask to improve recall for voice queries
+            strategy="hybrid",  # Hybrid matches text /ask default; more robust than dense-only
+        )
+
+        logger.info(
+            "Voice RAG flow: retrieve->generate",
+            chunks=result["chunks_retrieved"],
+            confidence=result["confidence"],
+        )
+        return VoiceAskResponse(
+            answer=result["answer"],
+            sources=result["sources"],
+            confidence=result["confidence"],
+            chunks_retrieved=result["chunks_retrieved"],
+            average_similarity=result["average_similarity"],
+            transcription_text=question,
+            transcription_language=transcription.language or "unknown",
+            transcription_latency_ms=transcription_latency_ms,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+    except ModelNotFoundError as e:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": "LLM model not available",
+                "model": e.model_name,
+                "remediation": [
+                    f"Pull the model: ollama pull {e.model_name}",
+                    "List available models: ollama list",
+                ],
+            },
+        ) from e
+    except Exception as e:
+        logger.error("Voice ask failed", question=question[:80], error=str(e))
         raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}") from e
 
 

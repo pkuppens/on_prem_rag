@@ -1,0 +1,8 @@
+Metformin hydrochloride is indicated for the treatment of type 2 diabetes mellitus.
+
+Contraindications:
+- Metformin is contraindicated in patients with severe renal impairment (GFR < 30 mL/min).
+- Metformin should not be used in pregnancy unless clearly necessary. Animal studies do not indicate harmful effects.
+- Avoid in acute metabolic acidosis, including diabetic ketoacidosis.
+
+Common adverse effects include gastrointestinal symptoms. Start with low dose and titrate gradually.

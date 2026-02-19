@@ -2,6 +2,8 @@
 
 This module provides on-premises transcription using the faster-whisper library,
 which is a CTranslate2 implementation of OpenAI's Whisper model.
+
+See docs/technical/CUDA_SETUP.md for GPU/CUDA configuration.
 """
 
 import logging
@@ -17,10 +19,33 @@ logger = logging.getLogger(__name__)
 # Supported audio formats
 SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3", ".m4a", ".flac", ".ogg", ".webm"}
 
-# Model configuration
+# Model configuration (env overrides at runtime)
 DEFAULT_MODEL_SIZE = os.getenv("STT_MODEL_SIZE", "small")
-DEFAULT_DEVICE = os.getenv("STT_DEVICE", "cpu")  # "cpu" or "cuda"
-DEFAULT_COMPUTE_TYPE = os.getenv("STT_COMPUTE_TYPE", "int8")  # "int8", "float16", "float32"
+
+
+def _get_default_device() -> str:
+    """Resolve device: explicit STT_DEVICE env, else auto-detect CUDA, else cpu."""
+    explicit = os.getenv("STT_DEVICE")
+    if explicit is not None and explicit.strip():
+        return explicit.strip().lower()
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            return "cuda"
+    except ImportError:
+        pass
+    return "cpu"
+
+
+def _get_default_compute_type(device: str) -> str:
+    """Resolve compute type: explicit STT_COMPUTE_TYPE env, else float16 for cuda, int8 for cpu."""
+    explicit = os.getenv("STT_COMPUTE_TYPE")
+    if explicit is not None and explicit.strip():
+        return explicit.strip().lower()
+    if device == "cuda":
+        return "float16"
+    return "int8"
 
 
 class Transcriber:
@@ -28,20 +53,23 @@ class Transcriber:
 
     def __init__(
         self,
-        model_size: str = DEFAULT_MODEL_SIZE,
-        device: str = DEFAULT_DEVICE,
-        compute_type: str = DEFAULT_COMPUTE_TYPE,
+        model_size: str | None = None,
+        device: str | None = None,
+        compute_type: str | None = None,
     ):
         """Initialize the transcriber.
 
         Args:
-            model_size: Whisper model size ("tiny", "base", "small", "medium", "large-v2", "large-v3")
-            device: Device to use for inference ("cpu" or "cuda")
-            compute_type: Computation type ("int8", "float16", "float32")
+            model_size: Whisper model size ("tiny", "base", "small", "medium", "large-v2", "large-v3",
+                "turbo"). turbo = large-v3-turbo, good speed/accuracy for multilingual.
+            device: Device for inference ("cpu" or "cuda"). If None, uses STT_DEVICE env or auto-detects
+                CUDA when torch.cuda.is_available().
+            compute_type: Computation type ("int8", "float16", "float32"). If None, uses STT_COMPUTE_TYPE
+                env or float16 for cuda, int8 for cpu.
         """
-        self.model_size = model_size
-        self.device = device
-        self.compute_type = compute_type
+        self.model_size = model_size or os.getenv("STT_MODEL_SIZE", "small")
+        self.device = device if device is not None else _get_default_device()
+        self.compute_type = compute_type if compute_type is not None else _get_default_compute_type(self.device)
         self._model = None
 
     def _ensure_model_loaded(self) -> None:

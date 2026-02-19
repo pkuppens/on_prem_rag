@@ -17,6 +17,7 @@ Key features:
 from __future__ import annotations
 
 import logging
+import time
 from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
 from typing import TypedDict, Union
@@ -273,23 +274,23 @@ def process_document(
     """
     file_path = Path(file_path)
     logger = StructuredLogger(__name__)
+    t_start = time.perf_counter()
 
     # Progress tracking: Document loading (10% of total progress)
-    logger.debug("Starting document processing", filename=file_path.name, model=model_name)
+    logger.info("INGEST timing: started", filename=file_path.name, model=model_name)
     if progress_callback:
         progress_callback(file_path.name, 0.0)  # 0% - Starting
 
     # Load the document
-    logger.debug("Loading document", filename=file_path.name)
+    t_load_start = time.perf_counter()
     document_loader = DocumentLoader()
     documents, document_metadata = document_loader.load_document(file_path)
-
-    logger.debug(
-        "Document loaded successfully",
+    logger.info(
+        "INGEST timing: load_done",
         filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_load_start) * 1000),
         pages=len(documents),
         file_size=document_metadata.file_size,
-        file_type=document_metadata.file_type,
     )
 
     # Limit pages if requested (mainly for PDFs)
@@ -319,6 +320,7 @@ def process_document(
             progress_callback(file_path.name, overall_progress)
 
     # Chunk the documents using centralized chunking with page-by-page progress
+    t_chunk_start = time.perf_counter()
     chunking_result = chunk_documents(
         documents,
         chunk_size=chunk_size,
@@ -327,6 +329,12 @@ def process_document(
         enable_text_cleaning=True,
         min_chunk_length=10,
         progress_callback=chunking_progress_wrapper,
+    )
+    logger.info(
+        "INGEST timing: chunk_done",
+        filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_chunk_start) * 1000),
+        chunks=chunking_result.chunk_count,
     )
 
     logger.debug(
@@ -359,6 +367,7 @@ def process_document(
             progress_callback(file_path.name, total_progress)
 
     # Create embeddings and store them
+    t_embed_start = time.perf_counter()
     chunks_processed, records_stored = embed_chunks(
         chunking_result,
         model_name,
@@ -366,6 +375,19 @@ def process_document(
         collection_name=collection_name,
         deduplicate=deduplicate,
         progress_callback=embedding_progress_wrapper,
+    )
+    logger.info(
+        "INGEST timing: embed_and_store_done",
+        filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_embed_start) * 1000),
+        chunks=chunks_processed,
+        records=records_stored,
+    )
+
+    logger.info(
+        "INGEST timing: total_done",
+        filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_start) * 1000),
     )
 
     logger.debug(
@@ -574,9 +596,17 @@ def embed_chunks(
     logger.debug("Generating embeddings for chunks", filename=file_path.name, total_chunks=len(non_empty_nodes))
 
     # Add granular progress reporting for embedding generation
+    t_model_start = time.perf_counter()
     embed_model = get_embedding_model(model_name)
+    logger.info(
+        "INGEST timing: embed_model_load_done",
+        filename=file_path.name,
+        model=model_name,
+        elapsed_ms=int((time.perf_counter() - t_model_start) * 1000),
+    )
     embeddings = []
 
+    t_embed_gen_start = time.perf_counter()
     # Process each node to generate embeddings with progress updates
     for i, node in enumerate(non_empty_nodes):
         # Validate text content before embedding
@@ -620,7 +650,15 @@ def embed_chunks(
     if progress_callback:
         progress_callback(0.8)  # 80% of total progress - Embeddings generated
 
+    logger.info(
+        "INGEST timing: embed_gen_done",
+        filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_embed_gen_start) * 1000),
+        embeddings_count=len(embeddings),
+    )
+
     # Progress tracking: Metadata preparation and storage (20% of embedding phase, from 80% to 100% of total)
+    t_store_start = time.perf_counter()
     logger.debug("Preparing clean metadata for storage", filename=file_path.name)
 
     # Create clean, serializable metadata for each chunk
@@ -664,6 +702,12 @@ def embed_chunks(
     )
 
     count = manager._collection.count()
+    logger.info(
+        "INGEST timing: store_done",
+        filename=file_path.name,
+        elapsed_ms=int((time.perf_counter() - t_store_start) * 1000),
+        records_stored=count,
+    )
     logger.debug("Vector database storage completed", filename=file_path.name, records_stored=count, collection=collection_name)
 
     if progress_callback:

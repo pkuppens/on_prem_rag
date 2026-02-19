@@ -1,5 +1,7 @@
-import { Box, Typography, Paper, Button } from '@mui/material';
+import { useCallback } from 'react';
+import { Box, Typography, Paper, Button, CircularProgress } from '@mui/material';
 import Logger from '../../utils/logger';
+import { useDocumentTextContent } from '../../hooks/useDocumentTextContent';
 
 interface EmbeddingResult {
   text: string;
@@ -17,14 +19,21 @@ interface Props {
 }
 
 export const DOCXViewer = ({ selectedResult }: Props) => {
-  const handleCopy = () => {
+  const { content, loading, error } = useDocumentTextContent(
+    selectedResult?.document_name ?? null,
+    !!selectedResult
+  );
+
+  const displayText = content ?? selectedResult?.text ?? '';
+  const handleCopy = useCallback(() => {
     const selectedText = window.getSelection()?.toString();
-    const textToCopy = selectedText?.trim() ? selectedText : selectedResult?.text;
+    const textToCopy = selectedText?.trim() ? selectedText : displayText;
     if (!textToCopy) return;
     navigator.clipboard.writeText(textToCopy).catch((err) => {
       Logger.error('Copy failed', 'DOCXViewer.tsx', 'handleCopy', 18, { err });
     });
-  };
+  }, [displayText]);
+
   if (!selectedResult) {
     return (
       <Paper sx={{ p: 4, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -41,21 +50,32 @@ export const DOCXViewer = ({ selectedResult }: Props) => {
         <Typography variant="h6" noWrap>
           {selectedResult.document_name}
         </Typography>
-        <Button onClick={handleCopy} size="small" variant="outlined">
+        <Button onClick={handleCopy} size="small" variant="outlined" disabled={loading || !!error}>
           Copy Text
         </Button>
       </Box>
-
-      <Box sx={{
-        p: 2,
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 1,
-        overflow: 'auto',
-        maxHeight: '80vh'
-      }}>
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+          <CircularProgress size={24} />
+        </Box>
+      )}
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
+      <Box
+        sx={{
+          p: 2,
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 1,
+          overflow: 'auto',
+          maxHeight: '80vh',
+        }}
+      >
         <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-          {selectedResult.text || 'No text content available'}
+          {loading ? '' : displayText || 'No text content available'}
         </Typography>
       </Box>
     </Paper>

@@ -94,6 +94,16 @@ Valid strategies: `dense`, `sparse`, `hybrid`, `bm25`. When omitted, uses `RETRI
 
 **Note:** `/api/ask` requires a running Ollama model. Pull with `ollama pull mistral:7b` or set `OLLAMA_MODEL` to an available model.
 
+### Voice query (audio → transcribe → RAG)
+
+The `/api/ask/voice` endpoint accepts audio, transcribes it with faster-whisper, and runs RAG. Use the microphone button in the React UI, or call via API:
+
+```bash
+curl -X POST -F "audio=@recording.wav" http://localhost:9180/api/ask/voice
+```
+
+Supported formats: WAV, MP3, M4A, FLAC, OGG, WebM. Response includes `transcription_text`, `transcription_language`, and `transcription_latency_ms` plus the standard RAG answer. STT model is configurable via `STT_MODEL_SIZE` (e.g. `turbo`, `small`), `STT_DEVICE` (cpu/cuda), and `STT_COMPUTE_TYPE` — see [env.example](../env.example) and [docs/technical/CUDA_SETUP.md](technical/CUDA_SETUP.md).
+
 ## Query Search (Retrieval Only)
 
 The `/api/query` endpoint returns matching chunks without LLM generation. Uses dense (semantic) search only.

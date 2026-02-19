@@ -100,7 +100,12 @@ def _reciprocal_rank_fusion(ranked_lists: list[list[dict[str, Any]]], k: int = 6
 
     for score, item in sorted_items:
         copy = dict(item)
-        copy["similarity_score"] = min(1.0, max(0.0, (score - min_s) / norm))
+        # When all items have the same RRF score (e.g. single chunk), norm makes score 0.
+        # Use 1.0 for tied top results so they pass similarity_threshold.
+        if norm <= 0 or max_s == min_s:
+            copy["similarity_score"] = 1.0
+        else:
+            copy["similarity_score"] = min(1.0, max(0.0, (score - min_s) / norm))
         results.append(copy)
 
     return results

@@ -73,6 +73,13 @@ export const API_ENDPOINTS = {
   },
   // Question answering (hybrid retrieval)
   ASK: '/api/ask',
+  ASK_VOICE: '/api/ask/voice',
+  // Speech-to-text
+  STT: {
+    TRANSCRIBE: '/api/stt/transcribe',
+    TRANSCRIBE_DRAFT: '/api/stt/transcribe/draft',
+    INFO: '/api/stt/info',
+  },
   // Parameters
   PARAMETERS: {
     LIST: '/api/parameters',
@@ -163,6 +170,18 @@ export class ApiUrlBuilder {
     return this.buildUrl(API_ENDPOINTS.ASK);
   }
 
+  getAskVoiceUrl(): string {
+    return this.buildUrl(API_ENDPOINTS.ASK_VOICE);
+  }
+
+  getSttTranscribeDraftUrl(): string {
+    return this.buildUrl(API_ENDPOINTS.STT.TRANSCRIBE_DRAFT);
+  }
+
+  getSttInfoUrl(): string {
+    return this.buildUrl(API_ENDPOINTS.STT.INFO);
+  }
+
   /**
    * Get the parameters list URL
    * @returns Parameters list URL
@@ -199,6 +218,12 @@ export const apiUrls = {
   file: (filename: string) => apiUrlBuilder.buildFileUrl(filename),
 
   /**
+   * Get URL for document content as plain text (txt, md, docx)
+   */
+  fileAsText: (filename: string) =>
+    apiUrlBuilder.buildUrl(`${API_ENDPOINTS.DOCUMENTS.FILES}/${encodeURIComponent(filename)}/as-text`),
+
+  /**
    * Get upload URL with optional parameter set
    */
   upload: (paramsName?: string) => apiUrlBuilder.getUploadUrl(paramsName),
@@ -212,6 +237,12 @@ export const apiUrls = {
    * Get ask (QA with hybrid retrieval) URL
    */
   ask: () => apiUrlBuilder.getAskUrl(),
+
+  askVoice: () => apiUrlBuilder.getAskVoiceUrl(),
+
+  sttTranscribeDraft: () => apiUrlBuilder.getSttTranscribeDraftUrl(),
+
+  sttInfo: () => apiUrlBuilder.getSttInfoUrl(),
 
   /**
    * Get parameters list URL

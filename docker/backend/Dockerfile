@@ -25,8 +25,8 @@ FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-# Install curl for Docker healthchecks
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
+# Install curl for healthchecks, util-linux for runuser (entrypoint)
+RUN apt-get update && apt-get install -y --no-install-recommends curl util-linux \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -u 1000 appuser
@@ -38,7 +38,9 @@ COPY --from=builder /app /app
 
 RUN chown -R appuser:appuser /app
 
-USER appuser
+COPY docker/backend/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 ENV PYTHONPATH=/app:/app/src
 ENV PYTHONUNBUFFERED=1

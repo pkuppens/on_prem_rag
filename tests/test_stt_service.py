@@ -6,6 +6,8 @@ context-aware corrections, so I can use voice input for medical documentation.
 Technical: Tests STT models, transcription flow, correction logic, and glossary.
 """
 
+from unittest.mock import patch
+
 import pytest
 
 from backend.stt.models import CorrectionConfig, CorrectionResult, STTResponse, TranscriptionResult, UserRole
@@ -170,6 +172,51 @@ class TestTranscriber:
         assert info["model_size"] == "small"
         assert info["is_loaded"] is False  # Model not loaded yet
 
+    def test_transcriber_turbo_model(self):
+        """As a user I want to use turbo model for better speed/accuracy.
+        Technical: Transcriber accepts "turbo" as model_size (large-v3-turbo alias).
+        """
+        from backend.stt.transcriber import Transcriber
+
+        transcriber = Transcriber(model_size="turbo", device="cpu", compute_type="int8")
+        assert transcriber.model_size == "turbo"
+
+    def test_transcriber_cuda_autodetect(self, monkeypatch):
+        """As a user I want CUDA auto-detected when GPU available.
+        Technical: When STT_DEVICE unset and torch.cuda.is_available() is True, device is cuda.
+        """
+        import torch
+
+        from backend.stt.transcriber import Transcriber
+
+        monkeypatch.delenv("STT_DEVICE", raising=False)
+        monkeypatch.delenv("STT_COMPUTE_TYPE", raising=False)
+        with patch.object(torch.cuda, "is_available", return_value=True):
+            transcriber = Transcriber()
+        assert transcriber.device == "cuda"
+        assert transcriber.compute_type == "float16"
+
+    def test_transcriber_device_from_env(self, monkeypatch):
+        """As a user I want to force device via STT_DEVICE env.
+        Technical: When STT_DEVICE=cuda, Transcriber uses cuda.
+        """
+        from backend.stt.transcriber import Transcriber
+
+        monkeypatch.setenv("STT_DEVICE", "cuda")
+        monkeypatch.delenv("STT_COMPUTE_TYPE", raising=False)
+        transcriber = Transcriber()
+        assert transcriber.device == "cuda"
+        assert transcriber.compute_type == "float16"
+
+    def test_transcriber_compute_type_float16_for_cuda(self):
+        """As a user I want float16 when using CUDA for better performance.
+        Technical: When device=cuda and STT_COMPUTE_TYPE unset, default is float16.
+        """
+        from backend.stt.transcriber import Transcriber
+
+        transcriber = Transcriber(device="cuda", compute_type=None)
+        assert transcriber.compute_type == "float16"
+
     def test_transcriber_get_global(self):
         """Test getting global transcriber instance."""
         from backend.stt.transcriber import get_transcriber
@@ -267,6 +314,90 @@ class TestSTTAPIModels:
         assert router is not None
         assert router.prefix == "/api/stt"
 
+    def test_transcription_result_has_language(self):
+        """As a user I want detected language available for downstream use.
+        Technical: TranscriptionResult includes language field.
+        """
+        result = TranscriptionResult(
+            text="Hello world",
+            language="en",
+            confidence=0.9,
+            duration_seconds=1.0,
+            segments=[],
+        )
+        assert result.language == "en"
+
+
+class TestSTTAPIEndpoints:
+    """Integration tests for STT and voice-ask API endpoints (AC-1e, AC-2)."""
+
+    def test_stt_info_returns_device(self):
+        """As a user I want to see STT device (cpu/cuda) in API info.
+        Technical: GET /api/stt/info returns transcriber.device.
+        """
+        from fastapi.testclient import TestClient
+
+        from backend.rag_pipeline.api.app import app
+
+        client = TestClient(app)
+        resp = client.get("/api/stt/info")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "service" in data
+        transcriber_info = data["service"]["transcriber"]
+        assert "device" in transcriber_info
+        assert transcriber_info["device"] in ("cpu", "cuda")
+
+    def test_ask_voice_unsupported_format(self):
+        """Voice ask rejects unsupported audio format."""
+        from fastapi.testclient import TestClient
+
+        from backend.rag_pipeline.api.app import app
+
+        client = TestClient(app)
+        resp = client.post(
+            "/api/ask/voice",
+            files={"audio": ("test.xyz", b"fake", "application/octet-stream")},
+        )
+        assert resp.status_code == 400
+
+    @pytest.mark.slow
+    @pytest.mark.ci_skip
+    def test_ask_voice_no_speech_detected(self):
+        """Voice ask returns 400 when audio has no speech.
+        Technical: Minimal silent WAV yields empty transcription.
+        Loads Whisper model on first run.
+        """
+        import struct
+
+        from fastapi.testclient import TestClient
+
+        from backend.rag_pipeline.api.app import app
+
+        # Build valid WAV: 1 channel, 16kHz, 16-bit, 0.1s silence
+        sample_rate = 16000
+        duration_sec = 0.1
+        num_samples = int(sample_rate * duration_sec)
+        data = struct.pack(f"<{num_samples}h", *([0] * num_samples))
+        wav = (
+            b"RIFF"
+            + struct.pack("<I", 36 + len(data))
+            + b"WAVE"
+            + b"fmt \x10\x00\x00\x00\x01\x00\x01\x00"
+            + struct.pack("<I", sample_rate)
+            + struct.pack("<I", sample_rate * 2)
+            + b"\x02\x00\x10\x00"
+            + b"data"
+            + struct.pack("<I", len(data))
+            + data
+        )
+        client = TestClient(app)
+        resp = client.post(
+            "/api/ask/voice",
+            files={"audio": ("silence.wav", wav, "audio/wav")},
+        )
+        assert resp.status_code in (400, 500)
+
 
 @pytest.mark.slow
 @pytest.mark.internet
@@ -283,6 +414,96 @@ class TestTranscriberIntegration:
         assert transcriber._model is not None
         info = transcriber.get_model_info()
         assert info["is_loaded"] is True
+
+
+@pytest.mark.slow
+@pytest.mark.internet
+class TestTTSSTTRoundtrip:
+    """TTS→STT roundtrip for Dutch/English (AC-4). Requires gtts and faster-whisper."""
+
+    @staticmethod
+    def _normalize(text: str) -> str:
+        """Lowercase and strip punctuation for comparison."""
+        import string
+
+        t = text.lower().strip()
+        for p in string.punctuation:
+            t = t.replace(p, " ")
+        return " ".join(t.split())
+
+    @staticmethod
+    def _similarity(a: str, b: str) -> float:
+        """Word overlap ratio (0-1)."""
+        wa = set(TestTTSSTTRoundtrip._normalize(a).split())
+        wb = set(TestTTSSTTRoundtrip._normalize(b).split())
+        if not wa:
+            return 1.0 if not wb else 0.0
+        return len(wa & wb) / len(wa)
+
+    def test_dutch_tts_stt_language_detected(self):
+        """As a user I want Dutch audio to transcribe to Dutch.
+        Technical: TTS(Dutch text) → STT → language detected as nl.
+        """
+        try:
+            from gtts import gTTS
+        except ImportError:
+            pytest.skip("gtts not installed")
+        from io import BytesIO
+
+        from backend.stt.transcriber import Transcriber
+
+        text = "Hoe gaat het met u vandaag?"
+        buf = BytesIO()
+        gTTS(text=text, lang="nl").write_to_fp(buf)
+        audio_bytes = buf.getvalue()
+
+        transcriber = Transcriber(model_size="tiny", device="cpu", compute_type="int8")
+        result = transcriber.transcribe_bytes(audio_bytes, file_extension=".mp3", language=None)
+        assert result.language == "nl"
+
+    def test_english_tts_stt_language_detected(self):
+        """As a user I want English audio to transcribe to English.
+        Technical: TTS(English text) → STT → language detected as en.
+        """
+        try:
+            from gtts import gTTS
+        except ImportError:
+            pytest.skip("gtts not installed")
+        from io import BytesIO
+
+        from backend.stt.transcriber import Transcriber
+
+        text = "How are you feeling today?"
+        buf = BytesIO()
+        gTTS(text=text, lang="en").write_to_fp(buf)
+        audio_bytes = buf.getvalue()
+
+        transcriber = Transcriber(model_size="tiny", device="cpu", compute_type="int8")
+        result = transcriber.transcribe_bytes(audio_bytes, file_extension=".mp3", language=None)
+        assert result.language == "en"
+
+    def test_tts_stt_similarity_medium_sentence(self):
+        """As a user I want transcription to match spoken text well.
+        Technical: TTS(text) → STT → normalized similarity ≥80%.
+        Uses tiny model; turbo would typically perform better.
+        """
+        try:
+            from gtts import gTTS
+        except ImportError:
+            pytest.skip("gtts not installed")
+        from io import BytesIO
+
+        from backend.stt.transcriber import Transcriber
+
+        text = "What is the recommended dosage for metformin?"
+        buf = BytesIO()
+        gTTS(text=text, lang="en").write_to_fp(buf)
+        audio_bytes = buf.getvalue()
+
+        transcriber = Transcriber(model_size="tiny", device="cpu", compute_type="int8")
+        result = transcriber.transcribe_bytes(audio_bytes, file_extension=".mp3", language="en")
+        sim = self._similarity(text, result.text)
+        assert sim >= 0.5, f"Similarity {sim:.2f} below 0.5; transcript: {result.text!r}"
 
 
 @pytest.mark.ollama

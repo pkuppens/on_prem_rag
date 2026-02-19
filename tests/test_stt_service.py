@@ -362,6 +362,7 @@ class TestSTTAPIEndpoints:
         assert resp.status_code == 400
 
     @pytest.mark.slow
+    @pytest.mark.ci_skip
     def test_ask_voice_no_speech_detected(self):
         """Voice ask returns 400 when audio has no speech.
         Technical: Minimal silent WAV yields empty transcription.

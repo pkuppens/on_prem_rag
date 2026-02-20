@@ -16,6 +16,7 @@ from .directory_utils import (
     get_uploaded_files_dir,
     validate_directory,
 )
+from .env_utils import get_env, get_env_or_none
 
 __all__ = [
     "DirectoryEmptyError",
@@ -32,4 +33,6 @@ __all__ = [
     "get_test_data_dir",
     "get_uploaded_files_dir",
     "validate_directory",
+    "get_env",
+    "get_env_or_none",
 ]

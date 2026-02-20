@@ -370,6 +370,40 @@ jobs:
           name: integration-test-results
           path: test-results-integration.xml
 
+  # Cloud LLM integration - validates Google Gemini when GEMINI_API_KEY is set
+  # Runs only on PR; skips when secret not configured (no token cost)
+  test-cloud-llm:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    if: github.event_name == 'pull_request' && github.base_ref != 'main' && secrets.GEMINI_API_KEY != ''
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Run Cloud LLM (Gemini) integration test
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          uv run pytest -m cloud_llm --run-internet -v --junitxml=test-results-cloud-llm.xml
+      - name: Upload cloud LLM test results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: cloud-llm-test-results
+          path: test-results-cloud-llm.xml
+
   # Security scanning job - runs in parallel with tests
   security:
     runs-on: ubuntu-latest

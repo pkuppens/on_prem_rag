@@ -38,13 +38,11 @@ The LLM is crucial for:
 ### Model Selection Criteria
 
 1. **On-Premises Requirement**
-
    - Must run locally
    - No external API dependencies
    - Full data control
 
 2. **Performance**
-
    - Adequate for RAG tasks
    - Reasonable resource requirements
    - Good response quality
@@ -57,7 +55,6 @@ The LLM is crucial for:
 ### Alternative Models Considered
 
 1. **Llama 2**
-
    - Pros: Strong performance, good documentation
    - Cons: Larger resource requirements
    - Decision: Not selected due to size
@@ -136,35 +133,38 @@ def process_query(
 
 Switching backends is done via environment variables. The RAG pipeline uses LiteLLM for unified access.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `LLM_BACKEND` | Backend: `ollama`, `openai`, `anthropic`, `azure`, `huggingface` | `ollama` |
-| `LLM_MODEL` | Model name (e.g. `mistral`, `gpt-4`, `claude-2`) | `mistral` |
-| `OLLAMA_BASE_URL` | Ollama API base URL | `http://localhost:11434` |
-| `OLLAMA_MODEL` | Legacy; used when `LLM_MODEL` not set and backend is ollama | `mistral` |
+| Variable          | Description                                                                | Default                  |
+| ----------------- | -------------------------------------------------------------------------- | ------------------------ |
+| `LLM_BACKEND`     | Backend: `ollama`, `openai`, `anthropic`, `azure`, `huggingface`, `gemini` | `ollama`                 |
+| `LLM_MODEL`           | Global model override for all backends                                      | (backend-specific)       |
+| `LLM_MODEL_GEMINI`    | Gemini model when `LLM_MODEL` not set                                       | `gemini-2.0-flash`      |
+| `LLM_MODEL_OPENAI`    | OpenAI model when `LLM_MODEL` not set                                       | `gpt-4.1-mini`          |
+| `LLM_MODEL_ANTHROPIC` | Anthropic model when `LLM_MODEL` not set                                    | `claude-sonnet-4-6`     |
+| `LLM_MODEL_AZURE`     | Azure deployment name when `LLM_MODEL` not set (your deployment name)       | `gpt-4.1-mini`          |
+| `OLLAMA_BASE_URL`     | Ollama API base URL                                                        | `http://localhost:11434` |
+| `OLLAMA_MODEL`        | Legacy; used when `LLM_MODEL` not set and backend is ollama                | `mistral`               |
 
 Provider-specific API keys (LiteLLM reads these):
 
-| Backend | Required env vars |
-|---------|-------------------|
-| `openai` | `OPENAI_API_KEY` |
-| `anthropic` | `ANTHROPIC_API_KEY` |
-| `azure` | `AZURE_API_KEY`, `AZURE_API_BASE`, `AZURE_API_VERSION` |
+| Backend       | Required env vars                                        |
+| ------------- | -------------------------------------------------------- |
+| `openai`      | `OPENAI_API_KEY`                                         |
+| `anthropic`   | `ANTHROPIC_API_KEY`                                      |
+| `azure`       | `AZURE_API_KEY`, `AZURE_API_BASE`, `AZURE_API_VERSION`   |
 | `huggingface` | `HUGGINGFACE_API_KEY` (optional for inference endpoints) |
-| `ollama` | None (local) |
+| `gemini`      | `GEMINI_API_KEY`                                         |
+| `ollama`      | None (local)                                             |
 
 ## Performance Considerations
 
 ### Optimization Strategies
 
 1. **Prompt Engineering**
-
    - Optimize system prompts
    - Implement few-shot examples
    - Use chain-of-thought prompting
 
 2. **Context Management**
-
    - Implement context window optimization
    - Use semantic compression
    - Prioritize relevant context
@@ -179,19 +179,16 @@ Provider-specific API keys (LiteLLM reads these):
 ### Planned Enhancements
 
 1. **Model Updates**
-
    - Monitor for newer models
    - Evaluate performance improvements
    - Consider model quantization
 
 2. **Performance**
-
    - Implement response caching
    - Optimize context handling
    - Add batch processing
 
 3. **Quality Improvements**
-
    - Enhance prompt engineering
    - Implement better context selection
    - Add response validation

@@ -1,0 +1,38 @@
+# Cloud LLM integration test - manual trigger only
+# Run when Cloud LLM code is changed; not needed for every CI run.
+# If GEMINI_API_KEY secret is not set, the test skips gracefully.
+name: Cloud LLM Test
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test-cloud-llm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Run Cloud LLM (Gemini) integration test
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          uv run pytest -m cloud_llm --run-internet -v --junitxml=test-results-cloud-llm.xml
+      - name: Upload cloud LLM test results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: cloud-llm-test-results
+          path: test-results-cloud-llm.xml

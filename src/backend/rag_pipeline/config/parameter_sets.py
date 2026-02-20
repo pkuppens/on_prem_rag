@@ -8,6 +8,8 @@ and provides utilities for parameter exploration and validation.
 from dataclasses import dataclass
 from typing import Any
 
+from backend.rag_pipeline.config.llm_config import get_model_for_backend
+
 
 @dataclass
 class ChunkingParams:
@@ -203,8 +205,8 @@ DEFAULT_EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 # - Higher k = more context but potentially more noise
 DEFAULT_TOP_K = 3
 
-# LLM settings
-DEFAULT_LLM_MODEL = "mistral"  # Ollama model name
+# LLM settings - model from env (LLM_MODEL, OLLAMA_MODEL) or backend default
+DEFAULT_LLM_MODEL = get_model_for_backend("ollama")
 DEFAULT_TEMPERATURE = 0.1  # Lower = more focused, higher = more creative
 DEFAULT_MAX_TOKENS = 512  # Maximum response length
 
@@ -218,7 +220,7 @@ PRECISE_ANSWERS = RAGParams(
         model_name="BAAI/bge-large-en-v1.5",  # Large model for better semantic understanding
     ),
     llm=LLMParams(
-        model_name="mistral",
+        model_name=get_model_for_backend("ollama"),
         temperature=0.1,  # Low temperature for precise answers
         max_tokens=512,
     ),
@@ -236,7 +238,7 @@ CONTEXT_RICH = RAGParams(
         model_name="BAAI/bge-large-en-v1.5",  # Large model for better semantic understanding
     ),
     llm=LLMParams(
-        model_name="mistral",
+        model_name=get_model_for_backend("ollama"),
         temperature=0.2,  # Slightly higher for more creative answers
         max_tokens=1024,
     ),
@@ -254,7 +256,7 @@ BALANCED = RAGParams(
         model_name="BAAI/bge-small-en-v1.5",  # Small model for speed
     ),
     llm=LLMParams(
-        model_name="mistral",
+        model_name=get_model_for_backend("ollama"),
         temperature=0.15,  # Balanced temperature
         max_tokens=768,
     ),
@@ -272,7 +274,7 @@ FAST_ANSWERS = RAGParams(
         model_name="sentence-transformers/all-MiniLM-L6-v2",  # Lightweight model
     ),
     llm=LLMParams(
-        model_name="mistral",
+        model_name=get_model_for_backend("ollama"),
         temperature=0.2,  # Slightly higher for faster generation
         max_tokens=256,  # Shorter responses
     ),
@@ -290,7 +292,7 @@ TEST_PARAMS = RAGParams(
         model_name="sentence-transformers/all-MiniLM-L6-v2",  # Lightweight, stable model
     ),
     llm=LLMParams(
-        model_name="mistral",
+        model_name=get_model_for_backend("ollama"),
         temperature=0.0,  # Deterministic outputs
         max_tokens=128,  # Fixed response length
     ),

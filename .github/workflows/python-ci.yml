@@ -227,7 +227,8 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Parallel with -n 2 --dist loadfile (GitHub runners are 2-core); pytest-cov auto-combines coverage
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
+          # --cov-fail-under=63: baseline from 2025-02-20; fail CI if coverage drops (see docs/testing/TEST_STRATEGY.md)
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=html --cov-report=term-missing --cov-fail-under=63
       - name: Upload coverage reports
         uses: actions/upload-artifact@v6
         with:
@@ -235,6 +236,7 @@ jobs:
           path: |
             coverage.xml
             test-results-unit.xml
+            htmlcov/
       - name: Add coverage to job summary
         if: always() && (success() || failure())
         run: |

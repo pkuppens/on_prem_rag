@@ -80,6 +80,8 @@ No tests were removed in this audit. Recommendations are for optimisation (Task 
 
 - **In scope**: `src/backend` (line and branch coverage).
 - **Out of scope**: Notebooks, scripts, tooling, frontend.
+- **CI enforcement**: `--cov-fail-under=63` in unit test job; CI fails if coverage drops below baseline.
+- **HTML report**: `htmlcov/` uploaded as artifact from unit job; download to inspect per-file coverage.
 
 ## CI Pipeline
 

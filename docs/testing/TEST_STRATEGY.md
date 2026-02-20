@@ -81,6 +81,12 @@ No tests were removed in this audit. Recommendations are for optimisation (Task 
 - **In scope**: `src/backend` (line and branch coverage).
 - **Out of scope**: Notebooks, scripts, tooling, frontend.
 
+## CI Pipeline
+
+- **Fast path**: setup → lint + model-download (parallel) → test-unit. Target: <3 min for unit job.
+- **Full path**: + test-performance (10 min timeout), test-integration (15 min timeout). Target: <8 min total on PR.
+- **Job timeouts**: unit 5 min, performance 10 min, integration 15 min.
+
 ## Environment Matrix
 
 | Environment | Workers | Notes |

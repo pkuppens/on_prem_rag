@@ -176,6 +176,7 @@ jobs:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
         with:
@@ -316,7 +317,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
         with:

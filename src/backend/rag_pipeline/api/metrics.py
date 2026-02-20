@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 from fastapi import APIRouter
 
-from ..core.vector_store import get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
@@ -53,12 +53,8 @@ def get_metrics() -> PipelineMetrics:
 def _get_index_chunk_count() -> int:
     """Get approximate chunk count from vector store (best effort)."""
     try:
-        vsm = get_vector_store_manager_from_env()
-        # ChromaVectorStoreManager exposes _collection
-        coll = getattr(vsm, "_collection", None)
-        if coll is not None:
-            result = coll.get(include=[])
-            return len(result["ids"]) if result.get("ids") else 0
+        vsm = get_vector_store_manager()
+        return vsm.get_chunk_count()
     except Exception as e:
         logger.warning("Could not get index chunk count", error=str(e))
     return 0

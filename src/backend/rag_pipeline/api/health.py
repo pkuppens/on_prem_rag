@@ -4,7 +4,7 @@ from starlette.responses import JSONResponse
 
 from ..config.llm_config import get_llm_config
 from ..core.llm_providers import get_llm_provider_from_env
-from ..core.vector_store import get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ async def health_database():
     # which doesn't require a separate database connection
     try:
         # Try to access the vector store to verify it's working
-        get_vector_store_manager_from_env()
+        get_vector_store_manager()
         # If we can create the vector store manager, the database is healthy
         return JSONResponse(content={"status": "ok"})
     except Exception as e:
@@ -59,7 +59,7 @@ async def health_vector_store():
     """Check the health of the vector store."""
     try:
         # Try to access the collection to verify it's working
-        get_vector_store_manager_from_env()
+        get_vector_store_manager()
         # This is a simple health check - we just verify we can create the manager
         return JSONResponse(content={"status": "ok"})
     except Exception as e:

@@ -15,7 +15,7 @@ from typing import Dict, List, Optional
 
 from ..config.parameter_sets import RAGParams, get_param_set
 from ..core.embeddings import process_document
-from ..core.vector_store import get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager
 from ..models.document_models import DocumentMetadata
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
@@ -31,7 +31,7 @@ class DocumentProcessingService:
 
     def __init__(self):
         """Initialize the document processing service."""
-        self.vector_store_manager = get_vector_store_manager_from_env()
+        self.vector_store_manager = get_vector_store_manager()
 
         logger.info("DocumentProcessingService initialized")
 

@@ -41,3 +41,31 @@ class TestChromaVectorStoreManager:
         import gc
 
         gc.collect()
+
+    def test_get_chunk_count_and_get_all_chunks(self, test_case_dir):
+        """As a user I want metrics and BM25 to use the abstract interface.
+        Technical: get_chunk_count and get_all_chunks work via ABC.
+        """
+        config = VectorStoreConfig(
+            host=None, persist_directory=str(test_case_dir), collection_name="test_chunks_abc"
+        )
+        manager = ChromaVectorStoreManager(config)
+
+        manager.add_embeddings(
+            ids=["c1", "c2"],
+            embeddings=[[0.1, 0.2], [0.3, 0.4]],
+            metadatas=[{"text": "hello world", "chunk_index": 0}, {"text": "foo bar", "chunk_index": 1}],
+        )
+
+        assert manager.get_chunk_count() == 2
+
+        ids, texts, metadatas = manager.get_all_chunks(limit=100)
+        assert ids == ["c1", "c2"]
+        assert texts == ["hello world", "foo bar"]
+        assert len(metadatas) == 2
+        assert metadatas[0].get("chunk_index") == 0
+
+        del manager
+        import gc
+
+        gc.collect()

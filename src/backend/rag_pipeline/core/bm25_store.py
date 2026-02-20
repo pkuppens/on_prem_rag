@@ -14,7 +14,7 @@ from typing import Any
 from rank_bm25 import BM25Okapi
 
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig
-from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
+from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager
 
 from ..utils.logging import StructuredLogger
 
@@ -29,62 +29,47 @@ def _tokenize(text: str) -> list[str]:
 
 
 class BM25Store:
-    """BM25 sparse index over chunk corpus from ChromaDB.
+    """BM25 sparse index over chunk corpus from vector store.
 
-    Builds index from ChromaDB documents on-demand. Suitable for small-to-medium
+    Builds index from vector store documents on-demand. Suitable for small-to-medium
     collections; for large corpora consider persistent index.
     """
 
-    def __init__(self, config: VectorStoreConfig) -> None:
-        """Initialize BM25 store with vector store config.
+    def __init__(
+        self,
+        config: VectorStoreConfig,
+        vector_store_manager: VectorStoreManager | None = None,
+    ) -> None:
+        """Initialize BM25 store with vector store config or injected manager.
 
         Args:
             config: VectorStoreConfig with persist_directory and collection_name.
+            vector_store_manager: Optional injected manager. If None, created from config.
         """
         self.config = config
-        self._vector_manager: ChromaVectorStoreManager | None = None
+        self._vector_manager = vector_store_manager
         self._bm25: BM25Okapi | None = None
         self._corpus_ids: list[str] = []
         self._corpus_documents: list[str] = []
         self._corpus_metadatas: list[dict[str, Any]] = []
 
-    def _get_vector_manager(self) -> ChromaVectorStoreManager:
-        """Lazy-init ChromaDB manager."""
+    def _get_vector_manager(self) -> VectorStoreManager:
+        """Lazy-init vector store manager from config if not injected."""
         if self._vector_manager is None:
-            self._vector_manager = ChromaVectorStoreManager(self.config)
+            self._vector_manager = get_vector_store_manager(self.config)
         return self._vector_manager
 
     def _build_index(self) -> None:
-        """Build BM25 index from ChromaDB documents."""
+        """Build BM25 index from vector store documents."""
         manager = self._get_vector_manager()
-        collection = manager._collection
-
-        # Fetch all documents and metadatas from ChromaDB.
-        # ChromaDB get() requires where/ids/where_document; chunk_index is int.
-        try:
-            result = collection.get(
-                where={"chunk_index": {"$gte": 0}},
-                include=["documents", "metadatas"],
-                limit=100_000,
-            )
-        except Exception as e:
-            logger.debug("BM25 build: where filter failed, using limit fallback", error=str(e))
-            # Fallback: get with limit only (ChromaDB >= 0.4 may support this).
-            result = collection.get(
-                include=["documents", "metadatas"],
-                limit=100_000,
-            )
-
-        ids = result.get("ids") or []
-        documents = result.get("documents") or []
-        metadatas = result.get("metadatas") or []
+        ids, documents, metadatas = manager.get_all_chunks(limit=100_000)
 
         if not ids or not documents:
             self._bm25 = None
             self._corpus_ids = []
             self._corpus_documents = []
             self._corpus_metadatas = []
-            logger.debug("BM25 index empty - no documents in ChromaDB")
+            logger.debug("BM25 index empty - no documents in vector store")
             return
 
         tokenized = [_tokenize(doc or "") for doc in documents]

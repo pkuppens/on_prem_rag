@@ -1,7 +1,7 @@
 """Query service for semantic document search."""
 
 from ..core.embeddings import query_embeddings
-from ..core.vector_store import get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
@@ -15,7 +15,7 @@ class QueryService:
     """
 
     def __init__(self):
-        self.vector_store_manager = get_vector_store_manager_from_env()
+        self.vector_store_manager = get_vector_store_manager()
 
     def query(self, query_text: str, model_name: str, top_k: int) -> dict:
         """Run a semantic search against the vector store.

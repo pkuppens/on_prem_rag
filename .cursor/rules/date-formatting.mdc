@@ -8,13 +8,19 @@ alwaysApply: true
 
 This rule ensures consistent date formatting across all code, documentation, and AI-generated content.
 
+## CRITICAL: Check user_info First
+
+**Before writing any date**, read the `user_info` block in the message for `Today's date` (e.g. "Friday Feb 20, 2026").
+That value is the authoritative date. Use it for Created/Updated fields. **Never assume or infer the year** — verify from user_info every time.
+
 ## CRITICAL: Always Use Accurate Dates
 
 **NEVER guess or randomly generate dates.** All dates must be 100% accurate and reflect the actual system date.
 
 ### Date Evaluation Process
 
-1. **Always evaluate today's date in YYYY-MM-DD format based on the system clock** before creating or updating files
+1. **Check user_info** — Use the `Today's date` from the message context first (authoritative)
+2. **Always evaluate today's date in YYYY-MM-DD format based on the system clock** before creating or updating files (when user_info is not available)
 2. **Use system clock** (preferred for most cases) - query the actual system date using `datetime.now().strftime("%Y-%m-%d")`
 3. **MCP services** (when available and appropriate)
 4. **Environment variables** (for testing or specific scenarios only)

@@ -216,7 +216,7 @@ line-ending = "auto"
 pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v -m 'not slow and not internet and not ollama and not docker and not cloud_llm'"
+addopts = "-v --durations=20 -m 'not slow and not internet and not ollama and not docker and not cloud_llm'"
 # Silence deprecation warnings from third-party packages (nemoguardrails, pydantic, langchain, etc.)
 filterwarnings = [
     "ignore::DeprecationWarning",

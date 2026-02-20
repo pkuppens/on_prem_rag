@@ -1,0 +1,27 @@
+---
+description: Testing conventions and patterns
+globs:
+alwaysApply: false
+---
+
+# Testing Conventions
+
+## Summary
+
+- **Unit tests**: Fast, no external services. Use light data (small PDFs, synthetic fixtures).
+- **Markers**: Every new test must have a category (`slow`, `internet`, etc.) if not default unit.
+- **Layout**: Prefer `tests/unit/<area>/` or `tests/integration/` mirroring `src/`.
+- **Docstrings**: See [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc).
+
+## Key Rules
+
+1. **Light data for unit tests**: Use `2005.11401v4.pdf` or synthetic data; avoid 144-page PDFs.
+2. **No duplicate assertions**: Unit tests cover logic; integration tests cover wiring. Never assert the same contract twice.
+3. **Fixture scope**: Prefer `session` for immutable, `module` for DB/model, `function` for mutable.
+4. **Marker policy**: Add `@pytest.mark.slow` or `@pytest.mark.internet` when appropriate so CI can select.
+
+## References
+
+- [docs/testing/TEST_STRATEGY.md](mdc:docs/testing/TEST_STRATEGY.md) — Full strategy
+- [docs/testing/WRITING_TESTS.md](mdc:docs/testing/WRITING_TESTS.md) — How to write new tests
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) — Docstring format

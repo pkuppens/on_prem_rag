@@ -51,6 +51,16 @@ The vector store is crucial for:
 
 ## Implementation Details
 
+### VectorStoreManager Abstraction
+
+The RAG pipeline uses a `VectorStoreManager` ABC to decouple consumers from ChromaDB. Chroma is the default implementation (`ChromaVectorStoreManager`). Metrics, BM25, and retrieval use the abstract interface:
+
+- `get_chunk_count()` — for metrics and observability
+- `get_all_chunks(limit)` — for BM25 sparse indexing
+- `get_storage_context()`, `add_embeddings()`, `query()`, `delete_by_document_name()`
+
+Use `get_vector_store_manager()` (no args = from env) to obtain a manager. Inject `VectorStoreManager` into services for testability and swappability.
+
 ### ChromaDB Setup
 
 ```python

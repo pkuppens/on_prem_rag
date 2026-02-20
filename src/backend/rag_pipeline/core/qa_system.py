@@ -15,7 +15,7 @@ from typing import Any
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from backend.rag_pipeline.core.llm_providers import LLMProvider, get_llm_provider_from_env
 from backend.rag_pipeline.core.retrieval import create_retrieval_service
-from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
+from backend.rag_pipeline.core.vector_store import get_vector_store_manager
 
 from ..utils.logging import StructuredLogger
 
@@ -32,7 +32,7 @@ class QASystem:
             llm_provider: Optional LLM provider. If None, will use default Ollama provider.
         """
         self.llm_provider = llm_provider or self._create_default_llm_provider()
-        self.vector_store_manager = get_vector_store_manager_from_env()
+        self.vector_store_manager = get_vector_store_manager()
 
     def _create_default_llm_provider(self) -> LLMProvider:
         """Create LLM provider from LLM_BACKEND and LLM_MODEL env vars.

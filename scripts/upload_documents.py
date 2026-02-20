@@ -22,7 +22,7 @@ import httpx
 from backend.rag_pipeline.config.parameter_sets import get_param_set
 from backend.rag_pipeline.core.embeddings import process_document
 from backend.rag_pipeline.core.vector_store import (
-    get_vector_store_manager_from_env,
+    get_vector_store_manager,
 )
 from backend.shared.utils.directory_utils import (
     ensure_directory_exists,
@@ -147,7 +147,7 @@ def upload_file(path: Path, upload_name: str, api_url: str, params_name: str) ->
             raise UploadError(f"{path}: {resp.status_code} {resp.text}")
 
 
-vector_store_manager = get_vector_store_manager_from_env()
+vector_store_manager = get_vector_store_manager()
 
 
 def clear_backend() -> None:

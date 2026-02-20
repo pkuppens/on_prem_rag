@@ -45,6 +45,26 @@ class VectorStoreManager(ABC):
             Number of chunks deleted (0 if none matched)
         """
 
+    @abstractmethod
+    def get_chunk_count(self) -> int:
+        """Return the number of chunks in the store (for metrics).
+
+        Returns:
+            Chunk count, or 0 if unknown/unavailable.
+        """
+
+    @abstractmethod
+    def get_all_chunks(self, limit: int = 100_000) -> tuple[list[str], list[str], list[dict]]:
+        """Fetch all chunk ids, texts, and metadatas for indexing (e.g. BM25).
+
+        Args:
+            limit: Maximum number of chunks to return.
+
+        Returns:
+            Tuple of (ids, texts, metadatas). texts[i] may be empty string
+            if text is stored only in metadata.
+        """
+
 
 @dataclass
 class ChromaVectorStoreManager(VectorStoreManager):
@@ -89,11 +109,44 @@ class ChromaVectorStoreManager(VectorStoreManager):
             self._collection.delete(ids=ids_to_delete)
         return len(ids_to_delete)
 
+    def get_chunk_count(self) -> int:
+        """Return the number of chunks in the ChromaDB collection."""
+        result = self._collection.get(include=[])
+        return len(result["ids"]) if result.get("ids") else 0
 
-def get_vector_store_manager_from_env() -> VectorStoreManager:
-    """Factory that creates a vector store manager based on environment config."""
+    def get_all_chunks(self, limit: int = 100_000) -> tuple[list[str], list[str], list[dict]]:
+        """Fetch all chunk ids, texts, and metadatas from ChromaDB for indexing."""
+        try:
+            result = self._collection.get(
+                where={"chunk_index": {"$gte": 0}},
+                include=["documents", "metadatas"],
+                limit=limit,
+            )
+        except Exception:
+            result = self._collection.get(
+                include=["documents", "metadatas"],
+                limit=limit,
+            )
+        ids = result.get("ids") or []
+        documents = result.get("documents") or []
+        metadatas = result.get("metadatas") or []
+        texts: list[str] = []
+        for i in range(len(ids)):
+            doc = documents[i] if i < len(documents) else None
+            meta = metadatas[i] if i < len(metadatas) else {}
+            text = (doc or (meta.get("text", "") if isinstance(meta, dict) else "")) or ""
+            texts.append(text)
+        while len(metadatas) < len(ids):
+            metadatas.append({})
+        return (ids, texts, metadatas[: len(ids)])
 
-    config = VectorStoreConfig()
-    if config.implementation == "chroma":
-        return ChromaVectorStoreManager(config)
-    raise ValueError(f"Unsupported vector store implementation: {config.implementation}")
+
+def get_vector_store_manager(config: VectorStoreConfig | None = None) -> VectorStoreManager:
+    """Create vector store manager from config or environment.
+
+    When config is None, reads VectorStoreConfig from environment variables.
+    """
+    cfg = config or VectorStoreConfig()
+    if cfg.implementation == "chroma":
+        return ChromaVectorStoreManager(cfg)
+    raise ValueError(f"Unsupported vector store implementation: {cfg.implementation}")

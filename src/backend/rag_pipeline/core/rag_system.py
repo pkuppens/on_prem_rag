@@ -38,7 +38,7 @@ from llama_index.readers.file import DocxReader, PDFReader
 
 # Local imports
 from backend.rag_pipeline.config.parameter_sets import RAGParams
-from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager_from_env
+from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager
 from backend.shared.utils.directory_utils import (
     DirectoryEmptyError,
     ensure_directory,
@@ -114,7 +114,7 @@ class LocalRAGSystem:
             description="embeddings cache directory",
         )
 
-        self.vector_store_manager = vector_store_manager or get_vector_store_manager_from_env()
+        self.vector_store_manager = vector_store_manager or get_vector_store_manager()
 
         # Initialize components and set global settings
         Settings.llm = self._setup_llm()

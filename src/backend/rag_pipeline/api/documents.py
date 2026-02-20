@@ -22,7 +22,7 @@ from backend.shared.utils.directory_utils import (
 
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from ..core.document_loader import DocumentLoader
-from ..core.vector_store import get_vector_store_manager_from_env
+from ..core.vector_store import get_vector_store_manager
 from ..services.document_processing_service import DocumentProcessingService
 from ..utils.docx_utils import extract_and_clean_docx
 from ..utils.logging import StructuredLogger
@@ -38,7 +38,7 @@ router = APIRouter(prefix="/api/documents", tags=["documents"])
 uploaded_files_dir = get_uploaded_files_dir()
 ensure_directory_exists(uploaded_files_dir)
 document_loader = DocumentLoader()
-vector_store_manager = get_vector_store_manager_from_env()
+vector_store_manager = get_vector_store_manager()
 document_processing_service = DocumentProcessingService()
 
 

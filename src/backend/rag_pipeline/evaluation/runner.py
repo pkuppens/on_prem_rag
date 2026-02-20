@@ -106,9 +106,9 @@ def _default_retrieve_factory() -> Callable[[str], Callable[[str, int], list[dic
     def factory(config_name: str) -> Callable[[str, int], list[dict[str, Any]]]:
         from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
         from backend.rag_pipeline.core.retrieval import create_retrieval_service
-        from backend.rag_pipeline.core.vector_store import get_vector_store_manager_from_env
+        from backend.rag_pipeline.core.vector_store import get_vector_store_manager
 
-        vsm = get_vector_store_manager_from_env()
+        vsm = get_vector_store_manager()
         params = get_param_set(DEFAULT_PARAM_SET_NAME)
         persist_dir = str(vsm.config.persist_directory)
         model_name = params.embedding.model_name

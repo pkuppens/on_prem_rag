@@ -371,11 +371,12 @@ jobs:
           path: test-results-integration.xml
 
   # Cloud LLM integration - validates Google Gemini when GEMINI_API_KEY is set
-  # Runs only on PR; skips when secret not configured (no token cost)
+  # Runs only on PRs targeting main; test skips internally when secret not configured
+  # Note: secrets cannot be referenced in job-level if (GitHub restriction)
   test-cloud-llm:
     runs-on: ubuntu-latest
     needs: [setup]
-    if: github.event_name == 'pull_request' && github.base_ref != 'main' && secrets.GEMINI_API_KEY != ''
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6

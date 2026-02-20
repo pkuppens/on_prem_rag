@@ -10,14 +10,13 @@ Regenerate with: `uv run python -m scripts.test_bottlenecks --run --top 50`
 
 ## Top 25 Slowest Unit Tests (baseline)
 
+Updated 2025-02-20 after Task 3: test_document_loader now uses smaller PDF (2005.11401v4.pdf).
+
 | Duration (s) | Test | File |
 |-------------|------|------|
-| 6.29 [SLOW] | test_duplicate_detection | tests/test_document_loader.py |
-| 6.17 [SLOW] | test_metadata_consistency | tests/test_document_loader.py |
 | 5.28 [SLOW] | test_websocket_progress_edge_case_completion_cleanup | tests/test_websocket.py |
 | 4.09 [SLOW] | test_websocket_connection | tests/test_websocket_connection.py |
 | 3.37 [SLOW] | test_upload_multiple_valid_files | tests/test_enhanced_documents_api.py |
-| 3.04 [SLOW] | test_load_pdf_document | tests/test_document_loader.py |
 | 2.98 [SLOW] | test_reset_memory_manager | tests/backend/memory/test_memory_manager.py |
 | 1.97 [SLOW] | test_audit_action_logs_event | tests/backend/guardrails/test_actions.py |
 | 1.95 [SLOW] | test_entity_store_property | tests/backend/memory/test_memory_manager.py |
@@ -42,4 +41,4 @@ Regenerate with: `uv run python -m scripts.test_bottlenecks --run --top 50`
 
 - Unit test marker: `-m "not slow and not internet and not ollama and not docker"`
 - Thresholds: unit >1s, integration >5s (see `scripts/test_bottlenecks.py --help`)
-- CI: ~90s total for ~694 unit tests on 2-core runner
+- CI: ~72s total for ~694 unit tests (after Task 3 optimization)

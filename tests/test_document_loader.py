@@ -14,9 +14,12 @@ class TestDocumentLoader:
     """Test the DocumentLoader class functionality."""
 
     def test_load_pdf_document(self, test_data_dir):
-        """Test loading a PDF document returns expected structure."""
+        """Test loading a PDF document returns expected structure.
+
+        Uses smaller PDF (2005.11401v4.pdf) for faster unit execution.
+        """
         loader = DocumentLoader()
-        pdf_path = test_data_dir / "2303.18223v16.pdf"
+        pdf_path = test_data_dir / "2005.11401v4.pdf"
 
         documents, metadata = loader.load_document(pdf_path)
 
@@ -54,9 +57,13 @@ class TestDocumentLoader:
         assert metadata.num_pages < 100  # Reasonable upper bound
 
     def test_duplicate_detection(self, test_data_dir):
-        """Test that duplicate file detection works."""
+        """Test that duplicate file detection works.
+
+        Uses smaller PDF (2005.11401v4.pdf) per TEST_STRATEGY: unit tests
+        should use light data. Duplicate detection logic is independent of file size.
+        """
         loader = DocumentLoader()
-        pdf_path = test_data_dir / "2303.18223v16.pdf"
+        pdf_path = test_data_dir / "2005.11401v4.pdf"
 
         # Load the same file twice
         documents1, metadata1 = loader.load_document(pdf_path, params_key="fast")
@@ -162,10 +169,14 @@ class TestDocumentLoader:
             loader.MAX_FILE_SIZE = original_limit
 
     def test_metadata_consistency(self, test_data_dir):
-        """Test that metadata is consistent across multiple loads."""
+        """Test that metadata is consistent across multiple loads.
+
+        Uses smaller PDF (2005.11401v4.pdf) per TEST_STRATEGY: unit tests
+        should use light data.
+        """
         loader1 = DocumentLoader()
         loader2 = DocumentLoader()
-        pdf_path = test_data_dir / "2303.18223v16.pdf"
+        pdf_path = test_data_dir / "2005.11401v4.pdf"
 
         # Load with different loader instances
         documents1, metadata1 = loader1.load_document(pdf_path)

@@ -81,6 +81,13 @@ No tests were removed in this audit. Recommendations are for optimisation (Task 
 - **In scope**: `src/backend` (line and branch coverage).
 - **Out of scope**: Notebooks, scripts, tooling, frontend.
 
+## Environment Matrix
+
+| Environment | Workers | Notes |
+|-------------|---------|------|
+| **CI (GitHub Actions)** | `-n 2` | 2-core runners; use `--dist loadfile` |
+| **Local** | `-n 4` or `min(4, cpu_count-2)` | Cap to avoid overload; document in AGENTS.md |
+
 ## References
 
 - [TEST_TIMINGS_BASELINE.md](TEST_TIMINGS_BASELINE.md) — Baseline slow test durations

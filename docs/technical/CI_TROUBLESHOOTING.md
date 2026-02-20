@@ -32,6 +32,10 @@ The failures occur in the **unit test** job, not integration tests. Integration 
 
 1. **Environment variables** (add to unit test step): `OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1` – may reduce crashes in some BLAS paths.
 2. **Disable pytest-xdist** for unit tests (`-n 0`) – avoids worker processes; may still crash when torch loads in main process.
+
+## Parallel Unit Tests (Issue #118)
+
+CI uses `-n 2 --dist loadfile` for unit tests (GitHub runners are 2-core). pytest-cov auto-combines coverage from workers. SQLite in memory tests: `init_memory_database()` handles "table already exists" races; `--dist loadfile` keeps tests from the same file on one worker, reducing DB contention.
 3. **Skip guardrails tests on CI** – pragmatic workaround: mark affected tests with `@pytest.mark.skipif(os.environ.get("CI"), reason="PyTorch CPU compatibility on GitHub runners")`.
 4. **PyTorch CPU-only wheel** – use `--extra-index-url https://download.pytorch.org/whl/cpu` for a potentially more compatible build (needs evaluation).
 5. **Larger runners** – GitHub’s larger hosted runners may use newer CPUs, but with higher cost.

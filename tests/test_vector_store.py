@@ -46,9 +46,7 @@ class TestChromaVectorStoreManager:
         """As a user I want metrics and BM25 to use the abstract interface.
         Technical: get_chunk_count and get_all_chunks work via ABC.
         """
-        config = VectorStoreConfig(
-            host=None, persist_directory=str(test_case_dir), collection_name="test_chunks_abc"
-        )
+        config = VectorStoreConfig(host=None, persist_directory=str(test_case_dir), collection_name="test_chunks_abc")
         manager = ChromaVectorStoreManager(config)
 
         manager.add_embeddings(

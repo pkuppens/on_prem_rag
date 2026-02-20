@@ -48,6 +48,7 @@ def check_prerequisites(url: str, check_name: str = "") -> bool:
     """Verify backend is reachable. Return True if OK. On failure, log specific remediation."""
     try:
         import httpx
+
         with httpx.Client(timeout=5) as client:
             resp = client.get(f"{url}/api/health")
             if resp.status_code == 200:
@@ -75,8 +76,10 @@ def create_test_audio_via_tts(text: str, lang: str = "en", slow: bool = True) ->
     slow=True reduces speech rate (~40%), improving Whisper recognition of rare words.
     """
     try:
-        from gtts import gTTS
         from io import BytesIO
+
+        from gtts import gTTS
+
         buf = BytesIO()
         gTTS(text=text, lang=lang, slow=slow).write_to_fp(buf)
         return buf.getvalue()
@@ -286,6 +289,7 @@ def run_dutch_rag(url: str) -> bool:
     # Check Ollama
     try:
         import httpx
+
         with httpx.Client(timeout=3) as client:
             r = client.get("http://localhost:11434/api/tags")
             models = r.json().get("models", []) if r.status_code == 200 else []
@@ -302,6 +306,7 @@ def run_dutch_rag(url: str) -> bool:
 
     try:
         import httpx
+
         with httpx.Client(timeout=60) as client:
             resp = client.post(
                 f"{url}/api/ask",
@@ -354,6 +359,7 @@ def _configure_logging(level_arg: str | None) -> None:
             logging.getLogger(name).setLevel(logging.WARNING)
         try:
             import gtts
+
             logging.getLogger(gtts.__name__).setLevel(logging.WARNING)
         except ImportError:
             pass

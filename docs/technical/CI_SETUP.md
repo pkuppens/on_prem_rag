@@ -43,6 +43,10 @@ The Python version is managed in multiple places:
 7. **Security Scan**: Vulnerability scanning (depends on setup)
 8. **CI Summary**: Aggregates results from all jobs
 
+### Cloud LLM Test (Manual)
+
+The **Cloud LLM Test** workflow (`.github/workflows/cloud-llm.yml`) runs separately and is triggered manually only. Use it when Cloud LLM code (e.g. Gemini, llm_config) is changed. If `GEMINI_API_KEY` is not set, the test skips gracefully. Trigger via Actions → Cloud LLM Test → Run workflow.
+
 ### Environment Variables
 
 Required environment variables for HuggingFace model caching:

@@ -60,12 +60,14 @@ def parse_junit_xml(xml_path: Path) -> list[dict]:
             # Derive file path from classname (e.g. tests.test_document_loader.TestDocumentLoader -> tests/test_document_loader.py)
             file_path = _classname_to_file(classname)
 
-            results.append({
-                "name": name,
-                "duration": duration,
-                "file": file_path,
-                "classname": classname,
-            })
+            results.append(
+                {
+                    "name": name,
+                    "duration": duration,
+                    "file": file_path,
+                    "classname": classname,
+                }
+            )
     return results
 
 
@@ -111,8 +113,11 @@ def run_pytest_and_parse(
         Pytest exit code (0 = pass).
     """
     cmd = [
-        "uv", "run", "pytest",
-        "-m", marker,
+        "uv",
+        "run",
+        "pytest",
+        "-m",
+        marker,
         f"--junitxml={junit_path}",
         "-q",
     ]

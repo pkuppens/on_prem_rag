@@ -24,6 +24,23 @@ DEFAULT_OUTPUT_DIR = Path("tmp/healthcare_guidelines")
 
 
 @dataclass(frozen=True)
+class FetchResult:
+    """Result of a fetch run.
+
+    Attributes:
+        output_dir: Directory where PDFs are stored.
+        downloaded: Filenames of newly downloaded files.
+        skipped: Count of sources skipped (file already existed).
+        skipped_files: Filenames that were skipped (already present).
+    """
+
+    output_dir: Path
+    downloaded: tuple[str, ...]
+    skipped: int
+    skipped_files: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class GuidelineSource:
     """A clinical guideline PDF source.
 
@@ -102,7 +119,7 @@ def fetch_healthcare_guidelines(
     sources: list[GuidelineSource],
     output_dir: Path,
     http_client: httpx.Client | None = None,
-) -> int:
+) -> FetchResult:
     """Download guideline PDFs to the output directory.
 
     Skips sources for which the output file already exists (idempotent).
@@ -113,14 +130,15 @@ def fetch_healthcare_guidelines(
         http_client: Optional HTTP client for testing. Uses httpx.Client if None.
 
     Returns:
-        Number of files downloaded (excluding skipped).
+        FetchResult with output_dir, downloaded filenames, and skipped count.
 
     Raises:
         httpx.HTTPStatusError: When a download returns 4xx/5xx.
         httpx.RequestError: When a network error occurs.
     """
     output_dir.mkdir(parents=True, exist_ok=True)
-    downloaded = 0
+    downloaded: list[str] = []
+    skipped_files: list[str] = []
 
     own_client = False
     if http_client is None:
@@ -132,17 +150,58 @@ def fetch_healthcare_guidelines(
             out_path = output_dir / source.filename
             if out_path.exists():
                 logger.debug("Skipping %s (already exists)", source.filename)
+                skipped_files.append(source.filename)
                 continue
             logger.info("Downloading %s", source.title)
             resp = http_client.get(source.url, follow_redirects=True)
             resp.raise_for_status()
             out_path.write_bytes(resp.content)
-            downloaded += 1
+            downloaded.append(source.filename)
     finally:
         if own_client:
             http_client.close()
 
-    return downloaded
+    return FetchResult(
+        output_dir=output_dir,
+        downloaded=tuple(downloaded),
+        skipped=len(skipped_files),
+        skipped_files=tuple(skipped_files),
+    )
+
+
+def _print_success_report(result: FetchResult, expected_total: int) -> None:
+    """Print a success summary: location, counts, and file list.
+
+    Always reports something; highlights when all expected files are present.
+    """
+    loc = result.output_dir.resolve()
+    n_dl = len(result.downloaded)
+    n_skip = result.skipped
+
+    def _size_kib(filename: str) -> float:
+        p = result.output_dir / filename
+        return p.stat().st_size / 1024 if p.exists() else 0.0
+
+    def _file_line(filename: str) -> None:
+        print(f"  - {filename} ({_size_kib(filename):.1f} KiB)", flush=True)
+
+    print(f"Location: {loc}", flush=True)
+    if n_skip == expected_total and n_dl == 0:
+        print(f"All {expected_total} expected files already present.", flush=True)
+        if n_skip <= 10:
+            for f in result.skipped_files:
+                _file_line(f)
+        else:
+            print(f"  ({n_skip} files - inspect output dir for full list)", flush=True)
+    else:
+        print(f"Downloaded: {n_dl} file(s)", flush=True)
+        if n_skip:
+            print(f"Skipped: {n_skip} (already present)", flush=True)
+        if n_dl < 10 and n_dl:
+            for f in result.downloaded:
+                _file_line(f)
+        elif n_dl:
+            print("  (10+ files - inspect output dir for full list)", flush=True)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -175,13 +234,17 @@ def main(argv: list[str] | None = None) -> int:
 
     args.output.mkdir(parents=True, exist_ok=True)
     try:
-        count = fetch_healthcare_guidelines(
+        result = fetch_healthcare_guidelines(
             sources=DEFAULT_NHG_SOURCES,
             output_dir=args.output,
         )
         if not args.quiet:
-            logger.info("Downloaded %d file(s) to %s", count, args.output)
+            _print_success_report(result, expected_total=len(DEFAULT_NHG_SOURCES))
         return 0
     except (httpx.HTTPStatusError, httpx.RequestError) as e:
         logger.error("Fetch failed: %s", e)
         return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

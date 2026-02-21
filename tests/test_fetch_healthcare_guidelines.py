@@ -46,12 +46,14 @@ class TestFetchHealthcareGuidelines:
         with patch.object(fetch_healthcare_guidelines, "httpx") as mock_httpx:
             mock_httpx.Client.return_value = mock_client
 
-            count = fetch_healthcare_guidelines.fetch_healthcare_guidelines(
+            result = fetch_healthcare_guidelines.fetch_healthcare_guidelines(
                 sources=[source],
                 output_dir=tmp_path,
             )
 
-        assert count == 1
+        assert len(result.downloaded) == 1
+        assert result.downloaded[0] == "test_guideline.pdf"
+        assert result.skipped == 0
         out_file = tmp_path / "test_guideline.pdf"
         assert out_file.exists()
         assert out_file.read_bytes() == pdf_content
@@ -80,12 +82,14 @@ class TestFetchHealthcareGuidelines:
         with patch.object(fetch_healthcare_guidelines, "httpx") as mock_httpx:
             mock_httpx.Client.return_value = mock_client
 
-            count = fetch_healthcare_guidelines.fetch_healthcare_guidelines(
+            result = fetch_healthcare_guidelines.fetch_healthcare_guidelines(
                 sources=[source],
                 output_dir=tmp_path,
             )
 
-        assert count == 0
+        assert len(result.downloaded) == 0
+        assert result.skipped == 1
+        assert result.skipped_files == ("existing.pdf",)
         mock_client.get.assert_not_called()
         assert (tmp_path / "existing.pdf").read_bytes() == b"existing content"
 
@@ -134,9 +138,15 @@ class TestFetchHealthcareGuidelines:
         output_dir = tmp_path / "healthcare_guidelines"
         assert not output_dir.exists()
 
+        result = fetch_healthcare_guidelines.FetchResult(
+            output_dir=output_dir,
+            downloaded=(),
+            skipped=0,
+            skipped_files=(),
+        )
         with patch(
             "scripts.fetch_healthcare_guidelines.fetch_healthcare_guidelines",
-            return_value=0,
+            return_value=result,
         ) as mock_fetch:
             fetch_healthcare_guidelines.main(["--output", str(output_dir)])
 
@@ -153,3 +163,67 @@ class TestFetchHealthcareGuidelines:
             assert s.url.startswith("https://")
             assert s.filename.endswith(".pdf")
             assert s.title
+
+    def test_main_prints_success_report(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        """As a user I want a success summary after fetch, so I know what was done.
+        Technical: main() prints location, downloaded/skipped counts, file list if < 10.
+        Validation: Run with mocked fetch returning 2 downloads; verify output.
+        """
+        result = fetch_healthcare_guidelines.FetchResult(
+            output_dir=tmp_path,
+            downloaded=("NHG_Urineweginfecties.pdf", "NHG_Depressie.pdf"),
+            skipped=1,
+            skipped_files=("NHG_Maagklachten.pdf",),
+        )
+        (tmp_path / "NHG_Urineweginfecties.pdf").write_bytes(b"x" * 500)
+        (tmp_path / "NHG_Depressie.pdf").write_bytes(b"y" * 1200)
+
+        with patch(
+            "scripts.fetch_healthcare_guidelines.fetch_healthcare_guidelines",
+            return_value=result,
+        ):
+            fetch_healthcare_guidelines.main(["--output", str(tmp_path)])
+
+        out = capsys.readouterr().out
+        assert "Location:" in out
+        assert "Downloaded: 2 file(s)" in out
+        assert "Skipped: 1" in out
+        assert "NHG_Urineweginfecties.pdf" in out
+        assert "NHG_Depressie.pdf" in out
+
+    def test_success_report_when_all_already_present(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        """As a user I want to know when all expected files are already present.
+        Technical: Report "All N expected files already present" with list.
+        Validation: Mock fetch returning all 11 skipped; verify message and file list.
+        """
+        sources = fetch_healthcare_guidelines.DEFAULT_NHG_SOURCES
+        skipped = tuple(s.filename for s in sources)
+        for f in skipped:
+            (tmp_path / f).write_bytes(b"x" * 100)
+
+        result = fetch_healthcare_guidelines.FetchResult(
+            output_dir=tmp_path,
+            downloaded=(),
+            skipped=len(skipped),
+            skipped_files=skipped,
+        )
+        with patch(
+            "scripts.fetch_healthcare_guidelines.fetch_healthcare_guidelines",
+            return_value=result,
+        ):
+            fetch_healthcare_guidelines.main(
+                ["--output", str(tmp_path)],
+            )
+
+        out = capsys.readouterr().out
+        assert "Location:" in out
+        assert "All 11 expected files already present" in out
+        assert "11 files" in out

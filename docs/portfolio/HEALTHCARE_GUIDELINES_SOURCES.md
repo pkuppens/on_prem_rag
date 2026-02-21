@@ -42,14 +42,15 @@ Curated sources for the healthcare clinical guideline assistant demo (#82). Docu
 
 1. **Fetch PDFs** (run once, or to refresh):
    ```bash
-   uv run fetch-healthcare-guidelines
+   uv run python -m scripts.fetch_healthcare_guidelines
    ```
-   Downloads to `tmp/healthcare_guidelines/` (gitignored).
+   Downloads to `tmp/healthcare_guidelines/` (gitignored). Reports location and count.
 
-2. **Ingest into RAG** (requires backend/embedding setup):
+2. **Ingest into RAG** (uses local ChromaDB + embedding; no API server):
    ```bash
-   uv run upload-documents --direct tmp/healthcare_guidelines/*.pdf
+   uv run python -m scripts.upload_documents --direct --filenameonly tmp/healthcare_guidelines
    ```
+   Windows: use directory path (glob does not expand in PowerShell).
 
 ## English sources (optional)
 

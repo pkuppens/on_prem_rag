@@ -1162,7 +1162,7 @@ This GitHub integration rule works seamlessly with:
 
 1. **Follow naming conventions**: Use consistent branch naming patterns
 2. **Keep branches focused**: One feature/story/task per branch
-3. **Clean up after merge**: Delete merged branches to maintain repository hygiene
+3. **Clean up after merge**: Run `/branch-cleanup` or `scripts/cleanup-merged-branches.sh` to delete merged and gone branches (merge, squash, rebase). See [branch-cleanup.md](.cursor/commands/branch-cleanup.md).
 4. **Use descriptive commit messages**: Include project IDs in commit messages
 
 ### Workflow Integration

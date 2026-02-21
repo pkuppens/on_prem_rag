@@ -1,0 +1,24 @@
+---
+description: Technical debt and TODO marking standards
+globs:
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: false
+---
+
+# Technical Debt Marking
+
+## TODO Format
+
+- **Prefer task reference:** `# TODO(TASK-NNN): Brief description`
+- **Alternative:** High-quality SMART description when no task exists: unambiguous, clear, actionable. Example: `# TODO: Add exponential backoff when Ollama returns 503 — retry 3x with 1s, 2s, 4s delays`
+
+Never use a bare `# TODO` without either a task ID or a complete, self-contained description.
+
+## Examples
+
+```python
+# TODO(TASK-042): Add retry logic for embedding failures
+# TODO: Add validation for chunk_size > 0 before passing to embedding model
+```

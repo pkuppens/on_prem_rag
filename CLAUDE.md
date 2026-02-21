@@ -95,13 +95,17 @@ uv add --dev package-name  # Dev dependency
 uv sync                    # Install from pyproject.toml
 ```
 
+### Code Quality
+
+Reduce complexity; use precise naming; single-purpose functions; explain why not what (*Code Complete 2*, *Philosophy of Software Design*). Rules: [function-definitions.mdc](.cursor/rules/function-definitions.mdc), [coding-style.mdc](.cursor/rules/coding-style.mdc), [test-documentation.mdc](.cursor/rules/test-documentation.mdc), [technical-debt.mdc](.cursor/rules/technical-debt.mdc). Skills: `.cursor/skills/code-quality-*` for design, docs, testing.
+
 ### Testing
 
 - Pre-push hooks enforce test passing on every push
 - Tests marked `@pytest.mark.slow`, `@pytest.mark.internet`, or `@pytest.mark.ollama` are skipped by default
 - Use `git push --no-verify` only in emergencies
-- Test docstrings should follow: "As a user I want [objective], so I can [benefit]. Technical: [requirement]."
-- **CI coverage**: `gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports` — open `tmp/coverage-reports/htmlcov/index.html` for per-file report. See docs/technical/CI_SETUP.md#coverage-reports.
+- Test docstrings: "As a user I want [objective], so I can [benefit]." for user-facing tests; full docstring (Args, Returns) for technical functions. See [test-documentation.mdc](.cursor/rules/test-documentation.mdc).
+- **CI coverage**: `gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports` — open `tmp/coverage-reports/htmlcov/index.html`. See docs/technical/CI_SETUP.md#coverage-reports.
 
 ### Git Workflow
 
@@ -113,11 +117,7 @@ uv sync                    # Install from pyproject.toml
 
 ### Code Style
 
-- Line length: 132 characters
-- Python 3.13 target
-- Ruff for linting and formatting
-- Type hints required for function signatures
-- Files should stay under 500 lines
+- Line length: 132 chars, Python 3.13, Ruff lint/format, type hints required, files under 500 lines. See [coding-style.mdc](.cursor/rules/coding-style.mdc).
 
 ## Project Structure Notes
 
@@ -125,6 +125,7 @@ uv sync                    # Install from pyproject.toml
 - `docs/` - Technical documentation
 - `tests/` - All test files (mirroring src structure in `tests/core/`)
 - `.cursor/rules/` - AI assistant rules and guidelines
+- `.cursor/skills/` - Code quality skills (design, docs, testing)
 - `agents/` - AI agent configurations
 - `tmp/` - **Scratch directory** (gitignored) — see below
 

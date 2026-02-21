@@ -96,6 +96,8 @@ start-auth = "backend.auth_service.main:start_server"
 start-test-app = "test_app:start_server"
 # Upload local files via CLI
 upload-documents = "scripts.upload_documents:main"
+# Fetch healthcare guideline PDFs by reference
+fetch-healthcare-guidelines = "scripts.fetch_healthcare_guidelines:main"
 # RAG evaluation on benchmark dataset
 evaluate-rag = "backend.rag_pipeline.evaluation.cli:main"
 # WBSO validation, upload, and reporting scripts

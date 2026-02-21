@@ -113,3 +113,24 @@ class TestEvaluationDatasetSchema:
             }
         )
         assert errors == []
+
+
+class TestClinicalBenchmarkDataset:
+    """Schema validation for NHG-based clinical benchmark (#82)."""
+
+    @pytest.fixture
+    def clinical_benchmark_path(self) -> Path:
+        """Path to clinical guideline benchmark fixture."""
+        return Path(__file__).parent / "fixtures" / "healthcare_benchmark_clinical.json"
+
+    def test_clinical_benchmark_exists_and_valid(self, clinical_benchmark_path: Path) -> None:
+        """As a user I want a clinical benchmark from real NHG guidelines, so I can evaluate retrieval.
+        Technical: healthcare_benchmark_clinical.json must exist, parse, and pass schema validation.
+        """
+        assert clinical_benchmark_path.exists(), f"Clinical benchmark not found: {clinical_benchmark_path}"
+        data = _load_benchmark(clinical_benchmark_path)
+        assert isinstance(data, list), "Clinical benchmark must be a JSON array"
+        assert len(data) >= 10, "Clinical benchmark should have at least 10 items"
+        for i, item in enumerate(data):
+            errors = _validate_item(item)
+            assert not errors, f"Item {i}: {errors}"

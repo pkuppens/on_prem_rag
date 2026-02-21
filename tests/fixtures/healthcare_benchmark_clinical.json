@@ -1,0 +1,73 @@
+[
+  {
+    "question": "Wat is de eerste keus antibioticum bij cystitis?",
+    "ground_truth_contexts": [
+      "Bij een cystitis is nitrofurantoïne (onveranderd) het middel van 1e keus en fosfomycine het middel van 2e keus"
+    ],
+    "expected_answer": "nitrofurantoïne"
+  },
+  {
+    "question": "Welke profylaxe kan worden gegeven bij recidiverende cystitis?",
+    "ground_truth_contexts": [
+      "1e keuze postcoïtaal: nitrofurantoïne 50 mg of trimethoprim 100 mg (< 2 uur na iedere coïtus, maximaal 1dd). Staken na 6-12 maanden"
+    ],
+    "expected_answer": "nitrofurantoïne 50 mg of trimethoprim 100 mg postcoïtaal"
+  },
+  {
+    "question": "Hoe wordt de diagnose cystitis gesteld?",
+    "ground_truth_contexts": [
+      "Een cystitis is aangetoond bij een combinatie van urineweggerelateerde klachten met een positieve nitriettest, een positieve dipslide of een positief sediment"
+    ],
+    "expected_answer": "urineweggerelateerde klachten met positieve nitriettest, dipslide of sediment"
+  },
+  {
+    "question": "Wat is het risico van afwachtend beleid bij blaasontsteking?",
+    "ground_truth_contexts": [
+      "Een afwachtend beleid verhoogt het risico op een pyelonefritis met ongeveer 1,6%"
+    ],
+    "expected_answer": "verhoogd risico op pyelonefritis (ongeveer 1,6%)"
+  },
+  {
+    "question": "Wanneer is nitrofurantoïne gecontra-indiceerd?",
+    "ground_truth_contexts": [
+      "Contra-indicaties voor nitrofurantoïne zijn onder andere ernstige nierinsufficiëntie (klaring < 30 ml/min) en G6PD-deficiëntie"
+    ],
+    "expected_answer": "ernstige nierinsufficiëntie (klaring < 30 ml/min), G6PD-deficiëntie"
+  },
+  {
+    "question": "Welk middel is tweede keus bij cystitis na nitrofurantoïne?",
+    "ground_truth_contexts": [
+      "fosfomycine niet als 1e keuze, maar als 2e keuze aangeraden voor de behandeling van cystitis bij gezonde, niet-zwangere vrouwen"
+    ],
+    "expected_answer": "fosfomycine"
+  },
+  {
+    "question": "Wat is het initiële beleid bij depressie?",
+    "ground_truth_contexts": [
+      "Het initiële beleid bestaat uit voorlichting, dagstructurering en kortdurende psychologische behandeling"
+    ],
+    "expected_answer": "voorlichting, dagstructurering en kortdurende psychologische behandeling"
+  },
+  {
+    "question": "Wanneer start je een antidepressivum bij depressie?",
+    "ground_truth_contexts": [
+      "Start een antidepressivum bij patiënten met een depressie zonder ernstig sociaal disfunctioneren, grote lijdensdruk of ernstige psychische comorbiditeit met onvoldoende effect van het initiële beleid"
+    ],
+    "expected_answer": "na onvoldoende effect van initieel beleid (voorlichting, psychotherapie)"
+  },
+  {
+    "question": "Welke PPI heeft de voorkeur bij chronisch gebruik voor maagklachten?",
+    "ground_truth_contexts": [
+      "Start bij een indicatie voor chronisch PPI-gebruik bij voorkeur met esomeprazol (eerste keus) of rabeprazol"
+    ],
+    "expected_answer": "esomeprazol (eerste keus) of rabeprazol"
+  },
+  {
+    "question": "Wat is de medicamenteuze eerste keus bij dehydratie door acute diarree?",
+    "ground_truth_contexts": [
+      "Bij dehydratie zijn ORS het middel van eerste keus.",
+      "Slechts bij (verhoogd risico op) dehydratie is medicamenteuze behandeling met ORS nodig"
+    ],
+    "expected_answer": "ORS (orale rehydratiezout)"
+  }
+]

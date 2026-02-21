@@ -152,7 +152,8 @@ Follow the standard Agent Workflow:
    uv run ruff check . && uv run ruff format --check .
    ```
 4. **Commit with issue reference**: `#NNN: feat: add py.typed marker`
-5. **PR when done**:
+5. **Update acceptance criteria checkboxes** when a criterion is verified complete: change `- [ ]` to `- [x]` in the issue body. Fetch full body (`gh issue view NNN --json body -q '.body'`), edit the checkboxes, then `gh issue edit NNN --body-file <file>`. Only check items that are **verified and validated**, not just implemented.
+6. **PR when done**:
    ```bash
    gh pr create --title "#NNN: Add py.typed marker" --body "Closes #NNN"
    ```

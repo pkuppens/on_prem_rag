@@ -36,8 +36,9 @@ Significant updates must be written to the GitHub issue so stakeholders see prog
 | Phase 1: Issue refinement | Refined acceptance criteria, out-of-scope, validation findings | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md` |
 | Phase 2: Plan complete | Implementation plan with checklists (tasks, test strategy) | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md` |
 | Phase 3: Milestones | Completed subtasks, test results | `gh issue comment NNN --body-file ...` when logical milestones are reached |
+| Phase 3: Acceptance criteria | Update checkboxes when criteria are **verified complete** | Fetch body, edit `- [ ]` → `- [x]`, then `gh issue edit NNN --body-file tmp/github/issue-descriptions/issue-NNN.md` |
 
-Draft first in `tmp/github/issue-comments/`, then post when content is ready.
+Draft first in `tmp/github/issue-comments/`, then post when content is ready. For acceptance criteria: only mark `[x]` when **verified and validated**, not just implemented. Update the issue body so the main issue reflects actual status.
 
 ## Prerequisites
 

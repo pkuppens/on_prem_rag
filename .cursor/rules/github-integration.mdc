@@ -1148,7 +1148,7 @@ This GitHub integration rule works seamlessly with:
 2. **Use consistent labeling**: Apply appropriate labels for filtering and organization
 3. **Update status regularly**: Keep issue status synchronized with project file status
 4. **Close with context**: Include completion details when closing issues
-5. **Maintain checkbox integrity**: Update local markdown checkboxes when tasks are completed
+5. **Maintain checkbox integrity**: Update checkboxes when tasks/criteria are completed. For **local project files** (STORY-_.md, TASK-_.md), edit the file. For **GitHub issue bodies**, fetch (`gh issue view NNN --json body -q '.body'`), change `- [ ]` to `- [x]` for verified criteria, then `gh issue edit NNN --body-file <file>`. Only check items that are **verified and validated**.
 6. **Verify completion**: Check implementation before marking tasks as complete
 
 ### Pull Request Management

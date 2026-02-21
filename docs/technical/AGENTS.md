@@ -112,6 +112,23 @@ gh pr create --title "#75: ..." --body "Closes #75"
 gh pr merge --squash --delete-branch
 ```
 
+### Coverage Reports from CI
+
+When reviewing test coverage from a PR or branch run, use `gh run download` to fetch the coverage artifact. The web UI artifacts section may not be visible depending on account/org settings; the CLI always works when authenticated.
+
+```bash
+# List recent Python CI runs (get RUN_ID from the first column or from run URL)
+gh run list --workflow "Python CI" --limit 5
+
+# Download coverage reports to tmp/coverage-reports
+gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports
+
+# Open per-file HTML report (after download)
+# tmp/coverage-reports/htmlcov/index.html
+```
+
+Artifact contents: `coverage.xml`, `test-results-unit.xml`, `htmlcov/` (per-file report). See [TEST_STRATEGY.md](../testing/TEST_STRATEGY.md) and [CI_SETUP.md](./CI_SETUP.md#coverage-reports) for details.
+
 ## References
 
 - [CLAUDE.md](../../CLAUDE.md) — Repo conventions

@@ -170,16 +170,20 @@ jobs:
           du -sh ~/.cache/uv ~/.local/share/uv 2>/dev/null || true
 
   # Unit test job - fast, always run
+  # Timeout: 30min for now to ensure results; reduce once runs stabilize (see CI_SETUP.md)
   test-unit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 1
+      # free-disk-space: needed for private repo runners (~14GB). Unit tests need HF cache + deps + coverage;
+      # without it "No space left" can occur. Each job gets a fresh VM (no shared runners).
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -225,8 +229,9 @@ jobs:
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
-          # Sequential (no -n) for reliable coverage and to avoid parallel race conditions; use -n auto locally for speed
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=term-missing
+          # Parallel with -n 2 --dist loadfile (GitHub runners are 2-core); pytest-cov auto-combines coverage
+          # --cov-fail-under=63: baseline from 2025-02-20; fail CI if coverage drops (see docs/testing/TEST_STRATEGY.md)
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=html --cov-report=term-missing --cov-fail-under=63
       - name: Upload coverage reports
         uses: actions/upload-artifact@v6
         with:
@@ -234,15 +239,19 @@ jobs:
           path: |
             coverage.xml
             test-results-unit.xml
+            htmlcov/
       - name: Add coverage to job summary
         if: always() && (success() || failure())
         run: |
           if [ -f coverage.xml ]; then
             pct=$(python3 -c "import xml.etree.ElementTree as ET; r=ET.parse('coverage.xml').getroot(); print(f\"{100*float(r.attrib.get('line-rate',0)):.1f}\")")
+            run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             {
               echo "## Unit Test Coverage"
               echo ""
               echo "**Coverage:** ${pct}%"
+              echo ""
+              echo "📎 [Download coverage-reports](${run_url}) → Artifacts (htmlcov/ for per-file report)"
             } >> $GITHUB_STEP_SUMMARY
           fi
 
@@ -316,7 +325,7 @@ jobs:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
     if: github.event_name == 'pull_request' || contains(github.ref, 'main')
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
         with:
@@ -470,6 +479,7 @@ jobs:
               if out_path:
                   with open(out_path, "a") as f:
                       f.write(f"percentage={pct:.1f}\n")
+                      f.write(f"should_comment={'true' if pct < 60 else 'false'}\n")
               print(f"Coverage: {pct:.1f}%")
           except Exception as e:
               with open("coverage_comment.md", "w") as f:
@@ -478,7 +488,9 @@ jobs:
               exit(0)  # Don't fail step - still allow PR comment
           PYEOF
 
+      # Only comment when coverage < 60% to reduce notification noise (coverage always in job summary + artifacts)
       - name: Comment on PR
+        if: steps.coverage.outputs.should_comment == 'true'
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

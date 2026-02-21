@@ -21,30 +21,25 @@ This document provides a practical example of how OpenAI Codex is integrated int
 ### Workflow Integration
 
 1. **Branch Management**
-
    - **Feature/Task Implementation**: MUST use feature/task branches (feature/FEAT-XXX, task/TASK-XXX)
    - **Direct to Main Allowed**: Documentation updates, CI/build configurations, agentic rules only
    - **Branch Naming**: Follow conventions in github-integration.mdc
    - Regular merges from feature branches to keep the main branch updated.
 
 2. **Commit Strategy**
-
    - Use multiple commits for separate smaller tasks to maintain a clear history.
    - Ensure each commit is atomic and addresses a single concern.
 
 3. **GitHub Actions**
-
    - All actions must pass, including ruff linting and fixing.
    - Adjust `pyproject.toml` to allow a permissive coding style, including a line length of 132.
 
 4. **Documentation**
-
    - Use `docs/technical/DOMAIN_DRIVEN_DESIGN.md` file for architectural decisions and explanations.
    - Update project progress reports in markdown files like STORY-xxx, TASK-xxx, FEAT-xxx.
    - Ensure documentation is in sync with code changes.
 
 5. **Package Management**
-
    - **CRITICAL: Always use `uv add` for project dependencies - NEVER use `pip install`**
    - Use `uv add package-name` to add runtime dependencies
    - Use `uv add --dev package-name` for development dependencies
@@ -77,23 +72,27 @@ Before writing code that imports new packages:
 ### Test Running Commands
 
 **Default (quick tests only):**
+
 ```bash
 uv run pytest                           # Runs fast tests only (excludes slow and internet)
 ```
 
 **Include slow tests:**
+
 ```bash
 uv run pytest -m ""                     # Run ALL tests including slow ones
 uv run pytest -m "slow"                 # Run ONLY slow tests
 ```
 
 **Include internet tests:**
+
 ```bash
 uv run pytest --run-internet            # Include internet-dependent tests
 uv run pytest -m "internet"             # Run ONLY internet tests
 ```
 
 **Run everything:**
+
 ```bash
 uv run pytest -m "" --run-internet      # Run ALL tests including slow and internet
 ```
@@ -102,14 +101,14 @@ uv run pytest -m "" --run-internet      # Run ALL tests including slow and inter
 
 Tests use pytest markers for categorization:
 
-| Marker | Description | Default |
-|--------|-------------|---------|
-| `@pytest.mark.slow` | Tests that take >5 seconds | **Skipped** |
-| `@pytest.mark.internet` | Tests requiring network access | **Skipped** |
-| `@pytest.mark.ollama` | Tests requiring Ollama (local LLM); skips if not on port 11434 | **Skipped** |
-| `@pytest.mark.docker` | Tests requiring full Docker stack deployment | **Skipped** |
-| `@pytest.mark.fts5` | Tests requiring SQLite FTS5 | Included |
-| `@pytest.mark.ci_setup` | CI/CD configuration tests | Included |
+| Marker                  | Description                                                    | Default     |
+| ----------------------- | -------------------------------------------------------------- | ----------- |
+| `@pytest.mark.slow`     | Tests that take >5 seconds                                     | **Skipped** |
+| `@pytest.mark.internet` | Tests requiring network access                                 | **Skipped** |
+| `@pytest.mark.ollama`   | Tests requiring Ollama (local LLM); skips if not on port 11434 | **Skipped** |
+| `@pytest.mark.docker`   | Tests requiring full Docker stack deployment                   | **Skipped** |
+| `@pytest.mark.fts5`     | Tests requiring SQLite FTS5                                    | Included    |
+| `@pytest.mark.ci_setup` | CI/CD configuration tests                                      | Included    |
 
 **Configuration**: See `pyproject.toml` `[tool.pytest.ini_options]` for marker definitions.
 
@@ -177,7 +176,6 @@ Based on feedback integration, the following standards ensure documentation and 
 #### Technical Documentation Standards
 
 1. **Code Files Section**
-
    - Add "## Code Files" section after "## References" in technical documentation
    - Include links to relevant code files with brief descriptions
    - For non-code documentation (e.g., AGENTS.md, CODEX.md), either omit this section or note "Intentionally left empty - no direct code dependencies"
@@ -194,13 +192,11 @@ Based on feedback integration, the following standards ensure documentation and 
 #### Code File Standards
 
 1. **Documentation Links in Docstrings**
-
    - Include links to relevant technical documentation in module and class docstrings
    - Use relative paths from project root
    - Example format: `See docs/technical/CHUNKING.md for detailed chunking strategies`
 
 2. **Inline Documentation References**
-
    - Add documentation links in complex code sections as inline comments
    - Reference specific sections when relevant
    - Example: `# Adaptive chunking strategy - see CHUNKING.md#future-improvements`
@@ -233,7 +229,6 @@ When implementing tasks:
 ### Verification Process
 
 1. Self-verification:
-
    - Review all acceptance criteria
    - Test each implemented feature
    - Update documentation
@@ -407,6 +402,8 @@ See [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)
 
 ### Implementation
 
+IMPORTANT: use system clock or message metadata to infer the current date when needed for timestamps in code and documentation.
+
 ```python
 from datetime import datetime
 
@@ -418,17 +415,17 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 Module description here.
 
 Author: AI Assistant
-Created: 2025-01-19  # Actual system date when created
-Updated: 2025-01-19  # Current system date when last modified
+Created: 2026-01-19  # Actual system date when created
+Updated: 2026-01-19  # Current system date when last modified
 """
 ```
 
 ### Common Mistakes to Avoid
 
-- ❌ `Created: 2025-01-15` (guessed date instead of actual system date)
+- ❌ `Created: 2025-01-15` (guessed date of incorrect year instead of actual system date)
 - ❌ `Updated: 2025-01-15` (outdated when file was actually modified on 2025-10-19)
-- ❌ `Date: 1/15/2025` (wrong format)
-- ❌ `Date: 2025-1-5` (missing leading zeros)
+- ❌ `Date: 1/15/2026` (wrong format)
+- ❌ `Date: 2026-1-5` (missing leading zeros)
 - ❌ Updating existing Created dates (should preserve audit history)
 
 See [.cursor/rules/date-formatting.mdc](.cursor/rules/date-formatting.mdc) for comprehensive date formatting guidelines.

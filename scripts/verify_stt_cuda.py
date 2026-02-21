@@ -65,10 +65,7 @@ def main() -> None:
                     "https://download.pytorch.org/whl/cu126 --force-reinstall"
                 )
             elif not torch.cuda.is_available():
-                errors.append(
-                    "PyTorch has CUDA build but torch.cuda.is_available() is False. "
-                    "Run: nvidia-smi"
-                )
+                errors.append("PyTorch has CUDA build but torch.cuda.is_available() is False. Run: nvidia-smi")
             else:
                 print("PyTorch CUDA: OK")
                 print(f"  Version: {torch.__version__}")
@@ -77,17 +74,14 @@ def main() -> None:
     # 2. Transcriber resolution (lazy - only logs, does not load model)
     print("\nTranscriber resolution (no model load):")
     try:
-        from backend.stt.transcriber import _get_default_device, _get_default_compute_type
+        from backend.stt.transcriber import _get_default_compute_type, _get_default_device
 
         device = _get_default_device()
         compute = _get_default_compute_type(device)
         print(f"  Resolved device: {device}")
         print(f"  Resolved compute_type: {compute}")
         if device == "cuda" and compute != "float16":
-            warnings.append(
-                f"Device is cuda but compute_type is {compute}. "
-                "Consider STT_COMPUTE_TYPE=float16 for GPU."
-            )
+            warnings.append(f"Device is cuda but compute_type is {compute}. Consider STT_COMPUTE_TYPE=float16 for GPU.")
     except Exception as e:
         errors.append(f"Transcriber import failed: {e}")
 

@@ -15,7 +15,9 @@ implementation details where applicable.
 
 ## Test Docstring Format
 
-All test methods that test business objectives must use the following docstring format:
+### User-Facing and Flow Control Tests
+
+For tests that validate business objectives or user flows, use:
 
 ```python
 def test_example(self):
@@ -27,7 +29,9 @@ def test_example(self):
     """
 ```
 
-Technical implementation tests can be more simple:
+### Technical and Utility Tests
+
+For tests of technical functions (config, pure helpers, internal utilities), use a full docstring with Args/Returns when the function signature or behavior is non-obvious, or a concise one-liner when trivial:
 
 ```python
 def test_get_fast_parameters():
@@ -35,6 +39,8 @@ def test_get_fast_parameters():
     fast_params = get_param_set("fast")
     assert fast_params == FAST_ANSWERS
 ```
+
+For complex technical tests, include Args, Returns, and validation approach as needed — match the documentation level of the code under test.
 
 ## Required Elements
 

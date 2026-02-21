@@ -652,6 +652,17 @@ git checkout branch-name
 git checkout -b new-branch-name
 ```
 
+### Merge Strategy
+
+To keep feature branches tidy while preserving branching structure when development is parallel:
+
+1. **Before PR**: Rebase feature branch onto main (`git checkout feature/X; git fetch origin; git rebase origin/main`). Keeps the feature branch linear with main and reduces conflicts.
+2. **When merging PR**: Prefer **"Create a merge commit"** (not squash, not rebase-and-merge). Merge commits preserve the branching structure; `git log --graph` shows when parallel work was integrated.
+3. **Result**: Main has merge commits at each integration point. Linear development on each feature branch; non-linear main when multiple branches merge in parallel.
+4. **After merge**: Run `/branch-cleanup` to sync main and delete merged/gone local branches.
+
+Squash and rebase-merge produce a linear main but hide the branch structure. Use merge commits when you want to see parallel development in the history.
+
 ## GitHub Actions Integration
 
 ### Automated Quality Gates
@@ -1148,7 +1159,7 @@ This GitHub integration rule works seamlessly with:
 2. **Use consistent labeling**: Apply appropriate labels for filtering and organization
 3. **Update status regularly**: Keep issue status synchronized with project file status
 4. **Close with context**: Include completion details when closing issues
-5. **Maintain checkbox integrity**: Update local markdown checkboxes when tasks are completed
+5. **Maintain checkbox integrity**: Update checkboxes when tasks/criteria are completed. For **local project files** (STORY-_.md, TASK-_.md), edit the file. For **GitHub issue bodies**, fetch (`gh issue view NNN --json body -q '.body'`), change `- [ ]` to `- [x]` for verified criteria, then `gh issue edit NNN --body-file <file>`. Only check items that are **verified and validated**.
 6. **Verify completion**: Check implementation before marking tasks as complete
 
 ### Pull Request Management
@@ -1162,7 +1173,7 @@ This GitHub integration rule works seamlessly with:
 
 1. **Follow naming conventions**: Use consistent branch naming patterns
 2. **Keep branches focused**: One feature/story/task per branch
-3. **Clean up after merge**: Delete merged branches to maintain repository hygiene
+3. **Clean up after merge**: Run `/branch-cleanup` or `scripts/cleanup-merged-branches.sh` to delete merged and gone branches (merge, squash, rebase). See [branch-cleanup.md](.cursor/commands/branch-cleanup.md).
 4. **Use descriptive commit messages**: Include project IDs in commit messages
 
 ### Workflow Integration

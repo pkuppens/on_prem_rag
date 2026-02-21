@@ -82,7 +82,9 @@ def _print_generic_troubleshooting() -> None:
     """Print generic CUDA troubleshooting steps."""
     print("\n--- Troubleshooting ---")
     print("• Run 'nvidia-smi' to verify the driver sees your GPU.")
-    print("• Ensure you installed the CUDA build: uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall")
+    print(
+        "• Ensure you installed the CUDA build: uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall"
+    )
     print("• Python 3.12/3.13 is supported by PyTorch 2.6+ with CUDA.")
     print("• See docs/technical/CUDA_SETUP.md for details.")
 

@@ -40,10 +40,12 @@ Significant updates must also be written to the GitHub issue so stakeholders see
 | Phase 1: Issue refinement | Refined acceptance criteria, out-of-scope, validation findings | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md` |
 | Phase 2: Plan complete | Implementation plan with checklists (tasks, test strategy) | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md` |
 | Phase 3: Milestones | Completed subtasks, test results | `gh issue comment NNN --body-file ...` when logical milestones are reached |
+| Phase 3: Acceptance criteria | Update checkboxes when criteria are **verified complete** | `gh issue view NNN --json body -q '.body'` → edit `- [ ]` to `- [x]` → `gh issue edit NNN --body-file tmp/github/issue-descriptions/issue-NNN.md` |
 
 - **Draft first** in `tmp/github/issue-comments/` (e.g. `issue-NNN-refinement.md`, `issue-NNN-plan.md`)
 - **Post** after user approval or when the content is ready (e.g. completion of refinement or planning)
 - **Checklists** in comments stay visible and can be updated by editing the comment (or posting a follow-up)
+- **Acceptance criteria checkboxes**: Only mark `[x]` when the criterion is **verified and validated**, not just implemented. Update the issue body (not just a comment) so the main issue reflects actual status.
 
 ## Prerequisites
 
@@ -189,6 +191,7 @@ A successful `/get-started fix issue #123` execution results in:
 During Phase 3 (Implement), keep `tmp/github/progress/issue-NNN-workflow.md` updated:
 
 - After each logical step: what was done, tests run, next concrete action
+- **When acceptance criteria are verified**: Update the GitHub issue body checkboxes (`- [ ]` → `- [x]`) so the issue reflects actual completion status. Use `gh issue view NNN --json body`, edit, then `gh issue edit NNN --body-file <file>`.
 - If session ends mid-implementation, the next agent reads this file and resumes
 
 ## References

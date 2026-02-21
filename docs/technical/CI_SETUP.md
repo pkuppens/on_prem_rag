@@ -109,6 +109,42 @@ Each job gets a fresh VM; runners are not shared between jobs. The free-disk-spa
 | test-performance  | 10 min  | Slow tests; sequential execution.                            |
 | test-integration  | 15 min  | Internet-dependent; sequential execution.                    |
 
+## Coverage Reports
+
+After each successful Python CI run, the `test-unit` job uploads a `coverage-reports` artifact containing per-file coverage and JUnit results.
+
+### Downloading via gh CLI (recommended)
+
+The Artifacts section on the run page may not be visible in some account/org configurations. Use `gh run download` instead:
+
+```bash
+# Get RUN_ID from: Actions → select run → URL contains /runs/RUN_ID
+# Or: gh run list --workflow "Python CI" --limit 5
+
+gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports
+```
+
+After download, open `tmp/coverage-reports/htmlcov/index.html` in a browser for the per-file coverage report.
+
+### Downloading via GitHub Web UI
+
+1. Go to **Actions** → select the workflow run
+2. Scroll to the **Artifacts** section at the bottom
+3. Click **coverage-reports** to download the zip
+4. Extract and open `htmlcov/index.html` for per-file coverage
+
+### Artifact contents
+
+| File/folder          | Purpose                                   |
+|----------------------|-------------------------------------------|
+| `htmlcov/`           | Per-file HTML coverage (open index.html)  |
+| `coverage.xml`       | Raw coverage data (for tools)             |
+| `test-results-unit.xml` | JUnit test results                     |
+
+### PR comments
+
+Coverage is posted as a PR comment only when coverage < 60% (to reduce notification noise). Coverage is always available in the job summary and artifacts.
+
 ## Troubleshooting
 
 ### Common Issues

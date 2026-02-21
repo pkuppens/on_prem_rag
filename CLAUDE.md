@@ -101,6 +101,7 @@ uv sync                    # Install from pyproject.toml
 - Tests marked `@pytest.mark.slow`, `@pytest.mark.internet`, or `@pytest.mark.ollama` are skipped by default
 - Use `git push --no-verify` only in emergencies
 - Test docstrings should follow: "As a user I want [objective], so I can [benefit]. Technical: [requirement]."
+- **CI coverage**: `gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports` — open `tmp/coverage-reports/htmlcov/index.html` for per-file report. See docs/technical/CI_SETUP.md#coverage-reports.
 
 ### Git Workflow
 
@@ -149,7 +150,8 @@ tmp/
 │   ├── issue-descriptions/  # Cached issue bodies (issue-NNN.md)
 │   ├── issue-comments/      # Draft comments before posting
 │   └── pr-bodies/           # Draft PR descriptions
-├── analysis/              # Exploration notes, coverage reports, profiling
+├── coverage-reports/      # CI coverage (gh run download); htmlcov/index.html for per-file report
+├── analysis/              # Exploration notes, profiling
 ├── debug/                 # Debug output, logs, test artifacts
 └── progress/              # Any other work-in-progress text
 ```

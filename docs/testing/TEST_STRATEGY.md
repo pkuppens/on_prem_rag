@@ -81,8 +81,18 @@ No tests were removed in this audit. Recommendations are for optimisation (Task 
 - **In scope**: `src/backend` (line and branch coverage).
 - **Out of scope**: Notebooks, scripts, tooling, frontend.
 - **CI enforcement**: `--cov-fail-under=63` in unit test job; CI fails if coverage drops below baseline.
-- **HTML report**: `htmlcov/` in the `coverage-reports` artifact. From any run: Actions → run → Artifacts → `coverage-reports` → extract and open `htmlcov/index.html` for per-file coverage.
+- **HTML report**: `htmlcov/` in the `coverage-reports` artifact. See [CI_SETUP.md#coverage-reports](../technical/CI_SETUP.md#coverage-reports) for download instructions.
 - **PR comments**: Posted only when coverage < 60% (to reduce notification noise). Coverage is always in the job summary and artifacts.
+
+### Downloading coverage (gh CLI)
+
+If the Artifacts section is not visible on the run page, use:
+
+```bash
+gh run download <RUN_ID> --name coverage-reports --dir tmp/coverage-reports
+```
+
+Then open `tmp/coverage-reports/htmlcov/index.html` for the per-file report.
 
 ## CI Pipeline
 

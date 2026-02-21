@@ -170,17 +170,20 @@ jobs:
           du -sh ~/.cache/uv ~/.local/share/uv 2>/dev/null || true
 
   # Unit test job - fast, always run
+  # Timeout: 30min for now to ensure results; reduce once runs stabilize (see CI_SETUP.md)
   test-unit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
     needs: [setup, model-download]
-    timeout-minutes: 5
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 1
+      # free-disk-space: needed for private repo runners (~14GB). Unit tests need HF cache + deps + coverage;
+      # without it "No space left" can occur. Each job gets a fresh VM (no shared runners).
       - name: Free up disk space (private repo runner limit ~14GB)
         uses: jlumbroso/free-disk-space@main
         with:

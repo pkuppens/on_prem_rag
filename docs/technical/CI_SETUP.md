@@ -99,6 +99,16 @@ uv run python scripts/setup_embedding_models.py
 
 Private repository runners have ~14GB free disk. The workflow uses `jlumbroso/free-disk-space` to remove pre-installed tools (Android, .NET, Haskell, etc.), freeing ~30GB before `uv sync` and HuggingFace model downloads. Without this, "No space left on device" errors can occur.
 
+Each job gets a fresh VM; runners are not shared between jobs. The free-disk-space step adds setup time (~2–5 min) but is required for all test jobs (unit, integration, performance) because they restore the HuggingFace cache and run coverage.
+
+## Job Timeouts
+
+| Job               | Timeout | Rationale                                                    |
+|-------------------|---------|--------------------------------------------------------------|
+| test-unit         | 30 min  | Temporary; reduce once runs stabilize. Includes setup + pytest. |
+| test-performance  | 10 min  | Slow tests; sequential execution.                            |
+| test-integration  | 15 min  | Internet-dependent; sequential execution.                    |
+
 ## Troubleshooting
 
 ### Common Issues

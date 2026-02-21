@@ -245,10 +245,13 @@ jobs:
         run: |
           if [ -f coverage.xml ]; then
             pct=$(python3 -c "import xml.etree.ElementTree as ET; r=ET.parse('coverage.xml').getroot(); print(f\"{100*float(r.attrib.get('line-rate',0)):.1f}\")")
+            run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             {
               echo "## Unit Test Coverage"
               echo ""
               echo "**Coverage:** ${pct}%"
+              echo ""
+              echo "📎 [Download coverage-reports](${run_url}) → Artifacts (htmlcov/ for per-file report)"
             } >> $GITHUB_STEP_SUMMARY
           fi
 
@@ -476,6 +479,7 @@ jobs:
               if out_path:
                   with open(out_path, "a") as f:
                       f.write(f"percentage={pct:.1f}\n")
+                      f.write(f"should_comment={'true' if pct < 60 else 'false'}\n")
               print(f"Coverage: {pct:.1f}%")
           except Exception as e:
               with open("coverage_comment.md", "w") as f:
@@ -484,7 +488,9 @@ jobs:
               exit(0)  # Don't fail step - still allow PR comment
           PYEOF
 
+      # Only comment when coverage < 60% to reduce notification noise (coverage always in job summary + artifacts)
       - name: Comment on PR
+        if: steps.coverage.outputs.should_comment == 'true'
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

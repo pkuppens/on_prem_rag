@@ -312,7 +312,8 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run slow tests only (performance-related); sequential for CI reliability
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -m "slow and not internet and not ollama and not docker and not ci_skip" --junitxml=test-results-performance.xml
+          # -n 0: disable parallelism (overrides addopts "-n auto") — slow tests share ChromaDB and must run sequentially
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 0 -m "slow and not internet and not ollama and not docker and not ci_skip" --junitxml=test-results-performance.xml
       - name: Upload performance test results
         uses: actions/upload-artifact@v6
         with:

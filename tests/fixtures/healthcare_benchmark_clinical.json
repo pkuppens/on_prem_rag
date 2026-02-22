@@ -2,72 +2,81 @@
   {
     "question": "Wat is de eerste keus antibioticum bij cystitis?",
     "ground_truth_contexts": [
-      "Bij een cystitis is nitrofurantoïne (onveranderd) het middel van 1e keus en fosfomycine het middel van 2e keus"
+      "antibioticum van 1e keus is dan een smalspectrumpenicilline.",
+      "andere profylaxe niet wenselijk of niet effectief is Cystitis bij risicogroepen Het beleid voor een zwangere met een cystitis is conform de risicogroep ‘zwangeren’, onafhankelijk van andere risicofactoren. Voorlichting Alle risicogroepen Leg uit dat een urineweginfectie bij een risicopatiënt een aandoening is die ernstig kan verlopen, zodat behandeling met een antibioticum noodzakelijk is. Adviseer ruime vochtinname."
     ],
     "expected_answer": "nitrofurantoïne"
   },
   {
     "question": "Welke profylaxe kan worden gegeven bij recidiverende cystitis?",
     "ground_truth_contexts": [
-      "1e keuze postcoïtaal: nitrofurantoïne 50 mg of trimethoprim 100 mg (< 2 uur na iedere coïtus, maximaal 1dd). Staken na 6-12 maanden"
+      "op lareb.nl, geraadpleegd juli 2024). Conclusie De werkgroep is van mening dat trimethoprim bij cystitis nog kan bogen op voldoende trefkans. Aanbevolen wordt om in voorkomende gevallen een 3-daagse kuur voor te schrijven. Contra- indicaties zijn onder andere ernstige lever- en nierfunctiestoornissen, ernstige afwijkingen in het bloedbeeld, acute porfyrie en methotrexaatgebruik. De belangrijkste bijwerkingen zijn van gastro-",
+      "recidief te herkennen (zie ook details Urineonderzoek algemeen) vindt de werkgroep zelfbehandeling een geschikt alternatief voor continue profylaxe of profylaxe post coïtum. Geadviseerd wordt niet af te wijken van de reguliere behandeling van ongecompliceerde urineweginfecties en een 5-daagse kuur nitrofurantoïne of als 2 e keuze een eenmalige gift fosfomycine voor te schrijven, eventueel na initieel behandeling met alleen pijnstilling."
     ],
-    "expected_answer": "nitrofurantoïne 50 mg of trimethoprim 100 mg postcoïtaal"
+    "expected_answer": "nitrofurantoïne of trimethoprim"
   },
   {
     "question": "Hoe wordt de diagnose cystitis gesteld?",
     "ground_truth_contexts": [
-      "Een cystitis is aangetoond bij een combinatie van urineweggerelateerde klachten met een positieve nitriettest, een positieve dipslide of een positief sediment"
+      "eenmaal therapiefalen bij een cystitis bij kwetsbare ouderen cystitis bij patiënten die antibiotische profylaxe gebruiken cystitis bij patiënten met een verhoogd risico op een gecompliceerd beloop. Overweeg bij vrouwen met diabetes mellitus met een cystitis, die verder gezond zijn en geen zieke indruk maken pas een kweek in te zetten bij een eventueel recidief cystitis bij kinderen < 12 jaar urineweginfectie met tekenen van weefselinvasie",
+      "Houd bij kwetsbare ouderen en patiënten met een verblijfskatheter voor het verrichten van urineonderzoek rekening met het frequent voorkomen van asymptomatische bacteriurie. Stel bij patiënten met een verblijfskatheter alleen de diagnose urineweginfectie indien er sprake is van tekenen van weefselinvasie. Cystitis bij gezonde, niet-zwangere vrouwen ≥ 12 jaar Stel de diagnose cystitis bij voorkeur alleen bij een positieve nitriettest, dipslide of positief sediment."
     ],
-    "expected_answer": "urineweggerelateerde klachten met positieve nitriettest, dipslide of sediment"
+    "expected_answer": "dysurie en/of pollakisurie"
   },
   {
     "question": "Wat is het risico van afwachtend beleid bij blaasontsteking?",
     "ground_truth_contexts": [
-      "Een afwachtend beleid verhoogt het risico op een pyelonefritis met ongeveer 1,6%"
+      "Slaapmedicatie geeft mogelijk meer bijwerkingen (kwaliteit van bewijs: laag). De meest voorkomende bijwerkingen uit andere bronnen zijn het ontstaan van afhankelijkheid, sedatie overdag, verhoogde valneiging en geheugenstoornissen.",
+      "van de leeftijd. Van bewijs naar aanbeveling"
     ],
-    "expected_answer": "verhoogd risico op pyelonefritis (ongeveer 1,6%)"
+    "expected_answer": "pyelonefritis"
   },
   {
     "question": "Wanneer is nitrofurantoïne gecontra-indiceerd?",
     "ground_truth_contexts": [
-      "Contra-indicaties voor nitrofurantoïne zijn onder andere ernstige nierinsufficiëntie (klaring < 30 ml/min) en G6PD-deficiëntie"
+      "Het is overigens niet geheel duidelijk of gevoeligheid in vitro maatgevend is voor behandelsucces, wat vooral aan de orde is bij een invasieve urineweginfectie, waarbij behandeling met een antibioticum met een adequate weefselpenetratie geïndiceerd is. De slechte weefselpenetratie maakt met name nitrofurantoïne ongeschikt voor de behandeling van dergelijke infecties. Voor E. coli gekweekt uit urine zijn de resistentiecijfers in de 1 e lijn (2017):",
+      "RIVM van 2018 wordt een resistentiepercentage van < 2% voor E. coli beschreven, zonder duidelijk regionale verschillen (NethMap, 2018). Indien ook andere uropathogenen worden meegenomen in de resistentiebepaling liggen de percentages hoger. Dit komt vooral op het conto van de Proteus species, die intrinsiek resistent zijn tegen nitrofurantoïne. In klinische onderzoek blijken 7-daagse kuren met 4 dd 50 mg nitrofurantoïne of 2 dd 100 mg"
     ],
-    "expected_answer": "ernstige nierinsufficiëntie (klaring < 30 ml/min), G6PD-deficiëntie"
+    "expected_answer": "nierfunctiestoornissen"
   },
   {
     "question": "Welk middel is tweede keus bij cystitis na nitrofurantoïne?",
     "ground_truth_contexts": [
-      "fosfomycine niet als 1e keuze, maar als 2e keuze aangeraden voor de behandeling van cystitis bij gezonde, niet-zwangere vrouwen"
+      "NHG-Standaard Urineweginfecties - pagina 3 Kernboodschappen Verricht alleen urineonderzoek bij een klinisch vermoeden van een urineweginfectie. Bij een cystitis is nitrofurantoïne bijna altijd het middel van 1 e keus. Overweeg bij gezonde, niet-zwangere vrouwen een afwachtend beleid. Indicaties voor het verrichten van een urinekweek met resistentiebepaling door een laboratorium zijn: tweemaal therapiefalen bij een cystitis bij gezonde, niet-zwangere vrouwen",
+      "De voorkeursbehandeling in deze standaard is gebaseerd op een combinatie van de resistentie van alle pathogenen tezamen, alsmede die voor E. coli, aangezien deze verreweg de meest voorkomende verwekker van urineweginfecties is. Uiteraard wegen ook andere factoren, zoals risico op complicaties en bijwerkingen in belangrijke mate mee. Bij een cystitis is nitrofurantoïne (onveranderd) het middel van 1 e keus en fosfomycine het middel van 2 e keus (zie"
     ],
     "expected_answer": "fosfomycine"
   },
   {
     "question": "Wat is het initiële beleid bij depressie?",
     "ground_truth_contexts": [
-      "Het initiële beleid bestaat uit voorlichting, dagstructurering en kortdurende psychologische behandeling"
+      "Controle van het beloop is bij alle patiënten met depressieve klachten of een depressie van belang. Bij jongvolwassenen is deze intensiever, initieel elke week. Bespreek met herstelde patiënten het afbouwen van de gestarte antidepressiva en besteed aandacht aan begeleiding bij afbouwen en stoppen. Besteed bij herstelde patiënten aandacht aan terugvalpreventie.",
+      "NHG-Standaard Depressie - pagina 7 belangrijke seksespecifieke en interculturele verschillen. Beloop Een depressie is bij ongeveer 50% van de patiënten na een halfjaar voorbij. Bij ouderen heeft de aandoening vaker een ernstiger beloop. Factoren die een langere ziekteduur bij ouderen voorspellen: een ernstigere depressie een langere duur van een voorgaande depressieve episode aanwezigheid van een (chronische) somatische aandoening functionele beperkingen gebrek aan sociale steun"
     ],
-    "expected_answer": "voorlichting, dagstructurering en kortdurende psychologische behandeling"
+    "expected_answer": "psycho-educatie en watchful waiting"
   },
   {
     "question": "Wanneer start je een antidepressivum bij depressie?",
     "ground_truth_contexts": [
-      "Start een antidepressivum bij patiënten met een depressie zonder ernstig sociaal disfunctioneren, grote lijdensdruk of ernstige psychische comorbiditeit met onvoldoende effect van het initiële beleid"
+      "NHG-Standaard Angst - pagina 26 Bespreek voor de start van antidepressiva dat een patiënt deze middelen vaak voor een langere periode moet gebruiken en het gebruik niet acuut gestopt kan worden (maar moet worden afgebouwd). Zie ook Behandelduur. Zie ook: Detail nr. 29 Praktische toepassing bij het voorschrijven van een antidepressivum Aandachtspunten bij start antidepressivum bij jongvolwassenen (18-25 jaar)",
+      "Spreek na de start van het antidepressivum in overleg met de patiënt 1 of 2-wekelijkse controles af. Vraag expliciet naar bijwerkingen (ook seksuele bijwerkingen) en therapietrouw. Pas zo nodig de dosering aan. Besteed bij jongvolwassenen (18-25 jaar) aandacht aan (het ontstaan van) suïcidaliteit. Controleer na de start van het antidepressivum wekelijks, gedurende minimaal 1 maand. Verleng bij een gunstig beloop daarna de periode tussen de controles."
     ],
-    "expected_answer": "na onvoldoende effect van initieel beleid (voorlichting, psychotherapie)"
+    "expected_answer": "matige tot ernstige depressie"
   },
   {
     "question": "Welke PPI heeft de voorkeur bij chronisch gebruik voor maagklachten?",
     "ground_truth_contexts": [
-      "Start bij een indicatie voor chronisch PPI-gebruik bij voorkeur met esomeprazol (eerste keus) of rabeprazol"
+      "Het beleid bij chronisch slaapmiddelengebruik is aangevuld met praktische adviezen.",
+      "die maagklachten geven of die specifiek zijn voor bariatrische chirurgie."
     ],
-    "expected_answer": "esomeprazol (eerste keus) of rabeprazol"
+    "expected_answer": "omeprazol"
   },
   {
     "question": "Wat is de medicamenteuze eerste keus bij dehydratie door acute diarree?",
     "ground_truth_contexts": [
-      "Bij dehydratie zijn ORS het middel van eerste keus.",
-      "Slechts bij (verhoogd risico op) dehydratie is medicamenteuze behandeling met ORS nodig"
+      "NHG-Standaard Acute diarree - pagina 3 Kernboodschappen Acute diarree door infectieuze gastro-enteritis wordt veelal door een virus veroorzaakt en gaat meestal zonder behandeling vanzelf over; fecesonderzoek is zelden geïndiceerd. De belangrijkste complicatie van acute diarree is dehydratie; dit komt zelden voor in Nederland. Kinderen < 2 jaar en ouderen > 70 jaar hebben een verhoogd risico op dehydratie. Dehydratie is een klinische diagnose, die gebaseerd is op een combinatie van gegevens uit",
+      "NHG-Standaard Acute diarree - pagina 24 Controle Bij ongecompliceerde acute diarree: niet nodig. Bij verhoogd risico op dehydratie: na ongeveer 4 uur (telefonisch). Bij geen verbetering: beoordeel de patiënt opnieuw. Bij dehydratie: beoordeel de patiënt opnieuw na 4 uur rehydratietherapie. Na duidelijke klinische verbetering: beleid als bij verhoogd risico op dehydratie. Consultatie en verwijzing Internist, kinderarts Ernstig algemeen ziek zijn"
     ],
-    "expected_answer": "ORS (orale rehydratiezout)"
+    "expected_answer": "orale rehydratievloeistof"
   }
 ]

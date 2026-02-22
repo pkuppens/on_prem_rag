@@ -96,6 +96,8 @@ start-auth = "backend.auth_service.main:start_server"
 start-test-app = "test_app:start_server"
 # Upload local files via CLI
 upload-documents = "scripts.upload_documents:main"
+# Fetch healthcare guideline PDFs by reference
+fetch-healthcare-guidelines = "scripts.fetch_healthcare_guidelines:main"
 # RAG evaluation on benchmark dataset
 evaluate-rag = "backend.rag_pipeline.evaluation.cli:main"
 # WBSO validation, upload, and reporting scripts
@@ -216,7 +218,10 @@ line-ending = "auto"
 pythonpath = ["src", "src/backend"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v --durations=20 -m 'not slow and not internet and not ollama and not docker and not cloud_llm'"
+addopts = "-v --durations=20 -n auto --dist loadfile -m 'not slow and not internet and not ollama and not docker and not cloud_llm'"
+# -n auto: use all available cores locally (capped at 8 by conftest.py pytest_configure)
+# --dist loadfile: keep tests from the same file on the same worker (preserves class/module fixtures)
+# CI overrides -n auto with explicit -n 2 (GitHub runners are 2-core)
 # Silence deprecation warnings from third-party packages (nemoguardrails, pydantic, langchain, etc.)
 filterwarnings = [
     "ignore::DeprecationWarning",

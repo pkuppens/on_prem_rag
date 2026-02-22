@@ -145,16 +145,24 @@ Use `tmp/` for all development scratch files that should NOT be committed. This 
 
 ```
 tmp/
-├── CLAUDE.md              # Instructions for this directory
-├── github/                # GitHub-related drafts
-│   ├── CLAUDE.md
-│   ├── issue-descriptions/  # Cached issue bodies (issue-NNN.md)
-│   ├── issue-comments/      # Draft comments before posting
-│   └── pr-bodies/           # Draft PR descriptions
-├── coverage-reports/      # CI coverage (gh run download); htmlcov/index.html for per-file report
-├── analysis/              # Exploration notes, profiling
-├── debug/                 # Debug output, logs, test artifacts
-└── progress/              # Any other work-in-progress text
+├── CLAUDE.md                     # Instructions for this directory
+├── github/                       # GitHub-related scratch files
+│   ├── issue-NNN/                # All scratch files for issue NNN in one place
+│   │   ├── description.md        # Cached issue body (gh issue view NNN)
+│   │   ├── workflow.md           # Phase tracking, decisions, next steps
+│   │   ├── plan.md               # Implementation plan (Phase 2)
+│   │   ├── validation.md         # Validation document (/create-validation)
+│   │   └── comments/             # Draft comments before posting
+│   │       ├── refinement.md     # Phase 1 refinement comment
+│   │       ├── plan.md           # Phase 2 plan comment
+│   │       ├── milestone.md      # Phase 3 progress comment
+│   │       └── close.md          # Close comment (if issue is obsolete)
+│   ├── open-issues.md            # Cached open issues list (gh issue list)
+│   └── pr-bodies/                # Draft PR descriptions before posting
+├── coverage-reports/             # CI coverage (gh run download); htmlcov/index.html for per-file report
+├── analysis/                     # Exploration notes, profiling
+├── debug/                        # Debug output, logs, test artifacts
+└── drafts/                       # Any other WIP text
 ```
 
 **Rules:**

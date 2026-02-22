@@ -22,14 +22,17 @@ Start work on a GitHub issue using the project's Issue Implementation Workflow. 
 
 Use the project's `tmp/` directory and its subdirectories for all scratch files during the workflow. This enables continuation between sessions: a new agent can read the workflow state and resume from where the previous session left off.
 
+All scratch files for an issue live under a single directory — `tmp/github/issue-NNN/`:
+
 | File Path | Purpose |
 |-----------|---------|
-| `tmp/github/issue-descriptions/issue-NNN.md` | Cached issue body from `gh issue view NNN` |
-| `tmp/github/progress/issue-NNN-workflow.md` | Workflow state: phase, decisions, validation results, next steps |
-| `tmp/github/progress/issue-NNN-plan.md` | Implementation plan (Phase 2 output) |
-| `tmp/github/issue-comments/issue-NNN-close.md` | Draft close comment when closing obsolete issues |
+| `tmp/github/issue-NNN/description.md` | Cached issue body from `gh issue view NNN` |
+| `tmp/github/issue-NNN/workflow.md` | Workflow state: phase, decisions, validation results, next steps |
+| `tmp/github/issue-NNN/plan.md` | Implementation plan (Phase 2 output) |
+| `tmp/github/issue-NNN/validation.md` | Validation document (created by `/create-validation`) |
+| `tmp/github/issue-NNN/comments/` | Draft comments before posting (refinement, plan, close) |
 
-**Continuation flow**: At start, check if `tmp/github/progress/issue-NNN-workflow.md` exists. If it does, read it to load phase, decisions, and next steps before continuing. Update this file after each step.
+**Continuation flow**: At start, check if `tmp/github/issue-NNN/workflow.md` exists. If it does, read it to load phase, decisions, and next steps before continuing. Update this file after each step.
 
 ## Writing to GitHub
 
@@ -37,12 +40,12 @@ Significant updates must also be written to the GitHub issue so stakeholders see
 
 | When | What to post | How |
 |------|--------------|-----|
-| Phase 1: Issue refinement | Refined acceptance criteria, out-of-scope, validation findings | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md` |
-| Phase 2: Plan complete | Implementation plan with checklists (tasks, test strategy) | `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md` |
-| Phase 3: Milestones | Completed subtasks, test results | `gh issue comment NNN --body-file ...` when logical milestones are reached |
-| Phase 3: Acceptance criteria | Update checkboxes when criteria are **verified complete** | `gh issue view NNN --json body -q '.body'` → edit `- [ ]` to `- [x]` → `gh issue edit NNN --body-file tmp/github/issue-descriptions/issue-NNN.md` |
+| Phase 1: Issue refinement | Refined acceptance criteria, out-of-scope, validation findings | `gh issue comment NNN --body-file tmp/github/issue-NNN/comments/refinement.md` |
+| Phase 2: Plan complete | Implementation plan with checklists (tasks, test strategy) | `gh issue comment NNN --body-file tmp/github/issue-NNN/comments/plan.md` |
+| Phase 3: Milestones | Completed subtasks, test results | `gh issue comment NNN --body-file tmp/github/issue-NNN/comments/milestone.md` when logical milestones are reached |
+| Phase 3: Acceptance criteria | Update checkboxes when criteria are **verified complete** | `gh issue view NNN --json body -q '.body'` → edit `- [ ]` to `- [x]` → `gh issue edit NNN --body-file tmp/github/issue-NNN/description.md` |
 
-- **Draft first** in `tmp/github/issue-comments/` (e.g. `issue-NNN-refinement.md`, `issue-NNN-plan.md`)
+- **Draft first** in `tmp/github/issue-NNN/comments/` (e.g. `refinement.md`, `plan.md`)
 - **Post** after user approval or when the content is ready (e.g. completion of refinement or planning)
 - **Checklists** in comments stay visible and can be updated by editing the comment (or posting a follow-up)
 - **Acceptance criteria checkboxes**: Only mark `[x]` when the criterion is **verified and validated**, not just implemented. Update the issue body (not just a comment) so the main issue reflects actual status.
@@ -102,8 +105,8 @@ If no issue number is found, list open issues (number with title) so the user ca
 gh issue view <NNN>
 ```
 
-- **Write**: Save output to `tmp/github/issue-descriptions/issue-NNN.md` (cached issue body for reuse)
-- **Write**: Create or update `tmp/github/progress/issue-NNN-workflow.md` with: issue number, fetched date, phase (e.g. "Phase 1 Validate"), status
+- **Write**: Save output to `tmp/github/issue-NNN/description.md` (cached issue body for reuse)
+- **Write**: Create or update `tmp/github/issue-NNN/workflow.md` with: issue number, fetched date, phase (e.g. "Phase 1 Validate"), status
 
 **If `gh` fails** (not authenticated, repo not set):
 
@@ -123,12 +126,12 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 2. **1.2** Search codebase for relevant symbols; check recent commits and merged PRs
 3. **1.3** Research existing tooling and best practices (libraries, patterns, similar solutions)
 
-- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with validation results (obsolete/valid, findings, decisions)
-- **If refinement done** (e.g. clarified acceptance criteria, added out-of-scope): draft to `tmp/github/issue-comments/issue-NNN-refinement.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-refinement.md`
+- **Write**: Update `tmp/github/issue-NNN/workflow.md` with validation results (obsolete/valid, findings, decisions)
+- **If refinement done** (e.g. clarified acceptance criteria, added out-of-scope): draft to `tmp/github/issue-NNN/comments/refinement.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-NNN/comments/refinement.md`
 
 **If issue is obsolete or already done**:
 
-- **Write**: Draft close comment to `tmp/github/issue-comments/issue-NNN-close.md`
+- **Write**: Draft close comment to `tmp/github/issue-NNN/comments/close.md`
 - Suggest closing: `gh issue close NNN --comment "Duplicate of #X"` or similar
 - Stop
 
@@ -141,9 +144,9 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`
-- **Write**: Save implementation plan to `tmp/github/progress/issue-NNN-plan.md`
-- **Write**: Update `tmp/github/progress/issue-NNN-workflow.md` with: phase (Phase 2/3), branch name, plan summary, next steps; if BASE_BRANCH ≠ main, add `base_branch: BASE_BRANCH` so `/pr` can target the correct base
-- **GitHub**: Draft plan (with checklists) to `tmp/github/issue-comments/issue-NNN-plan.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-comments/issue-NNN-plan.md`
+- **Write**: Save implementation plan to `tmp/github/issue-NNN/plan.md`
+- **Write**: Update `tmp/github/issue-NNN/workflow.md` with: phase (Phase 2/3), branch name, plan summary, next steps; if BASE_BRANCH ≠ main, add `base_branch: BASE_BRANCH` so `/pr` can target the correct base
+- **GitHub**: Draft plan (with checklists) to `tmp/github/issue-NNN/comments/plan.md`, then post with `gh issue comment NNN --body-file tmp/github/issue-NNN/comments/plan.md`
 - If user requested "implement" or "fix": proceed to Phase 3 (implement in small steps, test after each, quality gate before commit)
 - If user requested "plan" only: present implementation plan and stop
 
@@ -161,7 +164,7 @@ When user runs `/get-started` without an issue number:
    The default output shows number and title. Present the list so the user can select an issue.
 
 3. Summarize the three-phase workflow briefly (Phase 1 Validate, Phase 2 Plan, Phase 3 Implement)
-4. **Write** (optional): Save list to `tmp/github/progress/open-issues.md` if helpful for session continuity
+4. **Write** (optional): Save list to `tmp/github/open-issues.md` if helpful for session continuity
 5. Ask the user to either:
    - **Select an issue**: `/get-started fix issue #N`
    - **Create a new issue**: `gh issue create` (then `/get-started fix issue #N` with the new number)
@@ -191,7 +194,7 @@ A successful `/get-started fix issue #123` execution results in:
 During Phase 3 (Implement), keep `tmp/github/progress/issue-NNN-workflow.md` updated:
 
 - After each logical step: what was done, tests run, next concrete action
-- **When acceptance criteria are verified**: Update the GitHub issue body checkboxes (`- [ ]` → `- [x]`) so the issue reflects actual completion status. Use `gh issue view NNN --json body`, edit, then `gh issue edit NNN --body-file <file>`.
+- **When acceptance criteria are verified**: Update the GitHub issue body checkboxes (`- [ ]` → `- [x]`) so the issue reflects actual completion status. Use `gh issue view NNN --json body`, edit to `tmp/github/issue-NNN/description.md`, then `gh issue edit NNN --body-file tmp/github/issue-NNN/description.md`.
 - If session ends mid-implementation, the next agent reads this file and resumes
 
 ## References

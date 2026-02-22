@@ -4,10 +4,9 @@ results/
 docs/archive/
 tmpclaude-*-cwd
 
-# Claude Code local settings (ignore contents, not skills)
-.claude/*
-# Project skills (shared, committed)
-!.claude/skills/
+# Claude Code — fully version-controlled (.claude/ is committed)
+# Machine-specific local settings must NOT be committed
+.claude/settings.local.json
 
 # Serena MCP server memories
 .serena/

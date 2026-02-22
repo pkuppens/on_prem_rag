@@ -103,6 +103,7 @@ Run with:
 
 ```bash
 uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark.json --output results/eval
+# Clinical guidelines (NHG): uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark_clinical.json --output results/eval-clinical
 ```
 
 | Strategy | MRR | Recall@5 | Hit@5 | Precision@5 |

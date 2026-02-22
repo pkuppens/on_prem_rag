@@ -29,11 +29,12 @@ def test_get_embedding_model_remote(mock_hf, monkeypatch):
 
 
 @patch("backend.rag_pipeline.utils.embedding_model_utils.HuggingFaceEmbedding")
-def test_get_embedding_model_returns_cached_instance(mock_hf):
+def test_get_embedding_model_returns_cached_instance(mock_hf, monkeypatch):
     """As a user I want the embedding model cached, so that ingestion avoids cold-start per document.
     Technical: Second call with same (model_name, cache_dir) returns cached instance; HuggingFaceEmbedding
     is only called once.
     """
+    monkeypatch.delenv("TRANSFORMERS_OFFLINE", raising=False)
     clear_embedding_model_cache()
     model1 = get_embedding_model("cached-model", cache_dir="cache")
     model2 = get_embedding_model("cached-model", cache_dir="cache")

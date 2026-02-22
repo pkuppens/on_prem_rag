@@ -138,7 +138,7 @@ Never silently change expectations to make a failing step pass without documenti
 
 ## References
 
-- [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md) — validation file format
+- [docs/technical/VALIDATION_FORMAT.md](../../../docs/technical/VALIDATION_FORMAT.md) — validation file format
 - [.cursor/skills/create-validation/SKILL.md](../create-validation/SKILL.md) — creates validation files
-- [CLAUDE.md](../../CLAUDE.md) — service start commands, ports
-- [docs/PORTS.md](../../docs/PORTS.md) — service ports reference
+- [CLAUDE.md](../../../CLAUDE.md) — service start commands, ports
+- [docs/PORTS.md](../../../docs/PORTS.md) — service ports reference

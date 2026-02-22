@@ -7,7 +7,7 @@ Create a step-by-step validation document for a feature or issue. Each step is a
 ## Redirect To (do not duplicate)
 
 - **Running the validation**: Use `/run-validation` to execute a validation document
-- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../docs/technical/VALIDATION_FORMAT.md)
+- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md)
 - **Issue workflow**: Use `/get-started` for the full Validate → Plan → Implement flow
 
 ## When to Use

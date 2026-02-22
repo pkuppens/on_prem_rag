@@ -105,7 +105,7 @@ curl -s -X POST http://localhost:9180/upload \
 
 ## References
 
-- [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md) — full format spec
-- [docs/PORTS.md](../../docs/PORTS.md) — service ports
-- [CLAUDE.md](../../CLAUDE.md) — build/run commands
+- [docs/technical/VALIDATION_FORMAT.md](../../../docs/technical/VALIDATION_FORMAT.md) — full format spec
+- [docs/PORTS.md](../../../docs/PORTS.md) — service ports
+- [CLAUDE.md](../../../CLAUDE.md) — build/run commands
 - [.cursor/skills/run-validation/SKILL.md](../run-validation/SKILL.md) — executes and verifies a validation file

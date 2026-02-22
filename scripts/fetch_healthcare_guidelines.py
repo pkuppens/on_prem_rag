@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -152,10 +153,19 @@ def fetch_healthcare_guidelines(
                 logger.debug("Skipping %s (already exists)", source.filename)
                 skipped_files.append(source.filename)
                 continue
-            logger.info("Downloading %s", source.title)
+            logger.info("PDF download start, filename=%s, url=%s", source.filename, source.url)
+            t_start = time.perf_counter()
             resp = http_client.get(source.url, follow_redirects=True)
             resp.raise_for_status()
             out_path.write_bytes(resp.content)
+            elapsed_ms = int((time.perf_counter() - t_start) * 1000)
+            size_kib = len(resp.content) / 1024
+            logger.info(
+                "PDF download done, filename=%s, elapsed_ms=%d, size_kib=%.1f",
+                source.filename,
+                elapsed_ms,
+                size_kib,
+            )
             downloaded.append(source.filename)
     finally:
         if own_client:
@@ -197,7 +207,7 @@ def _print_success_report(result: FetchResult, expected_total: int) -> None:
         print(f"Downloaded: {n_dl} file(s)", flush=True)
         if n_skip:
             print(f"Skipped: {n_skip} (already present)", flush=True)
-        if n_dl < 10 and n_dl:
+        if n_dl <= 10 and n_dl:
             for f in result.downloaded:
                 _file_line(f)
         elif n_dl:

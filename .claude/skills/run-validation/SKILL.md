@@ -13,7 +13,7 @@ Parse $ARGUMENTS:
 - file path → load from that path
 - *(empty)* → list `tmp/validations/*.md` and ask user to select
 
-Follow [.cursor/skills/run-validation/SKILL.md](.cursor/skills/run-validation/SKILL.md) exactly.
+Follow [.cursor/skills/run-validation/SKILL.md](../../../.cursor/skills/run-validation/SKILL.md) exactly.
 
 ## Quick Reference
 

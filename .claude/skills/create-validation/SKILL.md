@@ -13,7 +13,7 @@ Parse $ARGUMENTS:
 - `for <slug>` → feature slug; save as `docs/validations/feature-<slug>-validation.md`
 - *(empty)* → ask user for issue number or feature name
 
-Follow [.cursor/skills/create-validation/SKILL.md](.cursor/skills/create-validation/SKILL.md) exactly.
+Follow [.cursor/skills/create-validation/SKILL.md](../../../.cursor/skills/create-validation/SKILL.md) exactly.
 
 ## Quick Reference
 
@@ -22,7 +22,7 @@ Follow [.cursor/skills/create-validation/SKILL.md](.cursor/skills/create-validat
 - An explicit **Expected** outcome (no vague wording)
 - A `- [ ] Step passed` checkbox
 
-**Format spec**: [docs/technical/VALIDATION_FORMAT.md](docs/technical/VALIDATION_FORMAT.md)
+**Format spec**: [docs/technical/VALIDATION_FORMAT.md](../../../docs/technical/VALIDATION_FORMAT.md)
 
 **Step types**: CLI command · HTTP request · UI browser check · file check · log check
 

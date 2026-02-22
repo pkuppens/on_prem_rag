@@ -7,7 +7,7 @@ Execute a validation document step by step. For each step: run the command or ch
 ## Redirect To (do not duplicate)
 
 - **Creating a validation**: Use `/create-validation` to generate the validation document first
-- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../docs/technical/VALIDATION_FORMAT.md)
+- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md)
 - **Committing and PRs**: Use `/commit` and `/pr` after validation passes
 
 ## When to Use

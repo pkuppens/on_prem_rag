@@ -39,5 +39,5 @@ Commands are invoked with `/command-name`. Use **delegation** for reuse; keep th
 
 ## Validation Format
 
-- [docs/technical/VALIDATION_FORMAT.md](../docs/technical/VALIDATION_FORMAT.md) — schema for validation files created by `/create-validation` and consumed by `/run-validation`
+- [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md) — schema for validation files created by `/create-validation` and consumed by `/run-validation`
 - Storage: `tmp/validations/issue-NNN-validation.md` (session-scoped) or `docs/validations/feature-<slug>-validation.md` (committed)

@@ -67,8 +67,8 @@ requires-python = ">=3.12,<3.14"
 
 # Configure the package to include src directory and make it importable
 [tool.setuptools.packages.find]
-where = ["src", "scripts"]
-include = ["*"]
+where = ["src", "."]
+include = ["scripts", "scripts.*", "authenticate_google_calendar", "backend", "backend.*", "frontend", "frontend.*", "mcp_calendar", "mcp_calendar.*", "wbso", "wbso.*"]
 
 [tool.setuptools.package-data]
 "backend.rag_pipeline" = ["py.typed"]

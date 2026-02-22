@@ -16,9 +16,9 @@ Reads a validation file, executes each step, tracks pass/fail, and iterates on f
 ## Inputs
 
 The user provides one of:
-- An issue number (`#NNN`) → look for `tmp/validations/issue-NNN-validation.md`
+- An issue number (`#NNN`) → look for `tmp/github/issue-NNN/validation.md`
 - A file path → read validation from that path
-- Nothing → list `tmp/validations/` files and ask user to select
+- Nothing → list `tmp/github/issue-*/validation.md` files and ask user to select
 
 ## Execution Protocol
 
@@ -105,7 +105,7 @@ After all steps are processed:
 
 - **If passed**: Suggest `gh issue comment NNN --body "Validation passed. All N steps verified."` and update acceptance criteria checkboxes in the issue.
 - **If failed**: Suggest next actions (fix specific steps, re-run with `/run-validation`).
-- Update `tmp/github/progress/issue-NNN-workflow.md` with validation outcome.
+- Update `tmp/github/issue-NNN/workflow.md` with validation outcome.
 
 ## Updating the Validation File
 

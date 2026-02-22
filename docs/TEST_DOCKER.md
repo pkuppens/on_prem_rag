@@ -90,7 +90,7 @@ If Chroma is on a different port (see `CHROMA_HOST_PORT` in `env.example`), adju
    docker logs on_prem_rag-backend-1 2>&1 | grep INGEST
    ```
 
-   Logs include `upload_processing_started`, `load_done`, `chunk_done`, `embed_model_load_done`, `embed_gen_done`, `store_done`, `total_done`, each with `elapsed_ms`.
+   Logs include `INGEST: PDF load start`, `INGEST: PDF load done`, `INGEST: model load start`, `INGEST: model load done`, `chunk_done`, `embed_gen_done`, `store_done`, `total_done`, each with `elapsed_ms` where applicable.
 
 4. **Clean Up**:
    ```bash

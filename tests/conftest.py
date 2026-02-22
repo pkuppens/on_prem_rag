@@ -16,13 +16,24 @@ import pytest
 
 from src.backend.rag_pipeline.utils.progress import progress_notifier
 
+_MAX_LOCAL_WORKERS = 8  # Leave cores free for OS/IDE; cap memory usage
+
 
 def pytest_configure(config: pytest.Config) -> None:
-    """Isolate ChromaDB persist directory per xdist worker to prevent SQLite lock contention.
+    """Configure parallel workers and isolate ChromaDB per worker.
 
-    Each worker (gw0, gw1, …) or the main process gets its own temp directory so that
-    parallel test runs never share the same ChromaDB SQLite file.
+    Worker count: caps xdist ``-n auto`` at _MAX_LOCAL_WORKERS on high-core machines.
+    A hardcoded ``-n N`` on the CLI (e.g. ``-n 2`` in CI) is always respected as-is.
+
+    ChromaDB isolation: each worker gets its own CHROMA_PERSIST_DIR so that parallel
+    workers never share the same SQLite file (prevents "database is locked" errors).
     """
+    # Cap -n auto on the controller process (xdist workers don't have config.option.numprocesses)
+    if hasattr(config.option, "numprocesses") and config.option.numprocesses == "auto":
+        cpu_count = os.cpu_count() or 1
+        config.option.numprocesses = min(cpu_count, _MAX_LOCAL_WORKERS)
+
+    # Isolate ChromaDB per worker (or per main process when not using xdist)
     worker_id = os.environ.get("PYTEST_XDIST_WORKER", "master")
     chroma_dir = Path(tempfile.gettempdir()) / f"chroma_test_{worker_id}"
     chroma_dir.mkdir(parents=True, exist_ok=True)

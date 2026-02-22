@@ -12,10 +12,16 @@ Key features:
 - Batch processing for efficiency
 - Deduplication based on content hashes
 - Comprehensive metadata preservation
+
+Model-keying: Duplicate detection uses (file_content_hash, embedding_model). When you
+switch embedding models, re-ingestion is required — we store embedding_model in chunk
+metadata. For strict model separation, use different collection_name or persist_dir
+per model (e.g. collection "documents_minilm" vs "documents_e5").
 """
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import time
 from collections.abc import Callable, Iterable, Sequence
@@ -27,13 +33,25 @@ from llama_index.core.schema import BaseNode, TextNode
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig
 from backend.rag_pipeline.core.chunking import ChunkingResult, chunk_documents
 from backend.rag_pipeline.core.document_loader import DocumentLoader
-from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager
+from backend.rag_pipeline.core.vector_store import ChromaVectorStoreManager, get_vector_store_manager
 from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
 
 from ..utils.logging import StructuredLogger
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+def _compute_file_content_hash(file_path: Path) -> str:
+    """Compute SHA-256 hash of raw file bytes for exact duplicate detection.
+
+    Trade-off: This reads the file once. Document loading (PDF load start/done) reads
+    again. For duplicate detection, checking hash before load avoids the heavier
+    PDF parse when the file is unchanged. For new files, we read twice (hash + load).
+    A read-once flow would require DocumentLoader to return hash from its load pass,
+    or to accept pre-read bytes — not currently supported by LlamaIndex readers.
+    """
+    return hashlib.sha256(file_path.read_bytes()).hexdigest()
 
 
 class EmbeddingResult(TypedDict):
@@ -276,18 +294,39 @@ def process_document(
     logger = StructuredLogger(__name__)
     t_start = time.perf_counter()
 
+    # Skip exact duplicate: file content hash already in ChromaDB
+    file_content_hash = _compute_file_content_hash(file_path)
+    cfg = VectorStoreConfig(
+        persist_directory=Path(persist_dir),
+        collection_name=collection_name,
+    )
+    manager = get_vector_store_manager(cfg)
+    if manager.has_document_with_file_hash(file_content_hash, embedding_model=model_name):
+        logger.info(
+            "INGEST timing: skipped_duplicate",
+            filename=file_path.name,
+            file_content_hash=file_content_hash[:16],
+        )
+        return 0, 0
+
     # Progress tracking: Document loading (10% of total progress)
     logger.info("INGEST timing: started", filename=file_path.name, model=model_name)
     if progress_callback:
         progress_callback(file_path.name, 0.0)  # 0% - Starting
 
-    # Load the document
+    # Load the document (PDF or other type - parse from disk)
     t_load_start = time.perf_counter()
+    logger.info(
+        "INGEST: PDF load start",
+        filename=file_path.name,
+        model=model_name,
+    )
     document_loader = DocumentLoader()
     documents, document_metadata = document_loader.load_document(file_path)
     logger.info(
-        "INGEST timing: load_done",
+        "INGEST: PDF load done",
         filename=file_path.name,
+        model=model_name,
         elapsed_ms=int((time.perf_counter() - t_load_start) * 1000),
         pages=len(documents),
         file_size=document_metadata.file_size,
@@ -375,6 +414,7 @@ def process_document(
         collection_name=collection_name,
         deduplicate=deduplicate,
         progress_callback=embedding_progress_wrapper,
+        file_content_hash=file_content_hash,
     )
     logger.info(
         "INGEST timing: embed_and_store_done",
@@ -454,7 +494,7 @@ def chunk_pdf(
     # Load the document
     print(f"Loading PDF document: {pdf_path.name}")
     document_loader = DocumentLoader()
-    documents, document_metadata = document_loader.load_document(pdf_path)
+    documents, _ = document_loader.load_document(pdf_path)
 
     print(f"Loaded {len(documents)} pages from PDF")
 
@@ -476,7 +516,13 @@ def chunk_pdf(
     return chunking_result
 
 
-def create_clean_metadata(node, file_path: Path, chunk_index: int) -> dict:
+def create_clean_metadata(
+    node,
+    file_path: Path,
+    chunk_index: int,
+    file_content_hash: str | None = None,
+    embedding_model: str | None = None,
+) -> dict:
     """Create clean, serializable metadata for a chunk.
 
     This function extracts only serializable metadata fields and omits
@@ -525,6 +571,10 @@ def create_clean_metadata(node, file_path: Path, chunk_index: int) -> dict:
     clean_metadata.setdefault("page_number", "unknown")
     clean_metadata.setdefault("page_label", "unknown")
     clean_metadata.setdefault("content_hash", "")
+    if file_content_hash:
+        clean_metadata["file_content_hash"] = file_content_hash
+    if embedding_model:
+        clean_metadata["embedding_model"] = embedding_model
 
     return clean_metadata
 
@@ -537,6 +587,7 @@ def embed_chunks(
     collection_name: str = "documents",
     deduplicate: bool = True,
     progress_callback: Callable[[float], None] | None = None,
+    file_content_hash: str | None = None,
 ) -> tuple[int, int]:
     """Embed chunks and store them in a vector database.
 
@@ -595,11 +646,16 @@ def embed_chunks(
     # Generate embeddings - this is the most time-consuming part
     logger.debug("Generating embeddings for chunks", filename=file_path.name, total_chunks=len(non_empty_nodes))
 
-    # Add granular progress reporting for embedding generation
+    # Model load (first call loads/downloads from HuggingFace; subsequent calls use cache)
+    logger.info(
+        "INGEST: model load start",
+        filename=file_path.name,
+        model=model_name,
+    )
     t_model_start = time.perf_counter()
     embed_model = get_embedding_model(model_name)
     logger.info(
-        "INGEST timing: embed_model_load_done",
+        "INGEST: model load done",
         filename=file_path.name,
         model=model_name,
         elapsed_ms=int((time.perf_counter() - t_model_start) * 1000),
@@ -664,7 +720,13 @@ def embed_chunks(
     # Create clean, serializable metadata for each chunk
     metadatas = []
     for i, node in enumerate(non_empty_nodes):
-        clean_metadata = create_clean_metadata(node, file_path, i)
+        clean_metadata = create_clean_metadata(
+            node,
+            file_path,
+            i,
+            file_content_hash=file_content_hash,
+            embedding_model=model_name,
+        )
         metadatas.append(clean_metadata)
 
         # Report progress for metadata preparation

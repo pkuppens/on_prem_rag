@@ -53,6 +53,15 @@ class VectorStoreManager(ABC):
             Chunk count, or 0 if unknown/unavailable.
         """
 
+    def has_document_with_file_hash(self, file_content_hash: str, embedding_model: str | None = None) -> bool:
+        """Check if any chunk with this file content hash exists (exact duplicate).
+
+        When embedding_model is provided, also requires matching model — file X embedded
+        for model A does not count as duplicate when re-ingesting for model B.
+        Default implementation returns False. Override in ChromaVectorStoreManager.
+        """
+        return False
+
     @abstractmethod
     def get_all_chunks(self, limit: int = 100_000) -> tuple[list[str], list[str], list[dict]]:
         """Fetch all chunk ids, texts, and metadatas for indexing (e.g. BM25).
@@ -113,6 +122,25 @@ class ChromaVectorStoreManager(VectorStoreManager):
         """Return the number of chunks in the ChromaDB collection."""
         result = self._collection.get(include=[])
         return len(result["ids"]) if result.get("ids") else 0
+
+    def has_document_with_file_hash(self, file_content_hash: str, embedding_model: str | None = None) -> bool:
+        """Check if any chunk with this file content hash exists (exact duplicate).
+
+        When embedding_model is set, requires both file_content_hash and embedding_model
+        to match — avoids skipping when the same file was embedded for a different model.
+        """
+        try:
+            where: dict = {"file_content_hash": file_content_hash}
+            if embedding_model:
+                where["embedding_model"] = embedding_model
+            result = self._collection.get(
+                where=where,
+                include=[],
+                limit=1,
+            )
+            return len(result.get("ids") or []) > 0
+        except Exception:
+            return False
 
     def get_all_chunks(self, limit: int = 100_000) -> tuple[list[str], list[str], list[dict]]:
         """Fetch all chunk ids, texts, and metadatas from ChromaDB for indexing."""

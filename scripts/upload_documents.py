@@ -88,6 +88,11 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Remove uploaded files and database before processing",
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable DEBUG logging (default: INFO)",
+    )
 
     return parser.parse_args(argv)
 
@@ -188,6 +193,12 @@ def process_local_file(path: Path, upload_name: str, params_name: str, upload_on
 def main(argv: Iterable[str] | None = None) -> int:
     """CLI entry point."""
     args = parse_args(argv)
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
     if args.clear:
         clear_backend()

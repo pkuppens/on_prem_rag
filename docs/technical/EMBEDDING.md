@@ -93,6 +93,11 @@ Use `get_embedding_model` to load models from a local directory, existing cache,
 or download from Hugging Face if needed. The function respects the
 `TRANSFORMERS_OFFLINE` environment variable for offline testing.
 
+**In-process cache:** The model is loaded once per `(model_name, cache_dir)` and
+reused for all subsequent calls. This keeps the model hot in memory and avoids the
+~20–30 s cold-start per document during batch ingestion. First document in a batch
+pays the load cost; later documents reuse the cached instance.
+
 ```python
 from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
 
@@ -100,6 +105,14 @@ embed_model = get_embedding_model(
     "sentence-transformers/all-MiniLM-L6-v2",
     cache_dir="data/cache/huggingface",
 )
+```
+
+To clear the cache (e.g. when switching models or freeing memory):
+
+```python
+from backend.rag_pipeline.utils.embedding_model_utils import clear_embedding_model_cache
+
+clear_embedding_model_cache()
 ```
 
 ### Document Processing and Embedding

@@ -6,6 +6,7 @@ This module provides shared fixtures and configuration for all tests.
 import os
 import shutil
 import socket
+import tempfile
 import uuid
 from collections.abc import Generator
 from pathlib import Path
@@ -14,6 +15,19 @@ from urllib.parse import urlparse
 import pytest
 
 from src.backend.rag_pipeline.utils.progress import progress_notifier
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    """Isolate ChromaDB persist directory per xdist worker to prevent SQLite lock contention.
+
+    Each worker (gw0, gw1, …) or the main process gets its own temp directory so that
+    parallel test runs never share the same ChromaDB SQLite file.
+    """
+    worker_id = os.environ.get("PYTEST_XDIST_WORKER", "master")
+    chroma_dir = Path(tempfile.gettempdir()) / f"chroma_test_{worker_id}"
+    chroma_dir.mkdir(parents=True, exist_ok=True)
+    os.environ["CHROMA_PERSIST_DIR"] = str(chroma_dir)
+
 
 OLLAMA_SKIP_REASON = (
     "Ollama (LLM service) not running on port 11434. "

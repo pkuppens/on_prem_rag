@@ -21,18 +21,20 @@ See [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT
 
 | Scope | Location |
 |-------|----------|
-| Session-scoped (ephemeral) | `tmp/validations/issue-NNN-validation.md` |
+| Issue-scoped (ephemeral) | `tmp/github/issue-NNN/validation.md` |
 | Feature-scoped (committed) | `docs/validations/feature-<slug>-validation.md` |
 
-Default to `tmp/validations/` unless the user asks for a committed validation.
+Default to `tmp/github/issue-NNN/` unless the user asks for a committed validation.
+
+All issue scratch files live under `tmp/github/issue-NNN/` — see `tmp/CLAUDE.md` for the full layout.
 
 ## How to Create a Validation
 
 ### 1. Gather Context
 
 Read:
-- The issue acceptance criteria (`gh issue view NNN` or `tmp/github/issue-descriptions/issue-NNN.md`)
-- The implementation plan (`tmp/github/progress/issue-NNN-plan.md`)
+- The issue acceptance criteria (`gh issue view NNN` or `tmp/github/issue-NNN/description.md`)
+- The implementation plan (`tmp/github/issue-NNN/plan.md`)
 - Relevant API docs, service ports (`docs/PORTS.md`), and entry point commands (CLAUDE.md)
 
 ### 2. Identify Validation Steps
@@ -66,9 +68,9 @@ One sentence: "This validation asserts that [feature] is implemented correctly b
 
 ### 6. Save the File
 
-Write to `tmp/validations/issue-NNN-validation.md` using the format template in VALIDATION_FORMAT.md.
+Write to `tmp/github/issue-NNN/validation.md` using the format template in VALIDATION_FORMAT.md.
 
-Update `tmp/github/progress/issue-NNN-workflow.md` to reference the validation file.
+Update `tmp/github/issue-NNN/workflow.md` to reference the validation file and record the issue number or chore slug it was created for.
 
 ## Quality Bar for Validations
 

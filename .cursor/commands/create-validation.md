@@ -22,14 +22,16 @@ The user may append text after `/create-validation`. Parse:
 
 | Pattern | Extracted | Example |
 |---------|-----------|---------|
-| `#NNN` or `issue NNN` | Issue number → load from `tmp/github/issue-descriptions/issue-NNN.md` | `/create-validation #82` |
+| `#NNN` or `issue NNN` | Issue number → load from `tmp/github/issue-NNN/description.md` | `/create-validation #82` |
 | `for <feature>` | Feature slug → save as `docs/validations/feature-<slug>-validation.md` | `/create-validation for document-upload` |
 | *(empty)* | Interactive — ask for issue number or feature name | `/create-validation` |
 
 ## Storage
 
-- Default: `tmp/validations/issue-NNN-validation.md` (gitignored, session-scoped)
+- Default: `tmp/github/issue-NNN/validation.md` (gitignored, issue-scoped)
 - Use `docs/validations/` only when explicitly requested by user (committed, permanent)
+
+All issue scratch files live together under `tmp/github/issue-NNN/` — see `tmp/CLAUDE.md`.
 
 ## Execution
 
@@ -40,13 +42,13 @@ Follow [.cursor/skills/create-validation/SKILL.md](../skills/create-validation/S
 2. Map each acceptance criterion to verifiable steps (test, API, UI, file, log)
 3. Write steps with exact commands and explicit expected outcomes
 4. Write prerequisites
-5. Save to `tmp/validations/issue-NNN-validation.md`
-6. Update `tmp/github/progress/issue-NNN-workflow.md` to reference the validation
+5. Save to `tmp/github/issue-NNN/validation.md`
+6. Update `tmp/github/issue-NNN/workflow.md` to reference the validation
 
 ## Output
 
 ```
-Created: tmp/validations/issue-NNN-validation.md
+Created: tmp/github/issue-NNN/validation.md
 Steps: N (prerequisites + X test + Y API + Z UI)
 Run with: /run-validation #NNN
 ```

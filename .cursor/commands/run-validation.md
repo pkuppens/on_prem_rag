@@ -20,9 +20,9 @@ Execute a validation document step by step. For each step: run the command or ch
 
 | Pattern | Action |
 |---------|--------|
-| `#NNN` or `issue NNN` | Load `tmp/validations/issue-NNN-validation.md` |
+| `#NNN` or `issue NNN` | Load `tmp/github/issue-NNN/validation.md` |
 | File path | Load validation from that path |
-| *(empty)* | List `tmp/validations/*.md`, ask user to select |
+| *(empty)* | List `tmp/github/issue-*/validation.md`, ask user to select |
 
 ## Execution
 

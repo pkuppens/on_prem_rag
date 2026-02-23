@@ -20,27 +20,10 @@ Placeholder for load testing. See [docs/technical/TESTABILITY.md](../../docs/tec
 
 ```bash
 # Ensure backend is running on 9180
-# k6 run ask-load.js
+k6 run scripts/load/ask-load.js
 ```
 
-Create `ask-load.js` when implementing:
-
-```javascript
-// Example structure
-import http from 'k6/http';
-import { check, sleep } from 'k6';
-export const options = {
-  vus: 5,
-  duration: '30s',
-};
-export default function () {
-  const res = http.post('http://localhost:9180/api/ask', JSON.stringify({ question: 'test' }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-  check(res, { 'status 200': (r) => r.status === 200 });
-  sleep(1);
-}
-```
+Override options: `k6 run --vus 10 --duration 60s scripts/load/ask-load.js`
 
 ## SLOs (to be defined)
 

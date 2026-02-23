@@ -45,19 +45,24 @@ async def test_upload_triggers_service_background_task(tmp_path):
     """As a user I want uploaded documents processed via the service layer,
     so architecture boundaries are maintained.
     Technical: upload endpoint delegates background work to DocumentProcessingService.
+    Validation: New documents return 201 with created: true; background processing started.
     """
-    with patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service:
+    with patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service, patch(
+        "src.backend.rag_pipeline.api.documents.vector_store_manager"
+    ) as mock_vsm:
         mock_service.process_document_background = AsyncMock()
+        mock_vsm.has_document_with_file_hash.return_value = False  # New document
 
         response = client.post(
             "/api/documents/upload",
             files=_make_pdf_upload(),
         )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["status"] == "uploaded"
     assert data["processing"] == "started"
+    assert data["created"] is True
 
 
 def test_list_documents_returns_files(tmp_path):
@@ -70,6 +75,32 @@ def test_list_documents_returns_files(tmp_path):
 
     assert response.status_code == 200
     assert "files" in response.json()
+
+
+@pytest.mark.asyncio
+async def test_upload_duplicate_returns_200_created_false():
+    """As a user I want duplicate uploads to be detected before processing,
+    so I get an idempotent API and avoid redundant work.
+    Technical: Content-hash deduplication returns 200 with created: false; no file saved, no processing.
+    Validation: Mock has_document_with_file_hash=True; assert 200, created: false, no background task.
+    """
+    content = b"%PDF-1.4 duplicate-content"
+    with patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm, patch(
+        "src.backend.rag_pipeline.api.documents.document_processing_service"
+    ) as mock_service:
+        mock_vsm.has_document_with_file_hash.return_value = True  # Duplicate
+        mock_service.process_document_background = AsyncMock()
+
+        response = client.post(
+            "/api/documents/upload",
+            files=_make_pdf_upload(content=content),
+        )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "duplicate"
+    assert data["created"] is False
+    mock_service.process_document_background.assert_not_called()
 
 
 def test_delete_document_not_found_returns_404():

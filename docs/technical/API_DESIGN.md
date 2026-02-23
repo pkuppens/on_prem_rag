@@ -112,6 +112,27 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 - **Deprecation**: Document sunset date; remove v0 after migration
 - See [API_REDESIGN.md](API_REDESIGN.md)
 
+### Per-Endpoint vs Whole-API Versioning
+
+**Question**: If the `documents` API goes to v2, do all other endpoints (ask, query, chat) also need v2?
+
+**Answer**: No. Version only what changes. But consider **dependencies**:
+
+| Scenario | Documents v2 | Ask / Query / Chat |
+|----------|--------------|--------------------|
+| Documents changes independently (e.g. new upload contract) | `/api/v2/documents` | Stay on v1 or unversioned — **no change** |
+| Ask depends on document IDs from documents | Documents v2 → new ID format | If ask accepts document IDs, **ask must support both** or clients migrate together |
+| Shared request/response types | Documents v2 changes `UploadResponse` | Endpoints using that type may need alignment — version the **contract**, not every route |
+| Breaking change to a shared concept | e.g. `file_id` renamed to `document_id` | All endpoints that expose that concept should version together |
+
+**Rule of thumb**:
+
+- **Independent endpoints**: Version only the changed router. `/api/v2/documents` can coexist with `/api/ask`, `/api/query`.
+- **Dependent endpoints**: If endpoint A returns data that endpoint B consumes (e.g. document list → ask by doc), version them together when the contract breaks, or support both old and new in the consumer during migration.
+- **Whole-API version**: Use when many endpoints share a base path or contract (e.g. `/api/v2/*`). Simpler for clients (single base URL) but forces upgrades of unchanged routes.
+
+**Recommendation for this project**: Prefer **per-resource versioning**. Add `/api/v2/documents` when documents changes; leave `/api/ask`, `/api/query` as-is unless they depend on a breaking documents contract. Document dependencies in [API_ENDPOINTS.md](API_ENDPOINTS.md).
+
 ## REST vs GraphQL
 
 ### Decision: REST
@@ -137,6 +158,33 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 - **Stateless design**: No server-side session state; JWT carries identity
 - **Session affinity**: Not required if stateless
 - **Shared state**: Vector store (ChromaDB), auth tokens — must be external or replicated
+
+## API Server Separation (Auth vs Upload vs RAG)
+
+**Question**: Should different domains (auth, upload, RAG ask) run on separate API servers for scalability?
+
+**Current state**: Auth is already a separate service (port 9181); RAG backend (documents, ask, query, chat, upload) runs on one FastAPI app (port 9180).
+
+### When to Split
+
+| Split | Pros | Cons | Recommendation |
+|-------|------|------|-----------------|
+| **Auth separate** | Different scaling, security isolation, team ownership | Extra network hop, token validation latency | **Already done** — auth on 9181 |
+| **Upload separate** | Scale uploads independently (large files, CPU for parsing) | Shared ChromaDB, orchestration, CORS, routing | Consider when upload volume >> query volume |
+| **RAG query separate** | Scale LLM/embedding workloads independently | Same vector store; need consistency | Consider when ask/chat latency is the bottleneck |
+
+### Trade-offs
+
+- **Orchestration**: Multiple servers → need API gateway, load balancer, or reverse proxy. Clients must know multiple base URLs or a single gateway.
+- **Configuration**: Each server needs its own env, health checks, deployment. Docker Compose or Kubernetes handle this.
+- **Shared resources**: ChromaDB, auth tokens — all RAG-related servers need access. Keep these as shared backing services.
+- **CORS and security**: Each server needs CORS config. Auth tokens must be validated; either each server validates JWT, or a gateway validates and forwards identity.
+
+### Recommendation
+
+- **Keep monolithic RAG backend** (documents + ask + query + chat) for now. Volume and latency do not justify the operational complexity of splitting upload vs ask.
+- **Split when**: Upload volume causes CPU/memory pressure while ask traffic is light; or ask/chat needs distinct scaling (e.g. GPU pool for LLM) from upload (CPU for PDF parsing).
+- **Gateway pattern**: If you split, put an API gateway (nginx, Traefik, Kong) in front. Single client-facing URL; gateway routes `/api/documents/*` → upload service, `/api/ask` → RAG service. Simplifies client config.
 
 ## Auditing
 
@@ -180,6 +228,7 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 
 - [API_ENDPOINTS.md](API_ENDPOINTS.md) — Endpoint inventory
 - [API_REDESIGN.md](API_REDESIGN.md) — v0 → v1 redesign
+- [OPENAPI_INSPECTION.md](OPENAPI_INSPECTION.md) — Swagger/ReDoc findings, duplication notes
 - [DOMAIN_DRIVEN_DESIGN.md](DOMAIN_DRIVEN_DESIGN.md) — Bounded contexts
 - [.cursor/rules/security-best-practices.mdc](../../.cursor/rules/security-best-practices.mdc)
 - [.cursor/rules/audit-logging.mdc](../../.cursor/rules/audit-logging.mdc)

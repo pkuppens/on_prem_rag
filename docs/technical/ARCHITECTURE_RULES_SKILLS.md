@@ -11,6 +11,8 @@ Mapping of Cursor/Claude rules and skills to API design, scalable architecture, 
 
 | Rule/Skill | Path | Key Principles |
 |------------|------|----------------|
+| **api-design.mdc** | .cursor/rules/api-design.mdc | REST verbs, status codes, naming, versioning, OpenAPI, deduplication (200/201) |
+| **api-design** (skill) | .cursor/skills/api-design/SKILL.md | Enforce API rules when adding/changing endpoints; checklist, anti-patterns |
 | software-architect.mdc | .cursor/rules/software-architect.mdc | API design standards, REST, versioning, integration design |
 | security-best-practices.mdc | .cursor/rules/security-best-practices.mdc | Input validation, CORS, CSP, auth |
 | function-definitions.mdc | .cursor/rules/function-definitions.mdc | Function design, docstrings, type hints |

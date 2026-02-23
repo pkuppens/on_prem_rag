@@ -146,18 +146,43 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 
 **Rationale**: On-premises RAG has straightforward CRUD and action patterns. REST fits well. GraphQL would add complexity without clear benefit for current use cases. Re-evaluate if we later need highly variable client query shapes (e.g. many optional nested fields).
 
-## Authentication
+## API Design Facets
 
-- **JWT**: Auth service issues tokens; see `auth_service`
-- **OAuth2**: Password and client credentials flows
-- **Token lifecycle**: Access + refresh; document expiry policy
+### Authentication
+
+- **JWT**: Auth service (`backend/auth_service`) issues tokens; `OAuth2PasswordBearer` for password flow
+- **OAuth2 flows**: Password (tokenUrl: login), client credentials; external providers (Google, Microsoft) via `authlib` when env vars set
+- **Token lifecycle**: Access tokens; session-based OAuth flows use `SessionMiddleware` and `SESSION_SECRET_KEY`
 - **Protected paths**: Guardrails middleware protects `/api/v1/query`, `/api/v1/analyze`, `/api/v1/chat`
+- **Reference**: [auth_service/main.py](../../src/backend/auth_service/main.py), [security-best-practices.mdc](../../.cursor/rules/security-best-practices.mdc)
 
-## Horizontal Scaling
+### Horizontal Scaling
 
-- **Stateless design**: No server-side session state; JWT carries identity
-- **Session affinity**: Not required if stateless
-- **Shared state**: Vector store (ChromaDB), auth tokens — must be external or replicated
+- **Stateless design**: No server-side session state; JWT carries identity in requests
+- **Session affinity**: Not required for RAG backend; auth service uses session for OAuth callback flow only
+- **Shared state**: Vector store (ChromaDB), auth tokens — must be external or replicated across instances
+- **Reference**: [SCALABLE_ARCHITECTURE.md](SCALABLE_ARCHITECTURE.md)
+
+### Auditing
+
+- **Rule**: [.cursor/rules/audit-logging.mdc](../../.cursor/rules/audit-logging.mdc) — do not abbreviate inputs for audit evidence
+- **What is logged**: RAG queries (question, answer context), guardrail actions (jailbreak, PII, off-topic), access control decisions
+- **Evidence requirements**: Full user inputs (questions, prompts) in audit logs unless stored in database audit trail; database holds complete record
+- **Database audit trail**: `CloudQueryAuditEntry`, `GuardrailAction` in `backend/audit_trail`; value objects (`ActorReference`, `ResourceReference`) for privacy-preserving references
+- **Reference**: [audit_trail/](../../src/backend/audit_trail/), [guardrails input_guardrails](../../src/backend/guardrails/input_guardrails.py)
+
+### Rate Limiting
+
+- **Implementation**: `RateLimitMiddleware` in [api/middleware/rate_limit.py](../../src/backend/rag_pipeline/api/middleware/rate_limit.py) — 120 requests/minute per client IP
+- **Rationale**: Prevents abuse; configurable via `requests_per_minute` constructor
+- **Tune per environment**: Increase for high-throughput deployments; decrease for cost-sensitive or shared instances
+
+### CORS and Security Headers
+
+- **CORS**: `ALLOW_ORIGINS` env (comma-separated); default `http://localhost:5173`; RAG backend and auth service each configure `CORSMiddleware`
+- **Auth service**: Hardcoded origins for dev (`localhost:8002`, `localhost:5173`); production should use env
+- **Security headers**: CSP — restrict scripts, workers to `self`; see [security-best-practices.mdc](../../.cursor/rules/security-best-practices.mdc)
+- **File serving**: Documents endpoint sets `Access-Control-Allow-Origin` from `ALLOW_ORIGINS` for cross-origin preview
 
 ## API Server Separation (Auth vs Upload vs RAG)
 
@@ -186,21 +211,6 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 - **Split when**: Upload volume causes CPU/memory pressure while ask traffic is light; or ask/chat needs distinct scaling (e.g. GPU pool for LLM) from upload (CPU for PDF parsing).
 - **Gateway pattern**: If you split, put an API gateway (nginx, Traefik, Kong) in front. Single client-facing URL; gateway routes `/api/documents/*` → upload service, `/api/ask` → RAG service. Simplifies client config.
 
-## Auditing
-
-- See [.cursor/rules/audit-logging.mdc](../../.cursor/rules/audit-logging.mdc)
-- **Do not abbreviate** user inputs in audit logs (questions, prompts)
-- **Database audit trail**: Full data in audit tables; log truncation OK if DB holds complete record
-
-## Rate Limiting
-
-- **RateLimitMiddleware**: 120 requests/minute (configurable)
-- Prevents abuse; tune per environment
-
-## CORS and Security Headers
-
-- CORS: `ALLOW_ORIGINS` env (comma-separated)
-- CSP: Restrict scripts, workers to `self` (see security-best-practices)
 
 ## Guidelines for New Features
 

@@ -19,6 +19,27 @@ Production-grade API design guidelines for the on-premises RAG system. Grounded 
 
 **Current usage**: Most RAG actions use POST (ask, query, upload, transcribe) because they are either creates or non-idempotent operations.
 
+**Upload idempotency**: An upload could be made idempotent by keying on content hash — if the hash already exists, skip re-processing and return success. Semantically that aligns with **PUT** (`PUT /documents/{hash_or_name}`: "place this content here; if already present, no-op"). The current `POST /upload` treats each request as a new create. For v1, consider `PUT` with hash-based deduplication if idempotent retries matter (e.g. network reliability, sync tools).
+
+### Document Deduplication (RAG uniqueness)
+
+**Goal**: No duplicate documents in the database; RAG lookups return each item uniquely. Duplication can still occur if the same content is processed with different chunking or embedding (different pipelines → different chunks/embeddings).
+
+**Design questions for v1**:
+
+1. **Upload vs processing separation?** Store raw document first, then process (chunk/embed) as a separate step. Enables:
+   - Deduplication at storage level (by content hash) before processing
+   - Retry processing without re-upload; different pipelines for same document
+   - Current design: upload + process in one step. documents_enhanced async task is a step toward separation.
+
+2. **Error code for POST upload duplication?** End result: document present only once.
+   - **409 Conflict**: Standard for "resource already exists". Client must handle.
+   - **200 OK** with body `{ created: false, document_id: "..." }`: Idempotent success; no error. Client can distinguish new vs existing.
+   - **201 Created** vs **200 OK**: 201 = new, 200 = already existed (no re-processing). Same semantics.
+   - Recommendation: 200 OK with `created: true|false` — no error, client-informed, idempotent.
+
+3. **POST behaving like PUT?** If we keep POST but implement hash-based deduplication, POST becomes idempotent. No need to raise an error or warning — return success. Optionally indicate in response body (`created: false`) so clients know. Accepting this is reasonable; document the behaviour.
+
 ### Resource Naming
 
 - **Plural nouns**: `/api/documents`, `/api/chunks` (not `/document`)
@@ -31,6 +52,7 @@ Production-grade API design guidelines for the on-premises RAG system. Grounded 
 - GET, PUT, DELETE should be idempotent
 - POST is not idempotent unless explicitly designed (e.g. idempotency keys)
 - RAG actions (ask, query) are intentionally non-idempotent
+- Upload: see trade-off above — hash-based deduplication enables idempotent PUT
 
 ## Endpoint Naming
 

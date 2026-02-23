@@ -60,9 +60,18 @@ Map v0 → v1:
 
 **Phased rollout**: Prefer incremental (e.g. documents first, then ask/query) to reduce risk.
 
-## Continuation Issues
+## Continuation Issues and Branching Strategy
 
-The implementation is tracked in separate issues:
+The implementation is tracked in separate issues (**#127**, **#128**, **#129**) for planning and progress, but delivered from a **single branch**:
+
+- **Branch**: `feature/126-api-architecture-docs` (or `feature/126-api-v1` when implementation starts)
+- **Scope**: All work for #126, #127, #128, #129 lands on this branch
+- **Phases**: 127 (design) → 128 (impl) → 129 (load tests) are implementation phases, not branch triggers
+- **PR**: One PR when complete; merge to main
+
+This keeps the API redesign and documentation as one cohesive deliverable. Sub-issues track phases, not separate branches.
+
+## Continuation Issues
 
 - **#127**: [TASK] API v1 — Client-needs analysis and target design
 - **#128**: [FEAT] API v1 — Implementation and v0 removal (prerequisite: #127)

@@ -1,0 +1,64 @@
+---
+description: API design rules — REST conventions, versioning, deduplication, OpenAPI. Enforce when adding or changing API endpoints.
+globs:
+  - "src/backend/**/api/**/*.py"
+  - "docs/technical/API*.md"
+  - "docs/technical/FEATURE_DESIGN*.md"
+alwaysApply: false
+---
+
+# API Design Rules
+
+Enforce when adding or changing API endpoints. See [docs/technical/API_DESIGN.md](docs/technical/API_DESIGN.md) and [FEATURE_DESIGN_GUIDELINES.md](docs/technical/FEATURE_DESIGN_GUIDELINES.md).
+
+## HTTP Verbs and Status Codes
+
+- **GET**: Read-only, safe, idempotent — use for list, get-by-id, health.
+- **POST**: Create or action — use for upload, ask, transcribe, chat.
+- **PUT**: Replace resource, idempotent — prefer over POST for idempotent creates when possible.
+- **DELETE**: Remove, idempotent — use for delete by id or filename.
+
+**Upload deduplication (learned from v1 redesign)**:
+- New document → **201 Created** with `created: true`.
+- Duplicate (content hash exists) → **200 OK** with `created: false` — no error, idempotent.
+- Include `created` in response body for client distinction.
+
+## Resource Naming
+
+- **Plural nouns**: `/api/documents`, `/api/chunks` (not `/document`).
+- **Hierarchical paths**: `/api/documents/{id}/chunks`.
+- **Kebab-case or lowercase**; avoid verbs in paths — use HTTP methods.
+- Action endpoints (ask, transcribe) may be RPC-style when they represent domain actions.
+
+## New Endpoint vs Extend
+
+| Create New | Extend Existing |
+|------------|-----------------|
+| Different resource or action | Same resource, minor variant |
+| Different request/response contract | Same contract, additive params |
+| Clear separation of concerns | Avoids proliferation |
+
+**Anti-pattern**: Multiple endpoints doing the same thing (e.g. documents vs documents_enhanced) — consolidate.
+
+## OpenAPI and Documentation
+
+- Add `tags` to group endpoints.
+- Add `summary` and `description` to each route.
+- Add `example` in Pydantic models for request/response.
+- Document error responses (4xx, 5xx) where applicable.
+
+## Versioning
+
+- Use URL versioning: `/api/v1/documents`, `/api/v2/documents`.
+- Per-endpoint versioning: Only version endpoints that change; dependent endpoints follow when they share a contract (see API_DESIGN.md).
+- Deprecation: Document sunset date; remove old version after migration.
+
+## Checklist for New Endpoints
+
+- [ ] Correct HTTP verb
+- [ ] Consistent naming (plural nouns, hierarchical)
+- [ ] OpenAPI tags, description, examples
+- [ ] Pydantic request/response models
+- [ ] Error handling (HTTPException, RFC 7807)
+- [ ] Unit tests for route
+- [ ] Update API_ENDPOINTS.md if user-facing

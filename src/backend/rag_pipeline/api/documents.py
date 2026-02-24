@@ -4,6 +4,7 @@ This module provides endpoints for uploading, listing, and serving documents.
 """
 
 import asyncio
+import hashlib
 import os
 import re
 from pathlib import Path
@@ -11,7 +12,7 @@ from urllib.parse import urlparse
 
 import httpx
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field, HttpUrl
 
 from backend.shared.utils.directory_utils import (
@@ -265,6 +266,22 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         file_content = await file.read()
         logger.debug("File content read", content_size=len(file_content))
 
+        # Deduplication: check content hash before saving and processing
+        file_content_hash = hashlib.sha256(file_content).hexdigest()
+        embedding_model = params.embedding.model_name
+        if vector_store_manager.has_document_with_file_hash(file_content_hash, embedding_model=embedding_model):
+            logger.info(
+                "Upload skipped: duplicate content",
+                filename=filename,
+                file_content_hash=file_content_hash[:16],
+            )
+            return {
+                "message": "Document already exists (duplicate content); not re-processed",
+                "file_id": filename,
+                "status": "duplicate",
+                "created": False,
+            }
+
         # Directory is already ensured to exist at module level
 
         # Write file content
@@ -287,12 +304,16 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
 
         logger.info("Document upload completed, background processing started", filename=filename)
 
-        return {
-            "message": "Document uploaded successfully, processing started",
-            "file_id": filename,
-            "status": "uploaded",
-            "processing": "started",
-        }
+        return JSONResponse(
+            status_code=201,
+            content={
+                "message": "Document uploaded successfully, processing started",
+                "file_id": filename,
+                "status": "uploaded",
+                "processing": "started",
+                "created": True,
+            },
+        )
 
     except PermissionError as e:
         logger.error(

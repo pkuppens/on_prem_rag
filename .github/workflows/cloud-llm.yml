@@ -32,7 +32,7 @@ jobs:
           uv run pytest -m cloud_llm --run-internet -v --junitxml=test-results-cloud-llm.xml
       - name: Upload cloud LLM test results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cloud-llm-test-results
           path: test-results-cloud-llm.xml

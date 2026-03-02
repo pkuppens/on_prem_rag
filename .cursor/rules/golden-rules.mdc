@@ -39,6 +39,7 @@ This guide outlines the key principles and practices for AI-assisted development
 4. **Coding Style**
    - Follow [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) guidelines
    - **Function Design**: Follow [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) for comprehensive function standards
+   - **API Design**: For new or changed endpoints, follow [api-design.mdc](mdc:.cursor/rules/api-design.mdc) and `.cursor/skills/api-design/SKILL.md`
    - **Technical Debt**: Mark TODOs with task reference or SMART description; see [technical-debt.mdc](mdc:.cursor/rules/technical-debt.mdc)
    - Use dedicated functions for file operations
    - Keep progress tracking separate from core logic

@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider, createTheme, useMediaQuery, Box, Grid, Container } from '@mui/material';
+import { CssBaseline, ThemeProvider, createTheme, useMediaQuery, Box, Grid, Container, Paper } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { ThemeTestPage } from './pages/ThemeTestPage';
 import { AuthProvider } from './components/auth/AuthContext';

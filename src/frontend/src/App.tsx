@@ -8,6 +8,7 @@ import { RAGParamsSelector } from './components/config/RAGParamsSelector';
 import { FileDropzone } from './components/upload/FileDropzone';
 import { UploadProgress } from './components/upload/UploadProgress';
 import { QuerySection } from './components/query/QuerySection';
+import { SourcesSidebar } from './components/query/SourcesSidebar';
 import { DocumentPreview } from './components/preview/DocumentPreview';
 import axios from 'axios';
 import Logger from './utils/logger';
@@ -58,7 +59,9 @@ function App() {
   const [mode, setMode] = useState<ThemeMode>('light');
   const [paramSet, setParamSet] = useState<string>('fast');
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
-  const [selectedResult, setSelectedResult] = useState<EmbeddingResult | null>(null);
+  const [sources, setSources] = useState<EmbeddingResult[]>([]);
+  const [selectedSourceIndex, setSelectedSourceIndex] = useState(0);
+  const selectedResult = sources[selectedSourceIndex] ?? null;
   const theme = useAppTheme(mode);
   const { isBackendRunning, isChecking } = useBackendStatus();
 
@@ -205,7 +208,7 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Header />
-        <Box sx={{ py: 2, px: 3, width: '100%' }}>
+        <Box sx={{ py: { xs: 1.5, sm: 2 }, px: { xs: 2, sm: 3 }, width: '100%' }}>
           <Grid container spacing={3}>
             {/* Left Sidebar - 3 columns for ultrawide */}
             <Grid item xs={12} lg={3} xl={2}>
@@ -241,14 +244,38 @@ function App() {
                 {/* 4. Keyword Query with Search */}
                 <QuerySection
                   paramSet={paramSet}
-                  onResultSelect={setSelectedResult}
+                  sources={sources}
+                  selectedSourceIndex={selectedSourceIndex}
+                  onResultsChange={(results) => {
+                    setSources(results);
+                    if (results.length > 0) setSelectedSourceIndex(0);
+                  }}
+                  onSourceSelect={(index, result) => {
+                    setSelectedSourceIndex(index);
+                  }}
                 />
               </Box>
             </Grid>
 
-            {/* Right Area - 9 columns for ultrawide */}
+            {/* Right Area: DocumentPreview + Sources sidebar; stack on mobile */}
             <Grid item xs={12} lg={9} xl={10}>
-              <DocumentPreview selectedResult={selectedResult} />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={8}>
+                  <DocumentPreview selectedResult={selectedResult} />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Paper sx={{ p: 2, height: '100%', minHeight: { xs: 180, md: 200 } }}>
+                    <SourcesSidebar
+                      sources={sources}
+                      selectedIndex={selectedSourceIndex}
+                      onSourceSelect={(idx, _r) => {
+                        setSelectedSourceIndex(idx);
+                        document.getElementById(`source-${idx}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }}
+                    />
+                  </Paper>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Box>

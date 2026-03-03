@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography, Slider, Tooltip, Alert, CircularProgress, InputAdornment } from '@mui/material';
+import { Box, Button, Chip, Paper, TextField, Typography, Slider, Alert, CircularProgress, InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { apiUrls } from '../../config/api';
 import { useBackendStatus } from '../../hooks/useBackendStatus';
@@ -32,14 +32,15 @@ interface AskResponse {
 
 interface Props {
   paramSet: string;
-  onResultSelect: (result: EmbeddingResult) => void;
+  sources: EmbeddingResult[];
+  selectedSourceIndex: number;
+  onResultsChange: (results: EmbeddingResult[]) => void;
+  onSourceSelect: (index: number, result: EmbeddingResult) => void;
 }
 
-export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
+export const QuerySection = ({ paramSet, sources, selectedSourceIndex, onResultsChange, onSourceSelect }: Props) => {
   const [query, setQuery] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
-  const [results, setResults] = useState<EmbeddingResult[]>([]);
-  const [selected, setSelected] = useState(0);
   const [numResults, setNumResults] = useState(5); // Default to 5 results
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -70,25 +71,24 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
         record_id: '',
         page_number: s.page_number,
       }));
-      setResults(mapped);
+      onResultsChange(mapped);
       if (mapped.length > 0) {
-        setSelected(0);
-        onResultSelect(mapped[0]);
+        onSourceSelect(0, mapped[0]);
       }
     } catch (error) {
       console.error('Error querying:', error);
       const originalError = 'Failed to search documents. Please try again.';
       const enhancedError = enhanceErrorMessage(originalError, isBackendRunning, isChecking);
       setError(enhancedError);
-      setResults([]);
+      onResultsChange([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleResultSelect = (result: EmbeddingResult, index: number) => {
-    setSelected(index);
-    onResultSelect(result);
+  const handleCitationClick = (index: number, result: EmbeddingResult) => {
+    onSourceSelect(index, result);
+    document.getElementById(`source-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {
@@ -97,8 +97,7 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
   };
 
   const handleSliderChangeCommitted = () => {
-    // Re-run query when slider is released if we have existing results
-    if (query.trim() && results.length > 0) {
+    if (query.trim() && sources.length > 0) {
       runQuery();
     }
   };
@@ -166,6 +165,21 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
             Answer
           </Typography>
           <Typography variant="body1">{answer}</Typography>
+          {sources.length > 0 && (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1.5 }}>
+              {sources.map((_r, idx) => (
+                <Chip
+                  key={idx}
+                  label={idx + 1}
+                  size="small"
+                  variant={idx === selectedSourceIndex ? 'filled' : 'outlined'}
+                  onClick={() => handleCitationClick(idx, sources[idx])}
+                  sx={{ cursor: 'pointer' }}
+                  aria-label={`View source ${idx + 1}`}
+                />
+              ))}
+            </Box>
+          )}
         </Paper>
       )}
 
@@ -203,54 +217,12 @@ export const QuerySection = ({ paramSet, onResultSelect }: Props) => {
         </Alert>
       )}
 
-      {!isLoading && hasSearched && results.length === 0 && !error && (
+      {!isLoading && hasSearched && sources.length === 0 && !error && (
         <Alert severity="info" sx={{ mb: 2 }}>
           No relevant chunks found. Try different keywords or check if documents have been uploaded.
         </Alert>
       )}
 
-      {!isLoading && results.length > 0 && (
-        <Box>
-          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            Sources ({results.length})
-          </Typography>
-          {results.map((r, idx) => (
-            <Paper
-              key={idx}
-              onClick={() => handleResultSelect(r, idx)}
-              sx={{
-                p: 1.5,
-                mb: 1,
-                cursor: 'pointer',
-                bgcolor: idx === selected ? 'action.selected' : undefined,
-                '&:hover': {
-                  bgcolor: idx === selected ? 'action.selected' : 'action.hover',
-                },
-              }}
-            >
-              <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-                {r.document_name} • Page {
-                  r.page_number === 'unknown' || r.page_number === undefined ? 'N/A' :
-                  r.page_label && r.page_label !== 'unknown' && r.page_label !== String(r.page_number)
-                    ? `${r.page_number} (${r.page_label})`
-                    : r.page_number
-                } • Chunk {r.chunk_index} • Score: {r.similarity_score.toFixed(3)}
-              </Typography>
-              <Tooltip
-                title={r.text || 'No text content available'}
-                placement="top"
-                arrow
-                enterDelay={500}
-                leaveDelay={200}
-              >
-                <Typography variant="body2" sx={{ mt: 0.5, fontWeight: idx === selected ? 'medium' : 'normal' }}>
-                  {r.text ? `${r.text.slice(0, 150)}${r.text.length > 150 ? '...' : ''}` : 'No text content available'}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          ))}
-        </Box>
-      )}
     </Box>
   );
 };

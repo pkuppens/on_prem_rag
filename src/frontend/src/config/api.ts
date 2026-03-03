@@ -255,6 +255,12 @@ export const apiUrls = {
   parameterSets: () => apiUrlBuilder.getParameterSetsUrl(),
 
   /**
+   * Get Chainlit chat UI URL (separate app, typically port 8000).
+   * Override with VITE_CHAT_URL in .env.
+   */
+  chat: () => import.meta.env.VITE_CHAT_URL || 'http://localhost:8000',
+
+  /**
    * Get health check URL (full URL including backend base)
    */
   health: () => apiUrlBuilder.buildUrl('/health'),

@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Toolbar, Typography, Chip, Tooltip } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography, Chip, Tooltip, Link } from '@mui/material';
 import { useAuth } from './AuthContext';
 import { LoginForm } from './LoginForm';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import WifiIcon from '@mui/icons-material/Wifi';
 import WifiOffIcon from '@mui/icons-material/WifiOff';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import { BackendStatus } from '../BackendStatus';
+import { apiUrls } from '../../config/api';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -61,6 +62,20 @@ export const Header = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           RAG Demo
         </Typography>
+
+        {/* Search / Chat toggle: React = Search; Chainlit = Chat */}
+        <Tooltip title="Open Chainlit chat (voice, document upload)" arrow>
+          <Link
+            href={apiUrls.chat()}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            underline="hover"
+            sx={{ mr: 2 }}
+          >
+            Chat
+          </Link>
+        </Tooltip>
 
         {/* Backend Status Indicator */}
         <Box sx={{ mr: 2 }}>

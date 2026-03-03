@@ -16,6 +16,8 @@ Data stays on your infrastructure. The system supports GDPR, NEN 7510 (Dutch hea
 
 The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardized context exchange between components. Organizations can run document analysis, natural-language querying, and database lookups entirely on-premises.
 
+**Technical summary:** For architecture decisions, evaluation results, and lessons learned, see [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md). Publishable design document aimed at healthcare CTOs; includes diagrams, benchmarks, and run instructions.
+
 ## Design Decisions
 
 Key architectural trade-offs that shape the system:
@@ -114,6 +116,7 @@ uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark.json --output 
 
 _Table populated after running `uv run evaluate-rag`. Requires ChromaDB with ingested documents._
 See [docs/technical/RAG_EVALUATION.md](docs/technical/RAG_EVALUATION.md) for schema and usage.
+See [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md) for full design document and evaluation run instructions.
 
 ## Key Business Concerns & Decisions
 

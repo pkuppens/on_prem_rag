@@ -43,6 +43,12 @@ The Python version is managed in multiple places:
 7. **Security Scan**: Vulnerability scanning (depends on setup)
 8. **CI Summary**: Aggregates results from all jobs
 
+### Model Download Only (Manual)
+
+The **Model Download Only** workflow (`.github/workflows/model-download-only.yml`) runs the model-download job in isolation. Use it for fast iteration when debugging model-download CI failures (~4 min vs full pipeline). Follows the Cleanup pattern; subject to `cleanup-github-actions.sh`. On success, uploads `huggingface-models` artifact for debugging.
+
+**Trigger**: Actions → Model Download Only → Run workflow (select branch)
+
 ### Cloud LLM Test (Manual)
 
 The **Cloud LLM Test** workflow (`.github/workflows/cloud-llm.yml`) runs separately and is triggered manually only. Use it when Cloud LLM code (e.g. Gemini, llm_config) is changed. If `GEMINI_API_KEY` is not set, the test skips gracefully. Trigger via Actions → Cloud LLM Test → Run workflow.
@@ -58,12 +64,22 @@ env:
   SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/huggingface/sentence_transformers
 ```
 
+For model-download steps, additional env vars prevent encoding and progress-bar issues in CI:
+
+```yaml
+env:
+  PYTHONIOENCODING: utf-8
+  HF_HUB_DISABLE_PROGRESS_BARS: "1"
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+```
+
 ### Caching Strategy
 
 The workflow uses multiple cache layers:
 
 1. **Python and uv** (via `astral-sh/setup-uv`): Python installs and UV dependency cache. Invalidates when `uv.lock` or `pyproject.toml` changes. First runs are slower; cached runs skip Python/UV install.
-2. **HuggingFace Models**: Cached based on `scripts/setup_embedding_models.py` hash only—application code changes do not invalidate. Restore-keys allow reuse when the setup script is refactored but models are unchanged.
+2. **HuggingFace Models**: Cached based on `pyproject.toml` and `uv.lock` hash—invalidates when deps change. Setup script tweaks do not invalidate. Restore-keys allow fallback to older cache.
 3. **Pytest Cache**: Cached based on test files and pyproject.toml. Speeds up test collection on subsequent runs.
 
 ## Local Validation
@@ -256,7 +272,7 @@ The workflow is optimized for cached runs:
 - **astral-sh/setup-uv**: Replaces manual curl install and separate cache step. Caches both Python and UV dependencies.
 - **Shallow checkout** (`fetch-depth: 1`): Faster Git clone.
 - **Parallelism**: lint, model-download, and security run in parallel after setup; test jobs run in parallel after model-download.
-- **Smart cache invalidation**: UV cache invalidates on lock file changes; HF cache invalidates only on model setup script changes, not on application code changes.
+- **Smart cache invalidation**: UV cache invalidates on lock file changes; HF cache invalidates on `pyproject.toml`/`uv.lock` changes (dep-driven), not on setup script or application code changes.
 
 Monitor cache hit rates and job durations in the Actions UI.
 
@@ -270,6 +286,7 @@ Monitor cache hit rates and job durations in the Actions UI.
 ## Code Files
 
 - [.github/workflows/python-ci.yml](../../.github/workflows/python-ci.yml) - Main GitHub Actions workflow configuration
+- [.github/workflows/model-download-only.yml](../../.github/workflows/model-download-only.yml) - Isolated model-download for fast iteration
 - [.github/workflows/cleanup.yml](../../.github/workflows/cleanup.yml) - Repository and workflow run cleanup
 - [scripts/cleanup-github-actions.sh](../../scripts/cleanup-github-actions.sh) - Workflow run cleanup script
 - [scripts/cleanup-merged-branches.sh](../../scripts/cleanup-merged-branches.sh) - Merged branch cleanup script

@@ -20,11 +20,11 @@ from typing import Any
 import torch
 
 # LlamaIndex imports
+from backend.rag_pipeline.core.llama_compat import StorageContext
 from llama_index.core import (
     Document,
     Settings,
     SimpleDirectoryReader,
-    StorageContext,
     VectorStoreIndex,
     load_index_from_storage,
 )

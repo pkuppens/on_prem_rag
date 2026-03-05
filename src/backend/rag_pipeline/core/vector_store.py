@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 import chromadb
-from llama_index.core import StorageContext
+from backend.rag_pipeline.core.llama_compat import StorageContext
 from llama_index.vector_stores.chroma import ChromaVectorStore
 
 from backend.rag_pipeline.config.vector_store import VectorStoreConfig

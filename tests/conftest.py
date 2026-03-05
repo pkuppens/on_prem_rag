@@ -3,21 +3,6 @@
 This module provides shared fixtures and configuration for all tests.
 """
 
-# Patch llama_index.llms.huggingface to re-export HuggingFaceInferenceAPI before any
-# test triggers the import chain. HuggingFaceInferenceAPI was moved to
-# llama-index-llms-huggingface-api but some llama_index code still expects it in .huggingface.
-def _patch_llama_huggingface_inference_api() -> None:
-    try:
-        from llama_index.llms import huggingface_api
-        import llama_index.llms.huggingface as hf
-        if not hasattr(hf, "HuggingFaceInferenceAPI"):
-            hf.HuggingFaceInferenceAPI = huggingface_api.HuggingFaceInferenceAPI
-    except Exception:
-        pass
-
-
-_patch_llama_huggingface_inference_api()
-
 import os
 import shutil
 import socket

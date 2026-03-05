@@ -118,6 +118,10 @@ _Table populated after running `uv run evaluate-rag`. Requires ChromaDB with ing
 See [docs/technical/RAG_EVALUATION.md](docs/technical/RAG_EVALUATION.md) for schema and usage.
 See [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md) for full design document and evaluation run instructions.
 
+### WBSO (R&D Tax Credit)
+
+R&D activities for project WBSO-AICM-2025-01 are documented in [docs/project/wbso/](docs/project/wbso/), including progress reports and the annual report (jaarverslag) for accountant and RVO audit purposes.
+
 ## Key Business Concerns & Decisions
 
 ### Legal & Licensing Considerations

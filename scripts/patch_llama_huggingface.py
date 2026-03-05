@@ -125,7 +125,7 @@ def _patch_huggingface() -> int:
             init_py = candidate
             break
     if init_py is None:
-        print(f"Warning: {init_py} not found, skipping patch", file=sys.stderr)
+        print("Warning: llama_index/llms/huggingface/__init__.py not found, skipping patch", file=sys.stderr)
         return 0
 
     content = init_py.read_text()
@@ -133,25 +133,16 @@ def _patch_huggingface() -> int:
         print("llama_index.llms.huggingface already has HuggingFaceInferenceAPI")
         return 0
 
-    # Add re-export: try huggingface_api package, stub if not installed
-    patch = '''
-try:
-    from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
-except ImportError:
-    HuggingFaceInferenceAPI = None  # type: ignore[misc,assignment]  # noqa: N816
-
-'''
-    # Replace __all__ to include HuggingFaceInferenceAPI
-    if '__all__ = ["HuggingFaceLLM"]' in content:
-        new_content = content.replace(
-            '__all__ = ["HuggingFaceLLM"]',
-            f'''{patch}__all__ = ["HuggingFaceLLM", "HuggingFaceInferenceAPI"]''',
-        )
-    else:
-        print("Unexpected format, skipping patch", file=sys.stderr)
-        return 1
-
-    init_py.write_text(new_content)
+    # Append re-export at end of file — format-agnostic, works regardless of __all__ structure.
+    # direct `from module import Name` only requires Name to exist in the module namespace.
+    patch = (
+        "\n# Compatibility patch: re-export HuggingFaceInferenceAPI (moved to huggingface_api package)\n"
+        "try:\n"
+        "    from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI\n"
+        "except ImportError:\n"
+        "    HuggingFaceInferenceAPI = None  # type: ignore[misc,assignment]  # noqa: N816\n"
+    )
+    init_py.write_text(content + patch)
     print("Patched llama_index.llms.huggingface to re-export HuggingFaceInferenceAPI")
     return 0
 

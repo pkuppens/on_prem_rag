@@ -173,7 +173,7 @@ class TestSetupEmbeddingModels:
         # Verify
         assert result is False, "download_transformers_model should return False when download fails"
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_success(self, mock_hf_embedding):
         """Test successful LlamaIndex embedding model download."""
         # Mock the embedding model
@@ -187,7 +187,7 @@ class TestSetupEmbeddingModels:
         # Verify
         assert result is True, "download_llamaindex_embedding should return True on successful download"
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_failure(self, mock_hf_embedding):
         """Test LlamaIndex embedding model download failure."""
         # Mock failure
@@ -366,7 +366,7 @@ class TestSetupEmbeddingModels:
             assert mock_model.from_pretrained.call_args[0][0] == "test-model"
             assert mock_model.from_pretrained.call_args[1].get("local_files_only") is True
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_offline_success(self, mock_hf_embedding):
         """Test successful LlamaIndex embedding model download in offline mode."""
         # Set offline mode
@@ -423,7 +423,7 @@ class TestSetupEmbeddingModels:
             assert mock_tokenizer.from_pretrained.call_args[0][0] == "test-model"
             assert mock_tokenizer.from_pretrained.call_args[1].get("local_files_only") is True
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_offline_failure(self, mock_hf_embedding):
         """Test LlamaIndex embedding model download failure in offline mode."""
         # Set offline mode

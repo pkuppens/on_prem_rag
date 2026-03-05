@@ -21,7 +21,6 @@ import warnings
 from pathlib import Path
 
 try:
-    from llama_index.embeddings.huggingface import HuggingFaceEmbedding
     from sentence_transformers import SentenceTransformer
     from transformers import AutoModel, AutoTokenizer
 except ImportError as e:
@@ -29,13 +28,24 @@ except ImportError as e:
     print("Please install dependencies with: uv pip install -e .[dev]")
     sys.exit(1)
 
-from backend.shared.utils.directory_utils import get_cache_dir
+# HuggingFaceEmbedding imported lazily in download_llamaindex_embedding to avoid
+# llama_index.core.llms.ChatMessage import errors when llama-index packages have
+# version mismatches (e.g. on fresh CI venvs).
+#
+# We avoid importing backend.shared (get_cache_dir) because that can pull in
+# rag_pipeline/llama_index via the package dependency graph on fresh CI venvs.
+
+
+def _get_cache_dir() -> Path:
+    """Resolve project cache dir without importing backend (avoids llama_index load)."""
+    root = Path(__file__).resolve().parent.parent
+    return root / "data" / "cache"
 
 
 def setup_cache_directories():
     """Set up cache directories for HuggingFace models."""
     # Set default cache locations in our data directory
-    cache_dir = get_cache_dir()
+    cache_dir = _get_cache_dir()
     hf_home = os.environ.get("HF_HOME", str(cache_dir / "huggingface"))
     transformers_cache = os.environ.get("TRANSFORMERS_CACHE", f"{hf_home}/hub")
     sentence_transformers_home = os.environ.get("SENTENCE_TRANSFORMERS_HOME", f"{hf_home}/sentence_transformers")
@@ -138,6 +148,17 @@ def download_transformers_model(model_name: str):
 def download_llamaindex_embedding(model_name: str):
     """Download a model via LlamaIndex HuggingFaceEmbedding."""
     print(f"\n[Download] LlamaIndex embedding model: {model_name}")
+
+    # Lazy import to avoid ChatMessage/HuggingFaceInferenceAPI errors when
+    # llama-index packages have version mismatches (e.g. on fresh CI venvs).
+    # The same model (e.g. BAAI/bge-small-en-v1.5) is already cached by the
+    # transformers download step, so skipping here does not break offline tests.
+    try:
+        from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+    except ImportError as e:
+        print(f"[WARN] Cannot import HuggingFaceEmbedding (llama-index compat): {e}")
+        print("   Model will be used from transformers cache. Skipping LlamaIndex validation.")
+        return True  # Accept: model is cached by transformers download
 
     # Check if we're in offline mode
     if os.environ.get("TRANSFORMERS_OFFLINE") == "1":

@@ -51,9 +51,9 @@ class TestSetupEmbeddingModels:
         2. The subdirectories (hub and sentence_transformers) are created correctly
         3. The paths returned match the expected project structure
         """
-        # Mock the project root to use tmp_path
-        mock_project_root = tmp_path
-        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        # Mock cache dir to use tmp_path (avoids importing backend)
+        mock_cache_dir = tmp_path / "data" / "cache"
+        monkeypatch.setattr("scripts.setup_embedding_models._get_cache_dir", lambda: mock_cache_dir)
 
         # Clear environment variables to test defaults
         with patch.dict(os.environ, {}, clear=True):
@@ -63,13 +63,13 @@ class TestSetupEmbeddingModels:
             )
 
             # Calculate expected paths
-            expected_hf_home = str(mock_project_root / "data" / "cache" / "huggingface")
+            expected_hf_home = str(mock_cache_dir / "huggingface")
             expected_transformers_cache = f"{expected_hf_home}/hub"
             expected_sentence_transformers_home = f"{expected_hf_home}/sentence_transformers"
 
             # Debug information
             print("\nDebug Information:")
-            print(f"Mock project root: {mock_project_root}")
+            print(f"Mock cache dir: {mock_cache_dir}")
             print(f"Expected HF_HOME: {expected_hf_home}")
             print(f"Actual HF_HOME: {result_hf_home}")
             print(f"Expected TRANSFORMERS_CACHE: {expected_transformers_cache}")
@@ -173,7 +173,7 @@ class TestSetupEmbeddingModels:
         # Verify
         assert result is False, "download_transformers_model should return False when download fails"
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_success(self, mock_hf_embedding):
         """Test successful LlamaIndex embedding model download."""
         # Mock the embedding model
@@ -187,7 +187,7 @@ class TestSetupEmbeddingModels:
         # Verify
         assert result is True, "download_llamaindex_embedding should return True on successful download"
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_failure(self, mock_hf_embedding):
         """Test LlamaIndex embedding model download failure."""
         # Mock failure
@@ -213,9 +213,9 @@ class TestSetupEmbeddingModels:
     @pytest.mark.slow
     def test_script_execution_dry_run(self, tmp_path, monkeypatch):
         """Test script execution in dry run mode."""
-        # Mock the project root to use tmp_path
-        mock_project_root = tmp_path
-        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        # Mock cache dir to use tmp_path (avoids importing backend)
+        mock_cache_dir = tmp_path / "data" / "cache"
+        monkeypatch.setattr("scripts.setup_embedding_models._get_cache_dir", lambda: mock_cache_dir)
 
         # Mock sys.argv to include dry-run
         test_argv = ["setup_embedding_models.py", "--dry-run"]
@@ -258,9 +258,9 @@ class TestSetupEmbeddingModels:
         # Use a very small model for testing
         test_model = "sentence-transformers/all-MiniLM-L6-v2"
 
-        # Mock the project root to use tmp_path
-        mock_project_root = tmp_path
-        monkeypatch.setattr("backend.shared.utils.directory_utils.get_project_root", lambda: mock_project_root)
+        # Mock cache dir to use tmp_path (avoids importing backend)
+        mock_cache_dir = tmp_path / "data" / "cache"
+        monkeypatch.setattr("scripts.setup_embedding_models._get_cache_dir", lambda: mock_cache_dir)
 
         # Set up cache directories in tmp_path
         cache_dir = tmp_path / "cache" / "huggingface"
@@ -366,7 +366,7 @@ class TestSetupEmbeddingModels:
             assert mock_model.from_pretrained.call_args[0][0] == "test-model"
             assert mock_model.from_pretrained.call_args[1].get("local_files_only") is True
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_offline_success(self, mock_hf_embedding):
         """Test successful LlamaIndex embedding model download in offline mode."""
         # Set offline mode
@@ -423,7 +423,7 @@ class TestSetupEmbeddingModels:
             assert mock_tokenizer.from_pretrained.call_args[0][0] == "test-model"
             assert mock_tokenizer.from_pretrained.call_args[1].get("local_files_only") is True
 
-    @patch("scripts.setup_embedding_models.HuggingFaceEmbedding")
+    @patch("llama_index.embeddings.huggingface.HuggingFaceEmbedding")
     def test_download_llamaindex_embedding_offline_failure(self, mock_hf_embedding):
         """Test LlamaIndex embedding model download failure in offline mode."""
         # Set offline mode

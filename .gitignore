@@ -148,8 +148,7 @@ cython_debug/
 !.vscode/extensions.json
 *.code-workspace
 
-# uv
-uv.lock
+# uv (commit uv.lock for reproducible CI; .uv is local cache)
 .uv
 
 # Data directory - ignore all files in the data directory

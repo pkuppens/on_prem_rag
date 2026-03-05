@@ -1,0 +1,77 @@
+# Model Download Only - Fast iteration for CI model-download debugging
+#
+# Trigger: workflow_dispatch only (manual). Use for validating model-download
+# fixes without running full Python CI (~4 min vs full pipeline).
+#
+# Follows Cleanup pattern: subject to cleanup-github-actions.sh (Step 4 keeps
+# most recent per workflow+branch).
+#
+# IMPORTANT: Steps must match python-ci.yml model-download job.
+---
+name: Model Download Only
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  model-download:
+    name: Pre-download embedding models (CI mode)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Free up disk space (private repo runner limit ~14GB)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - name: Set up Python and uv with caching
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-python: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Cache HuggingFace models
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-huggingface-ci-
+      - name: Pre-download embedding models (CI mode)
+        env:
+          PYTHONIOENCODING: utf-8
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+          LANG: C.UTF-8
+          LC_ALL: C.UTF-8
+        run: |
+          export HF_HOME=$HOME/.cache/huggingface
+          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
+          uv run python scripts/setup_embedding_models.py --ci
+      - name: Upload HuggingFace models artifact
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: huggingface-models
+          path: ~/.cache/huggingface
+      - name: Log disk usage
+        if: always()
+        run: |
+          echo "=== Disk usage after model download ==="
+          df -h /
+          echo "=== HuggingFace cache size ==="
+          du -sh ~/.cache/huggingface 2>/dev/null || echo "No HF cache"
+          echo "=== UV cache size ==="
+          du -sh ~/.cache/uv ~/.local/share/uv 2>/dev/null || true

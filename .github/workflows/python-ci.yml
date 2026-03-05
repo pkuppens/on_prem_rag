@@ -150,10 +150,15 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Pre-download embedding models (CI mode)
+        env:
+          PYTHONIOENCODING: utf-8
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+          LANG: C.UTF-8
+          LC_ALL: C.UTF-8
         run: |
           export HF_HOME=$HOME/.cache/huggingface
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
@@ -209,7 +214,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
@@ -295,7 +300,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache
@@ -358,7 +363,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('scripts/setup_embedding_models.py') }}
+          key: ${{ runner.os }}-huggingface-ci-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-huggingface-ci-
       - name: Cache pytest cache

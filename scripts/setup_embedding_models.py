@@ -16,6 +16,7 @@ Environment Variables:
 import argparse
 import os
 import sys
+import traceback
 import warnings
 from pathlib import Path
 
@@ -73,6 +74,7 @@ def download_sentence_transformer_model(model_name: str):
             return True
         except Exception as e:
             print(f"[FAIL] Model not found in cache: {e}")
+            traceback.print_exc()
             print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
             return False
 
@@ -87,6 +89,7 @@ def download_sentence_transformer_model(model_name: str):
         return True
     except Exception as e:
         print(f"[FAIL] Failed to download {model_name}: {e}")
+        traceback.print_exc()
         return False
 
 
@@ -112,6 +115,7 @@ def download_transformers_model(model_name: str):
             return True
         except Exception as e:
             print(f"[FAIL] Model not found in cache: {e}")
+            traceback.print_exc()
             print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
             return False
 
@@ -127,6 +131,7 @@ def download_transformers_model(model_name: str):
         return True
     except Exception as e:
         print(f"[FAIL] Failed to download {model_name}: {e}")
+        traceback.print_exc()
         return False
 
 
@@ -147,6 +152,7 @@ def download_llamaindex_embedding(model_name: str):
             return True
         except Exception as e:
             print(f"[FAIL] Model not found in cache: {e}")
+            traceback.print_exc()
             print("   Please run without TRANSFORMERS_OFFLINE=1 to download the model")
             return False
 
@@ -157,6 +163,7 @@ def download_llamaindex_embedding(model_name: str):
         return True
     except Exception as e:
         print(f"[FAIL] Failed to download via LlamaIndex {model_name}: {e}")
+        traceback.print_exc()
         return False
 
 

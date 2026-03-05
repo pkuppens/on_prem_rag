@@ -7,6 +7,10 @@ all subsequent calls. This keeps the model hot in memory and avoids the
 ~20-30s cold-start on each document in a batch.
 
 See docs/technical/EMBEDDING.md for usage examples and caching strategy.
+
+HuggingFaceEmbedding is imported lazily to avoid llama_index.llms import
+errors (e.g. HuggingFaceInferenceAPI, ChatMessage) when packages have version
+mismatches on fresh CI venvs.
 """
 
 import logging
@@ -14,10 +18,9 @@ import os
 from pathlib import Path
 from threading import Lock
 
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-
 # In-process cache: (model_name, cache_dir) -> HuggingFaceEmbedding
-_model_cache: dict[tuple[str, str], HuggingFaceEmbedding] = {}
+# Type is evaluated lazily; HuggingFaceEmbedding imported inside get_embedding_model.
+_model_cache: dict[tuple[str, str], object] = {}
 _cache_lock = Lock()
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +37,8 @@ def get_embedding_model(model_name: str, cache_dir: str | None = None) -> Huggin
     the model is loaded from Hugging Face, falling back to offline mode when
     ``TRANSFORMERS_OFFLINE=1`` is set.
     """
+    from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
     cache_key = (model_name, cache_dir or "")
     with _cache_lock:
         if cache_key in _model_cache:

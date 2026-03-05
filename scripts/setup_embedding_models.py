@@ -31,14 +31,21 @@ except ImportError as e:
 # HuggingFaceEmbedding imported lazily in download_llamaindex_embedding to avoid
 # llama_index.core.llms.ChatMessage import errors when llama-index packages have
 # version mismatches (e.g. on fresh CI venvs).
+#
+# We avoid importing backend.shared (get_cache_dir) because that can pull in
+# rag_pipeline/llama_index via the package dependency graph on fresh CI venvs.
 
-from backend.shared.utils.directory_utils import get_cache_dir
+
+def _get_cache_dir() -> Path:
+    """Resolve project cache dir without importing backend (avoids llama_index load)."""
+    root = Path(__file__).resolve().parent.parent
+    return root / "data" / "cache"
 
 
 def setup_cache_directories():
     """Set up cache directories for HuggingFace models."""
     # Set default cache locations in our data directory
-    cache_dir = get_cache_dir()
+    cache_dir = _get_cache_dir()
     hf_home = os.environ.get("HF_HOME", str(cache_dir / "huggingface"))
     transformers_cache = os.environ.get("TRANSFORMERS_CACHE", f"{hf_home}/hub")
     sentence_transformers_home = os.environ.get("SENTENCE_TRANSFORMERS_HOME", f"{hf_home}/sentence_transformers")

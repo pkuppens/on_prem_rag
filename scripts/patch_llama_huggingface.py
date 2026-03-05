@@ -33,12 +33,12 @@ def main() -> int:
         print("llama_index.llms.huggingface already has HuggingFaceInferenceAPI")
         return 0
 
-    # Add re-export block after the existing imports, before __all__
+    # Add re-export: try huggingface_api package, stub if not installed
     patch = '''
 try:
     from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
 except ImportError:
-    HuggingFaceInferenceAPI = None  # type: ignore[misc,assignment]
+    HuggingFaceInferenceAPI = None  # type: ignore[misc,assignment]  # noqa: N816
 
 '''
     # Replace __all__ to include HuggingFaceInferenceAPI

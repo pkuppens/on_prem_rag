@@ -62,7 +62,6 @@ dependencies = [
     "faster-whisper>=1.2.1",
     "rank-bm25>=0.2.2",
     "gtts>=2.5.4",  # TTS for verify_voice_pipeline and STT tests
-    "llama-index-llms-huggingface-api>=0.6.2",
 ]
 requires-python = ">=3.12,<3.14"
 

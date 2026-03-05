@@ -34,6 +34,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Only run cleanup when Python CI succeeded (not on failure/cancelled)
+          CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+          if [ "$CONCLUSION" != "success" ]; then
+            echo "Python CI did not succeed (conclusion: $CONCLUSION). Skipping cleanup."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
           echo "Checking if Python CI completed for commit $HEAD_SHA"
 
@@ -88,10 +96,7 @@ jobs:
 
       - name: Clean up old workflow runs
         if: github.event_name == 'workflow_dispatch' || steps.check-complete.outputs.skip == 'false'
-        run: |
-          echo "::group::Workflow Run Cleanup"
-          bash scripts/cleanup-github-actions.sh --execute
-          echo "::endgroup::"
+        run: bash scripts/cleanup-github-actions.sh --execute
 
       - name: Summary
         if: github.event_name == 'workflow_dispatch' || steps.check-complete.outputs.skip == 'false'

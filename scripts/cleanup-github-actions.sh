@@ -98,6 +98,7 @@ EXISTING_BRANCHES=$(git branch -a | sed 's/remotes\/origin\///' | sed 's/^[* ]*/
 # ============================================================================
 # STEP 1: Obsolete approval runs (queued/waiting, old)
 # ============================================================================
+echo "::group::Step 1: Obsolete queued/waiting runs"
 print_info "STEP 1: Checking for obsolete queued/waiting runs (older than ${STALE_DAYS} days)..."
 
 STALE_CUTOFF=$($PYTHON -c "from datetime import datetime, timedelta; print((datetime.utcnow() - timedelta(days=${STALE_DAYS})).strftime('%Y-%m-%dT%H:%M:%SZ'))")
@@ -138,11 +139,13 @@ for run_id in $OBSOLETE_APPROVAL_IDS; do
 done
 
 [ $OBSOLETE_COUNT -eq 0 ] && print_success "No obsolete approval runs" || print_warning "Found $OBSOLETE_COUNT obsolete run(s)"
+echo "::endgroup::"
 echo ""
 
 # ============================================================================
 # STEP 2: Runs on PR refs (refs/pull/*)
 # ============================================================================
+echo "::group::Step 2: PR ref runs"
 print_info "STEP 2: Checking for runs on PR refs (refs/pull/*)..."
 
 PR_REF_BRANCHES=$($PYTHON -c "
@@ -180,11 +183,13 @@ while IFS= read -r branch; do
 done <<< "$PR_REF_BRANCHES"
 
 [ $PR_REF_RUNS -eq 0 ] && print_success "No PR ref runs" || print_warning "Found $PR_REF_RUNS run(s) on PR refs"
+echo "::endgroup::"
 echo ""
 
 # ============================================================================
 # STEP 3: Runs for deleted branches
 # ============================================================================
+echo "::group::Step 3: Deleted branch runs"
 print_info "STEP 3: Checking runs for deleted branches..."
 
 WORKFLOW_BRANCHES=$($PYTHON -c "
@@ -227,12 +232,37 @@ while IFS= read -r branch; do
 done <<< "$WORKFLOW_BRANCHES"
 
 [ $DELETED_BRANCH_RUNS -eq 0 ] && print_success "No runs for deleted branches" || print_warning "Found $DELETED_BRANCH_RUNS run(s) for deleted branches"
+echo "::endgroup::"
 echo ""
 
+# Get active workflow names (needed for Step 4 and Step 5)
+ACTIVE_WORKFLOWS=""
+for yml_file in .github/workflows/*.yml; do
+  [ -f "$yml_file" ] || continue
+  WF_NAME=$($PYTHON -c "
+import re, sys
+with open('$yml_file', encoding='utf-8') as f:
+  for line in f:
+    m = re.match(r'^name:\s*(.+)', line)
+    if m:
+      print(m.group(1).strip().strip('\"').strip(\"'\"))
+      break
+")
+  [ -n "$WF_NAME" ] && ACTIVE_WORKFLOWS="$ACTIVE_WORKFLOWS
+$WF_NAME"
+done
+
 # ============================================================================
-# STEP 4: Superseded runs (keep most recent and failed runs for debugging)
+# STEP 4: Superseded runs (keep most recent success + failed runs for active workflow+branch only)
 # ============================================================================
-print_info "STEP 4: Checking superseded runs (keeping most recent + failed runs for debugging)..."
+echo "::group::Step 4: Superseded runs (active workflow+branch)"
+# Only for runs where workflow exists and branch exists. Steps 3 and 5 handle deleted branches and orphaned workflows.
+print_info "STEP 4: Checking superseded runs (keeping most recent success + failed runs per active workflow+branch)..."
+
+EXISTING_BRANCHES_FILE="$($PYTHON -c 'import tempfile; fd, p = tempfile.mkstemp(suffix=".txt", prefix="cleanup_branches_"); __import__("os").close(fd); print(p)')"
+ACTIVE_WORKFLOWS_FILE="$($PYTHON -c 'import tempfile; fd, p = tempfile.mkstemp(suffix=".txt", prefix="cleanup_wf_"); __import__("os").close(fd); print(p)')"
+echo "$EXISTING_BRANCHES" | grep -v '^$' > "$EXISTING_BRANCHES_FILE"
+echo "$ACTIVE_WORKFLOWS" | grep -v '^$' > "$ACTIVE_WORKFLOWS_FILE"
 
 KEEP_RUNS=$($PYTHON << PYEOF
 import json
@@ -240,39 +270,50 @@ from collections import defaultdict
 
 with open("$TEMP_RUNS") as f:
   data = json.load(f)
+with open("$EXISTING_BRANCHES_FILE") as f:
+  existing_branches = set(l.strip() for l in f if l.strip())
+with open("$ACTIVE_WORKFLOWS_FILE") as f:
+  active_workflows = set(l.strip() for l in f if l.strip())
 
+def is_active(r):
+  branch = r.get("headBranch", "")
+  if not branch or branch.startswith("refs/pull/"):
+    return False
+  if branch not in existing_branches:
+    return False
+  if r.get("workflowName", "") not in active_workflows:
+    return False
+  return True
+
+# Only consider active workflow+branch (Steps 3 and 5 handle the rest)
 groups = defaultdict(list)
 for r in data:
-  key = r['workflowName'] + '|' + r['headBranch']
+  if not is_active(r):
+    continue
+  key = r["workflowName"] + "|" + r["headBranch"]
   groups[key].append(r)
 
 keep = []
 for runs in groups.values():
-  completed = [r for r in runs if r['status'] == 'completed']
-  if completed:
-    # Sort by creation date (newest first)
-    completed.sort(key=lambda x: x['createdAt'], reverse=True)
+  completed = [r for r in runs if r["status"] == "completed"]
+  if not completed:
+    continue
+  completed.sort(key=lambda x: x["createdAt"], reverse=True)
 
-    # Keep the most recent completed run
-    keep.append(str(completed[0]['databaseId']))
+  # Keep the most recent successful run (never delete it)
+  most_recent_success = next((r for r in completed if r.get("conclusion") == "success"), None)
+  if most_recent_success:
+    keep.append(str(most_recent_success["databaseId"]))
 
-    # Also keep failed runs that came after the last successful run
-    # This helps with debugging issues that haven't been resolved
-    last_success_date = None
-    for run in completed:
-      if run.get('conclusion') == 'success':
-        last_success_date = run['createdAt']
-        break
+  # Keep all failed runs for debugging
+  for r in completed:
+    if r.get("conclusion") == "failure":
+      keep.append(str(r["databaseId"]))
 
-    # Keep all failed runs that are newer than the last success
-    for run in completed:
-      if run.get('conclusion') == 'failure':
-        if last_success_date is None or run['createdAt'] > last_success_date:
-          keep.append(str(run['databaseId']))
-
-print('\n'.join(keep))
+print("\n".join(keep))
 PYEOF
 )
+rm -f "$EXISTING_BRANCHES_FILE" "$ACTIVE_WORKFLOWS_FILE"
 
 ALL_IDS=$($PYTHON -c "import json; f=open('$TEMP_RUNS'); d=json.load(f); print('\n'.join(str(r['databaseId']) for r in d))")
 SUPERSEDED_COUNT=0
@@ -298,56 +339,58 @@ for r in json.load(f):
 done
 
 [ $SUPERSEDED_COUNT -eq 0 ] && print_success "No superseded runs" || print_warning "Found $SUPERSEDED_COUNT superseded run(s)"
+echo "::endgroup::"
 echo ""
 
 # ============================================================================
 # STEP 5a: Repository Cleanup self-cleanup (special case)
 # ============================================================================
-# workflow_run-triggered runs may have headBranch that groups differently;
-# explicitly clean old Repository Cleanup runs to avoid clutter.
-print_info "STEP 5a: Cleaning old Repository Cleanup workflow runs (self-cleanup)..."
+echo "::group::Step 5a: Repository Cleanup self-cleanup"
+# Delete only successful runs; NEVER delete failing runs (keep for debugging).
+# workflow_run-triggered runs may have headBranch that groups differently.
+print_info "STEP 5a: Cleaning old Repository Cleanup workflow runs (delete only successful; keep failures)..."
 
 CLEANUP_WORKFLOW="Repository Cleanup"
 CLEANUP_TEMP="$($PYTHON -c "import tempfile, os; fd, p = tempfile.mkstemp(suffix='.json', prefix='cleanup_self_'); os.close(fd); print(p.replace(os.sep, '/'))")"
 gh run list --workflow "$CLEANUP_WORKFLOW" --limit 100 --json databaseId,status,conclusion,createdAt > "$CLEANUP_TEMP"
 
-CLEANUP_KEEP=$($PYTHON << PYEOF
+# KEEP all runs with conclusion=='failure'. DELETE only successful runs (obsolete or latest).
+CLEANUP_DELETE_IDS=$($PYTHON << PYEOF
 import json
 with open("$CLEANUP_TEMP") as f:
     data = json.load(f)
-completed = [r for r in data if r['status'] == 'completed']
-if not completed:
-    print("")
-else:
-    completed.sort(key=lambda x: x['createdAt'], reverse=True)
-    print(str(completed[0]['databaseId']))
+# Never delete failing runs
+to_delete = [r for r in data if r['status'] == 'completed' and r.get('conclusion') == 'success']
+for r in to_delete:
+    print(r['databaseId'])
 PYEOF
 )
 
 CLEANUP_COUNT=0
 CLEANUP_DELETED=0
-for run_id in $($PYTHON -c "import json; f=open('$CLEANUP_TEMP'); d=json.load(f); print('\n'.join(str(r['databaseId']) for r in d))"); do
+for run_id in $CLEANUP_DELETE_IDS; do
   run_id="${run_id%$'\r'}"
   [ -z "$run_id" ] && continue
-  echo "$CLEANUP_KEEP" | grep -qxF "$run_id" && continue
   CLEANUP_COUNT=$((CLEANUP_COUNT + 1))
   if [ "$DRY_RUN" = false ]; then
-    print_info "Deleting old Repository Cleanup run $run_id"
+    print_info "Deleting obsolete Repository Cleanup run $run_id (successful)"
     if echo "y" | gh run delete "$run_id" 2>/dev/null; then
       CLEANUP_DELETED=$((CLEANUP_DELETED + 1))
     fi
   else
-    print_warning "Would delete Repository Cleanup run $run_id"
+    print_warning "Would delete Repository Cleanup run $run_id (successful)"
   fi
 done
 
 [ $CLEANUP_COUNT -eq 0 ] && print_success "No extra Repository Cleanup runs to remove" || print_warning "Removed $CLEANUP_DELETED of $CLEANUP_COUNT old Repository Cleanup run(s)"
 rm -f "$CLEANUP_TEMP"
+echo "::endgroup::"
 echo ""
 
 # ============================================================================
 # STEP 5: Orphaned workflow runs (workflow file deleted, runs still exist)
 # ============================================================================
+echo "::group::Step 5: Orphaned workflow runs"
 print_info "STEP 5: Checking for runs from deleted/orphaned workflows..."
 
 # Get unique workflow names from the runs we fetched
@@ -363,23 +406,7 @@ for r in data:
     print(name)
 ")
 
-# Get workflow names that currently have .yml files
-ACTIVE_WORKFLOWS=""
-for yml_file in .github/workflows/*.yml; do
-  [ -f "$yml_file" ] || continue
-  # Extract the 'name:' field from each workflow file
-  WF_NAME=$($PYTHON -c "
-import re, sys
-with open('$yml_file', encoding='utf-8') as f:
-  for line in f:
-    m = re.match(r'^name:\s*(.+)', line)
-    if m:
-      print(m.group(1).strip().strip('\"').strip(\"'\"))
-      break
-")
-  [ -n "$WF_NAME" ] && ACTIVE_WORKFLOWS="$ACTIVE_WORKFLOWS
-$WF_NAME"
-done
+# ACTIVE_WORKFLOWS already computed before Step 4
 
 ORPHANED_COUNT=0
 ORPHANED_DELETED=0
@@ -413,6 +440,7 @@ for r in data:
 done <<< "$WORKFLOW_NAMES"
 
 [ $ORPHANED_COUNT -eq 0 ] && print_success "No orphaned workflow runs" || print_warning "Found $ORPHANED_COUNT orphaned run(s)"
+echo "::endgroup::"
 echo ""
 
 rm -f "$TEMP_RUNS"

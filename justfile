@@ -58,6 +58,11 @@ docker:
 pre-commit:
     pre-commit run --all-files
 
+# Validate model-download (same as CI model-download job, with strict warnings)
+# Run before push to catch encoding/deprecation issues locally.
+validate-model-download:
+    uv run python scripts/setup_embedding_models.py --ci --strict
+
 # Full quality gate (lint + test)
 check: lint test
 

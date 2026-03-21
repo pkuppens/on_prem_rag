@@ -119,6 +119,22 @@ class TestGitHubActionsWorkflow:
         assert "needs: setup" in workflow_content, "Other jobs should depend on setup job"
         assert "needs: [setup" in workflow_content, "Some jobs should depend on setup job"
 
+    def test_workflow_verifies_shared_ci_base_image(self) -> None:
+        """As a developer I want the workflow to verify the shared GHCR CI image before container jobs,
+        so pulls fail with a clear summary instead of an opaque container start error.
+
+        Technical: python-ci.yml should define verify-ci-base-image and CI_BASE_IMAGE (pkuppens/pkuppens).
+        """
+        workflow_path = Path(__file__).parent.parent.parent / ".github" / "workflows" / "python-ci.yml"
+        workflow_content = workflow_path.read_text(encoding="utf-8")
+
+        assert "verify-ci-base-image:" in workflow_content, "Workflow should verify GHCR CI base image before use"
+        assert "CI_BASE_IMAGE" in workflow_content, "Workflow should define CI_BASE_IMAGE"
+        assert "ghcr.io/pkuppens/pkuppens/ci-base-3.12" in workflow_content, "Workflow should reference shared pkuppens CI image"
+        assert "needs: [setup, model-download, verify-ci-base-image]" in workflow_content, (
+            "Container test jobs should depend on verify-ci-base-image"
+        )
+
 
 @pytest.mark.ci_setup
 class TestDependencyInstallation:

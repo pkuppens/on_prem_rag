@@ -34,14 +34,31 @@ The Python version is managed in multiple places:
 
 ### Job Structure
 
-1. **Setup Job**: Installs dependencies and pre-downloads models
-2. **Lint Job**: Runs code quality checks (depends on setup)
-3. **Model Download Job**: Downloads embedding models (depends on setup)
-4. **Unit Tests**: Fast tests that always run (depends on setup + model-download)
-5. **Performance Tests**: Slow tests, conditional execution
-6. **Integration Tests**: Internet-dependent tests, conditional execution
-7. **Security Scan**: Vulnerability scanning (depends on setup)
-8. **CI Summary**: Aggregates results from all jobs
+1. **Verify CI base (GHCR)**: Pulls the shared container image before any job uses `container:` (fails fast with a job summary if auth or tag is wrong)
+2. **Setup Job**: Installs dependencies and warms the UV cache
+3. **Lint Job**: Runs code quality checks (depends on setup)
+4. **Model Download Job**: Downloads embedding models (depends on setup)
+5. **Unit Tests**: Fast tests in the CI base container (depends on setup + model-download + verify)
+6. **Performance Tests**: Slow tests in the CI base container, conditional execution
+7. **Integration Tests**: Internet-dependent tests in the CI base container, conditional execution
+8. **Security Scan**: Vulnerability scanning (depends on setup; runs on the default runner, not the CI base image)
+9. **CI Summary**: Aggregates results from all jobs
+
+### Shared CI base image (GHCR)
+
+Unit, performance, and integration test jobs run inside a pre-built image maintained in **[pkuppens/pkuppens](https://github.com/pkuppens/pkuppens)** (reuse across your repos).
+
+- **Default image:** `ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest` (see [package page](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12))
+- **Override:** set repository **Actions variable** `CI_BASE_IMAGE` to another tag or image (workflow `env` uses it when non-empty)
+- **Private package:** if `GITHUB_TOKEN` cannot pull from another repo’s package, add repository secret **`GHCR_READ_TOKEN`** (PAT with `read:packages`) **or** grant this repository access to the package under **Package settings → Manage actions access**
+
+Local smoke test:
+
+```bash
+docker pull ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest
+```
+
+If the **Verify GHCR CI base image** job fails, open that job’s **summary** for copy-paste fix hints (login vs 404 vs permissions).
 
 ### Model Download Only (Manual)
 

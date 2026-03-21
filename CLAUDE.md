@@ -13,6 +13,8 @@ On-premises RAG system for document analysis using LLMs while maintaining data s
 uv sync --group dev
 pre-commit install
 uv run python scripts/setup_git_hooks.py  # Set up pre-push test enforcement
+# Canonical AI skills (sibling clone pkuppens/pkuppens required): see docs/technical/SKILLS_SETUP.md
+#   PowerShell: .\scripts\link_cursor_skills.ps1
 
 # Run tests
 uv run pytest                              # Quick tests only (default)

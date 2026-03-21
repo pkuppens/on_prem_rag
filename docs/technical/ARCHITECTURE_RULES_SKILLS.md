@@ -1,9 +1,11 @@
 # Architecture Rules and Skills Mapping
 
 Created: 2026-02-23
-Updated: 2026-02-23
+Updated: 2026-03-21
 
 Mapping of Cursor/Claude rules and skills to API design, scalable architecture, and data-intensive systems competencies.
+
+**Skills path:** After you run [`scripts/link_cursor_skills.ps1`](../../scripts/link_cursor_skills.ps1) (or `scripts/link_cursor_skills.sh`), `.cursor/skills/` points at the canonical tree in a sibling clone of [pkuppens/pkuppens](https://github.com/pkuppens/pkuppens). Setup: [SKILLS_SETUP.md](SKILLS_SETUP.md).
 
 ## Competency → Rules → Skills
 
@@ -44,8 +46,8 @@ Mapping of Cursor/Claude rules and skills to API design, scalable architecture, 
 | testing.mdc | .cursor/rules/testing.mdc | Test structure, markers |
 | test-documentation.mdc | .cursor/rules/test-documentation.mdc | Docstring format, business context |
 | code-quality-testing | .cursor/skills/code-quality-testing/SKILL.md | Behavioral coverage, mutation-aware assertions |
-| create-validation | .cursor/skills/create-validation/SKILL.md | Validation documents |
-| run-validation | .cursor/skills/run-validation/SKILL.md | Execute validation |
+| create-validation | .cursor/skills/validation/create-validation/SKILL.md | Validation documents |
+| run-validation | .cursor/skills/validation/run-validation/SKILL.md | Execute validation |
 
 ## Quick Reference (Interview Talking Points)
 
@@ -57,6 +59,7 @@ Mapping of Cursor/Claude rules and skills to API design, scalable architecture, 
 
 ## References
 
+- [SKILLS_SETUP.md](SKILLS_SETUP.md)
 - [API_DESIGN.md](API_DESIGN.md)
 - [SCALABLE_ARCHITECTURE.md](SCALABLE_ARCHITECTURE.md)
 - [DATA_INTENSIVE_SYSTEMS.md](DATA_INTENSIVE_SYSTEMS.md)

@@ -93,6 +93,13 @@ class DefaultEmbeddingFunction(EmbeddingFunction):
         except ImportError:
             logger.warning("sentence-transformers not installed, using fallback embeddings")
             self._use_fallback = True
+        except Exception as exc:
+            logger.warning(
+                "Failed to load embedding model %s, using fallback embeddings: %s",
+                model_name,
+                exc,
+            )
+            self._use_fallback = True
 
     def __call__(self, input: Documents) -> Embeddings:
         """Generate embeddings for the input documents."""

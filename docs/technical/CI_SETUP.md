@@ -60,6 +60,8 @@ docker pull ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest
 
 If the **Verify GHCR CI base image** job fails, open that job’s **summary** for copy-paste fix hints (login vs 404 vs permissions).
 
+Container test jobs run **`apt-get install build-essential`** (or Alpine `apk` equivalents) before `uv sync`, because slim base images may not include `g++` and some dependencies (for example **annoy**) build from source.
+
 ### Model Download Only (Manual)
 
 The **Model Download Only** workflow (`.github/workflows/model-download-only.yml`) runs the model-download job in isolation. Use it for fast iteration when debugging model-download CI failures (~4 min vs full pipeline). Follows the Cleanup pattern; subject to `cleanup-github-actions.sh`. On success, uploads `huggingface-models` artifact for debugging.

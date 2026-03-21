@@ -4,6 +4,9 @@ results/
 docs/archive/
 tmpclaude-*-cwd
 
+# Cursor skills — local junction/symlink to sibling clone pkuppens/pkuppens/skills (see docs/technical/SKILLS_SETUP.md)
+.cursor/skills
+
 # Claude Code — fully version-controlled (.claude/ is committed)
 # Machine-specific local settings must NOT be committed
 .claude/settings.local.json

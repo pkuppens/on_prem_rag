@@ -4,6 +4,8 @@
 
 For new agent chats working on GitHub issues: run `/get-started fix issue #N` to load the Issue Implementation Workflow into context and start with Phase 1 (Validate). See [docs/technical/AGENTS.md](docs/technical/AGENTS.md) for the full workflow summary.
 
+**Skills:** Cursor skills are not committed here. Link `.cursor/skills` to [pkuppens/pkuppens](https://github.com/pkuppens/pkuppens) `skills/` (sibling clone). Steps: [docs/technical/SKILLS_SETUP.md](docs/technical/SKILLS_SETUP.md).
+
 ## Shared Guidance
 
 For consolidated rules see [agents/README.md](agents/README.md).

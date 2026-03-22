@@ -50,6 +50,7 @@ Unit, performance, and integration test jobs run inside a pre-built image mainta
 
 - **Default image:** `ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest` (see [package page](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12))
 - **Override:** set repository **Actions variable** `CI_BASE_IMAGE` to another tag or image (workflow `env` uses it when non-empty)
+- **Integration-only image (optional):** set **`CI_INTEGRATION_IMAGE`** when the **test-integration** job should use a different image than unit/performance jobs (for example an HF-baked image such as `ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest`). When unset, it falls back to the same value as `CI_BASE_IMAGE`. The **Verify GHCR CI base image** job pulls **both** images when they differ.
 - **Private package:** if `GITHUB_TOKEN` cannot pull from another repo’s package, add repository secret **`GHCR_READ_TOKEN`** (PAT with `read:packages`) **or** grant this repository access to the package under **Package settings → Manage actions access**
 
 Local smoke test:
@@ -74,13 +75,14 @@ The **Cloud LLM Test** workflow (`.github/workflows/cloud-llm.yml`) runs separat
 
 ### Environment Variables
 
-Required environment variables for HuggingFace model caching:
+Per-step shell exports for HuggingFace model caching (do **not** set `HF_HOME` at workflow root to `github.workspace` — it conflicts with `~/.cache` used by `actions/cache`):
 
 ```yaml
-env:
-  HF_HOME: ${{ github.workspace }}/.cache/huggingface
-  TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface/hub
-  SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/huggingface/sentence_transformers
+# Inside a run: step (model-download, test-unit, etc.)
+run: |
+  export HF_HOME=$HOME/.cache/huggingface
+  export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+  export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
 ```
 
 For model-download steps, additional env vars prevent encoding and progress-bar issues in CI:

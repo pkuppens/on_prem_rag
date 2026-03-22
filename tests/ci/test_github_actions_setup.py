@@ -130,6 +130,9 @@ class TestGitHubActionsWorkflow:
 
         assert "verify-ci-base-image:" in workflow_content, "Workflow should verify GHCR CI base image before use"
         assert "CI_BASE_IMAGE" in workflow_content, "Workflow should define CI_BASE_IMAGE"
+        assert "CI_INTEGRATION_IMAGE" in workflow_content, (
+            "Workflow should define CI_INTEGRATION_IMAGE for optional integration-only image"
+        )
         assert "ghcr.io/pkuppens/pkuppens/ci-base-3.12" in workflow_content, "Workflow should reference shared pkuppens CI image"
         assert "needs: [setup, model-download, verify-ci-base-image]" in workflow_content, (
             "Container test jobs should depend on verify-ci-base-image"

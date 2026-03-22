@@ -4,10 +4,10 @@ name: Repository Cleanup
 # Trigger after Python CI completes on main.
 # This ensures cleanup can accurately detect superseded runs.
 #
-# Self-cleaning: Step 5a in cleanup-github-actions.sh explicitly deletes old
-# Repository Cleanup runs (workflow_run-triggered runs may group differently in
-# Step 4). At most one completed Repository Cleanup run is kept.
-#
+# Self-cleaning: Step 5a in cleanup-github-actions.sh re-fetches Repository Cleanup
+# runs (workflow_run-triggered runs may group differently in Step 4) and applies
+# the same keep rules as Step 4: latest pass + post-pass failures kept per branch.
+
 # Orphaned workflows: Step 5 cleans up runs for deleted workflow files
 # (e.g., the old standalone coverage-report.yml that was folded into python-ci.yml).
 on:
@@ -105,4 +105,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Merged branches deleted" >> $GITHUB_STEP_SUMMARY
           echo "- Old workflow runs cleaned" >> $GITHUB_STEP_SUMMARY
-          echo "- Failed runs kept for debugging" >> $GITHUB_STEP_SUMMARY
+          echo "- Superseded runs removed (latest pass + post-pass failures kept per branch)" >> $GITHUB_STEP_SUMMARY

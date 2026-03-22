@@ -140,11 +140,11 @@ Each job gets a fresh VM; runners are not shared between jobs. The free-disk-spa
 
 ## Job Timeouts
 
-| Job               | Timeout | Rationale                                                    |
-|-------------------|---------|--------------------------------------------------------------|
-| test-unit         | 30 min  | Temporary; reduce once runs stabilize. Includes setup + pytest. |
-| test-performance  | 10 min  | Slow tests; sequential execution.                            |
-| test-integration  | 15 min  | Internet-dependent; sequential execution.                    |
+| Job              | Timeout | Rationale                                                       |
+| ---------------- | ------- | --------------------------------------------------------------- |
+| test-unit        | 30 min  | Temporary; reduce once runs stabilize. Includes setup + pytest. |
+| test-performance | 10 min  | Slow tests; sequential execution.                               |
+| test-integration | 15 min  | Internet-dependent; sequential execution.                       |
 
 ## Coverage Reports
 
@@ -172,11 +172,11 @@ After download, open `tmp/coverage-reports/htmlcov/index.html` in a browser for 
 
 ### Artifact contents
 
-| File/folder          | Purpose                                   |
-|----------------------|-------------------------------------------|
-| `htmlcov/`           | Per-file HTML coverage (open index.html)  |
-| `coverage.xml`       | Raw coverage data (for tools)             |
-| `test-results-unit.xml` | JUnit test results                     |
+| File/folder             | Purpose                                  |
+| ----------------------- | ---------------------------------------- |
+| `htmlcov/`              | Per-file HTML coverage (open index.html) |
+| `coverage.xml`          | Raw coverage data (for tools)            |
+| `test-results-unit.xml` | JUnit test results                       |
 
 ### PR comments
 
@@ -193,6 +193,7 @@ Coverage is posted as a PR comment only when coverage < 60% (to reduce notificat
 **Cause**: pypika package incompatibility with Python 3.14
 
 **Solution**: Ensure Python 3.12 is being used:
+
 ```bash
 # Check current Python version
 python --version
@@ -208,7 +209,8 @@ uv sync --python 3.12 --dev
 
 **Cause**: Network issues or GitHub Actions runner problems
 
-**Solution**: 
+**Solution**:
+
 - Check network connectivity
 - Verify the setup-uv action version (v7) is available
 - Consider using a different runner or retry mechanism
@@ -220,6 +222,7 @@ uv sync --python 3.12 --dev
 **Cause**: Incompatible dependency versions
 
 **Solution**:
+
 - Check `pyproject.toml` for version constraints
 - Update dependencies to compatible versions
 - Use `uv lock --upgrade` to refresh lock file
@@ -231,6 +234,7 @@ uv sync --python 3.12 --dev
 **Cause**: Network issues or cache problems
 
 **Solution**:
+
 - Clear HuggingFace cache: `rm -rf ~/.cache/huggingface`
 - Check internet connectivity
 - Verify model names and versions
@@ -260,12 +264,17 @@ If caching causes problems:
 A separate **Repository Cleanup** workflow reduces GitHub Actions storage usage:
 
 - **Triggers**: After Python CI completes on main, or manually via `workflow_dispatch`
-- **Branch cleanup**: Deletes merged remote/local branches (feature/*, task/*)
-- **Workflow run cleanup**:
-  1. Runs from deleted branches
-  2. PR ref runs (refs/pull/*)
-  3. Obsolete queued/waiting runs (older than 7 days)
-  4. Superseded runs (keeps most recent successful per workflow+branch; keeps failed runs for debugging)
+- **Branch cleanup**: Deletes merged remote/local branches (feature/_, task/_)
+- **When cleanup runs**: The workflow only proceeds if the triggering Python CI run succeeded and there are no other **Python CI** runs for the same commit (`head_sha`) still in progress. Otherwise it skips until those runs finish (or you run cleanup manually).
+- **Duplicate CI on the same branch**: **Python CI** already uses a workflow `concurrency` group with `cancel-in-progress: true` (see `.github/workflows/python-ci.yml`), so a newer push cancels an older in-progress run on the same ref. The cleanup script does **not** call `gh run cancel`; it only deletes **completed** runs per the retention rules below.
+- **Workflow run cleanup** (same order as `scripts/cleanup-github-actions.sh`):
+  1. Obsolete queued/waiting runs (older than 7 days)
+  2. PR ref runs (`refs/pull/*`)
+  3. Runs for deleted branches
+  4. Superseded runs (per active workflow+branch: keep the latest **success**; keep completed failures **after** that success for debugging; delete older completed passes and older completed failures)
+  5. Extra **Repository Cleanup** workflow runs (same keep rules as step 4, dedicated fetch)
+  6. Orphaned runs (workflow file removed from the repo but runs still exist)
+- **In-flight runs**: Steps that apply supersession (4 and 5a) never delete runs whose `status` is not `completed`.
 
 **Manual run**: Actions → Repository Cleanup → Run workflow
 

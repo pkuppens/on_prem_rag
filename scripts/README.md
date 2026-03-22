@@ -148,7 +148,9 @@ When modifying these scripts:
 
 ### cleanup-github-actions.sh
 
-Removes obsolete GitHub Actions workflow runs to reduce storage usage.
+Removes obsolete GitHub Actions workflow runs to reduce storage usage. Per workflow and branch, keeps the latest passed run and completed runs after it; deletes older passes and older failures.
+
+**Safety**: Supersession steps never delete runs that are not yet `completed`. The script does not cancel in-progress or duplicate runs (Python CI already uses workflow `concurrency` with `cancel-in-progress` in `.github/workflows/python-ci.yml`). The **Repository Cleanup** workflow skips running this script until every Python CI run for the same commit has finished.
 
 **Usage** (requires gh CLI with workflow scope):
 

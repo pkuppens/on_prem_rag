@@ -7,7 +7,8 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
-# Cancel superseded runs on the same branch (e.g., rapid dependabot merges)
+# Duplicate suppression: newer run on the same ref cancels the older in-progress run.
+# Cleanup scripts only delete completed runs; they never call gh run cancel. See docs/technical/CI_SETUP.md (Repository Cleanup).
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

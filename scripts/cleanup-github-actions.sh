@@ -6,7 +6,10 @@
 # 1. Runs that required approval but are now obsolete (queued/waiting, old)
 # 2. Runs on PR refs (refs/pull/*) - ephemeral, no value after merge/close
 # 3. Runs for branches that no longer exist
-# 4. Superseded runs (keeps only most recent completed per workflow+branch)
+# 4. Superseded runs per workflow+branch: keep latest passed (success) only;
+#    keep all failed runs after that pass (debug); delete everything older
+#    on pass: remove all older runs (passes and failures) for the workflow+branch
+#    on failure: do not remove anything - everything can be useful for debugging
 # 5a. Repository Cleanup self-cleanup (special case: keeps only most recent)
 # 5. Orphaned workflow runs (workflow file deleted, runs still exist)
 #
@@ -17,6 +20,12 @@
 #
 # Based on: pkuppens/my_chat_gpt
 # Requires: gh CLI with workflow scope (gh auth refresh -s workflow)
+#
+# Safety / scope:
+# - Step 4 and 5a never delete runs with status != completed (in-flight stays until done).
+# - This script only removes completed runs; it does not gh run cancel duplicates.
+# - Repository Cleanup (cleanup.yml) skips until all Python CI runs for the same commit
+#   have finished, so automated cleanup does not run while that commit is still building.
 
 set -e
 
@@ -42,7 +51,7 @@ Cleans up:
 1. Obsolete approval runs - queued/waiting runs older than ${STALE_DAYS} days
 2. PR ref runs - all runs on refs/pull/* (ephemeral, no value after merge/close)
 3. Runs for branches that no longer exist
-4. Superseded runs - keeps only most recent completed per workflow+branch
+4. Superseded runs - latest passed run per workflow+branch; keep failures after it; delete older passes and older failures
 5a. Repository Cleanup self-cleanup - keeps only most recent run
 5. Orphaned workflow runs - runs for workflow files that have been deleted
 
@@ -253,11 +262,11 @@ $WF_NAME"
 done
 
 # ============================================================================
-# STEP 4: Superseded runs (keep most recent success + failed runs for active workflow+branch only)
+# STEP 4: Superseded runs (latest pass + completed runs after it, per workflow+branch)
 # ============================================================================
 echo "::group::Step 4: Superseded runs (active workflow+branch)"
 # Only for runs where workflow exists and branch exists. Steps 3 and 5 handle deleted branches and orphaned workflows.
-print_info "STEP 4: Checking superseded runs (keeping most recent success + failed runs per active workflow+branch)..."
+print_info "STEP 4: Checking superseded runs (keep latest passed run + completed runs after it per active workflow+branch)..."
 
 EXISTING_BRANCHES_FILE="$($PYTHON -c 'import tempfile; fd, p = tempfile.mkstemp(suffix=".txt", prefix="cleanup_branches_"); __import__("os").close(fd); print(p)')"
 ACTIVE_WORKFLOWS_FILE="$($PYTHON -c 'import tempfile; fd, p = tempfile.mkstemp(suffix=".txt", prefix="cleanup_wf_"); __import__("os").close(fd); print(p)')"
@@ -285,7 +294,13 @@ def is_active(r):
     return False
   return True
 
-# Only consider active workflow+branch (Steps 3 and 5 handle the rest)
+keep = set()
+
+# Never delete in-progress runs from Step 4 (queued / in_progress / etc.)
+for r in data:
+  if r.get("status") != "completed":
+    keep.add(str(r["databaseId"]))
+
 groups = defaultdict(list)
 for r in data:
   if not is_active(r):
@@ -293,24 +308,25 @@ for r in data:
   key = r["workflowName"] + "|" + r["headBranch"]
   groups[key].append(r)
 
-keep = []
 for runs in groups.values():
-  completed = [r for r in runs if r["status"] == "completed"]
+  completed = [r for r in runs if r.get("status") == "completed"]
   if not completed:
     continue
   completed.sort(key=lambda x: x["createdAt"], reverse=True)
 
-  # Keep the most recent successful run (never delete it)
-  most_recent_success = next((r for r in completed if r.get("conclusion") == "success"), None)
-  if most_recent_success:
-    keep.append(str(most_recent_success["databaseId"]))
+  successes = [r for r in completed if r.get("conclusion") == "success"]
+  if successes:
+    latest_pass = max(successes, key=lambda x: x["createdAt"])
+    t = latest_pass["createdAt"]
+    keep.add(str(latest_pass["databaseId"]))
+    for r in completed:
+      if r["createdAt"] > t:
+        keep.add(str(r["databaseId"]))
+  else:
+    # No passed run: keep only the most recent completed run for this workflow+branch
+    keep.add(str(completed[0]["databaseId"]))
 
-  # Keep all failed runs for debugging
-  for r in completed:
-    if r.get("conclusion") == "failure":
-      keep.append(str(r["databaseId"]))
-
-print("\n".join(keep))
+print("\n".join(sorted(keep)))
 PYEOF
 )
 rm -f "$EXISTING_BRANCHES_FILE" "$ACTIVE_WORKFLOWS_FILE"
@@ -343,26 +359,53 @@ echo "::endgroup::"
 echo ""
 
 # ============================================================================
-# STEP 5a: Repository Cleanup self-cleanup (special case)
+# STEP 5a: Repository Cleanup self-cleanup (same keep rules as Step 4)
 # ============================================================================
 echo "::group::Step 5a: Repository Cleanup self-cleanup"
-# Delete only successful runs; NEVER delete failing runs (keep for debugging).
-# workflow_run-triggered runs may have headBranch that groups differently.
-print_info "STEP 5a: Cleaning old Repository Cleanup workflow runs (delete only successful; keep failures)..."
+# Dedicated fetch: this workflow may be sparse in the global Step 4 list (1000-run cap).
+# Same semantics as Step 4: latest passed + completed runs after it per branch; drop older passes/failures.
+print_info "STEP 5a: Cleaning Repository Cleanup workflow runs (latest pass + runs after it per branch)..."
 
 CLEANUP_WORKFLOW="Repository Cleanup"
 CLEANUP_TEMP="$($PYTHON -c "import tempfile, os; fd, p = tempfile.mkstemp(suffix='.json', prefix='cleanup_self_'); os.close(fd); print(p.replace(os.sep, '/'))")"
-gh run list --workflow "$CLEANUP_WORKFLOW" --limit 100 --json databaseId,status,conclusion,createdAt > "$CLEANUP_TEMP"
+gh run list --workflow "$CLEANUP_WORKFLOW" --limit 200 --json databaseId,status,conclusion,headBranch,createdAt > "$CLEANUP_TEMP"
 
-# KEEP all runs with conclusion=='failure'. DELETE only successful runs (obsolete or latest).
 CLEANUP_DELETE_IDS=$($PYTHON << PYEOF
 import json
+from collections import defaultdict
+
 with open("$CLEANUP_TEMP") as f:
-    data = json.load(f)
-# Never delete failing runs
-to_delete = [r for r in data if r['status'] == 'completed' and r.get('conclusion') == 'success']
-for r in to_delete:
-    print(r['databaseId'])
+  data = json.load(f)
+
+keep = set()
+for r in data:
+  if r.get("status") != "completed":
+    keep.add(str(r["databaseId"]))
+
+groups = defaultdict(list)
+for r in data:
+  groups[r.get("headBranch") or ""].append(r)
+
+for runs in groups.values():
+  completed = [r for r in runs if r.get("status") == "completed"]
+  if not completed:
+    continue
+  completed.sort(key=lambda x: x["createdAt"], reverse=True)
+  successes = [r for r in completed if r.get("conclusion") == "success"]
+  if successes:
+    latest_pass = max(successes, key=lambda x: x["createdAt"])
+    t = latest_pass["createdAt"]
+    keep.add(str(latest_pass["databaseId"]))
+    for r in completed:
+      if r["createdAt"] > t:
+        keep.add(str(r["databaseId"]))
+  else:
+    keep.add(str(completed[0]["databaseId"]))
+
+for r in data:
+  rid = str(r["databaseId"])
+  if rid not in keep:
+    print(rid)
 PYEOF
 )
 
@@ -373,12 +416,12 @@ for run_id in $CLEANUP_DELETE_IDS; do
   [ -z "$run_id" ] && continue
   CLEANUP_COUNT=$((CLEANUP_COUNT + 1))
   if [ "$DRY_RUN" = false ]; then
-    print_info "Deleting obsolete Repository Cleanup run $run_id (successful)"
+    print_info "Deleting superseded Repository Cleanup run $run_id"
     if echo "y" | gh run delete "$run_id" 2>/dev/null; then
       CLEANUP_DELETED=$((CLEANUP_DELETED + 1))
     fi
   else
-    print_warning "Would delete Repository Cleanup run $run_id (successful)"
+    print_warning "Would delete Repository Cleanup run $run_id (superseded)"
   fi
 done
 

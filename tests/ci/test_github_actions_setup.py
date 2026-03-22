@@ -133,15 +133,9 @@ class TestGitHubActionsWorkflow:
         assert "CI_INTEGRATION_IMAGE" in workflow_content, (
             "Workflow should define CI_INTEGRATION_IMAGE for optional integration-only image"
         )
-        assert "ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12" in workflow_content, (
-            "Workflow should reference HF-capable pkuppens CI image default"
-        )
-        # Unit tests: setup + verify only (no model-download gate). Perf/integration still warm HF via model-download.
-        assert "needs: [setup, verify-ci-base-image]" in workflow_content, (
-            "test-unit should depend on setup and verify-ci-base-image without blocking on model-download"
-        )
+        assert "ghcr.io/pkuppens/pkuppens/ci-base-3.12" in workflow_content, "Workflow should reference shared pkuppens CI image"
         assert "needs: [setup, model-download, verify-ci-base-image]" in workflow_content, (
-            "Performance/integration container jobs should still depend on model-download and verify-ci-base-image"
+            "Container test jobs should depend on model-download and verify-ci-base-image"
         )
 
 

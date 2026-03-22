@@ -13,11 +13,12 @@ concurrency:
   cancel-in-progress: true
 
 # Shared CI images (built in pkuppens/pkuppens). Optional repo variables:
-# - CI_BASE_IMAGE — unit/performance container jobs (default ci-hf-base-3.12 for offline HF in TRANSFORMERS_OFFLINE tests)
-# - CI_INTEGRATION_IMAGE — test-integration; falls back to CI_BASE_IMAGE chain (set to slim ci-base if integration differs)
+# - CI_BASE_IMAGE — unit/performance container jobs (default ci-base-3.12; HF models filled by setup_embedding_models.py --ci after cache)
+# - CI_INTEGRATION_IMAGE — test-integration only; e.g. set to ci-hf-base if that image matches your HF layout (falls back to CI_BASE_IMAGE chain)
 env:
-  CI_BASE_IMAGE: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
-  CI_INTEGRATION_IMAGE: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest') }}
+  # Use || only (not != '' &&) — GitHub's workflow parser can reject complex conditionals in workflow env.
+  CI_BASE_IMAGE: "${{ vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}"
+  CI_INTEGRATION_IMAGE: "${{ vars.CI_INTEGRATION_IMAGE || vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}"
 
 # Optional: repository secret GHCR_READ_TOKEN — PAT with read:packages when the image is private and
 # GITHUB_TOKEN cannot pull (e.g. cross-repo package). See verify-ci-base-image job logs + job summary on failure.
@@ -36,7 +37,8 @@ jobs:
   # Proves we can pull the CI base image before any job uses container: (avoids opaque runner failures).
   # This job only checks ghcr.io pull + login — it does not validate Python/uv inside the image (container jobs do that).
   verify-ci-base-image:
-    name: Verify GHCR CI base (${{ env.CI_BASE_IMAGE }})
+    # env context is not allowed in job.name (GitHub workflow validation); use vars + default like workflow env.
+    name: Verify GHCR CI base (${{ vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -270,8 +272,7 @@ jobs:
 
   # Unit test job - fast, always run
   # Timeout: 30min for now to ensure results; reduce once runs stabilize (see CI_SETUP.md)
-  # Does not wait for model-download: unit tests use TRANSFORMERS_OFFLINE + cache restore + "Ensure CI embedding models"
-  # (integration/performance still need model-download to warm HF cache before heavier runs).
+  # Depends on model-download so actions/cache has a warm HF key before container restore; "Ensure CI embedding models" fills gaps.
   test-unit:
     runs-on: ubuntu-latest
     permissions:
@@ -279,14 +280,14 @@ jobs:
       packages: read
     container:
       # image must not use workflow env (GitHub Actions schema); keep in sync with workflow env CI_BASE_IMAGE
-      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
+      image: "${{ vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}"
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}
+        password: "${{ secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}"
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
-    needs: [setup, verify-ci-base-image]
+    needs: [setup, model-download, verify-ci-base-image]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
@@ -390,10 +391,10 @@ jobs:
       contents: read
       packages: read
     container:
-      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
+      image: "${{ vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}"
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}
+        password: "${{ secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}"
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
@@ -476,10 +477,10 @@ jobs:
       packages: read
     container:
       # Must match workflow env CI_INTEGRATION_IMAGE (GHA cannot use workflow env in container.image reliably)
-      image: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest') }}
+      image: "${{ vars.CI_INTEGRATION_IMAGE || vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}"
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}
+        password: "${{ secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}"
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management

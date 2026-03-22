@@ -48,15 +48,15 @@ The Python version is managed in multiple places:
 
 Unit, performance, and integration test jobs run inside a pre-built image maintained in **[pkuppens/pkuppens](https://github.com/pkuppens/pkuppens)** (reuse across your repos).
 
-- **Default image:** `ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest` (Hugging Face weights baked for offline `TRANSFORMERS_OFFLINE` tests; see [ci-hf-base package](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-hf-base-3.12)). Use slimmer [ci-base-3.12](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12) only if you set **`CI_BASE_IMAGE`** and rely on `actions/cache` for models.
+- **Default image:** `ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest` (see [package page](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12)). Hugging Face models for offline tests come from **`model-download`** + **`actions/cache`** and from **`setup_embedding_models.py --ci`** in container jobs when the cache misses. Optional **[ci-hf-base-3.12](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-hf-base-3.12)** can be selected via **`CI_BASE_IMAGE`** or **`CI_INTEGRATION_IMAGE`** only if it matches your **chromadb / uv** stack (the slim ci-base image is the default that matches this repo’s CI).
 - **Override:** set repository **Actions variable** `CI_BASE_IMAGE` to another tag or image (workflow `env` uses it when non-empty)
-- **Integration-only image (optional):** set **`CI_INTEGRATION_IMAGE`** when **test-integration** should use a **different** image than unit/performance (for example slim **`ci-base-3.12`** while **`CI_BASE_IMAGE`** stays **`ci-hf-base-3.12`**). When unset, it falls back to the same value as `CI_BASE_IMAGE`. The **Verify GHCR CI base image** job pulls **both** images when they differ.
+- **Integration-only image (optional):** set **`CI_INTEGRATION_IMAGE`** when **test-integration** should use a **different** image than unit/performance (for example an HF-baked **`ci-hf-base-3.12`** while **`CI_BASE_IMAGE`** stays **`ci-base-3.12`**). When unset, it falls back to the same value as `CI_BASE_IMAGE`. The **Verify GHCR CI base image** job pulls **both** images when they differ.
 - **Private package:** if `GITHUB_TOKEN` cannot pull from another repo’s package, add repository secret **`GHCR_READ_TOKEN`** (PAT with `read:packages`) **or** grant this repository access to the package under **Package settings → Manage actions access**
 
 Local smoke test:
 
 ```bash
-docker pull ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest
+docker pull ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest
 ```
 
 If the **Verify GHCR CI base image** job fails, open that job’s **summary** for copy-paste fix hints (login vs 404 vs permissions).

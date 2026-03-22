@@ -37,7 +37,8 @@ jobs:
   # Proves we can pull the CI base image before any job uses container: (avoids opaque runner failures).
   # This job only checks ghcr.io pull + login — it does not validate Python/uv inside the image (container jobs do that).
   verify-ci-base-image:
-    name: Verify GHCR CI base (${{ env.CI_BASE_IMAGE }})
+    # env context is not allowed in job.name (GitHub workflow validation); use vars + default like workflow env.
+    name: Verify GHCR CI base (${{ vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }})
     runs-on: ubuntu-latest
     permissions:
       contents: read

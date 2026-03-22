@@ -133,7 +133,7 @@ class TestGitHubActionsWorkflow:
         assert "CI_INTEGRATION_IMAGE" in workflow_content, (
             "Workflow should define CI_INTEGRATION_IMAGE for optional integration-only image"
         )
-        assert "ghcr.io/pkuppens/pkuppens/ci-base-3.12" in workflow_content, "Workflow should reference shared pkuppens CI image"
+        assert "ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12" in workflow_content, "Workflow should reference HF-capable pkuppens CI image default"
         assert "needs: [setup, model-download, verify-ci-base-image]" in workflow_content, (
             "Container test jobs should depend on verify-ci-base-image"
         )

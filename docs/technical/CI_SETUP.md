@@ -48,15 +48,15 @@ The Python version is managed in multiple places:
 
 Unit, performance, and integration test jobs run inside a pre-built image maintained in **[pkuppens/pkuppens](https://github.com/pkuppens/pkuppens)** (reuse across your repos).
 
-- **Default image:** `ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest` (see [package page](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12))
+- **Default image:** `ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest` (Hugging Face weights baked for offline `TRANSFORMERS_OFFLINE` tests; see [ci-hf-base package](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-hf-base-3.12)). Use slimmer [ci-base-3.12](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12) only if you set **`CI_BASE_IMAGE`** and rely on `actions/cache` for models.
 - **Override:** set repository **Actions variable** `CI_BASE_IMAGE` to another tag or image (workflow `env` uses it when non-empty)
-- **Integration-only image (optional):** set **`CI_INTEGRATION_IMAGE`** when the **test-integration** job should use a different image than unit/performance jobs (for example an HF-baked image such as `ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest`). When unset, it falls back to the same value as `CI_BASE_IMAGE`. The **Verify GHCR CI base image** job pulls **both** images when they differ.
+- **Integration-only image (optional):** set **`CI_INTEGRATION_IMAGE`** when **test-integration** should use a **different** image than unit/performance (for example slim **`ci-base-3.12`** while **`CI_BASE_IMAGE`** stays **`ci-hf-base-3.12`**). When unset, it falls back to the same value as `CI_BASE_IMAGE`. The **Verify GHCR CI base image** job pulls **both** images when they differ.
 - **Private package:** if `GITHUB_TOKEN` cannot pull from another repo’s package, add repository secret **`GHCR_READ_TOKEN`** (PAT with `read:packages`) **or** grant this repository access to the package under **Package settings → Manage actions access**
 
 Local smoke test:
 
 ```bash
-docker pull ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest
+docker pull ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest
 ```
 
 If the **Verify GHCR CI base image** job fails, open that job’s **summary** for copy-paste fix hints (login vs 404 vs permissions).

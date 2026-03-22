@@ -13,11 +13,11 @@ concurrency:
   cancel-in-progress: true
 
 # Shared CI images (built in pkuppens/pkuppens). Optional repo variables:
-# - CI_BASE_IMAGE — unit/performance container jobs (default ci-base-3.12)
-# - CI_INTEGRATION_IMAGE — test-integration only (e.g. HF-baked ci-hf-base); falls back to CI_BASE_IMAGE chain
+# - CI_BASE_IMAGE — unit/performance container jobs (default ci-hf-base-3.12 for offline HF in TRANSFORMERS_OFFLINE tests)
+# - CI_INTEGRATION_IMAGE — test-integration; falls back to CI_BASE_IMAGE chain (set to slim ci-base if integration differs)
 env:
-  CI_BASE_IMAGE: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}
-  CI_INTEGRATION_IMAGE: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest') }}
+  CI_BASE_IMAGE: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
+  CI_INTEGRATION_IMAGE: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest') }}
 
 # Optional: repository secret GHCR_READ_TOKEN — PAT with read:packages when the image is private and
 # GITHUB_TOKEN cannot pull (e.g. cross-repo package). See verify-ci-base-image job logs + job summary on failure.
@@ -80,7 +80,7 @@ jobs:
               echo ""
               echo "### Fix"
               echo "- **Private package, consume from this repo:** add secret **GHCR_READ_TOKEN** (PAT with \`read:packages\`) **or** in the package **Settings → Manage actions access**, grant **${{ github.repository }}** access."
-              echo "- **Confirm the tag** exists: [pkuppens/pkuppens packages](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12)."
+              echo "- **Confirm the tag** exists: [ci-hf-base-3.12](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-hf-base-3.12) or [ci-base-3.12](https://github.com/pkuppens/pkuppens/pkgs/container/pkuppens%2Fci-base-3.12) depending on **CI_BASE_IMAGE**."
               echo "- Optional: set repository **Actions variable** \`CI_BASE_IMAGE\` to pin another tag (must match workflow \`env\` / job matrix)."
               echo ""
               echo "Docs: [Permissions for GitHub Packages](https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages)"
@@ -271,7 +271,7 @@ jobs:
       packages: read
     container:
       # image must not use workflow env (GitHub Actions schema); keep in sync with workflow env CI_BASE_IMAGE
-      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}
+      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}
@@ -369,7 +369,7 @@ jobs:
       contents: read
       packages: read
     container:
-      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}
+      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest' }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}
@@ -444,7 +444,7 @@ jobs:
       packages: read
     container:
       # Must match workflow env CI_INTEGRATION_IMAGE (GHA cannot use workflow env in container.image reliably)
-      image: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest') }}
+      image: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-hf-base-3.12:latest') }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}

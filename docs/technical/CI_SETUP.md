@@ -100,7 +100,7 @@ env:
 The workflow uses multiple cache layers:
 
 1. **Python and uv** (via `astral-sh/setup-uv`): Python installs and UV dependency cache. Invalidates when `uv.lock` or `pyproject.toml` changes. First runs are slower; cached runs skip Python/UV install.
-2. **HuggingFace Models**: Cached based on `pyproject.toml` and `uv.lock` hash—invalidates when deps change. Setup script tweaks do not invalidate. Restore-keys allow fallback to older cache.
+2. **HuggingFace Models**: Cached based on `pyproject.toml` and `uv.lock` hash—invalidates when deps change. Setup script tweaks do not invalidate. Restore-keys allow fallback to older cache. Container **test-unit** and **test-performance** jobs also run **`scripts/setup_embedding_models.py --ci`** after cache restore (network allowed for that step only) so models exist under `$HOME/.cache/huggingface` when cache restore misses or the base image layout differs.
 3. **Pytest Cache**: Cached based on test files and pyproject.toml. Speeds up test collection on subsequent runs.
 
 ## Local Validation

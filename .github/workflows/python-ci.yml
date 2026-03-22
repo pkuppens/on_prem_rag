@@ -325,6 +325,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-
             ${{ runner.os }}-pytest-
+      # actions/cache restore can miss in container; image-baked HF may use a different layout than $HOME/.cache.
+      # This step is idempotent and uses network only when models are missing (not TRANSFORMERS_OFFLINE).
+      - name: Ensure CI embedding models (if missing)
+        env:
+          PYTHONIOENCODING: utf-8
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+          LANG: C.UTF-8
+          LC_ALL: C.UTF-8
+        run: |
+          export HF_HOME=$HOME/.cache/huggingface
+          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
+          uv run python scripts/setup_embedding_models.py --ci
       - name: Run unit tests with coverage
         env:
           # Mitigate PyTorch "Illegal instruction" on older GitHub runner CPUs (see docs/technical/CI_TROUBLESHOOTING.md)
@@ -422,6 +435,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pytest-${{ hashFiles('**/test_*.py') }}-
             ${{ runner.os }}-pytest-
+      - name: Ensure CI embedding models (if missing)
+        env:
+          PYTHONIOENCODING: utf-8
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+          LANG: C.UTF-8
+          LC_ALL: C.UTF-8
+        run: |
+          export HF_HOME=$HOME/.cache/huggingface
+          export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
+          export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
+          uv run python scripts/setup_embedding_models.py --ci
       - name: Run performance tests
         run: |
           export HF_HOME=$HOME/.cache/huggingface

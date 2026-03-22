@@ -8,6 +8,9 @@ Tests cover:
 - Module exports
 """
 
+import sys
+import types
+
 import pytest
 
 from backend.memory import (
@@ -34,6 +37,7 @@ from backend.memory import (
     get_memory_manager,
     reset_memory_manager,
 )
+from backend.memory.vector_memory import DefaultEmbeddingFunction
 
 
 class TestMemoryModuleExports:
@@ -327,3 +331,24 @@ class TestMemoryManager:
     def test_access_control_property(self, manager):
         """Should provide access to access control."""
         assert isinstance(manager.access_control, MemoryAccessControl)
+
+
+class TestVectorMemoryFallbackEmbedding:
+    """Tests for robust vector embedding fallback behavior."""
+
+    def test_fallback_used_when_model_load_fails(self, monkeypatch):
+        """Should use fallback embeddings when model initialization fails."""
+
+        class FailingSentenceTransformer:
+            def __init__(self, _: str) -> None:
+                raise OSError("offline model download disabled")
+
+        fake_module = types.SimpleNamespace(SentenceTransformer=FailingSentenceTransformer)
+        monkeypatch.setitem(sys.modules, "sentence_transformers", fake_module)
+
+        embedding_fn = DefaultEmbeddingFunction("all-MiniLM-L6-v2")
+        vectors = embedding_fn(["hello memory"])
+
+        assert embedding_fn._use_fallback is True
+        assert len(vectors) == 1
+        assert len(vectors[0]) > 0

@@ -81,6 +81,15 @@ class DefaultEmbeddingFunction(EmbeddingFunction):
     """
 
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+        """Initialize embedding backend with resilient fallback.
+
+        The preferred path uses sentence-transformers. If the package is missing
+        or model loading fails at runtime (for example in offline CI), this
+        switches to deterministic hash-based embeddings so unit tests stay stable.
+
+        Args:
+            model_name (str): The sentence-transformers model identifier.
+        """
         self.model_name = model_name
         self._model = None
         self._use_fallback = False
@@ -92,6 +101,13 @@ class DefaultEmbeddingFunction(EmbeddingFunction):
             logger.info(f"Loaded embedding model: {model_name}")
         except ImportError:
             logger.warning("sentence-transformers not installed, using fallback embeddings")
+            self._use_fallback = True
+        except Exception as exc:
+            logger.warning(
+                "Failed to initialize sentence-transformers model '%s' (%s), using fallback embeddings",
+                model_name,
+                type(exc).__name__,
+            )
             self._use_fallback = True
 
     def __call__(self, input: Documents) -> Embeddings:

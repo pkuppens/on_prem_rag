@@ -38,7 +38,7 @@ The Python version is managed in multiple places:
 2. **Setup Job**: Installs dependencies and warms the UV cache
 3. **Lint Job**: Runs code quality checks (depends on setup)
 4. **Model Download Job**: Downloads embedding models (depends on setup)
-5. **Unit Tests**: Fast tests in the CI base container (depends on setup + model-download + verify)
+5. **Unit Tests**: Fast tests in the CI base container (depends on setup + verify; does not wait for model-download — uses cache restore + offline-friendly ensure step)
 6. **Performance Tests**: Slow tests in the CI base container, conditional execution
 7. **Integration Tests**: Internet-dependent tests in the CI base container, conditional execution
 8. **Security Scan**: Vulnerability scanning (depends on setup; runs on the default runner, not the CI base image)
@@ -292,7 +292,7 @@ The workflow is optimized for cached runs:
 
 - **astral-sh/setup-uv**: Replaces manual curl install and separate cache step. Caches both Python and UV dependencies.
 - **Shallow checkout** (`fetch-depth: 1`): Faster Git clone.
-- **Parallelism**: lint, model-download, and security run in parallel after setup; test jobs run in parallel after model-download.
+- **Parallelism**: lint, model-download, security, and **test-unit** (after setup + verify) run in overlapping waves; performance/integration still wait on model-download + verify.
 - **Smart cache invalidation**: UV cache invalidates on lock file changes; HF cache invalidates on `pyproject.toml`/`uv.lock` changes (dep-driven), not on setup script or application code changes.
 
 Monitor cache hit rates and job durations in the Actions UI.

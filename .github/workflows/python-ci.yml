@@ -34,13 +34,19 @@ env:
 
 jobs:
   # Proves we can pull the CI base image before any job uses container: (avoids opaque runner failures).
+  # This job only checks ghcr.io pull + login — it does not validate Python/uv inside the image (container jobs do that).
   verify-ci-base-image:
-    name: Verify GHCR CI base image
+    name: Verify GHCR CI base (${{ env.CI_BASE_IMAGE }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: read
     steps:
+      - name: Echo CI image env (visibility in logs)
+        run: |
+          set -euo pipefail
+          echo "CI_BASE_IMAGE=${{ env.CI_BASE_IMAGE }}"
+          echo "CI_INTEGRATION_IMAGE=${{ env.CI_INTEGRATION_IMAGE }}"
       - name: Log in to ghcr.io and pull CI base image
         env:
           GHCR_READ_TOKEN: ${{ secrets.GHCR_READ_TOKEN }}
@@ -264,6 +270,8 @@ jobs:
 
   # Unit test job - fast, always run
   # Timeout: 30min for now to ensure results; reduce once runs stabilize (see CI_SETUP.md)
+  # Does not wait for model-download: unit tests use TRANSFORMERS_OFFLINE + cache restore + "Ensure CI embedding models"
+  # (integration/performance still need model-download to warm HF cache before heavier runs).
   test-unit:
     runs-on: ubuntu-latest
     permissions:
@@ -278,7 +286,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.12"] # See workflow-level comment for version management
-    needs: [setup, model-download, verify-ci-base-image]
+    needs: [setup, verify-ci-base-image]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6

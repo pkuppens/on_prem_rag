@@ -12,9 +12,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Shared CI image (built in pkuppens/pkuppens). Optional repo variable CI_BASE_IMAGE overrides the default.
+# Shared CI images (built in pkuppens/pkuppens). Optional repo variables:
+# - CI_BASE_IMAGE — unit/performance container jobs (default ci-base-3.12)
+# - CI_INTEGRATION_IMAGE — test-integration only (e.g. HF-baked ci-hf-base); falls back to CI_BASE_IMAGE chain
 env:
   CI_BASE_IMAGE: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}
+  CI_INTEGRATION_IMAGE: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest') }}
 
 # Optional: repository secret GHCR_READ_TOKEN — PAT with read:packages when the image is private and
 # GITHUB_TOKEN cannot pull (e.g. cross-repo package). See verify-ci-base-image job logs + job summary on failure.
@@ -86,6 +89,25 @@ jobs:
             exit 1
           fi
           echo "Pulled OK: ${{ env.CI_BASE_IMAGE }}"
+          INT_IMG="${{ env.CI_INTEGRATION_IMAGE }}"
+          BASE_IMG="${{ env.CI_BASE_IMAGE }}"
+          if [ "${INT_IMG}" != "${BASE_IMG}" ]; then
+            echo "::notice::CI_INTEGRATION_IMAGE differs from CI_BASE_IMAGE; pulling integration image."
+            if ! docker pull "${INT_IMG}"; then
+              {
+                echo "## Integration CI image pull failed"
+                echo ""
+                echo "**Image:** \`${INT_IMG}\`"
+                echo ""
+                echo "### Fix"
+                echo "- Confirm the tag exists and matches **CI_INTEGRATION_IMAGE** (repository Actions variable)."
+                echo "- Same auth rules as CI_BASE_IMAGE (GHCR_READ_TOKEN / package access)."
+              } >> "${GITHUB_STEP_SUMMARY}"
+              echo "::error::Failed to pull CI_INTEGRATION_IMAGE. See job summary."
+              exit 1
+            fi
+            echo "Pulled OK: ${INT_IMG}"
+          fi
 
   # Setup job validates that dependencies install correctly and warms the UV cache.
   # Python 3.12 is pinned to avoid pypika build failures with Python 3.14
@@ -421,7 +443,8 @@ jobs:
       contents: read
       packages: read
     container:
-      image: ${{ vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest' }}
+      # Must match workflow env CI_INTEGRATION_IMAGE (GHA cannot use workflow env in container.image reliably)
+      image: ${{ vars.CI_INTEGRATION_IMAGE != '' && vars.CI_INTEGRATION_IMAGE || (vars.CI_BASE_IMAGE != '' && vars.CI_BASE_IMAGE || 'ghcr.io/pkuppens/pkuppens/ci-base-3.12:latest') }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_READ_TOKEN != '' && secrets.GHCR_READ_TOKEN || secrets.GITHUB_TOKEN }}

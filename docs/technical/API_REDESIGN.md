@@ -1,7 +1,7 @@
 # API Redesign (v0 → v1)
 
 Created: 2026-02-23
-Updated: 2026-02-23
+Updated: 2026-03-23
 
 Ground-up API redesign plan. Treats the current API as v0; designs and implements a new v1. Versioning practice: no long-term parallel support; v0 is removed after v1 migration.
 
@@ -60,16 +60,27 @@ Map v0 → v1:
 
 **Phased rollout**: Prefer incremental (e.g. documents first, then ask/query) to reduce risk.
 
-## Continuation Issues and Branching Strategy
+## Continuation Issues and Branching Strategy (stacked PRs)
 
-The implementation is tracked in separate issues (**#127**, **#128**, **#129**) for planning and progress, but delivered from a **single branch**:
+Work is tracked in **#127** → **#128** → **#129** on a **critical path**. Delivery uses **one feature branch per issue** and **stacked pull requests** so each slice is reviewed and merged in order, while keeping history and issue references clear.
 
-- **Branch**: `feature/126-api-architecture-docs` (or `feature/126-api-v1` when implementation starts)
-- **Scope**: All work for #126, #127, #128, #129 lands on this branch
-- **Phases**: 127 (design) → 128 (impl) → 129 (load tests) are implementation phases, not branch triggers
-- **PR**: One PR when complete; merge to main
+### Branch and PR order
 
-This keeps the API redesign and documentation as one cohesive deliverable. Sub-issues track phases, not separate branches.
+| Order | Issue | Branch example (rename to match your naming) | Base branch | Merge first? |
+|-------|-------|-----------------------------------------------|-------------|------------|
+| 1 | #127 Design | `feature/127-api-v1-design` | `main` | Yes |
+| 2 | #128 Implementation | `feature/128-api-v1-implementation` | `main` after #127 merged, **or** branch from `feature/127-*` until #127 merges | After #127 |
+| 3 | #129 Load tests | `feature/129-load-test-suite` | `main` after #128 merged, **or** stacked on #128 branch | After #128 |
+
+### Rules
+
+- **Commits**: Reference the issue in messages (e.g. `#127: docs: complete v1 gap table`).
+- **Drift**: Regularly merge or rebase `main` into open stacked branches so they do not fall behind.
+- **Merge sequence**: Merge the bottom of the stack first (127 PR → then 128 PR → then 129 PR). If using GitHub stacked PRs, set each PR base to the previous feature branch until the parent merges, then retarget to `main`.
+
+### Alternative (not default)
+
+A **single long-lived branch** with one final PR is still possible for a small team; prefer stacked PRs when you want smaller reviews and safer incremental merges.
 
 ## Continuation Issues
 

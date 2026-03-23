@@ -2,6 +2,16 @@
 
 Issues for the on-premises RAG MVP are tracked on GitHub.
 
+Updated: 2026-03-23
+
+## Delivery and quality (goal-oriented docs)
+
+| Goal | Doc |
+|------|-----|
+| API v1 rollout order and dependencies | [api-v1-delivery-sequence.md](./api-v1-delivery-sequence.md) |
+| Manual checks, demo evidence, sign-off | [manual-verification-playbook.md](./manual-verification-playbook.md) |
+| Requirements → design → test traceability | [requirements-design-test-traceability.md](../technical/requirements-design-test-traceability.md) |
+
 ## Issue Implementation Workflow
 
 Before working on an issue, follow the **[Issue Implementation Workflow](./ISSUE_IMPLEMENTATION_WORKFLOW.md)**:

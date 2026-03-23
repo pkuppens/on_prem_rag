@@ -204,6 +204,9 @@ Follow [ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WO
 ## References
 
 - [ISSUES_README.md](./ISSUES_README.md) — Epic structure, verification strategy
+- [api-v1-delivery-sequence.md](./api-v1-delivery-sequence.md) — API v1 design → implementation → load tests (order and related work)
+- [manual-verification-playbook.md](./manual-verification-playbook.md) — Human verification, demo, sign-off templates
+- [requirements-design-test-traceability.md](../technical/requirements-design-test-traceability.md) — Acceptance criteria → design → tests
 - [CLAUDE.md](../../CLAUDE.md) — Repo conventions
 - [AGENTS.md](../technical/AGENTS.md) — Agent workflow and testing
 - [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc) — When to use branches vs direct-to-main

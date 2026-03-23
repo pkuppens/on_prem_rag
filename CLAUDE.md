@@ -85,9 +85,9 @@ Other: `project/` (SAFe docs), `docs/` (technical docs), `tests/` (mirrors src s
 
 ## Git Workflow
 
-- Branches: `feature/NNN-description`, `task/TASK-XXX-description`
+- Branches: `feature/NNN-description`, `task/TASK-XXX-description`, `chore/…`, `docs/…`
 - Commits: `#NNN: type: description` (types: feat, fix, docs, test, refactor, chore)
-- Doc/config changes can go directly to main; all other changes through PRs
+- **Merge to `main` only via pull request** (including docs, rules, and skills); enable protection per [docs/technical/BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md)
 - **Full workflow**: [docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 
 ## Scratch Directory (`tmp/`)

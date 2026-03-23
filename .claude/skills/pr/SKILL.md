@@ -6,4 +6,6 @@ argument-hint: [#issue-number]
 
 # PR
 
+**Merge to `main` only via PR** — never push hand-written commits directly to `main` ([.claude/skills/merge-via-pr/SKILL.md](../merge-via-pr/SKILL.md)).
+
 Follow [.cursor/commands/pr.md](../../../.cursor/commands/pr.md) exactly.

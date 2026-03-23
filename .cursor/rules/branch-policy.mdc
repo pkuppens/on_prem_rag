@@ -1,175 +1,81 @@
 ---
-description: Branch management policy for feature/task implementation vs documentation
+description: Branch management policy — all changes merge to main via pull request
 alwaysApply: true
 ---
 
 # Branch Policy
 
-This rule defines when branches are required versus when direct commits to main are allowed.
+This rule defines how work reaches `main`: **always through a branch and a pull request**, including documentation, rules, skills, and CI config. **Direct pushes to `main` are not allowed** for normal work; GitHub **branch rulesets** should enforce this ([BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md)).
 
-**Note on branch protection**: Branch protection on `main` may not be enabled in this repo, so direct push to main is possible. This policy does not forbid it entirely — use judgment for small, low-risk changes.
+## Branch requirements (all change types)
 
-## Branch Requirements
+Use a **named branch** for every deliverable commit, then open a **PR** to `main`:
 
-### MUST Use Branches
+| Change type | Branch examples |
+|-------------|-----------------|
+| Feature | `feature/FEAT-XXX-short-description`, `feature/NNN-short-description` |
+| Task | `task/TASK-XXX-short-description`
+| Bug / hotfix | `bug/BUG-XXX-…`, `hotfix/HOTFIX-XXX-…`
+| Chore / docs / rules / skills | `chore/NNN-short-description`, `docs/short-description` |
 
-**Feature/Task Implementation** - All code changes that implement new functionality:
+**Includes:** application code, tests, `docs/`, `.cursor/rules/`, `.cursor/skills/`, `.claude/skills/`, `pyproject.toml`, Docker, GitHub Actions, project markdown — anything that becomes a commit.
 
-- **Feature Development**: `feature/FEAT-XXX-short-description`
-- **Task Implementation**: `task/TASK-XXX-short-description`
-- **Bug Fixes**: `bug/BUG-XXX-short-description`
-- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
+## Why documentation and rules use branches too
 
-**Examples of Branch-Required Changes**:
+- Keeps **history reviewable** (PR diff, discussion, linked issues).
+- Matches **branch protection** (no accidental `git push origin main`).
+- Aligns with [.claude/skills/merge-via-pr/SKILL.md](mdc:.claude/skills/merge-via-pr/SKILL.md).
 
-- New API endpoints or routes
-- Database schema changes
-- New business logic implementation
-- Configuration changes that affect runtime behavior
-- New dependencies or package updates
-- Test implementations for new features
-- Refactoring of existing functionality
+## Issues and GitHub
 
-### Direct to Main Allowed
+- **Never** implement a GitHub issue **only** on `main` — always use a branch (`feature/…`, `task/…`, `chore/…`) and merge via PR ([ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)).
+- When work is **verified complete**, update **issue checkboxes** (body) and use **`Closes #NNN`** in the PR description so the issue closes on merge.
 
-**Documentation and Configuration** - Changes that don't affect runtime behavior:
+## Exceptions (rare)
 
-- **Documentation Updates**: README, technical docs, project management docs
-- **CI/Build Configuration**: GitHub Actions, Docker configs, build scripts
-- **Agentic Rules**: `.cursor/rules/*.mdc` files
-- **Project Management**: Task files, story files, epic files
-- **Configuration Files**: Environment examples, linting configs
-- **Scripts**: Utility scripts for data processing, analysis, reporting
-
-**Examples of Direct-to-Main Changes**:
-
-- Updating task completion status in TASK-\*.md files
-- Adding new project documentation
-- Updating coding standards or rules
-- CI pipeline improvements
-- Documentation corrections or additions
-- WBSO hours processing scripts
-- Project status reports
-
-**Quick CI fixes** (especially but not limited to): Small changes to prevent duplicate CI runs, fix workflow triggers, or correct CI config — can go directly to main or to the feature branch, depending on where the fix is needed. Use branches for significant development; direct commit is acceptable for these narrow fixes.
+- **Repository administrators** may use GitHub **bypass** for emergencies only (not routine workflow).
+- **Bots** (Dependabot, etc.) may merge via rules configured on the repo.
 
 ## Enforcement
 
-### AI Agent Behavior
+### AI agent behaviour
 
-AI agents must:
+1. **Before committing:** if current branch is `main`, **create a branch** (`git checkout -b chore/…` or `feature/…`) then commit.
+2. **Never suggest** `git push origin main` for hand-written commits.
+3. **Follow** [merge-via-pr skill](mdc:.cursor/skills/merge-via-pr/SKILL.md).
 
-1. **Check change type** before suggesting commits
-2. **Create branches** for any feature/task implementation (including bug fixes)
-3. **Commit directly to main** only for documentation/config changes or quick CI fixes
-4. **Follow branch naming conventions** from github-integration.mdc
+### Pre-commit / pre-push hooks
 
-**Issues**: Never work on main when implementing a GitHub issue. Always use branches (see [ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)).
+Hooks still run tests and lint; they do **not** enforce “not on main” — **branch protection** on GitHub does.
 
-### Pre-commit Hooks
+## Branching strategy: choosing the base
 
-The existing pre-push hooks enforce:
+### When on `main`
 
-- All pytest tests must pass
-- Code quality standards (ruff linting)
-- No direct enforcement of branch policy (relies on AI agent compliance)
+1. **Pull** `git pull origin main`.
+2. **Create branch** `git checkout -b <type>/<name>`.
+3. **Implement** and **push** the branch; open **PR** to `main`.
 
-### Code Review
+### When work depends on another open branch
 
-During code reviews:
-
-- Verify branch usage for feature implementations
-- Confirm direct-to-main commits are documentation/config only
-- Check branch naming follows conventions
-
-## Branching Strategy: Choosing the Right Base
-
-The branching strategy determines on which branch development should be done. Choose the base branch before creating a feature/task branch.
-
-### When on main
-
-1. **Check for applicable existing branches** (local or remote): Does any branch already contain functionality the issue needs (commands, rules, code)?
-2. **If yes** → Use that branch as base: sub-branch from it, or work on it directly if appropriate.
-3. **If no** → Create a new branch from `main`.
-
-### When on a non-main branch
-
-1. **Is this branch suitable for the new development?** (Does it provide the functionality the issue needs?)
-2. **If suitable** → Sub-branch from it, or work on it directly if appropriate.
-3. **If not suitable** → Consider:
-   - **Integrate to main first**: If linear history is preferred and the current branch is ready, merge to main, then branch from main.
-   - **Sub-branch**: If the issue depends on in-progress work, create a sub-branch from the current branch.
-   - **Parallel branch**: If the work is independent, branch from `main` in parallel (switch to main, pull, create new branch).
+1. Branch from that branch or rebase onto it after it merges.
+2. See [api-v1-delivery-sequence.md](docs/portfolio/api-v1-delivery-sequence.md) for stacked **API v1** PRs.
 
 ### Examples
 
 | Scenario | Action |
 |----------|--------|
-| Normal issue work | Branch from `main` |
-| Issue needs functionality from unmerged branch | Branch from that branch (or work on it directly) |
-| Testing new workflow commands on feature development | Branch from the workflow branch (e.g. `feature/workflow-improvements`) |
-| Current branch nearly done, new work independent | Merge current branch to main first, then branch from `main` |
+| Normal issue work | Branch from `main` → PR → merge |
+| Depends on unmerged branch | Branch from that branch or stack PRs |
+| Small doc-only fix | Still use a branch + PR (e.g. `docs/fix-typo-api`) |
 
-**How to specify base branch**: The user can indicate the base (e.g. `/get-started fix issue #85 branch off feature/X`). PRs from non-main bases target that branch until it is merged to main.
+## Branch naming conventions
 
-## Branch Naming Conventions
+Follow [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc)
 
-Follow the conventions defined in [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc):
+## Related
 
-- **Features**: `feature/FEAT-XXX-short-description`
-- **Tasks**: `task/TASK-XXX-short-description`
-- **Bugs**: `bug/BUG-XXX-short-description`
-- **Hotfixes**: `hotfix/HOTFIX-XXX-short-description`
-
-## Examples
-
-### ✅ Correct: Use Branch
-
-```bash
-# Feature implementation
-git checkout -b feature/FEAT-003-rag-pipeline
-# ... implement RAG pipeline code ...
-git commit -m "FEAT-003: Implement RAG pipeline core functionality"
-git push -u origin feature/FEAT-003-rag-pipeline
-```
-
-### ✅ Correct: Direct to Main
-
-```bash
-# Documentation update
-git add project/team/tasks/TASK-034.md
-git commit -m "TASK-034: Update task completion status"
-git push origin main
-```
-
-### ❌ Incorrect: Direct to Main for Feature
-
-```bash
-# This should use a branch
-git add src/backend/new_feature.py
-git commit -m "Add new feature implementation"  # WRONG - should be on branch
-```
-
-### ❌ Incorrect: Branch for Documentation
-
-```bash
-# This is unnecessary overhead
-git checkout -b docs/update-readme  # WRONG - can go directly to main
-git add README.md
-git commit -m "Update README"
-```
-
-## Integration with SAFe Methodology
-
-This branch policy aligns with the SAFe project structure:
-
-- **Epic → Feature → Story → Task** hierarchy preserved
-- **Feature branches** for epic-level implementations
-- **Task branches** for story-level implementations
-- **Direct commits** for project management artifacts
-
-## Related Rules
-
-- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - Branch naming and workflow
-- [golden-rules.mdc](mdc:.cursor/rules/golden-rules.mdc) - Core development principles
-- [project-management.mdc](mdc:.cursor/rules/project-management.mdc) - SAFe methodology
+- [merge-via-pr skill](mdc:.claude/skills/merge-via-pr/SKILL.md)
+- [BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md)
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc)
+- [golden-rules.mdc](mdc:.cursor/rules/golden-rules.mdc)

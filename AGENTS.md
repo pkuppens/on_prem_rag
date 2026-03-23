@@ -23,10 +23,9 @@ This document provides a practical example of how OpenAI Codex is integrated int
 ### Workflow Integration
 
 1. **Branch Management**
-   - **Feature/Task Implementation**: MUST use feature/task branches (feature/FEAT-XXX, task/TASK-XXX)
-   - **Direct to Main Allowed**: Documentation updates, CI/build configurations, agentic rules only
-   - **Branch Naming**: Follow conventions in github-integration.mdc
-   - Regular merges from feature branches to keep the main branch updated.
+   - **All changes**: Use a branch and merge to `main` via **pull request** (including docs, CI, and `.cursor` rules). See [docs/technical/BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md).
+   - **Branch Naming**: Follow conventions in github-integration.mdc (`feature/…`, `task/…`, `chore/…`).
+   - Regular merges from feature branches keep `main` current.
 
 2. **Commit Strategy**
    - Use multiple commits for separate smaller tasks to maintain a clear history.

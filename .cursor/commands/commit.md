@@ -8,6 +8,17 @@ This command creates well-structured commit messages following project standards
 
 ## Command Execution Workflow
 
+### Step 0: Branch guard (not `main`)
+
+**Do not create commits on `main`.** If `git branch --show-current` is `main`, create a branch first (see [branch-policy.mdc](../rules/branch-policy.mdc) and [.claude/skills/merge-via-pr/SKILL.md](../../.claude/skills/merge-via-pr/SKILL.md)):
+
+```bash
+git checkout -b chore/short-description
+# or feature/NNN-name, task/NNN-name, docs/…
+```
+
+Then continue with Step 1.
+
 ### Step 1: Analyze Current Context
 
 #### 1.1 Get Current Branch

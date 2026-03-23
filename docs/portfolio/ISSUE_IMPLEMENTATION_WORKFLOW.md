@@ -8,7 +8,7 @@ This workflow ensures issues are validated, planned, and implemented in a consis
 |-----------|----------|
 | **Issue review** | Validate before coding — check relevance, existing work, research tooling |
 | **Planning** | Architecture review, test strategy, and design before implementation |
-| **Feature branching** | All code changes via branches; never commit directly to main for features |
+| **Feature branching** | All changes merge via **pull request**; do not push deliverable commits directly to `main` ([branch-policy.mdc](../../.cursor/rules/branch-policy.mdc)) |
 | **Test-driven** | Write tests first where contract is clear; tests drive design |
 | **Architecture & design** | Follow SOLID, module boundaries, dependency inversion |
 
@@ -101,7 +101,7 @@ git pull
 git checkout -b feature/NNN-short-description
 ```
 
-**Rule**: Feature/task implementation **must** use branches. Direct-to-main is allowed only for docs, config, and agent rules.
+**Rule**: Use a branch for **all** work (code, docs, rules, skills); merge to `main` **only via PR**. See [BRANCH_PROTECTION.md](../technical/BRANCH_PROTECTION.md) to enforce on GitHub.
 
 ### 2.2 Review architecture and design
 
@@ -209,4 +209,5 @@ Follow [ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WO
 - [requirements-design-test-traceability.md](../technical/requirements-design-test-traceability.md) — Acceptance criteria → design → tests
 - [CLAUDE.md](../../CLAUDE.md) — Repo conventions
 - [AGENTS.md](../technical/AGENTS.md) — Agent workflow and testing
-- [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc) — When to use branches vs direct-to-main
+- [branch-policy.mdc](../../.cursor/rules/branch-policy.mdc) — Branch-first workflow; merge via PR only
+- [BRANCH_PROTECTION.md](../technical/BRANCH_PROTECTION.md) — Protect `main` on GitHub

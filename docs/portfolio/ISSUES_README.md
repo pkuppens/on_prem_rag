@@ -11,6 +11,7 @@ Updated: 2026-03-23
 | API v1 rollout order and dependencies | [api-v1-delivery-sequence.md](./api-v1-delivery-sequence.md) |
 | Manual checks, demo evidence, sign-off | [manual-verification-playbook.md](./manual-verification-playbook.md) |
 | Requirements → design → test traceability | [requirements-design-test-traceability.md](../technical/requirements-design-test-traceability.md) |
+| Protect `main` (PR required) | [BRANCH_PROTECTION.md](../technical/BRANCH_PROTECTION.md) |
 
 ## Issue Implementation Workflow
 

@@ -1,7 +1,7 @@
 # Architecture Rules and Skills Mapping
 
 Created: 2026-02-23
-Updated: 2026-03-21
+Updated: 2026-03-23
 
 Mapping of Cursor/Claude rules and skills to API design, scalable architecture, and data-intensive systems competencies.
 
@@ -38,6 +38,14 @@ Mapping of Cursor/Claude rules and skills to API design, scalable architecture, 
 | VECTOR_STORE.md | docs/technical/VECTOR_STORE.md | ChromaDB, alternatives, trade-offs |
 | CHUNKING.md | docs/technical/CHUNKING.md | Chunking strategies |
 | EMBEDDING.md | docs/technical/EMBEDDING.md | Embedding model choice |
+
+### Git workflow and delivery
+
+| Rule/Skill | Path | Key Principles |
+|------------|------|----------------|
+| branch-policy.mdc | .cursor/rules/branch-policy.mdc | Branch-first; merge to `main` via PR only |
+| **merge-via-pr** (skill) | .claude/skills/merge-via-pr/SKILL.md | Checklist before commit/PR; links to protection doc |
+| BRANCH_PROTECTION.md | docs/technical/BRANCH_PROTECTION.md | GitHub rulesets for `main` |
 
 ### Testability
 

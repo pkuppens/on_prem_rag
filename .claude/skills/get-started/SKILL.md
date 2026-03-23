@@ -52,8 +52,9 @@ Draft first in `tmp/github/issue-comments/`, then post when content is ready. Fo
 
 1. [docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md) — full 3-phase workflow
 2. [CLAUDE.md](CLAUDE.md) — project conventions, build commands, architecture
-3. [.cursor/rules/branch-policy.mdc](.cursor/rules/branch-policy.mdc) — branch naming
-4. [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) — optional; branch naming, gh CLI
+3. [.cursor/rules/branch-policy.mdc](.cursor/rules/branch-policy.mdc) — branch naming; all work merges via PR
+4. [.claude/skills/merge-via-pr/SKILL.md](.claude/skills/merge-via-pr/SKILL.md) — never commit deliverable work on `main`
+5. [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) — optional; branch naming, gh CLI
 
 ## Execution Workflow
 
@@ -100,7 +101,7 @@ gh issue view <NNN>
 
 ### Step 5: Phase 2 — Plan and (Optionally) Implement
 
-- Create branch: `git checkout main; git pull; git checkout -b feature/NNN-short-description` (or task/, bug/, hotfix/)
+- **If on `main`:** create a branch before editing: `git checkout main; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/`, `chore/…`). Do not leave uncommitted work only on `main`.
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`

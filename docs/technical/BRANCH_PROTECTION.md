@@ -1,7 +1,7 @@
 # Branch protection for `main`
 
 Created: 2026-03-23
-Updated: 2026-03-23
+Updated: 2026-03-24
 
 This repository uses a **branch-first** workflow: contributors merge work through **pull requests** into `main`, not by pushing directly to `main`. GitHub **rulesets** (or classic branch protection) enforce that server-side.
 
@@ -10,18 +10,40 @@ This repository uses a **branch-first** workflow: contributors merge work throug
 | Rule | Purpose |
 |------|---------|
 | **Require a pull request before merging** | Blocks direct pushes to `main`; all changes go through a PR. |
+| **Require linear history** | Merge commits are not allowed on `main`; PRs must use **rebase merge** (or match policy below). |
+| **Allowed merge methods: rebase only** | Keeps `main` linear and avoids merge-commit and squash-merge drift. |
+| **Block force pushes** (`non_fast_forward`) | Prevents rewriting protected branch history without bypass. |
 | **Require status checks to pass** (optional) | Tie required checks to your CI workflow after they are stable. |
 | **Restrict who can push** (optional) | Limit bypass to admins or release role. |
 
-**Suggested for solo/small teams:** require PR with **0** required approvals so you can self-merge after review, while still preventing accidental `git push origin main`.
+**Solo / small teams:** the ruleset uses **0** required approving reviews so you can merge your own PR once checks pass. GitHub still does **not** let the PR author submit an **Approve** review on their own PR in the UI; that is a platform rule, not something the ruleset JSON can change. To record review intent, use a **comment** review, CI green, or an additional reviewer when you have one.
+
+## Repository merge buttons (complement to rulesets)
+
+The ruleset restricts **which merge strategies** apply to `main`. You should also align **repository** settings so the merge dropdown matches:
+
+- **Settings** → **General** → **Pull Requests** → disable **Allow merge commits** and **Allow squash merging**; enable **Allow rebase merging**.
+
+Or via API (owner admin token):
+
+```powershell
+gh api repos/pkuppens/on_prem_rag -X PATCH `
+  -f allow_merge_commit=false `
+  -f allow_squash_merge=false `
+  -f allow_rebase_merge=true
+```
+
+This was applied for `pkuppens/on_prem_rag` on 2026-03-24 together with the ruleset update.
 
 ## Option A — GitHub UI (rulesets)
 
 1. Open **Settings** → **Rules** → **Rulesets** (or **Branches** for classic protection).
-2. **New ruleset** → **New branch ruleset**.
+2. **New ruleset** → **New branch ruleset** (or edit **Require PR for main**).
 3. **Target branches**: add pattern `main` (or `refs/heads/main`).
-4. Enable **Require a pull request before merging**.
-5. Save and confirm enforcement is **Active**.
+4. Enable **Require a pull request before merging**; set **Allowed merge methods** to **Rebase** only.
+5. Enable **Require linear history** and **Block force pushes**.
+6. Save and confirm enforcement is **Active**.
+7. Under **Settings** → **General** → **Pull Requests**, allow **rebase** only (see table above).
 
 ## Option B — GitHub CLI + API
 
@@ -29,9 +51,17 @@ A JSON example lives next to this file: [branch-protection-ruleset.example.json]
 
 **Prerequisites:** `gh auth login` with a token that can administer the repository.
 
+**Create** (first time only):
+
 ```powershell
 cd <repo-root>
 gh api repos/pkuppens/on_prem_rag/rulesets --method POST --input docs/technical/branch-protection-ruleset.example.json
+```
+
+**Update** an existing ruleset (keep the same `name` and rules; GitHub identifies the ruleset by id):
+
+```powershell
+gh api repos/pkuppens/on_prem_rag/rulesets/14226332 --method PUT --input docs/technical/branch-protection-ruleset.example.json
 ```
 
 If the call returns `403` or `404`, your token may lack `admin:repo_hook` / admin on the repo — use Option A or ask an owner.
@@ -41,8 +71,6 @@ If the call returns `403` or `404`, your token may lack `admin:repo_hook` / admi
 ```bash
 gh api repos/pkuppens/on_prem_rag/rulesets
 ```
-
-**Update** an existing ruleset: `PATCH /repos/{owner}/{repo}/rulesets/{ruleset_id}` with a new JSON body.
 
 ## Verify
 

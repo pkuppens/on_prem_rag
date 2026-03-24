@@ -109,7 +109,7 @@ gh issue view 75              # View issue
 gh issue edit 75 --add-assignee @me
 gh issue comment 75 --body "..."
 gh pr create --title "#75: ..." --body "Closes #75"
-gh pr merge --squash --delete-branch
+gh pr merge --rebase --delete-branch
 ```
 
 ### Coverage Reports from CI

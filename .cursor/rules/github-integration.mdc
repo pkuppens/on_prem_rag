@@ -654,14 +654,11 @@ git checkout -b new-branch-name
 
 ### Merge Strategy
 
-To keep feature branches tidy while preserving branching structure when development is parallel:
+`main` is protected with **linear history** and **rebase merge** only (see [BRANCH_PROTECTION.md](../../docs/technical/BRANCH_PROTECTION.md)). This keeps integration simple and avoids merge-commit noise on the default branch.
 
-1. **Before PR**: Rebase feature branch onto main (`git checkout feature/X; git fetch origin; git rebase origin/main`). Keeps the feature branch linear with main and reduces conflicts.
-2. **When merging PR**: Prefer **"Create a merge commit"** (not squash, not rebase-and-merge). Merge commits preserve the branching structure; `git log --graph` shows when parallel work was integrated.
-3. **Result**: Main has merge commits at each integration point. Linear development on each feature branch; non-linear main when multiple branches merge in parallel.
-4. **After merge**: Run `/branch-cleanup` to sync main and delete merged/gone local branches.
-
-Squash and rebase-merge produce a linear main but hide the branch structure. Use merge commits when you want to see parallel development in the history.
+1. **Before PR**: Rebase the feature branch onto `main` (`git checkout feature/X; git fetch origin; git rebase origin/main`) so the PR stays easy to review and rebase-merge.
+2. **When merging PR**: Use **Rebase and merge** (or `gh pr merge --rebase --delete-branch`). Do not use merge commits or squash merge on `main`; the repository and ruleset settings disallow them.
+3. **After merge**: Run `/branch-cleanup` to sync `main` and delete merged or gone local branches.
 
 ## GitHub Actions Integration
 

@@ -182,7 +182,7 @@ gh pr create --title "#75: ..." --body "Closes #75"
 gh pr view
 
 # Merge PR
-gh pr merge --squash --delete-branch
+gh pr merge --rebase --delete-branch
 ```
 
 ---

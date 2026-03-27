@@ -18,6 +18,8 @@ The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardi
 
 **Technical summary:** For architecture decisions, evaluation results, and lessons learned, see [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md). Publishable design document aimed at healthcare CTOs; includes diagrams, benchmarks, and run instructions.
 
+**Security:** Report vulnerabilities through the process in [SECURITY.md](SECURITY.md). Technical security architecture is described in [docs/technical/SECURITY.md](docs/technical/SECURITY.md).
+
 ## Design Decisions
 
 Key architectural trade-offs that shape the system:

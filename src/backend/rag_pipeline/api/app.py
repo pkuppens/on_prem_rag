@@ -40,6 +40,11 @@ from .middleware.correlation_id import CorrelationIdMiddleware
 
 app.add_middleware(CorrelationIdMiddleware)
 
+# Audit log middleware (innermost so it sees final status codes)
+from .middleware.audit_log import AuditLogMiddleware
+
+app.add_middleware(AuditLogMiddleware)
+
 # Add CORS middleware (origins from ALLOW_ORIGINS env, comma-separated)
 _cors_origins = os.getenv("ALLOW_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(

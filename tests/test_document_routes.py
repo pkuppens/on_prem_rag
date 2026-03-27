@@ -120,6 +120,31 @@ def test_delete_document_rejects_path_traversal():
     assert response.status_code in (400, 404)
 
 
+def test_delete_document_success(tmp_path):
+    """As a data controller I want to delete a document and all its embeddings,
+    so I can fulfil GDPR Article 17 right-to-erasure requests.
+    Technical: DELETE /api/documents/{filename} removes the file from disk and all
+    associated chunks from the vector store, returning HTTP 204 with no body.
+    Validation: Mock vector_store_manager and uploaded_files_dir; verify 204 status,
+    file removal, and that delete_by_document_name was called once with the correct name.
+    """
+    filename = "report_to_delete.pdf"
+    fake_file = tmp_path / filename
+    fake_file.write_bytes(b"%PDF-1.4 test content")
+
+    with (
+        patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path),
+        patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm,
+    ):
+        mock_vsm.delete_by_document_name.return_value = 5  # 5 chunks deleted
+
+        response = client.delete(f"/api/documents/{filename}")
+
+    assert response.status_code == 204
+    assert not fake_file.exists(), "File should have been removed from disk"
+    mock_vsm.delete_by_document_name.assert_called_once_with(filename)
+
+
 def test_serve_document_as_text_txt(tmp_path):
     """As a user I want TXT files rendered as text in the preview, so I can read full content.
     Technical: GET /api/documents/files/{filename}/as-text returns UTF-8 text for .txt files.

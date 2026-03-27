@@ -173,3 +173,40 @@ def test_serve_document_as_text_not_found_returns_404(tmp_path):
     with patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path):
         response = client.get("/api/documents/files/nonexistent.txt/as-text")
     assert response.status_code == 404
+
+
+def test_gdpr_article17_delete_cascades_filesystem_and_vector_store(tmp_path) -> None:
+    """As a data subject, I want deletion to erase my document from all storage layers
+    so that the right to erasure (GDPR Article 17) is honoured.
+
+    Verifies:
+    - File is removed from the filesystem (primary storage).
+    - Vector store chunks are deleted (embedding storage).
+    - Document no longer appears in the listing after deletion.
+    """
+    filename = "sensitive_report.pdf"
+    (tmp_path / filename).write_bytes(b"%PDF-1.4 sensitive content")
+
+    with (
+        patch("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path),
+        patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm,
+    ):
+        mock_vsm.delete_by_document_name.return_value = 5  # 5 chunks deleted
+
+        # File must be present before deletion
+        list_before = client.get("/api/documents/list").json()["files"]
+        assert filename in list_before, "File must appear in listing before deletion"
+
+        # Delete triggers cascade
+        delete_resp = client.delete(f"/api/documents/{filename}")
+        assert delete_resp.status_code == 204, f"Expected 204 No Content, got {delete_resp.status_code}"
+
+        # Vector store chunks must have been deleted
+        mock_vsm.delete_by_document_name.assert_called_once_with(filename)
+
+        # File must be gone from the filesystem
+        assert not (tmp_path / filename).exists(), "File must be removed from filesystem on deletion"
+
+        # File must be absent from the listing
+        list_after = client.get("/api/documents/list").json()["files"]
+        assert filename not in list_after, "Deleted document must not appear in listing"

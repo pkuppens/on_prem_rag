@@ -363,7 +363,7 @@ NEN 7510 is the Dutch adaptation of ISO/IEC 27001 for healthcare. Relevant contr
 | A.16 Information security incidents| Audit trail provides event log for incident response           |
 | A.18 Compliance                    | This document; DPIA recommended                                |
 
-**Audit log retention:** NEN 7510 and applicable Dutch healthcare law (Wet op de geneeskundige behandelingsovereenkomst, WGBO) require medical records to be retained for a minimum of **20 years**. Audit logs should be retained accordingly. Automated archival is not yet implemented (known gap).
+**Audit log retention:** NEN 7510 and applicable Dutch healthcare law (Wet op de geneeskundige behandelingsovereenkomst, WGBO) require medical records to be retained for a minimum of **15 years**. Audit logs should be retained accordingly. Automated archival is not yet implemented (known gap).
 
 ### Suitability statement
 
@@ -375,7 +375,7 @@ This system is designed for on-premises deployment by healthcare operators who b
 
 | Limitation                                       | Severity | Planned fix                                         |
 |--------------------------------------------------|----------|-----------------------------------------------------|
-| Delete endpoint has no authentication check      | High     | Add JWT/role guard to `DELETE /api/documents/{filename}` |
+| Delete endpoint has no authentication check      | High     | **Interim mitigation:** restrict access to the RAG backend at the network/proxy level (firewall, VPN, or reverse-proxy auth) until `DELETE /api/documents/{filename}` has a JWT/role guard added |
 | JWT token refresh not implemented                | Medium   | Implement `/token/refresh` endpoint                 |
 | JWT token revocation not implemented             | Medium   | Token blocklist (Redis or DB) on logout             |
 | No automated data retention / TTL                | Medium   | Background job to expire documents after N days     |

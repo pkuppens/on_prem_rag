@@ -13,6 +13,8 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
+import bcrypt as _bcrypt
+
 from .database import SessionLocal, init_db
 from .models import Session as DBSession
 from .models import User
@@ -113,13 +115,13 @@ def get_db():
 
 
 def get_password_hash(password: str) -> str:
-    import hashlib
-
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Return a bcrypt hash of *password* (unique salt per call, work-factor 12)."""
+    return _bcrypt.hashpw(password.encode(), _bcrypt.gensalt(rounds=12)).decode()
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    return get_password_hash(password) == hashed
+    """Return True if *password* matches the stored bcrypt *hashed* value."""
+    return _bcrypt.checkpw(password.encode(), hashed.encode())
 
 
 def create_session(db: Session, user: User) -> DBSession:

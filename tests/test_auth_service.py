@@ -77,13 +77,9 @@ def test_passwords_are_hashed_in_database(client, test_db) -> None:
     assert user.password_hash is not None
     assert user.password_hash != plain_password  # Plain password should NOT be stored
 
-    # Verify it's actually a SHA-256 hash (64 hex characters)
-    assert len(user.password_hash) == 64  # SHA-256 produces 64 hex characters
-    assert all(c in "0123456789abcdef" for c in user.password_hash.lower())  # Only hex characters
-
-    # Verify the hash matches what our hashing function produces
-    expected_hash = get_password_hash(plain_password)
-    assert user.password_hash == expected_hash
+    # Verify it's actually a bcrypt hash (starts with $2b$ and is 60 chars)
+    assert user.password_hash.startswith("$2b$") or user.password_hash.startswith("$2a$")
+    assert len(user.password_hash) == 60  # bcrypt always produces 60-character hashes
 
     # Verify login still works with the plain password
     login_resp = client.post("/login", json={"username": username, "password": plain_password})
@@ -96,21 +92,24 @@ def test_passwords_are_hashed_in_database(client, test_db) -> None:
     db.close()
 
 
-def test_password_hash_consistency(client) -> None:
-    """Test that the same password always produces the same hash."""
+def test_password_hash_uses_bcrypt_with_unique_salts(client) -> None:
+    """Test that bcrypt produces unique hashes per call (different salts) but verifies correctly."""
+    from auth_service.main import verify_password
+
     password = "consistent_password"
 
-    # Generate multiple hashes of the same password
+    # bcrypt generates a unique salt per call — the same password produces different hashes
     hash1 = get_password_hash(password)
     hash2 = get_password_hash(password)
-    hash3 = get_password_hash(password)
+    assert hash1 != hash2, "bcrypt hashes must differ due to unique per-call salts"
 
-    # All hashes should be identical (SHA-256 is deterministic)
-    assert hash1 == hash2 == hash3
+    # But both hashes must verify correctly against the original password
+    assert verify_password(password, hash1)
+    assert verify_password(password, hash2)
 
-    # Different passwords should produce different hashes
-    different_hash = get_password_hash("different_password")
-    assert hash1 != different_hash
+    # A different password must NOT verify against either hash
+    assert not verify_password("wrong_password", hash1)
+    assert not verify_password("wrong_password", hash2)
 
 
 def test_register_user(client) -> None:

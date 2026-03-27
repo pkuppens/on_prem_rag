@@ -203,6 +203,37 @@ def test_token_expiry_behavior(client) -> None:
     assert me.json()["username"] == "tokentest"
 
 
+def test_user_session_isolation(client) -> None:
+    """As a security control, I want each user's session to be isolated so tokens cannot be cross-used.
+
+    Verifies:
+    - User A's token returns User A's identity, never User B's.
+    - Logging out User A does not invalidate User B's concurrent session.
+    """
+    # Register two independent users
+    client.post("/register", json={"username": "isolation_a", "email": "a@iso.example.com", "password": "passA"})
+    client.post("/register", json={"username": "isolation_b", "email": "b@iso.example.com", "password": "passB"})
+
+    token_a = client.post("/login", json={"username": "isolation_a", "password": "passA"}).json()["token"]
+    token_b = client.post("/login", json={"username": "isolation_b", "password": "passB"}).json()["token"]
+
+    # Each token resolves to its own user
+    me_a = client.get("/me", headers={"Authorization": f"Bearer {token_a}"}).json()
+    me_b = client.get("/me", headers={"Authorization": f"Bearer {token_b}"}).json()
+    assert me_a["username"] == "isolation_a", "Token A must identify user A"
+    assert me_b["username"] == "isolation_b", "Token B must identify user B"
+    assert me_a["username"] != me_b["username"], "Tokens must not resolve to the same identity"
+
+    # Logging out user A must not affect user B's session
+    client.post("/logout", headers={"Authorization": f"Bearer {token_a}"})
+    assert client.get("/me", headers={"Authorization": f"Bearer {token_a}"}).status_code == 401, (
+        "User A's token must be invalidated after logout"
+    )
+    assert client.get("/me", headers={"Authorization": f"Bearer {token_b}"}).status_code == 200, (
+        "User B's session must remain valid after user A logs out"
+    )
+
+
 def test_password_security(client) -> None:
     """Test that passwords are properly secured."""
     # Register user

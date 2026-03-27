@@ -147,3 +147,24 @@ def test_documents_delete_rejects_invalid_filename(tmp_path, monkeypatch) -> Non
     monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
     resp = client.delete("/api/documents/bad..name.pdf")  # contains ..
     assert resp.status_code == 400
+
+
+def test_documents_delete_vector_store_failure_returns_500(tmp_path, monkeypatch) -> None:
+    """As a user I want clear failure when indexed data cannot be removed, so I can retry or escalate.
+    Technical: If vector_store_manager.delete_by_document_name raises, DELETE returns 500 and file stays.
+    Validation: Mock raises; response is 500; file remains on disk.
+    """
+    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    file_path = tmp_path / "stuck.txt"
+    file_path.write_text("content")
+
+    class MockVSM:
+        def delete_by_document_name(self, filename: str) -> int:
+            raise RuntimeError("vector store unavailable")
+
+    mock_vsm = MockVSM()
+    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.vector_store_manager", mock_vsm)
+
+    resp = client.delete("/api/documents/stuck.txt")
+    assert resp.status_code == 500
+    assert file_path.exists()

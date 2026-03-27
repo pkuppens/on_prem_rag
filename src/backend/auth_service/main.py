@@ -1,6 +1,10 @@
+import logging
 import os
+import secrets
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta, timezone
+
+_logger = logging.getLogger(__name__)
 
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -68,8 +72,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add session middleware for OAuth2 flows
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY", "your-secret-key-change-this"))
+# Add session middleware for OAuth2 flows.
+# SESSION_SECRET_KEY must be set explicitly in production.  If missing or using the
+# insecure placeholder, a per-process random key is generated.  This means all
+# OAuth2 sessions are lost on restart and is NOT suitable for production.
+_SESSION_SECRET_PLACEHOLDER = "your-secret-key-change-this"
+_session_secret_key = os.getenv("SESSION_SECRET_KEY", "")
+if not _session_secret_key or _session_secret_key == _SESSION_SECRET_PLACEHOLDER:
+    _logger.warning(
+        "SESSION_SECRET_KEY is not set or uses the insecure placeholder value. "
+        "A random key has been generated — all OAuth2 sessions will be lost on restart. "
+        "Set SESSION_SECRET_KEY to a stable secret in production "
+        "(generate with: python -c \"import secrets; print(secrets.token_urlsafe(32))\")."
+    )
+    _session_secret_key = secrets.token_urlsafe(32)
+app.add_middleware(SessionMiddleware, secret_key=_session_secret_key)
 
 
 def start_server() -> None:

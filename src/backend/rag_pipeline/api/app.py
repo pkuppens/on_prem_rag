@@ -10,8 +10,12 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from ..config.llm_config import check_data_sovereignty
 from ..utils.logging import StructuredLogger
 from . import ask, chat, documents, documents_enhanced, health, metrics, parameters, query, stt, test, websocket
+
+# Fail fast: refuse to start if a cloud LLM backend is used in strict mode.
+check_data_sovereignty()
 
 # Set root logger to DEBUG level
 logging.getLogger().setLevel(logging.DEBUG)

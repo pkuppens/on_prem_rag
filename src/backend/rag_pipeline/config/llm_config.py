@@ -125,6 +125,34 @@ def get_llm_config() -> LLMConfig:
     )
 
 
+# Backends that route queries to external cloud services.
+# On-prem deployments must never use these in DATA_SOVEREIGNTY_MODE=strict.
+CLOUD_BACKENDS: frozenset[str] = frozenset({"openai", "anthropic", "azure", "gemini"})
+
+
+def check_data_sovereignty() -> None:
+    """Enforce on-premises data residency when DATA_SOVEREIGNTY_MODE=strict.
+
+    Call this at application startup. Raises RuntimeError if a cloud LLM backend
+    is configured while strict mode is active — preventing accidental data egress.
+
+    Set DATA_SOVEREIGNTY_MODE=strict to enforce. Default is permissive (no check).
+    """
+    import os
+
+    mode = os.getenv("DATA_SOVEREIGNTY_MODE", "").strip().lower()
+    if mode != "strict":
+        return
+
+    backend = _normalize_backend(get_env("LLM_BACKEND", DEFAULT_BACKEND))
+    if backend in CLOUD_BACKENDS:
+        raise RuntimeError(
+            f"DATA_SOVEREIGNTY_MODE=strict is set but LLM_BACKEND='{backend}' routes queries "
+            f"to an external cloud service. Use a local backend (e.g. ollama) or unset "
+            f"DATA_SOVEREIGNTY_MODE to allow cloud providers."
+        )
+
+
 def get_model_for_backend(backend: str) -> str:
     """Get model name (without LiteLLM prefix) for backend. Uses env resolution."""
     backend = _normalize_backend(backend)

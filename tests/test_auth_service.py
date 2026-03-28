@@ -211,8 +211,14 @@ def test_user_session_isolation(client) -> None:
     - Logging out User A does not invalidate User B's concurrent session.
     """
     # Register two independent users
-    client.post("/register", json={"username": "isolation_a", "email": "a@iso.example.com", "password": "passA"})
-    client.post("/register", json={"username": "isolation_b", "email": "b@iso.example.com", "password": "passB"})
+    client.post(
+        "/register",
+        json={"username": "isolation_a", "email": "a@iso.example.com", "password": "passA"},  # pragma: allowlist secret
+    )
+    client.post(
+        "/register",
+        json={"username": "isolation_b", "email": "b@iso.example.com", "password": "passB"},  # pragma: allowlist secret
+    )
 
     token_a = client.post("/login", json={"username": "isolation_a", "password": "passA"}).json()["token"]
     token_b = client.post("/login", json={"username": "isolation_b", "password": "passB"}).json()["token"]

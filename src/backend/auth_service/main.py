@@ -6,14 +6,13 @@ from datetime import datetime, timedelta, timezone
 
 _logger = logging.getLogger(__name__)
 
+import bcrypt as _bcrypt
 from authlib.integrations.starlette_client import OAuth
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
-
-import bcrypt as _bcrypt
 
 from .database import SessionLocal, init_db
 from .models import Session as DBSession
@@ -85,7 +84,7 @@ if not _session_secret_key or _session_secret_key == _SESSION_SECRET_PLACEHOLDER
         "SESSION_SECRET_KEY is not set or uses the insecure placeholder value. "
         "A random key has been generated — all OAuth2 sessions will be lost on restart. "
         "Set SESSION_SECRET_KEY to a stable secret in production "
-        "(generate with: python -c \"import secrets; print(secrets.token_urlsafe(32))\")."
+        '(generate with: python -c "import secrets; print(secrets.token_urlsafe(32))").'
     )
     _session_secret_key = secrets.token_urlsafe(32)
 app.add_middleware(SessionMiddleware, secret_key=_session_secret_key)

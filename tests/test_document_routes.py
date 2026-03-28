@@ -47,9 +47,10 @@ async def test_upload_triggers_service_background_task(tmp_path):
     Technical: upload endpoint delegates background work to DocumentProcessingService.
     Validation: New documents return 201 with created: true; background processing started.
     """
-    with patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service, patch(
-        "src.backend.rag_pipeline.api.documents.vector_store_manager"
-    ) as mock_vsm:
+    with (
+        patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service,
+        patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm,
+    ):
         mock_service.process_document_background = AsyncMock()
         mock_vsm.has_document_with_file_hash.return_value = False  # New document
 
@@ -85,9 +86,10 @@ async def test_upload_duplicate_returns_200_created_false():
     Validation: Mock has_document_with_file_hash=True; assert 200, created: false, no background task.
     """
     content = b"%PDF-1.4 duplicate-content"
-    with patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm, patch(
-        "src.backend.rag_pipeline.api.documents.document_processing_service"
-    ) as mock_service:
+    with (
+        patch("src.backend.rag_pipeline.api.documents.vector_store_manager") as mock_vsm,
+        patch("src.backend.rag_pipeline.api.documents.document_processing_service") as mock_service,
+    ):
         mock_vsm.has_document_with_file_hash.return_value = True  # Duplicate
         mock_service.process_document_background = AsyncMock()
 

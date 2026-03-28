@@ -18,9 +18,6 @@ from pathlib import Path
 from typing import Any
 
 import torch
-
-# LlamaIndex imports
-from backend.rag_pipeline.core.llama_compat import StorageContext
 from llama_index.core import (
     Document,
     Settings,
@@ -38,6 +35,9 @@ from llama_index.readers.file import DocxReader, PDFReader
 
 # Local imports
 from backend.rag_pipeline.config.parameter_sets import RAGParams
+
+# LlamaIndex imports
+from backend.rag_pipeline.core.llama_compat import StorageContext
 from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vector_store_manager
 from backend.shared.utils.directory_utils import (
     DirectoryEmptyError,

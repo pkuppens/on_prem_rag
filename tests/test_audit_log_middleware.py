@@ -32,10 +32,9 @@ def test_audit_log_records_method_path_status(audit_app, caplog) -> None:
         client = TestClient(audit_app)
         client.get("/ping")
 
-    assert any(
-        "method=GET" in r.message and "path=/ping" in r.message and "status=200" in r.message
-        for r in caplog.records
-    ), f"Expected audit log entry not found in: {[r.message for r in caplog.records]}"
+    assert any("method=GET" in r.message and "path=/ping" in r.message and "status=200" in r.message for r in caplog.records), (
+        f"Expected audit log entry not found in: {[r.message for r in caplog.records]}"
+    )
 
 
 def test_audit_log_anonymous_without_token(audit_app, caplog) -> None:

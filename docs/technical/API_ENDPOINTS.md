@@ -1,7 +1,7 @@
 # API Endpoint Inventory
 
 Created: 2026-02-23
-Updated: 2026-02-23
+Updated: 2026-03-29
 
 This document inventories all API routes in the RAG pipeline. It feeds into [API_REDESIGN.md](API_REDESIGN.md) for the v0 → v1 redesign.
 
@@ -70,7 +70,7 @@ Different semantics: query returns chunks; ask returns LLM answer. Frontend prim
 
 | Client | Endpoints Used |
 |--------|----------------|
-| React frontend | `/api/documents/upload`, `/api/documents/list`, `/api/ask`, `/api/chat`, `/ws/upload-progress`, `/api/stt/transcribe` |
+| React frontend | `/api/documents/*`, `/api/query`, `/api/ask`, `/api/ask/voice`, `/api/stt/*`, `/api/parameters/sets`, `/api/health`, `/ws/upload-progress` (see [src/frontend/src/config/api.ts](../../src/frontend/src/config/api.ts); main Q&A uses **`/api/ask`**, not `/api/chat`) |
 | CLI / scripts | `/api/documents/upload`, `/api/documents/from-url`, possibly `/api/ask`, `/api/query` |
 | Docker health | `/health` or `/api/health` |
 | Metrics (Prometheus) | `/metrics` |

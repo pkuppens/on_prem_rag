@@ -1,0 +1,139 @@
+# OpenAPI 3.0 draft for target v1 RAG API (design only; not served until #128).
+# See docs/technical/API_REDESIGN.md for full narrative and gap analysis.
+
+openapi: 3.0.3
+info:
+  title: On-Prem RAG API
+  version: 1.0.0-draft
+  description: >
+    Draft surface for /api/v1 after v0 removal. Ops endpoints /health and /metrics stay unversioned.
+
+servers:
+  - url: http://localhost:8000
+    description: Local backend
+
+tags:
+  - name: documents
+  - name: retrieval
+  - name: qa
+  - name: speech
+  - name: parameters
+  - name: health
+  - name: chat
+
+paths:
+  /api/v1/documents:
+    get:
+      tags: [documents]
+      summary: List documents
+      operationId: listDocumentsV1
+    post:
+      tags: [documents]
+      summary: Upload or enqueue document (sync or async)
+      operationId: createDocumentV1
+      parameters:
+        - name: async
+          in: query
+          schema:
+            type: boolean
+            default: false
+
+  /api/v1/documents/tasks/{task_id}:
+    get:
+      tags: [documents]
+      summary: Processing task status
+      operationId: getDocumentTaskStatusV1
+    delete:
+      tags: [documents]
+      summary: Cancel or delete task-associated document
+      operationId: deleteDocumentTaskV1
+
+  /api/v1/documents/{document_id}:
+    delete:
+      tags: [documents]
+      summary: Delete document by id
+      operationId: deleteDocumentV1
+
+  /api/v1/documents/ingest-from-url:
+    post:
+      tags: [documents]
+      summary: Fetch and ingest document from URL
+      operationId: ingestDocumentFromUrlV1
+
+  /api/v1/documents/{document_id}/content:
+    get:
+      tags: [documents]
+      summary: Get file bytes or text content
+      operationId: getDocumentContentV1
+
+  /api/v1/retrieval/chunks:
+    post:
+      tags: [retrieval]
+      summary: Retrieval-only chunk search
+      operationId: searchChunksV1
+
+  /api/v1/retrieval/conversations:
+    post:
+      tags: [retrieval]
+      summary: Medical conversation pipeline
+      operationId: processConversationV1
+
+  /api/v1/qa:
+    post:
+      tags: [qa]
+      summary: RAG question answering
+      operationId: askV1
+
+  /api/v1/qa/voice:
+    post:
+      tags: [qa]
+      summary: Voice RAG
+      operationId: askVoiceV1
+
+  /api/v1/speech/transcribe:
+    post:
+      tags: [speech]
+      summary: Speech-to-text
+      operationId: transcribeV1
+
+  /api/v1/speech/transcribe/draft:
+    post:
+      tags: [speech]
+      summary: Draft transcription
+      operationId: transcribeDraftV1
+
+  /api/v1/speech/info:
+    get:
+      tags: [speech]
+      summary: STT capability info
+      operationId: speechInfoV1
+
+  /api/v1/parameter-sets:
+    get:
+      tags: [parameters]
+      summary: List RAG parameter sets
+      operationId: listParameterSetsV1
+
+  /api/v1/health:
+    get:
+      tags: [health]
+      summary: Aggregate health
+      operationId: healthAggregateV1
+
+  /api/v1/health/{component}:
+    get:
+      tags: [health]
+      summary: Per-component health
+      operationId: healthComponentV1
+
+  /api/v1/chat:
+    post:
+      tags: [chat]
+      summary: Multi-turn chat completion
+      operationId: chatV1
+
+  /api/v1/chat/stream:
+    post:
+      tags: [chat]
+      summary: Streaming chat (SSE)
+      operationId: chatStreamV1

@@ -39,26 +39,31 @@ Test strategy for the API layer and data-intensive components. See [TEST_STRATEG
 - `POST /api/documents/upload`
 - `POST /api/query` (retrieval-only)
 
-### Baseline (Placeholder)
+### Running Load Tests
 
 ```bash
-# Example: k6 quick run (install k6 separately)
-# k6 run scripts/load/ask-load.js
+# k6 (default: 5 VUs, 30 s)
+k6 run scripts/load/ask-load.js
 
-# Or: locust
-# locust -f scripts/load/locustfile.py --host=http://localhost:9180
+# Locust (headless)
+locust -f scripts/load/locustfile.py \
+    --host=http://localhost:9180 \
+    --users 5 --spawn-rate 1 --run-time 30s --headless
 ```
 
-Create `scripts/load/` with:
-- `ask-load.js` (k6) or `locustfile.py` (locust)
-- Document target throughput and latency SLOs
-- Run as part of release verification (manual or CI)
+See [scripts/load/README.md](../../scripts/load/README.md) for full instructions.
+
+### SLOs
+
+| Endpoint | p95 | Error rate |
+|----------|-----|------------|
+| `GET /api/health` | < 500 ms | < 1 % |
+| `POST /api/query` | < 2 000 ms | < 1 % |
+| `POST /api/ask` | < 15 000 ms | < 5 % |
 
 ### Current Gaps
 
-- No automated load tests in CI
-- No formal throughput/latency SLOs
-- Recommend: Add load test script; run manually before releases
+- No automated load tests in CI (requires Ollama; recommend manual pre-release run)
 
 ## References
 

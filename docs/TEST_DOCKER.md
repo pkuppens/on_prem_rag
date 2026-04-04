@@ -25,7 +25,7 @@ curl -s http://localhost:9181/oauth/providers
 curl -s http://localhost:9182/api/v2/heartbeat
 
 # 5. Verify STT (voice pipeline) — device should be "cpu" in Docker
-curl -s http://localhost:9180/api/stt/info | python -m json.tool
+curl -s http://localhost:9180/api/v1/speech/info | python -m json.tool
 
 # 6. Stop
 docker-compose down

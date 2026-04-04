@@ -1,7 +1,7 @@
 /**
  * Voice input button for recording audio and transcribing to text.
  *
- * Uses MediaRecorder to capture audio, then POSTs to /api/stt/transcribe/draft.
+ * Uses MediaRecorder to capture audio, then POSTs to /api/v1/speech/transcribe/draft.
  * Satisfies AC-3: mic control, calls STT API, record → transcribe → display.
  */
 

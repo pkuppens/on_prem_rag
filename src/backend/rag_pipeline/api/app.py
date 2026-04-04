@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from ..config.llm_config import check_data_sovereignty
 from ..utils.logging import StructuredLogger
-from . import ask, chat, documents, documents_enhanced, health, metrics, parameters, query, stt, test, websocket
+from . import ask, chat, documents, health, metrics, parameters, query, stt, test, websocket
 
 # Fail fast: refuse to start if a cloud LLM backend is used in strict mode.
 check_data_sovereignty()
@@ -64,7 +64,6 @@ app.include_router(health.router)
 app.include_router(metrics.router)
 app.include_router(parameters.router)
 app.include_router(documents.router)
-app.include_router(documents_enhanced.router)  # Enhanced documents API
 app.include_router(query.router)
 app.include_router(ask.router)
 app.include_router(chat.router)

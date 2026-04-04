@@ -17,9 +17,9 @@ test.describe('PDF URL Construction', () => {
 
   test('should serve uploaded PDF files correctly', async ({ page }) => {
     // Mock the file upload response
-    await page.route('**/api/documents/upload', async route => {
+    await page.route('**/api/v1/documents', async route => {
       await route.fulfill({
-        status: 200,
+        status: 201,
         contentType: 'application/json',
         body: JSON.stringify({ message: 'Document uploaded and processed successfully' })
       });
@@ -38,7 +38,7 @@ test.describe('PDF URL Construction', () => {
     await page.waitForSelector('text=Upload completed successfully', { timeout: 10000 });
 
     // Check that the PDF URL is updated correctly
-    const pdfUrl = await page.locator('a[href*="api/documents/files"]').getAttribute('href');
+    const pdfUrl = await page.locator('a[href*="api/v1/documents"]').getAttribute('href');
     expect(pdfUrl).toBe(apiUrls.file('2303.18223v16.pdf'));
   });
 });

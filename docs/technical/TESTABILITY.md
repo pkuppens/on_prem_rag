@@ -1,7 +1,7 @@
 # Testability
 
 Created: 2026-02-23
-Updated: 2026-02-23
+Updated: 2026-04-05
 
 Test strategy for the API layer and data-intensive components. See [TEST_STRATEGY.md](../testing/TEST_STRATEGY.md) for full project strategy.
 
@@ -35,9 +35,9 @@ Test strategy for the API layer and data-intensive components. See [TEST_STRATEG
 
 ### Key Endpoints to Load Test
 
-- `POST /api/ask` (RAG — most expensive)
-- `POST /api/documents/upload`
-- `POST /api/query` (retrieval-only)
+- `POST /api/v1/qa` (RAG — most expensive)
+- `POST /api/v1/documents`
+- `POST /api/v1/retrieval/chunks` (retrieval-only)
 
 ### Baseline (Placeholder)
 

@@ -6,6 +6,18 @@ For new agent chats working on GitHub issues: run `/get-started fix issue #N` to
 
 **Skills:** Cursor skills are not committed here. Link `.cursor/skills` to [pkuppens/pkuppens](https://github.com/pkuppens/pkuppens) `skills/` (sibling clone). Steps: [docs/technical/SKILLS_SETUP.md](docs/technical/SKILLS_SETUP.md).
 
+### Branch before any edits (mandatory)
+
+If `git branch --show-current` prints **`main`**, create a named branch **before** changing tracked files (code, tests, `docs/`, config). Your working tree and uncommitted edits stay with you:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/NNN-short-slug
+```
+
+If you already edited on `main` but have not committed, run `git checkout -b feature/NNN-short-slug` once; commits then land on the new branch. See [.claude/skills/plan-branch-strategy/SKILL.md](.claude/skills/plan-branch-strategy/SKILL.md) and [.claude/skills/merge-via-pr/SKILL.md](.claude/skills/merge-via-pr/SKILL.md). [branch-policy.mdc](.cursor/rules/branch-policy.mdc) requires merging via PR, not direct commits to `main`.
+
 ## Shared Guidance
 
 For consolidated rules see [agents/README.md](agents/README.md).

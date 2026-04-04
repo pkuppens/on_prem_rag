@@ -16,7 +16,7 @@ from backend.stt.transcriber import SUPPORTED_AUDIO_FORMATS
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/stt", tags=["Speech-to-Text"])
+router = APIRouter(prefix="/api/v1/speech", tags=["speech"])
 
 # Maximum audio file size (50 MB)
 MAX_AUDIO_SIZE = 50 * 1024 * 1024
@@ -198,23 +198,6 @@ async def transcribe_audio_draft(
     except Exception as e:
         logger.exception(f"Draft transcription failed: {e}")
         raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
-
-
-@router.get("/health")
-async def stt_health() -> dict[str, Any]:
-    """Check health of STT service components.
-
-    Returns:
-        Dict with health status of transcriber and corrector
-    """
-    try:
-        stt_service = get_stt_service()
-        return stt_service.health_check()
-    except Exception as e:
-        return {
-            "status": "unhealthy",
-            "error": str(e),
-        }
 
 
 @router.get("/info")

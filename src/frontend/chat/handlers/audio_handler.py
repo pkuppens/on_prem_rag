@@ -18,7 +18,7 @@ from frontend.chat.utils.session import SessionManager, UserRole
 logger = logging.getLogger(__name__)
 
 # STT service configuration
-STT_BACKEND_URL = os.getenv("STT_BACKEND_URL", "http://localhost:8000/api/stt")
+STT_BACKEND_URL = os.getenv("STT_BACKEND_URL", "http://localhost:8000/api/v1/speech")
 
 # Supported audio formats
 SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3", ".m4a", ".flac", ".ogg", ".webm"}

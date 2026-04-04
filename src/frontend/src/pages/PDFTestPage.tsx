@@ -10,7 +10,8 @@ import axios from 'axios';
 // Import the centralized PDF setup
 import { pdfjs } from '../utils/pdfSetup';
 
-const TEST_PDF_URL = 'http://localhost:8000/api/documents/files/2303.18223v16.pdf';
+const TEST_PDF_URL =
+  'http://localhost:8000/api/v1/documents/2303.18223v16.pdf/content';
 
 export const PDFTestPage = () => {
   const [numPages, setNumPages] = useState<number>(0);
@@ -78,7 +79,7 @@ export const PDFTestPage = () => {
 
       try {
         const response = await axios.post(
-          'http://localhost:8000/api/documents/upload',
+          'http://localhost:8000/api/v1/documents',
           formData,
           {
             headers: {
@@ -124,7 +125,7 @@ export const PDFTestPage = () => {
     Logger.info('Starting dummy progress test', 'PDFTestPage.tsx', 'handleDummyProgressTest', 110);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/test/dummy');
+      const response = await axios.post('http://localhost:8000/api/v1/test/dummy');
       Logger.info('Dummy progress test started', 'PDFTestPage.tsx', 'handleDummyProgressTest', 113, response.data);
 
       // Initialize progress for the test file

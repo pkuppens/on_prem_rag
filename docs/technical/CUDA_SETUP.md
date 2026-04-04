@@ -111,7 +111,7 @@ Environment variables (see `env.example`):
 | `STT_MODEL_SIZE`  | `small`              | `tiny`, `base`, `small`, `medium`, `turbo`, etc. |
 | `STT_COMPUTE_TYPE`| `float16` (cuda) / `int8` (cpu) | `int8`, `float16`, `float32`  |
 
-Verify: `GET /api/stt/info` returns `transcriber.device` (`cpu` or `cuda`), `model_size`, and `compute_type`.
+Verify: `GET /api/v1/speech/info` returns `transcriber.device` (`cpu` or `cuda`), `model_size`, and `compute_type`.
 
 ## Reinstalling After Adding CUDA
 

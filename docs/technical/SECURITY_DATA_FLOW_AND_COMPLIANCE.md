@@ -1,6 +1,7 @@
 # Security data flow and compliance notes
 
 **Created:** 2026-03-27
+**Updated:** 2026-04-05
 
 This document complements [SECURITY.md](SECURITY.md) with a **data lifecycle diagram** and **high-level compliance readiness** notes. It reflects the implementation in this repository; it is **not** legal advice. Deployments in regulated environments need organisation-specific policies, contracts, and assessments.
 
@@ -61,7 +62,7 @@ flowchart TB
 | Upload | Original files (PDF, DOCX, …) | Configured upload directory on disk |
 | Indexing | Chunks and embeddings | Vector store (default: local ChromaDB) |
 | Query | User question, retrieved chunks, generated answer | Memory / process; logs may go to audit pipeline |
-| Erasure | User-triggered delete | `DELETE /api/documents/{filename}` removes file and associated vectors (see [documents.py](../../src/backend/rag_pipeline/api/documents.py)) |
+| Erasure | User-triggered delete | `DELETE /api/v1/documents/{document_id}` removes file and associated vectors (see [documents.py](../../src/backend/rag_pipeline/api/documents.py); id is filename unless changed by design) |
 
 ## GDPR / AVG (EU)
 

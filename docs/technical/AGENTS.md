@@ -42,7 +42,10 @@ If the issue is obsolete or done, close it with a comment and stop.
 
 ### Phase 2 — Plan
 
-1. **Branch from main**: `git checkout main && git pull && git checkout -b feature/NNN-short-description`
+1. **Branch from main (before further edits)**  
+   Run `git branch --show-current`. If the branch is **`main`**, switch to a named branch immediately — including when you already have local changes (they move with you):  
+   `git checkout main && git pull origin main && git checkout -b feature/NNN-short-description`  
+   Do not leave implementation on `main`; see [.claude/skills/plan-branch-strategy/SKILL.md](../../.claude/skills/plan-branch-strategy/SKILL.md).
 2. **Review architecture**: CLAUDE.md, ADRs, `docs/technical/` for correct module boundaries
 3. **Decide test strategy**: Test-first for pure logic; integration for API; manual for UI
 4. **Assign yourself**: `gh issue edit NNN --add-assignee @me`
@@ -132,5 +135,6 @@ Artifact contents: `coverage.xml`, `test-results-unit.xml`, `htmlcov/` (per-file
 ## References
 
 - [CLAUDE.md](../../CLAUDE.md) — Repo conventions
+- [.claude/skills/plan-branch-strategy/SKILL.md](../../.claude/skills/plan-branch-strategy/SKILL.md) — Branch before edits on `main`
 - [ISSUE_IMPLEMENTATION_WORKFLOW.md](../portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md) — Full 3-phase workflow
 - [TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md) — Vector store and embedding test strategy

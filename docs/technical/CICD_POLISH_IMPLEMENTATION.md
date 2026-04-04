@@ -10,14 +10,14 @@ This document summarizes the CI/CD improvements implemented to polish the GitHub
 
 Automated dependency updates for:
 - **Python packages** (pip ecosystem)
-  - Weekly updates on Monday at 9:00 AM
+  - Weekly updates on **Sunday 04:00** (timezone **Europe/Amsterdam**, CET/CEST)
   - Groups minor and patch updates together
   - Limit of 5 open PRs
   - Labels: `dependencies`, `python`
   - Commit prefix: `deps`
 
 - **GitHub Actions** (github-actions ecosystem)
-  - Weekly updates on Monday at 9:00 AM
+  - Weekly updates on **Sunday 04:00** (timezone **Europe/Amsterdam**, CET/CEST)
   - Limit of 3 open PRs
   - Labels: `dependencies`, `github-actions`
   - Commit prefix: `ci`
@@ -98,7 +98,7 @@ Comprehensive guide for repository administrators:
 
 - [x] Release workflow triggers on version tags
 - [x] Coverage badge visible in README
-- [x] Dependabot creates automated PRs (will start on Monday)
+- [x] Dependabot creates automated PRs (weekly schedule: Sunday 04:00 Europe/Amsterdam)
 - [x] Coverage report posted as PR comment
 - [x] Branch protection rules documented
 
@@ -158,7 +158,7 @@ git push origin v1.0.0
 ### Managing Dependencies
 
 Dependabot will automatically:
-- Check for updates weekly (Monday 9am)
+- Check for updates weekly (Sunday 04:00 Europe/Amsterdam)
 - Create PRs for security updates
 - Group minor/patch updates together
 - Label PRs appropriately
@@ -177,7 +177,7 @@ Dependabot will automatically:
 
 3. **Optional: Configure Dependabot settings**:
    - Adjust update schedule if needed
-   - Set up auto-merge for trusted updates
+   - Keep **Allow auto-merge** off (repository settings); merge Dependabot PRs manually after CI passes and you have read release notes. See [BRANCH_PROTECTION.md](BRANCH_PROTECTION.md) (Dependabot section).
 
 ### For Developers
 

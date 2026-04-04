@@ -4,6 +4,10 @@
 # Note: While this project uses 'uv' for package management, Dependabot uses 'pip' ecosystem
 # because it monitors pyproject.toml and uv.lock files. Dependabot will create PRs that can be
 # synced with 'uv sync' or 'uv lock --upgrade-package <package>'.
+#
+# Schedule: weekly on Sunday 04:00 in Europe/Amsterdam (CET/CEST). Runs off-hours; PRs are ready the same
+# weekend or for Monday planning. open-pull-requests-limit caps concurrent PRs so newer dependency runs
+# tend to supersede older open bumps.
 
 version: 2
 updates:
@@ -11,10 +15,13 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "monthly"
-      day: "monday"
-      time: "09:00"
+      interval: "weekly"
+      day: "sunday"
+      time: "04:00"
+      timezone: "Europe/Amsterdam"
     open-pull-requests-limit: 5
+    assignees:
+      - "pkuppens"
     labels:
       - "dependencies"
       - "python"
@@ -34,10 +41,13 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
-      day: "monday"
-      time: "09:00"
+      interval: "weekly"
+      day: "sunday"
+      time: "04:00"
+      timezone: "Europe/Amsterdam"
     open-pull-requests-limit: 3
+    assignees:
+      - "pkuppens"
     labels:
       - "dependencies"
       - "github-actions"

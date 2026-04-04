@@ -1,7 +1,7 @@
 # Branch protection for `main`
 
 Created: 2026-03-23
-Updated: 2026-03-24
+Updated: 2026-04-04
 
 This repository uses a **branch-first** workflow: contributors merge work through **pull requests** into `main`, not by pushing directly to `main`. GitHub **rulesets** (or classic branch protection) enforce that server-side.
 
@@ -34,6 +34,23 @@ gh api repos/pkuppens/on_prem_rag -X PATCH `
 ```
 
 This was applied for `pkuppens/on_prem_rag` on 2026-03-24 together with the ruleset update.
+
+**Allow auto-merge:** keep **disabled** so dependency and feature PRs merge only after a deliberate action. Full CI still runs on every PR; humans read release notes and merge when ready. Applied for this repo on 2026-04-04:
+
+```powershell
+gh api repos/pkuppens/on_prem_rag -X PATCH -f allow_auto_merge=false
+```
+
+**Ruleset choice:** keep **`required_approving_review_count`: 0** in [branch-protection-ruleset.example.json](branch-protection-ruleset.example.json) for solo maintainers (merge after green checks without a second approval). Raise to **1** when a second reviewer is available; note GitHub does not let the PR author approve their own PR.
+
+**Organization repos:** if the repo moves under an org, check **Organization → Settings** for any org-wide Dependabot or merge automation that could merge without review.
+
+## Dependabot PRs (human review, no auto-merge)
+
+- Dependabot opens PRs; it does **not** merge from `.github/dependabot.yml`. Merge policy is repository settings + branch rules.
+- **Do not** enable auto-merge on individual Dependabot PRs.
+- Optional: `assignees` / `reviewers` in `dependabot.yml` notify owners; see [.github/dependabot.yml](../../.github/dependabot.yml).
+- **Schedule:** version-update checks run **weekly** on **Sunday 04:00** (`timezone: Europe/Amsterdam` for CET/CEST). `open-pull-requests-limit` limits how many dependency PRs stay open at once so newer runs can replace stale bumps.
 
 ## Option A — GitHub UI (rulesets)
 

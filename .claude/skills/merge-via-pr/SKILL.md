@@ -7,6 +7,7 @@ description: Enforce branch-first delivery. All work merges to main only via pul
 
 ## When to use
 
+- **At the start of an agent session** that will edit the repo: if you are on `main`, run `git checkout -b <type>/<name>` (after `git pull` on `main` if needed) **before the first file change**. Uncommitted work follows the new branch.
 - Starting **any** change that will be committed (code, tests, `docs/`, `.cursor/rules/`, `.claude/skills/`, CI config, `pyproject.toml`, etc.).
 - Before `/commit` or `git push` — confirm you are **not** on `main`.
 

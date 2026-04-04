@@ -15,13 +15,42 @@ async def health():
     return JSONResponse(content={"status": "ok"})
 
 
-@router.get("/api/health")
-async def health_api():
-    """Check the health of the API."""
-    return JSONResponse(content={"status": "ok"})
+@router.get("/api/v1/health")
+async def health_v1_api(deep: bool = False):
+    """Versioned API health: shallow status or optional deep component rollup."""
+
+    if not deep:
+        return JSONResponse(content={"status": "ok"})
+
+    components: dict = {}
+    try:
+        get_vector_store_manager()
+        components["database"] = {"status": "ok"}
+    except Exception as e:
+        components["database"] = {"status": "error", "detail": str(e)}
+
+    try:
+        llm_config = get_llm_config()
+        llm_provider = get_llm_provider_from_env()
+        is_healthy = await llm_provider.health_check()
+        components["llm"] = {"status": "ok" if is_healthy else "error", "backend": llm_config.backend_model_pair}
+    except Exception as e:
+        components["llm"] = {"status": "error", "detail": str(e)}
+
+    try:
+        get_vector_store_manager()
+        components["vector"] = {"status": "ok"}
+    except Exception as e:
+        components["vector"] = {"status": "error", "detail": str(e)}
+
+    components["auth"] = {"status": "ok"}
+    components["websocket"] = {"status": "ok"}
+
+    any_err = any(c.get("status") == "error" for c in components.values())
+    return JSONResponse(content={"status": "degraded" if any_err else "ok", "components": components})
 
 
-@router.get("/api/health/database")
+@router.get("/api/v1/health/database")
 async def health_database():
     """Check the health of the database connection."""
     # For now, we'll assume the database is healthy since we're using ChromaDB
@@ -35,7 +64,7 @@ async def health_database():
         raise HTTPException(status_code=503, detail=f"Database connection failed: {e}")
 
 
-@router.get("/api/health/llm")
+@router.get("/api/v1/health/llm")
 async def health_llm():
     """Check the health of the LLM provider.
 
@@ -54,7 +83,7 @@ async def health_llm():
         raise HTTPException(status_code=503, detail=f"LLM provider health check failed: {e}") from e
 
 
-@router.get("/api/health/vector")
+@router.get("/api/v1/health/vector")
 async def health_vector_store():
     """Check the health of the vector store."""
     try:
@@ -66,7 +95,7 @@ async def health_vector_store():
         raise HTTPException(status_code=503, detail=f"Vector store health check failed: {e}")
 
 
-@router.get("/api/health/auth")
+@router.get("/api/v1/health/auth")
 async def health_auth():
     """Placeholder for auth service health check."""
     # In a microservices architecture, this would likely be a call to the auth service.
@@ -74,7 +103,7 @@ async def health_auth():
     return JSONResponse(content={"status": "ok"})
 
 
-@router.get("/api/health/websocket")
+@router.get("/api/v1/health/websocket")
 async def health_websocket():
     """Placeholder for WebSocket health check."""
     # This might involve checking if the WebSocket manager is running.

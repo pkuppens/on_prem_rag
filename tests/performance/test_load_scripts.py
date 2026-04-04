@@ -44,17 +44,23 @@ class TestK6ScriptContent:
     def _read(self) -> str:
         return (SCRIPTS_LOAD_DIR / "ask-load.js").read_text()
 
-    def test_covers_ask_endpoint(self):
-        """As a tester I want POST /api/ask covered, so the most expensive RAG path is exercised.
-        Technical: ask-load.js must reference /api/ask.
+    def test_covers_qa_endpoint(self):
+        """As a tester I want POST /api/v1/qa covered, so the most expensive RAG path is exercised.
+        Technical: ask-load.js must reference /api/v1/qa.
         """
-        assert "/api/ask" in self._read()
+        assert "/api/v1/qa" in self._read()
 
-    def test_covers_query_endpoint(self):
-        """As a tester I want POST /api/query covered, so the retrieval-only path is exercised.
-        Technical: ask-load.js must reference /api/query.
+    def test_covers_retrieval_chunks_endpoint(self):
+        """As a tester I want POST /api/v1/retrieval/chunks covered, so retrieval-only path is exercised.
+        Technical: ask-load.js must reference /api/v1/retrieval/chunks.
         """
-        assert "/api/query" in self._read()
+        assert "/api/v1/retrieval/chunks" in self._read()
+
+    def test_covers_health_endpoint(self):
+        """As a tester I want GET /api/v1/health covered, so liveness is exercised under load.
+        Technical: ask-load.js must reference /api/v1/health.
+        """
+        assert "/api/v1/health" in self._read()
 
     def test_defines_thresholds(self):
         """As a tester I want performance thresholds defined, so failures are detected automatically.
@@ -81,17 +87,23 @@ class TestLocustScriptContent:
     def _read(self) -> str:
         return (SCRIPTS_LOAD_DIR / "locustfile.py").read_text()
 
-    def test_covers_ask_endpoint(self):
-        """As a tester I want POST /api/ask covered in the locust file.
-        Technical: locustfile.py must reference /api/ask.
+    def test_covers_qa_endpoint(self):
+        """As a tester I want POST /api/v1/qa covered in the locust file.
+        Technical: locustfile.py must reference /api/v1/qa.
         """
-        assert "/api/ask" in self._read()
+        assert "/api/v1/qa" in self._read()
 
-    def test_covers_query_endpoint(self):
-        """As a tester I want POST /api/query covered in the locust file.
-        Technical: locustfile.py must reference /api/query.
+    def test_covers_retrieval_chunks_endpoint(self):
+        """As a tester I want POST /api/v1/retrieval/chunks covered in the locust file.
+        Technical: locustfile.py must reference /api/v1/retrieval/chunks.
         """
-        assert "/api/query" in self._read()
+        assert "/api/v1/retrieval/chunks" in self._read()
+
+    def test_covers_health_endpoint(self):
+        """As a tester I want GET /api/v1/health covered in the locust file.
+        Technical: locustfile.py must reference /api/v1/health.
+        """
+        assert "/api/v1/health" in self._read()
 
     def test_has_locust_user_class(self):
         """As a tester I want a proper Locust User class so the test is runnable.

@@ -24,7 +24,7 @@ from ..utils.logging import StructuredLogger
 from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/ask", tags=["question-answering"])
+router = APIRouter(prefix="/api/v1/qa", tags=["qa"])
 
 # Initialize QA system
 qa_system = QASystem()
@@ -281,25 +281,3 @@ async def ask_voice(audio: UploadFile = File(..., description="Audio file (e.g. 
     except Exception as e:
         logger.error("Voice ask failed", question=question[:80], error=str(e))
         raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}") from e
-
-
-@router.get("/health")
-async def health_check() -> dict:
-    """Health check endpoint for the QA system.
-
-    Returns:
-        Dictionary containing health status
-    """
-    try:
-        # Check if LLM provider is healthy
-        llm_healthy = await qa_system.llm_provider.health_check()
-
-        return {
-            "status": "healthy" if llm_healthy else "degraded",
-            "llm_provider": "available" if llm_healthy else "unavailable",
-            "vector_store": "available",
-        }
-
-    except Exception as e:
-        logger.error("Health check failed", error=str(e))
-        return {"status": "unhealthy", "error": str(e)}

@@ -18,7 +18,7 @@ BYPASS_PATHS = {
     "/health",
     "/healthz",
     "/ready",
-    "/api/health",
+    "/api/v1/health",
     "/metrics",
     "/docs",
     "/redoc",

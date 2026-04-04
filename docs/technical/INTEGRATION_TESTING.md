@@ -50,7 +50,7 @@
 uv run pytest -m "slow" tests/test_retrieval_strategies.py -v
 
 # Full integration (requires ingested medical docs)
-# Run queries manually via /api/ask or REPL
+# Run queries manually via /api/v1/qa or REPL
 ```
 
 ---

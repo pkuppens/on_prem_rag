@@ -1,5 +1,6 @@
 /**
- * k6 load test for the RAG backend (POST /api/ask, POST /api/query, GET /api/health).
+ * k6 load test for the RAG backend (v1 API):
+ * GET /api/v1/health, POST /api/v1/retrieval/chunks, POST /api/v1/qa.
  *
  * Prerequisites:
  * - Backend running on http://localhost:9180 (see docs/PORTS.md)
@@ -15,9 +16,9 @@
  *   BACKEND_URL=http://my-server:9180 k6 run scripts/load/ask-load.js
  *
  * SLOs (Service-Level Objectives):
- *   - POST /api/ask   : p95 < 15 000 ms, error rate < 5 %  (LLM inference included)
- *   - POST /api/query : p95 <  2 000 ms, error rate < 1 %  (retrieval-only)
- *   - GET  /api/health: p95 <    500 ms, error rate < 1 %
+ *   - POST /api/v1/qa              : p95 < 15 000 ms, error rate < 5 %  (LLM inference included)
+ *   - POST /api/v1/retrieval/chunks: p95 <  2 000 ms, error rate < 1 %  (retrieval-only)
+ *   - GET  /api/v1/health          : p95 <    500 ms, error rate < 1 %
  */
 
 import http from "k6/http";
@@ -74,7 +75,7 @@ function randomFrom(arr) {
 export default function () {
   // 1. Health check (lightweight, always included)
   group("health", () => {
-    const res = http.get(`${BASE_URL}/api/health`, { tags: { name: "health" } });
+    const res = http.get(`${BASE_URL}/api/v1/health`, { tags: { name: "health" } });
     check(res, {
       "health status 200": (r) => r.status === 200,
     });
@@ -88,7 +89,7 @@ export default function () {
       query: randomFrom(QUERY_TEXTS),
       top_k: 5,
     });
-    const res = http.post(`${BASE_URL}/api/query`, payload, {
+    const res = http.post(`${BASE_URL}/api/v1/retrieval/chunks`, payload, {
       headers: JSON_HEADERS,
       tags: { name: "query" },
     });
@@ -99,14 +100,14 @@ export default function () {
 
   sleep(0.5);
 
-  // 3. Full RAG ask (most expensive — LLM included)
+  // 3. Full RAG QA (most expensive — LLM included)
   group("ask", () => {
     const payload = JSON.stringify({
       question: randomFrom(ASK_QUESTIONS),
       top_k: 5,
       similarity_threshold: 0.7,
     });
-    const res = http.post(`${BASE_URL}/api/ask`, payload, {
+    const res = http.post(`${BASE_URL}/api/v1/qa`, payload, {
       headers: JSON_HEADERS,
       tags: { name: "ask" },
     });

@@ -1,6 +1,6 @@
 """Locust load test for the RAG backend.
 
-Covers POST /api/ask, POST /api/query, and GET /api/health.
+Covers POST /api/v1/qa, POST /api/v1/retrieval/chunks, and GET /api/v1/health.
 
 Prerequisites:
     pip install locust          # or: uv add --dev locust
@@ -18,9 +18,9 @@ Override host via env:
 
 SLOs (Service-Level Objectives)
 --------------------------------
-- POST /api/ask   : p95 < 15 000 ms, error rate < 5 %  (LLM inference included)
-- POST /api/query : p95 <  2 000 ms, error rate < 1 %  (retrieval-only)
-- GET  /api/health: p95 <    500 ms, error rate < 1 %
+- POST /api/v1/qa              : p95 < 15 000 ms, error rate < 5 %  (LLM inference included)
+- POST /api/v1/retrieval/chunks: p95 <  2 000 ms, error rate < 1 %  (retrieval-only)
+- GET  /api/v1/health          : p95 <    500 ms, error rate < 1 %
 """
 
 import os
@@ -67,27 +67,27 @@ class RAGUser(HttpUser):
 
     @task(3)
     def health_check(self) -> None:
-        """GET /api/health — lightweight liveness probe."""
-        self.client.get("/api/health", name="GET /api/health")
+        """GET /api/v1/health — lightweight liveness probe."""
+        self.client.get("/api/v1/health", name="GET /api/v1/health")
 
     @task(2)
     def query_documents(self) -> None:
-        """POST /api/query — retrieval-only, no LLM inference."""
+        """POST /api/v1/retrieval/chunks — retrieval-only, no LLM inference."""
         self.client.post(
-            "/api/query",
+            "/api/v1/retrieval/chunks",
             json={"query": random.choice(_QUERY_TEXTS), "top_k": 5},
-            name="POST /api/query",
+            name="POST /api/v1/retrieval/chunks",
         )
 
     @task(1)
     def ask_question(self) -> None:
-        """POST /api/ask — full RAG pipeline with LLM answer generation."""
+        """POST /api/v1/qa — full RAG pipeline with LLM answer generation."""
         self.client.post(
-            "/api/ask",
+            "/api/v1/qa",
             json={
                 "question": random.choice(_ASK_QUESTIONS),
                 "top_k": 5,
                 "similarity_threshold": 0.7,
             },
-            name="POST /api/ask",
+            name="POST /api/v1/qa",
         )

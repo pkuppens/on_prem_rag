@@ -34,7 +34,7 @@ def main() -> int:
 
     if count == 0:
         print("\n*** Collection is EMPTY. No documents have been embedded. ***")
-        print("Upload a document via POST /api/documents/upload and wait ~30s for processing.")
+        print("Upload a document via POST /api/v1/documents and wait ~30s for processing.")
         return 1
 
     # Get param set used for upload and retrieval

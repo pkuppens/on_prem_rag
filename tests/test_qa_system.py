@@ -194,7 +194,7 @@ class TestAskAPI:
         """Test that empty question returns validation error."""
         client = TestClient(app)
 
-        response = client.post("/api/ask", json={"question": ""})
+        response = client.post("/api/v1/qa", json={"question": ""})
 
         assert response.status_code == 422
         assert "detail" in response.json()
@@ -203,7 +203,7 @@ class TestAskAPI:
         """Test that missing question field returns validation error."""
         client = TestClient(app)
 
-        response = client.post("/api/ask", json={})
+        response = client.post("/api/v1/qa", json={})
 
         assert response.status_code == 422  # Validation error
 
@@ -212,11 +212,11 @@ class TestAskAPI:
         client = TestClient(app)
 
         # Test negative top_k
-        response = client.post("/api/ask", json={"question": "test", "top_k": -1})
+        response = client.post("/api/v1/qa", json={"question": "test", "top_k": -1})
         assert response.status_code == 422
 
         # Test top_k too large
-        response = client.post("/api/ask", json={"question": "test", "top_k": 100})
+        response = client.post("/api/v1/qa", json={"question": "test", "top_k": 100})
         assert response.status_code == 422
 
     def test_ask_endpoint_invalid_similarity_threshold(self):
@@ -224,11 +224,11 @@ class TestAskAPI:
         client = TestClient(app)
 
         # Test negative threshold
-        response = client.post("/api/ask", json={"question": "test", "similarity_threshold": -0.1})
+        response = client.post("/api/v1/qa", json={"question": "test", "similarity_threshold": -0.1})
         assert response.status_code == 422
 
         # Test threshold > 1
-        response = client.post("/api/ask", json={"question": "test", "similarity_threshold": 1.1})
+        response = client.post("/api/v1/qa", json={"question": "test", "similarity_threshold": 1.1})
         assert response.status_code == 422
 
     def test_ask_endpoint_invalid_strategy(self):
@@ -238,7 +238,7 @@ class TestAskAPI:
         """
         client = TestClient(app)
 
-        response = client.post("/api/ask", json={"question": "test", "strategy": "invalid"})
+        response = client.post("/api/v1/qa", json={"question": "test", "strategy": "invalid"})
         assert response.status_code == 422
         assert "detail" in response.json()
 
@@ -257,7 +257,7 @@ class TestAskAPI:
         }
 
         client = TestClient(app)
-        response = client.post("/api/ask", json={"question": "ICD-10 code?", "strategy": "hybrid"})
+        response = client.post("/api/v1/qa", json={"question": "ICD-10 code?", "strategy": "hybrid"})
 
         assert response.status_code == 200
         mock_qa_system.ask_question.assert_called_once()
@@ -279,7 +279,7 @@ class TestAskAPI:
         }
 
         client = TestClient(app)
-        response = client.post("/api/ask", json={"question": "What is AI?"})
+        response = client.post("/api/v1/qa", json={"question": "What is AI?"})
 
         assert response.status_code == 200
         data = response.json()
@@ -289,18 +289,14 @@ class TestAskAPI:
         assert data["chunks_retrieved"] == 1
 
     def test_ask_health_endpoint(self):
-        """Test the health check endpoint."""
+        """Versioned API health shallow check (GET /api/v1/health)."""
         client = TestClient(app)
 
-        with patch("backend.rag_pipeline.api.ask.qa_system.llm_provider.health_check", new_callable=AsyncMock) as mock_health:
-            mock_health.return_value = True
+        response = client.get("/api/v1/health")
 
-            response = client.get("/api/ask/health")
-
-            assert response.status_code == 200
-            data = response.json()
-            assert data["status"] == "healthy"
-            assert data["llm_provider"] == "available"
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ok"
 
     @patch("backend.rag_pipeline.api.ask.qa_system")
     def test_ask_endpoint_model_not_found_returns_503_with_remediation(self, mock_qa_system):
@@ -315,7 +311,7 @@ class TestAskAPI:
         )
 
         client = TestClient(app)
-        response = client.post("/api/ask", json={"question": "What is AI?"})
+        response = client.post("/api/v1/qa", json={"question": "What is AI?"})
 
         assert response.status_code == 503
         data = response.json()

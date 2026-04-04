@@ -13,7 +13,7 @@
         maxRecordingTime: 120000, // 2 minutes max
         audioMimeType: 'audio/webm;codecs=opus',
         fallbackMimeType: 'audio/webm',
-        sttEndpoint: '/api/stt/transcribe',
+        sttEndpoint: '/api/v1/speech/transcribe',
         inputSelector: 'textarea[data-testid="stChatInput"], textarea.cl-chat-input, input[type="text"].cl-input',
         submitButtonSelector: 'button[data-testid="stChatSubmitButton"], button.cl-send-button',
     };

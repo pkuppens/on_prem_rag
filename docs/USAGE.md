@@ -11,7 +11,7 @@ Default base URL when running via Docker: `http://localhost:9180`. Override if y
 ### Via API (file upload)
 
 ```bash
-curl -X POST -F "file=@document.pdf" http://localhost:9180/api/documents/upload
+curl -X POST -F "file=@document.pdf" http://localhost:9180/api/v1/documents
 ```
 
 ### Via API (download from URL)
@@ -19,7 +19,7 @@ curl -X POST -F "file=@document.pdf" http://localhost:9180/api/documents/upload
 ```bash
 curl -X POST -H "Content-Type: application/json" \
   -d '{"url":"https://example.com/doc.pdf"}' \
-  http://localhost:9180/api/documents/from-url
+  http://localhost:9180/api/v1/documents/ingest-from-url
 ```
 
 Supported formats: PDF, TXT, MD, DOCX, CSV, JSON. See API docs for limits.
@@ -33,21 +33,21 @@ uv run python -m scripts.upload_documents --direct --filenameonly path/to/docume
 ### List uploaded documents
 
 ```bash
-curl -s http://localhost:9180/api/documents/list
+curl -s http://localhost:9180/api/v1/documents
 ```
 
 Returns: `{"files": ["document.pdf", "synthetic-medical-doc.txt"]}`
 
 ## Asking Questions (RAG with LLM)
 
-The `/api/ask` endpoint retrieves relevant chunks and generates an answer using the LLM. It supports multiple retrieval strategies.
+The `/api/v1/qa` endpoint retrieves relevant chunks and generates an answer using the LLM. It supports multiple retrieval strategies.
 
 ### Basic request
 
 ```bash
 curl -X POST -H "Content-Type: application/json" \
   -d '{"question": "When should metformin be avoided?"}' \
-  http://localhost:9180/api/ask
+  http://localhost:9180/api/v1/qa
 ```
 
 ### With retrieval strategy
@@ -58,17 +58,17 @@ Compare results across strategies by passing `strategy`:
 # Dense (semantic search only)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"question": "ICD-10 code for type 2 diabetes", "strategy": "dense"}' \
-  http://localhost:9180/api/ask
+  http://localhost:9180/api/v1/qa
 
 # Sparse (BM25 keyword search)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"question": "ICD-10 code for type 2 diabetes", "strategy": "sparse"}' \
-  http://localhost:9180/api/ask
+  http://localhost:9180/api/v1/qa
 
 # Hybrid (dense + sparse merged)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"question": "ICD-10 code for type 2 diabetes", "strategy": "hybrid"}' \
-  http://localhost:9180/api/ask
+  http://localhost:9180/api/v1/qa
 ```
 
 Valid strategies: `dense`, `sparse`, `hybrid`, `bm25`. When omitted, uses `RETRIEVAL_STRATEGY` env var or parameter set default.
@@ -92,42 +92,42 @@ Valid strategies: `dense`, `sparse`, `hybrid`, `bm25`. When omitted, uses `RETRI
 }
 ```
 
-**Note:** `/api/ask` requires a running Ollama model. Pull with `ollama pull mistral:7b` or set `OLLAMA_MODEL` to an available model.
+**Note:** `/api/v1/qa` requires a running Ollama model. Pull with `ollama pull mistral:7b` or set `OLLAMA_MODEL` to an available model.
 
 ### Voice query (audio → transcribe → RAG)
 
-The `/api/ask/voice` endpoint accepts audio, transcribes it with faster-whisper, and runs RAG. Use the microphone button in the React UI, or call via API:
+The `/api/v1/qa/voice` endpoint accepts audio, transcribes it with faster-whisper, and runs RAG. Use the microphone button in the React UI, or call via API:
 
 ```bash
-curl -X POST -F "audio=@recording.wav" http://localhost:9180/api/ask/voice
+curl -X POST -F "audio=@recording.wav" http://localhost:9180/api/v1/qa/voice
 ```
 
 Supported formats: WAV, MP3, M4A, FLAC, OGG, WebM. Response includes `transcription_text`, `transcription_language`, and `transcription_latency_ms` plus the standard RAG answer. STT model is configurable via `STT_MODEL_SIZE` (e.g. `turbo`, `small`), `STT_DEVICE` (cpu/cuda), and `STT_COMPUTE_TYPE` — see [env.example](../env.example) and [docs/technical/CUDA_SETUP.md](technical/CUDA_SETUP.md).
 
 ## Query Search (Retrieval Only)
 
-The `/api/query` endpoint returns matching chunks without LLM generation. Uses dense (semantic) search only.
+The `/api/v1/retrieval/chunks` endpoint returns matching chunks without LLM generation. Uses dense (semantic) search only.
 
 ```bash
 curl -X POST -H "Content-Type: application/json" \
   -d '{"query": "metformin contraindications"}' \
-  http://localhost:9180/api/query
+  http://localhost:9180/api/v1/retrieval/chunks
 ```
 
 Optional parameters: `params_name` (parameter set), `top_k` (number of results).
 
-**Note:** `/api/query` does not use hybrid/sparse strategies; it uses dense ChromaDB search only.
+**Note:** `/api/v1/retrieval/chunks` does not use hybrid/sparse strategies; it uses dense ChromaDB search only.
 
 ## Frontend
 
-Open the React UI at `http://localhost:5173` (when frontend container is running). The Query page uses `/api/query` for search. Any UI that calls `/api/ask` will use the strategy parameter when provided.
+Open the React UI at `http://localhost:5173` (when frontend container is running). The Query page uses `/api/v1/retrieval/chunks` for search. Any UI that calls `/api/v1/qa` will use the strategy parameter when provided.
 
 ## Parameter Sets
 
 Available parameter sets (affect chunking, embedding model, top_k):
 
 ```bash
-curl -s http://localhost:9180/api/parameters/sets
+curl -s http://localhost:9180/api/v1/parameter-sets
 ```
 
 Sets: `fast`, `precise`, `context_rich`, `balanced`, `test`. Use `params_name` in requests where supported.
@@ -137,7 +137,7 @@ Sets: `fast`, `precise`, `context_rich`, `balanced`, `test`. Use `params_name` i
 | Issue                    | Remediation                                                |
 | ------------------------ | ---------------------------------------------------------- |
 | 503 "LLM model not available" | `ollama pull mistral:7b` or set `OLLAMA_MODEL=llama3.2:1b` |
-| Empty sources            | Ensure documents are ingested; check `GET /api/documents/list` |
+| Empty sources            | Ensure documents are ingested; check `GET /api/v1/documents` |
 | Port in use              | Override `BACKEND_PORT` in `.env`; see [docs/PORTS.md](PORTS.md) |
 | Invalid strategy         | Use `dense`, `sparse`, `hybrid`, or `bm25`                 |
 

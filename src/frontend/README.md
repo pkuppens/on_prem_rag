@@ -94,6 +94,6 @@ The frontend is built with:
 
 The frontend communicates with the backend through RESTful APIs:
 
-- Document upload: `POST /api/documents/upload`
-- Query search: `POST /api/query`
+- Document upload: `POST /api/v1/documents`
+- Query search: `POST /api/v1/retrieval/chunks`
 - WebSocket for real-time progress updates: `ws://localhost:8000/ws/upload-progress`

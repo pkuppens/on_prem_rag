@@ -1,4 +1,4 @@
-"""Tests for POST /api/documents/from-url endpoint.
+"""Tests for POST /api/v1/documents/ingest-from-url endpoint.
 
 This module tests document ingestion via URL without requiring a running
 backend or external HTTP services. All network calls are mocked.
@@ -27,7 +27,7 @@ def client():
 
 
 class TestDocumentsFromUrl:
-    """Tests for POST /api/documents/from-url endpoint."""
+    """Tests for POST /api/v1/documents/ingest-from-url endpoint."""
 
     @patch("backend.rag_pipeline.api.documents.process_document_background")
     @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
@@ -40,7 +40,7 @@ class TestDocumentsFromUrl:
         monkeypatch,
     ):
         """As a user I want to provide documents via URL, so I can ingest without local files.
-        Technical: POST /api/documents/from-url downloads content and starts background processing.
+        Technical: POST /api/v1/documents/ingest-from-url downloads content and starts background processing.
         Validation: Mock httpx; verify 200, filename saved, background task enqueued.
         """
         monkeypatch.setattr(
@@ -62,7 +62,7 @@ class TestDocumentsFromUrl:
         mock_async_client_class.return_value = mock_client
 
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "https://example.com/doc.pdf"},
         )
 
@@ -112,7 +112,7 @@ class TestDocumentsFromUrl:
         mock_async_client_class.return_value = mock_client
 
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "https://example.com/download?id=123"},
         )
 
@@ -130,7 +130,7 @@ class TestDocumentsFromUrl:
         Technical: Only http and https schemes accepted.
         """
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "file:///etc/passwd"},
         )
         assert resp.status_code == 422  # Pydantic HttpUrl validates scheme
@@ -138,7 +138,7 @@ class TestDocumentsFromUrl:
     def test_from_url_requires_valid_url(self, client):
         """As a user I want validation of URL format, so malformed requests fail clearly."""
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "not-a-valid-url"},
         )
         assert resp.status_code == 422
@@ -179,7 +179,7 @@ class TestDocumentsFromUrl:
         mock_async_client_class.return_value = mock_client
 
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "https://example.com/missing.pdf"},
         )
 
@@ -216,7 +216,7 @@ class TestDocumentsFromUrl:
         mock_async_client_class.return_value = mock_client
 
         resp = client.post(
-            "/api/documents/from-url",
+            "/api/v1/documents/ingest-from-url",
             json={"url": "https://example.com/large.pdf"},
         )
 

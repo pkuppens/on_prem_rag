@@ -19,7 +19,7 @@ import sys
 
 
 def main() -> int:
-    """Call /api/chat/stream with direct=true, print output, and report streaming support."""
+    """Call /api/v1/chat/stream with direct=true, print output, and report streaming support."""
     try:
         import httpx
     except ImportError:
@@ -27,7 +27,7 @@ def main() -> int:
         return 1
 
     base = os.getenv("RAG_API_BASE", "http://localhost:9180")
-    url = f"{base}/api/chat/stream"
+    url = f"{base}/api/v1/chat/stream"
 
     # direct=true: skip RAG, stream LLM response directly (validates token-by-token streaming)
     payload = {

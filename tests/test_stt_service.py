@@ -312,7 +312,7 @@ class TestSTTAPIModels:
         from backend.rag_pipeline.api.stt import router
 
         assert router is not None
-        assert router.prefix == "/api/stt"
+        assert router.prefix == "/api/v1/speech"
 
     def test_transcription_result_has_language(self):
         """As a user I want detected language available for downstream use.
@@ -333,14 +333,14 @@ class TestSTTAPIEndpoints:
 
     def test_stt_info_returns_device(self):
         """As a user I want to see STT device (cpu/cuda) in API info.
-        Technical: GET /api/stt/info returns transcriber.device.
+        Technical: GET /api/v1/speech/info returns transcriber.device.
         """
         from fastapi.testclient import TestClient
 
         from backend.rag_pipeline.api.app import app
 
         client = TestClient(app)
-        resp = client.get("/api/stt/info")
+        resp = client.get("/api/v1/speech/info")
         assert resp.status_code == 200
         data = resp.json()
         assert "service" in data
@@ -356,7 +356,7 @@ class TestSTTAPIEndpoints:
 
         client = TestClient(app)
         resp = client.post(
-            "/api/ask/voice",
+            "/api/v1/qa/voice",
             files={"audio": ("test.xyz", b"fake", "application/octet-stream")},
         )
         assert resp.status_code == 400
@@ -393,7 +393,7 @@ class TestSTTAPIEndpoints:
         )
         client = TestClient(app)
         resp = client.post(
-            "/api/ask/voice",
+            "/api/v1/qa/voice",
             files={"audio": ("silence.wav", wav, "audio/wav")},
         )
         assert resp.status_code in (400, 500)

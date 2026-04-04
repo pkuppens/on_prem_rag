@@ -1,5 +1,7 @@
 # Frontend API Configuration System
 
+Updated: 2026-04-05
+
 ## Overview
 
 The frontend now uses a centralized, configurable API system that eliminates hardcoded URLs and provides environment-specific configuration. This makes the application production-ready and easier to maintain.
@@ -54,18 +56,25 @@ All API endpoints are defined in one place:
 ```typescript
 export const API_ENDPOINTS = {
   DOCUMENTS: {
-    UPLOAD: "/api/documents/upload",
-    LIST: "/api/documents/list",
-    FILES: "/api/documents/files",
+    UPLOAD: "/api/v1/documents",
+    LIST: "/api/v1/documents",
+    CONTENT_BASE: "/api/v1/documents",
   },
   QUERY: {
-    SEARCH: "/api/query",
+    SEARCH: "/api/v1/retrieval/chunks",
+  },
+  ASK: "/api/v1/qa",
+  ASK_VOICE: "/api/v1/qa/voice",
+  STT: {
+    TRANSCRIBE: "/api/v1/speech/transcribe",
+    TRANSCRIBE_DRAFT: "/api/v1/speech/transcribe/draft",
+    INFO: "/api/v1/speech/info",
   },
   PARAMETERS: {
-    LIST: "/api/parameters",
+    SETS: "/api/v1/parameter-sets",
   },
   HEALTH: {
-    STATUS: "/api/health",
+    STATUS: "/api/v1/health",
   },
   WEBSOCKET: {
     UPLOAD_PROGRESS: "/ws/upload-progress",
@@ -78,17 +87,17 @@ export const API_ENDPOINTS = {
 The `ApiUrlBuilder` class provides methods for constructing URLs:
 
 ```typescript
-// File serving URLs
+// File serving URLs (binary content sub-resource)
 const fileUrl = apiUrls.file("document.pdf");
-// Result: http://localhost:8000/api/documents/files/document.pdf
+// Result: http://localhost:8000/api/v1/documents/document.pdf/content
 
 // Upload URLs with parameters
 const uploadUrl = apiUrls.upload("fast");
-// Result: http://localhost:8000/api/documents/upload?params_name=fast
+// Result: http://localhost:8000/api/v1/documents?params_name=fast
 
 // Query URLs
 const queryUrl = apiUrls.query();
-// Result: http://localhost:8000/api/query
+// Result: http://localhost:8000/api/v1/retrieval/chunks
 
 // WebSocket URLs
 const wsUrl = apiUrls.uploadProgressWebSocket();
@@ -159,8 +168,8 @@ const customUrl = customBuilder.buildFileUrl("document.pdf");
 
 ```typescript
 // ❌ Hardcoded URLs
-const pdfUrl = `http://localhost:8000/api/documents/files/${filename}`;
-const uploadUrl = `http://localhost:8000/api/documents/upload?params_name=${paramSet}`;
+const pdfUrl = `http://localhost:8000/api/v1/documents/${encodeURIComponent(filename)}/content`;
+const uploadUrl = `http://localhost:8000/api/v1/documents?params_name=${paramSet}`;
 const websocket = new WebSocket("ws://localhost:8000/ws/upload-progress");
 ```
 
@@ -246,9 +255,9 @@ import { apiUrls } from "../config/api";
 
 test("should construct correct URLs", () => {
   expect(apiUrls.file("test.pdf")).toBe(
-    "http://localhost:8000/api/documents/files/test.pdf"
+    "http://localhost:8000/api/v1/documents/test.pdf/content"
   );
-  expect(apiUrls.query()).toBe("http://localhost:8000/api/query");
+  expect(apiUrls.query()).toBe("http://localhost:8000/api/v1/retrieval/chunks");
 });
 ```
 

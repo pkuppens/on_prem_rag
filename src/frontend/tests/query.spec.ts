@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// QuerySection uses /api/ask (hybrid retrieval)
+// QuerySection uses POST /api/v1/qa (hybrid retrieval)
 const emptyAskResponse = {
   answer: "I couldn't find relevant information.",
   sources: [],
@@ -11,7 +11,7 @@ const emptyAskResponse = {
 
 test.describe('Query Functionality', () => {
   test('should show no results message when ask returns empty sources', async ({ page }) => {
-    await page.route('**/api/ask', async route => {
+    await page.route('**/api/v1/qa', async route => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -28,7 +28,7 @@ test.describe('Query Functionality', () => {
   });
 
   test('should show loading state during ask', async ({ page }) => {
-    await page.route('**/api/ask', async route => {
+    await page.route('**/api/v1/qa', async route => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       await route.fulfill({
         status: 200,
@@ -48,7 +48,7 @@ test.describe('Query Functionality', () => {
   });
 
   test('should show error message when API call fails', async ({ page }) => {
-    await page.route('**/api/ask', async route => {
+    await page.route('**/api/v1/qa', async route => {
       await route.fulfill({
         status: 500,
         contentType: 'application/json',

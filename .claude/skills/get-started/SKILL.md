@@ -54,7 +54,8 @@ Draft first in `tmp/github/issue-comments/`, then post when content is ready. Fo
 2. [CLAUDE.md](CLAUDE.md) — project conventions, build commands, architecture
 3. [.cursor/rules/branch-policy.mdc](.cursor/rules/branch-policy.mdc) — branch naming; all work merges via PR
 4. [.claude/skills/merge-via-pr/SKILL.md](.claude/skills/merge-via-pr/SKILL.md) — never commit deliverable work on `main`
-5. [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) — optional; branch naming, gh CLI
+5. [.claude/skills/plan-branch-strategy/SKILL.md](.claude/skills/plan-branch-strategy/SKILL.md) — if on `main`, branch **before** first file edit (uncommitted changes follow `git checkout -b`)
+6. [.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc) — optional; branch naming, gh CLI
 
 ## Execution Workflow
 
@@ -101,7 +102,7 @@ gh issue view <NNN>
 
 ### Step 5: Phase 2 — Plan and (Optionally) Implement
 
-- **If on `main`:** create a branch before editing: `git checkout main; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/`, `chore/…`). Do not leave uncommitted work only on `main`.
+- **If on `main`:** create a branch before editing: `git checkout main; git pull origin main; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/`, `chore/…`). If you already have local edits on `main`, run `git checkout -b feature/NNN-short-description` once — your working tree moves to the new branch. See [plan-branch-strategy](../plan-branch-strategy/SKILL.md).
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`

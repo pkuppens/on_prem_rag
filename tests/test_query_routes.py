@@ -16,7 +16,7 @@ def test_query_documents_delegates_to_query_service():
     mock_results = {"results": [{"text": "chunk1", "score": 0.9}]}
     with patch("src.backend.rag_pipeline.api.query.query_service") as mock_service:
         mock_service.query.return_value = mock_results
-        response = client.post("/api/query", json={"query": "test query"})
+        response = client.post("/api/v1/retrieval/chunks", json={"query": "test query"})
     assert response.status_code == 200
     assert response.json() == mock_results
     mock_service.query.assert_called_once()
@@ -26,7 +26,7 @@ def test_query_documents_empty_query_returns_400():
     """As a user I want clear validation errors, so I know when my query is invalid.
     Technical: empty query string returns 400.
     """
-    response = client.post("/api/query", json={"query": ""})
+    response = client.post("/api/v1/retrieval/chunks", json={"query": ""})
     assert response.status_code == 400
     assert response.json()["detail"] == "Query must not be empty"
 
@@ -37,23 +37,23 @@ def test_query_service_error_returns_500():
     """
     with patch("src.backend.rag_pipeline.api.query.query_service") as mock_service:
         mock_service.query.side_effect = RuntimeError("vector store unavailable")
-        response = client.post("/api/query", json={"query": "test query"})
+        response = client.post("/api/v1/retrieval/chunks", json={"query": "test query"})
     assert response.status_code == 500
 
 
 def test_process_conversation_endpoint():
-    """Test the /api/query/process_conversation endpoint."""
+    """Test the /api/v1/retrieval/conversations endpoint."""
     with patch("src.backend.rag_pipeline.api.query.process_medical_conversation") as mock_process:
         mock_process.return_value = {"result": "mocked_result"}
-        response = client.post("/api/query/process_conversation", json={"text": "test conversation"})
+        response = client.post("/api/v1/retrieval/conversations", json={"text": "test conversation"})
         assert response.status_code == 200
         assert response.json() == {"result": {"result": "mocked_result"}}
         mock_process.assert_called_once_with("test conversation")
 
 
 def test_process_conversation_endpoint_empty_text():
-    """Test the /api/query/process_conversation endpoint with empty text."""
-    response = client.post("/api/query/process_conversation", json={"text": ""})
+    """Test the /api/v1/retrieval/conversations endpoint with empty text."""
+    response = client.post("/api/v1/retrieval/conversations", json={"text": ""})
     assert response.status_code == 400
     data = response.json()
     assert data.get("detail") == "Text must not be empty"
@@ -88,7 +88,7 @@ def test_query_service_receives_correct_top_k():
     mock_service = MagicMock()
     mock_service.query.return_value = {"results": []}
     with patch("src.backend.rag_pipeline.api.query.query_service", mock_service):
-        response = client.post("/api/query", json={"query": "test", "top_k": 3})
+        response = client.post("/api/v1/retrieval/chunks", json={"query": "test", "top_k": 3})
     assert response.status_code == 200
     call_kwargs = mock_service.query.call_args
     # top_k is the third positional arg

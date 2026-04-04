@@ -8,7 +8,7 @@ This guide describes how to manually verify HTML and PDF uploads, text extractio
 ## Prerequisites
 
 1. **Start the backend**: `uv run start-backend` (runs on http://localhost:8000)
-2. **Optional**: Ollama running for `/api/ask` queries (not required for upload tests)
+2. **Optional**: Ollama running for `/api/v1/qa` queries (not required for upload tests)
 
 ## Test 1: HTML Upload and Text Extraction
 
@@ -42,7 +42,7 @@ import httpx
 with open('tests/test_data/manual_test.html', 'rb') as f:
     files = {'file': ('manual_test.html', f, 'text/html')}
     data = {'params_name': 'default'}
-    r = httpx.post('http://localhost:8000/api/documents/upload', files=files, data=data, timeout=120)
+    r = httpx.post('http://localhost:8000/api/v1/documents', files=files, data=data, timeout=120)
     print('Status:', r.status_code, r.json())
 "
 ```
@@ -50,24 +50,24 @@ with open('tests/test_data/manual_test.html', 'rb') as f:
 **Bash/curl** (Linux/macOS/Git Bash):
 
 ```bash
-curl -X POST "http://localhost:8000/api/documents/upload" \
+curl -X POST "http://localhost:8000/api/v1/documents" \
   -F "file=@tests/test_data/manual_test.html" \
   -F "params_name=default"
 ```
 
-**Expected**: `200 OK` with `"status": "uploaded"`, `"processing": "started"`.
+**Expected**: `201 Created` with `"status": "uploaded"`, `"processing": "started"` (new file).
 
 ### Step 3: Verify file is listed
 
 ```powershell
-uv run python -c "import httpx; print(httpx.get('http://localhost:8000/api/documents/list').json())"
+uv run python -c "import httpx; print(httpx.get('http://localhost:8000/api/v1/documents').json())"
 ```
 
 **Expected**: `{"files": ["manual_test.html"]}` (or includes the file).
 
 ### Step 4: Re-upload same file (dedup robustness)
 
-Upload the same HTML file again. Background processing runs; deduplication skips re-storing identical chunks in the vector store. Response should still be `200 OK`.
+Upload the same HTML file again. Deduplication returns `200 OK` with `"status": "duplicate"` and no new processing.
 
 ---
 
@@ -101,26 +101,26 @@ import httpx
 with open('tests/test_data/2005.11401v4.pdf', 'rb') as f:
     files = {'file': ('2005.11401v4.pdf', f, 'application/pdf')}
     data = {'params_name': 'default'}
-    r = httpx.post('http://localhost:8000/api/documents/upload', files=files, data=data, timeout=180)
+    r = httpx.post('http://localhost:8000/api/v1/documents', files=files, data=data, timeout=180)
     print('Status:', r.status_code, r.json())
 "
 ```
 
-**Expected**: `200 OK` with `"status": "uploaded"`, `"processing": "started"`.
+**Expected**: `201 Created` with `"status": "uploaded"`, `"processing": "started"` (new file).
 
 ### Step 3: Wait and verify
 
 Processing can take 30–60 seconds for a multi-page PDF. Then:
 
 ```powershell
-uv run python -c "import httpx; print(httpx.get('http://localhost:8000/api/documents/list').json())"
+uv run python -c "import httpx; print(httpx.get('http://localhost:8000/api/v1/documents').json())"
 ```
 
 **Expected**: List includes `2005.11401v4.pdf`.
 
 ### Step 4: Re-upload PDF (dedup)
 
-Upload the same PDF again. Processing runs; dedup prevents duplicate chunks. Response: `200 OK`.
+Upload the same PDF again. Deduplication returns `200 OK` with `"status": "duplicate"`.
 
 ---
 
@@ -146,7 +146,7 @@ Requires Ollama running locally:
 ```powershell
 uv run python -c "
 import httpx
-r = httpx.post('http://localhost:8000/api/ask', json={'question': 'What is the main topic?'}, timeout=60)
+r = httpx.post('http://localhost:8000/api/v1/qa', json={'question': 'What is the main topic?'}, timeout=60)
 print('Status:', r.status_code)
 if r.status_code == 200:
     print('Answer:', r.json().get('answer', '')[:400])
@@ -157,9 +157,9 @@ if r.status_code == 200:
 
 ## Quick Checklist
 
-- [ ] HTML upload returns 200
-- [ ] HTML file appears in `/api/documents/list`
+- [ ] HTML upload returns 201 (or 200 if duplicate)
+- [ ] HTML file appears in `GET /api/v1/documents`
 - [ ] Same HTML can be uploaded again (no errors)
-- [ ] PDF upload returns 200
+- [ ] PDF upload returns 201 (or 200 if duplicate)
 - [ ] PDF file appears in list after processing
 - [ ] Same PDF can be uploaded again (no errors)

@@ -1,7 +1,7 @@
 # Load Testing
 
 Created: 2026-02-23
-Updated: 2026-03-29
+Updated: 2026-04-06
 
 Load-test scripts for the RAG backend.
 See [docs/technical/TESTABILITY.md](../../docs/technical/TESTABILITY.md) for the full testing strategy.
@@ -9,9 +9,15 @@ See [docs/technical/TESTABILITY.md](../../docs/technical/TESTABILITY.md) for the
 ## Files
 
 | File | Tool | Purpose |
-|------|------|---------|
-| `ask-load.js` | k6 | Multi-endpoint load test (ask, query, health) |
+|------|------|--------|
+| `ask-load.js` | k6 | Multi-endpoint load test (qa, retrieval, health) |
 | `locustfile.py` | Locust | Alternative multi-endpoint load test |
+
+## Endpoints exercised (API v1)
+
+- `GET /api/v1/health`
+- `POST /api/v1/retrieval/chunks` — retrieval-only
+- `POST /api/v1/qa` — RAG (most expensive)
 
 ## Prerequisites
 
@@ -90,11 +96,11 @@ Service-Level Objectives measured under a **steady load of 5 concurrent users**.
 
 | Endpoint | p50 | p95 | Error rate |
 |----------|-----|-----|------------|
-| `GET /api/health` | < 100 ms | < 500 ms | < 1 % |
-| `POST /api/query` (retrieval-only) | < 500 ms | < 2 000 ms | < 1 % |
-| `POST /api/ask` (LLM inference) | < 5 000 ms | < 15 000 ms | < 5 % |
+| `GET /api/v1/health` | < 100 ms | < 500 ms | < 1 % |
+| `POST /api/v1/retrieval/chunks` (retrieval-only) | < 500 ms | < 2 000 ms | < 1 % |
+| `POST /api/v1/qa` (LLM inference) | < 5 000 ms | < 15 000 ms | < 5 % |
 
-> **Note**: `/api/ask` latency depends heavily on the Ollama model loaded and available
+> **Note**: `/api/v1/qa` latency depends heavily on the Ollama model loaded and available
 > hardware (CPU vs GPU). The 15 s p95 target assumes a small model (≤ 7 B parameters)
 > on a typical developer workstation with no GPU.
 
@@ -102,9 +108,9 @@ Service-Level Objectives measured under a **steady load of 5 concurrent users**.
 
 | Endpoint | Minimum req/s |
 |----------|--------------|
-| `GET /api/health` | 20 |
-| `POST /api/query` | 2 |
-| `POST /api/ask` | 0.5 |
+| `GET /api/v1/health` | 20 |
+| `POST /api/v1/retrieval/chunks` | 2 |
+| `POST /api/v1/qa` | 0.5 |
 
 ## When to Run
 
@@ -112,7 +118,7 @@ Service-Level Objectives measured under a **steady load of 5 concurrent users**.
 - After significant **model or embedding changes**
 - When adding new retrieval strategies
 
-CI integration is deliberately omitted because `/api/ask` requires a running Ollama
+CI integration is deliberately omitted because `/api/v1/qa` requires a running Ollama
 model and can take minutes per run. To add it to CI, gate it on a dedicated
 `[load-test]` label or schedule it as a nightly workflow.
 

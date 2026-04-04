@@ -72,7 +72,7 @@ class TestEnhancedDocumentsAPI:
         Validation: Upload a text file and verify response format and status.
         """
         with open(sample_files[0], "rb") as f:
-            response = client.post("/api/v1/upload", files={"files": (sample_files[0].name, f, "text/plain")})
+            response = client.post("/api/v1/documents?async=true", files={"files": (sample_files[0].name, f, "text/plain")})
 
         assert response.status_code == 200
         data = response.json()
@@ -106,7 +106,7 @@ class TestEnhancedDocumentsAPI:
                 content = f.read()
             files_data.append(("files", (file_path.name, content, "text/plain")))
 
-        response = client.post("/api/v1/upload", files=files_data)
+        response = client.post("/api/v1/documents?async=true", files=files_data)
 
         assert response.status_code == 200
         data = response.json()
@@ -134,7 +134,9 @@ class TestEnhancedDocumentsAPI:
 
         try:
             with open(file_path, "rb") as f:
-                response = client.post("/api/v1/upload", files={"files": (file_path.name, f, "application/octet-stream")})
+                response = client.post(
+                    "/api/v1/documents?async=true", files={"files": (file_path.name, f, "application/octet-stream")}
+                )
 
             assert response.status_code == 200  # Upload endpoint returns 200 with rejection details
             data = response.json()
@@ -167,7 +169,7 @@ class TestEnhancedDocumentsAPI:
 
         try:
             with open(file_path, "rb") as f:
-                response = client.post("/api/v1/upload", files={"files": (file_path.name, f, "text/plain")})
+                response = client.post("/api/v1/documents?async=true", files={"files": (file_path.name, f, "text/plain")})
 
             assert response.status_code == 200
             data = response.json()
@@ -192,17 +194,12 @@ class TestEnhancedDocumentsAPI:
         Technical: The API should reject requests with no files.
         Validation: Send request without files and verify proper error response.
         """
-        response = client.post("/api/v1/upload", files={})
+        response = client.post("/api/v1/documents?async=true", files={})
 
-        assert response.status_code == 422  # FastAPI returns 422 for validation errors
+        assert response.status_code == 400
         data = response.json()
         assert "detail" in data
-        # RFC 7807: errors list holds validation details; detail is first error message
-        errors = data.get("errors", data.get("detail", []))
-        if isinstance(errors, list):
-            assert any("files" in str(error).lower() for error in errors)
-        else:
-            assert "files" in str(errors).lower()
+        assert "files" in str(data["detail"]).lower()
 
     def test_upload_too_many_files(self, client):
         """Test uploading too many files.
@@ -226,7 +223,7 @@ class TestEnhancedDocumentsAPI:
                     content = f.read()
                 files_data.append(("files", (temp_files[-1].name, content, "text/plain")))
 
-            response = client.post("/api/v1/upload", files=files_data)
+            response = client.post("/api/v1/documents?async=true", files=files_data)
 
             assert response.status_code == 400
             data = response.json()
@@ -248,14 +245,14 @@ class TestEnhancedDocumentsAPI:
         """
         # First upload a file to get a task ID
         with open(sample_files[0], "rb") as f:
-            upload_response = client.post("/api/v1/upload", files={"files": (sample_files[0].name, f, "text/plain")})
+            upload_response = client.post("/api/v1/documents?async=true", files={"files": (sample_files[0].name, f, "text/plain")})
 
         assert upload_response.status_code == 200
         upload_data = upload_response.json()
         task_id = upload_data["task_id"]
 
         # Get processing status
-        status_response = client.get(f"/api/v1/status/{task_id}")
+        status_response = client.get(f"/api/v1/documents/tasks/{task_id}")
 
         assert status_response.status_code == 200
         status_data = status_response.json()
@@ -278,7 +275,7 @@ class TestEnhancedDocumentsAPI:
         Technical: The API should return 404 for non-existent task IDs.
         Validation: Request status for invalid task ID and verify 404 response.
         """
-        response = client.get("/api/v1/status/nonexistent-task-id")
+        response = client.get("/api/v1/documents/tasks/nonexistent-task-id")
 
         assert response.status_code == 404
         data = response.json()
@@ -292,19 +289,13 @@ class TestEnhancedDocumentsAPI:
         Technical: The API should provide a list of processed documents.
         Validation: Call list endpoint and verify response structure.
         """
-        response = client.get("/api/v1/list")
+        response = client.get("/api/v1/documents")
 
         assert response.status_code == 200
         data = response.json()
 
-        # Verify response structure
-        assert "documents" in data
-        assert "total_count" in data
-        assert "message" in data
-
-        # Should be a list
-        assert isinstance(data["documents"], list)
-        assert isinstance(data["total_count"], int)
+        assert "files" in data
+        assert isinstance(data["files"], list)
 
 
 class TestFileUploadService:

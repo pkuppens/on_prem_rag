@@ -13,10 +13,10 @@ from ..config.parameter_sets import (
 from ..utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/parameters", tags=["parameters"])
+router = APIRouter(tags=["parameters"])
 
 
-@router.get("/sets")
+@router.get("/api/v1/parameter-sets")
 async def get_parameter_sets() -> dict:
     """Return available RAG parameter sets and default selection.
 
@@ -25,5 +25,5 @@ async def get_parameter_sets() -> dict:
             - default: Name of the default parameter set
             - sets: List of available parameter set names
     """
-    logger.info("GET /api/parameters/sets")
+    logger.info("GET /api/v1/parameter-sets")
     return {"default": DEFAULT_PARAM_SET_NAME, "sets": available_param_sets()}

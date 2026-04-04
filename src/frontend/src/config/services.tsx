@@ -26,7 +26,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'Supabase',
     displayName: 'Database: Supabase',
     icon: 'Storage',
-    healthCheckUrl: '/api/health/database',
+    healthCheckUrl: '/api/v1/health/database',
     enabled: true,
   },
   {
@@ -34,7 +34,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'Ollama',
     displayName: 'LLM: Ollama',
     icon: 'Dns',
-    healthCheckUrl: '/api/health/llm',
+    healthCheckUrl: '/api/v1/health/llm',
     enabled: true,
   },
   {
@@ -42,7 +42,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'FastAPI',
     displayName: 'API: FastAPI',
     icon: 'Api',
-    healthCheckUrl: '/api/health',
+    healthCheckUrl: '/api/v1/health',
     enabled: true,
   },
   {
@@ -50,7 +50,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'Auth Service',
     displayName: 'Auth: Service',
     icon: 'Security',
-    healthCheckUrl: '/api/health/auth',
+    healthCheckUrl: '/api/v1/health/auth',
     enabled: true,
   },
   {
@@ -58,7 +58,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'ChromaDB',
     displayName: 'Vector: ChromaDB',
     icon: 'Hub',
-    healthCheckUrl: '/api/health/vector',
+    healthCheckUrl: '/api/v1/health/vector',
     enabled: true,
   },
   {
@@ -66,7 +66,7 @@ export const serviceConfigs: ServiceConfig[] = [
     name: 'WebSocket',
     displayName: 'WebSocket',
     icon: 'Wifi',
-    healthCheckUrl: '/api/health/websocket',
+    healthCheckUrl: '/api/v1/health/websocket',
     enabled: true,
   },
 ];

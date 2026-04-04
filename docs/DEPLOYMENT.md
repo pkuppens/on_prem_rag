@@ -66,7 +66,7 @@ Additional persistence:
 After ingestion, documents remain available after `docker-compose restart backend`. Verify with:
 
 ```bash
-curl -s http://localhost:9180/api/documents/list
+curl -s http://localhost:9180/api/v1/documents
 ```
 
 ## Security Considerations

@@ -8,12 +8,16 @@ import hashlib
 import os
 import re
 from pathlib import Path
+from typing import Annotated, List
 from urllib.parse import urlparse
 
 import httpx
-from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query, Request, UploadFile
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel, Field, HttpUrl
+
+# request.form() yields starlette.datastructures.UploadFile, not fastapi.datastructures.UploadFile.
+from starlette.datastructures import UploadFile as StarletteUploadFile
 
 from backend.shared.utils.directory_utils import (
     _format_path_for_error,
@@ -24,7 +28,9 @@ from backend.shared.utils.directory_utils import (
 from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from ..core.document_loader import DocumentLoader
 from ..core.vector_store import get_vector_store_manager
+from ..models.document_models import ProcessingStatus, UploadResponse
 from ..services.document_processing_service import DocumentProcessingService
+from ..services.file_upload_service import FileUploadService
 from ..utils.docx_utils import extract_and_clean_docx
 from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
@@ -33,7 +39,7 @@ from .metrics import get_metrics
 logger = StructuredLogger(__name__)
 logger.debug("Starting document management API endpoints")
 
-router = APIRouter(prefix="/api/documents", tags=["documents"])
+router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
 
 # Initialize directories and services
 uploaded_files_dir = get_uploaded_files_dir()
@@ -41,6 +47,7 @@ ensure_directory_exists(uploaded_files_dir)
 document_loader = DocumentLoader()
 vector_store_manager = get_vector_store_manager()
 document_processing_service = DocumentProcessingService()
+file_upload_service = FileUploadService()
 
 
 async def process_document_background(file_path, filename: str, params_name: str) -> None:
@@ -55,54 +62,16 @@ async def process_document_background(file_path, filename: str, params_name: str
     get_metrics().record_ingestion()
 
 
-@router.get("/list")
+@router.get("")
 async def list_documents() -> dict[str, list[str]]:
     """Return a list of uploaded document filenames.
 
     Returns:
         Dict containing a list of filenames
     """
-    logger.info("GET /api/documents/list")
+    logger.info("GET /api/v1/documents")
     files = [f.name for f in uploaded_files_dir.iterdir() if f.is_file()]
     return {"files": files}
-
-
-@router.delete("/{filename}", status_code=204)
-async def delete_document(filename: str) -> None:
-    """Delete a document and its vector store chunks.
-
-    Removes the file from disk and all associated chunks from the vector store.
-
-    Args:
-        filename: Name of the document file (e.g. 'report.pdf').
-            Must not contain path separators (security: path traversal prevention).
-
-    Raises:
-        HTTPException: 400 if filename contains path separators.
-        HTTPException: 404 if document does not exist.
-    """
-    if "/" in filename or "\\" in filename or ".." in filename:
-        logger.warning("Delete rejected: invalid filename", filename=filename)
-        raise HTTPException(status_code=400, detail="Filename must not contain path separators")
-
-    file_path = uploaded_files_dir / filename
-    if not file_path.exists() or not file_path.is_file():
-        logger.info("Delete: document not found", filename=filename)
-        raise HTTPException(status_code=404, detail=f"Document not found: {filename}")
-
-    try:
-        chunks_deleted = vector_store_manager.delete_by_document_name(filename)
-        logger.info("Deleted chunks from vector store", filename=filename, chunks_deleted=chunks_deleted)
-    except Exception as e:
-        logger.error("Failed to delete chunks from vector store", filename=filename, error=str(e))
-        raise HTTPException(status_code=500, detail="Failed to delete document from vector store") from e
-
-    try:
-        file_path.unlink()
-        logger.info("Deleted document file", filename=filename)
-    except OSError as e:
-        logger.error("Failed to delete file", filename=filename, error=str(e))
-        raise HTTPException(status_code=500, detail="Failed to delete document file") from e
 
 
 class DocumentFromUrlRequest(BaseModel):
@@ -112,7 +81,7 @@ class DocumentFromUrlRequest(BaseModel):
     params_name: str = Field(default=DEFAULT_PARAM_SET_NAME, description="Parameter set for processing")
 
 
-@router.post("/from-url")
+@router.post("/ingest-from-url")
 async def upload_document_from_url(payload: DocumentFromUrlRequest, background_tasks: BackgroundTasks) -> dict:
     """Download a document from a URL and process it for RAG.
 
@@ -131,7 +100,7 @@ async def upload_document_from_url(payload: DocumentFromUrlRequest, background_t
         HTTPException: 415 if content type not supported
     """
     url_str = str(payload.url)
-    logger.info("POST /api/documents/from-url", url=url_str, params_name=payload.params_name)
+    logger.info("POST /api/v1/documents/ingest-from-url", url=url_str, params_name=payload.params_name)
 
     parsed = urlparse(url_str)
     if parsed.scheme not in ("http", "https"):
@@ -195,30 +164,22 @@ async def upload_document_from_url(payload: DocumentFromUrlRequest, background_t
         raise HTTPException(status_code=502, detail=f"Download request failed: {str(e)}") from e
 
 
-@router.post("/upload")
-async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, params_name: str = DEFAULT_PARAM_SET_NAME) -> dict:
-    """Handle file upload and start background processing.
+async def sync_upload_single_file(file: UploadFile, background_tasks: BackgroundTasks, params_name: str) -> JSONResponse:
+    """Handle single-file sync upload: save, dedupe, queue background processing."""
 
-    Args:
-        file: The uploaded file
-        background_tasks: FastAPI background tasks manager
-        params_name: Name of the parameter set to use (default: DEFAULT_PARAM_SET_NAME)
+    logger.info(
+        "POST /api/v1/documents",
+        filename=file.filename,
+        size=file.size,
+        content_type=file.content_type,
+        async_mode=False,
+    )
 
-    Returns:
-        Dict with upload status and file information
-
-    Raises:
-        HTTPException: If upload validation fails
-    """
-    logger.info("POST /api/documents/upload", filename=file.filename, size=file.size, content_type=file.content_type)
-
-    # Validate request params_name
     params = get_param_set(params_name)
     if not isinstance(params, RAGParams):
         logger.warning("Upload rejected: invalid parameter set", params_name=params_name)
         raise HTTPException(status_code=400, detail="Invalid parameter set name")
 
-    # Validate request
     if not (filename := file.filename):
         logger.warning("Upload rejected: missing filename")
         raise HTTPException(status_code=400, detail="Filename is required")
@@ -227,14 +188,13 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         logger.warning("Upload rejected: empty file", filename=filename)
         raise HTTPException(status_code=400, detail="File cannot be empty")
 
-    # Check for supported content types
     supported_types = [
         "application/pdf",
         "text/plain",
         "text/markdown",
         "text/html",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
-        "application/msword",  # .doc
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword",
         "text/csv",
         "application/json",
     ]
@@ -246,10 +206,8 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
         )
 
     try:
-        # Notify upload started
         await progress_notifier.notify(ProgressEvent(filename, 5, "Upload started"))
 
-        # Ensure the upload directory exists
         logger.debug(
             "Preparing to save file",
             filename=filename,
@@ -258,15 +216,12 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
             upload_dir_is_dir=uploaded_files_dir.is_dir(),
         )
 
-        # Save upload to the proper uploaded files directory
         file_path = uploaded_files_dir / filename
         logger.debug("File path resolved", file_path=str(file_path))
 
-        # Read file content first
         file_content = await file.read()
         logger.debug("File content read", content_size=len(file_content))
 
-        # Deduplication: check content hash before saving and processing
         file_content_hash = hashlib.sha256(file_content).hexdigest()
         embedding_model = params.embedding.model_name
         if vector_store_manager.has_document_with_file_hash(file_content_hash, embedding_model=embedding_model):
@@ -275,20 +230,19 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
                 filename=filename,
                 file_content_hash=file_content_hash[:16],
             )
-            return {
-                "message": "Document already exists (duplicate content); not re-processed",
-                "file_id": filename,
-                "status": "duplicate",
-                "created": False,
-            }
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Document already exists (duplicate content); not re-processed",
+                    "file_id": filename,
+                    "status": "duplicate",
+                    "created": False,
+                },
+            )
 
-        # Directory is already ensured to exist at module level
-
-        # Write file content
         with open(file_path, "wb") as f:
             f.write(file_content)
 
-        # Verify file was saved
         if not file_path.exists():
             raise RuntimeError(f"File was not saved successfully to {file_path}")
 
@@ -296,10 +250,8 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
 
         await progress_notifier.notify(ProgressEvent(filename, 10, "File saved"))
 
-        # Small delay to ensure file is fully written
         await asyncio.sleep(0.1)
 
-        # Start background processing
         background_tasks.add_task(process_document_background, file_path, filename, params_name)
 
         logger.info("Document upload completed, background processing started", filename=filename)
@@ -344,12 +296,153 @@ async def upload_document(file: UploadFile, background_tasks: BackgroundTasks, p
     except Exception as e:
         logger.error("Error during file upload", filename=filename, error=str(e), error_type=type(e).__name__)
         await progress_notifier.notify(ProgressEvent(filename, -1, f"Upload failed: {str(e)}"))
-        detail = str(e)
+        detail: str | dict = str(e)
         if os.getenv("ENVIRONMENT") == "development":
             import traceback
 
             detail = {"error": str(e), "traceback": traceback.format_exc()}
         raise HTTPException(status_code=500, detail=detail) from e
+
+
+async def process_async_task_documents(task_id: str, params_name: str) -> None:
+    """Run multi-file processing for an async upload task (task-scoped directory)."""
+
+    logger.info("Starting background document processing", task_id=task_id, params_name=params_name)
+
+    try:
+        file_upload_service.update_processing_status(task_id, "processing", 0.0, "Starting document processing")
+
+        task_dir = file_upload_service.upload_dir / task_id
+        if not task_dir.exists():
+            raise FileNotFoundError(f"Task directory not found: {task_dir}")
+
+        file_paths = [f for f in task_dir.iterdir() if f.is_file()]
+        if not file_paths:
+            raise ValueError("No files found in task directory")
+
+        logger.info("Found files for processing", task_id=task_id, file_count=len(file_paths))
+
+        results = await document_processing_service.process_documents(task_id, file_paths, params_name)
+
+        if results["failed_files"] == 0:
+            file_upload_service.update_processing_status(
+                task_id, "completed", 1.0, f"Processing completed: {results['processed_files']} files processed"
+            )
+        else:
+            file_upload_service.update_processing_status(
+                task_id,
+                "completed_with_errors",
+                1.0,
+                f"Processing completed with errors: {results['processed_files']} successful, {results['failed_files']} failed",
+            )
+
+        logger.info("Background processing completed", task_id=task_id, **results)
+
+    except Exception as e:
+        logger.error("Background processing failed", task_id=task_id, error=str(e))
+        file_upload_service.update_processing_status(task_id, "error", -1.0, f"Processing failed: {str(e)}")
+
+
+@router.post("", response_model=None)
+async def create_document(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    async_q: Annotated[bool, Query(alias="async")] = False,
+    params_name: Annotated[str, Query()] = DEFAULT_PARAM_SET_NAME,
+) -> JSONResponse | UploadResponse:
+    """Create document(s): sync multipart field `file`, or async with `async=true` and field `files`."""
+
+    form = await request.form()
+
+    if async_q:
+        raw_files = form.getlist("files")
+        files: List[UploadFile] = [f for f in raw_files if isinstance(f, StarletteUploadFile)]
+        if not files:
+            raise HTTPException(status_code=400, detail="Multipart field 'files' is required when async=true")
+        if len(files) > 10:
+            raise HTTPException(status_code=400, detail="Maximum 10 files allowed per upload")
+
+        logger.info("POST /api/v1/documents", file_count=len(files), params_name=params_name, async_mode=True)
+
+        try:
+            upload_result = await file_upload_service.upload_multiple_files(files)
+            if upload_result.accepted_count > 0:
+                background_tasks.add_task(process_async_task_documents, upload_result.task_id, params_name)
+                logger.info("Background processing started", task_id=upload_result.task_id)
+            return upload_result
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error("Upload failed", error=str(e))
+            raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}") from e
+
+    single = form.get("file")
+    if not isinstance(single, StarletteUploadFile):
+        raise HTTPException(status_code=400, detail="Multipart field 'file' is required when async=false (default)")
+
+    return await sync_upload_single_file(single, background_tasks, params_name)
+
+
+@router.get("/tasks/{task_id}", response_model=ProcessingStatus)
+async def get_processing_status(task_id: str) -> ProcessingStatus:
+    """Return async upload task status."""
+
+    logger.info("GET /api/v1/documents/tasks/{task_id}", task_id=task_id)
+
+    status = file_upload_service.get_processing_status(task_id)
+    if not status:
+        raise HTTPException(status_code=404, detail=f"Task not found: {task_id}")
+
+    return status
+
+
+@router.delete("/tasks/{task_id}", status_code=204)
+async def cleanup_task(task_id: str) -> Response:
+    """Remove task workspace after completed or failed processing."""
+
+    logger.info("DELETE /api/v1/documents/tasks/{task_id}", task_id=task_id)
+
+    status = file_upload_service.get_processing_status(task_id)
+    if not status:
+        raise HTTPException(status_code=404, detail=f"Task not found: {task_id}")
+
+    if status.status not in ("completed", "completed_with_errors", "error"):
+        raise HTTPException(status_code=400, detail=f"Cannot cleanup task with status: {status.status}")
+
+    success = file_upload_service.cleanup_task_files(task_id)
+    if not success:
+        raise HTTPException(status_code=500, detail="Cleanup failed")
+
+    return Response(status_code=204)
+
+
+@router.delete("/{document_id}", status_code=204)
+async def delete_document(document_id: str) -> None:
+    """Delete a document file and its vector chunks (document_id is the stored filename)."""
+
+    filename = document_id
+    if "/" in filename or "\\" in filename or ".." in filename:
+        logger.warning("Delete rejected: invalid document_id", filename=filename)
+        raise HTTPException(status_code=400, detail="document_id must not contain path separators")
+
+    file_path = uploaded_files_dir / filename
+    if not file_path.exists() or not file_path.is_file():
+        logger.info("Delete: document not found", filename=filename)
+        raise HTTPException(status_code=404, detail=f"Document not found: {filename}")
+
+    try:
+        chunks_deleted = vector_store_manager.delete_by_document_name(filename)
+        logger.info("Deleted chunks from vector store", filename=filename, chunks_deleted=chunks_deleted)
+    except Exception as e:
+        logger.error("Failed to delete chunks from vector store", filename=filename, error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to delete document from vector store") from e
+
+    try:
+        file_path.unlink()
+        logger.info("Deleted document file", filename=filename)
+    except OSError as e:
+        logger.error("Failed to delete file", filename=filename, error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to delete document file") from e
 
 
 async def _serve_file(filename: str):
@@ -454,64 +547,49 @@ async def _serve_file(filename: str):
         ) from e
 
 
-@router.get("/files/{filename}/as-text")
-async def serve_document_as_text(filename: str) -> PlainTextResponse:
-    """Return document content as plain text for preview.
+@router.get("/{document_id}/content", response_model=None)
+async def get_document_content(
+    document_id: str,
+    request: Request,
+    content_format: Annotated[str | None, Query(alias="format", description="format=text for plain-text extraction")] = None,
+) -> FileResponse | PlainTextResponse:
+    """Return document bytes or plain text (query format=text or Accept: text/plain)."""
 
-    Supports .txt, .md (read as UTF-8) and .docx (extract text via python-docx).
-    Extendable: future formats (e.g. markdown-to-HTML, docx-to-PDF) can be added.
+    filename = document_id
+    logger.info(
+        "GET /api/v1/documents/{document_id}/content",
+        document_id=document_id,
+        content_format=content_format,
+    )
 
-    Args:
-        filename: Name of the file
+    accept = (request.headers.get("accept") or "").lower()
+    wants_text = (content_format or "").lower() == "text" or "text/plain" in accept
 
-    Returns:
-        PlainTextResponse: UTF-8 text content
-
-    Raises:
-        HTTPException: 400 if unsupported format or invalid filename
-        HTTPException: 404 if file not found
-        HTTPException: 500 if extraction fails
-    """
-    logger.info("GET /api/documents/files/{filename}/as-text", filename=filename)
     if not filename or ".." in filename or "/" in filename:
-        raise HTTPException(status_code=400, detail="Invalid filename")
-    ext = Path(filename).suffix.lower()
+        raise HTTPException(status_code=400, detail="Invalid document_id")
+
     file_path = uploaded_files_dir / filename
     if not file_path.exists() or not file_path.is_file():
         raise HTTPException(status_code=404, detail=f"File not found: {filename}")
-    try:
-        if ext in (".txt", ".md"):
-            text = file_path.read_text(encoding="utf-8")
-        elif ext in (".docx", ".doc"):
-            paragraphs = extract_and_clean_docx(file_path)
-            text = "\n\n".join(p for p in paragraphs if p.strip())
-        else:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Text extraction not supported for {ext}; use /files/{{filename}} for binary download.",
-            )
-        return PlainTextResponse(content=text)
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error("Error extracting text", filename=filename, error=str(e))
-        raise HTTPException(status_code=500, detail=f"Failed to extract text: {e}") from e
 
+    if wants_text:
+        ext = Path(filename).suffix.lower()
+        try:
+            if ext in (".txt", ".md"):
+                text = file_path.read_text(encoding="utf-8")
+            elif ext in (".docx", ".doc"):
+                paragraphs = extract_and_clean_docx(file_path)
+                text = "\n\n".join(p for p in paragraphs if p.strip())
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Text extraction not supported for {ext}; omit format=text for binary download.",
+                )
+            return PlainTextResponse(content=text)
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error("Error extracting text", filename=filename, error=str(e))
+            raise HTTPException(status_code=500, detail=f"Failed to extract text: {e}") from e
 
-@router.get("/files/{filename}")
-async def serve_document_file(filename: str) -> FileResponse:
-    """Serve uploaded files with proper error handling and logging.
-
-    Args:
-        filename: Name of the file to serve
-
-    Returns:
-        FileResponse: The requested file
-
-    Raises:
-        HTTPException: 404 if file not found
-        HTTPException: 400 if filename is invalid
-        HTTPException: 500 if file access fails
-    """
-    logger.info("GET /api/documents/files/{filename}", filename=filename)
     return await _serve_file(filename)

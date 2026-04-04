@@ -63,30 +63,30 @@ export const getApiConfig = (): ApiConfig => {
 export const API_ENDPOINTS = {
   // Document management
   DOCUMENTS: {
-    UPLOAD: '/api/documents/upload',
-    LIST: '/api/documents/list',
-    FILES: '/api/documents/files',
+    UPLOAD: '/api/v1/documents',
+    LIST: '/api/v1/documents',
+    CONTENT_BASE: '/api/v1/documents',
   },
   // Query and search
   QUERY: {
-    SEARCH: '/api/query',
+    SEARCH: '/api/v1/retrieval/chunks',
   },
   // Question answering (hybrid retrieval)
-  ASK: '/api/ask',
-  ASK_VOICE: '/api/ask/voice',
+  ASK: '/api/v1/qa',
+  ASK_VOICE: '/api/v1/qa/voice',
   // Speech-to-text
   STT: {
-    TRANSCRIBE: '/api/stt/transcribe',
-    TRANSCRIBE_DRAFT: '/api/stt/transcribe/draft',
-    INFO: '/api/stt/info',
+    TRANSCRIBE: '/api/v1/speech/transcribe',
+    TRANSCRIBE_DRAFT: '/api/v1/speech/transcribe/draft',
+    INFO: '/api/v1/speech/info',
   },
   // Parameters
   PARAMETERS: {
-    LIST: '/api/parameters',
+    SETS: '/api/v1/parameter-sets',
   },
   // Health check
   HEALTH: {
-    STATUS: '/api/health',
+    STATUS: '/api/v1/health',
   },
   // WebSocket
   WEBSOCKET: {
@@ -119,7 +119,9 @@ export class ApiUrlBuilder {
    * @returns Complete file URL
    */
   buildFileUrl(filename: string): string {
-    return this.buildUrl(`${API_ENDPOINTS.DOCUMENTS.FILES}/${encodeURIComponent(filename)}`);
+    return this.buildUrl(
+      `${API_ENDPOINTS.DOCUMENTS.CONTENT_BASE}/${encodeURIComponent(filename)}/content`,
+    );
   }
 
   /**
@@ -187,7 +189,7 @@ export class ApiUrlBuilder {
    * @returns Parameters list URL
    */
   getParametersUrl(): string {
-    return this.buildUrl(API_ENDPOINTS.PARAMETERS.LIST);
+    return this.buildUrl(API_ENDPOINTS.PARAMETERS.SETS);
   }
 
   /**
@@ -195,7 +197,7 @@ export class ApiUrlBuilder {
    * @returns Parameter sets URL
    */
   getParameterSetsUrl(): string {
-    return this.buildUrl(`${API_ENDPOINTS.PARAMETERS.LIST}/sets`);
+    return this.buildUrl(API_ENDPOINTS.PARAMETERS.SETS);
   }
 
   /**
@@ -221,7 +223,9 @@ export const apiUrls = {
    * Get URL for document content as plain text (txt, md, docx)
    */
   fileAsText: (filename: string) =>
-    apiUrlBuilder.buildUrl(`${API_ENDPOINTS.DOCUMENTS.FILES}/${encodeURIComponent(filename)}/as-text`),
+    apiUrlBuilder.buildUrl(
+      `${API_ENDPOINTS.DOCUMENTS.CONTENT_BASE}/${encodeURIComponent(filename)}/content?format=text`,
+    ),
 
   /**
    * Get upload URL with optional parameter set

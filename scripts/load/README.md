@@ -1,7 +1,7 @@
 # Load Testing
 
 Created: 2026-02-23
-Updated: 2026-02-23
+Updated: 2026-04-05
 
 Placeholder for load testing. See [docs/technical/TESTABILITY.md](../../docs/technical/TESTABILITY.md) for strategy.
 
@@ -12,9 +12,9 @@ Placeholder for load testing. See [docs/technical/TESTABILITY.md](../../docs/tec
 
 ## Target Endpoints
 
-- `POST /api/ask` — RAG (most expensive)
-- `POST /api/documents/upload`
-- `POST /api/query` — retrieval-only
+- `POST /api/v1/qa` — RAG (most expensive)
+- `POST /api/v1/documents`
+- `POST /api/v1/retrieval/chunks` — retrieval-only
 
 ## Quick Run (k6)
 
@@ -27,5 +27,5 @@ Override options: `k6 run --vus 10 --duration 60s scripts/load/ask-load.js`
 
 ## SLOs (to be defined)
 
-- Throughput: req/s for /api/ask
+- Throughput: req/s for /api/v1/qa
 - Latency: p95 < N ms

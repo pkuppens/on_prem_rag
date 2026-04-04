@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Batch document upload utility.
 
-This script uploads one or more documents to the `/api/documents/upload`
+This script uploads one or more documents to `POST /api/v1/documents`
 endpoint of the FastAPI application. It supports directory traversal,
 custom filename metadata, and basic filtering. The implementation
 aligns with STORY-002 and TASK-023, allowing quick ingestion of local
@@ -31,7 +31,7 @@ from backend.shared.utils.directory_utils import (
     get_uploaded_files_dir,
 )
 
-DEFAULT_API_URL = "http://localhost:8000/api/documents/upload"
+DEFAULT_API_URL = "http://localhost:8000/api/v1/documents"
 DEFAULT_PARAM_SET = "fast"
 
 logger = logging.getLogger(__name__)
@@ -148,7 +148,7 @@ def upload_file(path: Path, upload_name: str, api_url: str, params_name: str) ->
         files = {"file": (upload_name, f)}
         data = {"params_name": params_name}
         resp = httpx.post(api_url, files=files, data=data, timeout=60)
-        if resp.status_code != 200:
+        if resp.status_code not in (200, 201):
             raise UploadError(f"{path}: {resp.status_code} {resp.text}")
 
 

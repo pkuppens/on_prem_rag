@@ -1,4 +1,4 @@
-# OpenAPI 3.0 draft for target v1 RAG API (design only; not served until #128).
+# OpenAPI 3.0 draft for /api/v1 RAG API (design companion; FastAPI still serves /openapi.json).
 # See docs/technical/API_REDESIGN.md for full narrative and gap analysis.
 
 openapi: 3.0.3
@@ -27,6 +27,13 @@ paths:
       tags: [documents]
       summary: List documents
       operationId: listDocumentsV1
+      responses:
+        "200":
+          description: Filenames in upload directory
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentListResponse"
     post:
       tags: [documents]
       summary: Upload or enqueue document (sync or async)
@@ -37,6 +44,41 @@ paths:
           schema:
             type: boolean
             default: false
+        - name: params_name
+          in: query
+          schema:
+            type: string
+            default: default
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Single file when async=false
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Multiple files when async=true (max 10)
+      responses:
+        "200":
+          description: Duplicate content (sync) or partial async result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncUploadResponse"
+        "201":
+          description: New document accepted (sync)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncUploadResponse"
 
   /api/v1/documents/tasks/{task_id}:
     get:
@@ -59,6 +101,20 @@ paths:
       tags: [documents]
       summary: Fetch and ingest document from URL
       operationId: ingestDocumentFromUrlV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngestFromUrlRequest"
+      responses:
+        "200":
+          description: Download started; background processing queued
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
 
   /api/v1/documents/{document_id}/content:
     get:
@@ -71,6 +127,20 @@ paths:
       tags: [retrieval]
       summary: Retrieval-only chunk search
       operationId: searchChunksV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetrievalChunksRequest"
+      responses:
+        "200":
+          description: Chunks and metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
 
   /api/v1/retrieval/conversations:
     post:
@@ -83,6 +153,19 @@ paths:
       tags: [qa]
       summary: RAG question answering
       operationId: askV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QaRequest"
+      responses:
+        "200":
+          description: Answer with sources
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QaResponse"
 
   /api/v1/qa/voice:
     post:
@@ -137,3 +220,78 @@ paths:
       tags: [chat]
       summary: Streaming chat (SSE)
       operationId: chatStreamV1
+
+components:
+  schemas:
+    DocumentListResponse:
+      type: object
+      required: [files]
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+    SyncUploadResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        file_id:
+          type: string
+        status:
+          type: string
+          enum: [uploaded, duplicate]
+        processing:
+          type: string
+        created:
+          type: boolean
+    IngestFromUrlRequest:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+          format: uri
+        params_name:
+          type: string
+          default: default
+    RetrievalChunksRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        params_name:
+          type: string
+        top_k:
+          type: integer
+          minimum: 1
+    QaRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+        strategy:
+          type: string
+          description: dense, sparse, hybrid, bm25
+        params_name:
+          type: string
+        top_k:
+          type: integer
+    QaResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+        sources:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        confidence:
+          type: string
+        chunks_retrieved:
+          type: integer
+        average_similarity:
+          type: number

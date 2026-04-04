@@ -14,7 +14,7 @@ from ..utils.logging import StructuredLogger
 from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/query", tags=["query"])
+router = APIRouter(prefix="/api/v1/retrieval", tags=["retrieval"])
 
 # Initialize services
 query_service = QueryService()
@@ -44,7 +44,7 @@ class ConversationRequest(BaseModel):
     text: str
 
 
-@router.post("")
+@router.post("/chunks")
 async def query_documents(payload: QueryRequest) -> dict:
     """Return matching chunks for a query.
 
@@ -74,7 +74,7 @@ async def query_documents(payload: QueryRequest) -> dict:
         raise HTTPException(status_code=500, detail=f"Error during query: {str(e)}") from e
 
 
-@router.post("/process_conversation")
+@router.post("/conversations")
 async def process_conversation_endpoint(payload: ConversationRequest) -> dict:
     """Process a medical conversation through the RAG pipeline.
 

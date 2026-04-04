@@ -1,6 +1,6 @@
 # Security architecture
 
-**Updated:** 2026-03-27
+**Updated:** 2026-04-05
 
 This document describes **security-related components** that exist in the repository today. For vulnerability reporting, see the root [SECURITY.md](../../SECURITY.md). For **data flows** and **GDPR / NEN 7510 / DPIA** readiness notes, see [SECURITY_DATA_FLOW_AND_COMPLIANCE.md](SECURITY_DATA_FLOW_AND_COMPLIANCE.md). Authentication flows are detailed in [AUTHENTICATION_AUTORISATION.md](../AUTHENTICATION_AUTORISATION.md).
 
@@ -37,7 +37,7 @@ This document describes **security-related components** that exist in the reposi
 
 - Uploaded documents live in the configured upload directory.
 - Chunks and embeddings are stored in the configured vector store (default: ChromaDB via the vector store manager).
-- **Deletion:** `DELETE /api/documents/{filename}` removes the file and associated chunks in the vector store ([documents.py](../../src/backend/rag_pipeline/api/documents.py)). This supports **data minimisation** and **erasure** workflows but does not replace backup rotation or log redaction policies.
+- **Deletion:** `DELETE /api/v1/documents/{document_id}` removes the file and associated chunks in the vector store ([documents.py](../../src/backend/rag_pipeline/api/documents.py); `document_id` is the stored filename today). This supports **data minimisation** and **erasure** workflows but does not replace backup rotation or log redaction policies.
 
 ## Related documentation
 

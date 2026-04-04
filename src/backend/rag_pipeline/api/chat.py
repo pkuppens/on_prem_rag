@@ -1,7 +1,7 @@
 """Conversational chat API endpoint for the RAG pipeline.
 
-Implements POST /api/chat with message history for multi-turn RAG conversations.
-Supports streaming via POST /api/chat/stream (SSE).
+Implements POST /api/v1/chat with message history for multi-turn RAG conversations.
+Supports streaming via POST /api/v1/chat/stream (SSE).
 
 Chat streaming: the LLM provider delivers partial results as they are generated,
 reducing perceived wait time. We pass through provider chunks; we never simulate
@@ -21,7 +21,7 @@ from ..utils.logging import StructuredLogger
 from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/chat", tags=["chat"])
+router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
 
 qa_system = QASystem()
 

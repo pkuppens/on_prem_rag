@@ -12,7 +12,7 @@ from ..utils.logging import StructuredLogger
 from ..utils.progress import ProgressEvent, progress_notifier
 
 logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/test", tags=["test"])
+router = APIRouter(prefix="/api/v1/test", tags=["test"])
 
 
 async def simulate_progress_processing():

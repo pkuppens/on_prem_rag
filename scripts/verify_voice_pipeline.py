@@ -11,7 +11,7 @@ Usage:
   --progression runs 3 steps:
   - Step 0: STT only (audio duration + latency)
   - Step 1: Upload metformin fixture -> RAG query (backend Ollama + ChromaDB)
-  - Step 2: Voice RAG (/api/ask/voice) with guardrails when enabled
+  - Step 2: Voice RAG (POST /api/v1/qa/voice) with guardrails when enabled
 
 All RAG steps use the backend's configured Ollama; no direct Ollama API calls.
 
@@ -50,7 +50,7 @@ def check_prerequisites(url: str, check_name: str = "") -> bool:
         import httpx
 
         with httpx.Client(timeout=5) as client:
-            resp = client.get(f"{url}/api/health")
+            resp = client.get(f"{url}/api/v1/health")
             if resp.status_code == 200:
                 log.info("Backend reachable at %s", url)
                 return True
@@ -66,7 +66,7 @@ def check_prerequisites(url: str, check_name: str = "") -> bool:
     log.info("  - Docker: docker-compose up -d chroma backend")
     port = url.rstrip("/").split(":")[-1].split("/")[0]
     log.info("Ensure port %s is free (or set BACKEND_PORT in .env).", port)
-    log.info("Verify: curl -s %s/api/health", url)
+    log.info("Verify: curl -s %s/api/v1/health", url)
     return False
 
 
@@ -108,7 +108,7 @@ def _run_stt_step(
     form = {"language": language_hint}
     t0 = time.perf_counter()
     with httpx.Client(timeout=60) as client:
-        resp = client.post(f"{url}/api/stt/transcribe/draft", files=files, data=form)
+        resp = client.post(f"{url}/api/v1/speech/transcribe/draft", files=files, data=form)
     elapsed_ms = int((time.perf_counter() - t0) * 1000)
 
     if resp.status_code != 200:
@@ -183,7 +183,7 @@ def run_progression(url: str, ingestion_wait_sec: int = DEFAULT_INGESTION_WAIT_S
 
     # Verify STT model (STT_MODEL_SIZE from .env; Docker needs env_file in compose)
     try:
-        r = httpx.get(f"{url}/api/stt/info", timeout=5)
+        r = httpx.get(f"{url}/api/v1/speech/info", timeout=5)
         if r.status_code == 200:
             model = r.json().get("service", {}).get("transcriber", {}).get("model_size", "?")
             log.info("STT model: %s", model)
@@ -219,7 +219,7 @@ def run_progression(url: str, ingestion_wait_sec: int = DEFAULT_INGESTION_WAIT_S
             with open(fixture_path, "rb") as f:
                 content = f.read()
             files = {"file": ("metformin_verify_pipeline.txt", content, "text/plain")}
-            upload_resp = httpx.post(f"{url}/api/documents/upload", files=files, timeout=30)
+            upload_resp = httpx.post(f"{url}/api/v1/documents", files=files, timeout=30)
             if upload_resp.status_code == 200:
                 if ingestion_wait_sec > 0:
                     log.info("Uploaded metformin doc, waiting %s s for ingestion...", ingestion_wait_sec)
@@ -227,7 +227,7 @@ def run_progression(url: str, ingestion_wait_sec: int = DEFAULT_INGESTION_WAIT_S
                 else:
                     log.info("Uploaded metformin doc (ingestion wait skipped, e.g. --ingestion-wait 0)")
                 rag_resp = httpx.post(
-                    f"{url}/api/ask",
+                    f"{url}/api/v1/qa",
                     json={
                         "question": metformin_question,
                         "strategy": "hybrid",
@@ -254,7 +254,7 @@ def run_progression(url: str, ingestion_wait_sec: int = DEFAULT_INGESTION_WAIT_S
         files = {"audio": ("metformin_question.mp3", audio_metformin, "audio/mpeg")}
         t0_rag = time.perf_counter()
         with httpx.Client(timeout=90) as client:
-            resp = client.post(f"{url}/api/ask/voice", files=files)
+            resp = client.post(f"{url}/api/v1/qa/voice", files=files)
         elapsed_rag = time.perf_counter() - t0_rag
         if resp.status_code == 200:
             data = resp.json()
@@ -309,7 +309,7 @@ def run_dutch_rag(url: str) -> bool:
 
         with httpx.Client(timeout=60) as client:
             resp = client.post(
-                f"{url}/api/ask",
+                f"{url}/api/v1/qa",
                 json={"question": question_nl, "strategy": "hybrid"},
             )
             resp.raise_for_status()

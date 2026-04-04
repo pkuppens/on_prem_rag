@@ -40,8 +40,8 @@ class GuardrailsMiddleware(BaseHTTPMiddleware):
 
     # Paths that require guardrails
     PROTECTED_PATHS = [
-        "/api/v1/query",
-        "/api/v1/analyze",
+        "/api/v1/retrieval",
+        "/api/v1/qa",
         "/api/v1/chat",
         "/api/v1/documents",
     ]
@@ -170,7 +170,7 @@ class GuardrailsDepends:
     Use this as a dependency to add guardrails validation to specific routes.
 
     Example:
-        @app.post("/api/query")
+        @app.post("/api/v1/retrieval/chunks")
         async def query(
             request: QueryRequest,
             guardrails: GuardrailsDepends = Depends(),

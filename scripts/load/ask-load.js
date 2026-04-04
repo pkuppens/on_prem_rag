@@ -1,5 +1,5 @@
 /**
- * k6 load test for POST /api/ask (RAG question-answering).
+ * k6 load test for POST /api/v1/qa (RAG question-answering).
  *
  * Prerequisites:
  * - Backend running on http://localhost:9180 (see docs/PORTS.md)
@@ -31,7 +31,7 @@ export default function () {
     top_k: 5,
   });
 
-  const res = http.post(`${BASE_URL}/api/ask`, payload, {
+  const res = http.post(`${BASE_URL}/api/v1/qa`, payload, {
     headers: { "Content-Type": "application/json" },
   });
 

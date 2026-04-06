@@ -1,11 +1,13 @@
 # Test Strategy
 
 Created: 2025-02-20  
-Updated: 2025-02-20
+Updated: 2026-04-06
 
 ## Overview
 
 This document defines the testing strategy for the on-premises RAG project: test pyramid policy, marker usage, and deduplication guidelines. It supports issue #118 (testing strategy redesign).
+
+**Requirements traceability:** Automated tests primarily evidence **VAL-SR-*** rows in [requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md](../requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md). Per-change mini-matrices: [requirements-design-test-traceability.md](../technical/requirements-design-test-traceability.md).
 
 ## Test Pyramid Policy
 

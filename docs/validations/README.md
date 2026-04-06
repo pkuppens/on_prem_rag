@@ -10,8 +10,11 @@ Every committed validation file must reference the GitHub issue or chore it vali
 ---
 issue: "#NNN"                        # GitHub issue number, OR
 chore: "short-description"           # if no issue was created (e.g. "dependency-upgrade-2026-02")
+val: "VAL-SR-012"                    # optional: link to RTM validation id (VAL-UR-*, VAL-SR-*, VAL-SSR-*)
 ---
 ```
+
+See [requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md](../requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md) for **VAL-*** ids.
 
 For session-scoped validations in `tmp/github/issue-NNN/validation.md`, the issue number is implicit from the directory name.
 

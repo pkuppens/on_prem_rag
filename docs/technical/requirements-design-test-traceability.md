@@ -1,9 +1,11 @@
 # Requirements, design, and test traceability (lightweight)
 
 Created: 2026-03-23
-Updated: 2026-03-23
+Updated: 2026-04-06
 
 Use this pattern when work touches code or APIs so **requirements**, **design**, and **verification** stay aligned without heavy process overhead.
+
+**Product-wide matrix:** For numbered engineering requirements (UR / SR / SSR) and roll-up validation IDs (**VAL-UR-***, **VAL-SR-***, **VAL-SSR-***), see [requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md](../requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md) and [requirements/README.md](../requirements/README.md). Per-change mini-matrices below still apply; reference a **VAL-SR-*** (or UR/SSR) row when a change maps to an existing requirement.
 
 ## Levels (maps to SDLC)
 

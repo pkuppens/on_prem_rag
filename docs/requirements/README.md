@@ -9,6 +9,21 @@ This folder holds **product engineering requirements** and the **requirements tr
 | [project/team/stories/](../../project/team/stories/) | User stories and sprint-sized work |
 | `docs/requirements/` here | **UR**, **SR**, **SSR**, optional **CR**, and **RTM** with validation IDs |
 
+## Portfolio mapping (EPIC / FEAT audit)
+
+Cross-check (2026-04-06): no misplaced files under `project/portfolio/epics/` or `project/program/features/`; **no `git mv`**. Program features align with engineering themes as below (detail in [REQUIREMENTS_TRACEABILITY_MATRIX.md](REQUIREMENTS_TRACEABILITY_MATRIX.md)):
+
+| Feature | Primary UR / SR themes |
+|---------|-------------------------|
+| [FEAT-001](../../project/program/features/FEAT-001.md) | UR-001–003, UR-007; SR-001–005, SR-012 |
+| [FEAT-002](../../project/program/features/FEAT-002.md) | UR-002, UR-004, UR-006; SR-007, SR-010, SR-011 |
+| [FEAT-003](../../project/program/features/FEAT-003.md) | UR-005, UR-007; SR-003, SR-006, SR-009 |
+| [FEAT-004](../../project/program/features/FEAT-004.md) | Roadmap NL2SQL (out of core SR scope for this retrofit) |
+| [FEAT-005](../../project/program/features/FEAT-005.md) | UR-005, UR-006; SR-005, SR-008, SR-009 |
+| [FEAT-006](../../project/program/features/FEAT-006.md) | UR-006; SR-007, SR-011 |
+
+Parent epic: [EPIC-001](../../project/portfolio/epics/EPIC-001.md).
+
 ## Documents
 
 | File | Content |

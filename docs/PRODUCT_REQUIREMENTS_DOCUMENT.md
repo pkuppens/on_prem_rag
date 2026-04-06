@@ -35,7 +35,7 @@ Portfolio delivery (SAFe) remains in [project/portfolio/epics/](../project/portf
 | UR-006 | Administrators can **deploy** with containers, **authentication**, and **health checks**. |
 | UR-007 | Organisations can **measure retrieval quality** using documented evaluation means. |
 
-**System (SR) and subsystem (SSR) requirements:** [requirements/SYSTEM_REQUIREMENTS.md](requirements/SYSTEM_REQUIREMENTS.md),
+**System (SR) and subsystem (SSR) requirements:** [requirements/SYSTEM_REQUIREMENTS.md](requirements/SYSTEM_REQUIREMENTS.md) (**SR-001** through **SR-012**),
 [requirements/SOFTWARE_SUBSYSTEM_REQUIREMENTS.md](requirements/SOFTWARE_SUBSYSTEM_REQUIREMENTS.md).
 
 ## Key Features (program alignment)

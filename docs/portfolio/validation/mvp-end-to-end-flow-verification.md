@@ -1,9 +1,10 @@
 # MVP end-to-end flow verification
 
 Created: 2026-03-23
-Updated: 2026-03-23
+Updated: 2026-04-06
 
 **Verification ID:** VERIFY-MVP-FLOW  
+**RTM (primary):** Step 1 → **VAL-UR-001** / **VAL-SR-001**; Step 2 → **VAL-UR-002** / **VAL-SR-002**; Step 3 (voice) → **VAL-UR-004** — see [requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md](../../requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md).  
 **GitHub issue (optional):** https://github.com/pkuppens/on_prem_rag/issues/73  
 
 Copy this file to `tmp/validation-YYYYMMDD-mvp-flow.md` for a run, or save a filled copy under `docs/portfolio/validation/reports/` if you commit evidence.

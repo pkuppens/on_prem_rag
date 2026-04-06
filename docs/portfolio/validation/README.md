@@ -1,9 +1,11 @@
 # Manual validation templates
 
 Created: 2026-03-23
-Updated: 2026-03-23
+Updated: 2026-04-06
 
 Templates for human verification and sign-off. Start from [manual-verification-playbook.md](../manual-verification-playbook.md).
+
+**Requirements traceability:** Map manual steps to **VAL-UR-***, **VAL-SR-***, or **VAL-SSR-*** ids in [requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md](../../requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md). Optional `val:` in committed validation frontmatter: [validations/README.md](../../validations/README.md).
 
 | Template | Purpose |
 |----------|---------|

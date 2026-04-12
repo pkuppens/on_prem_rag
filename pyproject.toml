@@ -264,7 +264,7 @@ show_missing = true # Show line numbers of missing coverage
 
 [dependency-groups]
 dev = [
-    "bandit>=1.8.6",
+    "bandit>=1.9.4",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.6",
     "plotly>=6.3.1",

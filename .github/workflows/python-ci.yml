@@ -537,7 +537,8 @@ jobs:
           export TRANSFORMERS_CACHE=$HOME/.cache/huggingface/hub
           export SENTENCE_TRANSFORMERS_HOME=$HOME/.cache/huggingface/sentence_transformers
           # Run integration tests (internet dependent); sequential for CI reliability
-          uv run pytest -m "internet and not ollama and not docker and not ci_skip" --junitxml=test-results-integration.xml
+          # -n 0: disable parallelism (overrides addopts "-n auto") to avoid ChromaDB init races during test module import
+          uv run pytest -n 0 -m "internet and not ollama and not docker and not ci_skip" --junitxml=test-results-integration.xml
       - name: Upload integration test results
         uses: actions/upload-artifact@v7
         with:

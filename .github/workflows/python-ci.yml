@@ -656,7 +656,7 @@ jobs:
       # Only comment when coverage < 60% to reduce notification noise (coverage always in job summary + artifacts)
       - name: Comment on PR
         if: steps.coverage.outputs.should_comment == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

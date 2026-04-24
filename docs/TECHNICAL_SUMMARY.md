@@ -1,7 +1,7 @@
 # On-Premises RAG for Healthcare: Technical Design and Lessons Learned
 
 **Created:** 2026-03-03  
-**Updated:** 2026-03-03
+**Updated:** 2026-04-24
 
 A technical summary of building a production-ready Retrieval-Augmented Generation (RAG) system for regulated healthcare environments. This document is designed as internal documentation that can be converted to a blog post for publishing on a personal site or LinkedIn.
 
@@ -107,6 +107,8 @@ Output includes JSON results and a Markdown table. Example (illustrative; actual
 | dense    | 0.72 | 0.81     | 0.90  | 0.65        |
 | sparse   | 0.58 | 0.69     | 0.82  | 0.52        |
 | hybrid   | 0.85 | 0.88     | 0.93  | 0.71        |
+
+_The table above is an illustrative example. For a dated run with exact versions, commit SHA, and measured metrics, see [reports/rag-evaluation-run-2026-04-24.md](reports/rag-evaluation-run-2026-04-24.md)._
 
 _See [RAG_EVALUATION.md](technical/RAG_EVALUATION.md) for schema and usage._
 

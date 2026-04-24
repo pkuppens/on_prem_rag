@@ -1,7 +1,7 @@
 # Load testing and RAG evaluation sign-off
 
 Created: 2026-03-23
-Updated: 2026-03-23
+Updated: 2026-04-24
 
 Automation should already ship **scripts and documentation**. This template is for **human execution** before release or portfolio sign-off when results are environment-dependent.
 
@@ -35,7 +35,7 @@ Notes:
 
 ## RAG evaluation
 
-**References:** [TECHNICAL_SUMMARY.md](../../TECHNICAL_SUMMARY.md), and the GitHub issue for evaluation (exact `uv run` commands).  
+**References:** [TECHNICAL_SUMMARY.md](../../TECHNICAL_SUMMARY.md), and the GitHub issue for evaluation (exact `uv run` commands). **Measured run (versions, SHAs):** [rag-evaluation-run-2026-04-24.md](../../reports/rag-evaluation-run-2026-04-24.md).  
 **GitHub issue (optional):** https://github.com/pkuppens/on_prem_rag/issues/133
 
 | Field | Value |

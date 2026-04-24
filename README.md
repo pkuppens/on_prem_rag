@@ -110,13 +110,13 @@ uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark.json --output 
 # Clinical guidelines (NHG): uv run evaluate-rag --dataset tests/fixtures/healthcare_benchmark_clinical.json --output results/eval-clinical
 ```
 
-| Strategy | MRR | Recall@5 | Hit@5 | Precision@5 |
-|----------|-----|----------|-------|-------------|
-| dense    | -   | -        | -     | -           |
-| sparse   | -   | -        | -     | -           |
-| hybrid   | -   | -        | -     | -           |
+| Strategy | MRR   | Recall@5 | Hit@5 | Precision@5 |
+|----------|-------|----------|-------|-------------|
+| dense    | 0.5161 | 0.5161  | 0.5161 | 0.1032     |
+| sparse   | 0.8710 | 0.8710  | 0.8710 | 0.1742     |
+| hybrid   | 0.5898 | 0.9032  | 0.9032 | 0.1806     |
 
-_Table populated after running `uv run evaluate-rag`. Requires ChromaDB with ingested documents._
+_General healthcare benchmark, local run 2026-04-24. See [docs/reports/rag-evaluation-run-2026-04-24.md](docs/reports/rag-evaluation-run-2026-04-24.md) for commit SHA, package versions, and clinical benchmark. Requires ChromaDB with ingested documents to reproduce._
 See [docs/technical/RAG_EVALUATION.md](docs/technical/RAG_EVALUATION.md) for schema and usage.
 See [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md) for full design document and evaluation run instructions.
 

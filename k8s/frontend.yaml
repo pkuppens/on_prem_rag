@@ -1,0 +1,56 @@
+# Frontend (React/Vite). Stateless. Reaches backend/auth via Ingress in-cluster.
+#   docker build -t onpremrag-frontend:dev -f docker/frontend/Dockerfile .
+#   kind load docker-image onpremrag-frontend:dev --name ckad
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: onpremrag
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: onpremrag-frontend:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5173
+          env:
+            - name: VITE_BACKEND_URL
+              value: "http://onpremrag.local/api"
+            - name: VITE_AUTH_URL
+              value: "http://onpremrag.local/auth"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5173
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: onpremrag
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 5173
+      targetPort: 5173

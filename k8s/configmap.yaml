@@ -1,0 +1,16 @@
+# Non-secret runtime config for the RAG backend and auth service.
+# Mirrors the environment block of docker-compose.yml (service DNS names instead of host ports).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onpremrag-config
+  namespace: onpremrag
+data:
+  CHROMA_HOST: "chroma"
+  CHROMA_PORT: "8000"
+  OLLAMA_BASE_URL: "http://ollama:11434"
+  UPLOADED_FILES_DIR: "/app/uploaded_files"
+  ALLOW_ORIGINS: "http://localhost:5173,http://onpremrag.local"
+  ENVIRONMENT: "development"
+  BACKEND_PORT: "9180"
+  AUTH_PORT: "9181"

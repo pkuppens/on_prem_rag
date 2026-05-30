@@ -1,0 +1,72 @@
+# Auth microservice (separate FastAPI app, same backend image, different command).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: onpremrag
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: onpremrag-backend:dev
+          imagePullPolicy: IfNotPresent
+          command:
+            - uvicorn
+            - src.backend.auth_service.main:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "9181"
+          ports:
+            - containerPort: 9181
+          env:
+            - name: PORT
+              value: "9181"
+            - name: ENVIRONMENT
+              value: "development"
+            - name: AUTH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: onpremrag-secrets
+                  key: AUTH_JWT_SECRET
+          readinessProbe:
+            httpGet:
+              path: /oauth/providers
+              port: 9181
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /oauth/providers
+              port: 9181
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: onpremrag
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 9181
+      targetPort: 9181

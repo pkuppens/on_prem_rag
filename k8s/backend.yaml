@@ -1,0 +1,125 @@
+# RAG backend (FastAPI). Stateless apart from uploaded files (shared PVC).
+# Image: build docker/backend/Dockerfile and push, or load into kind:
+#   docker build -t onpremrag-backend:dev -f docker/backend/Dockerfile .
+#   kind load docker-image onpremrag-backend:dev --name ckad
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploaded-files
+  namespace: onpremrag
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: onpremrag
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: onpremrag-backend:dev
+          imagePullPolicy: IfNotPresent
+          command:
+            - uvicorn
+            - backend.rag_pipeline.api.app:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "9180"
+          ports:
+            - containerPort: 9180
+          envFrom:
+            - configMapRef:
+                name: onpremrag-config
+          env:
+            - name: PORT
+              value: "9180"
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: onpremrag-secrets
+                  key: OPENAI_API_KEY
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: onpremrag-secrets
+                  key: ANTHROPIC_API_KEY
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: onpremrag-secrets
+                  key: GOOGLE_API_KEY
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9180
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9180
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploaded_files
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: uploaded-files
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: onpremrag
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 9180
+      targetPort: 9180
+---
+# Independent scaling of the backend (CKAD domain 2/4). Needs metrics-server.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend
+  namespace: onpremrag
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70

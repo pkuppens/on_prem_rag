@@ -111,9 +111,9 @@ class IngestionService:
 
         # ---- Step 1: Duplicate check ----
         if deduplicate and emb_model:
-            from backend.ingestion.infrastructure.document_loader import DocumentLoader as DL
+            from backend.ingestion.infrastructure.document_loader import DocumentLoader
 
-            loader = DL()
+            loader = DocumentLoader()
             file_content_hash = loader._compute_file_hash(file_path)  # type: ignore[attr-defined]
             if self.vector_store.has_document_with_file_hash(file_content_hash, embedding_model=emb_model):
                 logger.info("Skipping duplicate document", filename=file_path.name)
@@ -225,7 +225,7 @@ class IngestionService:
                 if emb_model:
                     meta["embedding_model"] = emb_model
                 metadatas_list.append(meta)
-            self.vector_store.add_embeddings(ids, embeddings[:len(ids)], metadatas_list)
+            self.vector_store.add_embeddings(ids, embeddings[: len(ids)], metadatas_list)
             records_stored = len(ids)
         else:
             records_stored = 0

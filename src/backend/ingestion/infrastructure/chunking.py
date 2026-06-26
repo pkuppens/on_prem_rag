@@ -20,8 +20,8 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.schema import BaseNode, TextNode
 
 from backend.ingestion.domain.value_objects import Chunk, IngestionDocument
-from backend.rag_pipeline.utils.text_cleaning import clean_chunk_text, get_text_statistics
 from backend.rag_pipeline.utils.logging import StructuredLogger
+from backend.rag_pipeline.utils.text_cleaning import clean_chunk_text, get_text_statistics
 
 logger = StructuredLogger(__name__)
 
@@ -218,9 +218,7 @@ def chunk_documents(
         # Preserve empty pages
         page_text = page_doc.text or ""
         if not page_chunks and not page_text.strip():
-            empty_node = TextNode(
-                text="", metadata=dict(page_doc.metadata) if page_doc.metadata else {}
-            )
+            empty_node = TextNode(text="", metadata=dict(page_doc.metadata) if page_doc.metadata else {})
             empty_node.metadata["is_empty_page"] = True
             page_chunks = [empty_node]
 

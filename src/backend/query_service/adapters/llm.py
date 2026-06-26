@@ -10,7 +10,6 @@ from collections.abc import Generator
 
 from backend.llm_gateway.application.completion_service import CompletionService
 from backend.llm_gateway.domain.interfaces import LLMProvider
-
 from backend.query_service.ports.llm_gateway import ICompletionService
 
 

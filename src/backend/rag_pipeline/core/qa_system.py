@@ -9,10 +9,10 @@ from __future__ import annotations
 from typing import Any
 
 from backend.llm_gateway.domain.interfaces import LLMProvider
+from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from backend.query_service.application.query_orchestrator import (
     QueryOrchestrator as QASystem,
 )
-from backend.query_service.application.query_orchestrator import QueryOrchestrator
 
 from ..utils.logging import StructuredLogger
 

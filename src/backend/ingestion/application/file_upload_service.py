@@ -84,12 +84,14 @@ class FileUploadService:
                     validation_result = await self._validate_file(file)
                     if validation_result["valid"]:
                         saved_path = await self._save_file(file, task_id)
-                        accepted_files.append({
-                            "filename": file.filename,
-                            "saved_path": str(saved_path),
-                            "size": file.size,
-                            "content_type": file.content_type,
-                        })
+                        accepted_files.append(
+                            {
+                                "filename": file.filename,
+                                "saved_path": str(saved_path),
+                                "size": file.size,
+                                "content_type": file.content_type,
+                            }
+                        )
                         logger.info("File accepted", filename=file.filename, task_id=task_id)
                     else:
                         rejected_files.append({"filename": file.filename, "error": validation_result["error"]})

@@ -8,9 +8,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from backend.retrieval.application.search_service import create_retrieval_service
-
 from backend.query_service.ports.retrieval import IRetrievalService
+from backend.retrieval.application.search_service import create_retrieval_service
 
 
 class RetrievalAdapter(IRetrievalService):

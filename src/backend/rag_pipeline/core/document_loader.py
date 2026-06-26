@@ -28,6 +28,7 @@ from backend.ingestion.infrastructure.document_loader import (  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
+
 # Re-export DocumentMetadata for backward compatibility
 class DocumentMetadata(BaseModel):
     """Metadata for a processed document.
@@ -202,9 +203,7 @@ class DocumentLoader:
                 metadata.num_pages = len(ing_docs)
 
             metadata.creation_date = self._extract_creation_date(file_path)
-            metadata.section_headings = self._extract_section_headings(
-                llama_docs, file_path, file_path.suffix.lower()
-            )
+            metadata.section_headings = self._extract_section_headings(llama_docs, file_path, file_path.suffix.lower())
 
             # Mark as processed
             self.processed_files.add(dedup_key)

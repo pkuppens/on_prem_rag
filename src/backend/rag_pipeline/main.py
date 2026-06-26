@@ -8,6 +8,7 @@ Keeps process_medical_conversation for backward compatibility (not yet migrated)
 
 from crewai import Crew
 
+from backend.query_service.main import start_server  # noqa: F401
 from backend.rag_pipeline.agents import create_medical_crew
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
 from backend.rag_pipeline.core.rag_system import LocalRAGSystem
@@ -18,7 +19,6 @@ from backend.rag_pipeline.tasks import (
     PreprocessMedicalTextTask,
     QualityControlTask,
 )
-from backend.query_service.main import start_server  # noqa: F401
 
 
 def process_medical_conversation(text: str):

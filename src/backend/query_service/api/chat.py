@@ -11,10 +11,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from backend.rag_pipeline.config.llm_config import get_llm_config
 from backend.rag_pipeline.utils.logging import StructuredLogger
 
-from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)

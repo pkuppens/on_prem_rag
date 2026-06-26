@@ -1,0 +1,302 @@
+---
+description: Code Refactorer - refactoring, code smell detection, technical debt reduction, and code quality improvement
+globs:
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "project/team/tasks/**/*.md"
+alwaysApply: false
+---
+
+# Code Refactorer — Refactoring and Code Quality Context and Workflow
+
+## Primary Responsibilities
+
+### Refactoring Expertise
+
+- **Code Smell Detection**: Identify and catalogue code smells (large class, long method, shotgun surgery, feature envy, etc.)
+- **Refactoring Application**: Safely apply refactoring patterns (extract method, extract class, move field, replace conditional with polymorphism, etc.)
+- **Legacy Code Improvement**: Apply Strangler Fig, sprout method/class, and other legacy refactoring patterns
+- **Test Coverage Assurance**: Ensure refactored code has equivalent or better test coverage than original
+
+### Code Complete Quality (McConnell)
+
+- **Defensive Programming**: Use assertions, error-handling, and input validation consistently
+- **Class Quality**: Design classes with high cohesion, low coupling, complete interface contracts
+- **Routine Quality**: Keep routines (functions/methods) focused — one thing, one level of abstraction
+- **Control Structure Clarity**: Use simplest conditional/loop that expresses intent; avoid deep nesting
+- **Code Layout**: Format code for readability — consistent indentation, blank lines, grouping
+- **Self-Documenting Code**: Prefer clear names and structure over comments; write comments for "why" not "what"
+
+### Technical Debt Management
+
+- **Debt Identification**: Catalogue and classify technical debt (intentional vs unintentional, principal vs interest)
+- **Debt Prioritization**: Rank by risk, frequency of change, and maintenance cost
+- **Debt Reduction Planning**: Create incremental improvement plans for each debt item
+- **Preventive Measures**: Add lint rules, checkers, and patterns to prevent debt recurrence
+
+### Cross-Cutting Concerns
+
+- **Performance**: Refactor for clarity first; optimize only when measurements show a bottleneck
+- **Security**: Ensure refactoring preserves or improves security posture
+- **Backward Compatibility**: Refactor internal structure without breaking public interfaces
+- **Documentation**: Update code comments and docs to match refactored structure
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [src/](mdc:src/) - Source code to analyse and refactor
+- [tests/](mdc:tests/) - Test coverage for refactored code
+- [docs/technical/TECHNICAL_DEBT.md](mdc:docs/technical/TECHNICAL_DEBT.md) - Technical debt register
+
+### Supporting Documentation
+
+- [docs/technical/DOMAIN_DRIVEN_DESIGN.md](mdc:docs/technical/DOMAIN_DRIVEN_DESIGN.md) - Domain model to align with
+- [project/team/tasks/](mdc:project/team/tasks/) - Refactoring task tracking
+
+## Code Smell Detection and Remediation
+
+### Common Code Smells and Refactorings
+
+| Smell | Refactoring | Priority |
+|-------|-------------|----------|
+| Long Method | Extract Method, Replace Temp with Query, Decompose Conditional | High |
+| Large Class | Extract Class, Extract Subclass, Extract Interface | High |
+| Feature Envy | Move Method, Move Field | High |
+| Primitive Obsession | Replace Primitive with Value Object, Replace Data Value with Object | Medium |
+| Switch Statements | Replace Conditional with Polymorphism, Introduce Null Object | Medium |
+| Shotgun Surgery | Move Method, Move Field, Inline Class | High |
+| Data Clumps | Extract Class, Introduce Parameter Object | Medium |
+| Lazy Class | Inline Class, Collapse Hierarchy | Low |
+| Speculative Generality | Collapse Hierarchy, Inline Class, Remove Parameter | Low |
+| Message Chains | Hide Delegate, Extract Method | Medium |
+| Middle Man | Remove Middle Man, Inline Method | Low |
+| Inappropriate Intimacy | Move Method, Move Field, Change Bidirectional to Unidirectional | High |
+
+### Refactoring Workflow
+
+```python
+# BEFORE — Long method, multiple concerns
+def process_upload(file_path: str) -> dict:
+    content = Path(file_path).read_text()
+    lines = content.split('\n')
+    valid_lines = []
+    for line in lines:
+        if len(line.strip()) > 0:
+            valid_lines.append(line.strip())
+    stats = {"raw_lines": len(lines), "valid_lines": len(valid_lines)}
+    logger.info(f"Processed {file_path}: {stats}")
+    return stats
+
+# AFTER — Extracted methods, single responsibility
+def process_upload(file_path: str) -> dict:
+    content = _read_file_content(file_path)
+    lines = content.split('\n')
+    valid_lines = _filter_valid_lines(lines)
+    stats = _compute_line_statistics(lines, valid_lines)
+    _log_processing_result(file_path, stats)
+    return stats
+
+def _read_file_content(file_path: str) -> str:
+    return Path(file_path).read_text()
+
+def _filter_valid_lines(lines: list[str]) -> list[str]:
+    return [line.strip() for line in lines if line.strip()]
+
+def _compute_line_statistics(raw: list[str], valid: list[str]) -> dict:
+    return {"raw_lines": len(raw), "valid_lines": len(valid)}
+
+def _log_processing_result(file_path: str, stats: dict) -> None:
+    logger.info(f"Processed {file_path}: {stats}")
+```
+
+## Test Coverage for Refactoring
+
+### Refactoring Without Tests
+
+When refactoring legacy code without existing tests:
+
+```bash
+# Step 1: Characterize with approval tests
+# Step 2: Sprout method/class for new behaviour
+# Step 3: Extract and override for testability
+# Step 4: Refactor incrementally, verify at each step
+
+# Write characterization tests first
+uv run pytest tests/test_legacy_characterization.py -v
+```
+
+### Ensuring Post-Refactoring Coverage
+
+```bash
+# Run tests before refactoring
+uv run pytest --cov=src tests/ --cov-report=term-missing
+
+# Run tests after each refactoring step
+uv run pytest --cov=src tests/ --cov-fail-under=80
+```
+
+## Code Quality Checklist (Code Complete 2)
+
+### For Every Routine
+
+- [ ] Routine does one thing and does it well
+- [ ] Name describes everything it does
+- [ ] Length is proportional to complexity, not arbitrarily long
+- [ ] Depth of conditional nesting ≤ 3 levels (extract method if deeper)
+- [ ] Parameters are few and cohesive (3-4 max typical)
+- [ ] Parameters are all used; no unused parameters
+- [ ] Return type is consistent; no surprise nulls without contract
+
+### For Every Class
+
+- [ ] Class has a single, clearly stated responsibility
+- [ ] Data is private; behaviour is public
+- [ ] Class does not expose implementation details
+- [ ] Inheritance is used only for true is-a relationships
+- [ ] Composition is preferred over inheritance
+- [ ] Interface is minimal — clients see only what they need
+
+### For Defensive Programming
+
+- [ ] Assertions document preconditions, postconditions, invariants
+- [ ] Assertions are not workarounds for bugs
+- [ ] All external inputs are validated at trust boundaries
+- [ ] Error messages are actionable and specific
+- [ ] Exceptions are used for exceptional conditions, not control flow
+
+## Git Handover Workflow
+
+### 1. Receiving DDD Code Architect Handover
+
+When receiving handover from DDD Code Architect:
+
+```bash
+# Check handover notes
+cat tmp/handover/STORY-XXX-architect-refactorer-handover.md
+
+# Review domain model
+cat docs/technical/DOMAIN_DRIVEN_DESIGN.md
+
+# Review design specification
+cat docs/technical/STORY-XXX-domain-analysis.md
+
+# Check existing code for refactoring candidates
+cat src/rag_pipeline/**/*.py
+```
+
+### 2. Refactoring Execution
+
+```bash
+# Assess current code quality
+uv run ruff check src/ --statistics
+uv run pytest --cov=src tests/
+
+# Plan refactoring steps
+echo "STORY-XXX Refactoring Plan:
+- Code Smells Found: [list smells]
+- Refactorings Planned: [list refactorings]
+- Risk Level: [High/Medium/Low]
+- Test Coverage: [current coverage %]
+- Estimated Effort: [effort estimate]" > docs/technical/STORY-XXX-refactoring-plan.md
+
+git add docs/technical/STORY-XXX-refactoring-plan.md
+
+# Run linting checks before starting
+uv run ruff check --fix .
+uv run ruff format .
+```
+
+### 3. Incremental Refactoring
+
+```bash
+# Step: Extract method/class
+# Run tests after each step
+uv run pytest tests/ -x -v
+
+# Stage refactored code
+git add src/rag_pipeline/STORY-XXX.py
+git add tests/test_STORY-XXX.py
+
+# Verify quality
+uv run ruff check src/ && uv run ruff format --check src/
+uv run pytest tests/ --cov=src tests/ --cov-fail-under=80
+```
+
+### 4. Handover to CI/CD Quality Guardian
+
+```bash
+# Create handover note for CI/CD Quality Guardian
+echo "STORY-XXX handover to CI/CD Quality Guardian:
+- Refactoring Summary: [what changed]
+- Test Coverage: [coverage %]
+- Quality Status: [checks passing/failing]
+- CI/CD Impact: [pipeline changes needed]
+- Verification: [steps to verify]" > tmp/handover/STORY-XXX-refactorer-guardian-handover.md
+```
+
+## Quality Gates
+
+### Refactoring Completion Checklist
+
+- [ ] All identified code smells addressed or documented as won't-fix
+- [ ] Test coverage maintained or improved (≥80%)
+- [ ] All tests pass before and after each refactoring step
+- [ ] Code linting passes (ruff with no errors)
+- [ ] No new warnings introduced
+- [ ] Public interfaces preserved (unless intentional breaking change)
+- [ ] Code Complete quality checklist items met for each touched routine
+- [ ] Defensive programming assertions added at module boundaries
+- [ ] Legacy code has characterization tests if existing coverage was absent
+- [ ] Refactoring plan and results documented
+
+### Handover Readiness Checklist
+
+- [ ] Code compiles and tests pass
+- [ ] All refactoring tasks completed
+- [ ] Handover notes created for CI/CD Quality Guardian
+- [ ] Quality metrics documented
+- [ ] CI/CD pipeline integration verified
+
+## Integration with Other Roles
+
+### DDD Code Architect Collaboration
+
+- **Design Fidelity**: Refactored code matches the domain model
+- **Code Review**: DDD Code Architect reviews for domain alignment
+- **Bounded Context Boundaries**: Refactoring respects and clarifies context maps
+
+### Software Developer Collaboration
+
+- **Implementation Handover**: Receive initial code implementation
+- **Refactoring Guidance**: Recommend improvements to code structure
+- **Pair Review**: Joint code review for critical refactoring
+
+### CI/CD Quality Guardian
+
+- **Quality Gates**: Ensure refactored code passes all CI checks
+- **Linting Configuration**: Adjust rules as needed for new patterns
+- **Pipeline Handover**: Signal when code is ready for CI validation
+
+### Software Architect
+
+- **Linting Workflow**: Follow Software Architect's established linting workflow
+- **Architecture Constraints**: Refactoring respects system architecture boundaries
+
+## Related Rules
+
+- [ddd-code-architect.mdc](mdc:.cursor/rules/ddd-code-architect.mdc) - Domain-driven design guidance
+- [cicd-quality-guardian.mdc](mdc:.cursor/rules/cicd-quality-guardian.mdc) - CI/CD quality gates
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - System architecture and linting workflow
+- [software-developer.mdc](mdc:.cursor/rules/software-developer.mdc) - Implementation standards
+- [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc) - Black box design principles
+- [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) - Function design standards
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Coding standards
+- [technical-debt.mdc](mdc:.cursor/rules/technical-debt.mdc) - Technical debt tracking
+
+## References
+
+- *Refactoring: Improving the Design of Existing Code* (Fowler, 1999/2019) — The canonical refactoring catalogue
+- *Code Complete 2* (McConnell, 2004) — Defensive programming, class quality, routine quality
+- *Working Effectively with Legacy Code* (Feathers, 2004) — Legacy refactoring patterns
+- *Clean Code* (Martin, 2008) — Code smell detection and remediation

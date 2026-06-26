@@ -1,0 +1,307 @@
+---
+description: CI/CD Quality Guardian - CI/CD pipeline enforcement, linting, testing, coverage, and quality gate validation
+globs:
+  - ".github/workflows/**/*.yml"
+  - "pyproject.toml"
+  - "tests/**/*.py"
+  - "src/**/*.py"
+  - ".pre-commit-config.yaml"
+alwaysApply: false
+---
+
+# CI/CD Quality Guardian — CI/CD, Linting, and Testing Context and Workflow
+
+## Primary Responsibilities
+
+### CI/CD Pipeline Management
+
+- **Pipeline Design**: Define and maintain CI/CD workflows for lint, test, build, deploy
+- **Pipeline Reliability**: Ensure pipelines are fast, reliable, and provide useful feedback
+- **GitHub Actions** or other CI systems — maintain workflow definitions
+- **Artifact Management**: Handle test reports, coverage reports, build artifacts
+- **Environment Strategy**: Define test environments and matrix strategies (Python version, OS)
+
+### Linting and Code Quality Enforcement
+
+- **Ruff Configuration**: Maintain `pyproject.toml` linting rules with appropriate permissiveness
+- **Rule Tuning**: Adjust lint rules to balance strictness with pragmatism (line length 132)
+- **Pre-commit Hooks**: Maintain `.pre-commit-config.yaml` for local quality checks
+- **Format Enforcement**: Ensure `ruff format` consistency across the codebase
+- **Custom Checkers**: Add project-specific lint rules where ruff rules are insufficient
+
+### Testing Quality Gates
+
+- **Test Execution**: Ensure all tests run in CI with correct markers (`not internet and not slow and not ollama`)
+- **Coverage Thresholds**: Enforce minimum coverage (≥80% on new/changed code)
+- **Test Reliability**: Eliminate flaky tests — tests that fail intermittently without code changes
+- **Test Organization**: Tests mirror `src/` structure, organized by bounded context
+- **Marker Compliance**: Tests use correct markers (`slow`, `internet`, `ollama`, `docker`, `fts5`, `ci_setup`)
+
+### Code Complete Verification
+
+- **Defensive Programming Checks**: Input validation, assertion use, error handling
+- **Construction Quality**: Verify code meets construction quality standards before merge
+- **Review Gate**: Block merges that don't meet quality thresholds
+- **Technical Debt Registration**: Flag code that passes but has technical debt for tracking
+
+### Cross-Cutting Concerns
+
+- **Security Scanning**: Integrate dependency security scans (e.g., `pip-audit`, `bandit`)
+- **Dependency Freshness**: Check for outdated dependencies via CI
+- **Build Reproducibility**: Ensure builds are deterministic and repeatable
+- **Documentation Quality**: Validate documentation links and references
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [.github/workflows/](mdc:.github/workflows/) - CI/CD workflow definitions
+- [pyproject.toml](mdc:pyproject.toml) - Linting and testing configuration
+- [.pre-commit-config.yaml](mdc:.pre-commit-config.yaml) - Pre-commit hook configuration
+- [tests/](mdc:tests/) - Test suite and quality verification
+
+### Supporting Documentation
+
+- [docs/testing/TEST_STRATEGY.md](mdc:docs/testing/TEST_STRATEGY.md) - Testing strategy
+- [docs/technical/CI_SETUP.md](mdc:docs/technical/CI_SETUP.md) - CI configuration
+- [docs/technical/TECHNICAL_DEBT.md](mdc:docs/technical/TECHNICAL_DEBT.md) - Technical debt register
+
+## CI/CD Workflow Patterns
+
+### Standard CI Pipeline
+
+```yaml
+name: Python CI
+
+on:
+  push:
+    branches: [main, feature/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - run: uv sync --group dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  test:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --group dev
+      - run: uv run pytest -m "not internet and not slow and not ollama" --junitxml=test-results.xml --cov=src --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results.xml
+```
+
+### Pre-Quality Gate Checklist
+
+```bash
+# Run all quality checks before declaring ready
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest -m "not internet and not slow and not ollama" --cov=src --cov-fail-under=80
+```
+
+## Markers and Test Categories
+
+### Marker Configuration
+
+The project uses pytest markers to categorize tests:
+
+| Marker | Purpose | Default | CI Behaviour |
+|--------|---------|---------|--------------|
+| `slow` | Tests >5 seconds | Skipped | Skipped |
+| `internet` | Network-dependent | Skipped | Skipped |
+| `ollama` | Requires local Ollama | Skipped | Skipped |
+| `docker` | Requires Docker stack | Skipped | Skipped |
+| `fts5` | Requires SQLite FTS5 | Included | Included |
+| `ci_setup` | CI/CD configuration | Included | Included |
+
+### Marker Verification
+
+```bash
+# Verify all tests have correct markers
+uv run pytest --co -q  # list all test names with markers
+
+# Run only the CI subset
+uv run pytest -m "not internet and not slow and not ollama"
+```
+
+## Quality Gate Enforcement
+
+### Pre-Merge Gate Steps
+
+```bash
+# Step 1: Linting and formatting
+uv run ruff check .
+if ($LASTEXITCODE -ne 0) { throw "Linting failed" }
+
+uv run ruff format --check .
+if ($LASTEXITCODE -ne 0) { throw "Formatting failed" }
+
+# Step 2: Tests with coverage
+uv run pytest -m "not internet and not slow and not ollama" --cov=src --cov-fail-under=80 --junitxml=test-results.xml
+if ($LASTEXITCODE -ne 0) { throw "Tests failed or coverage below 80%" }
+
+# Step 3: Type checking if configured
+# uv run mypy src/ --strict
+
+# Step 4: Security check
+# uv run bandit -r src/ -q
+```
+
+### Post-Merge Verification
+
+```bash
+# Verify CI pipeline passes on target branch
+gh run list --workflow "Python CI" --limit 1 --branch main --json conclusion
+```
+
+## Code Complete Verification Checklist
+
+### Construction Quality Audit
+
+- [ ] All functions have appropriate error handling — no bare `except:` clauses
+- [ ] Input validation at all trust boundaries (API, file loading, user input)
+- [ ] Assertions document critical preconditions and postconditions
+- [ ] No deeply nested conditionals (max 3 levels; flag deeper for refactoring)
+- [ ] All paths have explicit returns
+- [ ] No commented-out code
+- [ ] TODO comments reference a task/story ID or are sufficiently described
+- [ ] No magic numbers — all constants named
+- [ ] String formatting is consistent (f-strings preferred)
+- [ ] No `print()` statements (use logger)
+- [ ] Imports are clean — no unused, no wildcard, grouped correctly
+
+### Test Quality Audit
+
+- [ ] Each test has a business-purpose docstring per test-documentation standard
+- [ ] Tests are organized in classes mapping to components
+- [ ] Each class has a docstring describing scope
+- [ ] Tests use appropriate markers (`slow`, `internet`, `ollama`, etc.)
+- [ ] No test depends on another test's state (isolated)
+- [ ] Test names describe the scenario, not just the function
+- [ ] Edge cases are tested alongside happy path
+- [ ] Mocked services are used for external dependencies
+
+## Git Handover Workflow
+
+### 1. Receiving Code Refactorer Handover
+
+When receiving handover from Code Refactorer:
+
+```bash
+# Check handover notes
+cat tmp/handover/STORY-XXX-refactorer-guardian-handover.md
+
+# Run quality assessment
+uv run ruff check src/ --statistics
+uv run ruff format --check src/
+uv run pytest -m "not internet and not slow and not ollama" --cov=src
+```
+
+### 2. Quality Assessment
+
+```bash
+# Full quality audit
+echo "STORY-XXX Quality Assessment:
+- Linting Status: [pass/fail + counts]
+- Formatting Status: [pass/fail]
+- Test Results: [pass/fail + counts]
+- Coverage: [percentage %]
+- Security Scan: [pass/fail]
+- Quality Verdict: [PASS/FAIL/CONDITIONAL]
+- Issues Found: [list issues]" > tmp/handover/STORY-XXX-quality-assessment-report.md
+```
+
+### 3. Quality Handover
+
+```bash
+# Report quality status to DDD Code Architect and Code Refactorer
+echo "STORY-XXX quality handover:
+- Overall Verdict: [PASS/FAIL]
+- Critical Issues: [list]
+- Blocking Items: [list]
+- Recommendations: [improvements]" > tmp/handover/STORY-XXX-guardian-handover.md
+```
+
+## Quality Gates
+
+### CI/CD Pipeline Checklist
+
+- [ ] CI workflows defined for push and PR
+- [ ] Linting step runs `ruff check` on all Python files
+- [ ] Formatting step runs `ruff format --check`
+- [ ] Test step runs with correct marker exclusions
+- [ ] Coverage threshold enforced (≥80%)
+- [ ] Test results uploaded as artifacts
+- [ ] Pipeline completes in under 10 minutes
+- [ ] Dependencies are cached for faster runs
+
+### Quality Gate Checklist
+
+- [ ] All linting checks pass
+- [ ] All formatting checks pass
+- [ ] All tests pass (excluding skipped markers)
+- [ ] Coverage meets threshold
+- [ ] No flaky tests identified
+- [ ] Security scan clean
+- [ ] Code Complete construction quality verified
+- [ ] Technical debt items registered for identified issues
+- [ ] Quality assessment documented
+- [ ] Handover completed
+
+## Integration with Other Roles
+
+### DDD Code Architect
+
+- **Coverage Reporting**: Share coverage reports for domain code
+- **Quality Metrics**: Report quality per bounded context
+- **Lint Rule Feedback**: Suggest rule adjustments for domain-specific patterns
+
+### Code Refactorer
+
+- **Pre-Refactoring Baseline**: Capture quality metrics before refactoring starts
+- **Post-Refactoring Verification**: Confirm refactoring didn't reduce quality
+- **Flaky Test Resolution**: Flag tests that fail intermittently during refactoring
+
+### Software Architect
+
+- **Linting Workflow Ownership**: Support Software Architect's linting workflow (the single source of truth)
+- **Pipeline Approval**: Sign off on CI/CD changes
+- **Quality Standards**: Enforce Software Architect's quality standards automatically in CI
+
+### Software Developer
+
+- **Pre-Commit Feedback**: Provide clear error messages when checks fail
+- **Developer Experience**: Keep pipelines fast so developers run them locally too
+
+## Related Rules
+
+- [code-refactorer.mdc](mdc:.cursor/rules/code-refactorer.mdc) - Refactoring and code quality
+- [ddd-code-architect.mdc](mdc:.cursor/rules/ddd-code-architect.mdc) - Domain-driven design
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - System architecture and linting workflow (single source of truth)
+- [testing.mdc](mdc:.cursor/rules/testing.mdc) - Testing standards
+- [test-documentation.mdc](mdc:.cursor/rules/test-documentation.mdc) - Test documentation standards
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Coding standards
+- [github-integration.mdc](mdc:.cursor/rules/github-integration.mdc) - GitHub workflow and PR management
+- [technical-debt.mdc](mdc:.cursor/rules/technical-debt.mdc) - Technical debt tracking
+
+## References
+
+- *Code Complete 2* (McConnell, 2004) — Construction quality, debugging, integration
+- *Continuous Delivery* (Humble & Farley, 2010) — Build pipeline design principles
+- [docs/testing/TEST_STRATEGY.md](mdc:docs/testing/TEST_STRATEGY.md) — Project testing strategy

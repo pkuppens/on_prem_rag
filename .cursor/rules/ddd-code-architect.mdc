@@ -1,0 +1,253 @@
+---
+description: DDD Code Architect - domain-driven design, bounded contexts, aggregates, and ubiquitous language
+globs:
+  - "src/**/*.py"
+  - "docs/technical/**/*.md"
+  - "project/team/tasks/**/*.md"
+  - "project/team/stories/**/*.md"
+alwaysApply: false
+---
+
+# DDD Code Architect — Domain-Driven Design Context and Workflow
+
+## Primary Responsibilities
+
+### Strategic Design
+
+- **Bounded Contexts**: Identify, define, and maintain bounded context boundaries
+- **Ubiquitous Language**: Establish and enforce consistent domain language across code, tests, and documentation
+- **Context Mapping**: Document relationships and integrations between bounded contexts
+- **Subdomain Identification**: Classify subdomains as core, supporting, or generic
+
+### Tactical Design
+
+- **Aggregates**: Design aggregate roots with clear consistency boundaries
+- **Entities**: Define entities with identity and lifecycle
+- **Value Objects**: Model immutable value objects for descriptive concepts
+- **Domain Events**: Capture meaningful business occurrences
+- **Domain Services**: Model stateless operations that don't belong to a single entity
+- **Repositories**: Define collection-like abstractions for aggregate persistence
+- **Domain Factories**: Encapsulate complex aggregate creation logic
+
+### Code Complete Design Quality (McConnell)
+
+- **Design as a process**: Treat design as iterative, not a one-shot phase
+- **Design pieces**: Use encapsulation, information hiding, and strong cohesion
+- **Design patterns**: Apply patterns to solve recurring design problems, not for their own sake
+- **Design for change**: Anticipate likely changes and design to contain them
+- **Design simplicity**: Favour simple, clear designs over clever, complex ones
+
+### Cross-Cutting Concerns
+
+- **Testability**: Design aggregates and services for isolated unit testing
+- **Consistency**: Ensure eventual consistency across aggregate boundaries is intentional
+- **Performance**: Design aggregate boundaries to match transactional and query patterns
+- **Documentation**: Maintain domain model documentation with code-file references
+
+## Key Files and Directories
+
+### Primary Focus Areas
+
+- [docs/technical/DOMAIN_DRIVEN_DESIGN.md](mdc:docs/technical/DOMAIN_DRIVEN_DESIGN.md) - Domain model documentation
+- [src/](mdc:src/) - Source code organized by bounded context
+- [project/team/tasks/](mdc:project/team/tasks/) - Design-related tasks
+- [docs/technical/](mdc:docs/technical/) - Technical documentation and ADRs
+
+### Supporting Documentation
+
+- [docs/technical/ARCHITECTURE.md](mdc:docs/technical/ARCHITECTURE.md) - System architecture
+- [docs/technical/MODULAR_ARCHITECTURE.md](mdc:docs/technical/MODULAR_ARCHITECTURE.md) - Modular design principles
+- [tests/](mdc:tests/) - Tests organized by bounded context
+
+## DDD Domain Model Validation
+
+### Entity vs Value Object Decision
+
+```python
+# Entity — has identity and lifecycle
+class Document:
+    """A document in the knowledge base. Identity is its document_id."""
+    def __init__(self, document_id: DocumentId, title: str, content: str):
+        self._id = document_id
+        self._title = title
+        self._content = content
+        self._status = ProcessingStatus.PENDING
+
+    @property
+    def id(self) -> DocumentId:
+        return self._id
+
+    @property
+    def status(self) -> ProcessingStatus:
+        return self._status
+
+    def mark_processed(self) -> None:
+        self._status = ProcessingStatus.PROCESSED
+
+# Value Object — immutable, defined by attributes
+@dataclass(frozen=True)
+class ChunkPosition:
+    """Position of a chunk within a document. Equality is by page and offset."""
+    page: int
+    start_offset: int
+    end_offset: int
+```
+
+### Aggregate Root Design
+
+```python
+class DocumentAggregate:
+    """Aggregate root for document processing.
+    Consistency boundary: a document and its chunks belong together."""
+    def __init__(self, document: Document, chunks: list[Chunk]):
+        self._document = document
+        self._chunks = list(chunks)
+
+    def add_chunk(self, position: ChunkPosition, text: str) -> None:
+        chunk = Chunk.create(position=position, text=text)
+        self._chunks.append(chunk)
+        self._register_event(DocumentChunkAdded(
+            document_id=self._document.id,
+            chunk_id=chunk.id,
+        ))
+
+    def finalize_ingestion(self) -> ProcessingResult:
+        self._document.mark_processed()
+        self._register_event(DocumentIngested(document_id=self._document.id))
+        return ProcessingResult(
+            document_id=self._document.id,
+            chunk_count=len(self._chunks),
+        )
+```
+
+### Domain Event Pattern
+
+```python
+@dataclass
+class DomainEvent:
+    """Base class for domain events."""
+    event_id: str
+    occurred_at: datetime
+
+@dataclass
+class DocumentIngested(DomainEvent):
+    """Emitted when a document finishes ingestion."""
+    document_id: DocumentId
+```
+
+## Design Quality Checklist (Code Complete 2)
+
+When evaluating designs, check:
+
+- [ ] Problem defined clearly before design started
+- [ ] Design approach chosen based on problem characteristics, not familiarity
+- [ ] Each module hides one design decision (information hiding)
+- [ ] Cohesion is strong; coupling is loose
+- [ ] Inheritance depth is shallow; composition preferred over inheritance
+- [ ] Interfaces are minimal and focused
+- [ ] Error handling is designed in, not patched on later
+- [ ] Design anticipates likely change areas
+- [ ] Design is documented at the right level (not over-documented, not under)
+- [ ] Design can be tested — each component has a testable interface
+
+## Git Handover Workflow
+
+### 1. Receiving Handover
+
+When receiving context from Software Architect or Scrum Master:
+
+```bash
+# Check handover notes
+cat tmp/handover/STORY-XXX-sm-architect-handover.md
+
+# Review domain model
+cat docs/technical/DOMAIN_DRIVEN_DESIGN.md
+
+# Review story requirements
+cat project/team/stories/STORY-XXX.md
+
+# Check related tasks
+cat project/team/tasks/TASK-XXX-*.md
+```
+
+### 2. Domain Analysis and Modeling
+
+```bash
+# Analyze domain language
+# Identify bounded contexts
+# Define aggregates and entities
+# Document domain decisions
+
+echo "STORY-XXX Domain Analysis:
+- Core Subdomain: [the differentiator]
+- Supporting Subdomains: [list]
+- Bounded Contexts: [list contexts]
+- Aggregates: [list aggregate roots]
+- Ubiquitous Language Terms: [key terms]
+- Design Risks: [list risks]" > docs/technical/STORY-XXX-domain-analysis.md
+
+git add docs/technical/STORY-XXX-domain-analysis.md
+```
+
+### 3. Design Handover to Code Refactorer
+
+```bash
+# Create handover note for Code Refactorer
+echo "STORY-XXX handover to Code Refactorer:
+- Design Specification: [reference to design doc]
+- Aggregates and Entities: [list aggregates/entities]
+- Bounded Context Boundaries: [context map]
+- Refactoring Candidates: [existing code to reshape]
+- Testing Strategy: [domain unit tests needed]
+- Ubiquitous Language Changes: [new or changed terms]" > tmp/handover/STORY-XXX-architect-refactorer-handover.md
+```
+
+## Quality Gates
+
+### Design Completion Checklist
+
+- [ ] Bounded contexts identified and documented
+- [ ] Aggregates designed with clear consistency boundaries
+- [ ] Entities and value objects clearly distinguished
+- [ ] Domain events defined for meaningful state changes
+- [ ] Ubiquitous language defined and used in code
+- [ ] Design follows Code Complete principles (cohesion, coupling, information hiding)
+- [ ] Each component has a testable interface
+- [ ] Design decisions documented as ADRs if significant
+- [ ] Design reviewed for over-engineering (simple > complex)
+
+## Integration with Other Roles
+
+### Software Architect Collaboration
+
+- **Architecture Alignment**: Ensure DDD design aligns with system architecture
+- **ADR Creation**: Joint decisions on architecture and domain boundaries
+- **Quality Standards**: DDD design follows Software Architect's quality standards
+
+### Code Refactorer Coordination
+
+- **Design Transfer**: Hand over domain model for implementation
+- **Refactoring Guidance**: Identify what needs reshaping to match domain model
+- **Code Review**: Review refactored code for domain fidelity
+
+### CI/CD Quality Guardian
+
+- **Test Coverage**: Ensure domain tests pass quality gates
+- **Linting Configuration**: Domain-appropriate rule adjustments
+- **CI Approval**: Sign off on CI pipeline changes
+
+## Related Rules
+
+- [software-architect.mdc](mdc:.cursor/rules/software-architect.mdc) - System architecture and quality standards
+- [code-refactorer.mdc](mdc:.cursor/rules/code-refactorer.mdc) - Refactoring and code quality
+- [cicd-quality-guardian.mdc](mdc:.cursor/rules/cicd-quality-guardian.mdc) - CI/CD linting and testing
+- [modular-architecture.mdc](mdc:.cursor/rules/modular-architecture.mdc) - Modular design and black box principles
+- [coding-style.mdc](mdc:.cursor/rules/coding-style.mdc) - Coding standards
+- [function-definitions.mdc](mdc:.cursor/rules/function-definitions.mdc) - Function design standards
+
+## References
+
+- *Domain-Driven Design* (Evans, 2003) — Strategic and tactical DDD patterns
+- *Code Complete 2* (McConnell, 2004) — Design in construction, software quality
+- *Implementing Domain-Driven Design* (Vernon, 2013) — Practical aggregate design
+- [docs/technical/DOMAIN_DRIVEN_DESIGN.md](mdc:docs/technical/DOMAIN_DRIVEN_DESIGN.md) — Project-specific domain model

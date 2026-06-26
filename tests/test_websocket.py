@@ -10,9 +10,9 @@ import pytest
 from fastapi.testclient import TestClient
 from starlette.testclient import WebSocketTestSession
 
-from src.backend.rag_pipeline.api.app import app
-from src.backend.rag_pipeline.api.websocket import websocket_progress
-from src.backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
+from backend.query_service.api.app import app
+from backend.query_service.api.websocket import websocket_progress
+from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
 
 
 # Helper mock websocket for direct code testing

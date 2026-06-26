@@ -12,7 +12,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from backend.rag_pipeline.evaluation.runner import evaluate_retrieval, run_evaluation
+from backend.evaluation.runner import evaluate_retrieval, run_evaluation
 
 
 def _chunk(text: str) -> dict:

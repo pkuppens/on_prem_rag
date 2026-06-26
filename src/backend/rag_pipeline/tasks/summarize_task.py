@@ -1,29 +1,9 @@
 # src/backend/rag_pipeline/tasks/summarize_task.py
 """
-Task for summarizing medical text.
+Compatibility shim — re-exports from backend.medical_agents.tasks.summarize_task.
+
+This module exists for backward compatibility during the DDD extraction.
+All code should eventually import from backend.medical_agents.tasks directly.
 """
 
-from crewai import Task
-
-
-class GenerateSummaryTask(Task):
-    """
-    A task for creating concise and accurate summaries of medical text.
-    """
-
-    def __init__(self, agent):
-        """
-        Initializes the GenerateSummaryTask.
-
-        Args:
-            agent: The agent to perform the task.
-        """
-        super().__init__(
-            description=(
-                "Create a concise, accurate, and readable summary of the medical text. "
-                "The summary should be tailored for a clinical audience and highlight "
-                "the most critical information."
-            ),
-            expected_output="A concise and accurate summary of the medical text.",
-            agent=agent,
-        )
+from backend.medical_agents.tasks.summarize_task import *  # noqa: F401, F403

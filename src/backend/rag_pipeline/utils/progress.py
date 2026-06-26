@@ -4,13 +4,20 @@ These helpers implement a very small observer pattern so that processing
 functions can emit ``ProgressEvent`` objects without knowing whether any
 WebSocket clients are connected. The :class:`ProgressNotifier` keeps track
 of subscribed ``WebSocket`` connections and forwards each event to them.
+
+.. note::
+   A copy of this module also lives at ``backend.ingestion.infrastructure.progress``
+   as part of the DDD bounded context extraction (Phase 3). The ingestion BC
+   version is the canonical one for new code.
 """
+
+from __future__ import annotations
 
 import asyncio
 
 from fastapi import WebSocket
 
-from .logging import StructuredLogger
+from backend.rag_pipeline.utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
 
@@ -26,13 +33,6 @@ class ProgressEvent:
     """
 
     def __init__(self, file_id: str, progress: int, message: str = ""):
-        """Initialize a progress event.
-
-        Args:
-            file_id: Identifier for the file being processed
-            progress: Progress percentage (0-100, or -1 for error)
-            message: Optional status message
-        """
         self.file_id = file_id
         self.progress = progress
         self.message = message
@@ -52,20 +52,14 @@ class ProgressNotifier:
     """
 
     def __init__(self):
-        """Initialize the progress notifier."""
         self._subscribers: set[WebSocket] = set()
         self._current_progress: dict[str, int] = {}
 
     async def subscribe(self, websocket: WebSocket) -> None:
-        """Add a WebSocket connection to receive progress updates.
-
-        Args:
-            websocket: The WebSocket connection to subscribe
-        """
+        """Add a WebSocket connection to receive progress updates."""
         self._subscribers.add(websocket)
         logger.info(f"WebSocket subscribed. Total subscribers: {len(self._subscribers)}")
 
-        # Send current progress state to new subscriber
         if self._current_progress:
             active_progress = {k: v for k, v in self._current_progress.items() if v < 100}
             if active_progress:
@@ -75,11 +69,7 @@ class ProgressNotifier:
                     logger.warning(f"Failed to send initial state to new subscriber: {e}")
 
     async def unsubscribe(self, websocket: WebSocket) -> None:
-        """Remove a WebSocket connection from receiving updates.
-
-        Args:
-            websocket: The WebSocket connection to unsubscribe
-        """
+        """Remove a WebSocket connection from receiving updates."""
         self._subscribers.discard(websocket)
         logger.info(f"WebSocket unsubscribed. Total subscribers: {len(self._subscribers)}")
 
@@ -89,14 +79,11 @@ class ProgressNotifier:
         Args:
             event: The progress event to broadcast
         """
-        # Update internal progress state
         self._current_progress[event.file_id] = event.progress
 
-        # Remove completed uploads from tracking after a delay
         if event.progress >= 100:
             asyncio.create_task(self._cleanup_completed(event.file_id, delay=5.0))
 
-        # Prepare message for WebSocket clients
         message = {
             "type": "progress_update",
             "file_id": event.file_id,
@@ -107,21 +94,13 @@ class ProgressNotifier:
             "error": event.message if event.progress == -1 else None,
         }
 
-        # Send to all connected WebSocket clients
         if self._subscribers:
             tasks = []
             for websocket in self._subscribers.copy():
                 tasks.append(self._send_to_subscriber(websocket, message))
-
             await asyncio.gather(*tasks, return_exceptions=True)
 
     async def _send_to_subscriber(self, websocket: WebSocket, message: dict) -> None:
-        """Send message to a single WebSocket subscriber with error handling.
-
-        Args:
-            websocket: The WebSocket connection to send to
-            message: The message to send
-        """
         try:
             await websocket.send_json(message)
         except Exception as e:
@@ -129,12 +108,6 @@ class ProgressNotifier:
             await self.unsubscribe(websocket)
 
     async def _cleanup_completed(self, file_id: str, delay: float) -> None:
-        """Remove completed file from progress tracking after a delay.
-
-        Args:
-            file_id: The file ID to clean up
-            delay: Delay in seconds before cleanup
-        """
         await asyncio.sleep(delay)
         self._current_progress.pop(file_id, None)
         logger.debug(f"Cleaned up completed file: {file_id}")

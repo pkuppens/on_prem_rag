@@ -10,7 +10,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from backend.rag_pipeline.api.middleware.audit_log import AuditLogMiddleware
+from backend.query_service.api.middleware.audit_log import AuditLogMiddleware
 
 
 @pytest.fixture()

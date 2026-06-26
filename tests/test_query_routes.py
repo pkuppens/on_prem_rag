@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
 
-from src.backend.rag_pipeline.api.app import app
+from backend.query_service.api.app import app
 
 client = TestClient(app)
 
@@ -14,7 +14,7 @@ def test_query_documents_delegates_to_query_service():
     Technical: route delegates to QueryService, not core.embeddings directly.
     """
     mock_results = {"results": [{"text": "chunk1", "score": 0.9}]}
-    with patch("src.backend.rag_pipeline.api.query.query_service") as mock_service:
+    with patch("backend.query_service.api.query.query_service") as mock_service:
         mock_service.query.return_value = mock_results
         response = client.post("/api/v1/retrieval/chunks", json={"query": "test query"})
     assert response.status_code == 200
@@ -35,7 +35,7 @@ def test_query_service_error_returns_500():
     """As a user I want proper error responses, so I can handle failures gracefully.
     Technical: QueryService exception propagates as 500.
     """
-    with patch("src.backend.rag_pipeline.api.query.query_service") as mock_service:
+    with patch("backend.query_service.api.query.query_service") as mock_service:
         mock_service.query.side_effect = RuntimeError("vector store unavailable")
         response = client.post("/api/v1/retrieval/chunks", json={"query": "test query"})
     assert response.status_code == 500
@@ -43,7 +43,7 @@ def test_query_service_error_returns_500():
 
 def test_process_conversation_endpoint():
     """Test the /api/v1/retrieval/conversations endpoint."""
-    with patch("src.backend.rag_pipeline.api.query.process_medical_conversation") as mock_process:
+    with patch("backend.rag_pipeline.main.process_medical_conversation") as mock_process:
         mock_process.return_value = {"result": "mocked_result"}
         response = client.post("/api/v1/retrieval/conversations", json={"text": "test conversation"})
         assert response.status_code == 200
@@ -68,7 +68,7 @@ def test_query_route_has_no_core_imports():
     import sys
 
     # Reload to get a fresh module reference
-    module_name = "src.backend.rag_pipeline.api.query"
+    module_name = "backend.query_service.api.query"
     if module_name in sys.modules:
         module = sys.modules[module_name]
     else:
@@ -87,7 +87,7 @@ def test_query_service_receives_correct_top_k():
     """
     mock_service = MagicMock()
     mock_service.query.return_value = {"results": []}
-    with patch("src.backend.rag_pipeline.api.query.query_service", mock_service):
+    with patch("backend.query_service.api.query.query_service", mock_service):
         response = client.post("/api/v1/retrieval/chunks", json={"query": "test", "top_k": 3})
     assert response.status_code == 200
     call_kwargs = mock_service.query.call_args

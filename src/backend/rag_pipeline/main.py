@@ -1,6 +1,9 @@
 # src/backend/rag_pipeline/main.py
 """
-Main entry point for the RAG pipeline.
+Compatibility shim — delegates to the Query Service BC.
+
+Re-exports start_server from backend.query_service.main.
+Keeps process_medical_conversation for backward compatibility (not yet migrated).
 """
 
 from crewai import Crew
@@ -15,6 +18,7 @@ from backend.rag_pipeline.tasks import (
     PreprocessMedicalTextTask,
     QualityControlTask,
 )
+from backend.query_service.main import start_server  # noqa: F401
 
 
 def process_medical_conversation(text: str):
@@ -60,6 +64,11 @@ def process_medical_conversation(text: str):
     result = crew.kickoff(inputs={"text": text})
     return result
 
+
+__all__ = [
+    "process_medical_conversation",
+    "start_server",
+]
 
 if __name__ == "__main__":
     # Example usage

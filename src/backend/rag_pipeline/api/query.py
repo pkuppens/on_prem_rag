@@ -1,98 +1,23 @@
-"""Query API endpoints for the RAG pipeline.
+"""Compatibility shim — delegates to the Query Service API.
 
-This module provides endpoints for querying the document store
-using semantic search.
+Re-exports all symbols from backend.query_service.api.query for backward
+compatibility during the Query Service BC migration.
 """
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from backend.query_service.api.query import (  # noqa: F401
+    ConversationRequest,
+    QueryRequest,
+    process_conversation_endpoint,
+    query_documents,
+    query_service,
+    router,
+)
 
-from ..config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
-from ..main import process_medical_conversation
-from ..services.query_service import QueryService
-from ..utils.logging import StructuredLogger
-from .metrics import get_metrics
-
-logger = StructuredLogger(__name__)
-router = APIRouter(prefix="/api/v1/retrieval", tags=["retrieval"])
-
-# Initialize services
-query_service = QueryService()
-
-
-class QueryRequest(BaseModel):
-    """Payload for the query endpoint.
-
-    Attributes:
-        query: The search query text
-        params_name: Optional name of parameter set to use
-        top_k: Optional override for number of results
-    """
-
-    query: str
-    params_name: str | None = None
-    top_k: int | None = None
-
-
-class ConversationRequest(BaseModel):
-    """Payload for the conversation endpoint.
-
-    Attributes:
-        text: The conversation text to process
-    """
-
-    text: str
-
-
-@router.post("/chunks")
-async def query_documents(payload: QueryRequest) -> dict:
-    """Return matching chunks for a query.
-
-    Args:
-        payload: The query request containing search text and options
-
-    Returns:
-        Dict containing matching document chunks
-
-    Raises:
-        HTTPException: If query is empty or search fails
-    """
-    if not payload.query:
-        raise HTTPException(status_code=400, detail="Query must not be empty")
-
-    params = get_param_set(payload.params_name or DEFAULT_PARAM_SET_NAME)
-
-    # Use custom top_k if provided, otherwise use parameter set default
-    top_k = payload.top_k if payload.top_k is not None else params.retrieval.top_k
-
-    try:
-        get_metrics().record_query()
-        results = query_service.query(payload.query, params.embedding.model_name, top_k)
-        return results
-    except Exception as e:
-        logger.error("Error during query", query=payload.query, error=str(e))
-        raise HTTPException(status_code=500, detail=f"Error during query: {str(e)}") from e
-
-
-@router.post("/conversations")
-async def process_conversation_endpoint(payload: ConversationRequest) -> dict:
-    """Process a medical conversation through the RAG pipeline.
-
-    Args:
-        payload: The conversation request containing the text to process
-
-    Returns:
-        The result of the crew's work.
-
-    Raises:
-        HTTPException: If the text is empty or processing fails
-    """
-    if not payload.text:
-        raise HTTPException(status_code=400, detail="Text must not be empty")
-
-    try:
-        result = process_medical_conversation(payload.text)
-        return {"result": result}
-    except Exception as e:
-        logger.error("Error during conversation processing", text=payload.text, error=str(e))
-        raise HTTPException(status_code=500, detail=f"Error during conversation processing: {str(e)}") from e
+__all__ = [
+    "ConversationRequest",
+    "QueryRequest",
+    "process_conversation_endpoint",
+    "query_documents",
+    "query_service",
+    "router",
+]

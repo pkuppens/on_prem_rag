@@ -86,9 +86,7 @@ class PromptBuilder:
         Returns:
             Formatted context string.
         """
-        return "\n\n".join(
-            [f"Document: {chunk['document_name']}\nContent: {chunk['text']}" for chunk in chunks]
-        )
+        return "\n\n".join([f"Document: {chunk['document_name']}\nContent: {chunk['text']}" for chunk in chunks])
 
     def _format_history(self, history: list[dict[str, str]] | None) -> str:
         """Format conversation history into a string section.

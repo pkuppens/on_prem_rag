@@ -28,15 +28,14 @@ from backend.query_service.domain.aggregates import Conversation
 from backend.query_service.domain.entities import Answer, Query
 from backend.query_service.domain.interfaces import IQueryOrchestrator
 from backend.query_service.domain.value_objects import QueryIntent
+from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
+from backend.rag_pipeline.utils.logging import StructuredLogger
 
 from ..ports.access_control import IAccessControlCheck
 from ..ports.audit import IAuditTrail
 from ..ports.llm_gateway import ICompletionService
 from ..ports.privacy import IPrivacySanitizer
 from ..ports.retrieval import IRetrievalService
-
-from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
-from backend.rag_pipeline.utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
 

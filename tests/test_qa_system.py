@@ -20,8 +20,8 @@ from backend.llm_gateway.infrastructure import (
 )
 from backend.query_service.api.app import app
 from backend.query_service.application.query_orchestrator import QueryOrchestrator
-from backend.query_service.ports.retrieval import IRetrievalService
 from backend.query_service.ports.llm_gateway import ICompletionService
+from backend.query_service.ports.retrieval import IRetrievalService
 
 
 def _ollama_available() -> bool:

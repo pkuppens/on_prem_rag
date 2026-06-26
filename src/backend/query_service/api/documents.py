@@ -17,12 +17,6 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from pydantic import BaseModel, Field, HttpUrl
 from starlette.datastructures import UploadFile as StarletteUploadFile
 
-from backend.shared.utils.directory_utils import (
-    _format_path_for_error,
-    ensure_directory_exists,
-    get_uploaded_files_dir,
-)
-
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from backend.rag_pipeline.core.document_loader import DocumentLoader
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager
@@ -32,6 +26,11 @@ from backend.rag_pipeline.services.file_upload_service import FileUploadService
 from backend.rag_pipeline.utils.docx_utils import extract_and_clean_docx
 from backend.rag_pipeline.utils.logging import StructuredLogger
 from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
+from backend.shared.utils.directory_utils import (
+    _format_path_for_error,
+    ensure_directory_exists,
+    get_uploaded_files_dir,
+)
 
 from .metrics import get_metrics
 
@@ -155,7 +154,9 @@ async def sync_upload_single_file(file: UploadFile, background_tasks: Background
     ]
 
     if (content_type := file.content_type) not in supported_types:
-        raise HTTPException(status_code=400, detail=f"Unsupported file type: {content_type}. Supported types: {', '.join(supported_types)}")
+        raise HTTPException(
+            status_code=400, detail=f"Unsupported file type: {content_type}. Supported types: {', '.join(supported_types)}"
+        )
 
     try:
         await progress_notifier.notify(ProgressEvent(filename, 5, "Upload started"))
@@ -216,6 +217,7 @@ async def sync_upload_single_file(file: UploadFile, background_tasks: Background
         detail: str | dict = error_msg
         if os.getenv("ENVIRONMENT") == "development":
             import traceback
+
             detail = {"error": error_msg, "traceback": traceback.format_exc()}
         raise HTTPException(status_code=500, detail=detail) from e
 
@@ -235,9 +237,16 @@ async def process_async_task_documents(task_id: str, params_name: str) -> None:
         results = await document_processing_service.process_documents(task_id, file_paths, params_name)
 
         if results["failed_files"] == 0:
-            file_upload_service.update_processing_status(task_id, "completed", 1.0, f"Processing completed: {results['processed_files']} files processed")
+            file_upload_service.update_processing_status(
+                task_id, "completed", 1.0, f"Processing completed: {results['processed_files']} files processed"
+            )
         else:
-            file_upload_service.update_processing_status(task_id, "completed_with_errors", 1.0, f"Processing completed with errors: {results['processed_files']} successful, {results['failed_files']} failed")
+            file_upload_service.update_processing_status(
+                task_id,
+                "completed_with_errors",
+                1.0,
+                f"Processing completed with errors: {results['processed_files']} successful, {results['failed_files']} failed",
+            )
     except Exception as e:
         file_upload_service.update_processing_status(task_id, "error", -1.0, f"Processing failed: {str(e)}")
 

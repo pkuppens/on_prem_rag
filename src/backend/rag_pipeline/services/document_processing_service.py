@@ -78,13 +78,13 @@ class DocumentProcessingService:
             for file_path in file_paths:
                 try:
                     logger.info("Processing file", filename=file_path.name, task_id=task_id)
-                    chunks_processed, records_stored = await self._process_single_document(
-                        file_path, params, task_id
-                    )
+                    chunks_processed, records_stored = await self._process_single_document(file_path, params, task_id)
                     results["processed_files"] += 1
                     results["total_chunks"] += chunks_processed
                     results["total_records"] += records_stored
-                    logger.info("File processed successfully", filename=file_path.name, chunks=chunks_processed, records=records_stored)
+                    logger.info(
+                        "File processed successfully", filename=file_path.name, chunks=chunks_processed, records=records_stored
+                    )
                 except Exception as e:
                     results["failed_files"] += 1
                     error_info = {"filename": file_path.name, "error": str(e), "error_type": type(e).__name__}

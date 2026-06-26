@@ -15,7 +15,6 @@ from backend.access_control.domain.value_objects import (
     Role,
     get_role_permissions,
 )
-
 from backend.query_service.ports.access_control import IAccessControlCheck
 
 

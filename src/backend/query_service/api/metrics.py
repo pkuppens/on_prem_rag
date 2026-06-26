@@ -55,10 +55,10 @@ def get_metrics() -> PipelineMetrics:
 def _get_index_chunk_count() -> int:
     """Get approximate chunk count from vector store (best effort)."""
     try:
+        import os
+
         from backend.retrieval.infrastructure.vector_store import get_vector_store_read
         from backend.retrieval.infrastructure.vector_store_config import VectorStoreConfig
-
-        import os
 
         config = VectorStoreConfig(
             persist_directory=os.getenv("PERSIST_DIRECTORY", "./chroma_db"),

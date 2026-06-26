@@ -11,7 +11,7 @@ layer adapters.
 
 from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from backend.query_service.domain.aggregates import Conversation
-from backend.query_service.domain.entities import Query, Answer, Citation
+from backend.query_service.domain.entities import Answer, Citation, Query
 from backend.query_service.domain.interfaces import IQueryOrchestrator
 
 __all__ = [

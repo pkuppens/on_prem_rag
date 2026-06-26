@@ -14,7 +14,6 @@ from backend.audit_trail.domain.value_objects import (
     AuditMetadata,
     ResourceReference,
 )
-
 from backend.query_service.ports.audit import IAuditTrail
 
 
@@ -77,9 +76,9 @@ class AuditTrailAdapter(IAuditTrail):
         if not self._service:
             return
 
-        from backend.audit_trail.domain.entities import GuardrailAction, GuardrailType
-
         import hashlib
+
+        from backend.audit_trail.domain.entities import GuardrailAction, GuardrailType
 
         actor = ActorReference(
             user_id="system",

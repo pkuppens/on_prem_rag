@@ -10,14 +10,13 @@ from pathlib import Path
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field, field_validator
 
-from backend.stt.service import get_stt_service
-from backend.stt.transcriber import SUPPORTED_AUDIO_FORMATS
-
+from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from backend.rag_pipeline.config.llm_config import get_llm_config
 from backend.rag_pipeline.core.llm_providers import ModelNotFoundError
 from backend.rag_pipeline.utils.logging import StructuredLogger
+from backend.stt.service import get_stt_service
+from backend.stt.transcriber import SUPPORTED_AUDIO_FORMATS
 
-from backend.query_service.application.query_orchestrator import QueryOrchestrator
 from .metrics import get_metrics
 
 logger = StructuredLogger(__name__)

@@ -9,7 +9,6 @@ from __future__ import annotations
 from typing import Any
 
 from backend.privacy_guard.domain.value_objects import AnonymizedText, CloudSafety, PIICategory, PIIType, hash_text
-
 from backend.query_service.ports.privacy import IPrivacySanitizer
 
 # Re-export for convenience
@@ -44,11 +43,13 @@ class PrivacyGuardAdapter(IPrivacySanitizer):
             matches = pii_type.matches(sanitized)
             for match in reversed(matches):  # Reverse to preserve positions
                 sanitized = sanitized[: match.start()] + pii_type.transform_token + sanitized[match.end() :]
-                detections.append({
-                    "category": pii_type.category.value,
-                    "token": pii_type.transform_token,
-                    "position": {"start": match.start(), "end": match.end()},
-                })
+                detections.append(
+                    {
+                        "category": pii_type.category.value,
+                        "token": pii_type.transform_token,
+                        "position": {"start": match.start(), "end": match.end()},
+                    }
+                )
 
         metadata = {
             "pii_detected": len(detections),

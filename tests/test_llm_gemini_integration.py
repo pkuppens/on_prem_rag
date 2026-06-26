@@ -40,7 +40,7 @@ class TestGeminiCloudLLMIntegration:
         """
         import litellm
 
-        from backend.rag_pipeline.config.llm_config import get_litellm_model_for_backend
+        from backend.llm_gateway.infrastructure.config import get_litellm_model_for_backend
 
         prompt = "Reply with exactly one word: OK"
         model = get_litellm_model_for_backend("gemini")

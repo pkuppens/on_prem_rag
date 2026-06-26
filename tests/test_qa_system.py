@@ -12,13 +12,13 @@ from unittest.mock import AsyncMock, Mock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.rag_pipeline.api.app import app
-from backend.rag_pipeline.core.llm_providers import (
+from backend.llm_gateway.domain.interfaces import LLMProvider
+from backend.llm_gateway.domain.value_objects import ModelNotFoundError
+from backend.llm_gateway.infrastructure import (
     LiteLLMProvider,
-    LLMProvider,
-    ModelNotFoundError,
     OllamaProvider,
 )
+from backend.rag_pipeline.api.app import app
 from backend.rag_pipeline.core.qa_system import QASystem
 
 

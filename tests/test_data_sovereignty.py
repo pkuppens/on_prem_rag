@@ -7,7 +7,7 @@ data never leaves the on-premises boundary through misconfiguration.
 
 import pytest
 
-from backend.rag_pipeline.config.llm_config import check_data_sovereignty
+from backend.llm_gateway.infrastructure.config import check_data_sovereignty
 
 
 @pytest.mark.parametrize("cloud_backend", ["openai", "anthropic", "azure", "gemini"])

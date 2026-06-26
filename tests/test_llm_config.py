@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from backend.rag_pipeline.config.llm_config import (
+from backend.llm_gateway.infrastructure import (
     DEFAULT_BACKEND,
     DEFAULT_MODEL,
     LLMConfig,

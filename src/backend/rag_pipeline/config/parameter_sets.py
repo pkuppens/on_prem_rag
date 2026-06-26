@@ -8,7 +8,7 @@ and provides utilities for parameter exploration and validation.
 from dataclasses import dataclass
 from typing import Any
 
-from backend.rag_pipeline.config.llm_config import get_model_for_backend
+from backend.llm_gateway.infrastructure.config import get_model_for_backend
 
 
 @dataclass

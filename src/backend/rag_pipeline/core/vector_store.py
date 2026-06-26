@@ -178,3 +178,13 @@ def get_vector_store_manager(config: VectorStoreConfig | None = None) -> VectorS
     if cfg.implementation == "chroma":
         return ChromaVectorStoreManager(cfg)
     raise ValueError(f"Unsupported vector store implementation: {cfg.implementation}")
+
+
+# ---------------------------------------------------------------------------
+# Re-exports from new Retrieval BC — for consumers that only need read access
+# ---------------------------------------------------------------------------
+
+from backend.retrieval.infrastructure.vector_store import (  # noqa: E402, F401
+    ChromaVectorStoreReadAdapter,
+    get_vector_store_read,
+)

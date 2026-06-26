@@ -13,6 +13,8 @@ The audit system provides the evidence for this claim.
 Reference: WBSO-AICM-2025-01 WP3 (08-2025)
 """
 
+from backend.audit_trail.application.audit_service import AuditService
+from backend.audit_trail.application.wbso_report_generator import WBSOReport, WBSOReportGenerator
 from backend.audit_trail.domain.entities import (
     CloudQueryAuditEntry,
     GuardrailAction,
@@ -25,14 +27,23 @@ from backend.audit_trail.domain.value_objects import (
     AuditMetadata,
     ResourceReference,
 )
+from backend.audit_trail.infrastructure.audit_store import FileAuditStore, InMemoryAuditStore
+from backend.audit_trail.ports.audit_store import AuditQuery, IAuditStore
 
 __all__ = [
     "ActorReference",
     "AuditMetadata",
+    "AuditQuery",
+    "AuditService",
     "CloudQueryAuditEntry",
+    "FileAuditStore",
     "GuardrailAction",
     "GuardrailEventEntry",
     "GuardrailType",
+    "IAuditStore",
+    "InMemoryAuditStore",
     "PatientIsolationAuditEntry",
     "ResourceReference",
+    "WBSOReport",
+    "WBSOReportGenerator",
 ]

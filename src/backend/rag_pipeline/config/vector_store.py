@@ -1,19 +1,13 @@
-import os
-from dataclasses import dataclass
-from pathlib import Path
+"""Compatibility shim — re-exports from ``backend.retrieval.infrastructure.vector_store_config``.
 
+Vector store configuration has been extracted to ``src/backend/retrieval/infrastructure/``
+as part of the DDD bounded context extraction (Phase 2).
 
-@dataclass
-class VectorStoreConfig:
-    """Configuration for vector store selection."""
+See docs/technical/DDD_EXTRACTION_PLAN.md#phase-2-retrieval-bc-extraction.
+"""
 
-    implementation: str = os.getenv("VECTOR_STORE_IMPL", "chroma")
-    host: str | None = os.getenv("CHROMA_HOST")
-    port: int | None = int(os.getenv("CHROMA_PORT", "0")) or None
-    persist_directory: str | Path = os.getenv("CHROMA_PERSIST_DIR", "data/chroma")
-    collection_name: str = os.getenv("CHROMA_COLLECTION", "documents")
+from __future__ import annotations
 
-    def __post_init__(self):
-        """Convert persist_directory to Path if it's a string."""
-        if isinstance(self.persist_directory, str):
-            self.persist_directory = Path(self.persist_directory)
+from backend.retrieval.infrastructure.vector_store_config import (  # noqa: F401
+    VectorStoreConfig,
+)

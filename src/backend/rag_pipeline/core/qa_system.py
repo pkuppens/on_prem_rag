@@ -12,8 +12,9 @@ from __future__ import annotations
 import os
 from typing import Any
 
+from backend.llm_gateway.domain.interfaces import LLMProvider
+from backend.llm_gateway.infrastructure.provider_factory import get_llm_provider_from_env
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, get_param_set
-from backend.rag_pipeline.core.llm_providers import LLMProvider, get_llm_provider_from_env
 from backend.rag_pipeline.core.retrieval import create_retrieval_service
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager
 

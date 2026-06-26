@@ -3,10 +3,10 @@ from unittest.mock import MagicMock, patch
 import httpx
 import pytest
 
-from backend.rag_pipeline.core.llm_providers import (
+from backend.llm_gateway.domain.value_objects import ModelNotFoundError
+from backend.llm_gateway.infrastructure import (
     LiteLLMProvider,
     LLMProviderFactory,
-    ModelNotFoundError,
     OllamaProvider,
     get_llm_provider_from_env,
 )
@@ -81,10 +81,10 @@ def test_litellm_provider_generate_answer(mock_completion) -> None:
     assert call_kwargs["stream"] is False
 
 
-@patch("backend.rag_pipeline.config.llm_config.get_llm_config")
+@patch("backend.llm_gateway.infrastructure.config.get_llm_config")
 def test_get_llm_provider_from_env(mock_get_config) -> None:
     """get_llm_provider_from_env creates LiteLLMProvider from config."""
-    from backend.rag_pipeline.config.llm_config import LLMConfig
+    from backend.llm_gateway.infrastructure.config import LLMConfig
 
     mock_get_config.return_value = LLMConfig(
         backend="ollama", model="mistral", litellm_model="ollama/mistral", api_base="http://x:11434"

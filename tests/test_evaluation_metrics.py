@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from backend.rag_pipeline.evaluation.metrics import (
+from backend.evaluation.metrics import (
     EvaluationResult,
     compute_aggregates,
     hit_rate_at_k,

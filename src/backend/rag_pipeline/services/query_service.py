@@ -1,4 +1,8 @@
-"""Query service for semantic document search."""
+"""Query service for semantic document search.
+
+NOTE: This service is being migrated to the Query Service BC.
+Keeping the original implementation for backward compatibility.
+"""
 
 from ..core.embeddings import query_embeddings
 from ..core.vector_store import get_vector_store_manager

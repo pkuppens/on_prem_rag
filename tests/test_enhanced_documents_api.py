@@ -15,8 +15,8 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from src.backend.rag_pipeline.api.app import app
-from src.backend.rag_pipeline.services.file_upload_service import FileUploadService
+from backend.query_service.api.app import app
+from backend.rag_pipeline.services.file_upload_service import FileUploadService
 
 
 class MockUploadFile:

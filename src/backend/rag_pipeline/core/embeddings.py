@@ -1,4 +1,9 @@
-"""Embedding generation and vector storage for the RAG pipeline.
+"""Embedding generation and vector storage for the RAG pipeline — COMPATIBILITY SHIM.
+
+.. note::
+   This module is kept as a compatibility shim during the DDD extraction (Phase 3).
+   New ingestion code should use ``backend.ingestion.infrastructure.embedding``.
+   Query-time embedding is moving to the Retrieval BC in later phases.
 
 This module provides functionality for:
 - Converting text chunks to embeddings using HuggingFace models

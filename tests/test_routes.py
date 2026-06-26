@@ -5,7 +5,7 @@ This module tests the various API endpoints and their functionality.
 
 from fastapi.testclient import TestClient
 
-from src.backend.rag_pipeline.api.app import app
+from backend.query_service.api.app import app
 
 client = TestClient(app)
 
@@ -45,7 +45,7 @@ def test_documents_list(tmp_path, monkeypatch) -> None:
     """Test the document listing endpoint."""
     file_path = tmp_path / "example.txt"
     file_path.write_text("data")
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     resp = client.get("/api/v1/documents")
     assert resp.status_code == 200
     assert resp.json()["files"] == ["example.txt"]
@@ -56,11 +56,11 @@ def test_documents_delete_success(tmp_path, monkeypatch) -> None:
     Technical: DELETE /api/v1/documents/{filename} removes file and vector chunks.
     Validation: 204 on success, file gone from list.
     """
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     file_path = tmp_path / "to_delete.txt"
     file_path.write_text("content")
     mock_vsm = type("MockVSM", (), {"delete_by_document_name": lambda self, n: 3})()
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.vector_store_manager", mock_vsm)
+    monkeypatch.setattr("backend.query_service.api.documents.vector_store_manager", mock_vsm)
 
     resp = client.delete("/api/v1/documents/to_delete.txt")
     assert resp.status_code == 204
@@ -73,7 +73,7 @@ def test_documents_delete_not_found(tmp_path, monkeypatch) -> None:
     """As a user I want clear feedback when deleting non-existent documents.
     Technical: DELETE returns 404 when document does not exist.
     """
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     resp = client.delete("/api/v1/documents/nonexistent.pdf")
     assert resp.status_code == 404
     assert "not found" in resp.json()["detail"].lower()
@@ -83,7 +83,7 @@ def test_error_responses_follow_rfc7807(tmp_path, monkeypatch) -> None:
     """As a user I want structured error responses, so I can handle failures programmatically.
     Technical: HTTPException and validation errors return application/problem+json.
     """
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     resp = client.delete("/api/v1/documents/nonexistent.pdf")
     assert resp.status_code == 404
     assert resp.headers.get("content-type", "").startswith("application/problem+json")
@@ -108,8 +108,8 @@ def test_chat_endpoint_accepts_messages(monkeypatch) -> None:
     def mock_generate(question, chunks, conversation_history=None):
         return "Mocked answer"
 
-    monkeypatch.setattr("src.backend.rag_pipeline.api.chat.qa_system.retrieve_relevant_chunks", mock_retrieve)
-    monkeypatch.setattr("src.backend.rag_pipeline.api.chat.qa_system.generate_answer", mock_generate)
+    monkeypatch.setattr("backend.query_service.api.chat.orchestrator.retrieve_relevant_chunks", mock_retrieve)
+    monkeypatch.setattr("backend.query_service.api.chat.orchestrator.generate_answer", mock_generate)
 
     resp = client.post(
         "/api/v1/chat",
@@ -144,7 +144,7 @@ def test_documents_delete_rejects_invalid_filename(tmp_path, monkeypatch) -> Non
     """As a user I want the API to reject invalid filenames with .. in the name.
     Technical: Filenames with .. return 400 for path traversal prevention.
     """
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     resp = client.delete("/api/v1/documents/bad..name.pdf")  # contains ..
     assert resp.status_code == 400
 
@@ -154,7 +154,7 @@ def test_documents_delete_vector_store_failure_returns_500(tmp_path, monkeypatch
     Technical: If vector_store_manager.delete_by_document_name raises, DELETE returns 500 and file stays.
     Validation: Mock raises; response is 500; file remains on disk.
     """
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.uploaded_files_dir", tmp_path)
+    monkeypatch.setattr("backend.query_service.api.documents.uploaded_files_dir", tmp_path)
     file_path = tmp_path / "stuck.txt"
     file_path.write_text("content")
 
@@ -163,7 +163,7 @@ def test_documents_delete_vector_store_failure_returns_500(tmp_path, monkeypatch
             raise RuntimeError("vector store unavailable")
 
     mock_vsm = MockVSM()
-    monkeypatch.setattr("src.backend.rag_pipeline.api.documents.vector_store_manager", mock_vsm)
+    monkeypatch.setattr("backend.query_service.api.documents.vector_store_manager", mock_vsm)
 
     resp = client.delete("/api/v1/documents/stuck.txt")
     assert resp.status_code == 500

@@ -10,7 +10,7 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.rag_pipeline.api.app import app
+from backend.query_service.api.app import app
 
 client = TestClient(app)
 

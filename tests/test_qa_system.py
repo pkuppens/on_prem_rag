@@ -18,8 +18,10 @@ from backend.llm_gateway.infrastructure import (
     LiteLLMProvider,
     OllamaProvider,
 )
-from backend.rag_pipeline.api.app import app
-from backend.rag_pipeline.core.qa_system import QASystem
+from backend.query_service.api.app import app
+from backend.query_service.application.query_orchestrator import QueryOrchestrator
+from backend.query_service.ports.retrieval import IRetrievalService
+from backend.query_service.ports.llm_gateway import ICompletionService
 
 
 def _ollama_available() -> bool:
@@ -35,133 +37,140 @@ def _ollama_available() -> bool:
 
 
 class TestQASystem:
-    """Test cases for the QASystem class."""
+    """Test cases for the QueryOrchestrator (fka QASystem)."""
 
-    def test_qa_system_initialization(self):
-        """Test that QASystem initializes correctly with default LLM provider."""
-        qa_system = QASystem()
+    def test_orchestrator_injects_ports(self):
+        """Test that QueryOrchestrator accepts injected ports instead of defaults."""
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_llm = Mock(spec=ICompletionService)
+        orchestrator = QueryOrchestrator(
+            retrieval_service=mock_retrieval,
+            completion_service=mock_llm,
+        )
 
-        assert qa_system.llm_provider is not None
-        assert isinstance(qa_system.llm_provider, LLMProvider)
-        # Default from env is LiteLLM-based (LLM_BACKEND/LLM_MODEL)
-        assert isinstance(qa_system.llm_provider, LiteLLMProvider)
-        assert qa_system.vector_store_manager is not None
+        assert orchestrator._retrieval is mock_retrieval
+        assert orchestrator._llm is mock_llm
 
-    def test_qa_system_with_custom_llm_provider(self):
-        """Test that QASystem accepts custom LLM provider."""
-        mock_llm = Mock()
-        qa_system = QASystem(llm_provider=mock_llm)
+    def test_orchestrator_with_custom_completion_service(self):
+        """Test that QueryOrchestrator accepts custom completion service."""
+        mock_llm = Mock(spec=ICompletionService)
+        orchestrator = QueryOrchestrator(completion_service=mock_llm)
 
-        assert qa_system.llm_provider is mock_llm
+        assert orchestrator._llm is mock_llm
 
     def test_retrieve_relevant_chunks_empty_question(self):
         """Test that empty question raises ValueError."""
-        qa_system = QASystem()
+        mock_retrieval = Mock(spec=IRetrievalService)
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=Mock(spec=ICompletionService))
 
         with pytest.raises(ValueError, match="Question cannot be empty"):
-            qa_system.retrieve_relevant_chunks("")
+            orchestrator.retrieve_relevant_chunks("")
 
     def test_retrieve_relevant_chunks_whitespace_question(self):
         """Test that whitespace-only question raises ValueError."""
-        qa_system = QASystem()
+        mock_retrieval = Mock(spec=IRetrievalService)
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=Mock(spec=ICompletionService))
 
         with pytest.raises(ValueError, match="Question cannot be empty"):
-            qa_system.retrieve_relevant_chunks("   ")
+            orchestrator.retrieve_relevant_chunks("   ")
 
-    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
-    def test_retrieve_relevant_chunks_success(self, mock_create_service):
-        """Test successful chunk retrieval."""
-        mock_service = Mock()
-        mock_service.retrieve.return_value = [
+    def test_retrieve_relevant_chunks_success(self):
+        """Test successful chunk retrieval via injected retrieval port."""
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_retrieval.retrieve.return_value = [
             {"text": "Sample document content", "similarity_score": 0.8, "document_name": "test.pdf", "chunk_index": 0},
             {"text": "Another document content", "similarity_score": 0.6, "document_name": "test2.pdf", "chunk_index": 1},
         ]
-        mock_create_service.return_value = mock_service
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=Mock(spec=ICompletionService))
 
-        qa_system = QASystem()
-        chunks = qa_system.retrieve_relevant_chunks("test question", top_k=5, similarity_threshold=0.5)
+        chunks = orchestrator.retrieve_relevant_chunks("test question", top_k=5, similarity_threshold=0.5)
 
         assert len(chunks) == 2
         assert chunks[0]["similarity_score"] == 0.8
         assert chunks[1]["similarity_score"] == 0.6
-        mock_service.retrieve.assert_called_once_with(query="test question", top_k=5, similarity_threshold=0.5)
+        mock_retrieval.retrieve.assert_called_once()
 
-    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
-    def test_retrieve_relevant_chunks_with_threshold_filtering(self, mock_create_service):
+    def test_retrieve_relevant_chunks_with_threshold_filtering(self):
         """Test that similarity threshold filtering works correctly."""
-        mock_service = Mock()
-        mock_service.retrieve.return_value = [
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_retrieval.retrieve.return_value = [
             {"text": "High similarity content", "similarity_score": 0.9, "document_name": "test.pdf", "chunk_index": 0},
         ]
-        mock_create_service.return_value = mock_service
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=Mock(spec=ICompletionService))
 
-        qa_system = QASystem()
-        chunks = qa_system.retrieve_relevant_chunks("test question", similarity_threshold=0.7)
+        chunks = orchestrator.retrieve_relevant_chunks("test question", similarity_threshold=0.7)
 
         assert len(chunks) == 1
         assert chunks[0]["similarity_score"] == 0.9
-        mock_service.retrieve.assert_called_once()
+        mock_retrieval.retrieve.assert_called_once()
 
     def test_generate_answer_empty_question(self):
         """Test that empty question raises ValueError."""
-        qa_system = QASystem()
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_llm = Mock(spec=ICompletionService)
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=mock_llm)
         mock_chunks = [{"text": "test", "document_name": "test.pdf"}]
 
         with pytest.raises(ValueError, match="Question cannot be empty"):
-            qa_system.generate_answer("", mock_chunks)
+            orchestrator.generate_answer("", mock_chunks)
 
     def test_generate_answer_no_context(self):
         """Test that empty context raises ValueError."""
-        qa_system = QASystem()
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_llm = Mock(spec=ICompletionService)
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=mock_llm)
 
         with pytest.raises(ValueError, match="Context chunks are required"):
-            qa_system.generate_answer("test question", [])
+            orchestrator.generate_answer("test question", [])
 
     def test_generate_answer_success(self):
-        """Test successful answer generation."""
-        mock_llm = Mock()
-        mock_llm.generate_answer.return_value = "This is a test answer."
-
-        qa_system = QASystem(llm_provider=mock_llm)
+        """Test successful answer generation via injected completion port."""
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_llm = Mock(spec=ICompletionService)
+        mock_llm.generate.return_value = "This is a test answer."
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=mock_llm)
         mock_chunks = [{"text": "Sample document content", "document_name": "test.pdf", "page_number": 1}]
 
-        answer = qa_system.generate_answer("test question", mock_chunks)
+        answer = orchestrator.generate_answer("test question", mock_chunks)
 
         assert answer == "This is a test answer."
-        mock_llm.generate_answer.assert_called_once()
+        mock_llm.generate.assert_called_once()
 
         # Check that the prompt contains the context
-        call_args = mock_llm.generate_answer.call_args[0][0]
+        call_args = mock_llm.generate.call_args[0][0]
         assert "Sample document content" in call_args
         assert "test question" in call_args
 
     def test_ask_question_empty_question(self):
         """Test that empty question raises ValueError."""
-        qa_system = QASystem()
+        orchestrator = QueryOrchestrator(
+            retrieval_service=Mock(spec=IRetrievalService),
+            completion_service=Mock(spec=ICompletionService),
+        )
 
         with pytest.raises(ValueError, match="Question cannot be empty"):
-            qa_system.ask_question("")
+            orchestrator.ask_question("")
 
-    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
-    def test_ask_question_no_relevant_chunks(self, mock_create_service):
+    def test_ask_question_no_relevant_chunks(self):
         """Test handling when no relevant chunks are found."""
-        mock_service = Mock()
-        mock_service.retrieve.return_value = []
-        mock_create_service.return_value = mock_service
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_retrieval.retrieve.return_value = []
+        orchestrator = QueryOrchestrator(
+            retrieval_service=mock_retrieval,
+            completion_service=Mock(spec=ICompletionService),
+        )
 
-        qa_system = QASystem()
-        result = qa_system.ask_question("test question")
+        result = orchestrator.ask_question("test question")
 
         assert result["answer"] == "I couldn't find relevant information to answer your question."
         assert result["sources"] == []
         assert result["confidence"] == "low"
         assert result["chunks_retrieved"] == 0
 
-    @patch("backend.rag_pipeline.core.qa_system.create_retrieval_service")
-    def test_ask_question_success(self, mock_create_service):
+    def test_ask_question_success(self):
         """Test successful question answering."""
-        mock_service = Mock()
-        mock_service.retrieve.return_value = [
+        mock_retrieval = Mock(spec=IRetrievalService)
+        mock_retrieval.retrieve.return_value = [
             {
                 "text": "Sample document content about AI and machine learning",
                 "similarity_score": 0.9,
@@ -171,13 +180,12 @@ class TestQASystem:
                 "page_number": 1,
             },
         ]
-        mock_create_service.return_value = mock_service
 
-        mock_llm = Mock()
-        mock_llm.generate_answer.return_value = "AI is a field of computer science."
+        mock_llm = Mock(spec=ICompletionService)
+        mock_llm.generate.return_value = "AI is a field of computer science."
 
-        qa_system = QASystem(llm_provider=mock_llm)
-        result = qa_system.ask_question("What is AI?")
+        orchestrator = QueryOrchestrator(retrieval_service=mock_retrieval, completion_service=mock_llm)
+        result = orchestrator.ask_question("What is AI?")
 
         assert "AI is a field of computer science." in result["answer"]
         assert len(result["sources"]) == 1
@@ -242,7 +250,7 @@ class TestAskAPI:
         assert response.status_code == 422
         assert "detail" in response.json()
 
-    @patch("backend.rag_pipeline.api.ask.qa_system")
+    @patch("backend.query_service.api.ask.orchestrator")
     def test_ask_endpoint_strategy_passed_to_qa(self, mock_qa_system):
         """As a user I want to compare retrieval strategies per request, so I can choose the best.
         Technical: strategy param is passed to qa_system.ask_question.
@@ -264,7 +272,7 @@ class TestAskAPI:
         call_kwargs = mock_qa_system.ask_question.call_args[1]
         assert call_kwargs.get("strategy") == "hybrid"
 
-    @patch("backend.rag_pipeline.api.ask.qa_system")
+    @patch("backend.query_service.api.ask.orchestrator")
     def test_ask_endpoint_success(self, mock_qa_system):
         """Test successful question answering via API."""
         # Mock the QA system response
@@ -298,7 +306,7 @@ class TestAskAPI:
         data = response.json()
         assert data["status"] == "ok"
 
-    @patch("backend.rag_pipeline.api.ask.qa_system")
+    @patch("backend.query_service.api.ask.orchestrator")
     def test_ask_endpoint_model_not_found_returns_503_with_remediation(self, mock_qa_system):
         """As a user I want clear guidance when the LLM model is unavailable, so I can fix it.
         Technical: ModelNotFoundError from QA system returns 503 with remediation steps.

@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from src.backend.rag_pipeline.api.app import app
+from backend.query_service.api.app import app
 
 
 @pytest.fixture

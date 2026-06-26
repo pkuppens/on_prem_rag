@@ -337,7 +337,7 @@ class TestSTTAPIEndpoints:
         """
         from fastapi.testclient import TestClient
 
-        from backend.rag_pipeline.api.app import app
+        from backend.query_service.api.app import app
 
         client = TestClient(app)
         resp = client.get("/api/v1/speech/info")
@@ -352,7 +352,7 @@ class TestSTTAPIEndpoints:
         """Voice ask rejects unsupported audio format."""
         from fastapi.testclient import TestClient
 
-        from backend.rag_pipeline.api.app import app
+        from backend.query_service.api.app import app
 
         client = TestClient(app)
         resp = client.post(
@@ -372,7 +372,7 @@ class TestSTTAPIEndpoints:
 
         from fastapi.testclient import TestClient
 
-        from backend.rag_pipeline.api.app import app
+        from backend.query_service.api.app import app
 
         # Build valid WAV: 1 channel, 16kHz, 16-bit, 0.1s silence
         sample_rate = 16000

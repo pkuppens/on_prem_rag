@@ -1,10 +1,10 @@
-"""RAG evaluation framework.
+"""Compatibility shim — re-exports from new Evaluation BC location.
 
-Batch evaluation of retrieval and generation quality.
-See docs/technical/RAG_EVALUATION.md for schema and usage.
+The evaluation package has moved to ``backend.evaluation``.
+This shim preserves imports from the old ``backend.rag_pipeline.evaluation`` path.
 """
 
-from backend.rag_pipeline.evaluation.metrics import (
+from backend.evaluation.metrics import (  # noqa: F401
     EvaluationResult,
     compute_aggregates,
     hit_rate_at_k,

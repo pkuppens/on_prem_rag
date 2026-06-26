@@ -257,7 +257,7 @@ class TestGlobalLLMSelector:
         # Should return the same instance
         assert selector1 is selector2
 
-    @patch("backend.rag_pipeline.agents.llm_selector.AgentLLMSelector")
+    @patch("backend.medical_agents.llm_selector.AgentLLMSelector")
     def test_get_llm_for_agent(self, mock_selector_class):
         """As a developer I want a convenience function to get LLMs for agents."""
         mock_llm = MagicMock()
@@ -266,7 +266,7 @@ class TestGlobalLLMSelector:
         mock_selector_class.return_value = mock_selector
 
         # Reset the global selector
-        import backend.rag_pipeline.agents.llm_selector as llm_module
+        import backend.medical_agents.llm_selector as llm_module
 
         llm_module._global_selector = mock_selector
 

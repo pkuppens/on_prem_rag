@@ -11,7 +11,7 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.rag_pipeline.api.app import app
+from backend.query_service.api.app import app
 
 
 @pytest.fixture
@@ -29,8 +29,8 @@ def client():
 class TestDocumentsFromUrl:
     """Tests for POST /api/v1/documents/ingest-from-url endpoint."""
 
-    @patch("backend.rag_pipeline.api.documents.process_document_background")
-    @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
+    @patch("backend.query_service.api.documents.process_document_background")
+    @patch("backend.query_service.api.documents.httpx.AsyncClient")
     def test_from_url_success_downloads_and_starts_processing(
         self,
         mock_async_client_class,
@@ -44,7 +44,7 @@ class TestDocumentsFromUrl:
         Validation: Mock httpx; verify 200, filename saved, background task enqueued.
         """
         monkeypatch.setattr(
-            "backend.rag_pipeline.api.documents.uploaded_files_dir",
+            "backend.query_service.api.documents.uploaded_files_dir",
             tmp_upload_dir,
         )
 
@@ -81,8 +81,8 @@ class TestDocumentsFromUrl:
         # Background task should be queued (runs sync in TestClient)
         mock_process_background.assert_called_once()
 
-    @patch("backend.rag_pipeline.api.documents.process_document_background")
-    @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
+    @patch("backend.query_service.api.documents.process_document_background")
+    @patch("backend.query_service.api.documents.httpx.AsyncClient")
     def test_from_url_uses_content_disposition_filename(
         self,
         mock_async_client_class,
@@ -95,7 +95,7 @@ class TestDocumentsFromUrl:
         Technical: Content-Disposition header overrides path-derived filename.
         """
         monkeypatch.setattr(
-            "backend.rag_pipeline.api.documents.uploaded_files_dir",
+            "backend.query_service.api.documents.uploaded_files_dir",
             tmp_upload_dir,
         )
 
@@ -120,7 +120,7 @@ class TestDocumentsFromUrl:
         assert resp.json()["file_id"] == "report-2024.pdf"
         assert (tmp_upload_dir / "report-2024.pdf").exists()
 
-    @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
+    @patch("backend.query_service.api.documents.httpx.AsyncClient")
     def test_from_url_rejects_non_http_scheme(
         self,
         mock_async_client_class,
@@ -143,7 +143,7 @@ class TestDocumentsFromUrl:
         )
         assert resp.status_code == 422
 
-    @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
+    @patch("backend.query_service.api.documents.httpx.AsyncClient")
     def test_from_url_download_failure_returns_502(
         self,
         mock_async_client_class,
@@ -155,7 +155,7 @@ class TestDocumentsFromUrl:
         Technical: HTTP errors (404, 500) return 502 with download failure message.
         """
         monkeypatch.setattr(
-            "backend.rag_pipeline.api.documents.uploaded_files_dir",
+            "backend.query_service.api.documents.uploaded_files_dir",
             tmp_upload_dir,
         )
 
@@ -186,7 +186,7 @@ class TestDocumentsFromUrl:
         assert resp.status_code == 502
         assert "download" in resp.json().get("detail", "").lower() or "failed" in resp.json().get("detail", "").lower()
 
-    @patch("backend.rag_pipeline.api.documents.httpx.AsyncClient")
+    @patch("backend.query_service.api.documents.httpx.AsyncClient")
     def test_from_url_rejects_oversized_document(
         self,
         mock_async_client_class,
@@ -198,7 +198,7 @@ class TestDocumentsFromUrl:
         Technical: Documents over 50MB return 400.
         """
         monkeypatch.setattr(
-            "backend.rag_pipeline.api.documents.uploaded_files_dir",
+            "backend.query_service.api.documents.uploaded_files_dir",
             tmp_upload_dir,
         )
 

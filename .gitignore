@@ -1,5 +1,6 @@
 # Temporary files
 tmp/
+chroma_db/
 results/
 docs/archive/
 tmpclaude-*-cwd

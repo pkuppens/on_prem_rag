@@ -336,7 +336,7 @@ async def process_async_task_documents(task_id: str, params_name: str) -> None:
                 f"Processing completed with errors: {results['processed_files']} successful, {results['failed_files']} failed",
             )
 
-        logger.info("Background processing completed", task_id=task_id, **results)
+        logger.info("Background processing completed", **results)
 
     except Exception as e:
         logger.error("Background processing failed", task_id=task_id, error=str(e))

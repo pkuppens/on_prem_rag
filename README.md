@@ -20,6 +20,22 @@ The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardi
 
 **Security:** Report vulnerabilities through the process in [SECURITY.md](SECURITY.md). Technical security architecture is described in [docs/technical/SECURITY.md](docs/technical/SECURITY.md).
 
+## Getting the Code
+
+Clone the repository:
+
+```bash
+git clone https://github.com/pkuppens/on_prem_rag.git
+cd on_prem_rag
+```
+
+**Note:** This project uses `uv` for dependency management, not `pip`. See [Prerequisites](#prerequisites) below for setup requirements. If you're on **Windows** and see a long folder path after cloning, consider using the shorter command, default checkout name `on_prem_rag` is probably fine:
+
+```bash
+git clone https://github.com/pkuppens/on_prem_rag.git
+cd on_prem_rag
+```
+
 ## Quick Start with Docker Compose
 
 **Prerequisite:** Ensure Docker Desktop (or Docker Engine) is running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.

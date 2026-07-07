@@ -20,6 +20,85 @@ The architecture embraces the **Model‑Context‑Protocol (MCP)** for standardi
 
 **Security:** Report vulnerabilities through the process in [SECURITY.md](SECURITY.md). Technical security architecture is described in [docs/technical/SECURITY.md](docs/technical/SECURITY.md).
 
+## Quick Start with Docker Compose
+
+**Prerequisite:** Ensure Docker Desktop (or Docker Engine) is running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.
+
+Clone the repository and run:
+
+```bash
+docker-compose up --build
+```
+
+This launches ChromaDB, the FastAPI backend, the React frontend and an Ollama
+container. Visit the frontend at http://localhost:5173. If you already run an
+Ollama container separately, comment out the `ollama` service in
+`docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
+
+## Local Development Setup
+
+To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.
+
+```bash
+# Create venv and install all dependencies (including dev tools)
+uv sync --group dev
+
+# Install git hooks for pre-commit (lint, format, etc.)
+pre-commit install
+
+# Set up git hooks for unit test enforcement (run once after cloning)
+uv run python scripts/setup_git_hooks.py
+```
+
+**Verify setup** by running:
+
+```bash
+uv run pytest                              # Run tests (excludes slow and internet by default)
+pre-commit run --all-files                 # Run all pre-commit hooks (first run may auto-fix some files)
+```
+
+No manual venv activation is needed—`uv run` uses the project environment automatically on all platforms.
+
+**Note**: The project uses a src-layout structure. `uv sync` installs the package in editable mode so the test suite can import modules from `src/`, `scripts/`, and `project/` directories.
+
+### Git Push Enforcement
+
+The project enforces unit test passing on every git push via pre-push hooks:
+
+- **Automatic**: Unit tests run before every push
+- **Fast**: Only runs fast unit tests (excludes slow and internet tests)
+- **Blocking**: Push is blocked if tests fail
+- **Emergency Bypass**: Use `git push --no-verify` in emergencies
+
+See [docs/technical/GIT_HOOKS.md](docs/technical/GIT_HOOKS.md) for detailed documentation.
+
+### Development Standards
+
+- **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
+- **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
+- **Linting**: All code must pass linting checks before commits. Run linting with:
+
+  ```bash
+  # First run: Auto-fix issues
+  uv run ruff check --fix .
+
+  # Second run: Format code
+  uv run ruff format .
+
+  # Third run: Verify everything is clean
+  uv run ruff check . && uv run ruff format --check .
+  ```
+
+- **Package Management**: Configuration is handled through `pyproject.toml` for portable development environments
+- **Dependency Management**:
+  - **CRITICAL**: Always use `uv add package-name` for new dependencies - NEVER use `pip install`
+  - `pip install` only works locally but fails in fresh environments (CI/CD, containers)
+  - Before importing any package, verify it exists in `pyproject.toml` or add it with `uv add`
+  - Use `uv sync` to install dependencies in fresh environments
+- **CI/CD**: Check GitHub Actions results before creating pull requests
+
+See [docs/SETUP.md](docs/SETUP.md) and [docs/pre-commit-hooks.md](docs/pre-commit-hooks.md) for additional details.
+
 ## Design Decisions
 
 Key architectural trade-offs that shape the system:
@@ -228,82 +307,6 @@ This project can be configured as a multi-root workspace to integrate the relate
 - Integrated development workflow
 
 **Note:** The workspace file uses absolute paths and is gitignored (`.gitignore` includes `*.code-workspace`) since paths are user-specific. Each developer should create their own workspace file with paths adjusted for their system.
-
-## Local Development Setup
-
-To run the tests or work on the code outside containers, install the Python dependencies using `uv`. Network access is required when installing packages.
-
-```bash
-# Create venv and install all dependencies (including dev tools)
-uv sync --group dev
-
-# Install git hooks for pre-commit (lint, format, etc.)
-pre-commit install
-
-# Set up git hooks for unit test enforcement (run once after cloning)
-uv run python scripts/setup_git_hooks.py
-```
-
-**Verify setup** by running:
-
-```bash
-uv run pytest                              # Run tests (excludes slow and internet by default)
-pre-commit run --all-files                 # Run all pre-commit hooks (first run may auto-fix some files)
-```
-
-No manual venv activation is needed—`uv run` uses the project environment automatically on all platforms.
-
-**Note**: The project uses a src-layout structure. `uv sync` installs the package in editable mode so the test suite can import modules from `src/`, `scripts/`, and `project/` directories.
-
-### Git Push Enforcement
-
-The project enforces unit test passing on every git push via pre-push hooks:
-
-- **Automatic**: Unit tests run before every push
-- **Fast**: Only runs fast unit tests (excludes slow and internet tests)
-- **Blocking**: Push is blocked if tests fail
-- **Emergency Bypass**: Use `git push --no-verify` in emergencies
-
-See [docs/technical/GIT_HOOKS.md](docs/technical/GIT_HOOKS.md) for detailed documentation.
-
-### Development Standards
-
-- **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
-- **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
-- **Linting**: All code must pass linting checks before commits. Run linting with:
-
-  ```bash
-  # First run: Auto-fix issues
-  uv run ruff check --fix .
-
-  # Second run: Format code
-  uv run ruff format .
-
-  # Third run: Verify everything is clean
-  uv run ruff check . && uv run ruff format --check .
-  ```
-
-- **Package Management**: Configuration is handled through `pyproject.toml` for portable development environments
-- **Dependency Management**:
-  - **CRITICAL**: Always use `uv add package-name` for new dependencies - NEVER use `pip install`
-  - `pip install` only works locally but fails in fresh environments (CI/CD, containers)
-  - Before importing any package, verify it exists in `pyproject.toml` or add it with `uv add`
-  - Use `uv sync` to install dependencies in fresh environments
-- **CI/CD**: Check GitHub Actions results before creating pull requests
-
-See [docs/SETUP.md](docs/SETUP.md) and [docs/pre-commit-hooks.md](docs/pre-commit-hooks.md) for additional details.
-
-### Phase 2: Enterprise Features (Weeks 5-8)
-
-- Role-based access control
-- Multi-user support
-- Security hardening
-
-### Phase 3: Advanced Capabilities (Weeks 9-12)
-
-- Database natural language queries
-- Multi-LLM support
-- Performance optimization
 
 ## Risk Assessment
 

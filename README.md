@@ -29,11 +29,51 @@ git clone https://github.com/pkuppens/on_prem_rag.git
 cd on_prem_rag
 ```
 
-**Note:** This project uses `uv` for dependency management, not `pip`. See [Prerequisites](#prerequisites) below for setup requirements. If you're on **Windows** and see a long folder path after cloning, consider using the shorter command, default checkout name `on_prem_rag` is probably fine:
+**Note:** This project uses `uv` for dependency management, not `pip`. See [Prerequisites](#prerequisites) below for setup requirements.
+
+## Prerequisites
+
+Before getting started, ensure you have the following tools installed:
+
+| Tool | Version | Why It Matters | Verification |
+| --- | --- | --- | --- |
+| **Python** | 3.12+ | Project requires Python 3.12 or newer for type hints and async features. Using an older version causes cryptic runtime errors. | `python --version` |
+| **uv** | Latest | Fast, reliable package manager that ensures dependencies work in CI/CD and fresh environments (not just locally). | `uv --version` |
+| **Git** | Latest | Required to clone the repository and manage versions. | `git --version` |
+| **Docker** | Latest (optional) | Recommended for running services (ChromaDB, Ollama) without local setup. Not required if you run services natively. | `docker --version` |
+
+### Installing Prerequisites
+
+**Python 3.12+**:
+- **Windows**: Download from [python.org](https://www.python.org/downloads/) or use `winget install Python.Python.3.12`
+- **macOS**: `brew install python@3.12`
+- **Linux**: `sudo apt-get install python3.12` (or equivalent for your distro)
+
+**uv Package Manager**:
+```bash
+# Windows (recommended)
+winget install astral-sh.uv
+
+# Or on any platform (requires pip or curl)
+pip install uv
+# OR
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Git**: Install from [git-scm.com](https://git-scm.com/downloads) or use your package manager.
+
+**Docker** (optional):  Download from [docker.com](https://www.docker.com/products/docker-desktop) for your platform.
+
+### Verify Your Setup
+
+Run this command to confirm all prerequisites are installed:
 
 ```bash
-git clone https://github.com/pkuppens/on_prem_rag.git
-cd on_prem_rag
+python --version && uv --version && git --version
+# Expected output similar to:
+# Python 3.13.0
+# uv 0.5.7
+# git version 2.42.0
 ```
 
 ## Quick Start with Docker Compose

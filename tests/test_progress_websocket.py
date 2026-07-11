@@ -8,13 +8,8 @@ in real-time. Run this while the backend is running to see progress events.
 
 import asyncio
 import json
-import sys
-from pathlib import Path
 
 import websockets
-
-# Add the project root to the Python path
-sys.path.append(str(Path(__file__).parent))
 
 from backend.rag_pipeline.utils.logging import StructuredLogger
 from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier

@@ -9,16 +9,9 @@ Entity: WorkSession
 Purpose: Unified model for work session tracking, hours calculation, and work item association
 """
 
-import sys
 from dataclasses import dataclass
 from datetime import datetime, time
-from pathlib import Path
 from typing import Any, Dict, List, Optional
-
-# Add src/ (not project root) to path so `backend.*` resolves the same way it
-# does under the package's normal src-layout (see CLAUDE.md > Import Conventions).
-project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
 
 from backend.datetime_utils import parse_datetime_flexible
 

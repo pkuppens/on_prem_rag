@@ -9,13 +9,9 @@ both string and JSON ping-pong messages.
 import asyncio
 import json
 import sys
-from pathlib import Path
 
 import pytest
 import websockets
-
-# Add the project root to the Python path
-sys.path.append(str(Path(__file__).parent))
 
 from backend.rag_pipeline.utils.logging import StructuredLogger
 

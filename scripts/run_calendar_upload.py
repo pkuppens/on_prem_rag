@@ -19,9 +19,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
 
-# Add src/ to path so `wbso.*` resolves without requiring the editable install
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 from wbso.calendar_event import CalendarEvent
 from wbso.logging_config import get_logger
 from wbso.pipeline_steps import step_calendar_replace

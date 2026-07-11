@@ -14,10 +14,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Set
 
-# Add src/ to path so `wbso.*` resolves without requiring the editable install
-project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
-
 from wbso.logging_config import get_logger
 from wbso.upload import GoogleCalendarUploader
 

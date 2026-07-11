@@ -42,6 +42,25 @@ Before getting started, ensure you have the following tools installed:
 | **Git** | Latest | Required to clone the repository and manage versions. | `git --version` |
 | **Docker** | Latest (optional) | Recommended for running services (ChromaDB, Ollama) without local setup. Not required if you run services natively. | `docker --version` |
 
+### Check What You Already Have
+
+Before installing anything, check whether you already have a suitable version:
+
+```bash
+python --version && uv --version && git --version && docker --version
+```
+
+Versions confirmed working as of 2026-07-11:
+
+```
+Python 3.13.2
+uv 0.9.30
+git version 2.55.0.windows.2
+Docker version 29.6.1, build 8900f1d
+```
+
+Any version meeting the minimums in the table above is fine — you only need to install/upgrade a tool if the command above is missing or reports an older version.
+
 ### Installing Prerequisites
 
 **Python 3.12+**:
@@ -64,18 +83,6 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 **Docker** (optional):  Download from [docker.com](https://www.docker.com/products/docker-desktop) for your platform.
 
-### Verify Your Setup
-
-Run this command to confirm all prerequisites are installed:
-
-```bash
-python --version && uv --version && git --version
-# Expected output similar to:
-# Python 3.13.0
-# uv 0.5.7
-# git version 2.42.0
-```
-
 ## Quick Start with Docker Compose
 
 **Prerequisite:** Ensure Docker Desktop (or Docker Engine) is running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.
@@ -83,13 +90,54 @@ python --version && uv --version && git --version
 Clone the repository and run:
 
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
-This launches ChromaDB, the FastAPI backend, the React frontend and an Ollama
-container. Visit the frontend at http://localhost:5173. If you already run an
-Ollama container separately, comment out the `ollama` service in
-`docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
+### What Success Looks Like
+
+Check that every service reports `healthy` (or `Up` for services without a healthcheck):
+
+```bash
+docker compose ps
+# NAME                     STATUS
+# on_prem_rag-chroma-1     Up ... (healthy)
+# on_prem_rag-backend-1    Up ... (healthy)
+# on_prem_rag-auth-1       Up ... (healthy)
+# on_prem_rag-frontend-1   Up ...
+# on_prem_rag-ollama-1     Up ...
+```
+
+Then verify the services respond:
+
+```bash
+curl http://localhost:9180/health          # backend -> {"status":"ok"}
+curl http://localhost:9181/oauth/providers # auth -> {"providers":[...]}
+```
+
+Visit the frontend at http://localhost:5173.
+
+### Conflicting or Partially Running Containers
+
+- **Port already in use** (e.g. `Bind for 0.0.0.0:11434 failed: port is already allocated`): another process or
+  container (for example a native Ollama install, or Ollama from an unrelated Compose project) is already using
+  that port. Override the host port instead of stopping the other service:
+  ```bash
+  OLLAMA_HOST_PORT=11435 docker-compose up --build -d
+  ```
+  Set `OLLAMA_BASE_URL` to match if the backend needs to reach that instance. The same override pattern applies
+  to any port in the [Prerequisites](#prerequisites) table (`BACKEND_PORT`, `AUTH_PORT`, `CHROMA_HOST_PORT`,
+  `FRONTEND_PORT`) — see [docs/PORTS.md](docs/PORTS.md).
+- **Containers left over from a previous run** (stopped, or only some services started because an earlier `up`
+  failed partway through): re-running `docker-compose up --build -d` recreates and starts whatever is missing —
+  no need to remove old containers first. To start from a clean slate, run `docker compose down` first.
+- **Already running an Ollama container separately**: comment out the `ollama` service in `docker-compose.yml`
+  and point `OLLAMA_BASE_URL` at your existing instance instead of running a second one.
+
+Tear down when done:
+
+```bash
+docker-compose down
+```
 
 ## Local Development Setup
 
@@ -119,7 +167,18 @@ No manual venv activation is needed—`uv run` uses the project environment auto
 
 ### Git Push Enforcement
 
-The project enforces unit test passing on every git push via pre-push hooks:
+`pre-commit install` (above) only wires up **pre-commit** hooks (lint/format on `git commit`). It does not touch
+the **pre-push** hook, which runs the test suite on `git push` — that needs the separate setup script:
+
+```bash
+uv run python scripts/setup_git_hooks.py
+```
+
+A plain script is used instead of `pre-commit`'s own push-stage support because the hook needs an OS-specific
+implementation (a PowerShell script on Windows, a shell script on Unix) and the script picks the right one and
+installs it as an executable `.git/hooks/pre-push`.
+
+Once installed, the hook enforces unit test passing on every git push:
 
 - **Automatic**: Unit tests run before every push
 - **Fast**: Only runs fast unit tests (excludes slow and internet tests)
@@ -130,7 +189,9 @@ See [docs/technical/GIT_HOOKS.md](docs/technical/GIT_HOOKS.md) for detailed docu
 
 ### Development Standards
 
-- **Import Style**: Use absolute imports (`from scripts import module_name`) instead of relative imports
+- **Import Style**: Use absolute imports across top-level packages, e.g. `from scripts import module_name` or
+  `from backend.rag_pipeline.core import chunking` — never `from src...`. Relative imports (e.g. `from ..utils
+  import logging`) are only used for references within the same subpackage.
 - **Testing**: All tests must pass before commits. Run tests with: `uv run pytest`
 - **Linting**: All code must pass linting checks before commits. Run linting with:
 
@@ -310,21 +371,6 @@ critical for validating the overall architecture.
 - Document question-answering pipeline
 - Basic web interface for proof-of-concept
 - Docker-based deployment
-
-## Quick Start with Docker Compose
-
-**Prerequisite:** Ensure Docker Desktop (or Docker Engine) is running. If commands fail with "error during connect" or "cannot find the file specified", start Docker Desktop and wait until it is ready.
-
-Clone the repository and run:
-
-```bash
-docker-compose up --build
-```
-
-This launches ChromaDB, the FastAPI backend, the React frontend and an Ollama
-container. Visit the frontend at http://localhost:5173. If you already run an
-Ollama container separately, comment out the `ollama` service in
-`docker-compose.yml` and set `OLLAMA_BASE_URL` accordingly.
 
 ## Multi-Root Workspace Configuration
 

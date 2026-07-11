@@ -82,6 +82,7 @@ class TestQueryOrchestrator:
         orch = QueryOrchestrator(retrieval_service=retrieval, completion_service=llm)
 
         from backend.query_service.domain.aggregates import Conversation
+
         conv = Conversation(session_id="test_session")
         answer = orch.process_in_conversation(conv, "What is diabetes?")
         assert "couldn't find relevant information" in answer.text.lower()
@@ -92,6 +93,7 @@ class TestQueryOrchestrator:
         orch = QueryOrchestrator(retrieval_service=retrieval, completion_service=llm)
 
         from backend.query_service.domain.aggregates import Conversation
+
         conv = Conversation(session_id="test_session")
         answer = orch.process_in_conversation(conv, "What is diabetes?")
         assert answer.text == "Diabetes is a chronic condition."
@@ -109,6 +111,7 @@ class TestQueryOrchestrator:
         )
 
         from backend.query_service.domain.aggregates import Conversation
+
         conv = Conversation(session_id="test_session")
         answer = orch.process_in_conversation(conv, "What is diabetes?")
         assert answer.text == "Diabetes is a chronic condition."

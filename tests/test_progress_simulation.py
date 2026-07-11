@@ -13,8 +13,8 @@ from pathlib import Path
 # Add the project root to the Python path
 sys.path.append(str(Path(__file__).parent))
 
-from src.backend.rag_pipeline.utils.logging import StructuredLogger
-from src.backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
+from backend.rag_pipeline.utils.logging import StructuredLogger
+from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier
 
 logger = StructuredLogger(__name__)
 

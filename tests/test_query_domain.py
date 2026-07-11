@@ -142,10 +142,12 @@ class TestConversationContext:
         assert ctx.formatted == ""
 
     def test_formatted(self):
-        ctx = ConversationContext.from_history([
-            {"role": "user", "content": "hello"},
-            {"role": "assistant", "content": "world"},
-        ])
+        ctx = ConversationContext.from_history(
+            [
+                {"role": "user", "content": "hello"},
+                {"role": "assistant", "content": "world"},
+            ]
+        )
         expected = "user: hello\nassistant: world"
         assert ctx.formatted == expected
 

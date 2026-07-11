@@ -65,6 +65,20 @@ Other: `project/` (SAFe docs), `docs/` (technical docs), `tests/` (mirrors src s
 - **src-layout**: Package installed in editable mode via `uv sync --group dev`
 - **Entry points**: Defined in `pyproject.toml` `[project.scripts]`
 
+### Import Conventions
+
+Code lives under `src/` (e.g. `src/backend/`, `src/wbso/`), but `src` is a **build root, not an importable package** — always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc., never `src.backend...` or `src.wbso...`.
+
+`src.*` imports used to work too, because a stray `src/__init__.py` turned `src` into a real package and pytest/scripts running from the repo root put the project root on `sys.path`. That made two import spellings resolve to the same module — confusing, and easy to typo into inconsistently across files. `src/__init__.py` has been removed and `ruff`'s `TID251` banned-api rule now fails the build on any `src.*` import (see `[tool.ruff.lint.flake8-tidy-imports.banned-api]` in `pyproject.toml`).
+
+For standalone scripts that manipulate `sys.path` manually (outside the editable install, e.g. `docs/project/hours/scripts/*.py`), add `src/` to the path, not the repo root:
+
+```python
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root / "src"))
+from backend.datetime_utils import parse_datetime_flexible
+```
+
 ## Critical Rules
 
 **Dependency management**: `uv add package-name` (runtime) / `uv add --dev package-name` — **NEVER `pip install`**.

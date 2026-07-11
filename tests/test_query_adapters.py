@@ -15,10 +15,10 @@ from backend.query_service.adapters.llm import LLMCompletionAdapter
 from backend.query_service.adapters.privacy_guard import PrivacyGuardAdapter
 from backend.query_service.adapters.retrieval import RetrievalAdapter
 
-
 # ---------------------------------------------------------------------------
 # AccessControlAdapter
 # ---------------------------------------------------------------------------
+
 
 class TestAccessControlAdapter:
     def test_check_permission_granted_for_gp(self):
@@ -64,6 +64,7 @@ class TestAccessControlAdapter:
 # AuditTrailAdapter
 # ---------------------------------------------------------------------------
 
+
 class TestAuditTrailAdapter:
     def test_log_query_received_noop_without_service(self):
         adapter = AuditTrailAdapter()
@@ -91,6 +92,7 @@ class TestAuditTrailAdapter:
 # PrivacyGuardAdapter
 # ---------------------------------------------------------------------------
 
+
 class TestPrivacyGuardAdapter:
     def test_sanitize_clean_text(self):
         adapter = PrivacyGuardAdapter()
@@ -108,6 +110,7 @@ class TestPrivacyGuardAdapter:
 # ---------------------------------------------------------------------------
 # RetrievalAdapter
 # ---------------------------------------------------------------------------
+
 
 class TestRetrievalAdapter:
     def test_init_sets_config(self):
@@ -147,6 +150,7 @@ class TestRetrievalAdapter:
 # ---------------------------------------------------------------------------
 # LLMCompletionAdapter
 # ---------------------------------------------------------------------------
+
 
 class TestLLMCompletionAdapter:
     def test_generate_delegates(self):

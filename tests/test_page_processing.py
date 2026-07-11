@@ -10,8 +10,8 @@ from pathlib import Path
 import pytest
 from llama_index.core import Document
 
-from src.backend.rag_pipeline.core.chunking import chunk_documents
-from src.backend.rag_pipeline.core.document_loader import DocumentLoader
+from backend.rag_pipeline.core.chunking import chunk_documents
+from backend.rag_pipeline.core.document_loader import DocumentLoader
 
 
 class TestPageByPageProcessing:

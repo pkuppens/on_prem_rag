@@ -21,13 +21,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
-# Add project root to path
+# Add src/ to path so `wbso.*` resolves without requiring the editable install
 project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "src"))
 
-from src.wbso.calendar_event import CalendarEvent, WBSODataset
-from src.wbso.logging_config import get_logger
-from src.wbso.pipeline_steps import step_google_calendar_data_preparation
+from wbso.calendar_event import CalendarEvent, WBSODataset
+from wbso.logging_config import get_logger
+from wbso.pipeline_steps import step_google_calendar_data_preparation
 
 logger = get_logger("prepare_calendar_data_standalone")
 
@@ -121,7 +121,7 @@ def load_calendar_events_from_pipeline_context() -> List[CalendarEvent]:
                     dataset.load_from_json(source_path)
 
                     # Convert sessions to events
-                    from src.wbso.activities import WBSOActivities
+                    from wbso.activities import WBSOActivities
 
                     activities_manager = WBSOActivities()
                     activities_manager.load_activities(force_regenerate=False)

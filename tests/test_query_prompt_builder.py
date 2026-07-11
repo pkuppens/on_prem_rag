@@ -1,4 +1,5 @@
 """Tests for the PromptBuilder application service."""
+
 from __future__ import annotations
 
 from backend.query_service.application.prompt_builder import PromptBuilder
@@ -7,9 +8,7 @@ from backend.query_service.application.prompt_builder import PromptBuilder
 class TestPromptBuilder:
     def test_build_qa_prompt_basic(self):
         builder = PromptBuilder()
-        chunks = [
-            {"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.9, "text": "The sky is blue."}
-        ]
+        chunks = [{"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.9, "text": "The sky is blue."}]
         prompt = builder.build_qa_prompt("What color is the sky?", chunks)
         assert "What color is the sky?" in prompt
         assert "The sky is blue." in prompt

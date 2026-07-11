@@ -14,9 +14,9 @@ import pytest
 def test_auth_service_imports():
     """Test that auth_service imports work."""
     try:
-        from src.backend.auth_service.database import init_db
-        from src.backend.auth_service.main import app, start_server
-        from src.backend.auth_service.models import Session, User
+        from backend.auth_service.database import init_db
+        from backend.auth_service.main import app, start_server
+        from backend.auth_service.models import Session, User
 
         assert app is not None
         assert start_server is not None
@@ -27,16 +27,17 @@ def test_auth_service_imports():
         pytest.fail(
             f"Failed to import auth service modules: {e}\n\n"
             "FIX: Run 'pip install -e .[dev]' to install the package in development mode.\n"
-            "This will make all src.* imports available system-wide."
+            "This will make all backend.* imports available system-wide."
         )
 
 
 def test_rag_pipeline_imports():
     """Test that rag_pipeline imports work."""
     try:
+        from backend.rag_pipeline.file_ingestion import app, start_server
+
+        from backend.rag_pipeline.core.document_loader import DocumentLoader
         from backend.shared.utils.directory_utils import get_uploaded_files_dir
-        from src.backend.rag_pipeline.core.document_loader import DocumentLoader
-        from src.backend.rag_pipeline.file_ingestion import app, start_server
 
         # Verify uploaded_files directory exists
         uploaded_files_dir = get_uploaded_files_dir()
@@ -52,7 +53,7 @@ def test_rag_pipeline_imports():
         pytest.fail(
             f"Failed to import RAG pipeline modules: {e}\n\n"
             "FIX: Run 'pip install -e .[dev]' to install the package in development "
-            "mode.\nThis will make all src.* imports available system-wide."
+            "mode.\nThis will make all backend.* imports available system-wide."
         )
     except Exception as e:
         pytest.fail(
@@ -65,7 +66,7 @@ def test_rag_pipeline_imports():
 def test_test_app_imports():
     """Test that test app modules can be imported."""
     try:
-        from src.test_app import app, start_server
+        from test_app import app, start_server
 
         assert app is not None
         assert start_server is not None
@@ -73,7 +74,7 @@ def test_test_app_imports():
         pytest.fail(
             f"Failed to import test app modules: {e}\n\n"
             "FIX: Run 'pip install -e .[dev]' to install the package in development mode.\n"
-            "This will make all src.* imports available system-wide."
+            "This will make all backend.* imports available system-wide."
         )
 
 
@@ -91,7 +92,7 @@ def test_scripts_can_be_called():
     )
 
     # Test that the modules referenced in pyproject.toml scripts exist
-    script_modules = ["src.backend.auth_service.main", "src.backend.rag_pipeline.file_ingestion", "src.test_app"]
+    script_modules = ["backend.auth_service.main", "backend.rag_pipeline.file_ingestion", "test_app"]
 
     for module_name in script_modules:
         try:
@@ -100,7 +101,7 @@ def test_scripts_can_be_called():
                 pytest.fail(
                     f"Module {module_name} not found.\n\n"
                     "FIX: Run 'pip install -e .[dev]' to install the package in development "
-                    "mode.\nThis will make all src.* modules discoverable by the Python "
+                    "mode.\nThis will make all backend.* modules discoverable by the Python "
                     "import system."
                 )
 

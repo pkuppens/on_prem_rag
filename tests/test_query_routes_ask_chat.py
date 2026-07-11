@@ -28,8 +28,7 @@ def test_ask_question_valid_strategies(strategy):
     payload = {"question": "test question"}
     if strategy is not None:
         payload["strategy"] = strategy
-    with patch.object(client.app, "state", create=True), \
-         patch("backend.query_service.api.ask.orchestrator") as mock_orch:
+    with patch.object(client.app, "state", create=True), patch("backend.query_service.api.ask.orchestrator") as mock_orch:
         mock_orch.ask_question.return_value = {
             "answer": "test answer",
             "sources": [],
@@ -89,9 +88,12 @@ def test_chat_success():
             {"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.85, "text": "relevant content"}
         ]
         mock_orch.generate_answer.return_value = "Here is the answer"
-        response = client.post("/api/v1/chat", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 200
     data = response.json()
     assert data["answer"] == "Here is the answer"
@@ -101,9 +103,12 @@ def test_chat_success():
 def test_chat_no_chunks():
     with patch("backend.query_service.api.chat.orchestrator") as mock_orch:
         mock_orch.retrieve_relevant_chunks.return_value = []
-        response = client.post("/api/v1/chat", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 200
     assert "couldn't find relevant information" in response.json()["answer"].lower()
 
@@ -115,9 +120,12 @@ def test_chat_high_confidence():
             {"document_name": "doc2.pdf", "page_number": 2, "similarity_score": 0.90, "text": "more content"},
         ]
         mock_orch.generate_answer.return_value = "High confidence answer"
-        response = client.post("/api/v1/chat", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     data = response.json()
     assert data["confidence"] == "high"
 
@@ -125,9 +133,12 @@ def test_chat_high_confidence():
 def test_chat_error():
     with patch("backend.query_service.api.chat.orchestrator") as mock_orch:
         mock_orch.retrieve_relevant_chunks.side_effect = RuntimeError("retrieval failed")
-        response = client.post("/api/v1/chat", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 500
 
 
@@ -149,9 +160,12 @@ def test_chat_stream_last_message_not_user():
 def test_chat_stream_direct():
     with patch("backend.query_service.api.chat.orchestrator.retrieve_relevant_chunks") as mock_ret:
         mock_ret.return_value = [{"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.85, "text": "content"}]
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "stream test"}],
-            "direct": True,
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "stream test"}],
+                "direct": True,
+            },
+        )
     assert response.status_code == 200
     assert "text/event-stream" in response.headers["content-type"]

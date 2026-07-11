@@ -1,4 +1,5 @@
 """Edge-case tests for query service modules to close coverage gaps."""
+
 from __future__ import annotations
 
 import json
@@ -117,14 +118,17 @@ def test_chat_get_llm_config_value_error():
 def test_chat_stream_direct_implemented():
     with patch("backend.query_service.api.chat.orchestrator", autospec=False) as mock_orch:
         mock_orch.generate_answer_stream.return_value = iter(["token1", "token2"])
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [
-                {"role": "user", "content": "previous question"},
-                {"role": "assistant", "content": "previous answer"},
-                {"role": "user", "content": "direct test"},
-            ],
-            "direct": True,
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [
+                    {"role": "user", "content": "previous question"},
+                    {"role": "assistant", "content": "previous answer"},
+                    {"role": "user", "content": "direct test"},
+                ],
+                "direct": True,
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "token1" in content
@@ -138,10 +142,13 @@ def test_chat_stream_direct_not_implemented():
     ):
         mock_orch.generate_answer_stream.side_effect = NotImplementedError
         mock_orch._llm.generate.return_value = "fallback answer"
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "stream test"}],
-            "direct": True,
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "stream test"}],
+                "direct": True,
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "fallback answer" in content
@@ -155,9 +162,12 @@ def test_chat_stream_direct_not_implemented():
 def test_chat_stream_no_chunks_non_direct():
     with patch("backend.query_service.api.chat.orchestrator", autospec=False) as mock_orch:
         mock_orch.retrieve_relevant_chunks.return_value = []
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "no chunks test"}],
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "no chunks test"}],
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "couldn't find relevant information" in content
@@ -170,9 +180,12 @@ def test_chat_stream_with_chunks_and_streaming():
     with patch("backend.query_service.api.chat.orchestrator", autospec=False) as mock_orch:
         mock_orch.retrieve_relevant_chunks.return_value = mock_chunks
         mock_orch.generate_answer_stream.return_value = iter(["hello ", "world"])
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "hello " in content
@@ -186,9 +199,12 @@ def test_chat_stream_with_chunks_long_text():
     with patch("backend.query_service.api.chat.orchestrator", autospec=False) as mock_orch:
         mock_orch.retrieve_relevant_chunks.return_value = mock_chunks
         mock_orch.generate_answer_stream.return_value = iter(["answer"])
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "answer" in content
@@ -203,9 +219,12 @@ def test_chat_stream_not_implemented_non_direct():
         mock_orch.retrieve_relevant_chunks.return_value = mock_chunks
         mock_orch.generate_answer_stream.side_effect = NotImplementedError
         mock_orch.generate_answer.return_value = "fallback answer"
-        response = client.post("/api/v1/chat/stream", json={
-            "messages": [{"role": "user", "content": "test question"}],
-        })
+        response = client.post(
+            "/api/v1/chat/stream",
+            json={
+                "messages": [{"role": "user", "content": "test question"}],
+            },
+        )
     assert response.status_code == 200
     content = response.text
     assert "fallback answer" in content
@@ -310,9 +329,12 @@ async def test_websocket_subscribe_error():
 
 
 def test_chat_stream_empty_content():
-    response = client.post("/api/v1/chat/stream", json={
-        "messages": [{"role": "user", "content": ""}],
-    })
+    response = client.post(
+        "/api/v1/chat/stream",
+        json={
+            "messages": [{"role": "user", "content": ""}],
+        },
+    )
     assert response.status_code == 400
 
 
@@ -324,5 +346,6 @@ def test_chat_stream_empty_content():
 def test_start_server():
     with patch("uvicorn.run") as mock_run:
         from backend.query_service.main import start_server
+
         start_server()
     mock_run.assert_called_once()

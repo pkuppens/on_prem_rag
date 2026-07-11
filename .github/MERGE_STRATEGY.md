@@ -2,22 +2,52 @@
 
 ## Repository Settings
 
-This repository is configured to enforce consistent merge behavior:
+This repository allows two merge methods and expects the person merging to
+pick the right one per PR (see [Choosing a Merge Method](#choosing-a-merge-method)
+below). Squash merging stays disabled.
 
-### Merge Commit Strategy
+### Merge Methods: Rebase (default) + Merge Commit (exception)
 
-**Setting**: Enable **Merge commits**, disable Squash merging and Rebase merging.
+**Setting**: Enable **Allow rebase merging** and **Allow merge commits**. Disable **Allow squash merging**.
 
 **Location**: Repository Settings → General → Pull Requests → Merge button
 
 **Rationale**:
-- **Merge commits** preserve branch history and create clear audit trails
-- Each PR gets a merge commit with the PR title and number in the message
-- Enables clear `git log` history showing when features were integrated
-- Supports rollback via `git revert` on the merge commit
+- Most PRs here (chores, docs, fixes, most features) already arrive as a small
+  number of well-formed, reviewed commits. Rebase merge keeps `main` linear and
+  makes `git bisect`/`git blame` trace directly to the original commit — no
+  synthetic merge/squash commit in the way.
+- Squash is disabled because it would discard exactly the kind of deliberate,
+  multi-commit history this repo writes on purpose (e.g. a refactor commit
+  followed by a targeted lint-fix commit) — squashing flattens that back into
+  one commit and loses the "why split this way" signal.
+- Merge commits are kept available, but only for the two cases below where a
+  linear rebase actively loses information or can't be produced cleanly.
+
+### Choosing a Merge Method
+
+**Default: rebase merge.** Use it unless one of the two exceptions below applies.
+
+**Exception 1 — real conflicts.** If bringing the branch onto `main` requires an
+actual 3-way conflict resolution (not just a mechanical `git rebase` replay),
+merge instead of rebasing. Rebasing a long-diverged branch commit-by-commit can
+force you to resolve the same conflict repeatedly; a merge resolves it once,
+and the merge commit records that a real reconciliation happened.
+
+**Exception 2 — a feature narrative worth preserving.** For a large,
+multi-commit feature branch where the individual commits tell a meaningful
+story you want visible as a unit in `git log --graph` (not just "squashed into
+one PR"), use a merge commit deliberately at merge time. This is an opt-in
+call made by the PR author/reviewer, not an automatic "big PR = merge commit"
+rule — most large PRs still rebase cleanly and should still be rebased.
+
+Everything else — chores, docs, dependency bumps, fixes, ordinary features —
+rebases.
 
 ```
-Example merge commit: Merge pull request #172 from pkuppens/docs/improve-readme
+Example rebase-merged history:  ...  <commit A>  <commit B>  (from PR, now on main, linear)
+Example merge-commit history:   ...  <merge commit "Merge pull request #NNN from ...">
+                                        \  <commit A>  <commit B>  (branch, preserved)
 ```
 
 ### Automatic Branch Deletion
@@ -58,15 +88,17 @@ The `cleanup.yml` workflow runs after merge to:
 1. **Create PR** from named branch (feature/*, docs/*, fix/*, etc.)
 2. **CI/CD validates** (tests, lint, coverage)
 3. **Merge approved** (requires status checks to pass)
-4. **GitHub merges** with merge commit (explicit commit message)
+4. **GitHub merges** — rebase by default; merge commit only for the two
+   exceptions in [Choosing a Merge Method](#choosing-a-merge-method)
 5. **Auto-delete** removes source branch
 6. **Cleanup workflow** (if needed) ensures remote sync
 
 ## Commands Reference
 
 ```bash
-# Check merge strategy is working
-git log --oneline | head -20  # Look for "Merge pull request" commits
+# gh pr merge picks the method explicitly — there is no repo-wide default to rely on
+gh pr merge <NNN> --rebase --delete-branch   # default
+gh pr merge <NNN> --merge --delete-branch    # only for the two exceptions above
 
 # Verify branch auto-delete worked
 git branch -a  # Remote tracking branches cleaned automatically
@@ -87,9 +119,9 @@ git branch -d feature/completed-work
 ### Enable in GitHub Web UI
 
 1. Navigate to: **Settings** → **General** → **Pull Requests**
-   - ✅ Allow merge commits (keep only this checked)
+   - ✅ Allow rebase merging (default method)
+   - ✅ Allow merge commits (exception method — see above)
    - ❌ Uncheck "Allow squash merging"
-   - ❌ Uncheck "Allow rebase merging"
    - ✅ Automatically delete head branches
    - ✅ Always suggest updating pull request branches
 
@@ -112,7 +144,7 @@ Expected output:
 {
   "deleteBranchOnMerge": true,
   "mergeCommitAllowed": true,
-  "rebaseMergeAllowed": false,
+  "rebaseMergeAllowed": true,
   "squashMergeAllowed": false
 }
 ```

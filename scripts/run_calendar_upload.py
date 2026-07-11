@@ -19,13 +19,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add src/ to path so `wbso.*` resolves without requiring the editable install
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from src.wbso.calendar_event import CalendarEvent
-from src.wbso.logging_config import get_logger
-from src.wbso.pipeline_steps import step_calendar_replace
-from src.wbso.upload import GoogleCalendarUploader
+from wbso.calendar_event import CalendarEvent
+from wbso.logging_config import get_logger
+from wbso.pipeline_steps import step_calendar_replace
+from wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("calendar_upload_script")
 
@@ -86,7 +86,7 @@ def load_calendar_events_from_prepared_data() -> list[CalendarEvent]:
 
     # We need to run the pipeline steps up to step_google_calendar_data_preparation
     # to get the prepared calendar events
-    from src.wbso.pipeline_steps import (
+    from wbso.pipeline_steps import (
         step_assign_activities,
         step_assign_commits_to_sessions,
         step_consolidate_system_events,
@@ -181,7 +181,7 @@ def main():
     except FileNotFoundError as e:
         logger.error(str(e))
         logger.error("\nTo prepare the data, run:")
-        logger.error("  uv run python -m src.wbso.pipeline --start-date 2025-06-01 --end-date 2025-12-02")
+        logger.error("  uv run wbso-pipeline --start-date 2025-06-01 --end-date 2025-12-02")
         logger.error("  (The pipeline will stop before calendar upload if there are issues)")
         return 1
     except Exception as e:

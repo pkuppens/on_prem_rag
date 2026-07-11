@@ -15,15 +15,12 @@ from datetime import datetime, time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-# Add project root to path for imports
+# Add src/ (not project root) to path so `backend.*` resolves the same way it
+# does under the package's normal src-layout (see CLAUDE.md > Import Conventions).
 project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "src"))
 
-try:
-    from src.backend.datetime_utils import parse_datetime_flexible
-except ImportError:
-    # Fallback for when imported from different contexts
-    from backend.datetime_utils import parse_datetime_flexible
+from backend.datetime_utils import parse_datetime_flexible
 
 
 @dataclass

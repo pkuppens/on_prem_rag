@@ -14,7 +14,7 @@ from urllib.parse import urlparse
 
 import pytest
 
-from src.backend.rag_pipeline.utils.progress import progress_notifier
+from backend.rag_pipeline.utils.progress import progress_notifier
 
 _MAX_LOCAL_WORKERS = 8  # Leave cores free for OS/IDE; cap memory usage
 

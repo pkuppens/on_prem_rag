@@ -19,14 +19,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-# Add project root to path
+# Add src/ to path so `wbso.*` resolves without requiring the editable install
 project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "src"))
 
-from src.wbso.calendar_event import CalendarEvent
-from src.wbso.logging_config import get_logger
-from src.wbso.pipeline_steps import step_calendar_replace
-from src.wbso.upload import GoogleCalendarUploader
+from wbso.calendar_event import CalendarEvent
+from wbso.logging_config import get_logger
+from wbso.pipeline_steps import step_calendar_replace
+from wbso.upload import GoogleCalendarUploader
 
 logger = get_logger("csv_calendar_upload")
 

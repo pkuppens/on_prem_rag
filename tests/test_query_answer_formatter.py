@@ -1,4 +1,5 @@
 """Tests for the AnswerFormatter application service."""
+
 from __future__ import annotations
 
 from backend.query_service.application.answer_formatter import AnswerFormatter
@@ -20,17 +21,13 @@ class TestAnswerFormatter:
 
     def test_format_answer_high_confidence(self):
         formatter = AnswerFormatter()
-        chunks = [
-            {"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.95, "text": "content"}
-        ]
+        chunks = [{"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.95, "text": "content"}]
         answer = formatter.format_answer("Answer", chunks)
         assert answer.confidence.label == "high"
 
     def test_format_answer_low_confidence(self):
         formatter = AnswerFormatter()
-        chunks = [
-            {"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.3, "text": "content"}
-        ]
+        chunks = [{"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.3, "text": "content"}]
         answer = formatter.format_answer("Answer", chunks)
         assert answer.confidence.label == "low"
 
@@ -42,8 +39,6 @@ class TestAnswerFormatter:
 
     def test_format_answer_strips_answer_text(self):
         formatter = AnswerFormatter()
-        chunks = [
-            {"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.8, "text": "content"}
-        ]
+        chunks = [{"document_name": "doc.pdf", "page_number": 1, "similarity_score": 0.8, "text": "content"}]
         answer = formatter.format_answer("  answer with spaces  ", chunks)
         assert answer.text == "answer with spaces"

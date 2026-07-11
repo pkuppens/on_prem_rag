@@ -17,7 +17,7 @@ import websockets
 # Add the project root to the Python path
 sys.path.append(str(Path(__file__).parent))
 
-from src.backend.rag_pipeline.utils.logging import StructuredLogger
+from backend.rag_pipeline.utils.logging import StructuredLogger
 
 logger = StructuredLogger(__name__)
 

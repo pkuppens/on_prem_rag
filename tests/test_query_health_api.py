@@ -1,4 +1,5 @@
 """Tests for Query Service health API endpoints."""
+
 from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock, patch

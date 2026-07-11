@@ -193,7 +193,9 @@ class TestDomainEvents:
         assert e.records_stored == 8
 
     def test_ingestion_finished_failure(self):
-        e = IngestionFinished(file_name="test.pdf", file_path="/p/test.pdf", total_chunks=0, records_stored=0, success=False, error="timeout")
+        e = IngestionFinished(
+            file_name="test.pdf", file_path="/p/test.pdf", total_chunks=0, records_stored=0, success=False, error="timeout"
+        )
         assert not e.success
         assert e.error == "timeout"
 
@@ -204,6 +206,7 @@ class TestDomainEvents:
 
     def test_all_events_are_frozen_dataclasses(self):
         import dataclasses
+
         e = DocumentLoaded(file_name="a", file_path="b", file_hash="c", page_count=1, file_size=1)
         assert dataclasses.is_dataclass(e)
         assert dataclasses.fields(e)

@@ -1,4 +1,5 @@
 """Tests for the ingestion infrastructure ProgressNotifier."""
+
 from __future__ import annotations
 
 import asyncio

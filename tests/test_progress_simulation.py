@@ -7,11 +7,6 @@ to test the progress reporting system and WebSocket functionality.
 """
 
 import asyncio
-import sys
-from pathlib import Path
-
-# Add the project root to the Python path
-sys.path.append(str(Path(__file__).parent))
 
 from backend.rag_pipeline.utils.logging import StructuredLogger
 from backend.rag_pipeline.utils.progress import ProgressEvent, progress_notifier

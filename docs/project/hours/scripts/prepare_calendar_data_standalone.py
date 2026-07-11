@@ -6,7 +6,7 @@ This script allows running the Google Calendar data preparation step independent
 without executing the full pipeline or uploading to Google Calendar.
 
 Usage:
-    python prepare_calendar_data_standalone.py [input_file] [output_file]
+    uv run python prepare_calendar_data_standalone.py [input_file] [output_file]
 
 If input_file is not provided, it will attempt to load from the pipeline context.
 If output_file is not provided, it will save to upload_output/prepared_calendar_events.json
@@ -20,10 +20,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import List
-
-# Add src/ to path so `wbso.*` resolves without requiring the editable install
-project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
 
 from wbso.calendar_event import CalendarEvent, WBSODataset
 from wbso.logging_config import get_logger

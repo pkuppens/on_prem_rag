@@ -3,15 +3,18 @@
 This module tests the page-by-page processing functionality using the 8-page PDF
 document (2305.03983v2.pdf) as specified. The tests validate chunking results,
 page boundaries, and text cleaning functionality.
+
+Targets backend.ingestion.infrastructure.{chunking,document_loader} — the production
+ingestion path used by IngestionService (see #178).
 """
 
 from pathlib import Path
 
 import pytest
-from llama_index.core import Document
 
-from backend.rag_pipeline.core.chunking import chunk_documents
-from backend.rag_pipeline.core.document_loader import DocumentLoader
+from backend.ingestion.domain.value_objects import Chunk
+from backend.ingestion.infrastructure.chunking import chunk_documents
+from backend.ingestion.infrastructure.document_loader import DocumentLoader
 
 
 class TestPageByPageProcessing:
@@ -39,9 +42,9 @@ class TestPageByPageProcessing:
         documents, metadata = document_loader.load_document(test_pdf_path)
 
         assert len(documents) == 8, f"Expected 8 pages, got {len(documents)}"
-        assert metadata.num_pages == 8, f"Expected 8 pages in metadata, got {metadata.num_pages}"
-        assert metadata.file_type == ".pdf"
-        assert metadata.file_size > 0
+        assert metadata["num_pages"] == 8, f"Expected 8 pages in metadata, got {metadata['num_pages']}"
+        assert metadata["file_type"] == ".pdf"
+        assert metadata["file_size"] > 0
 
     def test_page_boundaries_are_preserved(self, test_pdf_path, document_loader):
         """As a user I want search results to link to a single page, so I can quickly view and verify the result.
@@ -55,7 +58,7 @@ class TestPageByPageProcessing:
         large_chunk_size = 10000  # Much larger than typical page content
 
         # Chunk the entire document with large chunk size
-        result = chunk_documents(
+        chunks = chunk_documents(
             documents,
             chunk_size=large_chunk_size,
             chunk_overlap=0,  # No overlap to make boundary testing clearer
@@ -64,21 +67,19 @@ class TestPageByPageProcessing:
 
         # Verify we have at least as many chunks as pages
         # This ensures that page boundaries are being respected
-        assert result.chunk_count >= 8, (
-            f"Expected at least 8 chunks (one per page), got {result.chunk_count}. Chunks may be crossing page boundaries."
+        assert len(chunks) >= 8, (
+            f"Expected at least 8 chunks (one per page), got {len(chunks)}. Chunks may be crossing page boundaries."
         )
 
         # Verify that each chunk has a valid page number
-        for chunk in result.chunks:
-            assert chunk.metadata["page_number"] is not None, "Chunk should have a page number"
-            assert 1 <= chunk.metadata["page_number"] <= 8, (
-                f"Page number should be between 1 and 8, got {chunk.metadata['page_number']}"
-            )
+        for chunk in chunks:
+            assert chunk.page_number is not None, "Chunk should have a page number"
+            assert 1 <= chunk.page_number <= 8, f"Page number should be between 1 and 8, got {chunk.page_number}"
 
         # Group chunks by page and verify each page has at least one chunk
         page_chunks = {}
-        for chunk in result.chunks:
-            page_num = chunk.metadata["page_number"]
+        for chunk in chunks:
+            page_num = chunk.page_number
             if page_num not in page_chunks:
                 page_chunks[page_num] = []
             page_chunks[page_num].append(chunk)
@@ -98,33 +99,28 @@ class TestPageByPageProcessing:
         documents, _ = document_loader.load_document(test_pdf_path)
 
         # Chunk the entire document
-        result = chunk_documents(documents, chunk_size=512, chunk_overlap=50, source_path=test_pdf_path)
+        chunks = chunk_documents(documents, chunk_size=512, chunk_overlap=50, source_path=test_pdf_path)
 
         # Verify chunking statistics
-        assert result.num_pages == 8, f"Expected 8 pages, got {result.num_pages}"
-        assert result.chunk_count > 0, "Should have at least one chunk"
-        assert result.chunk_count == len(result.chunks), "Chunk count should match actual chunks"
-        assert result.file_name == "2305.03983v2.pdf"
-        assert result.file_path == str(test_pdf_path)
-        assert result.file_size > 0
-
-        # Verify chunking parameters
-        assert result.chunking_params["chunk_size"] == 512
-        assert result.chunking_params["chunk_overlap"] == 50
+        assert len(chunks) > 0, "Should have at least one chunk"
+        page_numbers = {c.page_number for c in chunks}
+        assert page_numbers == set(range(1, 9)), f"Expected 8 pages, got {page_numbers}"
+        assert all(c.document_name == "2305.03983v2.pdf" for c in chunks)
+        assert all(c.source == str(test_pdf_path) for c in chunks)
 
         # Verify file hash
-        assert len(result.file_hash) == 64, "Should be SHA-256 hash"
+        assert all(len(c.content_hash) == 64 for c in chunks), "Should be SHA-256 hash"
 
     def test_chunk_metadata_structure(self, test_pdf_path, document_loader):
         """As a user I want search results to include proper source attribution and navigation.
         Technical: Each chunk must have complete metadata structure for document tracking and page navigation.
         """
         documents, _ = document_loader.load_document(test_pdf_path)
-        result = chunk_documents(documents, source_path=test_pdf_path)
+        chunks = chunk_documents(documents, source_path=test_pdf_path)
 
         # Check first chunk metadata
-        if result.chunks:
-            chunk = result.chunks[0]
+        if chunks:
+            chunk = chunks[0]
             required_fields = ["chunk_index", "document_id", "document_name", "page_number", "page_label", "source", "content_hash"]
 
             for field in required_fields:
@@ -144,9 +140,9 @@ class TestPageByPageProcessing:
         Technical: Chunk text should be cleaned of excessive whitespace and formatting artifacts.
         """
         documents, _ = document_loader.load_document(test_pdf_path)
-        result = chunk_documents(documents, source_path=test_pdf_path)
+        chunks = chunk_documents(documents, source_path=test_pdf_path)
 
-        for chunk in result.chunks:
+        for chunk in chunks:
             text = chunk.text
 
             # Text should not be empty
@@ -166,11 +162,11 @@ class TestPageByPageProcessing:
         Technical: Content should be distributed across all pages with reasonable chunk distribution.
         """
         documents, _ = document_loader.load_document(test_pdf_path)
-        result = chunk_documents(documents, source_path=test_pdf_path)
+        chunks = chunk_documents(documents, source_path=test_pdf_path)
 
         # Group chunks by page
-        page_chunks: dict[int, list[Document]] = {}
-        for chunk in result.chunks:
+        page_chunks: dict[int, list[Chunk]] = {}
+        for chunk in chunks:
             page_num = chunk.metadata["page_number"]
             if page_num not in page_chunks:
                 page_chunks[page_num] = []
@@ -196,16 +192,16 @@ class TestPageByPageProcessing:
         documents, _ = document_loader.load_document(test_pdf_path)
 
         # Test with different overlap values
-        result = chunk_documents(documents, chunk_size=512, chunk_overlap=100, source_path=test_pdf_path)
+        chunks = chunk_documents(documents, chunk_size=512, chunk_overlap=100, source_path=test_pdf_path)
 
         # If we have multiple chunks, check for overlap
-        if len(result.chunks) > 1:
-            for i in range(len(result.chunks) - 1):
-                chunk1 = result.chunks[i]
-                chunk2 = result.chunks[i + 1]
+        if len(chunks) > 1:
+            for i in range(len(chunks) - 1):
+                chunk1 = chunks[i]
+                chunk2 = chunks[i + 1]
 
                 # Check if chunks are from the same page
-                if chunk1.metadata["page_number"] == chunk2.metadata["page_number"]:
+                if chunk1.page_number == chunk2.page_number:
                     # There should be some overlap in content
                     chunk1_end = chunk1.text[-50:]  # Last 50 chars
                     chunk2_start = chunk2.text[:50]  # First 50 chars
@@ -225,15 +221,15 @@ class TestPageByPageProcessing:
 
         # Verify document loading
         assert len(documents) == 8
-        assert metadata.num_pages == 8
+        assert metadata["num_pages"] == 8
 
         # Verify chunking
-        result = chunk_documents(documents, source_path=test_pdf_path)
-        assert result.num_pages == 8
-        assert result.chunk_count > 0
+        chunks = chunk_documents(documents, source_path=test_pdf_path)
+        assert {c.page_number for c in chunks} == set(range(1, 9))
+        assert len(chunks) > 0
 
         # Verify chunk metadata
-        for chunk in result.chunks:
+        for chunk in chunks:
             assert chunk.metadata["page_number"] is not None
             assert chunk.metadata["page_label"] is not None
             assert len(chunk.text.strip()) > 0

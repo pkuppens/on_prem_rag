@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from backend.rag_pipeline.core.chunking import chunk_documents
-from backend.rag_pipeline.core.document_loader import DocumentLoader
+from backend.ingestion.infrastructure.chunking import chunk_documents
+from backend.ingestion.infrastructure.document_loader import DocumentLoader
 
 # Stable URL for a 100+ page PDF (GPT-4 technical report, arXiv)
 # PDF is fetched at test time; never stored in repo.
@@ -44,7 +44,7 @@ class TestIngestionPerformance:
             start = time.perf_counter()
 
             documents, metadata = loader.load_document(pdf_path)
-            chunking_result = chunk_documents(
+            chunks = chunk_documents(
                 documents,
                 source_path=pdf_path,
                 chunk_size=512,
@@ -54,6 +54,6 @@ class TestIngestionPerformance:
 
             elapsed = time.perf_counter() - start
 
-            assert metadata.num_pages >= 100, f"Expected 100+ pages, got {metadata.num_pages}"
-            assert chunking_result.chunk_count > 0
+            assert metadata["num_pages"] >= 100, f"Expected 100+ pages, got {metadata['num_pages']}"
+            assert len(chunks) > 0
             assert elapsed < 60, f"Ingestion took {elapsed:.1f}s, must complete in < 60s"

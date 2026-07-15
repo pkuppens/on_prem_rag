@@ -65,20 +65,28 @@ The pipeline supports multiple strategies via the `strategy` parameter in `chunk
 
 ### Integration with Chunking Strategies
 
-```python
-from backend.rag_pipeline.core.chunking import chunk_documents
-from llama_index.core import Document
+The production ingestion path (used by `IngestionService`) is
+`backend.ingestion.infrastructure.chunking`:
 
-def process_documents(documents: list[Document], chunk_size: int = 512, chunk_overlap: int = 50):
+```python
+from backend.ingestion.domain.value_objects import IngestionDocument
+from backend.ingestion.infrastructure.chunking import chunk_documents
+
+def process_documents(documents: list[IngestionDocument], chunk_size: int = 512, chunk_overlap: int = 50):
     """Process documents into chunks with metadata and relationships."""
-    result = chunk_documents(
+    return chunk_documents(
         documents,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         strategy="character",  # Uses RecursiveChunkingStrategy (character-based)
     )
-    return result.chunks
 ```
+
+A legacy, functionally equivalent `backend.rag_pipeline.core.chunking` module is
+retained (not deleted) because `backend.rag_pipeline.core.embeddings` — still used by
+`scripts/upload_documents.py` — depends on it (see
+[on_prem_rag#178](https://github.com/pkuppens/on_prem_rag/issues/178)). New code
+should use `ingestion.infrastructure.chunking`.
 
 ### Configuration
 
@@ -164,9 +172,10 @@ def process_documents(documents: list[Document], chunk_size: int = 512, chunk_ov
 
 ## Code Files
 
-- [src/backend/rag_pipeline/core/chunking.py](../../src/backend/rag_pipeline/core/chunking.py) - Main chunking implementation with RecursiveChunkingStrategy and metadata handling
-- [tests/test_chunking.py](../../tests/test_chunking.py) - Comprehensive test suite covering chunking strategies, overlap, and edge cases
-- [src/rag_pipeline/config/parameter_sets.py](../../src/rag_pipeline/config/parameter_sets.py) - ChunkingParams configuration and validation
-- [src/rag_pipeline/core/embeddings.py](../../src/rag_pipeline/core/embeddings.py) - Integration between chunking and embedding generation
-- [src/rag_pipeline/file_ingestion.py](../../src/rag_pipeline/file_ingestion.py) - File upload and chunking pipeline integration
-- [src/rag_pipeline/core/rag_system.py](../../src/rag_pipeline/core/rag_system.py) - RAG system integration with chunking for index creation
+- [src/backend/ingestion/infrastructure/chunking.py](../../src/backend/ingestion/infrastructure/chunking.py) - Production chunking implementation (used by `IngestionService`) with RecursiveChunkingStrategy and metadata handling
+- [tests/test_ingestion_chunking.py](../../tests/test_ingestion_chunking.py) - Direct test suite for the production chunking path
+- [src/backend/rag_pipeline/core/chunking.py](../../src/backend/rag_pipeline/core/chunking.py) - Legacy equivalent, retained for `rag_pipeline/core/embeddings.py` (see #178)
+- [tests/test_chunking.py](../../tests/test_chunking.py) - Test suite for the legacy chunking module
+- [src/backend/rag_pipeline/config/parameter_sets.py](../../src/backend/rag_pipeline/config/parameter_sets.py) - ChunkingParams configuration and validation
+- [src/backend/rag_pipeline/core/embeddings.py](../../src/backend/rag_pipeline/core/embeddings.py) - Integration between (legacy) chunking and embedding generation
+- [src/backend/ingestion/application/ingest_service.py](../../src/backend/ingestion/application/ingest_service.py) - Production ingestion pipeline: load → chunk → embed → store

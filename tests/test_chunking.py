@@ -1,7 +1,13 @@
-"""Tests for the chunking module.
+"""Tests for the legacy rag_pipeline.core.chunking module.
 
 Comprehensive test coverage for chunking strategies and configurations.
 Test scenarios align with docs/technical/CHUNKING.md strategy documentation.
+
+This module is retained (not deleted, see #178) because
+backend.rag_pipeline.core.embeddings — still used by scripts/upload_documents.py —
+depends on it. The production ingestion path is covered separately by
+tests/test_ingestion_chunking.py, which targets
+backend.ingestion.infrastructure.chunking directly.
 """
 
 import pytest

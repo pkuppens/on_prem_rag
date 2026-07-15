@@ -17,9 +17,8 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from pydantic import BaseModel, Field, HttpUrl
 from starlette.datastructures import UploadFile as StarletteUploadFile
 
+from backend.ingestion.infrastructure.vector_store import get_vector_store_write
 from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
-from backend.rag_pipeline.core.document_loader import DocumentLoader
-from backend.rag_pipeline.core.vector_store import get_vector_store_manager
 from backend.rag_pipeline.models.document_models import ProcessingStatus, UploadResponse
 from backend.rag_pipeline.services.document_processing_service import DocumentProcessingService
 from backend.rag_pipeline.services.file_upload_service import FileUploadService
@@ -41,8 +40,7 @@ router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
 # Initialize directories and services
 uploaded_files_dir = get_uploaded_files_dir()
 ensure_directory_exists(uploaded_files_dir)
-document_loader = DocumentLoader()
-vector_store_manager = get_vector_store_manager()
+vector_store_manager = get_vector_store_write()
 document_processing_service = DocumentProcessingService()
 file_upload_service = FileUploadService()
 

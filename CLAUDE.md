@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project Overview
 
 On-premises RAG system for document analysis using LLMs while maintaining data sovereignty. FastAPI backend, React frontend, ChromaDB vector storage, Ollama for local LLM inference.
@@ -67,11 +65,7 @@ Other: `project/` (SAFe docs), `docs/` (technical docs), `tests/` (mirrors src s
 
 ### Import Conventions
 
-Code lives under `src/` (e.g. `src/backend/`, `src/wbso/`), but `src` is a **build root, not an importable package** — always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc., never `src.backend...` or `src.wbso...`.
-
-`src.*` imports used to work too, because a stray `src/__init__.py` turned `src` into a real package and pytest/scripts running from the repo root put the project root on `sys.path`. That made two import spellings resolve to the same module — confusing, and easy to typo into inconsistently across files. `src/__init__.py` has been removed and `ruff`'s `TID251` banned-api rule now fails the build on any `src.*` import (see `[tool.ruff.lint.flake8-tidy-imports.banned-api]` in `pyproject.toml`).
-
-Standalone scripts (e.g. `docs/project/hours/scripts/*.py`, `scripts/*.py`) never need `sys.path` manipulation to import `backend.*`/`wbso.*` — `uv sync --group dev` installs the package in editable mode, so those imports resolve as long as the script runs via `uv run python <script>` (the documented invocation for every such script). If you see a `sys.path.insert`/`sys.path.append` before an import block, it's very likely leftover cruft from before the editable install existed — delete it rather than "fixing" it, and put the import at the top of the file like any other.
+Always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc. — never `src.backend...`/`src.wbso...` (banned by ruff `TID251`). Details/history: [docs/technical/IMPORT_CONVENTIONS.md](docs/technical/IMPORT_CONVENTIONS.md).
 
 ## Critical Rules
 
@@ -100,18 +94,7 @@ Standalone scripts (e.g. `docs/project/hours/scripts/*.py`, `scripts/*.py`) neve
 
 ## Scratch Directory (`tmp/`)
 
-Use `tmp/` for all scratch files that should NOT be committed (gitignored).
-
-```
-tmp/
-├── github/issue-NNN/        # description.md, workflow.md, plan.md, comments/
-├── coverage-reports/        # CI coverage (gh run download); open htmlcov/index.html
-├── analysis/                # Exploration notes, profiling
-├── debug/                   # Debug output, logs, test artifacts
-└── drafts/                  # Any other WIP text
-```
-
-Rules: never commit from `tmp/`; prefer `tmp/` over repo root or `docs/`; move persistent content to Claude memory.
+Use `tmp/` (gitignored) for all scratch files — never the repo root or `docs/`. See [tmp/CLAUDE.md](tmp/CLAUDE.md) for subdirectory layout and conventions.
 
 ## References
 

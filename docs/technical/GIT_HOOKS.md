@@ -15,11 +15,14 @@ The project implements a pre-push hook that automatically runs unit tests before
 
 ### Hook Files
 
-The git hook system consists of several files:
+The git hook system consists of:
 
-- `.git/hooks/pre-push` - Shell script for Unix-like systems (Linux, macOS)
-- `.git/hooks/pre-push.ps1` - PowerShell script for Windows
-- `scripts/setup_git_hooks.py` - Cross-platform setup script
+- `githooks/pre-push` - Tracked POSIX shell script; this is the single source of
+  truth for the hook's behavior on both Windows and Unix. Git for Windows invokes
+  hooks through its bundled `sh`, so the same script runs unmodified on both
+  platforms — no OS branching or PowerShell wrapper needed.
+- `scripts/setup_git_hooks.py` - Installs `githooks/pre-push` into
+  `.git/hooks/pre-push` (the actual, untracked, git-managed hooks directory)
 
 ### Setup Process
 
@@ -28,9 +31,12 @@ The git hook system consists of several files:
    uv run python scripts/setup_git_hooks.py
    ```
 
-2. **Manual Setup**: The setup script detects the operating system and installs the appropriate hook:
-   - **Windows**: Creates a batch file wrapper that calls the PowerShell script
-   - **Unix-like**: Copies and makes executable the shell script
+2. The setup script copies the tracked `githooks/pre-push` template to
+   `.git/hooks/pre-push` and marks it executable, then verifies the install by
+   actually executing the hook with `PRE_PUSH_SELF_TEST=1` (which short-circuits
+   to a no-op success) rather than only checking that the file exists — this
+   catches interpreter-resolution failures instead of silently reporting a
+   broken hook as configured.
 
 ### Hook Behavior
 
@@ -42,7 +48,7 @@ The pre-push hook performs the following actions:
    - Validates that `uv` is installed and available
 
 2. **Dependency Installation**:
-   - Runs `uv sync --dev` to ensure all dependencies are installed
+   - Runs `uv sync --group dev` to ensure all dependencies are installed
    - Fails if dependency installation fails
 
 3. **Unit Test Execution**:
@@ -153,11 +159,11 @@ The pre-push hook complements the existing GitHub Actions CI/CD pipeline:
 
 ## Code Files
 
-- [.git/hooks/pre-push](.git/hooks/pre-push) - Unix shell script for pre-push hook
-- [.git/hooks/pre-push.ps1](.git/hooks/pre-push.ps1) - PowerShell script for Windows
-- [scripts/setup_git_hooks.py](scripts/setup_git_hooks.py) - Cross-platform setup script
-- [pyproject.toml](pyproject.toml) - Test configuration and dependencies
-- [.github/workflows/python-ci.yml](.github/workflows/python-ci.yml) - CI/CD pipeline configuration
+- [githooks/pre-push](../../githooks/pre-push) - Tracked POSIX hook script (source of truth)
+- [scripts/setup_git_hooks.py](../../scripts/setup_git_hooks.py) - Setup script; installs the hook and verifies it executes
+- [tests/test_setup_git_hooks.py](../../tests/test_setup_git_hooks.py) - Tests for the install/verify logic
+- [pyproject.toml](../../pyproject.toml) - Test configuration and dependencies
+- [.github/workflows/python-ci.yml](../../.github/workflows/python-ci.yml) - CI/CD pipeline configuration
 
 ## References
 

@@ -1,0 +1,59 @@
+#!/bin/sh
+# Tracked pre-push hook template — installed into .git/hooks/pre-push by
+# scripts/setup_git_hooks.py. A single POSIX script (not a per-OS branch):
+# Git for Windows invokes hooks through its bundled sh.exe regardless of the
+# user's shell, so this runs unmodified on Windows (Git Bash) and Unix.
+#
+# PRE_PUSH_SELF_TEST=1 short-circuits into a no-op success, used by
+# scripts/setup_git_hooks.py's verify_hook_setup() to prove the hook can
+# actually execute without running the full test suite.
+
+if [ "$PRE_PUSH_SELF_TEST" = "1" ]; then
+    echo "[PRE-PUSH] self-test ok"
+    exit 0
+fi
+
+echo "[PRE-PUSH] Running pre-push checks..."
+
+project_root=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$project_root" ]; then
+    echo "[PRE-PUSH] Not in a git repository."
+    exit 1
+fi
+cd "$project_root" || exit 1
+
+if [ ! -f "pyproject.toml" ]; then
+    echo "[PRE-PUSH] pyproject.toml not found. Are you in the project root?"
+    exit 1
+fi
+
+if ! command -v uv >/dev/null 2>&1; then
+    echo "[PRE-PUSH] uv is not installed or not on PATH."
+    exit 1
+fi
+
+echo "[PRE-PUSH] Syncing dependencies (uv sync --group dev)..."
+if ! uv sync --group dev; then
+    echo "[PRE-PUSH] Dependency installation failed."
+    exit 1
+fi
+
+echo "[PRE-PUSH] Running ruff check --fix..."
+uv run ruff check --fix .
+
+echo "[PRE-PUSH] Running ruff format..."
+uv run ruff format .
+
+# Auto-stage any files ruff fixed/formatted, matching the behavior
+# setup_git_hooks.py already advertises in its printed instructions.
+git add -u
+
+echo "[PRE-PUSH] Running fast unit tests (uv run pytest -m 'not internet and not slow')..."
+if ! uv run pytest -m "not internet and not slow"; then
+    echo "[PRE-PUSH] Tests failed. Push blocked."
+    echo "[PRE-PUSH] Fix failing tests, or in a genuine emergency: git push --no-verify"
+    exit 1
+fi
+
+echo "[PRE-PUSH] All checks passed."
+exit 0

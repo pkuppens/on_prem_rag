@@ -16,7 +16,7 @@ from typing import Any
 
 from backend.ingestion.application.ingest_service import IngestionService
 from backend.ingestion.infrastructure.progress import ProgressEvent, progress_notifier
-from backend.rag_pipeline.config.parameter_sets import RAGParams, get_param_set
+from backend.rag_pipeline.config.parameter_sets import DEFAULT_PARAM_SET_NAME, RAGParams, get_param_set
 from backend.rag_pipeline.core.vector_store import get_vector_store_manager
 from backend.rag_pipeline.models.document_models import DocumentMetadata
 from backend.rag_pipeline.utils.logging import StructuredLogger
@@ -28,10 +28,20 @@ _ingestion_service: IngestionService | None = None
 
 
 def _get_ingestion_service() -> IngestionService:
-    """Get or create the shared IngestionService instance."""
+    """Get or create the shared IngestionService instance.
+
+    Wires the default parameter set's embedding model as the ingestion embedding
+    provider — without this, IngestionService silently skips embedding generation
+    (see IngestionService.__init__ docstring) and every uploaded document ends up
+    with 0 vector-store records, breaking retrieval for the whole app.
+    """
     global _ingestion_service
     if _ingestion_service is None:
-        _ingestion_service = IngestionService()
+        from backend.rag_pipeline.utils.embedding_model_utils import get_embedding_model
+
+        default_model_name = get_param_set(DEFAULT_PARAM_SET_NAME).embedding.model_name
+        embedding_provider = get_embedding_model(default_model_name)
+        _ingestion_service = IngestionService(embedding_provider=embedding_provider)  # type: ignore[arg-type]
     return _ingestion_service
 
 

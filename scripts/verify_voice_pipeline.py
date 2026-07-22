@@ -220,7 +220,7 @@ def run_progression(url: str, ingestion_wait_sec: int = DEFAULT_INGESTION_WAIT_S
                 content = f.read()
             files = {"file": ("metformin_verify_pipeline.txt", content, "text/plain")}
             upload_resp = httpx.post(f"{url}/api/v1/documents", files=files, timeout=30)
-            if upload_resp.status_code == 200:
+            if upload_resp.status_code in (200, 201):
                 if ingestion_wait_sec > 0:
                     log.info("Uploaded metformin doc, waiting %s s for ingestion...", ingestion_wait_sec)
                     time.sleep(ingestion_wait_sec)
@@ -286,19 +286,20 @@ def run_dutch_rag(url: str) -> bool:
     if not check_prerequisites(url, "Dutch->English RAG check"):
         return False
 
-    # Check Ollama
+    # Check Ollama (informational only; the backend uses its own OLLAMA_BASE_URL regardless)
+    ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     try:
         import httpx
 
         with httpx.Client(timeout=3) as client:
-            r = client.get("http://localhost:11434/api/tags")
+            r = client.get(f"{ollama_url}/api/tags")
             models = r.json().get("models", []) if r.status_code == 200 else []
         if not models:
             log.warning("Ollama has no models. Run: ollama pull mistral:7b")
         else:
             log.info("Ollama models: %s", [m.get("name") for m in models[:5]])
     except Exception as e:
-        log.warning("Ollama not reachable: %s. Dutch->English RAG needs Ollama.", e)
+        log.warning("Ollama not reachable at %s: %s. Dutch->English RAG needs Ollama.", ollama_url, e)
 
     # Dutch medical question
     question_nl = "Wat is de aanbevolen dosering van metformine bij diabetes type 2?"

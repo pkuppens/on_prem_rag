@@ -92,6 +92,15 @@ Always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc. —
 - **Merge to `main` only via pull request** (including docs, rules, and skills); enable protection per [docs/technical/BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md)
 - **Full workflow**: [docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)
 
+## Project Board
+
+Open issues are tracked on a GitHub Project (Kanban board): https://github.com/users/pkuppens/projects/1
+
+- **Status** column (Todo / In Progress / Done) is the Kanban view.
+- **Rank** field (number, lower = higher priority) orders issues by value-vs-effort — most value for least effort first. Set/updated by whoever last did a priority pass; not auto-maintained.
+- **When picking what to work on next, or when priority is ambiguous, check this board before asking the user** — it reflects the user's last stated ordering.
+- A Roadmap (timeline) view can be added manually in the web UI; `gh project` CLI cannot create custom views.
+
 ## Scratch Directory (`tmp/`)
 
 Use `tmp/` (gitignored) for all scratch files — never the repo root or `docs/`. See [tmp/CLAUDE.md](tmp/CLAUDE.md) for subdirectory layout and conventions.

@@ -95,12 +95,27 @@ Always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc. —
 
 ## Project Board
 
-Open issues are tracked on a GitHub Project (Kanban board): https://github.com/users/pkuppens/projects/1
+Work is tracked via a prioritized project roadmap — a GitHub Project (Kanban board): https://github.com/users/pkuppens/projects/1
 
 - **Status** column (Todo / In Progress / Done) is the Kanban view.
 - **Rank** field (number, lower = higher priority) orders issues by value-vs-effort — most value for least effort first. Set/updated by whoever last did a priority pass; not auto-maintained.
 - **When picking what to work on next, or when priority is ambiguous, check this board before asking the user** — it reflects the user's last stated ordering.
 - A Roadmap (timeline) view can be added manually in the web UI; `gh project` CLI cannot create custom views.
+- **Modifying the board is explicitly allowed once discussed with the user**: reordering/reprioritizing issues (including the Rank field), adding or removing items, and changing the dashboard itself (adding, removing, or reordering fields/views). Discuss the change with the user first — don't do it silently — but no separate PR or approval process is needed beyond that conversation.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues (`pkuppens/on_prem_rag`), via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five canonical labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
 ## Scratch Directory (`tmp/`)
 

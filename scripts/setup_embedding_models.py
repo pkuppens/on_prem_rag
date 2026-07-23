@@ -240,6 +240,7 @@ def main():
         models_to_download = [
             ("sentence_transformer", "sentence-transformers/all-MiniLM-L6-v2"),
             ("transformers", "BAAI/bge-small-en-v1.5"),
+            ("llamaindex", "sentence-transformers/all-MiniLM-L6-v2"),
             ("llamaindex", "BAAI/bge-small-en-v1.5"),
         ]
     else:

@@ -105,6 +105,10 @@ Open issues are tracked on a GitHub Project (Kanban board): https://github.com/u
 
 Use `tmp/` (gitignored) for all scratch files — never the repo root or `docs/`. See [tmp/CLAUDE.md](tmp/CLAUDE.md) for subdirectory layout and conventions.
 
+## Related Projects
+
+Sibling repo `../production-agentic-rag-course` ([pkuppens/production-agentic-rag-course](https://github.com/pkuppens/production-agentic-rag-course.git)) is a learning course building a production-grade RAG system (OpenSearch, hybrid search, LangGraph agentic RAG, Airflow) from scratch. It's a source of lessons and techniques to evaluate for adoption here — check it for prior art before designing new retrieval, agentic, or pipeline features. This project does not need to reciprocally track it, but improvements made here may be worth porting back.
+
 ## References
 
 | Topic | Location |

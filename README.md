@@ -233,6 +233,10 @@ Key architectural trade-offs that shape the system:
 
 For legal, commercial, and pending decisions, see [Key Business Concerns & Decisions](#key-business-concerns--decisions).
 
+## Related Projects
+
+Sibling repo [production-agentic-rag-course](https://github.com/pkuppens/production-agentic-rag-course.git) is a hands-on course building a production-grade RAG system (OpenSearch hybrid search, LangGraph agentic RAG, Airflow pipelines) from the ground up. It serves as a source of techniques and lessons learned to evaluate for adoption in this project; the relationship is one-directional for now, though improvements made here may later be worth porting back there.
+
 ## What We'll Build
 
 ![image](https://github.com/user-attachments/assets/2ed5872e-9ab2-49e4-90bf-ca0f774a46e1)

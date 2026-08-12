@@ -87,6 +87,7 @@ Always import as `backend.rag_pipeline.core.chunking`, `wbso.pipeline`, etc. —
 
 ## Git Workflow
 
+- **Always work from a branch by default.** Before making any edits, create/switch to a feature branch — never commit or push directly on `main` unless the user explicitly instructs otherwise (e.g. a CI/CD fix that only reproduces on `main`).
 - Branches: `feature/NNN-description`, `task/TASK-XXX-description`, `chore/…`, `docs/…`
 - Commits: `#NNN: type: description` (types: feat, fix, docs, test, refactor, chore)
 - **Merge to `main` only via pull request** (including docs, rules, and skills); enable protection per [docs/technical/BRANCH_PROTECTION.md](docs/technical/BRANCH_PROTECTION.md)

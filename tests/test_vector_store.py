@@ -67,3 +67,30 @@ class TestChromaVectorStoreManager:
         import gc
 
         gc.collect()
+
+    def test_has_document_with_file_hash_scoped_by_embedding_model(self, test_case_dir):
+        """Regression test for #207: has_document_with_file_hash must not always return False.
+
+        Passing both file_content_hash and embedding_model previously built a flat
+        two-key ChromaDB `where` dict, which ChromaDB rejects with ValueError
+        ("Expected where to have exactly one operator"). The bare except-Exception
+        swallowed that error and always returned False, silently disabling
+        duplicate-content detection for every ingest that specifies an embedding model.
+        """
+        config = VectorStoreConfig(host=None, persist_directory=str(test_case_dir), collection_name="test_dedup")
+        manager = ChromaVectorStoreManager(config)
+
+        manager.add_embeddings(
+            ids=["c1"],
+            embeddings=[[0.1, 0.2]],
+            metadatas=[{"file_content_hash": "abc123", "embedding_model": "model-a"}],
+        )
+
+        assert manager.has_document_with_file_hash("abc123", embedding_model="model-a") is True
+        assert manager.has_document_with_file_hash("abc123", embedding_model="model-b") is False
+        assert manager.has_document_with_file_hash("other-hash", embedding_model="model-a") is False
+
+        del manager
+        import gc
+
+        gc.collect()

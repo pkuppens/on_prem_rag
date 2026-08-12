@@ -245,8 +245,8 @@ def chunk_documents(
             text_cleaning_stats["cleaned_chunks"] += len(page_chunks)
 
         # Convert nodes to domain Chunks
-        for i, node in enumerate(page_chunks):
-            chunk_index = len(all_chunks) + i
+        for node in page_chunks:
+            chunk_index = len(all_chunks)
             doc_id = f"{source_path.stem}_{chunk_index}"
             domain_chunk = Chunk(
                 text=node.text or "",

@@ -111,7 +111,7 @@ class ChromaVectorStoreWriteAdapter(IVectorStoreWrite):
         try:
             where: dict[str, Any] = {"file_content_hash": file_content_hash}
             if embedding_model:
-                where["embedding_model"] = embedding_model
+                where = {"$and": [{"file_content_hash": file_content_hash}, {"embedding_model": embedding_model}]}
             result = self._collection.get(
                 where=where,
                 include=[],

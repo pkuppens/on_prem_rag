@@ -158,6 +158,29 @@ class TestChunkDocuments:
             assert chunk1.page_number == chunk2.page_number
             assert chunk1.document_name == chunk2.document_name
 
+    def test_chunk_ids_unique_across_uneven_pages(self):
+        """Regression test for #207: chunk_index must not double-count position.
+
+        A document whose pages produce different chunk counts (e.g. 7, 6, 2)
+        previously produced duplicate document_id/chunk_index values across
+        page boundaries (chunk_index = len(all_chunks) + i), which crashed
+        ChromaDB's collection.add() with DuplicateIDError and silently
+        dropped the whole document from the vector store.
+        """
+        documents = [
+            IngestionDocument(text=". ".join(f"Sentence {i} on page one" for i in range(60))),
+            IngestionDocument(text=". ".join(f"Sentence {i} on page two" for i in range(50))),
+            IngestionDocument(text=". ".join(f"Sentence {i} on page three" for i in range(15))),
+        ]
+
+        chunks = chunk_documents(documents, source_path=Path("test.pdf"), chunk_size=50, chunk_overlap=5)
+
+        document_ids = [c.document_id for c in chunks]
+        assert len(document_ids) == len(set(document_ids)), f"Duplicate document_id values: {document_ids}"
+
+        chunk_indices = [c.chunk_index for c in chunks]
+        assert chunk_indices == list(range(len(chunks))), f"chunk_index must be a contiguous sequence, got {chunk_indices}"
+
     def test_empty_page_handling(self):
         """Test that empty pages are properly marked and preserved for page numbering."""
         documents = [

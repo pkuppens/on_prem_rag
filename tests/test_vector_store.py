@@ -20,6 +20,14 @@ from rag_pipeline.core.vector_store import ChromaVectorStoreManager
 class TestChromaVectorStoreManager:
     """Test ChromaDB vector store manager."""
 
+    @pytest.fixture(autouse=True)
+    def _release_manager_on_windows(self):
+        """Cleanup to release ChromaDB/SQLite file locks on Windows after each test."""
+        yield
+        import gc
+
+        gc.collect()
+
     def test_add_and_query(self, test_case_dir):
         """Test adding and querying embeddings."""
         config = VectorStoreConfig(host=None, persist_directory=str(test_case_dir))
@@ -35,12 +43,6 @@ class TestChromaVectorStoreManager:
         assert isinstance(ids, list), f"Expected ids to be list, got {type(ids)}"
         assert len(ids) == 1, f"Expected 1 id, got {len(ids)}"
         assert ids[0] == "1", f"Expected first id to be '1', got '{ids[0]}'"
-
-        # Cleanup to release file locks on Windows
-        del manager
-        import gc
-
-        gc.collect()
 
     def test_get_chunk_count_and_get_all_chunks(self, test_case_dir):
         """As a user I want metrics and BM25 to use the abstract interface.
@@ -63,11 +65,6 @@ class TestChromaVectorStoreManager:
         assert len(metadatas) == 2
         assert metadatas[0].get("chunk_index") == 0
 
-        del manager
-        import gc
-
-        gc.collect()
-
     def test_has_document_with_file_hash_scoped_by_embedding_model(self, test_case_dir):
         """Regression test for #207: has_document_with_file_hash must not always return False.
 
@@ -89,8 +86,3 @@ class TestChromaVectorStoreManager:
         assert manager.has_document_with_file_hash("abc123", embedding_model="model-a") is True
         assert manager.has_document_with_file_hash("abc123", embedding_model="model-b") is False
         assert manager.has_document_with_file_hash("other-hash", embedding_model="model-a") is False
-
-        del manager
-        import gc
-
-        gc.collect()

@@ -338,14 +338,17 @@ class QueryOrchestrator(IQueryOrchestrator):
     def _create_default_retrieval(self) -> IRetrievalService:
         """Create a default RetrievalAdapter from environment config."""
         from backend.query_service.adapters.retrieval import RetrievalAdapter
+        from backend.retrieval.infrastructure.vector_store_config import VectorStoreConfig
 
         params = get_param_set(DEFAULT_PARAM_SET_NAME)
         ret = params.retrieval
+        # Same config as the ingestion write side, so queries search the store documents were written to.
+        store = VectorStoreConfig()
         return RetrievalAdapter(
             strategy=ret.strategy,
             model_name=params.embedding.model_name,
-            persist_dir=os.getenv("PERSIST_DIRECTORY", "./chroma_db"),
-            collection_name="documents",
+            persist_dir=str(store.persist_directory),
+            collection_name=store.collection_name,
             hybrid_alpha=ret.hybrid_alpha,
             use_reranker=ret.use_reranker,
             reranker_model=ret.reranker_model,

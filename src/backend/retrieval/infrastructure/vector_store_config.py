@@ -22,7 +22,10 @@ class VectorStoreConfig:
     implementation: str = field(default_factory=lambda: os.getenv("VECTOR_STORE_IMPL", "chroma"))
     host: str | None = field(default_factory=lambda: os.getenv("CHROMA_HOST"))
     port: int | None = field(default_factory=lambda: int(os.getenv("CHROMA_PORT", "0")) or None)
-    persist_directory: str | Path = field(default_factory=lambda: os.getenv("CHROMA_PERSIST_DIR", "data/chroma"))
+    # PERSIST_DIRECTORY is a legacy alias; ingestion and retrieval must resolve the same directory.
+    persist_directory: str | Path = field(
+        default_factory=lambda: os.getenv("CHROMA_PERSIST_DIR") or os.getenv("PERSIST_DIRECTORY") or "data/chroma"
+    )
     collection_name: str = field(default_factory=lambda: os.getenv("CHROMA_COLLECTION", "documents"))
 
     def __post_init__(self):

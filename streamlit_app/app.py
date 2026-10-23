@@ -23,6 +23,9 @@ import streamlit as st
 DEFAULT_API_URL = "http://localhost:8000"
 QA_PATH = "/api/v1/qa"
 REQUEST_TIMEOUT_S = 120.0  # local LLM generation can be slow
+# The backend default (0.7) drops relevant chunks for small embedding models (all-MiniLM scores ~0.6-0.7).
+DEFAULT_SIMILARITY_THRESHOLD = 0.5
+DEFAULT_TOP_K = 5
 
 
 class BackendError(Exception):
@@ -34,26 +37,53 @@ def get_api_url() -> str:
     return os.environ.get("ON_PREM_RAG_API_URL", DEFAULT_API_URL).rstrip("/")
 
 
-def ask_backend(question: str, api_url: str) -> dict:
+def describe_http_error(response: httpx.Response) -> str:
+    """Turn an error response into a message, including the backend's remediation steps when present."""
+    try:
+        detail = response.json().get("detail")
+    except ValueError:
+        detail = None
+    if isinstance(detail, dict):
+        steps = "".join(f"\n- {step}" for step in detail.get("remediation", []))
+        return f"Backend returned {response.status_code}: {detail.get('error', detail)}{steps}"
+    return f"Backend returned {response.status_code}: {detail or response.text[:300]}"
+
+
+def ask_backend(
+    question: str,
+    api_url: str,
+    similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
+    top_k: int = DEFAULT_TOP_K,
+) -> dict:
     """POST the question to the QA endpoint and return the parsed response.
 
     Raises:
         BackendError: on connection failure, timeout, or a non-2xx response.
     """
+    payload = {"question": question, "similarity_threshold": similarity_threshold, "top_k": top_k}
     try:
-        response = httpx.post(f"{api_url}{QA_PATH}", json={"question": question}, timeout=REQUEST_TIMEOUT_S)
+        response = httpx.post(f"{api_url}{QA_PATH}", json=payload, timeout=REQUEST_TIMEOUT_S)
         response.raise_for_status()
         return response.json()
     except httpx.HTTPStatusError as e:
-        raise BackendError(f"Backend returned {e.response.status_code}: {e.response.text[:300]}") from e
+        raise BackendError(describe_http_error(e.response)) from e
+    except httpx.TimeoutException as e:
+        raise BackendError(
+            f"Backend at {api_url} did not answer within {REQUEST_TIMEOUT_S:.0f} s. "
+            "The local LLM may still be loading; try again, or check that Ollama is running (ollama ps)."
+        ) from e
     except httpx.HTTPError as e:
-        raise BackendError(f"Could not reach backend at {api_url}: {e}") from e
+        raise BackendError(
+            f"Could not reach backend at {api_url}: {e}\n"
+            "- Start it: uv run start-backend\n"
+            "- Or set ON_PREM_RAG_API_URL (docker-compose stack: http://localhost:9180)"
+        ) from e
 
 
 def render_sources(sources: list[dict]) -> None:
     """Render retrieved chunks as collapsible entries: document, page, score, text."""
     if not sources:
-        st.caption("No sources retrieved — the vector store may be empty.")
+        st.caption("No sources retrieved: the vector store may be empty, or lower the similarity threshold in the sidebar.")
         return
     for i, source in enumerate(sources, start=1):
         name = source.get("document_name", "unknown document")
@@ -82,6 +112,8 @@ def main() -> None:
     st.title("On-prem RAG chat")
     api_url = get_api_url()
     st.caption(f"Backend: {api_url}")
+    threshold = st.sidebar.slider("Similarity threshold", 0.0, 1.0, DEFAULT_SIMILARITY_THRESHOLD, 0.05)
+    top_k = st.sidebar.slider("Top k chunks", 1, 20, DEFAULT_TOP_K)
 
     history: list[dict] = st.session_state.setdefault("history", [])
     for turn in history:
@@ -92,7 +124,7 @@ def main() -> None:
         return
 
     try:
-        result = ask_backend(question, api_url)
+        result = ask_backend(question, api_url, similarity_threshold=threshold, top_k=top_k)
         turn = {"question": question, "answer": result.get("answer", ""), "sources": result.get("sources", [])}
     except BackendError as e:
         turn = {"question": question, "error": str(e)}

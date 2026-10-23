@@ -46,6 +46,10 @@ test-cov:
 run:
     uv run start-backend
 
+# End-to-end smoke test: Ollama -> backend -> upload -> /api/v1/qa -> Streamlit (starts what is missing)
+e2e *ARGS:
+    uv run python scripts/e2e_smoke.py {{ARGS}}
+
 # Run auth service
 run-auth:
     uv run start-auth

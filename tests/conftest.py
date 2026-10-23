@@ -21,6 +21,7 @@ _MAX_LOCAL_WORKERS = 8  # Leave cores free for OS/IDE; cap memory usage
 # Session ID shared across workers so each run gets a fresh set of dirs,
 # but all workers within one run share the same session prefix (worker suffix keeps them isolated).
 _TEST_SESSION_ID = uuid.uuid4().hex[:8]
+_AUTO_CHROMA_DIR_ENV = "_ON_PREM_RAG_AUTO_CHROMA_DIR"
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -39,12 +40,17 @@ def pytest_configure(config: pytest.Config) -> None:
         cpu_count = os.cpu_count() or 1
         config.option.numprocesses = min(cpu_count, _MAX_LOCAL_WORKERS)
 
-    # Only override when not already set — respect explicit caller-provided path
-    if "CHROMA_PERSIST_DIR" not in os.environ:
+    # Only override when not already set — respect explicit caller-provided path.
+    # xdist workers inherit the controller's environment, so a dir the controller auto-assigned
+    # (marked via _AUTO_CHROMA_DIR_ENV) must be replaced per worker, or all workers share one
+    # SQLite file and race on schema creation ("table collections already exists").
+    current = os.environ.get("CHROMA_PERSIST_DIR")
+    if current is None or current == os.environ.get(_AUTO_CHROMA_DIR_ENV):
         worker_id = os.environ.get("PYTEST_XDIST_WORKER", "master")
         chroma_dir = Path(tempfile.gettempdir()) / f"chroma_test_{_TEST_SESSION_ID}_{worker_id}"
         chroma_dir.mkdir(parents=True, exist_ok=True)
         os.environ["CHROMA_PERSIST_DIR"] = str(chroma_dir)
+        os.environ[_AUTO_CHROMA_DIR_ENV] = str(chroma_dir)
 
 
 OLLAMA_SKIP_REASON = (

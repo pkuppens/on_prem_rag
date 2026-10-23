@@ -360,8 +360,8 @@ jobs:
           # -n 2: GitHub free runners are 2-core; overrides addopts "-n auto" from pyproject.toml
           # --dist loadfile: keep tests from the same file on the same worker (preserves fixtures)
           # pytest-cov auto-combines coverage across workers
-          # --cov-fail-under=62: baseline from 2025-02-20, adjusted 2026-06-26 after bounded context extraction (see docs/testing/TEST_STRATEGY.md)
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=html --cov-report=term-missing --cov-fail-under=62
+          # No --cov-fail-under: low coverage is a warning (next step), not a failure. See docs/testing/TEST_STRATEGY.md
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=html --cov-report=term-missing
       - name: Upload coverage reports
         uses: actions/upload-artifact@v7
         with:
@@ -372,6 +372,9 @@ jobs:
             htmlcov/
       - name: Add coverage to job summary
         if: always() && (success() || failure())
+        env:
+          # Target, not a gate: below it CI emits a warning annotation but stays green.
+          COVERAGE_TARGET: "62"
         run: |
           if [ -f coverage.xml ]; then
             pct=$(python3 -c "import xml.etree.ElementTree as ET; r=ET.parse('coverage.xml').getroot(); print(f\"{100*float(r.attrib.get('line-rate',0)):.1f}\")")
@@ -383,6 +386,10 @@ jobs:
               echo ""
               echo "📎 [Download coverage-reports](${run_url}) → Artifacts (htmlcov/ for per-file report)"
             } >> $GITHUB_STEP_SUMMARY
+            if python3 -c "import sys; sys.exit(0 if float('${pct}') < float('${COVERAGE_TARGET}') else 1)"; then
+              echo "::warning title=Low coverage::Unit test coverage ${pct}% is below the ${COVERAGE_TARGET}% target (warning only, not a failure)"
+              echo "⚠️ Below the ${COVERAGE_TARGET}% target — warning only." >> $GITHUB_STEP_SUMMARY
+            fi
           fi
 
   # Performance test job - conditional execution

@@ -10,6 +10,7 @@ Ingestion BC extraction (Phase 3).
 from __future__ import annotations
 
 import asyncio
+import time
 
 from fastapi import WebSocket
 
@@ -32,7 +33,7 @@ class ProgressEvent:
         self.file_id = file_id
         self.progress = progress
         self.message = message
-        self.timestamp = asyncio.get_event_loop().time()
+        self.timestamp = time.monotonic()  # same clock as loop.time(), without needing a running loop
 
 
 class ProgressNotifier:

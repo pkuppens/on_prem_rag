@@ -90,14 +90,14 @@ def cleanup_uploaded_files():
     # Clean up before test
     for file in uploaded_dir.glob("*"):
         if file.is_file():
-            file.unlink()
+            file.unlink(missing_ok=True)  # parallel xdist workers share this dir
 
     yield
 
     # Clean up after test
     for file in uploaded_dir.glob("*"):
         if file.is_file():
-            file.unlink()
+            file.unlink(missing_ok=True)  # parallel xdist workers share this dir
 
 
 @pytest.fixture(scope="session")

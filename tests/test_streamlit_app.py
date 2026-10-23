@@ -50,7 +50,11 @@ def test_question_renders_answer_and_sources():
     assert not at.exception
     url = post.call_args.args[0]
     assert url == "http://localhost:8000/api/v1/qa"
-    assert post.call_args.kwargs["json"] == {"question": "What is the first-line treatment?"}
+    assert post.call_args.kwargs["json"] == {
+        "question": "What is the first-line treatment?",
+        "similarity_threshold": 0.5,
+        "top_k": 5,
+    }
     rendered = [m.value for m in at.markdown]
     assert "What is the first-line treatment?" in rendered
     assert QA_RESPONSE["answer"] in rendered
@@ -72,18 +76,38 @@ def test_conversation_keeps_previous_turns():
     assert len(at.session_state["history"]) == 2
 
 
-@pytest.mark.parametrize(
-    "side_effect",
-    [httpx.ConnectError("connection refused"), httpx.ReadTimeout("timed out")],
-    ids=["unreachable", "timeout"],
-)
-def test_unreachable_backend_shows_error(side_effect: Exception):
-    """As a developer I want a visible error when the backend is down, instead of a crashed app."""
-    at = _run_with_question("anything", MagicMock(side_effect=side_effect))
+def test_unreachable_backend_shows_error():
+    """As a developer I want a visible error with start instructions when the backend is down."""
+    at = _run_with_question("anything", MagicMock(side_effect=httpx.ConnectError("connection refused")))
 
     assert not at.exception
     assert len(at.error) == 1
     assert "Could not reach backend" in at.error[0].value
+    assert "uv run start-backend" in at.error[0].value
+
+
+def test_timeout_shows_ollama_hint():
+    """As a developer I want a timeout explained (slow or stopped LLM), not reported as unreachable."""
+    at = _run_with_question("anything", MagicMock(side_effect=httpx.ReadTimeout("timed out")))
+
+    assert not at.exception
+    assert "did not answer within" in at.error[0].value
+    assert "Ollama" in at.error[0].value
+
+
+def test_backend_remediation_is_shown():
+    """As a developer I want the backend's remediation steps (e.g. ollama pull) shown for a missing model."""
+    request = httpx.Request("POST", "http://localhost:8000/api/v1/qa")
+    detail = {"error": "LLM model not available", "model": "mistral", "remediation": ["Pull the model: ollama pull mistral"]}
+    response = httpx.Response(503, json={"detail": detail}, request=request)
+    failing = MagicMock()
+    failing.raise_for_status.side_effect = httpx.HTTPStatusError("503", request=request, response=response)
+
+    at = _run_with_question("anything", MagicMock(return_value=failing))
+
+    assert not at.exception
+    assert "LLM model not available" in at.error[0].value
+    assert "ollama pull mistral" in at.error[0].value
 
 
 def test_backend_http_error_shows_status():

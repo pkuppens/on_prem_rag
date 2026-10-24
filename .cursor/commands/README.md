@@ -74,6 +74,7 @@ Two distinct validation activities exist — do not conflate them:
 | `/pr` | Create pull request | Prereq: commits done; validation passed |
 | `/branch-cleanup` | Sync local branches after PR merged (main, prune, delete merged/gone) | After `/pr` merge |
 | `/test` | Run tests with service management | Used by commit, pr |
+| `/smoke` | UI smoke test + demo playbook: every UI in a real browser, screenshots per step | After `/branch-cleanup`; before a demo |
 | `/update-commits` | WBSO: refresh commit CSVs from `repositories.csv` | Standalone |
 | `/update-date-tags` | Update Created/Updated tags in files | Standalone |
 

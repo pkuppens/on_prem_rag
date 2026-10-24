@@ -177,7 +177,7 @@ def ensure_backend(api_url: str, start: bool, ollama_url: str) -> subprocess.Pop
         proc = subprocess.Popen(["uv", "run", "start-backend"], cwd=ROOT, env=env, stdout=log_file, stderr=subprocess.STDOUT)
     # First start loads embedding models; allow a few minutes.
     if not wait_until(lambda: backend_healthy(api_url) or proc.poll() is not None, timeout_s=240, interval_s=2):
-        stop_backend(proc)
+        stop_process(proc)
         raise SmokeError("Backend did not become healthy within 240 s.", f"Inspect {BACKEND_LOG}")
     if proc.poll() is not None:
         tail = BACKEND_LOG.read_text(encoding="utf-8", errors="replace")[-1500:]
@@ -190,8 +190,8 @@ def ensure_backend(api_url: str, start: bool, ollama_url: str) -> subprocess.Pop
     return proc
 
 
-def stop_backend(proc: subprocess.Popen | None) -> None:
-    """Stop a backend we started, including uvicorn's reload child processes."""
+def stop_process(proc: subprocess.Popen | None) -> None:
+    """Stop a process we started, including its children (uvicorn reload workers, npm -> node)."""
     if proc is None or proc.poll() is not None:
         return
     if sys.platform == "win32":
@@ -308,7 +308,7 @@ def run(args: argparse.Namespace) -> None:
             log(f"[{i}/{len(steps)}] {name}")
             step()
     finally:
-        stop_backend(state.get("proc"))
+        stop_process(state.get("proc"))
 
 
 def main() -> int:

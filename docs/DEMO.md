@@ -7,6 +7,10 @@ voice query → evaluation metrics. Target runtime: 2–3 minutes for the core f
 minutes including evaluation. Written for #88; verified against a real cold-start run during
 #73 (see that issue for the full verification log).
 
+For an executable walkthrough of the native (non-Docker) UIs, run `just smoke --headed`: it drives the
+React UI, Streamlit chat, Chainlit chat and API docs in a browser, with a talking point per step in
+[.cursor/commands/smoke.md](../.cursor/commands/smoke.md).
+
 ## Prerequisites
 
 - Docker Desktop running

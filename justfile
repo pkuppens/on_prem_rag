@@ -50,6 +50,10 @@ run:
 e2e *ARGS:
     uv run python scripts/e2e_smoke.py {{ARGS}}
 
+# UI smoke test + demo playbook: every UI in a real browser, screenshots in tmp/debug/smoke (see .cursor/commands/smoke.md)
+smoke *ARGS:
+    uv run python scripts/ui_smoke.py {{ARGS}}
+
 # Run auth service
 run-auth:
     uv run start-auth

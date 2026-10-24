@@ -4,6 +4,7 @@ Same URL paths as the original rag_pipeline/api/documents.py for backward compat
 """
 
 import asyncio
+import glob
 import hashlib
 import os
 import re
@@ -307,16 +308,29 @@ async def cleanup_task(task_id: str) -> Response:
     return Response(status_code=204)
 
 
+def resolve_document_path(filename: str) -> Path:
+    """Return the stored file for a document name.
+
+    Sync uploads are stored as ``<upload_dir>/<name>``; async uploads as ``<upload_dir>/<task_id>/<name>_<ts>.<ext>``.
+
+    Raises:
+        HTTPException: 400 when the name contains path separators, 404 when no stored file matches.
+    """
+    if not filename or "/" in filename or "\\" in filename or ".." in filename:
+        raise HTTPException(status_code=400, detail="document_id must not contain path separators")
+
+    candidates = [uploaded_files_dir / filename, *sorted(uploaded_files_dir.glob(f"*/{glob.escape(filename)}"))]
+    for path in candidates:
+        if path.is_file():
+            return path
+    raise HTTPException(status_code=404, detail=f"Document not found: {filename}")
+
+
 @router.delete("/{document_id}", status_code=204)
 async def delete_document(document_id: str) -> None:
     """Delete a document file and its vector chunks."""
     filename = document_id
-    if "/" in filename or "\\" in filename or ".." in filename:
-        raise HTTPException(status_code=400, detail="document_id must not contain path separators")
-
-    file_path = uploaded_files_dir / filename
-    if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=404, detail=f"Document not found: {filename}")
+    file_path = resolve_document_path(filename)
 
     try:
         chunks_deleted = vector_store_manager.delete_by_document_name(filename)
@@ -339,13 +353,7 @@ async def get_document_content(
     filename = document_id
     accept = (request.headers.get("accept") or "").lower()
     wants_text = (content_format or "").lower() == "text" or "text/plain" in accept
-
-    if not filename or ".." in filename or "/" in filename:
-        raise HTTPException(status_code=400, detail="Invalid document_id")
-
-    file_path = uploaded_files_dir / filename
-    if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=404, detail=f"File not found: {filename}")
+    file_path = resolve_document_path(filename)
 
     if wants_text:
         ext = Path(filename).suffix.lower()
@@ -363,11 +371,6 @@ async def get_document_content(
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to extract text: {e}") from e
 
-    if not filename or ".." in filename or "/" in filename:
-        raise HTTPException(status_code=400, detail="Invalid filename")
-    file_path = uploaded_files_dir / filename
-    if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=404, detail=f"File not found: {filename}")
     media_type = "application/pdf" if filename.lower().endswith(".pdf") else None
     return FileResponse(
         path=str(file_path),

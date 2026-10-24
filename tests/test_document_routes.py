@@ -177,6 +177,46 @@ def test_serve_document_as_text_not_found_returns_404(tmp_path):
     assert response.status_code == 404
 
 
+def test_serve_async_uploaded_document_from_task_dir(tmp_path):
+    """As a user I want to open a cited document that I uploaded via the async upload, so I can verify the answer.
+    Technical: async uploads store files in <upload_dir>/<task_id>/<name>_<ts>.ext; /content must find them (#214).
+    """
+    task_dir = tmp_path / "94b0b16d-8854-4ffd-afb5-391a1d7de07f"
+    task_dir.mkdir()
+    (task_dir / "metformin_summary_1792748702.txt").write_text("Metformin text.", encoding="utf-8")
+    with patch("backend.query_service.api.documents.uploaded_files_dir", tmp_path):
+        as_text = client.get("/api/v1/documents/metformin_summary_1792748702.txt/content?format=text")
+        as_file = client.get("/api/v1/documents/metformin_summary_1792748702.txt/content")
+    assert as_text.status_code == 200
+    assert as_text.text == "Metformin text."
+    assert as_file.status_code == 200
+    assert as_file.content == b"Metformin text."
+
+
+def test_delete_async_uploaded_document_from_task_dir(tmp_path):
+    """As a data subject I want documents from async uploads erasable too (GDPR Article 17).
+    Technical: DELETE /api/v1/documents/{name} resolves files in task subdirectories (#214).
+    """
+    task_dir = tmp_path / "task-1"
+    task_dir.mkdir()
+    (task_dir / "report_1792748702.txt").write_text("sensitive", encoding="utf-8")
+    with (
+        patch("backend.query_service.api.documents.uploaded_files_dir", tmp_path),
+        patch("backend.query_service.api.documents.vector_store_manager"),
+    ):
+        response = client.delete("/api/v1/documents/report_1792748702.txt")
+    assert response.status_code == 204
+    assert not (task_dir / "report_1792748702.txt").exists()
+
+
+@pytest.mark.parametrize("document_id", ["..%5Csecret.txt", "sub%5Cfile.txt"])
+def test_serve_document_rejects_backslash_paths(tmp_path, document_id):
+    """As a security engineer I want Windows path separators rejected, so documents cannot escape the upload dir."""
+    with patch("backend.query_service.api.documents.uploaded_files_dir", tmp_path):
+        response = client.get(f"/api/v1/documents/{document_id}/content?format=text")
+    assert response.status_code == 400
+
+
 def test_gdpr_article17_delete_cascades_filesystem_and_vector_store(tmp_path) -> None:
     """As a data subject, I want deletion to erase my document from all storage layers
     so that the right to erasure (GDPR Article 17) is honoured.

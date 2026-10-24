@@ -1,9 +1,4 @@
 {
-  "react-document-viewer": {
-    "issue": "https://github.com/pkuppens/on_prem_rag/issues/214",
-    "summary": "Document viewer returns 404 for uploaded documents",
-    "consoleErrorPattern": "/api/v1/documents/[^/]+/content"
-  },
   "react-chat-link": {
     "issue": "https://github.com/pkuppens/on_prem_rag/issues/215",
     "summary": "React header Chat link points at the backend instead of Chainlit"

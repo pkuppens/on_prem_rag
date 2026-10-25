@@ -1,6 +1,6 @@
-# Cursor Commands
+# Skills (slash commands)
 
-Commands are invoked with `/command-name`. Use **delegation** for reuse; keep the flow **acyclic**.
+Repo-specific skills, invoked with `/skill-name`. Each lives in `<name>/SKILL.md`. Use **delegation** for reuse; keep the flow **acyclic**.
 
 ## Issue Workflow
 

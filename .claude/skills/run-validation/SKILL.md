@@ -1,3 +1,9 @@
+---
+name: run-validation
+description: Execute a validation document step by step: run each check, compare to the expected outcome, fix failures, and report pass/fail. Use to gate a PR on a passing validation.
+argument-hint: [path-to-validation.md | #issue-number]
+---
+
 # Run Implementation Validation
 
 ## Purpose
@@ -7,7 +13,7 @@ Execute a validation document step by step. For each step: run the command or ch
 ## Redirect To (do not duplicate)
 
 - **Creating a validation**: Use `/create-validation` to generate the validation document first
-- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md)
+- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../../docs/technical/VALIDATION_FORMAT.md)
 - **Committing and PRs**: Use `/commit` and `/pr` after validation passes
 
 ## When to Use
@@ -26,9 +32,6 @@ Execute a validation document step by step. For each step: run the command or ch
 
 ## Execution
 
-Follow [.cursor/skills/run-validation/SKILL.md](../skills/run-validation/SKILL.md) exactly.
-
-**Summary:**
 1. Load validation file; report steps and current state
 2. Execute each unchecked step in order
 3. On pass → check off `[x]`; on fail → diagnose, fix, re-run

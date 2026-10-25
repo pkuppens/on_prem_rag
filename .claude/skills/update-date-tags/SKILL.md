@@ -1,3 +1,9 @@
+---
+name: update-date-tags
+description: Check and update Created/Updated date tags in markdown and code files. Ensures all files comply with the project date-formatting standards. Standalone — no delegation to/from other commands.
+argument-hint: [file-or-directory]
+---
+
 # Update Date Tags Command: Check and Update Date Tags in Files
 
 ## Purpose
@@ -278,7 +284,7 @@ python scripts/update_date_tags.py --fix-format
 
 When user requests to update date tags:
 
-1. **Read this command file**: `.cursor/commands/update-date-tags.md`
+1. **Read this command file**: `.claude/skills/update-date-tags/SKILL.md`
 2. **Run dry-run first**: Execute script with `--dry-run` to preview changes
 3. **Review output**: Check which files will be modified
 4. **Apply updates**: Run script without `--dry-run` to apply changes

@@ -7,7 +7,7 @@ alwaysApply: false
 
 This rule provides comprehensive GitHub integration capabilities for the On-Premises RAG project, enabling seamless workflow between GitHub issues, pull requests, and the existing SAFe project structure.
 
-**Workflow commands** (delegate to these instead of re-implementing): [/get-started](.cursor/commands/get-started.md) (issues), [/commit](.cursor/commands/commit.md) (commits), [/pr](.cursor/commands/pr.md) (PRs).
+**Workflow commands** (delegate to these instead of re-implementing): [/get-started](.claude/skills/get-started/SKILL.md) (issues), [/commit](.claude/skills/commit/SKILL.md) (commits), [/pr](.claude/skills/pr/SKILL.md) (PRs).
 
 ## Overview
 
@@ -1170,7 +1170,7 @@ This GitHub integration rule works seamlessly with:
 
 1. **Follow naming conventions**: Use consistent branch naming patterns
 2. **Keep branches focused**: One feature/story/task per branch
-3. **Clean up after merge**: Run `/branch-cleanup` or `scripts/cleanup-merged-branches.sh` to delete merged and gone branches (merge, squash, rebase). See [branch-cleanup.md](.cursor/commands/branch-cleanup.md).
+3. **Clean up after merge**: Run `/branch-cleanup` or `scripts/cleanup-merged-branches.sh` to delete merged and gone branches (merge, squash, rebase). See [branch-cleanup.md](.claude/skills/branch-cleanup/SKILL.md).
 4. **Use descriptive commit messages**: Include project IDs in commit messages
 
 ### Workflow Integration

@@ -45,7 +45,7 @@ A sibling **junction** or **symlink** avoids duplicating dozens of `SKILL.md` fi
 
 ## Repo-specific Claude skills
 
-Thin delegates under [`.claude/skills/`](../../.claude/skills/) (for example commands under [`.cursor/commands/`](../../.cursor/commands/)) stay in this repository. Canonical lifecycle skills come from `pkuppens/skills` via the link above.
+Repo-specific skills (workflow commands such as `/commit`, `/pr`, `/smoke`) live in full under [`.claude/skills/`](../../.claude/skills/), indexed in its [README](../../.claude/skills/README.md). Canonical lifecycle skills come from `pkuppens/skills` via the link above.
 
 ## References
 

@@ -1,4 +1,12 @@
+---
+name: commit
+description: Create well-structured commits with quality checks. Runs lint/format fixes, infers commit type from branch name, supports partial commits, and enforces project commit message standards (#NNN: type: description).
+argument-hint: [-m "message" | --amend | --partial]
+---
+
 # Commit Command: Create Good Commits with Quality Checks
+
+**Before committing:** you must be on a **feature/task/chore branch**, not `main` — see [merge-via-pr](../merge-via-pr/SKILL.md).
 
 ## Purpose
 
@@ -10,7 +18,7 @@ This command creates well-structured commit messages following project standards
 
 ### Step 0: Branch guard (not `main`)
 
-**Do not create commits on `main`.** If `git branch --show-current` is `main`, create a branch first (see [branch-policy.mdc](../rules/branch-policy.mdc) and [.claude/skills/merge-via-pr/SKILL.md](../../.claude/skills/merge-via-pr/SKILL.md)):
+**Do not create commits on `main`.** If `git branch --show-current` is `main`, create a branch first (see [branch-policy.mdc](../../../.cursor/rules/branch-policy.mdc) and [.claude/skills/merge-via-pr/SKILL.md](../merge-via-pr/SKILL.md)):
 
 ```bash
 git checkout -b chore/short-description
@@ -632,7 +640,7 @@ Tags are automatically inferred from:
 - **Rule**: `.cursor/rules/commit-message-standards.mdc` - Commit message standards
 - **Rule**: `.cursor/rules/git-version-control.mdc` - Git version control standards
 - **Rule**: `.cursor/rules/github-integration.mdc` - Branch naming conventions
-- **Command**: `.cursor/commands/pr.md` - Pull request creation workflow
+- **Command**: `.claude/skills/pr/SKILL.md` - Pull request creation workflow
 
 ---
 

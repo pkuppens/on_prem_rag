@@ -9,7 +9,7 @@ minutes including evaluation. Written for #88; verified against a real cold-star
 
 For an executable walkthrough of the native (non-Docker) UIs, run `just smoke --headed`: it drives the
 React UI, Streamlit chat, Chainlit chat and API docs in a browser, with a talking point per step in
-[.cursor/commands/smoke.md](../.cursor/commands/smoke.md).
+[.claude/skills/smoke/SKILL.md](../.claude/skills/smoke/SKILL.md).
 
 ## Prerequisites
 

@@ -1,3 +1,9 @@
+---
+name: update-commits
+description: WBSO: refresh commit CSV files from repositories.csv. Extracts latest commits from all listed repositories and updates the data used for WBSO hours registration tracking. Standalone — no delegation to/from other commands.
+argument-hint: []
+---
+
 # Update Commits Command: Refresh All Repository Commits
 
 ## Purpose
@@ -276,7 +282,7 @@ uv run python docs/project/hours/scripts/update_commits_from_repos.py
 
 When user requests to update commits:
 
-1. **Read this command file**: `.cursor/commands/update-commits.md`
+1. **Read this command file**: `.claude/skills/update-commits/SKILL.md`
 2. **Verify prerequisites**: Check all required files and directories exist
 3. **Execute update script**: Run `update_commits_from_repos.py` with appropriate parameters
 4. **Monitor progress**: Watch for errors and warnings

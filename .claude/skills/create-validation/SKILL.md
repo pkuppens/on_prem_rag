@@ -1,3 +1,9 @@
+---
+name: create-validation
+description: Create a step-by-step validation document for a GitHub issue or feature: concrete actions (CLI, URL, UI check) with expected outcomes and checkboxes. Use in Phase 2 (before implementation, TDD) or Phase 4 (after).
+argument-hint: [#issue-number | feature-slug]
+---
+
 # Create Implementation Validation
 
 ## Purpose
@@ -7,7 +13,7 @@ Create a step-by-step validation document for a feature or issue. Each step is a
 ## Redirect To (do not duplicate)
 
 - **Running the validation**: Use `/run-validation` to execute a validation document
-- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../docs/technical/VALIDATION_FORMAT.md)
+- **Validation format**: [docs/technical/VALIDATION_FORMAT.md](../../../docs/technical/VALIDATION_FORMAT.md)
 - **Issue workflow**: Use `/get-started` for the full Validate → Plan → Implement flow
 
 ## When to Use
@@ -35,9 +41,6 @@ All issue scratch files live together under `tmp/github/issue-NNN/` — see `tmp
 
 ## Execution
 
-Follow [.cursor/skills/create-validation/SKILL.md](../skills/create-validation/SKILL.md) exactly.
-
-**Summary:**
 1. Read issue/plan context (acceptance criteria, implementation plan, ports, commands)
 2. Map each acceptance criterion to verifiable steps (test, API, UI, file, log)
 3. Write steps with exact commands and explicit expected outcomes

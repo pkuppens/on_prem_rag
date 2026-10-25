@@ -1,3 +1,9 @@
+---
+name: smoke
+description: Run the UI smoke test and demo playbook. Drives every user-facing surface (React UI, Streamlit chat, Chainlit chat, API docs) in a real browser against live services, with screenshots and talking points per step. Use after merging a PR, before a demo, or to check a UI fix.
+argument-hint: [--headed | --grep <step> | --no-start]
+---
+
 # Smoke: UI Smoke Test and Demo Playbook
 
 Created: 2026-10-24
@@ -14,7 +20,7 @@ it catches defects that only show in the UI, such as a viewer that renders an er
 ## Redirect To / Used By
 
 - **Uses**: `scripts/ui_smoke.py` (orchestration; reuses the `scripts/e2e_smoke.py` checks), `src/frontend/smoke/ui-smoke.spec.ts` (steps)
-- **Used by**: run directly; after `/branch-cleanup` following a merge; before a live demo ([docs/DEMO.md](../../docs/DEMO.md))
+- **Used by**: run directly; after `/branch-cleanup` following a merge; before a live demo ([docs/DEMO.md](../../../docs/DEMO.md))
 
 ## Run
 
@@ -42,12 +48,26 @@ service logs in `tmp/debug/smoke/*.log`, traces of failed steps in `tmp/debug/sm
 | 4 | React document viewer | Clicking source 1 renders the full document text | "Click a citation to verify the claim in the original document." |
 | 5 | React chat link | Header **Chat** link points at the Chainlit app | "For conversational use there is a chat UI with voice and upload." |
 | 6 | Streamlit chat | Threshold and top-k sliders, answer with expandable source naming the sample | "A minimal chat for tuning retrieval: threshold and top-k change what the LLM sees." |
-| 7 | Chainlit chat | Login page renders | "The chat UI sits behind role-based login: clinicians and admins see different tools." |
+| 7 | Chainlit chat | Login page renders; logging in as `gp` / `gp123` shows "Welcome, Dr. Demo GP!" | "The chat UI sits behind role-based login: clinicians and admins see different tools." |
 | 8 | API docs | `/docs` lists `/api/v1/qa` | "Everything the UIs do is a documented REST API, so it integrates with existing hospital systems." |
+
+### Chainlit login
+
+The chat uses demo users from `DEMO_USERS` in `src/frontend/chat/auth/oauth_integration.py`:
+
+| Username | Password | Role |
+|----------|----------|------|
+| `gp` | `gp123` | GP (clinician) |
+| `patient` | `patient123` | Patient |
+| `admin` | `admin123` | Admin |
+
+`testuser` from the auth-service docs is not a chat user; a browser that autofills it gets "credentialssignin".
+Without `CHAINLIT_AUTH_SECRET` in `.env`, `start-chat` generates a new secret on every start, so a session cookie
+from an earlier run is rejected: log in again.
 
 ## Known issues
 
-[src/frontend/smoke/known-issues.json](../../src/frontend/smoke/known-issues.json) maps a step key to an open
+[src/frontend/smoke/known-issues.json](../../../src/frontend/smoke/known-issues.json) maps a step key to an open
 GitHub issue. Those steps run as expected failures (`test.fail`) and their console errors are ignored, so a
 known defect does not hide new ones and does not turn the run red.
 

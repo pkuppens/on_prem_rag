@@ -50,7 +50,7 @@ run:
 e2e *ARGS:
     uv run python scripts/e2e_smoke.py {{ARGS}}
 
-# UI smoke test + demo playbook: every UI in a real browser, screenshots in tmp/debug/smoke (see .cursor/commands/smoke.md)
+# UI smoke test + demo playbook: every UI in a real browser, screenshots in tmp/debug/smoke (see .claude/skills/smoke/SKILL.md)
 smoke *ARGS:
     uv run python scripts/ui_smoke.py {{ARGS}}
 

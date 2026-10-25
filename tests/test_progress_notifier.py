@@ -97,6 +97,43 @@ class TestProgressNotifier:
         assert mock_ws not in notifier._subscribers
 
 
+class TestSharedNotifier:
+    """As a React user I want upload processing progress over the WebSocket, so the progress row completes and clears."""
+
+    def test_rag_pipeline_module_reexports_the_ingestion_instance(self):
+        from backend.ingestion.infrastructure import progress as ingestion_progress
+        from backend.rag_pipeline.utils import progress as rag_progress
+
+        assert rag_progress.progress_notifier is ingestion_progress.progress_notifier
+
+    @pytest.mark.asyncio
+    async def test_processing_service_event_reaches_websocket_subscriber(self, tmp_path):
+        from unittest.mock import MagicMock
+
+        from backend.ingestion.application.ingest_service import IngestionService
+        from backend.query_service.api.websocket import progress_notifier as websocket_notifier
+
+        mock_ws = _make_mock_ws()
+        await websocket_notifier.subscribe(mock_ws)
+        try:
+            service = IngestionService(document_loader=MagicMock(), vector_store=MagicMock())
+            await service.process_document_background(tmp_path / "missing.txt", "missing.txt", "fast")
+        finally:
+            await websocket_notifier.unsubscribe(mock_ws)
+
+        message = mock_ws.send_json.call_args[0][0]
+        assert message["file_id"] == "missing.txt"
+        assert message["progress"] == -1
+
+    @pytest.mark.asyncio
+    async def test_initial_state_excludes_failed_uploads(self):
+        notifier = ProgressNotifier()
+        notifier._current_progress = {"active": 40, "failed": -1}
+        mock_ws = _make_mock_ws()
+        await notifier.subscribe(mock_ws)
+        assert mock_ws.send_json.call_args[0][0]["data"] == {"active": 40}
+
+
 def _make_mock_ws():
     from unittest.mock import AsyncMock, MagicMock
 

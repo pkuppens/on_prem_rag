@@ -53,7 +53,7 @@ class ProgressNotifier:
         logger.info(f"WebSocket subscribed. Total subscribers: {len(self._subscribers)}")
 
         if self._current_progress:
-            active_progress = {k: v for k, v in self._current_progress.items() if v < 100}
+            active_progress = {k: v for k, v in self._current_progress.items() if 0 <= v < 100}
             if active_progress:
                 try:
                     await websocket.send_json({"type": "initial_state", "data": active_progress})
@@ -73,7 +73,8 @@ class ProgressNotifier:
         """
         self._current_progress[event.file_id] = event.progress
 
-        if event.progress >= 100:
+        # Finished (100) and failed (-1) uploads are not active: drop them so a new subscriber's initial state stays clean.
+        if event.progress >= 100 or event.progress < 0:
             asyncio.create_task(self._cleanup_completed(event.file_id, delay=5.0))
 
         message = {

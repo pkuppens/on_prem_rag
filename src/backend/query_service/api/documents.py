@@ -165,6 +165,7 @@ async def sync_upload_single_file(file: UploadFile, background_tasks: Background
         embedding_model = params.embedding.model_name
 
         if vector_store_manager.has_document_with_file_hash(file_content_hash, embedding_model=embedding_model):
+            await progress_notifier.notify(ProgressEvent(filename, 100, "Already indexed (duplicate content)"))
             return JSONResponse(
                 status_code=200,
                 content={

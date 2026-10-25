@@ -45,5 +45,5 @@ description: Enforce branch-first delivery. All work merges to main only via pul
 
 - [branch-policy.mdc](../../../.cursor/rules/branch-policy.mdc)
 - [BRANCH_PROTECTION.md](../../../docs/technical/BRANCH_PROTECTION.md)
-- [.cursor/commands/commit.md](../../../.cursor/commands/commit.md)
-- [.cursor/commands/pr.md](../../../.cursor/commands/pr.md)
+- [commit](../commit/SKILL.md)
+- [pr](../pr/SKILL.md)

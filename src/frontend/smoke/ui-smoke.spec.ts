@@ -3,7 +3,7 @@ import { basename, extname, join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 
 // UI smoke test and demo walkthrough (#213). Each test is one demo step, in demo order;
-// the talking points live in .cursor/commands/smoke.md. Start via `just smoke`.
+// the talking points live in .claude/skills/smoke/SKILL.md. Start via `just smoke`.
 
 interface KnownIssue {
   issue: string;
@@ -145,13 +145,18 @@ test('06 streamlit chat: answer with expandable sources', async ({ page }) => {
   expect(errors, 'browser console errors').toEqual([]);
 });
 
-test('07 chainlit chat: login page renders', async ({ page }) => {
+test('07 chainlit chat: demo login shows the role welcome', async ({ page }) => {
   // Before login, Chainlit probes GET /user and logs the 401 as an error: expected, not a defect.
   const errors = watchErrors(page, [/401 \(Unauthorized\) @ .*\/user$/, /^vm: Unauthorized/]);
   await page.goto(CHAINLIT_URL);
   await expect(page.getByText('Login to access the app')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
   await shot(page, '07-chainlit-login');
+  // Demo users live in frontend.chat.auth.oauth_integration.DEMO_USERS.
+  await page.locator('#email').fill('gp');
+  await page.locator('#password').fill('gp123');
+  await page.getByRole('button', { name: 'Sign In' }).click();
+  await expect(page.getByText('Welcome, Dr. Demo GP!')).toBeVisible({ timeout: 30_000 });
+  await shot(page, '07-chainlit-welcome');
   expect(errors, 'browser console errors').toEqual([]);
 });
 

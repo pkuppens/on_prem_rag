@@ -1,4 +1,12 @@
+---
+name: get-started
+description: Start work on a GitHub issue using the Issue Implementation Workflow (Validate → Plan → Implement). Use when beginning work on an issue, switching issues, or resuming after a session break.
+argument-hint: [issue-number or fix issue #N]
+---
+
 # Get Started: Issue Workflow
+
+Execute the project's Issue Implementation Workflow for GitHub issue $ARGUMENTS.
 
 ## Purpose
 
@@ -81,7 +89,9 @@ If no issue number is found, list open issues (number with title) so the user ca
 1. **[docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md](docs/portfolio/ISSUE_IMPLEMENTATION_WORKFLOW.md)** — full 3-phase workflow (Validate, Plan, Implement)
 2. **[CLAUDE.md](CLAUDE.md)** — project conventions, build commands, architecture
 3. **[.cursor/rules/branch-policy.mdc](.cursor/rules/branch-policy.mdc)** — branch naming and when to use branches
-4. **[.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)** — optional; branch naming, gh CLI reference
+4. **[merge-via-pr](../merge-via-pr/SKILL.md)** — never commit deliverable work on `main`
+5. **[plan-branch-strategy](../plan-branch-strategy/SKILL.md)** — if on `main`, branch **before** the first file edit (uncommitted changes follow `git checkout -b`)
+6. **[.cursor/rules/github-integration.mdc](.cursor/rules/github-integration.mdc)** — optional; branch naming, gh CLI reference
 
 ## Command Execution Workflow
 
@@ -140,7 +150,7 @@ Perform validation as defined in ISSUE_IMPLEMENTATION_WORKFLOW.md:
 ### Step 5: Phase 2 — Plan and (Optionally) Implement
 
 - **Base branch**: Apply the branching strategy ([branch-policy.mdc](.cursor/rules/branch-policy.mdc)). Use user-specified `branch off <branch>` or `base <branch>` when given; otherwise determine from strategy (check existing branches, current branch suitability).
-- Create branch: `git checkout BASE_BRANCH; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/` per workflow)
+- Create branch: `git checkout BASE_BRANCH; git pull; git checkout -b feature/NNN-short-description` (or `task/`, `bug/`, `hotfix/` per workflow). If you already have local edits on `main`, run `git checkout -b feature/NNN-short-description` once — the working tree moves to the new branch
 - Review architecture (CLAUDE.md, docs/technical/)
 - Decide test strategy
 - Assign: `gh issue edit NNN --add-assignee @me`

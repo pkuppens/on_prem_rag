@@ -17,7 +17,7 @@ Temporary files are used to:
 
 **CRITICAL — Validation plans, test plans, next-steps docs for issues**: Create these in `tmp/github/issue-comments/` (e.g. `issue-77-airgap-test-plan.md`). Do **not** create them in `docs/portfolio/` or elsewhere in the repo; they are scratch content and belong in the gitignored `tmp/` directory. Remove any such files from the repo if they were committed by mistake.
 
-**Workflow commands** using tmp/: [get-started](.cursor/commands/get-started.md), [commit](.cursor/commands/commit.md), [pr](.cursor/commands/pr.md). Each defines its own tmp/ usage; this rule is the canonical structure.
+**Workflow commands** using tmp/: [get-started](.claude/skills/get-started/SKILL.md), [commit](.claude/skills/commit/SKILL.md), [pr](.claude/skills/pr/SKILL.md). Each defines its own tmp/ usage; this rule is the canonical structure.
 
 ## SCRATCH.md (Project Root)
 

@@ -1,4 +1,12 @@
+---
+name: pr
+description: Create a pull request that is first-time-right. Validates code quality, checks acceptance criteria, generates an AI-enhanced PR description, and creates the PR following project standards. Prerequisite: commits done and validation passed.
+argument-hint: [#issue-number]
+---
+
 # PR Command: Create Pull Request
+
+**Merge to `main` only via PR** — never push hand-written commits directly to `main` ([merge-via-pr](../merge-via-pr/SKILL.md)).
 
 ## Purpose
 
@@ -8,7 +16,7 @@ This command provides a comprehensive, step-by-step process for creating pull re
 
 - **Issue workflow**: Use `/get-started` when starting from an issue (Validate → Plan → Implement).
 - **Commits**: Use `/commit` before this command; all changes must be committed first.
-- **Pre-flight checks**: Same quality gates as `/commit` (ruff, format, pytest). Do not re-implement; reference [commit.md](.cursor/commands/commit.md) Quality Checks section.
+- **Pre-flight checks**: Same quality gates as `/commit` (ruff, format, pytest). Do not re-implement; reference [commit.md](.claude/skills/commit/SKILL.md) Quality Checks section.
 - **tmp/ for PR body**: Use `tmp/github/pr-descriptions/` per [temp-files.mdc](.cursor/rules/temp-files.mdc).
 - **After PR merged**: Use `/branch-cleanup` to sync main, prune refs, and delete merged/gone local branches.
 
@@ -543,7 +551,7 @@ gh auth login
 
 When user requests PR creation:
 
-1. **Read this command file**: `.cursor/commands/pr.md`
+1. **Read this command file**: `.claude/skills/pr/SKILL.md`
 2. **Follow the workflow**: Execute each step in sequence
 3. **Validate thoroughly**: Don't skip any validation steps
 4. **Generate comprehensive description**: Use AI to enhance PR content

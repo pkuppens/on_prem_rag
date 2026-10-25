@@ -101,6 +101,9 @@ test.describe('React UI: upload, ask, cite', () => {
     await expect(progress).toBeVisible();
     await shot(page, '02-react-uploading');
     await expect(progress).toBeHidden({ timeout: LLM_TIMEOUT });
+    // After a reload the rows come from the backend's real state: none may be left behind once indexing is done.
+    await page.reload();
+    await expect(page.getByRole('progressbar')).toHaveCount(0, { timeout: LLM_TIMEOUT });
   });
 
   test('03 react ask: answer with numbered sources', async () => {

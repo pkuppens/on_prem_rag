@@ -70,6 +70,16 @@ function App() {
     url: apiUrls.uploadProgressWebSocket(),
     onMessage: (data) => {
       Logger.debug('Received progress update', 'App.tsx', 'useWebSocket.onMessage', 47, data);
+      if (data.type === 'initial_state') {
+        // Uploads still processing when this connection opened: { file_id: progress }
+        const active = Object.entries(data.data ?? {}) as [string, number][];
+        setUploadProgress(prev => ({
+          ...prev,
+          ...Object.fromEntries(active.map(([fileId, progress]) => [fileId, { progress, isComplete: false }])),
+        }));
+        return;
+      }
+      if (!data.file_id) return;
       setUploadProgress(prev => ({
         ...prev,
         [data.file_id]: {

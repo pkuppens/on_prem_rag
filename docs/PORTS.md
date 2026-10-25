@@ -12,6 +12,7 @@ To avoid conflicts with common development ports (8000, 8080, 9000, etc.), this 
 | Auth     | 9181    | Authentication service  | `AUTH_PORT`           |
 | ChromaDB | 9182    | Vector database (host)  | `CHROMA_HOST_PORT`    |
 | Frontend | 5173    | Vite development server | `FRONTEND_PORT`       |
+| Chainlit | 8002    | Chat UI (local only)    | `CHAINLIT_PORT`       |
 | Ollama   | 11434   | LLM service (host)      | `OLLAMA_HOST_PORT`    |
 
 Ports are configurable via `.env`. Override any value if it conflicts with other services on your machine. See `env.example` and [TEST_DOCKER.md](TEST_DOCKER.md#port-conflicts).
@@ -44,6 +45,12 @@ Ports are configurable via `.env`. Override any value if it conflicts with other
   - `VITE_BACKEND_URL=http://localhost:9180`
   - `VITE_AUTH_URL=http://localhost:9181`
 
+### Chainlit Chat
+
+- Port: 8002 (default), started with `uv run start-chat`
+- Override: `CHAINLIT_PORT`; point the React header **Chat** link at it with `VITE_CHAT_URL` (default `http://localhost:8002`)
+- Not part of the Docker stack: docker-compose has no Chainlit service
+
 ### Ollama
 
 - Port: 11434 (default)
@@ -69,6 +76,7 @@ For local development without Docker:
 3. ChromaDB runs on port 9182 (or CHROMA_HOST_PORT)
 4. Frontend runs on port 5173
 5. Ollama runs on port 11434
+6. Chainlit chat runs on port 8002 (or CHAINLIT_PORT)
 
 ## Port Range Selection
 

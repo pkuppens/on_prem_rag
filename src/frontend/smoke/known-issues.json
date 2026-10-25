@@ -1,6 +1,1 @@
-{
-  "react-chat-link": {
-    "issue": "https://github.com/pkuppens/on_prem_rag/issues/215",
-    "summary": "React header Chat link points at the backend instead of Chainlit"
-  }
-}
+{}

@@ -1,7 +1,7 @@
 # Cursor / Claude skills setup (canonical tree)
 
 Created: 2026-03-21
-Updated: 2026-03-21
+Updated: 2026-10-27
 
 This repo does **not** commit the contents of `.cursor/skills`. Skills live in the portfolio repo **[pkuppens/pkuppens](https://github.com/pkuppens/pkuppens)** under [`skills/`](https://github.com/pkuppens/pkuppens/tree/main/skills). That tree is the single source of truth (see upstream [`skills/README.md`](https://github.com/pkuppens/pkuppens/blob/main/skills/README.md)).
 
@@ -45,7 +45,7 @@ A sibling **junction** or **symlink** avoids duplicating dozens of `SKILL.md` fi
 
 ## Repo-specific Claude skills
 
-Repo-specific skills (workflow commands such as `/commit`, `/pr`, `/smoke`) live in full under [`.claude/skills/`](../../.claude/skills/), indexed in its [README](../../.claude/skills/README.md). Canonical lifecycle skills come from `pkuppens/skills` via the link above.
+Repo-specific skills (workflow commands such as `/commit`, `/pr`, `/smoke`) live in full under [`.claude/skills/`](../../.claude/skills/), indexed in its [README](../../.claude/skills/README.md). Canonical lifecycle skills come from `pkuppens/skills` via the link above. Some, such as `/branch-cleanup`, are installed user-wide instead (e.g. `/plugin install branch-cleanup@pkuppens-skills`). Don't add a project copy with the same name: it shows up as a second, different skill.
 
 ## References
 

@@ -1170,7 +1170,7 @@ This GitHub integration rule works seamlessly with:
 
 1. **Follow naming conventions**: Use consistent branch naming patterns
 2. **Keep branches focused**: One feature/story/task per branch
-3. **Clean up after merge**: Run `/branch-cleanup` or `scripts/cleanup-merged-branches.sh` to delete merged and gone branches (merge, squash, rebase). See [branch-cleanup.md](.claude/skills/branch-cleanup/SKILL.md).
+3. **Clean up after merge**: Run `/branch-cleanup`, the canonical skill from [pkuppens/skills](https://github.com/pkuppens/skills/tree/main/skills/branch-cleanup). It verifies branch content against `main`, so it also catches rebase merges. `scripts/cleanup-merged-branches.sh` (used in CI) only detects merge commits.
 4. **Use descriptive commit messages**: Include project IDs in commit messages
 
 ### Workflow Integration

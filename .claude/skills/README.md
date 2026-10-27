@@ -72,7 +72,7 @@ Two distinct validation activities exist — do not conflate them:
 | `/run-validation` | Execute validation step-by-step, fix failures, gate on pass | `/commit` when passed |
 | `/commit` | Create commits with quality checks | `/pr` when ready |
 | `/pr` | Create pull request | Prereq: commits done; validation passed |
-| `/branch-cleanup` | Sync local branches after PR merged (main, prune, delete merged/gone) | After `/pr` merge |
+| `/branch-cleanup` | Canonical skill from [pkuppens/skills](https://github.com/pkuppens/skills/tree/main/skills/branch-cleanup), not in this folder: fetch/prune, fast-forward, delete branches whose content is in main | After `/pr` merge |
 | `/test` | Run tests with service management | Used by commit, pr |
 | `/smoke` | UI smoke test + demo playbook: every UI in a real browser, screenshots per step | After `/branch-cleanup`; before a demo |
 | `/update-commits` | WBSO: refresh commit CSVs from `repositories.csv` | Standalone |

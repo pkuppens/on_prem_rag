@@ -18,7 +18,7 @@ This command provides a comprehensive, step-by-step process for creating pull re
 - **Commits**: Use `/commit` before this command; all changes must be committed first.
 - **Pre-flight checks**: Same quality gates as `/commit` (ruff, format, pytest). Do not re-implement; reference [commit.md](.claude/skills/commit/SKILL.md) Quality Checks section.
 - **tmp/ for PR body**: Use `tmp/github/pr-descriptions/` per [temp-files.mdc](.cursor/rules/temp-files.mdc).
-- **After PR merged**: Use `/branch-cleanup` to sync main, prune refs, and delete merged/gone local branches.
+- **After PR merged**: Use `/branch-cleanup` (canonical skill from `pkuppens/skills`) to sync main, prune refs, and delete branches whose content is already in main.
 
 ## When to Use
 
@@ -463,9 +463,9 @@ fi
 
 When the PR is merged (via GitHub UI or `gh pr merge`), run `/branch-cleanup` to:
 
-- Checkout main and pull latest
-- Fetch with prune (remove stale remote refs)
-- Delete local branches that are merged or track gone remotes (covers merge, squash-merge, rebase-merge)
+- Fetch with prune and fast-forward local branches, `main` included
+- Delete local and remote branches whose content is already in `main` (covers merge, squash-merge, rebase-merge), after a dry-run
+- End on a fresh `main`
 
 ## Error Handling and Troubleshooting
 

@@ -361,6 +361,20 @@ class TestSTTAPIEndpoints:
         )
         assert resp.status_code == 400
 
+    def test_ask_voice_transcription_failure_returns_500(self):
+        """As a user I want a clear 500 with the cause when transcription fails, not an unhandled crash.
+        Technical: the error path logs via StructuredLogger, which has no .exception() (#212 found this).
+        """
+        from fastapi.testclient import TestClient
+
+        from backend.query_service.api.app import app
+
+        with patch("backend.query_service.api.ask.get_stt_service") as get_service:
+            get_service.return_value.transcribe_only.side_effect = RuntimeError("cublas64_12.dll not found")
+            resp = TestClient(app).post("/api/v1/qa/voice", files={"audio": ("q.wav", b"RIFF", "audio/wav")})
+        assert resp.status_code == 500
+        assert "cublas64_12.dll not found" in resp.json()["detail"]
+
     @pytest.mark.slow
     @pytest.mark.ci_skip
     def test_ask_voice_no_speech_detected(self):

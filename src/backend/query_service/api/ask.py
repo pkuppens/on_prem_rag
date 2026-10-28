@@ -164,7 +164,7 @@ async def ask_voice(audio: UploadFile = File(..., description="Audio file (e.g. 
             language=None,
         )
     except Exception as e:
-        logger.exception("Voice query transcription failed: %s", e)
+        logger.error("Voice query transcription failed", error=str(e))
         raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}") from e
 
     transcription_latency_ms = int((time.perf_counter() - t0) * 1000)

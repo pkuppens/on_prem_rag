@@ -28,13 +28,11 @@ def main() -> None:
     stt_device = os.getenv("STT_DEVICE", "")
     stt_model = os.getenv("STT_MODEL_SIZE", "")
     stt_compute = os.getenv("STT_COMPUTE_TYPE", "")
-    uv_no_sync = os.getenv("UV_NO_SYNC", "")
 
     print("STT environment variables:")
     print(f"  STT_DEVICE     = {stt_device or '(unset, will auto-detect)'}")
     print(f"  STT_MODEL_SIZE = {stt_model or '(unset, default: small)'}")
     print(f"  STT_COMPUTE_TYPE = {stt_compute or '(unset, default by device)'}")
-    print(f"  UV_NO_SYNC     = {uv_no_sync or '(unset)'}")
     print()
 
     if not stt_device and not stt_model and not stt_compute:
@@ -45,13 +43,6 @@ def main() -> None:
         )
 
     if stt_device and stt_device.lower() == "cuda":
-        if not uv_no_sync:
-            warnings.append(
-                "STT_DEVICE=cuda but UV_NO_SYNC is unset. "
-                "uv run may resync and replace CUDA torch with CPU. "
-                "Set UV_NO_SYNC=1 in .env or system env."
-            )
-
         # Check PyTorch
         try:
             import torch
@@ -61,8 +52,7 @@ def main() -> None:
             if "+cpu" in torch.__version__:
                 errors.append(
                     f"STT_DEVICE=cuda but PyTorch is CPU build ({torch.__version__}). "
-                    "Install CUDA build: uv pip install torch --index-url "
-                    "https://download.pytorch.org/whl/cu126 --force-reinstall"
+                    "Run: uv sync --group dev (Windows gets the cu126 build via pyproject.toml)"
                 )
             elif not torch.cuda.is_available():
                 errors.append("PyTorch has CUDA build but torch.cuda.is_available() is False. Run: nvidia-smi")

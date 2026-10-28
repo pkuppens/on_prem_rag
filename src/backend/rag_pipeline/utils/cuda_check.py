@@ -39,11 +39,11 @@ def _print_cpu_build_troubleshooting() -> None:
     print("\nTo get CUDA support on a machine with an NVIDIA GPU (e.g. RTX 4090):")
     print("\n1. Ensure NVIDIA driver supports your GPU and CUDA.")
     print("   Check: nvidia-smi")
-    print("\n2. Replace the CPU torch with the CUDA build:")
-    print("   uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall")
-    print("   (Use cu124 if CUDA 12.4 is preferred; cu126 recommended for RTX 4090)")
-    print("\n3. Re-run to verify (use --no-sync so uv does not overwrite with CPU):")
-    print("   uv run --no-sync is-cuda-available")
+    print("\n2. Re-sync: on Windows, uv sync installs the CUDA build (cu126 index in pyproject.toml):")
+    print("   uv sync --group dev")
+    print("   On Linux, PyPI torch already includes CUDA support.")
+    print("\n3. Re-run to verify:")
+    print("   uv run is-cuda-available")
     print("\nSee docs/technical/CUDA_SETUP.md for full setup guide.")
 
 

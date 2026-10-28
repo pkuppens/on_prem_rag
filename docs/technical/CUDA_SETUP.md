@@ -1,7 +1,7 @@
 # Local CUDA Setup for PyTorch and Whisper
 
 Created: 2026-02-12
-Updated: 2026-02-19
+Updated: 2026-10-28
 
 This guide describes how to enable CUDA/GPU support for PyTorch on local development machines (e.g. RTX 4090). CI and GitHub Actions run CPU-only by design.
 
@@ -9,94 +9,38 @@ This guide describes how to enable CUDA/GPU support for PyTorch on local develop
 
 **Python 3.12 and 3.13** are fully supported by PyTorch 2.6+ with CUDA. No need to downgrade. The project `requires-python = ">=3.12,<3.14"` is compatible.
 
-## Default vs CUDA Install
+## How torch is installed
 
-- **Default** (`uv sync`): Installs PyTorch from PyPI (CPU build). Used by CI and GitHub Actions.
-- **Local CUDA**: After sync, replace torch with the CUDA wheel for GPU acceleration.
+`uv sync` installs the right build per platform (see `[tool.uv.sources]` in `pyproject.toml`, #212):
+
+- **Windows**: `torch==2.10.0+cu126` from the PyTorch CUDA 12.6 index. PyPI only has CPU wheels for Windows.
+- **Linux (CI)**: `torch==2.10.0` from PyPI, which ships CUDA support on Linux. CI runners have no GPU, so `torch.cuda.is_available()` is False there.
+
+No manual `uv pip install` and no `UV_NO_SYNC` are needed. A plain `uv sync`, including the one the pre-push hook runs, keeps the CUDA build.
 
 ## Setup Steps (Local Development)
 
-### 1. Verify NVIDIA Driver
+1. Verify the NVIDIA driver sees the GPU and supports CUDA 12.6+: `nvidia-smi`
+2. Install dependencies: `uv sync --group dev` (the first sync downloads the ~2.5 GB CUDA wheel)
+3. Verify: `uv run is-cuda-available` (exit code 0 means CUDA is working)
 
-```bash
-nvidia-smi
-```
-
-Ensure the driver sees your GPU and the CUDA version matches the PyTorch build (see below).
-
-### 2. Install Project Dependencies
-
-```bash
-uv sync --group dev
-```
-
-### 3. Replace PyTorch with CUDA Build
-
-For **RTX 4090** (Ada Lovelace), use CUDA 12.4 or 12.6:
-
-**Windows (PowerShell):**
-
-```powershell
-uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall
-```
-
-**Linux/macOS:**
-
-```bash
-uv pip install torch --index-url https://download.pytorch.org/whl/cu126 --force-reinstall
-```
-
-Alternative indexes: `cu124` (CUDA 12.4), `cu128` (CUDA 12.8). Choose based on your driver and PyTorch compatibility.
-
-**Notes**:
-
-- Local-only: not persisted to `pyproject.toml` or `uv.lock`; CI and fresh clones keep the CPU build.
-- After CUDA install, `uv run` without `--no-sync` will resync and overwrite with CPU. **You must address this** (see step 5).
-
-### 4. Verify CUDA Availability
-
-**Important**: Use `--no-sync` so `uv run` does not resync and overwrite your CUDA build with the CPU version from the lock file:
-
-```bash
-uv run --no-sync is-cuda-available
-```
-
-Alternatively: `.venv\Scripts\python.exe -c "from backend.rag_pipeline.utils.cuda_check import main; main()"`
-
-Exit code 0 means CUDA is working. The script reports GPU details and troubleshooting hints if not.
-
-### 5. Keep the CUDA build: set UV_NO_SYNC
-
-After installing the CUDA build, `uv run` will resync from the lock file and overwrite with the CPU build unless you set `UV_NO_SYNC=1`. Two options:
-
-**Option A: System or user environment variable (recommended for a dedicated CUDA dev machine)**
-
-Set `UV_NO_SYNC=1` in your Windows environment variables (System properties → Environment variables → User or System variables). Applies to all uv commands in every terminal. No need to pass flags or load files.
-
-**Option B: .env file**
-
-Add `UV_NO_SYNC=1` to your `.env` (see `env.example`). Note: **`uv run` does not auto-load `.env`**. You must either:
-
-- Pass `--env-file .env` on every `uv run` command, or
-- Set `UV_ENV_FILE` to your `.env` path (e.g. in system env) so uv loads it when you run `uv run`.
-
-For project-specific, one-time setup on a CUDA machine, the system/user env var is usually simpler.
+If you set `UV_NO_SYNC=1` for the old manual setup, remove it. It is no longer needed, and it stops `uv run` from applying lockfile updates.
 
 ## CI and GitHub Actions
 
-GitHub Actions and similar CI runners typically have no GPU. Tests and builds use the default CPU PyTorch from `uv sync`. The CUDA install is local-only (via `uv pip install` into the venv) and is not persisted to `pyproject.toml` or `uv.lock`. CI continues to work without changes.
+GitHub Actions runners have no GPU. CI uses PyPI torch on Linux and is unaffected by the Windows CUDA index.
 
 ## faster-whisper and CTranslate2
 
 The `faster-whisper` package uses CTranslate2 for inference. For GPU-accelerated transcription:
 
-- CTranslate2 can use CUDA when available.
-- Ensure the PyTorch CUDA build is installed (faster-whisper may use it for model loading).
+- CTranslate2 needs the CUDA 12 cuBLAS and cuDNN 9 DLLs. On Windows, the CUDA torch wheel bundles them in `torch/lib`, so no separate CUDA toolkit install is needed.
+- Without them, transcription on `cuda` fails with `Library cublas64_12.dll is not found or cannot be loaded`.
 - See [faster-whisper](https://github.com/SYSTRAN/faster-whisper) docs for GPU setup.
 
 ## Speech-to-Text (STT) with CUDA
 
-The STT transcriber (`backend.stt.transcriber`) uses faster-whisper. After installing the PyTorch CUDA build and setting `UV_NO_SYNC=1` (see above):
+The STT transcriber (`backend.stt.transcriber`) uses faster-whisper. Once `uv sync` has installed the CUDA build (see above):
 
 1. **Auto-detect**: If `STT_DEVICE` is unset, the transcriber auto-detects CUDA via `torch.cuda.is_available()` and uses `cuda` when available.
 2. **Explicit device**: Set `STT_DEVICE=cuda` in `.env` to force GPU (or `STT_DEVICE=cpu` for CPU-only).
@@ -121,10 +65,11 @@ If you get file lock errors (`cannot access the file because it is being used`) 
 
 | Issue | Check |
 |-------|-------|
-| `torch.cuda.is_available()` is False | Run `uv run --no-sync is-cuda-available` for tailored hints |
-| CPU build detected after CUDA install | Set `UV_NO_SYNC=1` (see section 5); reinstall with `--index-url` from PyTorch CUDA index |
+| `torch.cuda.is_available()` is False | Run `uv run is-cuda-available` for tailored hints |
+| CPU build detected on Windows | Run `uv sync --group dev`; check `[tool.uv.sources]` in `pyproject.toml` still maps torch to `pytorch-cu126` |
 | Driver not found | Update NVIDIA driver; run `nvidia-smi` |
 | Wrong CUDA version | Match driver CUDA to wheel (e.g. cu126 needs CUDA 12.6) |
+| `cublas64_12.dll is not found` (STT) | torch is the CPU build: run `uv sync --group dev`, or set `STT_DEVICE=cpu` |
 
 ## References
 

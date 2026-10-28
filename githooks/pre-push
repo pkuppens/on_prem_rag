@@ -48,8 +48,10 @@ uv run ruff format .
 # setup_git_hooks.py already advertises in its printed instructions.
 git add -u
 
-echo "[PRE-PUSH] Running fast unit tests (uv run pytest -m 'not internet and not slow')..."
-if ! uv run pytest -m "not internet and not slow"; then
+# Tiered tests (#212): fast tier always; slow/ollama/e2e tiers when this machine has
+# an NVIDIA GPU / Ollama. PRE_PUSH_FAST=1 runs the fast tier only; PRE_PUSH_DRY_RUN=1
+# prints the plan and blocks the push without running tests.
+if ! uv run python scripts/pre_push_tiers.py --hook; then
     echo "[PRE-PUSH] Tests failed. Push blocked."
     echo "[PRE-PUSH] Fix failing tests, or in a genuine emergency: git push --no-verify"
     exit 1

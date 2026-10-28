@@ -130,7 +130,10 @@ can run them:
 | `ollama` | `pytest -m "ollama and ..."`                           | Ollama reachable (started if installed locally)        |
 | `e2e`    | `scripts/e2e_smoke.py --skip-streamlit` (`just e2e`)   | Ollama reachable                                       |
 
-Every tier excludes `internet`, `docker` and `cloud_llm`. A failing tier blocks the push, and the tiers
+Every tier excludes `internet`, `docker` and `cloud_llm`. The tiers get `OLLAMA_BASE_URL` with
+`host.docker.internal` mapped to `localhost`, so a container-oriented `.env` still reaches the native
+Ollama. If every test in a gated tier (`slow`, `ollama`) skips although its capability was detected,
+the tier fails rather than passing silently. A failing tier blocks the push, and the tiers
 after it do not run. On a machine without a GPU or Ollama, only `fast` runs, and the hook prints which
 tiers it skipped and why. GPU detection uses `nvidia-smi` rather than `torch.cuda`, because
 `uv sync` installs the CPU build of torch.

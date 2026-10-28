@@ -53,6 +53,9 @@ class Tier:
     status: str = "not run"
     duration_s: float = 0.0
     summary: str = ""
+    # A gated tier ran because its capability was detected; if every test still skips, the
+    # capability is not reaching the tests (e.g. a misrouted OLLAMA_BASE_URL), so that fails.
+    gated: bool = False
 
 
 @dataclass
@@ -83,6 +86,18 @@ def detect_gpu() -> tuple[str | None, str]:
     return None, gpus[0].split(" (UUID")[0]
 
 
+def tier_env() -> dict[str, str]:
+    """Environment for the tiers: OLLAMA_BASE_URL with the Docker host alias mapped to localhost.
+
+    A ``.env`` written for containers (``host.docker.internal``) would otherwise make the native
+    test process miss the local Ollama and skip every ``ollama`` test.
+    """
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from e2e_smoke import resolve_ollama_url
+
+    return {**os.environ, "OLLAMA_BASE_URL": resolve_ollama_url()}
+
+
 def detect_ollama() -> tuple[str | None, str]:
     """Return (skip reason or None, description); starts a locally installed Ollama when it is not running."""
     sys.path.insert(0, str(ROOT / "scripts"))
@@ -107,8 +122,8 @@ def plan_tiers(caps: Capabilities, fast_only: bool) -> list[Tier]:
     """Build the tier list; heavy tiers carry a skip reason when the machine (or the user) rules them out."""
     tiers = [
         Tier("fast", pytest_command("not slow and not ollama")),
-        Tier("slow", pytest_command("slow and not ollama"), skip_reason=caps.gpu),
-        Tier("ollama", pytest_command("ollama"), skip_reason=caps.ollama),
+        Tier("slow", pytest_command("slow and not ollama"), skip_reason=caps.gpu, gated=True),
+        Tier("ollama", pytest_command("ollama"), skip_reason=caps.ollama, gated=True),
         Tier(
             "e2e",
             [sys.executable, str(ROOT / "scripts" / "e2e_smoke.py"), "--skip-streamlit"],
@@ -128,17 +143,24 @@ def last_summary_line(output: str) -> str:
     """The pytest ``=== N passed in Xs ===`` line, or the last non-empty line for other commands."""
     lines = [line.strip() for line in output.splitlines() if line.strip()]
     for line in reversed(lines):
-        if re.match(r"^=+ .*\b(passed|failed|error|errors|no tests ran|deselected)\b.* =+$", line):
+        if re.match(r"^=+ .*\b(passed|failed|skipped|error|errors|no tests ran|deselected)\b.* =+$", line):
             return line.strip("= ")
     return lines[-1] if lines else ""
 
 
-def run_tier(tier: Tier) -> bool:
+def run_tier(tier: Tier, env: dict[str, str] | None = None) -> bool:
     """Run one tier, streaming its output; record status, duration and summary line."""
     print(f"\n[PRE-PUSH] === tier {tier.name}: {' '.join(tier.command[1:])}", flush=True)
     start = time.monotonic()
     proc = subprocess.Popen(
-        tier.command, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace"
+        tier.command,
+        cwd=ROOT,
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     captured: list[str] = []
     assert proc.stdout is not None
@@ -150,6 +172,9 @@ def run_tier(tier: Tier) -> bool:
     tier.summary = last_summary_line("".join(captured))
     # pytest exit code 5 = no tests collected for this marker; not a failure.
     tier.status = "passed" if returncode in (0, 5) else "failed"
+    if tier.gated and tier.status == "passed" and "skipped" in tier.summary and not re.search(r"\b\d+ passed", tier.summary):
+        tier.status = "failed"
+        tier.summary += " (all skipped although the capability was detected; run pytest -rs to see why)"
     return tier.status == "passed"
 
 
@@ -214,8 +239,9 @@ def main() -> int:
         # Inside the hook a dry run must not let an untested push through.
         return 1 if args.hook else 0
 
+    env = tier_env()
     for tier in tiers:
-        if tier.status == "not run" and not run_tier(tier):
+        if tier.status == "not run" and not run_tier(tier, env):
             break  # first failure blocks the push; later tiers stay "not run"
     branch, commit = git("rev-parse", "--abbrev-ref", "HEAD"), git("rev-parse", "--short", "HEAD")
     path = report_path(branch)

@@ -114,3 +114,28 @@ class TestDryRun:
     def test_exit_code(self, monkeypatch: pytest.MonkeyPatch, argv: list[str], expected: int):
         monkeypatch.setattr(sys, "argv", ["pre_push_tiers.py", "--fast", *argv])
         assert pre_push_tiers.main() == expected
+
+
+class TestGatedTierSkips:
+    """As a maintainer I want a gated tier that skips every test to fail, so a misconfiguration can't pass silently."""
+
+    def test_all_skipped_gated_tier_fails(self):
+        script = "print('===== 3 skipped in 1.0s ====='); raise SystemExit(0)"
+        tier = Tier("ollama", [sys.executable, "-c", script], gated=True)
+        assert pre_push_tiers.run_tier(tier) is False
+        assert "all skipped" in tier.summary
+
+    def test_some_passed_gated_tier_passes(self):
+        script = "print('===== 3 passed, 1 skipped in 1.0s ====='); raise SystemExit(0)"
+        assert pre_push_tiers.run_tier(Tier("slow", [sys.executable, "-c", script], gated=True)) is True
+
+    def test_all_skipped_fast_tier_is_not_gated(self):
+        script = "print('===== 3 skipped in 1.0s ====='); raise SystemExit(0)"
+        assert pre_push_tiers.run_tier(Tier("fast", [sys.executable, "-c", script])) is True
+
+
+class TestTierEnv:
+    def test_docker_host_alias_is_mapped_to_localhost(self, monkeypatch: pytest.MonkeyPatch):
+        """A container-oriented .env must not hide the local Ollama from the native test run."""
+        monkeypatch.setenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+        assert pre_push_tiers.tier_env()["OLLAMA_BASE_URL"] == "http://localhost:11434"

@@ -117,6 +117,32 @@ uv run pytest tests/ci/test_github_actions_setup.py -v -m ci_setup
 uv run pytest -m "not internet and not slow"
 ```
 
+### Heavy Test Tiers in Pre-Push (Dev PC)
+
+CI deselects `slow`, `ollama` and `docker` tests (2-core runners, no GPU, no LLM). The heavy tiers run
+in the pre-push hook instead (`githooks/pre-push` → `scripts/pre_push_tiers.py`), on whichever machine
+can run them:
+
+| Tier     | Runs                                                   | Needs                                                  |
+| -------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| `fast`   | `pytest -m "not slow and not ollama and ..."`          | always                                                 |
+| `slow`   | `pytest -m "slow and not ollama and ..."`              | NVIDIA GPU (`nvidia-smi -L` lists one)                 |
+| `ollama` | `pytest -m "ollama and ..."`                           | Ollama reachable (started if installed locally)        |
+| `e2e`    | `scripts/e2e_smoke.py --skip-streamlit` (`just e2e`)   | Ollama reachable                                       |
+
+Every tier excludes `internet`, `docker` and `cloud_llm`. A failing tier blocks the push, and the tiers
+after it do not run. On a machine without a GPU or Ollama, only `fast` runs, and the hook prints which
+tiers it skipped and why. GPU detection uses `nvidia-smi` rather than `torch.cuda`, because
+`uv sync` installs the CPU build of torch.
+
+- `PRE_PUSH_FAST=1 git push` runs the fast tier only.
+- `PRE_PUSH_DRY_RUN=1 git push` (or `just pre-push --dry-run`) prints the detected capabilities and the tier plan without running tests; from the hook it then blocks the push, so a dry run never pushes untested code.
+- Each run writes `tmp/github/pr-bodies/<issue>-local-test-report.md` (issue number from the branch name).
+  Post it on the PR with `gh pr comment <PR> --body-file tmp/github/pr-bodies/<issue>-local-test-report.md`.
+
+After changing `githooks/pre-push`, reinstall it with `uv run python scripts/setup_git_hooks.py`.
+A self-hosted GitHub runner was considered and rejected, because the dev PC is not always online (#212).
+
 ### Manual Setup Validation
 
 Test the setup process manually:

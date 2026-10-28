@@ -50,6 +50,10 @@ run:
 e2e *ARGS:
     uv run python scripts/e2e_smoke.py {{ARGS}}
 
+# Pre-push test tiers (fast always; slow/ollama/e2e when GPU/Ollama present). Flags: --fast, --dry-run
+pre-push *ARGS:
+    uv run python scripts/pre_push_tiers.py {{ARGS}}
+
 # UI smoke test + demo playbook: every UI in a real browser, screenshots in tmp/debug/smoke (see .claude/skills/smoke/SKILL.md)
 smoke *ARGS:
     uv run python scripts/ui_smoke.py {{ARGS}}

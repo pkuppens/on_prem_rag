@@ -11,3 +11,9 @@ on_prem_rag:
       # single query, so more dbt threads mainly add contention. 2 matches a GitHub Actions runner (2 vCPU);
       # override locally with DBT_THREADS.
       threads: "{{ env_var('DBT_THREADS', '2') | as_number }}"
+    # CI target (`dbt build --target ci`): in-memory database, nothing written to disk, never sampled.
+    # Models can branch on the active target with {{ target.name }}.
+    ci:
+      type: duckdb
+      path: ":memory:"
+      threads: 2

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_wbso__repositories
+    description: Repositories tracked for WBSO (seed wbso_repositories), with owner and name split.
+    columns:
+      - name: repo_name
+        description: Repository name without owner; joins to the commits source.
+        data_tests:
+          - unique
+          - not_null
+      - name: repo_owner
+        description: GitHub owner, e.g. pkuppens.
+      - name: repo_full_name
+        description: owner/name as in the seed.
+      - name: repo_description
+        description: Short repository description.
+      - name: wbso_relevance
+        description: Why the repository counts for WBSO.
+      - name: is_core_wbso
+        description: True when the relevance starts with 'Core WBSO'.

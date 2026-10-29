@@ -33,6 +33,18 @@ models:
   on_prem_rag:
     staging:
       +materialized: view
+    intermediate:
+      +materialized: view
+
+# Variables: project-wide parameters, read in SQL with {{ var('name') }}. Override per run without editing code:
+#   dbt build --vars '{wbso_period_start: "2026-01-01", wbso_period_end: "2026-12-31"}'
+vars:
+  # WBSO grant period that commits and hours are reported against (WBSO-AICM-2025-01 covers 2025).
+  wbso_period_start: "2025-01-01"
+  wbso_period_end: "2025-12-31"
+  # Rows to keep per sampled model on the dev target, for fast iteration on large inputs. 0 = no sampling.
+  # Never applied on the ci target (see int_wbso__commits_in_period.sql).
+  dev_sample_rows: 0
 
 # Column types for seeds. Without this dbt guesses types from the CSV contents.
 seeds:
@@ -41,3 +53,10 @@ seeds:
       +column_types:
         work_date: date
         hours: decimal(4, 2)
+    # Copy of docs/project/hours/data/repositories.csv, which the Python pipeline still reads.
+    # tests/assert_wbso_repositories_seed_matches_pipeline.sql fails when the two drift apart.
+    wbso_repositories:
+      +column_types:
+        repo_name: varchar
+        repo_description: varchar
+        wbso_relevance: varchar

@@ -67,11 +67,13 @@ project directory, where it picks up `profiles.yml`:
 
 ```bash
 cd analytics/dbt
+uv run dbt deps     # install packages from packages.yml (once, and after changing it)
 uv run dbt debug    # check the config and the DuckDB connection
 uv run dbt build    # seed + run + test, in dependency order
 ```
 
-Expected: `Done. PASS=7 WARN=0 ERROR=0` (1 seed, 1 model, 5 tests).
+Expected: `Done. PASS=21 WARN=0 ERROR=0`. Section 2 walks through the demo part of that build; the WBSO models
+are covered in section 4.
 
 Look at the result:
 
@@ -115,8 +117,10 @@ Every description from `_staging.yml` appears there. The lineage graph (bottom-r
 
 ```
 analytics/dbt/
-├── dbt_project.yml     committed   project config: name, paths, materializations
-├── profiles.yml        committed   connection: DuckDB file dev.duckdb (no secrets)
+├── dbt_project.yml     committed   project config: name, paths, materializations, vars
+├── profiles.yml        committed   connections: dev (DuckDB file dev.duckdb) and ci (in-memory); no secrets
+├── packages.yml        committed   third-party packages (dbt_utils)
+├── package-lock.yml    committed   exact package versions, written by `dbt deps`
 ├── models/             committed   SQL models + YAML docs/tests
 ├── seeds/              committed   small CSV files
 ├── tests/              committed   singular SQL tests
@@ -134,7 +138,55 @@ Environment variables:
 | `DBT_DUCKDB_PATH` | `dev.duckdb` | Location of the DuckDB database file |
 | `DBT_THREADS` | `2` | Models built in parallel. 2 matches a GitHub Actions runner; DuckDB already parallelises each query internally |
 
-## 4. How dbt will serve this project
+## 4. Everyday dbt features in this project
+
+### Packages
+
+`packages.yml` lists community packages; `dbt deps` installs them into `dbt_packages/` and pins the exact versions in
+`package-lock.yml`. dbt refuses to build until the packages are installed. This project uses
+[dbt_utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/), for example its `accepted_range` test in
+`models/intermediate/wbso/_int_wbso__models.yml`.
+
+### Seeds for real reference data
+
+`seeds/wbso_repositories.csv` is the list of repositories tracked for WBSO. The Python pipeline still reads the
+original in `docs/project/hours/data/repositories.csv`, so the seed is a copy. The singular test
+`tests/assert_wbso_repositories_seed_matches_pipeline.sql` fails when the two drift apart.
+
+### Variables
+
+`vars:` in `dbt_project.yml` are project parameters, read in SQL with `{{ var('name') }}`.
+`int_wbso__commits_in_period` keeps only commits inside `wbso_period_start`..`wbso_period_end`. Override them
+per run without touching code:
+
+```bash
+uv run dbt build --vars '{wbso_period_start: "2024-01-01", wbso_period_end: "2024-12-31"}'
+```
+
+### Targets: dev and ci
+
+`profiles.yml` has two outputs. `dev` (the default) builds into `dev.duckdb`; `ci` builds in memory, so nothing is
+written to disk. Select one with `--target`:
+
+```bash
+uv run dbt build --target ci
+```
+
+Because `ci` starts empty every time, always build the full graph there, or select with upstream models
+(`-s +my_model`). A single-model selection fails for lack of its inputs.
+
+SQL can branch on `{{ target.name }}`. `int_wbso__commits_in_period` keeps only the newest N rows on dev
+when `dev_sample_rows` is set, and never on ci:
+
+```bash
+uv run dbt build -s +int_wbso__commits_in_period --vars '{dev_sample_rows: 10}'   # 10 rows
+uv run dbt build -s +int_wbso__commits_in_period                                  # all rows again
+```
+
+Jinja is rendered everywhere in a model, including SQL `--` comments. To mention template syntax in a comment,
+use a Jinja comment: `{# ... #}`.
+
+## 5. How dbt will serve this project
 
 The WBSO pipeline (`src/wbso/`) turns git commits, calendar events and system logon/logoff events into
 hours per R&D category. Today that is hand-written Python: normalization in several places, session

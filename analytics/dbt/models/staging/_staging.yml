@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_example
+    description: Placeholder model proving the dbt + DuckDB wiring.
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null

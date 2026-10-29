@@ -1,0 +1,17 @@
+name: on_prem_rag
+version: "0.1.0"
+config-version: 2
+profile: on_prem_rag
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+
+target-path: target
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  on_prem_rag:
+    staging:
+      +materialized: view

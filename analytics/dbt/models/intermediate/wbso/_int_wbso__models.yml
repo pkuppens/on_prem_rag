@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_wbso__commits_in_period
+    description: >
+      Commits whose date falls inside the WBSO period (vars wbso_period_start/end), joined to the tracked
+      repositories. On the dev target, var dev_sample_rows > 0 keeps only the newest N commits.
+    columns:
+      - name: hash
+        description: Commit SHA.
+        data_tests:
+          - unique
+          - not_null
+      - name: commit_date
+        description: Commit date, always inside the WBSO period.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: "cast('{{ var(\"wbso_period_start\") }}' as date)"
+                max_value: "cast('{{ var(\"wbso_period_end\") }}' as date)"
+      - name: is_tracked_repo
+        description: True when the commit's repository is listed in the wbso_repositories seed.
+      - name: is_core_wbso_repo
+        description: True when that repository is a core WBSO project.

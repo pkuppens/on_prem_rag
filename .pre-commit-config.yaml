@@ -32,4 +32,5 @@ repos:
     hooks:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
-        exclude: .*\.(lock|ipynb)$
+        # analytics/dbt/package-lock.yml: sha1 hash written by `dbt deps`, not a secret
+        exclude: (.*\.(lock|ipynb)|analytics/dbt/package-lock\.yml)$

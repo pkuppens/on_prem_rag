@@ -94,7 +94,7 @@ guesswork (Precision@k, Recall@k, MRR, Hit@k)."*
 - **Production readiness**: Kubernetes manifests, CI/CD, pre-push test enforcement, structured
   logging, health checks across all services.
 - **Governance**: guardrails, auth microservice, PII detection, audit trail.
-- See `docs/ENEXIS.md` for the fuller requirements-mapping version of this narrative.
+- See [portfolio/GENAI_PLATFORM_DEMO.md](portfolio/GENAI_PLATFORM_DEMO.md) for the requirements-mapping version of this narrative (senior AI engineer / GenAI platform roles).
 
 ## Acceptance criteria status (#88)
 

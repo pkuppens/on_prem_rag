@@ -1,9 +1,13 @@
-# Local DuckDB profile. No secrets: the database is analytics/dbt/dev.duckdb (gitignored).
-# Override the location with DBT_DUCKDB_PATH.
+# Connection profile: tells dbt which database to build into. dbt looks for this file in the current
+# directory first, then in ~/.dbt/. It holds no secrets here: the database is a local DuckDB file,
+# analytics/dbt/dev.duckdb (gitignored). Override with DBT_DUCKDB_PATH.
 on_prem_rag:
   target: dev
   outputs:
     dev:
       type: duckdb
       path: "{{ env_var('DBT_DUCKDB_PATH', 'dev.duckdb') }}"
-      threads: 4
+      # threads = how many models dbt builds at the same time. DuckDB already uses all cores within a
+      # single query, so more dbt threads mainly add contention. 2 matches a GitHub Actions runner (2 vCPU);
+      # override locally with DBT_THREADS.
+      threads: "{{ env_var('DBT_THREADS', '2') | as_number }}"

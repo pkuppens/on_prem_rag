@@ -1,17 +1,43 @@
+# dbt project config: tells dbt what this project is called and where to find each kind of file.
+# Every path below is relative to this directory (analytics/dbt/).
 name: on_prem_rag
 version: "0.1.0"
 config-version: 2
-profile: on_prem_rag
+profile: on_prem_rag # which entry in profiles.yml holds the database connection
 
+# --- Source directories: hand-written, under version control ---
+# models/  SQL `select` statements. Each .sql file becomes one table or view, named after the file.
+#          YAML files next to them add descriptions and tests.
+# seeds/   Small, static CSV files (lookup/reference data, demo data). `dbt seed` loads each one as a
+#          table named after the file. Not meant for real data volumes; that comes in through sources.
+# tests/   "Singular" tests: a SQL query that selects the rows that break a rule. Zero rows = pass.
+#          (Generic tests such as not_null/unique are declared in the models' YAML instead.)
+# macros/  Reusable Jinja/SQL snippets, like functions, called from models with {{ my_macro(...) }}.
+#          Empty for now; the first one arrives with #193 (category normalization).
+# These four are dbt's defaults; they are listed explicitly so the layout is visible in one place.
+# A directory that does not exist yet is simply skipped.
 model-paths: ["models"]
+seed-paths: ["seeds"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
-seed-paths: ["seeds"]
 
+# --- Generated directories: build output, gitignored, safe to delete (`dbt clean`) ---
+# target/        compiled SQL, run results, manifest.json, and the docs site from `dbt docs generate`
+# dbt_packages/  third-party packages installed by `dbt deps` (from packages.yml, added in #192)
 target-path: target
 clean-targets: ["target", "dbt_packages"]
 
+# Defaults per folder. `+materialized: view` means: create a view (just a saved query, no data copied).
+# Other options are `table` (data stored, faster to read) and `incremental` (only new rows appended).
 models:
   on_prem_rag:
     staging:
       +materialized: view
+
+# Column types for seeds. Without this dbt guesses types from the CSV contents.
+seeds:
+  on_prem_rag:
+    example_hours_raw:
+      +column_types:
+        work_date: date
+        hours: decimal(4, 2)

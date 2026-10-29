@@ -1,10 +1,31 @@
+# Properties file: documentation and tests for the models in this folder.
+# dbt reads every .yml file under models/; the leading underscore just sorts it above the .sql files.
+#
+# - `description` text shows up in the generated docs site (`dbt docs generate && dbt docs serve`).
+# - `data_tests` under a column are "generic" tests. Each becomes a SQL query that selects violating
+#   rows; `dbt test` (or `dbt build`) fails if any rows come back. Built-in generic tests:
+#   unique, not_null, accepted_values, relationships (foreign key). Packages such as dbt_utils add more.
+# - Rules that do not fit a single column go in tests/ as a singular test, e.g. tests/assert_hours_in_valid_range.sql.
 version: 2
 
 models:
-  - name: stg_example
-    description: Placeholder model proving the dbt + DuckDB wiring.
+  - name: stg_example_hours
+    description: >
+      Demo of the seed -> staging -> test flow. Hours worked per day and category, cleaned from the
+      example_hours_raw seed. Replaced by real WBSO sources in #181.
     columns:
-      - name: id
+      - name: work_date
+        description: Day the hours were worked.
         data_tests:
-          - unique
+          - not_null
+      - name: category
+        description: Work category, lower-cased and trimmed.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["development", "research", "testing"]
+      - name: hours
+        description: Hours worked on that day in that category.
+        data_tests:
           - not_null

@@ -16,7 +16,10 @@ Generic for any pytest project; the only bundled tool is `coverage_tool.py` (std
 3. **Mock only what is slow or external** (network, LLM, DB server, filesystem outside `tmp_path`, clock, GPU/model loading). Patch where the name is *used*, not defined. Prefer fakes over deep `MagicMock` chains. Never mock the unit under test.
 4. **Order: function → branch → line.** First make sure every function executes at least once (`funcs`), then the error/edge branches (`lines`), then leftover lines.
 5. **Tests first, code later.** Do not refactor or rewrite production code until it has at least function-level tests. Characterise current behaviour; if behaviour looks like a bug, pin it with a test marked `xfail(strict=True, reason="BUG: ...")` and report it, do not silently fix.
-6. **Removing tested code lowers the percentage - that is expected and acceptable.** Deleting dead or obsolete code that has coverage removes covered lines from the numerator and denominator, so the total can drop. Never keep or add code just to protect the number. But if the total would fall below the gate, additional measures are needed in the same change: add tests for the remaining weakest functions (`funcs`/`files`), or lower the gate in a separate, explicitly justified commit. Check with `compare` and `gate` before and after the removal.
+6. **Removing tested code lowers the percentage - expected and acceptable.** Deleting dead or obsolete covered code shrinks numerator and denominator; never keep or add code to protect the number. If the total would fall below the floor (see Workflow step 7, Gates), do NOT lower the gate. Instead, in order of preference:
+   - **Boy scout:** add tests in the touched file/component, even if not strictly required by the issue, as a necessary part of the change.
+   - **Linked follow-up issue:** raise an issue to raise coverage elsewhere, link it to the originating issue/PR, and state the expected recovery.
+   - Only with explicit owner approval and a linked recovery issue may the floor be adjusted.
 7. **Red-Green-Refactor** where code changes: (Red) write the failing test, (Green) minimal change, (Refactor) only with tests green. For characterisation tests of existing code, "red" means: temporarily break the code (or assert a wrong value) once to prove the test can fail, then restore.
 8. **Clear feedback loops** for human and AI: small batches, re-measure after each batch (`compare`), and make failures self-explanatory (assert messages, parametrize ids, no shared mutable state).
 
@@ -44,7 +47,7 @@ Use the same pytest selection as CI (markers, offline env vars) so the number ma
 4. **Write tests** (principles above). Cover happy path, one edge, one failure per function, then loop `pytest <file> -q` until green.
 5. **Re-measure** with `run` on just the touched tests for speed (`-- tests/path -q`), then `compare` against the baseline with the full run before committing.
 6. **Commit per batch**, message states the module and the before/after number.
-7. **Gate.** When the target is reached, set `--cov-fail-under` to the new baseline (rounded down, a little below to absorb noise) in CI, and keep a warning for the stretch target.
+7. **Gates.** Track two numbers, never one: (a) a **floor**, the reasonable minimum for the project (e.g. 70%), a fixed standard that fails CI when the total is below it - not 'current minus 1'; (b) a **baseline ratchet**, the current percentage, which new/changed code (patch coverage, e.g. via `diff-cover`) must at least match, so quality never erodes even while the total is above the floor. Raise the baseline when the total improves; keep the floor for deliberate decisions. A warning annotation can track the gap to a stretch target.
 8. **Record lessons** (below) before finishing.
 
 ## Pitfalls checklist

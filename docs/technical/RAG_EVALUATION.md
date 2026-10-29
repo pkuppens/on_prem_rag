@@ -3,7 +3,7 @@
 Technical documentation for the batch evaluation of retrieval-augmented generation (RAG) pipelines. Supports measurable, reproducible metrics for retrieval quality and optional generation quality.
 
 Created: 2026-02-17
-Updated: 2026-02-17
+Updated: 2026-10-29
 
 ## Overview
 
@@ -95,6 +95,13 @@ uv run evaluate-rag --dataset benchmark.json --configs dense hybrid
 - `{output}.json`: Full results with per-query and aggregate metrics per config
 - `{output}.md`: Markdown table for quick comparison
 
+### Run history
+
+Every run also appends one JSON line per config to `tmp/eval-runs/history.jsonl` (change with `--history PATH`,
+skip with `--no-history`), so runs can be compared over time. Each row holds `run_id` (shared by the configs of one
+run), `run_timestamp` (UTC), `dataset`, `embedding_model`, `retrieval_config`, `top_k` and the aggregate metrics.
+The run id is printed to stderr; stdout and the `--output` files are unchanged.
+
 ### Example Report (Markdown)
 
 | Strategy | MRR  | Recall@5 | Hit@5 | Precision@5 |
@@ -108,3 +115,4 @@ uv run evaluate-rag --dataset benchmark.json --configs dense hybrid
 - [tests/fixtures/healthcare_benchmark.json](tests/fixtures/healthcare_benchmark.json) - Healthcare benchmark dataset
 - [tests/test_evaluation_metrics.py](tests/test_evaluation_metrics.py) - Metric unit tests
 - [tests/test_evaluation_dataset.py](tests/test_evaluation_dataset.py) - Schema validation tests
+- [tests/test_evaluation_history.py](tests/test_evaluation_history.py) - Run history tests

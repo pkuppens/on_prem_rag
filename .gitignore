@@ -212,3 +212,4 @@ analytics/dbt/dbt_packages/
 analytics/dbt/logs/
 *.duckdb
 *.duckdb.wal
+analytics/dbt/.user.yml

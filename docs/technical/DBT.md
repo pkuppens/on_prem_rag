@@ -107,6 +107,8 @@ Every description from `_staging.yml` appears there. The lineage graph (bottom-r
 | `dbt run` | Build models only |
 | `dbt test` | Run tests only |
 | `dbt build -s stg_example_hours+` | Build one model and everything downstream of it |
+| `dbt source freshness` | Check how recent each source's data is (warns after 7 days for the WBSO sources) |
+| `dbt show --inline "select * from {{ source('wbso', 'commits') }}"` | Query a source or model ad hoc |
 | `dbt clean` | Delete the generated `target/` and `dbt_packages/` |
 
 ## 3. Project layout and what goes in git
@@ -142,7 +144,10 @@ and validated.
 
 The planned steps, tracked in epic [#190](https://github.com/pkuppens/on_prem_rag/issues/190):
 
-1. **Sources** (#181): declare the CSV/JSON pipeline output in `docs/project/hours/data/` as dbt sources
+1. **Sources** (#181, done): `system_events`, `calendar_events` and `commits` in
+   [`models/staging/wbso/_wbso__sources.yml`](../../analytics/dbt/models/staging/wbso/_wbso__sources.yml), read in place
+   from `docs/project/hours/data/`. The file's header explains which pipeline files became sources and why
+   (e.g. the raw `commits/*.csv` files are not parseable, so `commits_processed.json` is used)
 2. **Staging** (#182): one `stg_` model per source, replacing the Python normalization
 3. **Intermediate** (#183): session deduplication as a SQL window function
 4. **Marts** (#184): hours per category/month, replacing the `Counter` reports

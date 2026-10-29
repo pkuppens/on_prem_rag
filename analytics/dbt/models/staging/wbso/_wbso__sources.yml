@@ -1,0 +1,132 @@
+# Sources: files produced by the WBSO hours pipeline (docs/project/hours/WBSO-DATA-FLOW.md), read in place by DuckDB.
+# A source is declared, not built: dbt only reads it. Models refer to it with {{ source('wbso', '<table>') }}.
+#
+# external_location is the FROM clause DuckDB uses for the source (a dbt-duckdb feature). Paths are relative
+# to analytics/dbt/, where dbt runs.
+#
+# Which files are sources, and why (#181):
+#   system_events    Stage 1 raw export, one file per export date. Overlapping exports repeat events, so
+#                    RecordId is not unique across files: deduplicate in staging.
+#   calendar_events  Stage 4 registered WBSO sessions (the hours that are reported).
+#   commits          Stage 2 commits_processed.json, NOT the raw commits/*.csv: commit messages contain
+#                    unescaped '|' (the CSV delimiter) and one file is UTF-16, so the raw CSVs cannot be
+#                    parsed reliably.
+#   repositories.csv becomes a dbt seed in #192.
+#
+# Freshness: `dbt source freshness` compares max(loaded_at_field) with now. Collection runs daily/weekly, so
+# data older than 7 days warns. There is no error threshold: stale history is expected outside reporting periods.
+version: 2
+
+sources:
+  - name: wbso
+    description: Outputs of the WBSO hours pipeline in docs/project/hours/data/.
+    config:
+      freshness:
+        warn_after: { count: 7, period: day }
+
+    tables:
+      - name: system_events
+        description: >
+          Windows system events (logon/logoff, shutdown, uptime) exported by the collection scripts.
+          All columns are text: DateTime uses two formats ('2025/08/21 08:34:17' and '4/27/2025 5:22:26 PM'),
+          parsed in staging.
+        meta:
+          # Column names are pinned because one export has a corrupted header line.
+          external_location: >-
+            read_csv('../../docs/project/hours/data/system_events_2*.csv', header = true, all_varchar = true,
+            filename = true, names = ['DateTime', 'EventId', 'LogName', 'EventType', 'Level', 'Username',
+            'ProcessName', 'Message', 'AdditionalInfo', 'RecordId'])
+        config:
+          loaded_at_field: >-
+            coalesce(try_strptime("DateTime", '%Y/%m/%d %H:%M:%S'), try_strptime("DateTime", '%m/%d/%Y %I:%M:%S %p'))
+        columns:
+          - name: DateTime
+            description: Local event time as text, in one of two formats (see table description).
+            data_tests:
+              - not_null
+          - name: EventId
+            description: Windows event id, e.g. 7001 logon, 7002 logoff, 1074 shutdown, 6013 uptime.
+          - name: LogName
+            description: Windows event log, e.g. System.
+          - name: EventType
+            description: Human-readable event type assigned by the export script.
+          - name: Level
+            description: Event severity (Information, Warning, ...).
+          - name: Username
+            description: User the event belongs to, 'N/A' when not applicable.
+          - name: ProcessName
+            description: Process that raised the event, 'N/A' when not applicable.
+          - name: Message
+            description: Full event message.
+          - name: AdditionalInfo
+            description: Extra detail from the export script, often empty.
+          - name: RecordId
+            description: Windows event record id. Unique within one export, repeated across overlapping exports.
+          - name: filename
+            description: Export file the row came from (added by DuckDB).
+
+      - name: calendar_events
+        description: Registered WBSO work sessions, one row per session, as uploaded to the WBSO calendar.
+        meta:
+          external_location: "read_csv('../../docs/project/hours/data/calendar_events.csv', header = true)"
+        config:
+          loaded_at_field: end_datetime
+        columns:
+          - name: session_id
+            description: Session identifier (ses_NNNN).
+            data_tests:
+              - unique
+              - not_null
+          - name: summary
+            description: WBSO activity the session is registered under.
+          - name: start_datetime
+            description: Session start (local time).
+          - name: end_datetime
+            description: Session end (local time).
+          - name: date
+            description: Session date.
+          - name: hours
+            description: Session duration in hours.
+          - name: iso_week_number
+            description: ISO week label, e.g. 2025-W22.
+          - name: iso_year
+            description: ISO year.
+          - name: iso_week
+            description: ISO week number.
+          - name: location
+            description: Work location, e.g. Thuiswerk.
+          - name: description
+            description: Free-text session description.
+
+      - name: commits
+        description: Git commits across all tracked repositories, after Stage 2 processing (commits_processed.json).
+        meta:
+          # work_block_id is null in every row, so JSON inference types it NULL; cast keeps it usable.
+          external_location: >-
+            (select * replace (cast(work_block_id as varchar) as work_block_id)
+            from (select unnest(commits, recursive := true)
+            from read_json('../../docs/project/hours/data/commits_processed.json')))
+        config:
+          loaded_at_field: '"timestamp"'
+        columns:
+          - name: timestamp
+            description: Commit time with UTC offset.
+          - name: repo_name
+            description: Repository the commit belongs to.
+          - name: author
+            description: Commit author.
+          - name: message
+            description: Commit message (first line).
+          - name: hash
+            description: Commit SHA.
+            data_tests:
+              - unique
+              - not_null
+          - name: is_wbso
+            description: Whether Stage 2 classified the commit as WBSO work.
+          - name: work_block_id
+            description: Work block the commit was assigned to; null when unassigned.
+          - name: outside_work_block
+            description: True when the commit falls outside every work block.
+          - name: date
+            description: Commit date.

@@ -1,0 +1,5 @@
+# Third-party dbt packages, installed into dbt_packages/ (gitignored) by `dbt deps`.
+# Exact versions are pinned in package-lock.yml (committed), so every machine and CI installs the same code.
+packages:
+  - package: dbt-labs/dbt_utils
+    version: [">=1.3.0", "<2.0.0"]

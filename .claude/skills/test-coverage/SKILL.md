@@ -60,3 +60,6 @@ Use the same pytest selection as CI (markers, offline env vars) so the number ma
 Append dated, one-line lessons here as they are discovered (keep it short; promote durable ones into Principles/Pitfalls).
 
 - 2026-10-29: Rank by *missed statements* (not percentage): a 0% 10-line file matters less than a 40% 800-line file.
+- 2026-10-29: `--cov-fail-under` and `coverage.json` use the combined line+branch number when `branch = true`; CI summaries reading `coverage.xml` `line-rate` show line-only. Compare like with like before setting a gate.
+- 2026-10-29: Tests behind a CI-skip marker (e.g. heavy ML imports) leave real logic uncovered on CI; test that logic with the heavy dependency patched out (`patch.object(module, "FLAG", False)`) instead of skipping.
+- 2026-10-29: Fake third-party modules with `monkeypatch.setitem(sys.modules, "name", fake)` (or `None` to force ImportError) when the code imports them lazily inside functions.

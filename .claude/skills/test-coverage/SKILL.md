@@ -16,8 +16,9 @@ Generic for any pytest project; the only bundled tool is `coverage_tool.py` (std
 3. **Mock only what is slow or external** (network, LLM, DB server, filesystem outside `tmp_path`, clock, GPU/model loading). Patch where the name is *used*, not defined. Prefer fakes over deep `MagicMock` chains. Never mock the unit under test.
 4. **Order: function → branch → line.** First make sure every function executes at least once (`funcs`), then the error/edge branches (`lines`), then leftover lines.
 5. **Tests first, code later.** Do not refactor or rewrite production code until it has at least function-level tests. Characterise current behaviour; if behaviour looks like a bug, pin it with a test marked `xfail(strict=True, reason="BUG: ...")` and report it, do not silently fix.
-6. **Red-Green-Refactor** where code changes: (Red) write the failing test, (Green) minimal change, (Refactor) only with tests green. For characterisation tests of existing code, "red" means: temporarily break the code (or assert a wrong value) once to prove the test can fail, then restore.
-7. **Clear feedback loops** for human and AI: small batches, re-measure after each batch (`compare`), and make failures self-explanatory (assert messages, parametrize ids, no shared mutable state).
+6. **Removing tested code lowers the percentage - that is expected and acceptable.** Deleting dead or obsolete code that has coverage removes covered lines from the numerator and denominator, so the total can drop. Never keep or add code just to protect the number. But if the total would fall below the gate, additional measures are needed in the same change: add tests for the remaining weakest functions (`funcs`/`files`), or lower the gate in a separate, explicitly justified commit. Check with `compare` and `gate` before and after the removal.
+7. **Red-Green-Refactor** where code changes: (Red) write the failing test, (Green) minimal change, (Refactor) only with tests green. For characterisation tests of existing code, "red" means: temporarily break the code (or assert a wrong value) once to prove the test can fail, then restore.
+8. **Clear feedback loops** for human and AI: small batches, re-measure after each batch (`compare`), and make failures self-explanatory (assert messages, parametrize ids, no shared mutable state).
 
 ## Deterministic commands
 

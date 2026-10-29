@@ -1,0 +1,9 @@
+# Local DuckDB profile. No secrets: the database is analytics/dbt/dev.duckdb (gitignored).
+# Override the location with DBT_DUCKDB_PATH.
+on_prem_rag:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DBT_DUCKDB_PATH', 'dev.duckdb') }}"
+      threads: 4

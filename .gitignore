@@ -205,3 +205,10 @@ docs/project/hours/validation_output/
 docs/project/hours/upload_output/
 test-results-unit.xml
 results/*
+
+# dbt (analytics/dbt)
+analytics/dbt/target/
+analytics/dbt/dbt_packages/
+analytics/dbt/logs/
+*.duckdb
+*.duckdb.wal

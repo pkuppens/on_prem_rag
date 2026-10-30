@@ -42,7 +42,8 @@ from backend.rag_pipeline.core.vector_store import VectorStoreManager, get_vecto
 from backend.shared.utils.directory_utils import (
     DirectoryEmptyError,
     ensure_directory,
-    validate_directory,
+    ensure_writable_directory,
+    require_readable_directory,
 )
 
 
@@ -321,12 +322,7 @@ class LocalRAGSystem:
         resolved_data_path = Path(data_path) if data_path else self.input_data_dir
 
         # Validate input directory
-        validate_directory(
-            resolved_data_path,
-            must_exist=True,
-            must_be_readable=True,
-            description="input data directory",
-        )
+        require_readable_directory(resolved_data_path, description="input data directory")
 
         # Check if directory is empty
         if not any(resolved_data_path.iterdir()):
@@ -441,13 +437,7 @@ class LocalRAGSystem:
         resolved_persist_dir = Path(persist_dir) if persist_dir else self.index_storage_dir
         if resolved_persist_dir:
             # Ensure directory exists and is writable
-            validate_directory(
-                resolved_persist_dir,
-                must_exist=True,
-                must_be_writable=True,
-                create_if_missing=True,
-                description="index storage directory",
-            )
+            ensure_writable_directory(resolved_persist_dir, description="index storage directory")
             index.storage_context.persist(str(resolved_persist_dir))
             print(f"Index saved to {resolved_persist_dir}")
 
@@ -470,12 +460,7 @@ class LocalRAGSystem:
         resolved_persist_dir = Path(persist_dir) if persist_dir else self.index_storage_dir
 
         # Validate index directory
-        validate_directory(
-            resolved_persist_dir,
-            must_exist=True,
-            must_be_readable=True,
-            description="index directory",
-        )
+        require_readable_directory(resolved_persist_dir, description="index directory")
 
         vs_context = self.vector_store_manager.get_storage_context()
         storage_context = StorageContext.from_defaults(

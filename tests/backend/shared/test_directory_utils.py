@@ -104,10 +104,10 @@ class TestPathHelpers:
         assert target.is_dir()
 
 
-class TestValidateDirectory:
+class TestRequireDirectory:
     def test_existing_directory_is_returned_as_path(self, fake_root):
         """A string path to an existing directory is accepted and returned as Path."""
-        assert du.validate_directory(str(fake_root)) == fake_root
+        assert du.require_directory(str(fake_root)) == fake_root
 
     def test_file_instead_of_directory_raises_not_a_directory(self, fake_root):
         """A file where a directory is expected is reported, using the description."""
@@ -115,93 +115,86 @@ class TestValidateDirectory:
         file.write_text("x")
 
         with pytest.raises(NotADirectoryError, match="not a upload directory"):
-            du.validate_directory(file, description="upload directory")
+            du.require_directory(file, description="upload directory")
 
     def test_missing_directory_raises_with_capitalised_description(self, fake_root):
-        """A missing required directory names itself and its relative path."""
+        """A missing directory names itself and its relative path."""
         with pytest.raises(FileNotFoundError, match=r"Upload dir not found: \./missing"):
-            du.validate_directory(fake_root / "missing", description="upload dir")
+            du.require_directory(fake_root / "missing", description="upload dir")
 
-    def test_missing_directory_is_created_when_requested(self, fake_root):
-        """create_if_missing creates the directory including parents."""
-        target = fake_root / "x" / "y"
+    def test_missing_directory_is_not_created(self, fake_root):
+        """Requiring a directory never creates it."""
+        with pytest.raises(FileNotFoundError):
+            du.require_directory(fake_root / "later")
 
-        result = du.validate_directory(target, create_if_missing=True)
+        assert not (fake_root / "later").exists()
 
-        assert result == target
-        assert target.is_dir()
+    def test_missing_directory_outside_project_root_raises_file_not_found(self, tmp_path):
+        """Paths outside the repo (e.g. a mounted volume) yield the normal error, showing the full path."""
+        missing = tmp_path / "volume" / "missing"
 
-    def test_missing_directory_allowed_when_not_required(self, fake_root):
-        """must_exist=False tolerates a missing directory and does not create it."""
-        target = fake_root / "later"
-
-        assert du.validate_directory(target, must_exist=False) == target
-        assert not target.exists()
-
-    def test_create_failure_is_reported_as_permission_error(self, fake_root, monkeypatch):
-        """If creating the directory is denied, the error explains where and why."""
-        monkeypatch.setattr(Path, "mkdir", _deny_mkdir)
-
-        with pytest.raises(PermissionError, match=r"Cannot create directory at \./nope"):
-            du.validate_directory(fake_root / "nope", create_if_missing=True)
-
-    def test_non_empty_directory_raises_when_empty_required(self, fake_root):
-        """must_be_empty rejects a directory that contains anything."""
-        (fake_root / "child.txt").write_text("x")
-
-        with pytest.raises(du.DirectoryEmptyError, match="is not empty"):
-            du.validate_directory(fake_root, must_be_empty=True)
-
-    def test_empty_directory_passes_when_empty_required(self, fake_root):
-        """An empty directory satisfies must_be_empty."""
-        empty = fake_root / "empty"
-        empty.mkdir()
-
-        assert du.validate_directory(empty, must_be_empty=True) == empty
-
-    @pytest.mark.parametrize(
-        ("flag", "label"),
-        [("must_be_writable", "write"), ("must_be_readable", "read")],
-        ids=["writable", "readable"],
-    )
-    def test_access_check_failure_raises_permission_error(self, flag, label, fake_root, monkeypatch):
-        """A directory the process may not read/write is rejected when access is required."""
-        monkeypatch.setattr(du.os, "access", lambda *_: False)
-
-        with pytest.raises(PermissionError, match=f"No {label} permission"):
-            du.validate_directory(fake_root, **{flag: True})
-
-    def test_access_checks_pass_for_accessible_directory(self, fake_root):
-        """A normal temp directory is readable and writable."""
-        assert du.validate_directory(fake_root, must_be_writable=True, must_be_readable=True) == fake_root
+        with pytest.raises(FileNotFoundError, match="Directory not found"):
+            du.require_directory(missing)
 
     @pytest.mark.parametrize("bad", [None, 5], ids=["none", "int"])
     def test_invalid_path_input_raises_value_error(self, bad):
         """None or non-path input fails before touching the filesystem."""
         with pytest.raises(ValueError):
-            du.validate_directory(bad)
+            du.require_directory(bad)
 
-    @pytest.mark.xfail(strict=True, reason="BUG: create_if_missing is ignored when must_exist=False")
-    def test_create_if_missing_creates_even_when_existence_not_required(self, fake_root):
-        """Documented: create_if_missing creates the directory if it doesn't exist."""
-        target = fake_root / "made"
 
-        du.validate_directory(target, must_exist=False, create_if_missing=True)
+class TestRequireAccessibleDirectory:
+    @pytest.mark.parametrize(
+        ("require", "label"),
+        [(du.require_readable_directory, "read"), (du.require_writable_directory, "write")],
+        ids=["readable", "writable"],
+    )
+    def test_access_failure_raises_permission_error(self, require, label, fake_root, monkeypatch):
+        """A directory the process may not read/write is rejected."""
+        monkeypatch.setattr(du.os, "access", lambda *_: False)
 
-        assert target.is_dir()
+        with pytest.raises(PermissionError, match=f"No {label} permission"):
+            require(fake_root)
 
-    @pytest.mark.xfail(strict=True, reason="BUG: must_be_empty on a missing, optional directory raises FileNotFoundError")
-    def test_missing_optional_directory_counts_as_empty(self, fake_root):
-        """A directory that need not exist and is missing should satisfy must_be_empty."""
-        target = fake_root / "absent"
+    @pytest.mark.parametrize(
+        "require",
+        [du.require_readable_directory, du.require_writable_directory],
+        ids=["readable", "writable"],
+    )
+    def test_accessible_directory_is_returned(self, require, fake_root):
+        """A normal temp directory is readable and writable."""
+        assert require(fake_root) == fake_root
 
-        assert du.validate_directory(target, must_exist=False, must_be_empty=True) == target
-
-    @pytest.mark.xfail(strict=True, reason="BUG: error message formatting raises ValueError for paths outside the project root")
-    def test_missing_directory_outside_project_root_raises_file_not_found(self, tmp_path):
-        """Paths outside the repo (e.g. a mounted volume) should yield the normal FileNotFoundError."""
+    @pytest.mark.parametrize(
+        "require",
+        [du.require_readable_directory, du.require_writable_directory],
+        ids=["readable", "writable"],
+    )
+    def test_missing_directory_raises_file_not_found(self, require, fake_root):
+        """Existence is checked before access."""
         with pytest.raises(FileNotFoundError):
-            du.validate_directory(tmp_path / "volume" / "missing")
+            require(fake_root / "missing")
+
+
+class TestRequireEmptyDirectory:
+    def test_non_empty_directory_raises(self, fake_root):
+        """A directory that contains anything is rejected."""
+        (fake_root / "child.txt").write_text("x")
+
+        with pytest.raises(du.DirectoryEmptyError, match="is not empty"):
+            du.require_empty_directory(fake_root)
+
+    def test_empty_directory_is_returned(self, fake_root):
+        """An empty directory passes."""
+        empty = fake_root / "empty"
+        empty.mkdir()
+
+        assert du.require_empty_directory(empty) == empty
+
+    def test_missing_directory_raises_file_not_found(self, fake_root):
+        """A missing directory is an error, not 'empty'."""
+        with pytest.raises(FileNotFoundError):
+            du.require_empty_directory(fake_root / "absent")
 
 
 class TestEnsureDirectory:
@@ -241,3 +234,30 @@ class TestEnsureDirectory:
         """None or non-path input is rejected."""
         with pytest.raises(ValueError):
             du.ensure_directory(bad)
+
+
+class TestEnsureWritableDirectory:
+    def test_creates_missing_directory_and_returns_it(self, fake_root):
+        """A missing directory (with parents) is created and usable."""
+        target = fake_root / "x" / "y"
+
+        assert du.ensure_writable_directory(target, description="index storage directory") == target
+        assert target.is_dir()
+
+    def test_existing_directory_is_accepted(self, fake_root):
+        """An existing writable directory is returned unchanged."""
+        assert du.ensure_writable_directory(fake_root) == fake_root
+
+    def test_not_writable_directory_raises_permission_error(self, fake_root, monkeypatch):
+        """A directory that exists but cannot be written to is rejected after creation."""
+        monkeypatch.setattr(du.os, "access", lambda *_: False)
+
+        with pytest.raises(PermissionError, match="No write permission for index dir"):
+            du.ensure_writable_directory(fake_root, description="index dir")
+
+    def test_create_failure_is_reported_as_permission_error(self, fake_root, monkeypatch):
+        """If creating the directory is denied, the error explains where and why."""
+        monkeypatch.setattr(Path, "mkdir", _deny_mkdir)
+
+        with pytest.raises(PermissionError, match=r"Cannot create or access directory at \./nope"):
+            du.ensure_writable_directory(fake_root / "nope")

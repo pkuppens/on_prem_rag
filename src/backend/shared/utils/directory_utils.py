@@ -139,84 +139,82 @@ def _format_path_for_error(path: Path) -> str:
     Returns:
         str: Formatted path string
     """
-    return f"./{get_relative_path(path)}"
+    try:
+        return f"./{get_relative_path(path)}"
+    except ValueError:  # outside the project root (e.g. a mounted volume): show the full path
+        return str(path)
 
 
-def validate_directory(
-    path: str | Path | None,
-    must_exist: bool = True,
-    must_be_empty: bool = False,
-    must_be_writable: bool = False,
-    must_be_readable: bool = False,
-    create_if_missing: bool = False,
-    description: str = "directory",
-) -> Path:
+def require_directory(path: str | Path | None, description: str = "directory") -> Path:
     """
-    Validate a directory against various criteria.
+    Require that a directory exists. Nothing is created or modified.
 
     Args:
-        path: Path to validate
-        must_exist: Whether the directory must exist
-        must_be_empty: Whether the directory must be empty
-        must_be_writable: Whether the directory must be writable
-        must_be_readable: Whether the directory must be readable
-        create_if_missing: Whether to create the directory if it doesn't exist
+        path: Path to check
         description: Description of the directory for error messages
 
     Returns:
-        Path object of the validated directory
+        Path object of the existing directory
 
     Raises:
         ValueError: If path is None or invalid type
-        FileNotFoundError: If directory doesn't exist and must_exist is True
-        NotADirectoryError: If path exists but is not a directory
-        DirectoryEmptyError: If directory is empty and must_be_empty is True
-        PermissionError: If directory access checks fail
-
+        FileNotFoundError: If the path does not exist
+        NotADirectoryError: If the path exists but is not a directory
     """
     path = _validate_path_input(path)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"{description.capitalize()} not found: {_format_path_for_error(path)}\n"
+            "Please create this directory or provide a valid path."
+        )
+    if not path.is_dir():
+        raise NotADirectoryError(
+            f"Path exists but is not a {description}: {_format_path_for_error(path)}\nPlease provide a valid directory path."
+        )
+    return path
 
-    # Check if path exists
-    if path.exists():
-        if not path.is_dir():
-            raise NotADirectoryError(
-                f"Path exists but is not a {description}: {_format_path_for_error(path)}\nPlease provide a valid directory path."
-            )
-    elif must_exist:
-        if create_if_missing:
-            try:
-                path.mkdir(parents=True, exist_ok=True)
-            except PermissionError as e:
-                raise PermissionError(
-                    f"Cannot create {description} at {_format_path_for_error(path)}\n"
-                    f"Permission denied: {e!s}\n"
-                    "Please check your permissions or choose a different location."
-                ) from e
-        else:
-            raise FileNotFoundError(
-                f"{description.capitalize()} not found: {_format_path_for_error(path)}\n"
-                "Please create this directory or provide a valid path."
-            )
 
-    # Check if directory is empty
-    if must_be_empty and any(path.iterdir()):
+def _require_access(path: Path, mode: int, action: str, description: str) -> Path:
+    if not os.access(path, mode):
+        raise PermissionError(
+            f"No {action} permission for {description}: {_format_path_for_error(path)}\n"
+            "Please check your permissions or choose a different location."
+        )
+    return path
+
+
+def require_readable_directory(path: str | Path | None, description: str = "directory") -> Path:
+    """Require an existing directory that the current process can read.
+
+    Raises:
+        ValueError, FileNotFoundError, NotADirectoryError: see `require_directory`
+        PermissionError: If the directory is not readable
+    """
+    return _require_access(require_directory(path, description), os.R_OK, "read", description)
+
+
+def require_writable_directory(path: str | Path | None, description: str = "directory") -> Path:
+    """Require an existing directory that the current process can write to.
+
+    Raises:
+        ValueError, FileNotFoundError, NotADirectoryError: see `require_directory`
+        PermissionError: If the directory is not writable
+    """
+    return _require_access(require_directory(path, description), os.W_OK, "write", description)
+
+
+def require_empty_directory(path: str | Path | None, description: str = "directory") -> Path:
+    """Require an existing directory without any entries.
+
+    Raises:
+        ValueError, FileNotFoundError, NotADirectoryError: see `require_directory`
+        DirectoryEmptyError: If the directory contains anything (named for the check; raised when NOT empty)
+    """
+    path = require_directory(path, description)
+    if any(path.iterdir()):
         raise DirectoryEmptyError(
             f"{description.capitalize()} is not empty: {_format_path_for_error(path)}\nPlease provide an empty directory."
         )
-
-    # Check permissions
-    if must_be_writable and not os.access(path, os.W_OK):
-        raise PermissionError(
-            f"No write permission for {description}: {_format_path_for_error(path)}\n"
-            "Please check your permissions or choose a different location."
-        )
-
-    if must_be_readable and not os.access(path, os.R_OK):
-        raise PermissionError(
-            f"No read permission for {description}: {_format_path_for_error(path)}\n"
-            "Please check your permissions or choose a different location."
-        )
-
     return path
 
 
@@ -257,6 +255,16 @@ def ensure_directory(
             f"Permission denied: {e!s}\n"
             "Please check your permissions or choose a different location."
         ) from e
+
+
+def ensure_writable_directory(path: str | Path | None, description: str = "directory") -> Path:
+    """Ensure a directory exists (creating it and its parents) and can be written to.
+
+    Raises:
+        ValueError, NotADirectoryError, PermissionError: see `ensure_directory`
+        PermissionError: If the directory exists but is not writable
+    """
+    return _require_access(ensure_directory(path, description), os.W_OK, "write", description)
 
 
 def ensure_directory_exists(directory: Path) -> None:

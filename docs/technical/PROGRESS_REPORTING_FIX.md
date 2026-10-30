@@ -63,7 +63,7 @@ DEBUG: Vector database storage completed | {"filename": "document.pdf", "records
 
 ### 4. API Integration
 
-**File**: `src/backend/rag_pipeline/api/documents.py`
+**File**: `src/backend/query_service/api/documents.py`
 
 - Updated `upload_document()` to use progress callback with dependency injection
 - Progress mapping: 0.0-1.0 processing progress → 10-95% upload progress
@@ -178,7 +178,7 @@ The implementation was tested with:
 ## Files Modified
 
 1. `src/backend/rag_pipeline/core/embeddings.py` - Main progress reporting implementation + metadata serialization fix
-2. `src/backend/rag_pipeline/api/documents.py` - API integration with progress callback
+2. `src/backend/query_service/api/documents.py` - API integration with progress callback
 3. `src/backend/rag_pipeline/core/rag_system.py` - Metadata serialization fix for query results
 4. `docs/technical/PROGRESS_REPORTING_FIX.md` - This documentation
 

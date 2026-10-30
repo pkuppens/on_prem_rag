@@ -173,7 +173,7 @@ The app uses RFC 7807-style exception handlers (`exception_handlers.py`):
 
 ### Rate Limiting
 
-- **Implementation**: `RateLimitMiddleware` in [api/middleware/rate_limit.py](../../src/backend/rag_pipeline/api/middleware/rate_limit.py) — 120 requests/minute per client IP
+- **Implementation**: `RateLimitMiddleware` in [api/middleware/rate_limit.py](../../src/backend/query_service/api/middleware/rate_limit.py) — 120 requests/minute per client IP
 - **Rationale**: Prevents abuse; configurable via `requests_per_minute` constructor
 - **Tune per environment**: Increase for high-throughput deployments; decrease for cost-sensitive or shared instances
 

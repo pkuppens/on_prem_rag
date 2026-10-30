@@ -62,7 +62,7 @@ flowchart TB
 | Upload | Original files (PDF, DOCX, …) | Configured upload directory on disk |
 | Indexing | Chunks and embeddings | Vector store (default: local ChromaDB) |
 | Query | User question, retrieved chunks, generated answer | Memory / process; logs may go to audit pipeline |
-| Erasure | User-triggered delete | `DELETE /api/v1/documents/{document_id}` removes file and associated vectors (see [documents.py](../../src/backend/rag_pipeline/api/documents.py); id is filename unless changed by design) |
+| Erasure | User-triggered delete | `DELETE /api/v1/documents/{document_id}` removes file and associated vectors (see [documents.py](../../src/backend/query_service/api/documents.py); id is filename unless changed by design) |
 
 ## GDPR / AVG (EU)
 
@@ -106,4 +106,4 @@ A DPIA is required when processing is likely to result in high risk to individua
 
 ## Code Files
 
-- [src/backend/rag_pipeline/api/documents.py](../../src/backend/rag_pipeline/api/documents.py) — upload, list, delete (including vector purge)
+- [src/backend/query_service/api/documents.py](../../src/backend/query_service/api/documents.py) — upload, list, delete (including vector purge)

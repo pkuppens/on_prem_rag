@@ -82,7 +82,9 @@ No tests were removed in this audit. Recommendations are for optimisation (Task 
 
 - **In scope**: `src/backend` (line and branch coverage).
 - **Out of scope**: Notebooks, scripts, tooling, frontend.
-- **CI signal**: 62% is a target, not a gate. The unit test job emits a GitHub warning annotation when coverage drops below it, but does not fail.
+- **CI gate**: the unit test job runs with `--cov-fail-under=70` (line + branch, as measured by `coverage.py`) and fails below it. Baseline on `main`-equivalent CI: 71.3% (line-only: 74.4%). Raise the floor as the baseline rises; do not lower it (see the `test-coverage` skill).
+- **CI target**: 80% line coverage. Below it the job emits a GitHub warning annotation but does not fail.
+- **Accepted gap**: the gate only measures the unit job, which deselects `slow`, `ollama`, `docker`, `internet` and `ci_skip` tests. Code only exercised by those tests counts as uncovered, and we accept a 70% floor because of this. Mocking or stubbing those paths so they count toward the unit number is preferred but not required.
 - **HTML report**: `htmlcov/` in the `coverage-reports` artifact. See [CI_SETUP.md#coverage-reports](../technical/CI_SETUP.md#coverage-reports) for download instructions.
 - **PR comments**: Posted only when coverage < 60% (to reduce notification noise). Coverage is always in the job summary and artifacts.
 

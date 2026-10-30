@@ -612,16 +612,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: coverage-reports
-
       - uses: actions/checkout@v7
         with:
           sparse-checkout: |
             .claude/skills/test-coverage
             coverage_floors.toml
+
+      # After checkout: checkout cleans the workspace and would delete the downloaded files
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-reports
 
       - name: Build coverage report
         id: coverage

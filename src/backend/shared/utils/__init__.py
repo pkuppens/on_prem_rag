@@ -6,6 +6,7 @@ from .directory_utils import (
     _format_path_for_error,
     ensure_directory,
     ensure_directory_exists,
+    ensure_writable_directory,
     get_cache_dir,
     get_chunks_dir,
     get_data_dir,
@@ -14,7 +15,10 @@ from .directory_utils import (
     get_relative_path,
     get_test_data_dir,
     get_uploaded_files_dir,
-    validate_directory,
+    require_directory,
+    require_empty_directory,
+    require_readable_directory,
+    require_writable_directory,
 )
 from .env_utils import get_env, get_env_or_none
 
@@ -32,7 +36,11 @@ __all__ = [
     "get_relative_path",
     "get_test_data_dir",
     "get_uploaded_files_dir",
-    "validate_directory",
+    "ensure_writable_directory",
+    "require_directory",
+    "require_empty_directory",
+    "require_readable_directory",
+    "require_writable_directory",
     "get_env",
     "get_env_or_none",
 ]

@@ -29,7 +29,7 @@ shared = 100
 stt = 79
 "rag_pipeline.api" = 100
 "rag_pipeline.config" = 36
-"rag_pipeline.core" = 72
+"rag_pipeline.core" = 73
 "rag_pipeline.services" = 76
 "rag_pipeline.utils" = 88
 

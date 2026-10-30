@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: dim_wbso_categories
+    description: >
+      One row per WBSO category; category_key is dbt_utils.generate_surrogate_key over the category code, so it is
+      identical on every run. dbt-side equivalent of the _category_cache in src/wbso/migration.py.
+    columns:
+      - name: category_key
+        data_tests: [unique, not_null]
+      - name: category_code
+        data_tests: [unique, not_null]
+
+  - name: mart_hours_by_category
+    description: Hours and session count per WBSO category (replaces the Counter / func.sum rollups in Python).
+    columns:
+      - name: wbso_category
+        data_tests:
+          - unique
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY_CLOUD, AUDIT_LOGGING, DATA_INTEGRITY, GENERAL_RD]
+      - name: total_hours
+        data_tests:
+          - hours_in_valid_range:
+              arguments: { min_value: 0, max_value: 100000 }
+      - name: category_key
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_wbso_categories'), field: category_key }
+
+  - name: mart_hours_by_month
+    description: >
+      Hours per calendar month, incremental (delete+insert on month_start, from the latest loaded month onward).
+      Months without sessions have no row; see mart_hours_by_month_gapless.
+    columns:
+      - name: month_start
+        data_tests: [unique, not_null]
+
+  - name: mart_hours_by_month_gapless
+    description: >
+      Every month between first and last session month, zero-filled via dbt_utils.date_spine. Before: a month
+      with no hours had no row. After: it appears with 0.
+    columns:
+      - name: month_start
+        data_tests:
+          - unique
+          - not_null
+          - dbt_utils.sequential_values:
+              arguments: { interval: 1, datepart: month }

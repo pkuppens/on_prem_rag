@@ -361,13 +361,17 @@ jobs:
           # --dist loadfile: keep tests from the same file on the same worker (preserves fixtures)
           # pytest-cov auto-combines coverage across workers
           # --cov-fail-under=70 is the gate (line+branch); the 80% target below is warning-only. See docs/testing/TEST_STRATEGY.md
-          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=html --cov-report=term-missing --cov-fail-under=70
+          TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1 uv run pytest -n 2 --dist loadfile -m "not internet and not slow and not ollama and not docker and not guardrails_ci_skip and not ci_skip" --junitxml=test-results-unit.xml --cov=src/backend --cov-report=xml --cov-report=json:coverage.json --cov-report=html --cov-report=term-missing --cov-fail-under=70
+      - name: Check per-package coverage floors
+        # Ratchet per area (coverage_floors.toml) so weak packages cannot hide behind the total
+        run: uv run python .claude/skills/test-coverage/coverage_tool.py --json coverage.json floors
       - name: Upload coverage reports
         uses: actions/upload-artifact@v7
         with:
           name: coverage-reports
           path: |
             coverage.xml
+            coverage.json
             test-results-unit.xml
             htmlcov/
       - name: Add coverage to job summary

@@ -8,6 +8,7 @@ Commands (all print plain text, exit code 0 unless stated):
   funcs    Functions never executed (function coverage), ranked by size.
   lines    Missing line ranges of one file (use after funcs, for branch/line work).
   gate     Exit 1 if total coverage is below --min.
+  floors   Exit 1 if any package/file in coverage_floors.toml is below its own floor (ratchet per area).
   compare  Show total/file deltas between two coverage.json files (feedback loop after a test batch).
 
 Example:
@@ -23,6 +24,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 DEFAULT_JSON = Path("tmp/analysis/coverage.json")
@@ -156,6 +158,47 @@ def cmd_gate(args: argparse.Namespace) -> int:
     return 0 if ok else 1
 
 
+def module_path(filename: str) -> str:
+    """Dotted path below `backend/` (e.g. `medical_agents.orchestrator`), independent of OS separators."""
+    parts = Path(filename.replace("\\", "/")).with_suffix("").parts
+    if "backend" in parts:
+        parts = parts[parts.index("backend") + 1 :]
+    return ".".join(parts)
+
+
+def combined_pct(summaries: list[dict]) -> float:
+    """Line+branch percentage (what coverage.py and --cov-fail-under use) over several files."""
+    covered = sum(s["covered_lines"] + s.get("covered_branches", 0) for s in summaries)
+    total = sum(s["num_statements"] + s.get("num_branches", 0) for s in summaries)
+    return pct(covered, total)
+
+
+def cmd_floors(args: argparse.Namespace) -> int:
+    """Check per-package and per-file floors so a weak area cannot hide behind a strong total."""
+    config = tomllib.loads(args.config.read_text(encoding="utf-8"))
+    files = {module_path(name): f["summary"] for name, f in load(args.json)["files"].items()}
+    failures, rows = [], []
+    for kind, section in (("package", config.get("packages", {})), ("file", config.get("files", {}))):
+        for key, floor in section.items():
+            if kind == "package":
+                match = [s for mod, s in files.items() if mod == key or mod.startswith(key + ".")]
+            else:
+                match = [s for mod, s in files.items() if mod == key]
+            if not match:
+                failures.append(f"{kind} '{key}': no measured files (renamed or deleted? remove it from {args.config.name})")
+                continue
+            actual = combined_pct(match)
+            rows.append((kind, key, actual, floor))
+            if actual < floor:
+                failures.append(f"{kind} '{key}': {actual:.1f}% < floor {floor}%")
+    for kind, key, actual, floor in sorted(rows, key=lambda r: r[2] - r[3]):
+        note = "  <- raise floor to %d" % int(actual) if actual >= floor + 1 else ""
+        print(f"{kind:8} {key:40} {actual:5.1f}% (floor {floor}%){note}")
+    for f in failures:
+        print(f"FAIL {f}")
+    return 1 if failures else 0
+
+
 def cmd_compare(args: argparse.Namespace) -> int:
     old, new = load(args.old), load(args.json)
     print(f"TOTAL {old['totals']['percent_covered']:.1f}% -> {new['totals']['percent_covered']:.1f}%\n")
@@ -188,11 +231,13 @@ def main() -> int:
         sp.add_argument("--top", type=int, default=15)
     sub.add_parser("lines").add_argument("file", help="file path or suffix")
     sub.add_parser("gate").add_argument("--min", type=float, required=True)
+    fl = sub.add_parser("floors")
+    fl.add_argument("--config", type=Path, default=Path("coverage_floors.toml"), help="floors file (default: %(default)s)")
     sub.add_parser("compare").add_argument("old", type=Path, help="earlier coverage.json")
     args = p.parse_args(argv)
     handlers = {
         "summary": cmd_summary, "files": cmd_files, "funcs": cmd_funcs,
-        "lines": cmd_lines, "gate": cmd_gate, "compare": cmd_compare,
+        "lines": cmd_lines, "gate": cmd_gate, "floors": cmd_floors, "compare": cmd_compare,
     }  # fmt: skip
     return cmd_run(args, pytest_args) if args.cmd == "run" else handlers[args.cmd](args)
 

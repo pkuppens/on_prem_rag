@@ -1,0 +1,39 @@
+# Per-area coverage floors (line + branch, % as in coverage.json), checked in CI by
+#   python .claude/skills/test-coverage/coverage_tool.py floors
+# They stop a weak area (e.g. medical_agents) hiding behind a strong total.
+#
+# Ratchet rules:
+#  - Floors only go up. When the tool prints "raise floor to N", bump the entry in the same PR.
+#  - Lowering a floor needs explicit owner approval and a linked issue to recover it.
+#  - Deleting code may change an area's number; remove the entry if the area is deleted.
+#  - New packages: add an entry at their first measured value.
+#  - Priority areas below the overall 70% gate (medical_agents, auth_service, privacy_guard,
+#    retrieval) are tracked in #211 / follow-ups; their floors are today's value, not a target.
+
+[packages]
+access_control = 86
+audit_trail = 89
+auth_service = 59
+data_analysis = 79
+evaluation = 80
+guardrails = 85
+ingestion = 79
+llm_gateway = 77
+medical_agents = 48
+memory = 76
+privacy_guard = 57
+query_service = 82
+retrieval = 60
+security = 100
+shared = 38
+stt = 79
+"rag_pipeline.api" = 3
+"rag_pipeline.config" = 36
+"rag_pipeline.core" = 72
+"rag_pipeline.services" = 76
+"rag_pipeline.utils" = 88
+
+# Per-file floors for the weakest files in priority packages (dotted path below src/backend).
+[files]
+"medical_agents.orchestrator" = 30
+"medical_agents.base_agent" = 44

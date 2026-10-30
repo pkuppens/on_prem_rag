@@ -30,6 +30,7 @@ models:
       start time, a session starting before the latest end of earlier sessions is dropped. Python not replaced.
     columns:
       - name: session_id
+        description: Session identifier; unique after deduplication.
         data_tests: [unique, not_null]
       - name: wbso_category
         description: Category from the normalize_wbso_category macro; UNMAPPED fails the test below.
@@ -38,6 +39,7 @@ models:
               arguments:
                 values: [AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY_CLOUD, AUDIT_LOGGING, DATA_INTEGRITY, GENERAL_RD]
       - name: hours
+        description: Session duration in hours, 0 to 24.
         data_tests:
           - hours_in_valid_range:
               arguments: { min_value: 0, max_value: 24 }

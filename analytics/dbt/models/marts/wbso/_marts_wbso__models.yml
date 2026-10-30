@@ -7,14 +7,17 @@ models:
       identical on every run. dbt-side equivalent of the _category_cache in src/wbso/migration.py.
     columns:
       - name: category_key
+        description: Surrogate key, md5 hash of the category code.
         data_tests: [unique, not_null]
       - name: category_code
+        description: WBSO category code, e.g. AI_FRAMEWORK.
         data_tests: [unique, not_null]
 
   - name: mart_hours_by_category
     description: Hours and session count per WBSO category (replaces the Counter / func.sum rollups in Python).
     columns:
       - name: wbso_category
+        description: WBSO category code.
         data_tests:
           - unique
           - not_null
@@ -22,10 +25,12 @@ models:
               arguments:
                 values: [AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY_CLOUD, AUDIT_LOGGING, DATA_INTEGRITY, GENERAL_RD]
       - name: total_hours
+        description: Sum of session hours in the category.
         data_tests:
           - hours_in_valid_range:
               arguments: { min_value: 0, max_value: 100000 }
       - name: category_key
+        description: Surrogate key; joins to dim_wbso_categories.
         data_tests:
           - relationships:
               arguments: { to: ref('dim_wbso_categories'), field: category_key }
@@ -36,6 +41,7 @@ models:
       Months without sessions have no row; see mart_hours_by_month_gapless.
     columns:
       - name: month_start
+        description: First day of the month.
         data_tests: [unique, not_null]
 
   - name: mart_hours_by_month_gapless
@@ -44,6 +50,7 @@ models:
       with no hours had no row. After: it appears with 0.
     columns:
       - name: month_start
+        description: First day of the month; no gaps.
         data_tests:
           - unique
           - not_null

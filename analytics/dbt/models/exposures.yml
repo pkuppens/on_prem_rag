@@ -1,0 +1,20 @@
+version: 2
+
+# Downstream consumers of the marts, so the lineage graph ends at "who reads this" instead of at the last mart.
+# The evaluation-comparison exposure (#188) is not declared: its mart does not exist yet.
+exposures:
+  - name: wbso_hours_reports
+    label: WBSO hours reports (CSV / Markdown)
+    type: analysis
+    maturity: medium
+    description: >
+      Category and monthly hour summaries that the WBSO reporting code exports as CSV/JSON/Markdown for the
+      accountant and RVO audit (src/wbso/database_reporting.py, audit_trail/wbso_report_generator.py). Those exports
+      are still produced by the Python code; this exposure declares which dbt marts hold the equivalent numbers.
+    url: https://github.com/pkuppens/on_prem_rag/blob/main/docs/project/hours/WBSO-DATA-FLOW.md
+    owner:
+      name: Pieter Kuppens
+      email: pieter.kuppens@gmail.com
+    depends_on:
+      - ref('mart_hours_by_category')
+      - ref('mart_hours_by_month_gapless')

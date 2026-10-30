@@ -531,6 +531,7 @@ Each stage validates its outputs:
 - **Tool**: Custom Python pipeline (`src/wbso/pipeline.py`)
 - **Orchestration**: Sequential execution with error handling
 - **State Tracking**: File-based (output files indicate stage completion)
+- **Lineage**: Not tracked by the pipeline itself; the dbt project in `analytics/dbt/` documents source → staging → mart lineage (`dbt docs generate`, see [docs/technical/DBT.md](../../technical/DBT.md))
 
 ### Future Considerations
 - **Luigi/Prefect**: Could be used for more complex orchestration

@@ -186,23 +186,45 @@ uv run dbt build -s +int_wbso__commits_in_period                                
 Jinja is rendered everywhere in a model, including SQL `--` comments. To mention template syntax in a comment,
 use a Jinja comment: `{# ... #}`.
 
-## 5. How dbt will serve this project
+## 5. The WBSO models
 
-The WBSO pipeline (`src/wbso/`) turns git commits, calendar events and system logon/logoff events into
-hours per R&D category. Today that is hand-written Python: normalization in several places, session
-deduplication with loops, and `Counter`-based reports. Those are exactly the jobs dbt models do, with tests
-and lineage as a bonus. The demo above is a miniature of it: raw hours with messy categories, cleaned
-and validated.
+Lineage: `source(calendar_events)` → `stg_wbso__calendar_events` → `int_wbso__sessions_deduped` →
+`dim_wbso_categories`, `mart_hours_by_category`, `mart_hours_by_month` → `mart_hours_by_month_gapless` →
+exposure `wbso_hours_reports`. Staging models for commits and system events sit beside it. The Python code in
+`src/wbso/` is not replaced; each model's `description` names the Python it mirrors.
 
-The planned steps, tracked in epic [#190](https://github.com/pkuppens/on_prem_rag/issues/190):
+| Model | What it shows | Issue |
+|-------|---------------|-------|
+| `stg_wbso__*` | Rename/cast only, one per source | #182 |
+| `int_wbso__sessions_deduped` | Duplicates and overlaps removed with window functions | #183 |
+| `mart_hours_by_category`, `mart_hours_by_month` (incremental, `delete+insert`) | Rollups | #184 |
+| `normalize_wbso_category` macro | One activity → category mapping, used by two models | #193 |
+| `dim_wbso_categories` | `dbt_utils.generate_surrogate_key` instead of a load-order cache | #194 |
+| `mart_hours_by_month_gapless` | `dbt_utils.date_spine` zero-fills months without sessions | #195 |
+| `hours_in_valid_range` generic test | Reusable `min_value`/`max_value` range check | #196 |
 
-1. **Sources** (#181, done): `system_events`, `calendar_events` and `commits` in
-   [`models/staging/wbso/_wbso__sources.yml`](../../analytics/dbt/models/staging/wbso/_wbso__sources.yml), read in place
-   from `docs/project/hours/data/`. The file's header explains which pipeline files became sources and why
-   (e.g. the raw `commits/*.csv` files are not parseable, so `commits_processed.json` is used)
-2. **Staging** (#182): one `stg_` model per source, replacing the Python normalization
-3. **Intermediate** (#183): session deduplication as a SQL window function
-4. **Marts** (#184): hours per category/month, replacing the `Counter` reports
-5. **Tests in CI** (#185) and **docs/lineage** (#186)
+### Add a test
 
-A second track (#187-#189) applies the same pattern to RAG ingestion and embedding-evaluation metadata.
+- **Generic** (per column): add under the column's `data_tests:` in the model's `.yml`, e.g. `not_null`, `unique`,
+  `relationships`, `accepted_values`, or the project's own `hours_in_valid_range` with
+  `arguments: { min_value: 0, max_value: 24 }` (defined in `macros/generic_tests/`).
+- **Singular** (whole-table rule): a `.sql` file under `tests/` that returns the rows breaking the rule.
+- Prove a new test: break the data on purpose, run `dbt build --select <model>` (not `dbt test`, which does not rebuild
+  views), see it fail, then revert.
+
+### Docs, lineage and exposures
+
+`dbt docs generate` needs built models, so run `dbt build` first on a persistent target (`dev`; the `ci` database
+is in memory). Every model and column has a description; the exposure in `models/exposures.yml` ends the graph at the
+WBSO reports. Static docs are not published anywhere; that is a separate decision.
+
+### CI
+
+[`.github/workflows/dbt.yml`](../../.github/workflows/dbt.yml) runs `dbt deps` and `dbt build --target ci` when
+`analytics/dbt/**` or the WBSO data/config files change. dbt is installed alone with `uv run --with`, so the job
+skips the heavy ML dependencies. Slim CI (`state:modified+`) was not tried.
+
+### Not built
+
+Evaluation-run comparison mart (#188) and the ingestion `MetadataStore` snapshot (#189) need real recorded data
+(evaluation history from the CLI, a populated `data/metadata.db`) and were left out.

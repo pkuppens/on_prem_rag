@@ -324,6 +324,8 @@ See [docs/TECHNICAL_SUMMARY.md](docs/TECHNICAL_SUMMARY.md) for full design docum
 
 R&D activities for project WBSO-AICM-2025-01 are documented in [docs/project/wbso/](docs/project/wbso/), including progress reports and the annual report (jaarverslag) for accountant and RVO audit purposes.
 
+The WBSO hours data layer is being rebuilt in dbt; for the why and what was left out, see [docs/DBT.md](docs/DBT.md) (setup: [docs/technical/DBT.md](docs/technical/DBT.md)).
+
 ## Key Business Concerns & Decisions
 
 ### Legal & Licensing Considerations

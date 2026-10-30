@@ -36,6 +36,7 @@ python $T lines path/to/file.py                         # missing line ranges / 
 python $T compare tmp/analysis/coverage.before.json     # delta after a batch of tests
 python $T gate --min 70                                 # exit 1 if below gate (CI-friendly)
 python $T floors                                        # exit 1 if a package/file is below its floor in coverage_floors.toml
+python $T report --gate 70                              # markdown: total + per-component table (CI job summary / PR comment)
 ```
 
 Use the same pytest selection as CI (markers, offline env vars) so the number matches CI. Keep the `--json` path outside version control (e.g. `tmp/`).

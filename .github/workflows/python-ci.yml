@@ -380,16 +380,13 @@ jobs:
           # Target, not a gate (the gate is --cov-fail-under in the test step): below it CI warns but stays green.
           COVERAGE_TARGET: "80"
         run: |
-          if [ -f coverage.xml ]; then
-            pct=$(python3 -c "import xml.etree.ElementTree as ET; r=ET.parse('coverage.xml').getroot(); print(f\"{100*float(r.attrib.get('line-rate',0)):.1f}\")")
+          if [ -f coverage.json ]; then
+            # Per-component table is informational; the total (line+branch) is what the gate decides on
+            uv run python .claude/skills/test-coverage/coverage_tool.py --json coverage.json report --gate 70 >> $GITHUB_STEP_SUMMARY
             run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            {
-              echo "## Unit Test Coverage"
-              echo ""
-              echo "**Coverage:** ${pct}%"
-              echo ""
-              echo "📎 [Download coverage-reports](${run_url}) → Artifacts (htmlcov/ for per-file report)"
-            } >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📎 [Download coverage-reports](${run_url}) → Artifacts (htmlcov/ for per-file report)" >> $GITHUB_STEP_SUMMARY
+            pct=$(uv run python -c "import json; t=json.load(open('coverage.json'))['totals']; print(f\"{t['percent_covered']:.1f}\")")
             if python3 -c "import sys; sys.exit(0 if float('${pct}') < float('${COVERAGE_TARGET}') else 1)"; then
               echo "::warning title=Low coverage::Unit test coverage ${pct}% is below the ${COVERAGE_TARGET}% target (warning only, not a failure)"
               echo "⚠️ Below the ${COVERAGE_TARGET}% target — warning only." >> $GITHUB_STEP_SUMMARY
@@ -620,52 +617,23 @@ jobs:
         with:
           name: coverage-reports
 
-      - name: Extract coverage percentage
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: |
+            .claude/skills/test-coverage
+            coverage_floors.toml
+
+      - name: Build coverage report
         id: coverage
         run: |
-          # Use Python for robust extraction and comment generation (avoids bc/shell quirks)
-          python3 << 'PYEOF'
-          import os
-          import xml.etree.ElementTree as ET
+          if [ -f coverage.json ]; then
+            python3 .claude/skills/test-coverage/coverage_tool.py --json coverage.json report --gate 70 > coverage_comment.md
+          else
+            printf '## Code Coverage Report\n\nCoverage file not found in artifact.\n' > coverage_comment.md
+          fi
+          echo "should_comment=true" >> "$GITHUB_OUTPUT"
 
-          coverage_file = "coverage.xml"
-          if not os.path.isfile(coverage_file):
-              with open("coverage_comment.md", "w") as f:
-                  f.write("## Code Coverage Report\n\n")
-                  f.write("Coverage file not found in artifact.\n")
-              raise SystemExit(0)
-
-          try:
-              tree = ET.parse(coverage_file)
-              root = tree.getroot()
-              rate = float(root.attrib.get("line-rate", 0))
-              pct = rate * 100
-
-              with open("coverage_comment.md", "w") as f:
-                  f.write("## Code Coverage Report\n\n")
-                  f.write(f"**Total Coverage:** {pct:.1f}%\n\n")
-                  if pct >= 80:
-                      f.write("Excellent coverage! (>=80%)\n\n")
-                  elif pct >= 60:
-                      f.write("Moderate coverage (60-80%)\n\n")
-                  else:
-                      f.write("Low coverage (<60%)\n\n")
-                  f.write("_Coverage report generated from unit tests_\n")
-
-              out_path = os.environ.get("GITHUB_OUTPUT")
-              if out_path:
-                  with open(out_path, "a") as f:
-                      f.write(f"percentage={pct:.1f}\n")
-                      f.write(f"should_comment={'true' if pct < 60 else 'false'}\n")
-              print(f"Coverage: {pct:.1f}%")
-          except Exception as e:
-              with open("coverage_comment.md", "w") as f:
-                  f.write("## Code Coverage Report\n\n")
-                  f.write(f"Error extracting coverage: {e}\n")
-              exit(0)  # Don't fail step - still allow PR comment
-          PYEOF
-
-      # Only comment when coverage < 60% to reduce notification noise (coverage always in job summary + artifacts)
+      # Sticky comment: one comment per PR, updated in place on every run
       - name: Comment on PR
         if: steps.coverage.outputs.should_comment == 'true'
         uses: actions/github-script@v9

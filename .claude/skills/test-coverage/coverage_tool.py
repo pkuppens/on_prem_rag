@@ -8,6 +8,7 @@ Commands (all print plain text, exit code 0 unless stated):
   funcs    Functions never executed (function coverage), ranked by size.
   lines    Missing line ranges of one file (use after funcs, for branch/line work).
   gate     Exit 1 if total coverage is below --min.
+  report   Markdown table: total plus per-component coverage (informational, always exit 0).
   floors   Exit 1 if any package/file in coverage_floors.toml is below its own floor (ratchet per area).
   compare  Show total/file deltas between two coverage.json files (feedback loop after a test batch).
 
@@ -173,6 +174,39 @@ def combined_pct(summaries: list[dict]) -> float:
     return pct(covered, total)
 
 
+def component_of(module: str) -> str:
+    """Component = top-level package below `backend/`; `rag_pipeline` is split one level deeper (it is a god package)."""
+    parts = module.split(".")
+    if len(parts) == 1:
+        return "(root)"
+    return ".".join(parts[:2]) if parts[0] == "rag_pipeline" and len(parts) > 2 else parts[0]
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    """Markdown overview: overall number (the gated metric) plus per-component coverage. Informational, never fails."""
+    data = load(args.json)
+    floors = tomllib.loads(args.config.read_text(encoding="utf-8")).get("packages", {}) if args.config.exists() else {}
+    groups: dict[str, list[dict]] = {}
+    for name, f in data["files"].items():
+        groups.setdefault(component_of(module_path(name)), []).append(f["summary"])
+    everything = [s for rows in groups.values() for s in rows]
+    t = data["totals"]
+    print("## Code Coverage Report\n")
+    gate = f" (gate: {args.gate:g}%)" if args.gate else ""
+    print(f"**Total coverage: {combined_pct(everything):.1f}%**{gate}, line + branch")
+    print(f"Line-only: {pct(t['covered_lines'], t['num_statements']):.1f}%\n")
+    print("| Component | Coverage | Statements | Missed | Floor |")
+    print("|---|---:|---:|---:|---:|")
+    for comp, rows in sorted(groups.items(), key=lambda kv: combined_pct(kv[1])):
+        stmts = sum(r["num_statements"] for r in rows)
+        if not stmts:
+            continue
+        floor = f"{floors[comp]}%" if comp in floors else ""
+        print(f"| `{comp}` | {combined_pct(rows):.1f}% | {stmts} | {sum(r['missing_lines'] for r in rows)} | {floor} |")
+    print("\n_Per-component figures are informational; the total decides pass/fail. Per-file detail: `htmlcov/` in the artifact._")
+    return 0
+
+
 def cmd_floors(args: argparse.Namespace) -> int:
     """Check per-package and per-file floors so a weak area cannot hide behind a strong total."""
     config = tomllib.loads(args.config.read_text(encoding="utf-8"))
@@ -233,11 +267,14 @@ def main() -> int:
     sub.add_parser("gate").add_argument("--min", type=float, required=True)
     fl = sub.add_parser("floors")
     fl.add_argument("--config", type=Path, default=Path("coverage_floors.toml"), help="floors file (default: %(default)s)")
+    rp = sub.add_parser("report")
+    rp.add_argument("--config", type=Path, default=Path("coverage_floors.toml"), help="floors file (default: %(default)s)")
+    rp.add_argument("--gate", type=float, default=0.0, help="gate percentage to display next to the total")
     sub.add_parser("compare").add_argument("old", type=Path, help="earlier coverage.json")
     args = p.parse_args(argv)
     handlers = {
         "summary": cmd_summary, "files": cmd_files, "funcs": cmd_funcs,
-        "lines": cmd_lines, "gate": cmd_gate, "floors": cmd_floors, "compare": cmd_compare,
+        "lines": cmd_lines, "gate": cmd_gate, "floors": cmd_floors, "report": cmd_report, "compare": cmd_compare,
     }  # fmt: skip
     return cmd_run(args, pytest_args) if args.cmd == "run" else handlers[args.cmd](args)
 

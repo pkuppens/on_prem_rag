@@ -35,6 +35,7 @@ python $T funcs --top 20                                # never-executed functio
 python $T lines path/to/file.py                         # missing line ranges / branches (steps 2-3)
 python $T compare tmp/analysis/coverage.before.json     # delta after a batch of tests
 python $T gate --min 70                                 # exit 1 if below gate (CI-friendly)
+python $T floors                                        # exit 1 if a package/file is below its floor in coverage_floors.toml
 ```
 
 Use the same pytest selection as CI (markers, offline env vars) so the number matches CI. Keep the `--json` path outside version control (e.g. `tmp/`).
@@ -47,7 +48,7 @@ Use the same pytest selection as CI (markers, offline env vars) so the number ma
 4. **Write tests** (principles above). Cover happy path, one edge, one failure per function, then loop `pytest <file> -q` until green.
 5. **Re-measure** with `run` on just the touched tests for speed (`-- tests/path -q`), then `compare` against the baseline with the full run before committing.
 6. **Commit per batch**, message states the module and the before/after number.
-7. **Gates.** Track two numbers, never one: (a) a **floor**, the reasonable minimum for the project (e.g. 70%), a fixed standard that fails CI when the total is below it - not 'current minus 1'; (b) a **baseline ratchet**, the current percentage, which new/changed code (patch coverage, e.g. via `diff-cover`) must at least match, so quality never erodes even while the total is above the floor. Raise the baseline when the total improves; keep the floor for deliberate decisions. A warning annotation can track the gap to a stretch target.
+7. **Gates.** Track two numbers, never one: (a) a **floor**, the reasonable minimum for the project (e.g. 70%), a fixed standard that fails CI when the total is below it - not 'current minus 1'; (b) a **baseline ratchet**, the current percentage, which new/changed code (patch coverage, e.g. via `diff-cover`) must at least match, so quality never erodes even while the total is above the floor. Raise the baseline when the total improves; keep the floor for deliberate decisions. (c) **Per-area floors** (`coverage_floors.toml`, `floors` command): one floor per package, plus per-file floors for the weakest files in critical packages, so a total above the gate cannot mask a half-tested area. Floors ratchet up only. A warning annotation can track the gap to a stretch target.
 8. **Record lessons** (below) before finishing.
 
 ## Pitfalls checklist

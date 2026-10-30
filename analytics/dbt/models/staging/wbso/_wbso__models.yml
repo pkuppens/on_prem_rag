@@ -19,3 +19,35 @@ models:
         description: Why the repository counts for WBSO.
       - name: is_core_wbso
         description: True when the relevance starts with 'Core WBSO'.
+
+  - name: stg_wbso__calendar_events
+    description: >
+      Registered WBSO work sessions, renamed and typed one-to-one from the calendar_events source.
+      Counterpart of the session load in src/wbso/ (Python not removed).
+    columns:
+      - name: session_id
+        data_tests: [unique, not_null]
+      - name: activity_name
+        description: WBSO activity the session is registered under (calendar_events.summary).
+        data_tests: [not_null]
+      - name: hours
+        description: Session duration in hours; 0 to 24 inclusive.
+        data_tests:
+          - not_null
+          - hours_in_valid_range:
+              arguments: { min_value: 0, max_value: 24 }
+
+  - name: stg_wbso__commits
+    description: Commits from commits_processed.json, renamed one-to-one. Counterpart of scripts/process_commits.py.
+    columns:
+      - name: commit_sha
+        data_tests: [unique, not_null]
+
+  - name: stg_wbso__system_events
+    description: >
+      Windows system events from all export files, typed. Not unique: overlapping exports repeat events.
+      Counterpart of scripts/analyze_system_events.py.
+    columns:
+      - name: event_at
+        description: Parsed event time; NULL only if neither of the two export formats matches.
+        data_tests: [not_null]

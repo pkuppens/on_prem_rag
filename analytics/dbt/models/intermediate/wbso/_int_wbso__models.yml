@@ -22,3 +22,22 @@ models:
         description: True when the commit's repository is listed in the wbso_repositories seed.
       - name: is_core_wbso_repo
         description: True when that repository is a core WBSO project.
+
+  - name: int_wbso__sessions_deduped
+    description: >
+      One row per work session with duplicates and overlaps removed. SQL window-function equivalent of
+      WBSODataValidator.validate_duplicates() / step_deduplicate in src/wbso/: duplicate session_id keeps the first by
+      start time, a session starting before the latest end of earlier sessions is dropped. Python not replaced.
+    columns:
+      - name: session_id
+        data_tests: [unique, not_null]
+      - name: wbso_category
+        description: Category from the normalize_wbso_category macro; UNMAPPED fails the test below.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [AI_FRAMEWORK, ACCESS_CONTROL, PRIVACY_CLOUD, AUDIT_LOGGING, DATA_INTEGRITY, GENERAL_RD]
+      - name: hours
+        data_tests:
+          - hours_in_valid_range:
+              arguments: { min_value: 0, max_value: 24 }

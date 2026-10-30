@@ -1,0 +1,48 @@
+name: dbt
+
+# Builds and tests the dbt project (analytics/dbt) on the in-memory `ci` target. Path-filtered: it runs only when the
+# dbt project or the WBSO data it reads changes. dbt is installed on its own (not `uv sync --dev`) so the job does not
+# pull the ML dependency stack; versions match the dev group in pyproject.toml.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "analytics/dbt/**"
+      - "docs/project/hours/data/**"
+      - "docs/project/hours/config/wbso_activities.json"
+      - ".github/workflows/dbt.yml"
+  push:
+    branches: [main]
+    paths:
+      - "analytics/dbt/**"
+      - "docs/project/hours/data/**"
+      - "docs/project/hours/config/wbso_activities.json"
+      - ".github/workflows/dbt.yml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: analytics/dbt
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+      - name: Install dbt packages
+        run: uv run --no-project --with "dbt-core>=1.10.23" --with "dbt-duckdb>=1.11.1" dbt deps
+      - name: dbt build (models, seeds, tests)
+        run: uv run --no-project --with "dbt-core>=1.10.23" --with "dbt-duckdb>=1.11.1" dbt build --target ci
+      - name: Source freshness (informational)
+        run: uv run --no-project --with "dbt-core>=1.10.23" --with "dbt-duckdb>=1.11.1" dbt source freshness --target ci
+        continue-on-error: true

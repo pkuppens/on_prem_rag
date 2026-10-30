@@ -121,7 +121,7 @@ Created `src/frontend/tests/pdf-url.spec.ts` to verify:
 
 ## Debug Logging
 
-The backend has debug logging enabled in `src/backend/rag_pipeline/api/documents.py`:
+The backend has debug logging enabled in `src/backend/query_service/api/documents.py`:
 
 ```python
 logger = StructuredLogger(__name__, level="DEBUG")
@@ -150,7 +150,7 @@ If debug logs aren't appearing, check:
 
 ## Related Files
 
-- `src/backend/rag_pipeline/api/documents.py` - File serving endpoint
+- `src/backend/query_service/api/documents.py` - File serving endpoint
 - `src/backend/rag_pipeline/utils/progress.py` - WebSocket progress notifications
 - `src/frontend/src/components/pdf/PDFViewer.tsx` - PDF viewer component
 - `src/frontend/src/components/upload/UploadProgress.tsx` - Upload progress display

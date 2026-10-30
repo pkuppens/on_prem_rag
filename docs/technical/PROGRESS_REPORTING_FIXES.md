@@ -94,7 +94,7 @@ Progress → Progress → ... → Progress
 
 ### WebSocket Improvements
 
-**File**: `src/backend/rag_pipeline/api/websocket.py`
+**File**: `src/backend/query_service/api/websocket.py`
 
 **Fixes**:
 
@@ -174,8 +174,8 @@ chunks_processed, records_stored = await process_document(
 
 ## Files Modified
 
-1. **`src/backend/rag_pipeline/api/websocket.py`** - WebSocket error fixes
-2. **`src/backend/rag_pipeline/api/documents.py`** - Async progress callbacks
+1. **`src/backend/query_service/api/websocket.py`** - WebSocket error fixes
+2. **`src/backend/query_service/api/documents.py`** - Async progress callbacks
 3. **`src/backend/rag_pipeline/core/chunking.py`** - Async page-by-page processing
 4. **`src/backend/rag_pipeline/core/embeddings.py`** - Enhanced progress reporting
 5. **`src/backend/rag_pipeline/utils/text_cleaning.py`** - Text cleaning utilities

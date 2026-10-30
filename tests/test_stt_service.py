@@ -309,7 +309,7 @@ class TestSTTAPIModels:
 
     def test_api_endpoint_imports(self):
         """Test that API endpoints can be imported."""
-        from backend.rag_pipeline.api.stt import router
+        from backend.query_service.api.stt import router
 
         assert router is not None
         assert router.prefix == "/api/v1/speech"

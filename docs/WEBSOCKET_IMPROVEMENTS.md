@@ -62,7 +62,7 @@ const { isConnected, sendMessage, reconnect } = useWebSocket({
 });
 ```
 
-### Backend Handler (`src/backend/rag_pipeline/api/websocket.py`)
+### Backend Handler (`src/backend/query_service/api/websocket.py`)
 
 The backend now handles both ping formats:
 

@@ -20,7 +20,7 @@ This document describes **security-related components** that exist in the reposi
 | Audit trail | Audit entities and logging related to guardrails and access | [src/backend/audit_trail/](../../src/backend/audit_trail/) |
 | Privacy guard | PII-oriented checks and utilities | [src/backend/privacy_guard/](../../src/backend/privacy_guard/) |
 | NeMo Guardrails | Input/output rails, config, integration hooks | [src/backend/guardrails/](../../src/backend/guardrails/) |
-| RAG API | Document upload, listing, **delete** (file + vectors), chat | [src/backend/rag_pipeline/api/](../../src/backend/rag_pipeline/api/) |
+| RAG API | Document upload, listing, **delete** (file + vectors), chat | [src/backend/query_service/api/](../../src/backend/query_service/api/) |
 
 ## Authentication and authorization
 
@@ -37,7 +37,7 @@ This document describes **security-related components** that exist in the reposi
 
 - Uploaded documents live in the configured upload directory.
 - Chunks and embeddings are stored in the configured vector store (default: ChromaDB via the vector store manager).
-- **Deletion:** `DELETE /api/v1/documents/{document_id}` removes the file and associated chunks in the vector store ([documents.py](../../src/backend/rag_pipeline/api/documents.py); `document_id` is the stored filename today). This supports **data minimisation** and **erasure** workflows but does not replace backup rotation or log redaction policies.
+- **Deletion:** `DELETE /api/v1/documents/{document_id}` removes the file and associated chunks in the vector store ([documents.py](../../src/backend/query_service/api/documents.py); `document_id` is the stored filename today). This supports **data minimisation** and **erasure** workflows but does not replace backup rotation or log redaction policies.
 
 ## Related documentation
 
@@ -57,5 +57,5 @@ This document describes **security-related components** that exist in the reposi
 - [src/backend/audit_trail/](../../src/backend/audit_trail/) — Audit logging entities and services
 - [src/backend/privacy_guard/](../../src/backend/privacy_guard/) — PII and privacy utilities
 - [src/backend/guardrails/](../../src/backend/guardrails/) — NeMo Guardrails configuration and manager
-- [src/backend/rag_pipeline/api/documents.py](../../src/backend/rag_pipeline/api/documents.py) — Document CRUD including delete with vector purge
+- [src/backend/query_service/api/documents.py](../../src/backend/query_service/api/documents.py) — Document CRUD including delete with vector purge
 - [tests/test_routes.py](../../tests/test_routes.py) — API tests including document delete
